@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Order Confirmation — Unified (Preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #008539;
+    --color-primary-dark: #006B2D;
+    --color-primary-light: #00A651;
+    --color-ink: #191919;
+    --color-ink-muted: #333333;
+    --color-ink-faint: #555555;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f8f8f8;
+    --color-border: #e5e5e5;
+    --color-amber: #f59e0b;
+    --color-trustpilot: #00b67a;
+    --color-badge-success-bg: #e8f5e9;
+    --radius-card: 12px;
+    --radius-card-lg: 16px;
+    --radius-pill: 9999px;
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Preview chrome (not part of email) ------------------------ */
+  html, body {
+    margin: 0; padding: 0;
+    background: #ececec;
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+  }
+  .preview-wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 32px 16px 64px;
+  }
+  .preview-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .preview-header h1 {
+    font-size: 24px; line-height: 32px; font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .preview-header p {
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink-faint);
+    margin: 0;
+  }
+  .preview-toggle {
+    display: inline-flex;
+    background: #fff;
+    border-radius: var(--radius-pill);
+    padding: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    margin: 16px auto 32px;
+  }
+  .preview-toggle button {
+    border: none; background: transparent;
+    padding: 8px 18px;
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    color: var(--color-ink-faint);
+  }
+  .preview-toggle button.is-active {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    justify-items: center;
+  }
+
+  /* Email shell ----------------------------------------------- */
+  .email {
+    width: 100%;
+    max-width: 640px;
+    background: #fff;
+    border-radius: var(--radius-card-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .email-inner {
+    padding: 24px 32px 32px;
+  }
+
+  /* Logo header ------------------------------------------------ */
+  .logo-bar {
+    text-align: center;
+    padding: 28px 24px 8px;
+  }
+  .logo-bar svg {
+    height: 32px;
+    width: auto;
+  }
+
+  /* Hero panel ------------------------------------------------- */
+  .hero {
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-card-lg);
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .hero h1 {
+    margin: 0 0 12px;
+    font-size: 28px; line-height: 36px; font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .hero p.lead {
+    margin: 0 0 20px;
+    font-size: 16px; line-height: 26px;
+    color: var(--color-ink-muted);
+  }
+  .hero .meta {
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink-faint);
+    margin: 0 0 24px;
+  }
+  .hero .meta strong { color: var(--color-ink); font-weight: 600; }
+  .hero .meta-dot { padding: 0 8px; opacity: 0.5; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 24px;
+    background: var(--color-primary);
+    color: #fff !important;
+    text-decoration: none;
+    border-radius: var(--radius-pill);
+    font-size: 14px; font-weight: 600; line-height: 20px;
+  }
+  .btn-primary:hover { background: var(--color-primary-dark); }
+
+  /* Progress timeline ----------------------------------------- */
+  .timeline {
+    margin: 0 0 28px;
+    padding: 8px 8px 4px;
+  }
+  .timeline-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+    position: relative;
+  }
+  .timeline-step {
+    text-align: center;
+    position: relative;
+    padding: 0 8px;
+  }
+  .timeline-dot {
+    display: block;
+    margin: 0 auto 10px;
+    width: 28px; height: 28px;
+    border-radius: 9999px;
+    background: var(--color-border);
+    line-height: 28px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .timeline-dot.is-done { background: var(--color-primary); }
+  .timeline-dot.is-current-paid { background: var(--color-primary); box-shadow: 0 0 0 4px var(--color-badge-success-bg); }
+  .timeline-dot.is-current-action { background: var(--color-amber); box-shadow: 0 0 0 4px #fef3c7; }
+  .timeline-dot svg { display: inline-block; vertical-align: middle; margin-top: -3px; }
+  .timeline-label {
+    font-size: 12px; line-height: 16px;
+    font-weight: 600;
+    color: var(--color-ink-muted);
+  }
+  .timeline-step.is-pending .timeline-label { color: var(--color-ink-faint); font-weight: 500; }
+  .timeline-connector {
+    position: absolute;
+    top: 14px;
+    height: 2px;
+    background: var(--color-border);
+    z-index: 1;
+  }
+  .timeline-connector-done {
+    background: var(--color-primary);
+  }
+
+  /* Artwork status badge (per line) -------------------------- */
+  .artwork-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px;
+    margin-top: 6px;
+    border-radius: 9999px;
+    font-size: 12px; line-height: 16px; font-weight: 600;
+    white-space: nowrap;
+  }
+  .artwork-badge svg { width: 12px; height: 12px; }
+  .artwork-badge.is-ready {
+    background: var(--color-badge-success-bg);
+    color: var(--color-primary-dark);
+  }
+  .artwork-badge.is-proofing {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .artwork-badge.is-awaiting {
+    background: #f3f4f6;
+    color: var(--color-ink-faint);
+  }
+
+  /* Action callout (conditional) ------------------------------ */
+  .action-callout {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-amber);
+    border-radius: var(--radius-card);
+    padding: 20px 24px;
+    margin: 0 0 28px;
+  }
+  .action-callout h3 {
+    margin: 0 0 6px;
+    font-size: 16px; line-height: 24px;
+    font-weight: 700;
+  }
+  .action-callout p {
+    margin: 0 0 12px;
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink-muted);
+  }
+  .action-callout ul {
+    margin: 0 0 12px;
+    padding: 0 0 0 18px;
+    font-size: 14px; line-height: 22px;
+  }
+  .action-callout ul li { margin: 0 0 4px; color: var(--color-ink); }
+  .action-callout ul li a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .action-callout .footnote {
+    margin: 0;
+    font-size: 12px; line-height: 16px;
+    color: var(--color-ink-faint);
+  }
+
+  /* Section heading ------------------------------------------- */
+  .section-h2 {
+    font-size: 20px; line-height: 28px; font-weight: 700;
+    margin: 0 0 16px;
+  }
+
+  /* Line items ------------------------------------------------- */
+  .line-items {
+    border-top: 1px solid var(--color-border);
+    margin: 0 0 32px;
+  }
+  .line-item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-border);
+    align-items: flex-start;
+  }
+  .line-thumb {
+    width: 64px; height: 64px;
+    background: var(--color-surface-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-ink-faint);
+  }
+  .line-thumb svg { width: 28px; height: 28px; }
+  .line-body .line-name {
+    font-size: 16px; line-height: 22px; font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .line-body .line-config {
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink-faint);
+    margin: 0 0 2px;
+  }
+  .line-body .line-qty {
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink-faint);
+    margin: 0;
+  }
+  .line-price {
+    font-size: 16px; line-height: 22px; font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Totals ---------------------------------------------------- */
+  .totals {
+    margin: 0 0 32px;
+  }
+  .totals table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .totals td {
+    padding: 6px 0;
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink-muted);
+  }
+  .totals td:last-child { text-align: right; color: var(--color-ink); }
+  .totals tr.total-row td {
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
+    font-size: 18px; line-height: 26px;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  /* Addresses ------------------------------------------------- */
+  .addresses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 0 0 32px;
+  }
+  .address h3 {
+    margin: 0 0 8px;
+    font-size: 14px; line-height: 20px; font-weight: 700;
+    color: var(--color-ink);
+    text-transform: none;
+  }
+  .address p {
+    margin: 0;
+    font-size: 14px; line-height: 22px;
+    color: var(--color-ink-muted);
+  }
+
+  /* FAQ panel ------------------------------------------------- */
+  .faq {
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-card-lg);
+    padding: 28px;
+    margin: 0 0 32px;
+  }
+  .faq h3 {
+    margin: 0 0 8px;
+    font-size: 18px; line-height: 26px; font-weight: 700;
+  }
+  .faq p {
+    margin: 0 0 20px;
+    font-size: 14px; line-height: 22px;
+    color: var(--color-ink-muted);
+  }
+  .faq p:last-child { margin-bottom: 0; }
+  .faq strong { color: var(--color-ink); font-weight: 700; }
+
+  /* Help CTA -------------------------------------------------- */
+  .help-cta {
+    text-align: center;
+    padding: 8px 0 24px;
+  }
+  .help-cta h3 {
+    margin: 0 0 8px;
+    font-size: 18px; line-height: 26px; font-weight: 700;
+  }
+  .help-cta p {
+    margin: 0 0 16px;
+    font-size: 14px; line-height: 22px;
+    color: var(--color-ink-muted);
+  }
+
+  /* Trustpilot strip ------------------------------------------ */
+  .trustpilot {
+    border-top: 1px solid var(--color-border);
+    padding: 20px 0 0;
+    text-align: center;
+    margin: 8px 0 0;
+  }
+  .trustpilot-inner {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; line-height: 18px;
+    color: var(--color-ink-muted);
+  }
+  .trustpilot-stars {
+    display: inline-flex; gap: 2px;
+  }
+  .trustpilot-star {
+    width: 16px; height: 16px;
+    background: var(--color-trustpilot);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .trustpilot-star svg { width: 12px; height: 12px; }
+  .trustpilot-label strong { color: var(--color-ink); font-weight: 700; }
+
+  /* Footer ---------------------------------------------------- */
+  .email-footer {
+    text-align: center;
+    padding: 24px 32px 28px;
+    background: #fff;
+  }
+  .email-footer p {
+    margin: 0;
+    font-size: 12px; line-height: 18px;
+    color: var(--color-ink-faint);
+  }
+  .email-footer p + p { margin-top: 2px; }
+
+  /* State labels above each email ----------------------------- */
+  .state-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600;
+    color: var(--color-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 12px;
+  }
+  .state-label .dot {
+    width: 8px; height: 8px; border-radius: 9999px;
+    background: var(--color-primary);
+  }
+  .state-label.is-action .dot { background: var(--color-amber); }
+
+  @media (max-width: 600px) {
+    .email-inner { padding: 16px 18px 24px; }
+    .hero { padding: 24px; }
+    .addresses { grid-template-columns: 1fr; }
+    .timeline-label { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-wrap">
+  <div class="preview-header">
+    <h1>Order Confirmation — Unified template</h1>
+    <p>Replaces the two HubSpot variants. Same Klaviyo template, two render states.</p>
+  </div>
+
+  <div class="preview-grid">
+
+    <!-- ============================================================
+         STATE A — No pending actions (happy path, default)
+         ============================================================ -->
+    <div>
+      <div class="state-label"><span class="dot"></span>State A — Order paid, no pending actions</div>
+      <div class="email">
+        <div class="logo-bar">
+          <!-- Helloprint wordmark (script) -->
+          <svg viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg" aria-label="Helloprint">
+            <text x="0" y="34" font-family="Brush Script MT, Lucida Handwriting, cursive" font-size="36" font-style="italic" fill="#191919" font-weight="700">HelloPrint</text>
+          </svg>
+        </div>
+
+        <div class="email-inner">
+
+          <!-- Hero -->
+          <div class="hero">
+            <h1>Thanks for your order, Sebastiaan</h1>
+            <p class="lead">We've got order <strong>#3781204</strong> and we're on it. Here's a quick recap and what to expect next.</p>
+            <p class="meta">
+              <strong>Order #3781204</strong>
+              <span class="meta-dot">·</span>
+              Estimated delivery <strong>Tue 19 May</strong>
+            </p>
+            <a class="btn-primary" href="#">View order →</a>
+          </div>
+
+          <!-- Timeline: Placed ✓ · Ready for production ✓ · In production (current) · On its way -->
+          <div class="timeline">
+            <div class="timeline-row">
+              <!-- Connectors: 1→2 done, 2→3 done, 3→4 pending -->
+              <div class="timeline-connector timeline-connector-done" style="left:12.5%; right:62.5%;"></div>
+              <div class="timeline-connector timeline-connector-done" style="left:37.5%; right:37.5%;"></div>
+              <div class="timeline-connector" style="left:62.5%; right:12.5%;"></div>
+
+              <div class="timeline-step">
+                <span class="timeline-dot is-done">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <div class="timeline-label">Order placed</div>
+              </div>
+              <div class="timeline-step">
+                <span class="timeline-dot is-done">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <div class="timeline-label">Ready for production</div>
+              </div>
+              <div class="timeline-step">
+                <span class="timeline-dot is-current-paid"></span>
+                <div class="timeline-label">In production</div>
+              </div>
+              <div class="timeline-step is-pending">
+                <span class="timeline-dot"></span>
+                <div class="timeline-label">On its way</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Line items — all artwork ready -->
+          <h2 class="section-h2">What you ordered</h2>
+          <div class="line-items">
+            <div class="line-item">
+              <div class="line-thumb">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="line-body">
+                <p class="line-name">A5 Flyers</p>
+                <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
+                <p class="line-qty">Qty 2,500</p>
+                <span class="artwork-badge is-ready">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Ready for production
+                </span>
+              </div>
+              <div class="line-price">€189.00</div>
+            </div>
+            <div class="line-item">
+              <div class="line-thumb">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="line-body">
+                <p class="line-name">Business Cards — Premium</p>
+                <p class="line-config">350 gsm · Round corners · Spot UV front</p>
+                <p class="line-qty">Qty 500</p>
+                <span class="artwork-badge is-ready">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Ready for production
+                </span>
+              </div>
+              <div class="line-price">€64.50</div>
+            </div>
+          </div>
+
+          <!-- Totals -->
+          <div class="totals">
+            <table>
+              <tr><td>Articles</td><td>€253.50</td></tr>
+              <tr><td>Services</td><td>€12.00</td></tr>
+              <tr><td>Delivery</td><td>€9.95</td></tr>
+              <tr><td>Subtotal</td><td>€275.45</td></tr>
+              <tr><td>VAT</td><td>€57.84</td></tr>
+              <tr class="total-row"><td>Total</td><td>€333.29</td></tr>
+            </table>
+          </div>
+
+          <!-- Addresses -->
+          <div class="addresses">
+            <div class="address">
+              <h3>Delivery address</h3>
+              <p>
+                Sebastiaan Ram<br>
+                Beursplein 37<br>
+                3011 AA Rotterdam<br>
+                Netherlands
+              </p>
+            </div>
+            <div class="address">
+              <h3>Invoice address</h3>
+              <p>
+                Helloprint B.V.<br>
+                Beursplein 37<br>
+                3011 AA Rotterdam<br>
+                Netherlands
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div class="faq">
+            <h3>Can I change my order?</h3>
+            <p>Once your order is paid and artwork is approved, it goes straight into production and can no longer be changed.</p>
+            <h3>Are delivery dates guaranteed?</h3>
+            <p>Over 98% of orders arrive on the latest communicated date when payment and artwork are completed before the daily cut-off. For extra peace of mind, choose <strong>Secured delivery</strong> at checkout for priority support, fastest reprints and a 20% refund if we're late.</p>
+          </div>
+
+          <!-- Help CTA -->
+          <div class="help-cta">
+            <h3>Have any more questions?</h3>
+            <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+            <a class="btn-primary" href="#">Help Centre →</a>
+          </div>
+
+          <!-- Trustpilot -->
+          <div class="trustpilot">
+            <span class="trustpilot-inner">
+              <span class="trustpilot-stars">
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="trustpilot-label"><strong>Excellent</strong> · 12,847 reviews on Trustpilot</span>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+          <p>You received this email because you placed an order with Helloprint © 2026.</p>
+          <p>All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         STATE B — Pending actions (artwork + payment outstanding)
+         ============================================================ -->
+    <div>
+      <div class="state-label is-action"><span class="dot"></span>State B — Payment pending + mixed artwork status</div>
+      <div class="email">
+        <div class="logo-bar">
+          <svg viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg" aria-label="Helloprint">
+            <text x="0" y="34" font-family="Brush Script MT, Lucida Handwriting, cursive" font-size="36" font-style="italic" fill="#191919" font-weight="700">HelloPrint</text>
+          </svg>
+        </div>
+
+        <div class="email-inner">
+
+          <!-- Hero (identical copy — calm + confirmatory) -->
+          <div class="hero">
+            <h1>Thanks for your order, Sebastiaan</h1>
+            <p class="lead">We've got order <strong>#3781205</strong> and we're on it. Here's a quick recap and what to expect next.</p>
+            <p class="meta">
+              <strong>Order #3781205</strong>
+              <span class="meta-dot">·</span>
+              Estimated delivery <strong>Fri 22 May</strong>
+            </p>
+            <a class="btn-primary" href="#">View order →</a>
+          </div>
+
+          <!-- Timeline: Placed ✓ · Ready for production (amber, current) · In production ○ · On its way ○ -->
+          <div class="timeline">
+            <div class="timeline-row">
+              <div class="timeline-connector timeline-connector-done" style="left:12.5%; right:62.5%;"></div>
+              <div class="timeline-connector" style="left:37.5%; right:37.5%;"></div>
+              <div class="timeline-connector" style="left:62.5%; right:12.5%;"></div>
+
+              <div class="timeline-step">
+                <span class="timeline-dot is-done">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <div class="timeline-label">Order placed</div>
+              </div>
+              <div class="timeline-step">
+                <span class="timeline-dot is-current-action"></span>
+                <div class="timeline-label">Ready for production</div>
+              </div>
+              <div class="timeline-step is-pending">
+                <span class="timeline-dot"></span>
+                <div class="timeline-label">In production</div>
+              </div>
+              <div class="timeline-step is-pending">
+                <span class="timeline-dot"></span>
+                <div class="timeline-label">On its way</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action callout — payment pending + one line awaiting upload.
+               Note: the line in "Proofing" state does NOT appear here — that's
+               on Helloprint's side, not the customer's. -->
+          <div class="action-callout">
+            <h3>A few things need your attention</h3>
+            <p>Complete these to keep your delivery on track.</p>
+            <ul>
+              <li>Confirm your payment — <a href="#">Pay now</a></li>
+              <li>Upload artwork for <strong>Roll-up Banner — Premium</strong> — <a href="#">Upload</a></li>
+            </ul>
+            <p class="footnote">Recommended by <strong>Wed 14 May, 14:00</strong> for delivery by <strong>Fri 22 May</strong>.</p>
+          </div>
+
+          <!-- Line items — 3 lines showing all 3 artwork states -->
+          <h2 class="section-h2">What you ordered</h2>
+          <div class="line-items">
+            <div class="line-item">
+              <div class="line-thumb">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="line-body">
+                <p class="line-name">A5 Flyers</p>
+                <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
+                <p class="line-qty">Qty 2,500</p>
+                <span class="artwork-badge is-ready">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Ready for production
+                </span>
+              </div>
+              <div class="line-price">€189.00</div>
+            </div>
+            <div class="line-item">
+              <div class="line-thumb">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="line-body">
+                <p class="line-name">Business Cards — Premium</p>
+                <p class="line-config">350 gsm · Round corners · Spot UV front</p>
+                <p class="line-qty">Qty 500</p>
+                <span class="artwork-badge is-proofing">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Proofing artwork
+                </span>
+              </div>
+              <div class="line-price">€64.50</div>
+            </div>
+            <div class="line-item">
+              <div class="line-thumb">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5a1 1 0 011-1h11l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1V5z" stroke="currentColor" stroke-width="1.5"/><path d="M16 4v4h4" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="line-body">
+                <p class="line-name">Roll-up Banner — Premium</p>
+                <p class="line-config">85 × 200 cm · Aluminium base · Carry bag included</p>
+                <p class="line-qty">Qty 3</p>
+                <span class="artwork-badge is-awaiting">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 11V3M5 6l3-3 3 3M3 12v1a1 1 0 001 1h8a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Awaiting upload
+                </span>
+              </div>
+              <div class="line-price">€237.00</div>
+            </div>
+          </div>
+
+          <!-- Totals -->
+          <div class="totals">
+            <table>
+              <tr><td>Articles</td><td>€490.50</td></tr>
+              <tr><td>Services</td><td>€12.00</td></tr>
+              <tr><td>Delivery</td><td>€14.95</td></tr>
+              <tr><td>Subtotal</td><td>€517.45</td></tr>
+              <tr><td>VAT</td><td>€108.66</td></tr>
+              <tr class="total-row"><td>Total</td><td>€626.11</td></tr>
+            </table>
+          </div>
+
+          <!-- Addresses -->
+          <div class="addresses">
+            <div class="address">
+              <h3>Delivery address</h3>
+              <p>
+                Sebastiaan Ram<br>
+                Beursplein 37<br>
+                3011 AA Rotterdam<br>
+                Netherlands
+              </p>
+            </div>
+            <div class="address">
+              <h3>Invoice address</h3>
+              <p>
+                Helloprint B.V.<br>
+                Beursplein 37<br>
+                3011 AA Rotterdam<br>
+                Netherlands
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div class="faq">
+            <h3>Can I change my order?</h3>
+            <p>Once your order is paid and artwork is approved, it goes straight into production and can no longer be changed.</p>
+            <h3>Are delivery dates guaranteed?</h3>
+            <p>Over 98% of orders arrive on the latest communicated date when payment and artwork are completed before the daily cut-off. For extra peace of mind, choose <strong>Secured delivery</strong> at checkout for priority support, fastest reprints and a 20% refund if we're late.</p>
+          </div>
+
+          <!-- Help CTA -->
+          <div class="help-cta">
+            <h3>Have any more questions?</h3>
+            <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+            <a class="btn-primary" href="#">Help Centre →</a>
+          </div>
+
+          <!-- Trustpilot -->
+          <div class="trustpilot">
+            <span class="trustpilot-inner">
+              <span class="trustpilot-stars">
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="trustpilot-star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="trustpilot-label"><strong>Excellent</strong> · 12,847 reviews on Trustpilot</span>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+          <p>You received this email because you placed an order with Helloprint © 2026.</p>
+          <p>All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
