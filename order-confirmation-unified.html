@@ -42,9 +42,224 @@
     color: var(--color-ink);
   }
   .preview-wrap {
-    max-width: 1280px;
+    max-width: 1320px;
     margin: 0 auto;
     padding: 32px 16px 64px;
+  }
+
+  /* ─── Three-column preview layout ─────────────────────────
+     Left: vertical flow chapters (sticky).
+     Centre: the email preview (fixed-width).
+     Right: per-flow metadata block + state toggles (sticky).
+     Collapses to a single column under ~1120px. */
+  .emails-wrap.preview-layout {
+    display: grid;
+    grid-template-columns: 216px minmax(0, 640px) minmax(280px, 320px);
+    gap: 24px;
+    align-items: start;
+    justify-content: center;
+  }
+  /* Sidebar — document-navigation style (transparent, numbered list with
+     group labels and a colored left bar marking the active flow). */
+  .flow-sidebar {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    padding-right: 8px;
+  }
+  .flow-sidebar-heading {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-faint);
+    padding: 0 0 6px 12px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 8px;
+  }
+  .flow-selector-vertical {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  .flow-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-faint);
+    padding: 14px 12px 4px;
+  }
+  .flow-group-label:first-child { padding-top: 4px; }
+  .flow-selector-vertical button {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    align-items: baseline;
+    gap: 6px;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-left: 2px solid transparent;
+    padding: 5px 10px 5px 10px;
+    margin: 0;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--color-ink-muted);
+    transition: background 0.1s, color 0.1s, border-color 0.1s;
+  }
+  .flow-selector-vertical button + button { margin-top: 1px; }
+  .flow-selector-vertical button:hover {
+    background: rgba(0,0,0,0.03);
+    color: var(--color-ink);
+  }
+  .flow-selector-vertical button.is-active {
+    background: rgba(0,133,57,0.06);
+    border-left-color: var(--color-primary);
+    color: var(--color-ink);
+  }
+  .flow-selector-vertical button.is-active .flow-name { font-weight: 700; }
+  .flow-selector-vertical button.is-active .flow-num {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+  .flow-selector-vertical .flow-num {
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--color-ink-faint);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .flow-selector-vertical .flow-name {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+  }
+
+  .meta-column {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Metadata "code block" — one per flow, only the matching flow shows. */
+  .email-meta {
+    display: none;
+    background: #fafafa;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .email-meta-field + .email-meta-field { margin-top: 14px; }
+  .email-meta-label {
+    color: var(--color-ink-faint);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .email-meta-label::before { content: "// "; opacity: 0.55; }
+  .email-meta-value {
+    color: var(--color-ink);
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .email-meta-value strong { font-weight: 700; }
+  .email-meta-value code {
+    display: inline-block;
+    background: rgba(0,133,57,0.08);
+    border: 1px solid rgba(0,133,57,0.20);
+    color: var(--color-primary-dark);
+    padding: 0 5px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+  }
+
+  /* Per-flow visibility of metadata blocks */
+  .emails-wrap[data-active-flow="order-confirmation"]   .email-meta[data-for-flow="order-confirmation"],
+  .emails-wrap[data-active-flow="artwork-reminder"]     .email-meta[data-for-flow="artwork-reminder"],
+  .emails-wrap[data-active-flow="day-1-reminder"]       .email-meta[data-for-flow="day-1-reminder"],
+  .emails-wrap[data-active-flow="proof-ready"]          .email-meta[data-for-flow="proof-ready"],
+  .emails-wrap[data-active-flow="order-shipped"]        .email-meta[data-for-flow="order-shipped"],
+  .emails-wrap[data-active-flow="order-cancelled"]      .email-meta[data-for-flow="order-cancelled"],
+  .emails-wrap[data-active-flow="invoice-ready"]        .email-meta[data-for-flow="invoice-ready"],
+  .emails-wrap[data-active-flow="reminder-friendly"]    .email-meta[data-for-flow="reminder-friendly"],
+  .emails-wrap[data-active-flow="reminder-first"]       .email-meta[data-for-flow="reminder-first"],
+  .emails-wrap[data-active-flow="reminder-second"]      .email-meta[data-for-flow="reminder-second"],
+  .emails-wrap[data-active-flow="notice-of-default"]    .email-meta[data-for-flow="notice-of-default"] {
+    display: block;
+  }
+
+  /* Toggle panel in the right column — vertical stack, full width.
+     Override the legacy 2-column grid styling from the top-bar layout. */
+  .meta-column .toggle-panel {
+    grid-template-columns: 1fr !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 16px 18px !important;
+    gap: 12px 0 !important;
+  }
+  .meta-column .toggle-group.full { grid-column: auto; }
+
+  /* Dark mode */
+  [data-theme="dark"] .flow-sidebar-heading { border-bottom-color: var(--color-border); }
+  [data-theme="dark"] .flow-selector-vertical { background: transparent; }
+  [data-theme="dark"] .flow-selector-vertical button {
+    color: #b3b3b3;
+    border-left-color: transparent;
+  }
+  [data-theme="dark"] .flow-selector-vertical button:hover {
+    background: rgba(255,255,255,0.04);
+    color: #f5f5f5;
+  }
+  [data-theme="dark"] .flow-selector-vertical button.is-active {
+    background: rgba(74,222,128,0.10);
+    border-left-color: #4ade80;
+    color: #f5f5f5;
+  }
+  [data-theme="dark"] .flow-selector-vertical button.is-active .flow-num { color: #4ade80; }
+  [data-theme="dark"] .email-meta {
+    background: #1a1a1a;
+    border-color: #2c2c2c;
+  }
+  [data-theme="dark"] .email-meta-value code {
+    background: rgba(74,222,128,0.10);
+    border-color: rgba(74,222,128,0.25);
+    color: #4ade80;
+  }
+
+  /* Mobile: collapse the 3-column layout to a single column */
+  @media (max-width: 1180px) {
+    .emails-wrap.preview-layout {
+      grid-template-columns: 1fr;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .flow-sidebar, .meta-column {
+      position: static;
+    }
+    .flow-selector-vertical {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .flow-selector-vertical button {
+      width: auto;
+      flex: 0 1 auto;
+    }
+    .flow-selector-vertical button + button { margin-top: 0; }
   }
   .preview-header {
     text-align: center;
@@ -181,9 +396,7 @@
   [data-theme="dark"] .toggle-panel { background: #1a1a1a; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
   [data-theme="dark"] .toggle-options button { background: #2a2a2a; color: #d4d4d4; border-color: #3d3d3d; }
   [data-theme="dark"] .toggle-options button.is-active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
-  [data-theme="dark"] .flow-selector { background: #1a1a1a; border-color: #2c2c2c; }
-  [data-theme="dark"] .flow-selector button { color: #b3b3b3; }
-  [data-theme="dark"] .flow-selector button.is-active { background: #f5f5f5; color: #1a1a1a; }
+  /* (Dark-mode rules for the old horizontal flow-selector were removed.) */
   [data-theme="dark"] .theme-toggle { background: #1a1a1a; border-color: #2c2c2c; }
   [data-theme="dark"] .theme-toggle button { color: #b3b3b3; }
   [data-theme="dark"] .theme-toggle button.is-active { background: #f5f5f5; color: #1a1a1a; }
@@ -201,51 +414,8 @@
   /* Discount row — lighter, slightly muted green so the value reads as a credit */
   [data-theme="dark"] .totals tr.discount-row td { color: var(--color-ink-muted); }
 
-  /* Flow selector (top-level pick of which email to preview) -- */
-  .flow-selector-wrap {
-    text-align: center;
-    margin: 0 0 28px;
-  }
-  .flow-selector {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    background: #fff;
-    border-radius: var(--radius-pill);
-    padding: 4px;
-    border: 1px solid var(--color-border);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-  .flow-selector button {
-    background: transparent;
-    border: none;
-    font-family: inherit;
-    padding: 8px 18px;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    color: var(--color-ink-faint);
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    transition: background 0.12s, color 0.12s;
-  }
-  .flow-selector button:hover {
-    color: var(--color-ink);
-  }
-  .flow-selector button.is-active {
-    background: var(--color-ink);
-    color: #fff;
-  }
-  .flow-selector .flow-name {
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .flow-selector .flow-when {
-    font-size: 11px;
-    font-weight: 500;
-    opacity: 0.7;
-  }
+  /* (Old horizontal .flow-selector CSS was removed — the sidebar uses
+     .flow-selector-vertical now, defined further down in this stylesheet.) */
 
   /* Flow-scoped visibility ----------------------------------- */
   /* data-for-flow accepts space-separated flow keys (matched with ~=) */
@@ -254,7 +424,8 @@
   .emails-wrap[data-active-flow="day-1-reminder"]     .toggle-group[data-for-flow~="day-1-reminder"],
   .emails-wrap[data-active-flow="artwork-reminder"]   .toggle-group[data-for-flow~="artwork-reminder"],
   .emails-wrap[data-active-flow="order-cancelled"]    .toggle-group[data-for-flow~="order-cancelled"],
-  .emails-wrap[data-active-flow="order-shipped"]      .toggle-group[data-for-flow~="order-shipped"] {
+  .emails-wrap[data-active-flow="order-shipped"]      .toggle-group[data-for-flow~="order-shipped"],
+  .emails-wrap[data-active-flow="invoice-ready"]      .toggle-group[data-for-flow~="invoice-ready"] {
     display: flex;
   }
   .email[data-flow] { display: none; }
@@ -263,8 +434,17 @@
   .emails-wrap[data-active-flow="artwork-reminder"]   .email[data-flow="artwork-reminder"],
   .emails-wrap[data-active-flow="proof-ready"]        .email[data-flow="proof-ready"],
   .emails-wrap[data-active-flow="order-cancelled"]    .email[data-flow="order-cancelled"],
-  .emails-wrap[data-active-flow="order-shipped"]      .email[data-flow="order-shipped"] {
+  .emails-wrap[data-active-flow="order-shipped"]      .email[data-flow="order-shipped"],
+  .emails-wrap[data-active-flow="invoice-ready"]      .email[data-flow="invoice-ready"],
+  .emails-wrap[data-active-flow="reminder-friendly"]  .email[data-flow="reminder-friendly"],
+  .emails-wrap[data-active-flow="reminder-first"]     .email[data-flow="reminder-first"],
+  .emails-wrap[data-active-flow="reminder-second"]    .email[data-flow="reminder-second"],
+  .emails-wrap[data-active-flow="notice-of-default"]  .email[data-flow="notice-of-default"] {
     display: block;
+  }
+  /* Hide the toggle panel for flows with no state to switch. */
+  .emails-wrap[data-active-flow="notice-of-default"] .toggle-panel {
+    display: none;
   }
   /* When only Lines toggle is visible, collapse panel to single column */
   .emails-wrap[data-active-flow="artwork-reminder"] .toggle-panel {
@@ -740,6 +920,251 @@
     color: var(--color-danger-ink);
   }
 
+  /* Invoice orders block (used by invoice-ready flow) ---------
+     Mirrors My Account → Invoice detail "Orders (N)" pattern.
+     Each row is one order that the invoice covers; clickable
+     through to the order detail page in My Account. */
+  .invoice-orders {
+    margin: 0 0 32px;
+  }
+  .invoice-orders-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+  }
+  .invoice-orders-head .section-h2 { margin: 0; }
+  .invoice-orders-count {
+    color: var(--color-ink-faint);
+    font-weight: 600;
+  }
+  .invoice-collective-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-muted);
+    border: 1px solid var(--color-border);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    color: var(--color-ink-faint);
+    white-space: nowrap;
+  }
+  .invoice-orders-list {
+    border-top: 1px solid var(--color-border);
+  }
+  /* Static table-row style — non-interactive summary of orders. */
+  .invoice-order-row {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--color-border);
+    color: inherit;
+  }
+  .invoice-order-icon {
+    width: 32px; height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-ink-faint);
+  }
+  .invoice-order-icon svg { width: 16px; height: 16px; }
+  .invoice-order-info {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+  .invoice-order-number {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 700;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .invoice-order-po {
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--color-ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Overdue invoices table (used by reminder + notice-of-default flows).
+     Same table-row pattern as .invoice-order-row but with more columns
+     (invoice number, due date, amount, status pill). */
+  .overdue-invoices {
+    margin: 0 0 32px;
+  }
+  .overdue-invoices-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+  }
+  .overdue-invoices-head .section-h2 { margin: 0; }
+  .overdue-invoices-list {
+    border-top: 1px solid var(--color-border);
+  }
+  .overdue-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .overdue-row-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .overdue-row-num {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 700;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .overdue-row-due {
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--color-ink-faint);
+  }
+  .overdue-row-due strong { color: var(--color-ink-muted); font-weight: 600; }
+  .overdue-row-amount {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 700;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .overdue-row-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    font-size: 12px; line-height: 16px; font-weight: 600;
+    white-space: nowrap;
+  }
+  .overdue-row-pill.is-overdue {
+    background: var(--color-amber-bg);
+    color: var(--color-amber-ink);
+  }
+  .overdue-row-pill.is-default {
+    background: var(--color-danger-bg);
+    color: var(--color-danger-ink);
+  }
+  .overdue-fee-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink-muted);
+  }
+  .overdue-fee-row .label { font-weight: 500; }
+  .overdue-fee-row .amount {
+    font-weight: 700;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .overdue-summary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    padding: 16px 4px 4px;
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+  .overdue-summary .amount {
+    font-variant-numeric: tabular-nums;
+    color: var(--color-danger-ink);
+  }
+  [data-theme="dark"] .overdue-summary .amount { color: #fca5a5; }
+
+  /* Dunning timeline — same component as the order timeline, used by
+     the reminder + notice-of-default flows to show the customer's
+     position in the collection sequence. */
+  .dunning-timeline { margin: 0 0 28px; padding: 8px 8px 4px; }
+
+  /* Danger variant for the action-callout (red left border + red icon). */
+  .action-callout.is-danger {
+    border-left-color: var(--color-danger);
+  }
+  .action-callout p.callout-line .danger-icon {
+    flex-shrink: 0;
+    color: var(--color-danger);
+    margin-top: 3px;
+  }
+
+  /* Formal notice block — a clean key/value list of the legal facts
+     (invoice ref, due date, deadline, consequences) used inside the
+     Notice of Default email so they read like a legal letter. */
+  .formal-notice {
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-card);
+    padding: 20px 24px;
+    margin: 0 0 28px;
+  }
+  .formal-notice h3 {
+    margin: 0 0 12px;
+    font-size: 14px; line-height: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-faint);
+  }
+  .formal-notice dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 24px;
+    row-gap: 10px;
+  }
+  .formal-notice dt {
+    font-size: 13px; line-height: 20px;
+    color: var(--color-ink-faint);
+    font-weight: 500;
+  }
+  .formal-notice dd {
+    margin: 0;
+    font-size: 14px; line-height: 20px;
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .formal-notice dd strong { color: var(--color-danger-ink); }
+  [data-theme="dark"] .formal-notice dd strong { color: #fca5a5; }
+
+  /* Dark mode lifts */
+  [data-theme="dark"] .invoice-order-number { color: var(--color-ink); }
+  [data-theme="dark"] .overdue-row-num,
+  [data-theme="dark"] .overdue-row-amount { color: var(--color-ink); }
+  [data-theme="dark"] .overdue-row-pill.is-overdue {
+    background: var(--color-amber-bg);
+    color: var(--color-amber-ink);
+  }
+  [data-theme="dark"] .overdue-row-pill.is-default {
+    background: var(--color-danger-bg);
+    color: var(--color-danger-ink);
+  }
+  [data-theme="dark"] .invoice-collective-pill {
+    background: var(--color-surface-muted);
+    border-color: var(--color-border);
+    color: var(--color-ink-faint);
+  }
+
   /* Addresses ------------------------------------------------ */
   .addresses {
     display: grid;
@@ -878,6 +1303,14 @@
   .email[data-flow="order-cancelled"][data-payment="paid"] .action-callout {
     display: block;
   }
+  /* Reminder + Notice-of-Default flows — action callout always visible
+     (each carries an amber or danger notification by design). */
+  .email[data-flow="reminder-friendly"] .action-callout,
+  .email[data-flow="reminder-first"] .action-callout,
+  .email[data-flow="reminder-second"] .action-callout,
+  .email[data-flow="notice-of-default"] .action-callout {
+    display: block;
+  }
 
   /* Action rows */
   .action-callout .action-row { display: none; }
@@ -927,89 +1360,92 @@
 
 <div class="preview-wrap">
   <div class="preview-header">
-    <h1>Order communications — interactive previews</h1>
-    <p>Two emails in the IE-launch order flow. Pick a flow above, then use the toggles to render each meaningful state. Trustpilot data is live as of <strong>2026-05-20</strong> (4.5★ · 32,894 reviews).</p>
+    <h1>Transactional Email Flow Visualised</h1>
   </div>
 
-  <!-- ── Flow selector (pick which email to preview) ───────── -->
-  <div class="flow-selector-wrap">
-    <div class="flow-selector">
-      <button type="button" data-flow="order-confirmation" class="is-active">
-        <span class="flow-name">Order confirmation</span>
-        <span class="flow-when">on order placed</span>
-      </button>
-      <button type="button" data-flow="artwork-reminder">
-        <span class="flow-name">Artwork reminder</span>
-        <span class="flow-when">+1 hour, no upload</span>
-      </button>
-      <button type="button" data-flow="day-1-reminder">
-        <span class="flow-name">Day-1 reminder</span>
-        <span class="flow-when">next morning, order-level</span>
-      </button>
-      <button type="button" data-flow="proof-ready">
-        <span class="flow-name">Proof ready</span>
-        <span class="flow-when">per line item</span>
-      </button>
-      <button type="button" data-flow="order-shipped">
-        <span class="flow-name">Order shipped</span>
-        <span class="flow-when">per shipment</span>
-      </button>
-      <button type="button" data-flow="order-cancelled">
-        <span class="flow-name">Order cancelled</span>
-        <span class="flow-when">per order</span>
-      </button>
-    </div>
-  </div>
+  <!-- ── 3-column preview layout: flow chapters | email | metadata + toggles ── -->
+  <div class="emails-wrap preview-layout" data-active-flow="order-confirmation">
 
-  <!-- ── Flow-scoped toggles + emails ──────────────────────── -->
-  <div class="emails-wrap" data-active-flow="order-confirmation">
+    <!-- Left sidebar — flow chapters (vertical numbered list, grouped by
+         phase of the customer lifecycle). Active flow gets a green left
+         bar + bold name, mirroring the SEO doc's "On this page" pattern. -->
+    <aside class="flow-sidebar">
+      <div class="flow-sidebar-heading">Email flows</div>
+      <nav class="flow-selector flow-selector-vertical">
 
-  <!-- Toggle panel — Lines is shared, Payment + Artwork are order-conf only -->
-  <div class="toggle-panel">
-    <div class="toggle-group">
-      <span class="toggle-group-label">Line items</span>
-      <div class="toggle-options" data-toggle="lines">
-        <button type="button" data-value="one">1 item</button>
-        <button type="button" data-value="multi" class="is-active">3 items</button>
-      </div>
-    </div>
-    <div class="toggle-group" data-for-flow="order-confirmation day-1-reminder">
-      <span class="toggle-group-label">Payment status</span>
-      <div class="toggle-options" data-toggle="payment">
-        <button type="button" data-value="paid" class="is-active">Paid</button>
-        <button type="button" data-value="pending">Pending</button>
-      </div>
-    </div>
-    <div class="toggle-group full" data-for-flow="order-confirmation day-1-reminder">
-      <span class="toggle-group-label">Line item artwork status</span>
-      <div class="toggle-options" data-toggle="artwork">
-        <button type="button" data-value="awaiting">Awaiting artwork</button>
-        <button type="button" data-value="received">Artwork received</button>
-        <button type="button" data-value="proof-ready">Proof ready</button>
-        <button type="button" data-value="issue">Artwork issue</button>
-        <button type="button" data-value="approved" class="is-active">Artwork approved</button>
-        <button type="button" data-value="mixed">Mixed (per-line)</button>
-      </div>
-    </div>
-    <!-- Order-shipped only -->
-    <div class="toggle-group" data-for-flow="order-shipped">
-      <span class="toggle-group-label">Shipment type</span>
-      <div class="toggle-options" data-toggle="shipment">
-        <button type="button" data-value="full" class="is-active">Full shipment</button>
-        <button type="button" data-value="partial">Partial (more to come)</button>
-      </div>
-    </div>
-    <div class="toggle-group" data-for-flow="order-shipped">
-      <span class="toggle-group-label">Track &amp; Trace</span>
-      <div class="toggle-options" data-toggle="tracking">
-        <button type="button" data-value="with" class="is-active">Tracking available</button>
-        <button type="button" data-value="without">No tracking yet</button>
-      </div>
-    </div>
-  </div>
+        <div class="flow-group-label">Order communications</div>
+        <button type="button" data-flow="order-confirmation" class="is-active">
+          <span class="flow-num">1.</span>
+          <span class="flow-name">Order confirmation</span>
+        </button>
+        <button type="button" data-flow="artwork-reminder">
+          <span class="flow-num">2.</span>
+          <span class="flow-name">Artwork reminder</span>
+        </button>
+        <button type="button" data-flow="day-1-reminder">
+          <span class="flow-num">3.</span>
+          <span class="flow-name">Day-1 reminder</span>
+        </button>
+        <button type="button" data-flow="proof-ready">
+          <span class="flow-num">4.</span>
+          <span class="flow-name">Proof ready</span>
+        </button>
+        <button type="button" data-flow="order-shipped">
+          <span class="flow-num">5.</span>
+          <span class="flow-name">Order shipped</span>
+        </button>
+        <button type="button" data-flow="order-cancelled">
+          <span class="flow-num">6.</span>
+          <span class="flow-name">Order cancelled</span>
+        </button>
 
-  <!-- ── Interactive emails (one shown per active flow) ────── -->
-  <div class="preview-grid">
+        <div class="flow-group-label">Invoice delivery</div>
+        <button type="button" data-flow="invoice-ready">
+          <span class="flow-num">7.</span>
+          <span class="flow-name">Invoice ready</span>
+        </button>
+        <button type="button" data-flow="reminder-friendly">
+          <span class="flow-num">8.</span>
+          <span class="flow-name">Friendly reminder</span>
+        </button>
+
+        <div class="flow-group-label">Dunning sequence</div>
+        <button type="button" data-flow="reminder-first">
+          <span class="flow-num">9.</span>
+          <span class="flow-name">First reminder</span>
+        </button>
+        <button type="button" data-flow="reminder-second">
+          <span class="flow-num">10.</span>
+          <span class="flow-name">Second reminder</span>
+        </button>
+        <button type="button" data-flow="notice-of-default">
+          <span class="flow-num">11.</span>
+          <span class="flow-name">Notice of default</span>
+        </button>
+
+      </nav>
+    </aside>
+
+    <!-- Centre — interactive email preview. -->
+    <div class="preview-grid">
+    <!-- ══════════════════════════════════════════════════════════════════
+         ORDER CONFIRMATION — Klaviyo data contract
+         ─────────────────────────────────────────────────────────────────
+         Event:   Order Placed
+         $value:  EX VAT (Klaviyo analytics only — do NOT use in template)
+         Currency: event.currency
+
+         Decisions locked 2026-05-26:
+           • Template never reads $value.
+           • $value is sent ex VAT from day one (matches B2B internal reporting).
+           • First name = Klaviyo profile {{ first_name }},
+                          fallback to event.BillingAddress.firstName.
+           • Articles  = Σ Items[].RowTotalExclTax where Kind == "product"   (template)
+           • Services  = Σ Items[].RowTotalExclTax where Kind == "service"   (template)
+           • Subtotal  = event.OrderTotalExclTax                             (NEW field on event)
+           • Total     = event.OrderTotalExclTax + event.TaxTotal            (computed)
+           • Address structure (ShippingAddress / BillingAddress) accepted as-is.
+         ════════════════════════════════════════════════════════════════ -->
     <div class="email" data-flow="order-confirmation" data-lines="multi" data-payment="paid" data-artwork="approved">
 
       <!-- Logo -->
@@ -1020,7 +1456,12 @@
 
       <div class="email-inner">
 
-        <!-- Hero -->
+        <!-- Hero
+             First name:  Klaviyo profile {{ first_name }} with fallback to event.BillingAddress.firstName
+                          → {{ first_name|default:event.BillingAddress.firstName|default:'there' }}
+             Order ID:    event.OrderId
+             View order:  event.OrderUrl
+             NOTE: $value is sent ex VAT for Klaviyo analytics — do NOT use $value anywhere in this template. -->
         <div class="hero">
           <h1>Thanks for your order, Sebastiaan</h1>
           <p class="lead">We've got order <strong>#3781204</strong> and we're on it. Here's a quick recap and what to expect next.</p>
@@ -1107,6 +1548,7 @@
               <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
               <p class="line-qty">Qty 2,500</p>
             </div>
+            <!-- line-price: event.Items[i].RowTotalExclTax (ex VAT) — formatted in event.currency -->
             <div class="line-price">€189.00</div>
           </div>
 
@@ -1142,6 +1584,7 @@
               <p class="line-config">350 gsm · Round corners · Spot UV front</p>
               <p class="line-qty">Qty 500</p>
             </div>
+            <!-- line-price: event.Items[i].RowTotalExclTax (ex VAT) -->
             <div class="line-price">€64.50</div>
           </div>
 
@@ -1177,11 +1620,23 @@
               <p class="line-config">85 × 200 cm · Aluminium base · Carry bag included</p>
               <p class="line-qty">Qty 3</p>
             </div>
+            <!-- line-price: event.Items[i].RowTotalExclTax (ex VAT) -->
             <div class="line-price">€237.00</div>
           </div>
         </div>
 
-        <!-- Totals (with payment pill in Total row, left of amount) -->
+        <!-- Totals (with payment pill in Total row, left of amount)
+             All money rows formatted in event.currency.
+             Bindings:
+               Articles  → Σ event.Items[].RowTotalExclTax where Kind == "product"   (template-computed)
+               Services  → Σ event.Items[].RowTotalExclTax where Kind == "service"   (template-computed)
+                           — hide row if sum == 0
+               Delivery  → event.ShippingExclTax
+               Discount  → event.DiscountTotal (negative for display; hide row if 0)
+               Subtotal  → event.OrderTotalExclTax   (NEW field being added to the event)
+               VAT       → event.TaxTotal
+               Total     → event.OrderTotalExclTax + event.TaxTotal   (computed; DO NOT use $value)
+               Pill      → event.PaymentState ("Paid" | "Pending") -->
         <div class="totals">
           <table>
             <tr><td>Articles</td><td>€490.50</td></tr>
@@ -1222,8 +1677,8 @@
             <h3>Invoice address</h3>
             <p>
               Helloprint B.V.<br>
-              Beursplein 37<br>
-              3011 AA Rotterdam<br>
+              Schiedamsevest 89<br>
+              3012 BG Rotterdam<br>
               Netherlands
             </p>
           </div>
@@ -2105,8 +2560,989 @@
     </div>
     <!-- ── End order cancelled email ───────────────────────── -->
 
+    <!-- ══════════════════════════════════════════════════════════════════
+         INVOICE READY — SendGrid (finance email, PDF attached)
+         ─────────────────────────────────────────────────────────────────
+         Channel:        SendGrid (NOT Klaviyo — per finance flow:
+                         CT → Jitsu → PubSub → Middle Layer → SendGrid).
+         Trigger:        Invoice generated for a paid order.
+         Subject:        Your invoice INV-2026-08291 — order #3781204
+         Preheader:      PDF attached · €620.06 paid · Keep for your records
+         Attachment:     INV-2026-08291.pdf (always include; never strip).
+         Tone:           Transactional, neutral. No upsell. No urgency.
+         Best practice:  Repeat invoice number / date / total in body so
+                         the email still works if the attachment is
+                         blocked by spam filters or unreadable.
+                         Provide a backup download link to the same PDF
+                         in the customer account (in case attachment is
+                         stripped). State VAT + legal entity for B2B
+                         accounting compliance. Provide a clear path for
+                         corrections / credit notes within a window.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="invoice-ready" data-lines="multi" data-payment="paid">
+
+      <!-- Logo -->
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero — copy + CTA + deadline all switch on data-payment.
+             Bindings (filled by SendGrid templating):
+               Invoice no.:  {{invoice.number}}
+               Order count:  {{invoice.orders | length}}      (when >1 → collective)
+               Single order: {{invoice.orders[0].number}}     (when count==1)
+               Issued:       {{invoice.issued_date | date:"d MMM yyyy"}}
+               Amount due:   {{invoice.amount_due | money}}   (unpaid only)
+               Due date:     {{invoice.due_date | date:"EEE d MMM yyyy"}} (unpaid)
+               Pay URL:      {{account.open_invoices_url}}    (unpaid CTA target)
+               PDF URL:      {{invoice.pdf_url}}              (paid CTA target — same PDF as the attachment) -->
+        <div class="hero">
+          <h1 id="iv-hero-title">Sebastiaan, your invoice is ready</h1>
+          <p class="lead" id="iv-hero-lead"></p>
+          <a class="btn-primary" href="#" id="iv-hero-cta">Download invoice (PDF) →</a>
+        </div>
+
+        <!-- Orders covered by this invoice — replaces product line items.
+             Mirrors My Account → Invoice detail "Orders (N)" pattern. An
+             invoice can cover one order or be collective across several.
+             Static (non-clickable) — this is a summary, not a navigation.
+             Row classes use .line-item-N so the existing data-lines="one"
+             rule collapses the list to a single order. -->
+        <div class="invoice-orders">
+          <div class="invoice-orders-head">
+            <h2 class="section-h2" id="iv-orders-title">Orders in this invoice <span class="invoice-orders-count" id="iv-orders-count">(3)</span></h2>
+            <span class="invoice-collective-pill" id="iv-collective-pill">Collective invoice</span>
+          </div>
+          <div class="invoice-orders-list">
+
+            <div class="invoice-order-row line-item-1">
+              <span class="invoice-order-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 5l6 3 6-3M8 8v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="invoice-order-info">
+                <span class="invoice-order-number">#HP-24819</span>
+                <span class="invoice-order-po">PO-NW-0428</span>
+              </span>
+            </div>
+
+            <div class="invoice-order-row line-item-2">
+              <span class="invoice-order-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 5l6 3 6-3M8 8v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="invoice-order-info">
+                <span class="invoice-order-number">#HP-24820</span>
+                <span class="invoice-order-po">PO-NW-0429</span>
+              </span>
+            </div>
+
+            <div class="invoice-order-row line-item-3">
+              <span class="invoice-order-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 5l6 3 6-3M8 8v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="invoice-order-info">
+                <span class="invoice-order-number">#HP-24821</span>
+                <span class="invoice-order-po">PO-NW-0430</span>
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Amount breakdown — simplified to match My Account "Amount breakdown".
+             Total label + payment pill switch on data-payment (JS + CSS). -->
+        <div class="totals">
+          <table>
+            <tr><td>Subtotal (ex VAT)</td><td>€512.45</td></tr>
+            <tr><td>VAT (21%)</td><td>€107.61</td></tr>
+            <tr class="total-row">
+              <td id="iv-total-label">Total paid</td>
+              <td class="total-amount">
+                <span class="payment-pill is-paid" data-for-payment="paid">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Paid
+                </span>
+                <span class="payment-pill is-pending" data-for-payment="pending">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Open
+                </span>
+                <span class="total-value">€620.06</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Address block: "billed from" (Helloprint legal entity) removed
+             per design — the seller details live on the attached PDF and
+             in the footer below. We keep only "Bill to" (the customer's
+             billing details), matching the My Account → Invoice pattern. -->
+        <div class="addresses" style="grid-template-columns: 1fr; max-width: 320px;">
+          <div class="address">
+            <h3>Bill to</h3>
+            <p>
+              Sebastiaan Ram<br>
+              Beursplein 37<br>
+              3011 AA Rotterdam<br>
+              Netherlands<br>
+              VAT NL000000000B00
+            </p>
+          </div>
+        </div>
+
+        <!-- Invoice FAQ — accounting-focused, NOT marketing. -->
+        <div class="faq">
+          <h3>About this invoice</h3>
+          <p>This is your official tax invoice. The PDF attached is the version your accountant should file. Same content as the summary above — we just repeat it here in case the attachment doesn't load.</p>
+          <h3>Need a correction or credit note?</h3>
+          <p>Reply to this email within <strong>14 days</strong> and we'll issue a corrected invoice or credit note. Common fixes include a wrong company name, missing VAT number, or PO reference.</p>
+          <h3>Where can I find past invoices?</h3>
+          <p>All your invoices live in <strong>My account → Invoices</strong>. You can download any of them as PDF, any time.</p>
+        </div>
+
+        <!-- Help CTA -->
+        <div class="help-cta">
+          <h3>Questions about billing?</h3>
+          <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+        <!-- Trustpilot — kept for visual consistency across the flow. -->
+        <div class="trustpilot">
+          <span class="trustpilot-inner">
+            <span class="trustpilot-stars" aria-label="Rated 4.5 out of 5">
+              <span class="star-bg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="star-fg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+            </span>
+            <span class="trustpilot-label">
+              <strong>Excellent</strong> · 4.5 out of 5 · <strong>32,894</strong> reviews on Trustpilot
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Footer — transactional notice. No marketing unsubscribe (this is a legal/tax document). -->
+      <div class="email-footer">
+        <p>You received this email because an invoice was issued for your order with Helloprint. This is a transactional message and cannot be unsubscribed from.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End invoice ready email ─────────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         FRIENDLY REMINDER — sent 3 days before the invoice due date
+         ─────────────────────────────────────────────────────────────────
+         Channel:        SendGrid (finance flow — same pipe as Invoice Ready).
+         Scope:          Per invoice (one email per upcoming invoice).
+         Subject:        Heads-up · Invoice INV-2026-08291 is due in 3 days
+         Preheader:      Pay any time before Wed 28 May to keep things smooth.
+         Tone:           Friendly, light. NOT a chase — just a helpful nudge.
+         No dunning timeline (this email sits before the dunning sequence).
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="reminder-friendly">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero — friendly heads-up, not a chase. -->
+        <div class="hero">
+          <h1>Sebastiaan, a quick heads-up on your invoice</h1>
+          <p class="lead">Invoice <strong>INV-2026-08291</strong> (<strong>€620.06</strong>) is due in <strong>3 days</strong>, on <strong>Wed 28 May 2026</strong>. Pay any time before then and you're sorted.</p>
+          <a class="btn-primary" href="#open-invoices">Pay invoice →</a>
+        </div>
+
+        <!-- Soft info callout — payment methods, no urgency. -->
+        <div class="action-callout is-info">
+          <h3>Easy ways to pay</h3>
+          <p class="callout-line">
+            <svg class="info-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M5 8.5l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="callout-text">Pay online with <strong>iDEAL, SEPA or card</strong> — or bank transfer (IBAN and reference are on the attached PDF).</span>
+          </p>
+        </div>
+
+        <!-- Orders in this invoice — same static block as Invoice Ready. -->
+        <div class="invoice-orders">
+          <div class="invoice-orders-head">
+            <h2 class="section-h2">Orders in this invoice <span class="invoice-orders-count">(3)</span></h2>
+            <span class="invoice-collective-pill">Collective invoice</span>
+          </div>
+          <div class="invoice-orders-list">
+            <div class="invoice-order-row">
+              <span class="invoice-order-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 5l6 3 6-3M8 8v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>
+              <span class="invoice-order-info"><span class="invoice-order-number">#HP-24819</span><span class="invoice-order-po">PO-NW-0428</span></span>
+            </div>
+            <div class="invoice-order-row">
+              <span class="invoice-order-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 5l6 3 6-3M8 8v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>
+              <span class="invoice-order-info"><span class="invoice-order-number">#HP-24820</span><span class="invoice-order-po">PO-NW-0429</span></span>
+            </div>
+            <div class="invoice-order-row">
+              <span class="invoice-order-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 5l6 3 6-3M8 8v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>
+              <span class="invoice-order-info"><span class="invoice-order-number">#HP-24821</span><span class="invoice-order-po">PO-NW-0430</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="totals">
+          <table>
+            <tr><td>Subtotal (ex VAT)</td><td>€512.45</td></tr>
+            <tr><td>VAT (21%)</td><td>€107.61</td></tr>
+            <tr class="total-row">
+              <td>Amount due</td>
+              <td class="total-amount">
+                <span class="payment-pill is-pending" style="display:inline-flex;">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Open
+                </span>
+                <span class="total-value">€620.06</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="faq">
+          <h3>Spotted something wrong?</h3>
+          <p>Reply to this email or raise a dispute through <strong>My account → Invoices</strong>. We'll pause the invoice and sort it out with you.</p>
+          <h3>Already paid?</h3>
+          <p>Bank transfers can take a day or two to land. If you paid recently, please ignore this nudge — it'll clear automatically once the payment hits our account.</p>
+        </div>
+
+        <div class="help-cta">
+          <h3>Questions about billing?</h3>
+          <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+        <div class="trustpilot">
+          <span class="trustpilot-inner">
+            <span class="trustpilot-stars" aria-label="Rated 4.5 out of 5">
+              <span class="star-bg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="star-fg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+            </span>
+            <span class="trustpilot-label">
+              <strong>Excellent</strong> · 4.5 out of 5 · <strong>32,894</strong> reviews on Trustpilot
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because invoice INV-2026-08291 is due in 3 days. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End Friendly reminder email ─────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         FIRST REMINDER — sent on Day +4 (4 days after due date)
+         ─────────────────────────────────────────────────────────────────
+         Channel:        SendGrid
+         Scope:          Aggregated — ONE email covering ALL open invoices
+                         for the customer (not per invoice).
+         Subject:        Friendly check-in · You have 1 overdue invoice
+         Preheader:      Is something wrong? Pay now or raise a dispute.
+         Tone:           More formal but still helpful and inquisitive.
+                         Asks "is something wrong?" before chasing.
+         Includes a dunning timeline so the customer understands what
+         happens next if they don't act.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="reminder-first" data-lines="multi">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1 id="rf-hero-title">Sebastiaan, your invoices are overdue</h1>
+          <p class="lead" id="rf-hero-lead"></p>
+          <a class="btn-primary" href="#open-invoices">Pay now →</a>
+        </div>
+
+        <!-- Dunning timeline — current step is "First reminder". -->
+        <div class="timeline dunning-timeline">
+          <div class="timeline-row">
+            <div class="timeline-connector timeline-connector-done" style="left:12.5%; right:62.5%;"></div>
+            <div class="timeline-connector" style="left:37.5%; right:37.5%;"></div>
+            <div class="timeline-connector" style="left:62.5%; right:12.5%;"></div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">Invoice sent</div>
+            </div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-current-action"></span>
+              <div class="timeline-label">First reminder</div>
+            </div>
+            <div class="timeline-step is-pending">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">Second reminder<br><span style="font-size:11px;opacity:0.7;">in 7 days</span></div>
+            </div>
+            <div class="timeline-step is-pending">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">Notice of default<br><span style="font-size:11px;opacity:0.7;">in 10 days · €4 fee</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action callout — amber, helpful framing. -->
+        <div class="action-callout">
+          <h3>Something we should know?</h3>
+          <p class="callout-line">
+            <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text">If the invoice is wrong or there's a problem with the order, <a href="#raise-dispute" style="color:inherit;font-weight:600;">raise a dispute</a> — we'll pause the clock while we investigate.</span>
+          </p>
+          <p class="callout-hint">Already paid by bank transfer? It can take 1–2 business days to clear. This reminder will close automatically once the payment lands.</p>
+        </div>
+
+        <!-- Overdue invoices table — reminders aggregate every overdue
+             invoice for the customer. Row 1 is permanent, rows 2 + 3
+             have .line-item-N classes so the "Open invoices" toggle
+             (1 vs 3) collapses the list. JS updates the count + total. -->
+        <div class="overdue-invoices">
+          <div class="overdue-invoices-head">
+            <h2 class="section-h2"><span id="rf-overdue-count">Overdue invoices (3)</span></h2>
+          </div>
+          <div class="overdue-invoices-list">
+            <div class="overdue-row line-item-1">
+              <div class="overdue-row-main">
+                <span class="overdue-row-num">INV-2026-08291</span>
+                <span class="overdue-row-due">Due <strong>28 May 2026</strong> · 4 days overdue</span>
+              </div>
+              <span class="overdue-row-pill is-overdue">Overdue</span>
+              <span class="overdue-row-amount">€620.06</span>
+            </div>
+            <div class="overdue-row line-item-2">
+              <div class="overdue-row-main">
+                <span class="overdue-row-num">INV-2026-08312</span>
+                <span class="overdue-row-due">Due <strong>30 May 2026</strong> · 2 days overdue</span>
+              </div>
+              <span class="overdue-row-pill is-overdue">Overdue</span>
+              <span class="overdue-row-amount">€245.00</span>
+            </div>
+            <div class="overdue-row line-item-3">
+              <div class="overdue-row-main">
+                <span class="overdue-row-num">INV-2026-08344</span>
+                <span class="overdue-row-due">Due <strong>31 May 2026</strong> · 1 day overdue</span>
+              </div>
+              <span class="overdue-row-pill is-overdue">Overdue</span>
+              <span class="overdue-row-amount">€189.50</span>
+            </div>
+          </div>
+          <div class="overdue-summary">
+            <span>Total outstanding</span>
+            <span class="amount" id="rf-overdue-total">€1,054.56</span>
+          </div>
+        </div>
+
+        <div class="faq">
+          <h3>What if I think an invoice is wrong?</h3>
+          <p>Raise a dispute in <strong>My account → Invoices</strong>, or reply to this email. We'll pause the dunning process for the disputed invoice while we investigate.</p>
+          <h3>What happens if I don't pay?</h3>
+          <p>You'll get a second reminder in 7 days. If invoices are still unpaid 10 days from now, we issue a formal notice of default and a <strong>€4 administrative fee</strong> is added.</p>
+        </div>
+
+        <div class="help-cta">
+          <h3>Need to talk this through?</h3>
+          <p>Reply to this email or chat with our billing team — we're here to help, not to chase.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because you have one or more overdue invoices with Helloprint. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End First reminder email ────────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SECOND REMINDER — sent on Day +11 (7 days after First reminder)
+         ─────────────────────────────────────────────────────────────────
+         Channel:        SendGrid
+         Scope:          Aggregated — ONE email for ALL open invoices.
+         Subject:        Action required · Invoice 11 days overdue
+         Preheader:      Pay before 11 Jun to avoid €4 fee + notice of default.
+         Tone:           Firm, assertive — but still professional.
+         Spells out the consequences of inaction and the cliff date (D+14).
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="reminder-second" data-lines="multi">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1 id="rs-hero-title">Sebastiaan, your invoices need urgent attention</h1>
+          <p class="lead" id="rs-hero-lead"></p>
+          <a class="btn-primary" href="#open-invoices">Pay now →</a>
+        </div>
+
+        <!-- Dunning timeline — current step is "Second reminder". -->
+        <div class="timeline dunning-timeline">
+          <div class="timeline-row">
+            <div class="timeline-connector timeline-connector-done" style="left:12.5%; right:62.5%;"></div>
+            <div class="timeline-connector timeline-connector-done" style="left:37.5%; right:37.5%;"></div>
+            <div class="timeline-connector" style="left:62.5%; right:12.5%;"></div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">Invoice sent</div>
+            </div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">First reminder</div>
+            </div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-current-action"></span>
+              <div class="timeline-label">Second reminder</div>
+            </div>
+            <div class="timeline-step is-pending">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">Notice of default<br><span style="font-size:11px;opacity:0.7;">in 3 days · €4 fee</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Amber callout — clear consequences. -->
+        <div class="action-callout">
+          <h3>What happens if you don't pay by 11 June 2026</h3>
+          <p class="callout-line">
+            <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text">A <strong>€4 administrative fee</strong> is added and we issue a <strong>formal notice of default</strong>.</span>
+          </p>
+          <p class="callout-line">
+            <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text"><strong>Pay on Invoice is suspended</strong> on your account — new orders need to be paid at checkout.</span>
+          </p>
+          <p class="callout-line">
+            <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text"><strong>Interest of 1% per month</strong> applies, charged retroactively from the original due date.</span>
+          </p>
+          <p class="callout-hint">If the invoice is genuinely wrong, <a href="#raise-dispute" style="color:inherit;font-weight:600;">raise a dispute</a> — disputes pause the dunning sequence until resolved.</p>
+        </div>
+
+        <div class="overdue-invoices">
+          <div class="overdue-invoices-head">
+            <h2 class="section-h2"><span id="rs-overdue-count">Overdue invoices (3)</span></h2>
+          </div>
+          <div class="overdue-invoices-list">
+            <div class="overdue-row line-item-1">
+              <div class="overdue-row-main">
+                <span class="overdue-row-num">INV-2026-08291</span>
+                <span class="overdue-row-due">Due <strong>28 May 2026</strong> · 11 days overdue</span>
+              </div>
+              <span class="overdue-row-pill is-overdue">Overdue</span>
+              <span class="overdue-row-amount">€620.06</span>
+            </div>
+            <div class="overdue-row line-item-2">
+              <div class="overdue-row-main">
+                <span class="overdue-row-num">INV-2026-08312</span>
+                <span class="overdue-row-due">Due <strong>30 May 2026</strong> · 9 days overdue</span>
+              </div>
+              <span class="overdue-row-pill is-overdue">Overdue</span>
+              <span class="overdue-row-amount">€245.00</span>
+            </div>
+            <div class="overdue-row line-item-3">
+              <div class="overdue-row-main">
+                <span class="overdue-row-num">INV-2026-08344</span>
+                <span class="overdue-row-due">Due <strong>31 May 2026</strong> · 8 days overdue</span>
+              </div>
+              <span class="overdue-row-pill is-overdue">Overdue</span>
+              <span class="overdue-row-amount">€189.50</span>
+            </div>
+          </div>
+          <div class="overdue-summary">
+            <span>Total outstanding</span>
+            <span class="amount" id="rs-overdue-total">€1,054.56</span>
+          </div>
+        </div>
+
+        <div class="faq">
+          <h3>Can I set up a payment arrangement?</h3>
+          <p>Yes — reply to this email before 11 June 2026 and our billing team will work out a plan with you. Once a notice of default is issued, our options become more limited.</p>
+          <h3>What if the invoice is wrong?</h3>
+          <p>Raise a dispute in <strong>My account → Invoices</strong> or reply to this email. The dunning sequence pauses while a dispute is open.</p>
+        </div>
+
+        <div class="help-cta">
+          <h3>Need to resolve this together?</h3>
+          <p>Reply to this email or chat with our billing team — we'd rather sort it now than escalate.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because you have an invoice 11 days overdue with Helloprint. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End Second reminder email ───────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         NOTICE OF DEFAULT — sent on Day +14 (ingebrekestelling / Mahnung)
+         ─────────────────────────────────────────────────────────────────
+         Channel:        SendGrid
+         Scope:          Aggregated — ONE email for ALL open invoices.
+         Subject:        Formal notice of default · INV-2026-08291
+         Preheader:      Final 7 days to pay before transfer to collections.
+         Tone:           Formal, legal. This email may be used as evidence
+                         of formal notice (ingebrekestelling) under Dutch
+                         Civil Code 6:82. Language is precise and neutral.
+         The body is structured as a legal notice with a key/value summary
+         of facts (invoice, amount, fee, due date, final deadline,
+         consequences) and a clear Pay Now CTA and dispute contact.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="notice-of-default">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>Formal notice of default</h1>
+          <p class="lead">Dear Sebastiaan,<br><br>This is a <strong>formal notice of default</strong> (ingebrekestelling) regarding invoice <strong>INV-2026-08291</strong>, which remains unpaid 14 days after its due date. You have <strong>7 calendar days</strong> from today — until <strong>18 June 2026</strong> — to pay in full. Failure to pay by that date will lead to the consequences listed below.</p>
+          <a class="btn-primary" href="#open-invoices">Pay now →</a>
+        </div>
+
+        <!-- Dunning timeline — final step active. -->
+        <div class="timeline dunning-timeline">
+          <div class="timeline-row">
+            <div class="timeline-connector timeline-connector-done" style="left:12.5%; right:62.5%;"></div>
+            <div class="timeline-connector timeline-connector-done" style="left:37.5%; right:37.5%;"></div>
+            <div class="timeline-connector timeline-connector-done" style="left:62.5%; right:12.5%;"></div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">Invoice sent</div>
+            </div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">First reminder</div>
+            </div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">Second reminder</div>
+            </div>
+            <div class="timeline-step">
+              <span class="timeline-dot" style="background:var(--color-danger);box-shadow:0 0 0 4px var(--color-danger-bg);"></span>
+              <div class="timeline-label" style="color:var(--color-danger-ink);font-weight:700;">Notice of default</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formal notice key/value block — legal facts. -->
+        <div class="formal-notice">
+          <h3>Notice of default — Summary</h3>
+          <dl>
+            <dt>Invoice number</dt><dd>INV-2026-08291</dd>
+            <dt>Original amount</dt><dd>€620.06</dd>
+            <dt>Administrative fee</dt><dd>€4.00</dd>
+            <dt>Original due date</dt><dd>28 May 2026</dd>
+            <dt>Notice issued</dt><dd>11 June 2026</dd>
+            <dt>Final deadline</dt><dd><strong>18 June 2026 (in 7 days)</strong></dd>
+            <dt>Total to pay</dt><dd><strong>€624.06</strong></dd>
+          </dl>
+        </div>
+
+        <!-- Danger callout — consequences of non-payment after deadline. -->
+        <div class="action-callout is-danger">
+          <h3>Consequences if not paid by 18 June 2026</h3>
+          <p class="callout-line">
+            <svg class="danger-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text"><strong>Interest of 1% per month</strong> applies, charged <strong>retroactively from the original due date</strong> (28 May 2026).</span>
+          </p>
+          <p class="callout-line">
+            <svg class="danger-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text"><strong>€40 collection costs</strong> are added in line with the Dutch Buitengerechtelijke Incassokosten Act (WIK).</span>
+          </p>
+          <p class="callout-line">
+            <svg class="danger-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text">The outstanding balance is <strong>transferred to our collection department</strong> for further action.</span>
+          </p>
+        </div>
+
+        <!-- Overdue invoices table — includes the €4 fee row. -->
+        <div class="overdue-invoices">
+          <div class="overdue-invoices-head">
+            <h2 class="section-h2">Outstanding balance</h2>
+          </div>
+          <div class="overdue-invoices-list">
+            <div class="overdue-row">
+              <div class="overdue-row-main">
+                <span class="overdue-row-num">INV-2026-08291</span>
+                <span class="overdue-row-due">Due <strong>28 May 2026</strong> · 14 days overdue</span>
+              </div>
+              <span class="overdue-row-pill is-default">In default</span>
+              <span class="overdue-row-amount">€620.06</span>
+            </div>
+            <div class="overdue-fee-row">
+              <span class="label">Administrative fee (notice of default)</span>
+              <span class="amount">€4.00</span>
+            </div>
+          </div>
+          <div class="overdue-summary">
+            <span>Total to pay by 18 June 2026</span>
+            <span class="amount">€624.06</span>
+          </div>
+        </div>
+
+        <!-- Dispute contact — required for a valid formal notice. -->
+        <div class="faq">
+          <h3>If you dispute this invoice</h3>
+          <p>If you believe this notice is incorrect, contact our billing team <strong>before 18 June 2026</strong>:</p>
+          <p>Email: <strong>billing@helloprint.com</strong><br>Or raise a dispute via <strong>My account → Invoices</strong>.</p>
+          <p>A dispute raised in writing before the deadline pauses the consequences listed above while we investigate.</p>
+          <h3>If you've already paid</h3>
+          <p>Bank transfers can take 1–2 business days. If you paid recently, no action is needed — once the payment reaches our account this notice closes automatically.</p>
+        </div>
+
+        <div class="help-cta">
+          <h3>Pay now to close this notice</h3>
+          <p>Paying €624.06 before 18 June 2026 resolves the matter — no interest, no collection costs, no further action.</p>
+          <a class="btn-primary" href="#open-invoices">Pay now →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>This is a formal notice of default (ingebrekestelling) for invoice INV-2026-08291. Issued under Dutch Civil Code 6:82. Retain for your records.</p>
+        <p>Helloprint B.V. · Schiedamsevest 89 · 3012 BG Rotterdam · Netherlands · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End Notice of Default email ─────────────────────── -->
+
+    </div>
+    <!-- /.preview-grid -->
+
+    <!-- ── Right column: per-flow metadata block + state toggles ────────── -->
+    <aside class="meta-column">
+
+      <!-- One metadata block per flow. CSS shows only the active one. -->
+      <div class="email-meta" data-for-flow="order-confirmation">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A customer just placed an order — this is the first email they get from us, sent within seconds of checkout.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Order Placed</code> · Klaviyo · immediate</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Reassure the customer, set delivery expectations, and surface any actions still needed (payment, artwork).</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>View order →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="artwork-reminder">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A customer placed an order but hasn't uploaded any artwork an hour later.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>+1h after Order Placed</code> · gated on <code>artwork_missing</code> · Klaviyo flow</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Unblock production by prompting the file upload while the customer is still warm.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Upload your file →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="day-1-reminder">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A day has passed and the order still has open actions — payment hasn't gone through, or artwork is still missing.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">scheduled · next morning · gated on <code>payment_pending OR artwork_action_pending</code> · Klaviyo</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Consolidate every open action into one nudge before the delivery date slips.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>View your order →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="proof-ready">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">Our pre-press team prepared a proof for one of the customer's items and we need their approval before printing.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Proof Ready</code> · per line item · Klaviyo</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Get a fast approve/request-changes decision so production can start (or be re-done) with no dead time.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Review your proof →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="order-shipped">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A supplier dispatched the customer's parcel — sent per shipment, so multi-supplier orders trigger multiple emails.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Order Shipped</code> · per shipment · Klaviyo</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Confirm dispatch and hand over the tracking link so the customer knows when to expect delivery.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Track your parcel →</code> (falls back to <code>View order</code> when no tracking)</div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="order-cancelled">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">The order was cancelled — by the customer, by support, or because we couldn't fulfil it.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Order Cancelled</code> · per order · Klaviyo</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Confirm the cancellation, explain the refund (when paid), and signal that nothing further is needed.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>View your order →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="invoice-ready">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">The official invoice was generated for the customer's order(s) — the first time they see it. May be a single-order or collective invoice.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Invoice Issued</code> · SendGrid · finance pipeline (CT → Jitsu → PubSub → Middle Layer → SendGrid)</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Deliver the legal invoice PDF and communicate whether payment is settled (paid) or still due (Pay-on-Invoice).</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value">Paid → <code>Download invoice (PDF) →</code><br>Unpaid → <code>Pay invoice →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="reminder-friendly">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A polite heads-up sent 3 days before an invoice is due. No chase, no escalation — just a friendly nudge.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">scheduled · <code>invoice.due_date − 3d</code> · per invoice · SendGrid</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Reduce overdue rate by giving the customer a chance to act before the dunning clock starts.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay invoice →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="reminder-first">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">An invoice tipped 4 days past due. We aggregate every open overdue invoice for that customer into one email.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">scheduled · <code>invoice.due_date + 4d</code> · aggregated per customer · SendGrid</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Open the conversation — check if something's wrong before escalating, while making the path to pay obvious.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay now →</code> (secondary: <code>Raise a dispute</code>)</div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="reminder-second">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">11 days past due — one week after the first reminder went unanswered. Last chance before the D+14 cliff.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">scheduled · <code>invoice.due_date + 11d</code> · aggregated per customer · SendGrid</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Push hard before D+14 by spelling out exactly what changes if the invoice still isn't paid (€4 fee, suspended Pay-on-Invoice, 1% monthly interest).</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay now →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="notice-of-default">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">14 days past due. The formal legal notice (ingebrekestelling) that triggers consequences — interest, collection costs, transfer to collections.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">scheduled · <code>invoice.due_date + 14d</code> · SendGrid · legal flow</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Issue the formal notice under Dutch Civil Code 6:82, set the 7-day cliff (D+21), and unlock interest + collection costs if unpaid.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay now →</code> (secondary: dispute contact)</div>
+        </div>
+      </div>
+
+      <!-- State toggles for the active flow. Groups with data-for-flow only
+           render when the active flow matches (CSS); otherwise hidden. -->
+      <div class="toggle-panel">
+        <!-- Line items: scoped to order-side flows. -->
+        <div class="toggle-group" data-for-flow="order-confirmation artwork-reminder day-1-reminder order-shipped order-cancelled">
+          <span class="toggle-group-label">Line items</span>
+          <div class="toggle-options" data-toggle="lines">
+            <button type="button" data-value="one">1 item</button>
+            <button type="button" data-value="multi" class="is-active">3 items</button>
+          </div>
+        </div>
+        <!-- Orders covered: invoice flows where one PDF can cover 1 or N orders. -->
+        <div class="toggle-group" data-for-flow="invoice-ready reminder-friendly">
+          <span class="toggle-group-label">Orders covered</span>
+          <div class="toggle-options" data-toggle="lines">
+            <button type="button" data-value="one">1 order</button>
+            <button type="button" data-value="multi" class="is-active">3 orders</button>
+          </div>
+        </div>
+        <!-- Open invoices: dunning reminders are aggregated per customer. -->
+        <div class="toggle-group" data-for-flow="reminder-first reminder-second">
+          <span class="toggle-group-label">Open invoices</span>
+          <div class="toggle-options" data-toggle="lines">
+            <button type="button" data-value="one">1 invoice</button>
+            <button type="button" data-value="multi" class="is-active">3 invoices</button>
+          </div>
+        </div>
+        <div class="toggle-group" data-for-flow="order-confirmation day-1-reminder invoice-ready">
+          <span class="toggle-group-label">Payment status</span>
+          <div class="toggle-options" data-toggle="payment">
+            <button type="button" data-value="paid" class="is-active">Paid</button>
+            <button type="button" data-value="pending">Pending / Unpaid</button>
+          </div>
+        </div>
+        <div class="toggle-group full" data-for-flow="order-confirmation day-1-reminder">
+          <span class="toggle-group-label">Line item artwork status</span>
+          <div class="toggle-options" data-toggle="artwork">
+            <button type="button" data-value="awaiting">Awaiting artwork</button>
+            <button type="button" data-value="received">Artwork received</button>
+            <button type="button" data-value="proof-ready">Proof ready</button>
+            <button type="button" data-value="issue">Artwork issue</button>
+            <button type="button" data-value="approved" class="is-active">Artwork approved</button>
+            <button type="button" data-value="mixed">Mixed (per-line)</button>
+          </div>
+        </div>
+        <div class="toggle-group" data-for-flow="order-shipped">
+          <span class="toggle-group-label">Shipment type</span>
+          <div class="toggle-options" data-toggle="shipment">
+            <button type="button" data-value="full" class="is-active">Full shipment</button>
+            <button type="button" data-value="partial">Partial (more to come)</button>
+          </div>
+        </div>
+        <div class="toggle-group" data-for-flow="order-shipped">
+          <span class="toggle-group-label">Track &amp; Trace</span>
+          <div class="toggle-options" data-toggle="tracking">
+            <button type="button" data-value="with" class="is-active">Tracking available</button>
+            <button type="button" data-value="without">No tracking yet</button>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+    <!-- /.meta-column -->
+
   </div>
-  </div>
+  <!-- /.emails-wrap -->
 </div>
 
 <script>
@@ -2198,6 +3634,106 @@
       arStrong.textContent = arLines === 'one'
         ? 'Upload your file for A5 Flyers.'
         : 'Upload files for 3 items.';
+    }
+
+    // ── Reminder emails (first + second) — content adapts to data-lines.
+    // The "Open invoices" toggle (1 vs 3) drives both the count in the
+    // heading and the total outstanding amount. Hero copy switches too.
+    function updateReminderEmail(flow, idPrefix, title1, title3, lead1, lead3, total1, total3) {
+      var email = document.querySelector('.email[data-flow="' + flow + '"]');
+      if (!email) return;
+      var lines = email.dataset.lines || 'multi';
+      var titleEl = document.getElementById(idPrefix + '-hero-title');
+      var leadEl = document.getElementById(idPrefix + '-hero-lead');
+      var countEl = document.getElementById(idPrefix + '-overdue-count');
+      var totalEl = document.getElementById(idPrefix + '-overdue-total');
+      if (lines === 'one') {
+        if (titleEl) titleEl.textContent = title1;
+        if (leadEl) leadEl.innerHTML = lead1;
+        if (countEl) countEl.textContent = 'Overdue invoices (1)';
+        if (totalEl) totalEl.textContent = total1;
+      } else {
+        if (titleEl) titleEl.textContent = title3;
+        if (leadEl) leadEl.innerHTML = lead3;
+        if (countEl) countEl.textContent = 'Overdue invoices (3)';
+        if (totalEl) totalEl.textContent = total3;
+      }
+    }
+
+    updateReminderEmail(
+      'reminder-first', 'rf',
+      'Sebastiaan, your invoice is overdue',
+      'Sebastiaan, your invoices are overdue',
+      'Invoice <strong>INV-2026-08291</strong> was due on <strong>28 May 2026</strong> — it\'s now <strong>4 days overdue</strong>. Is something wrong? Raise a dispute if needed — otherwise, pay now to keep your account in good standing. Most customers resolve overdue invoices within a few days.',
+      'You have <strong>3 overdue invoices</strong>, totalling <strong>€1,054.56</strong>. The oldest is 4 days past due. Is something wrong? Raise a dispute on any of them if needed — otherwise, pay now to keep your account in good standing. Most customers resolve overdue invoices within a few days.',
+      '€620.06',
+      '€1,054.56'
+    );
+
+    updateReminderEmail(
+      'reminder-second', 'rs',
+      'Sebastiaan, your invoice needs urgent attention',
+      'Sebastiaan, your invoices need urgent attention',
+      'Invoice <strong>INV-2026-08291</strong> is <strong>11 days overdue</strong>. Pay before <strong>11 June 2026</strong> to avoid a <strong>€4 administrative fee</strong> and a formal notice of default. After that date, Pay on Invoice is suspended and <strong>interest of 1% per month</strong> applies.',
+      'You have <strong>3 overdue invoices</strong> totalling <strong>€1,054.56</strong>, the oldest 11 days past due. Pay before <strong>11 June 2026</strong> to avoid a <strong>€4 administrative fee</strong> per invoice and formal notice of default. After that date, Pay on Invoice is suspended and <strong>interest of 1% per month</strong> applies.',
+      '€620.06',
+      '€1,054.56'
+    );
+
+    // Invoice ready — same friendly hero title for both states. Only
+    // the lead copy, CTA, and total label change between paid / unpaid.
+    // Order list collapses to a single row when data-lines="one"
+    // (CSS handles the hiding via the existing line-item-N rule).
+    var ivEmail = document.querySelector('.email[data-flow="invoice-ready"]');
+    if (ivEmail) {
+      var ivPayment = ivEmail.dataset.payment || 'paid';
+      var ivLines = ivEmail.dataset.lines || 'multi';
+      var INVOICE_NUMBER = 'INV-2026-08291';
+      var INVOICE_ISSUED = '14 May 2026';
+      var INVOICE_DUE_DATE = 'Wed 28 May 2026';
+      var INVOICE_AMOUNT = '€620.06';
+      var ORDER_COUNT = 3;
+      var FIRST_ORDER_NUMBER = '#HP-24819';
+
+      var ivTitle = document.getElementById('iv-hero-title');
+      var ivLead = document.getElementById('iv-hero-lead');
+      var ivCta = document.getElementById('iv-hero-cta');
+      var ivOrdersCount = document.getElementById('iv-orders-count');
+      var ivOrdersTitle = document.getElementById('iv-orders-title');
+      var ivCollectivePill = document.getElementById('iv-collective-pill');
+      var ivTotalLabel = document.getElementById('iv-total-label');
+
+      // Title is the same friendly line for both paid and unpaid — this
+      // is the FIRST time the customer sees the invoice; reminders are
+      // a separate flow that escalates the tone.
+      if (ivTitle) ivTitle.textContent = 'Sebastiaan, your invoice is ready';
+
+      var ordersClause = (ivLines === 'one')
+        ? 'for order <strong>' + FIRST_ORDER_NUMBER + '</strong>'
+        : 'covering <strong>' + ORDER_COUNT + ' orders</strong>';
+
+      if (ivPayment === 'pending') {
+        if (ivLead) ivLead.innerHTML = 'Invoice <strong>' + INVOICE_NUMBER + '</strong> ' + ordersClause + ' is attached as a PDF — issued <strong>' + INVOICE_ISSUED + '</strong>. <strong>' + INVOICE_AMOUNT + '</strong> is due by <strong>' + INVOICE_DUE_DATE + '</strong> (Net-14).';
+        if (ivCta) {
+          ivCta.textContent = 'Pay invoice →';
+          ivCta.setAttribute('href', '#open-invoices');
+        }
+        if (ivTotalLabel) ivTotalLabel.textContent = 'Amount due';
+      } else {
+        if (ivLead) ivLead.innerHTML = 'Invoice <strong>' + INVOICE_NUMBER + '</strong> ' + ordersClause + ' is attached as a PDF — issued <strong>' + INVOICE_ISSUED + '</strong>, paid in full. Keep it for your records, or grab another copy any time.';
+        if (ivCta) {
+          ivCta.textContent = 'Download invoice (PDF) →';
+          ivCta.setAttribute('href', '#download-pdf');
+        }
+        if (ivTotalLabel) ivTotalLabel.textContent = 'Total paid';
+      }
+
+      // Orders block heading + collective pill — only meaningful for multi.
+      if (ivOrdersCount) ivOrdersCount.textContent = (ivLines === 'one') ? '' : '(' + ORDER_COUNT + ')';
+      if (ivOrdersTitle && ivOrdersTitle.firstChild) {
+        ivOrdersTitle.firstChild.nodeValue = (ivLines === 'one') ? 'Order in this invoice ' : 'Orders in this invoice ';
+      }
+      if (ivCollectivePill) ivCollectivePill.style.display = (ivLines === 'one') ? 'none' : '';
     }
 
     // Day-1 reminder — payment line (conditional) + artwork line (when any artwork
@@ -2297,14 +3833,23 @@
   // Toggle behaviour — sets data-* attributes on the active email shell(s);
   // visibility/state changes are driven by CSS attribute selectors,
   // dynamic copy is populated by updateActionContent().
+  // Multiple toggle groups can share the same data-toggle key (e.g. the
+  // "lines" key is shared across "Line items / Orders / Open invoices");
+  // when one fires we sync the active state on every group sharing the key
+  // so they don't drift out of sync as the user switches flows.
   document.querySelectorAll('.toggle-options').forEach(function (group) {
-    var key = group.dataset.toggle; // "lines" | "payment" | "artwork"
+    var key = group.dataset.toggle; // "lines" | "payment" | "artwork" | "shipment" | "tracking"
     group.addEventListener('click', function (e) {
       var btn = e.target.closest('button[data-value]');
       if (!btn) return;
       var value = btn.dataset.value;
-      group.querySelectorAll('button').forEach(function (b) { b.classList.remove('is-active'); });
-      btn.classList.add('is-active');
+      // Sync active state across every group with the same data-toggle key.
+      document.querySelectorAll('.toggle-options[data-toggle="' + key + '"]').forEach(function (g) {
+        g.querySelectorAll('button').forEach(function (b) {
+          if (b.dataset.value === value) b.classList.add('is-active');
+          else b.classList.remove('is-active');
+        });
+      });
       document.querySelectorAll('.email').forEach(function (email) {
         email.dataset[key] = value;
       });
