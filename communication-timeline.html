@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helloprint · Customer Communication Timeline</title>
+<style>
+  :root {
+    --color-primary: #008539;
+    --color-primary-dark: #006B2D;
+    --color-primary-light: #00A651;
+    --color-ink: #191919;
+    --color-ink-muted: #333333;
+    --color-ink-faint: #555555;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f8f8f8;
+    --color-border: #e5e5e5;
+    --color-amber: #f59e0b;
+    --color-amber-bg: #fef3c7;
+    --color-amber-ink: #92400e;
+    --color-danger: #d32f2f;
+    --color-danger-bg: #fee2e2;
+    --color-danger-ink: #991b1b;
+    --color-sms: #2563eb;            /* SMS accent (blue) */
+    --color-sms-bg: #e0ecff;
+    --color-sms-ink: #1e3a8a;
+    --radius-card: 12px;
+    --radius-pill: 9999px;
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --page-bg: #ececec;
+  }
+  [data-theme="dark"] {
+    --color-ink: #f2f2f2;
+    --color-ink-muted: #cfcfcf;
+    --color-ink-faint: #9a9a9a;
+    --color-surface: #1e1e1e;
+    --color-surface-muted: #2a2a2a;
+    --color-border: #383838;
+    --color-amber-bg: #3a2e12;
+    --color-amber-ink: #fcd34d;
+    --color-danger-bg: #3a1c1c;
+    --color-danger-ink: #fca5a5;
+    --color-sms-bg: #16243f;
+    --color-sms-ink: #93b4ff;
+    --page-bg: #141414;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--page-bg);
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--color-primary); }
+
+  .page { max-width: 1280px; margin: 0 auto; padding: 28px 20px 80px; }
+
+  /* Header ---------------------------------------------------- */
+  .masthead {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap; margin-bottom: 22px;
+  }
+  .masthead-logo img { height: 26px; display: block; }
+  .logo-dark { display: none; }
+  [data-theme="dark"] .logo-light { display: none; }
+  [data-theme="dark"] .logo-dark { display: block; }
+  .masthead h1 { font-size: 24px; line-height: 1.2; margin: 14px 0 4px; font-weight: 800; letter-spacing: -0.01em; }
+  .masthead p.sub { margin: 0; color: var(--color-ink-faint); font-size: 14px; max-width: 640px; line-height: 1.5; }
+
+  .theme-toggle button {
+    border: 1px solid var(--color-border); background: var(--color-surface);
+    color: var(--color-ink-muted); border-radius: var(--radius-pill);
+    padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .masthead-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .viz-nav {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; background: var(--color-primary); color: #fff !important;
+    text-decoration: none; border-radius: var(--radius-pill); font-size: 13px; font-weight: 600;
+  }
+  .viz-nav:hover { background: var(--color-primary-dark); }
+
+  /* Controls -------------------------------------------------- */
+  .controls {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-card); padding: 14px 16px; margin-bottom: 8px;
+    position: sticky; top: 0; z-index: 20;
+  }
+  .seg { display: inline-flex; border: 1px solid var(--color-border); border-radius: var(--radius-pill); overflow: hidden; }
+  .seg button {
+    border: 0; background: transparent; color: var(--color-ink-muted);
+    padding: 7px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .seg button.is-active { background: var(--color-primary); color: #fff; }
+  .controls-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-ink-faint); }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-left: auto; }
+  .legend .chip { cursor: default; }
+  .summary { font-size: 13px; color: var(--color-ink-faint); margin: 14px 2px 26px; }
+  .summary strong { color: var(--color-ink); }
+
+  /* Channel chips --------------------------------------------- */
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: var(--radius-pill);
+    letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .chip svg { width: 12px; height: 12px; }
+  .chip.email { background: var(--color-badge-success-bg, #e8f5e9); color: var(--color-primary-dark); }
+  [data-theme="dark"] .chip.email { background: #12351f; color: #6ee7a0; }
+  .chip.sms { background: var(--color-sms-bg); color: var(--color-sms-ink); }
+  .chip.sms-proposed { background: transparent; color: var(--color-sms-ink); border: 1px dashed var(--color-sms); }
+  .chip.cond { background: var(--color-amber-bg); color: var(--color-amber-ink); }
+
+  /* Tracks ---------------------------------------------------- */
+  .track { margin-bottom: 30px; }
+  .track-head { display: flex; align-items: baseline; gap: 12px; margin: 0 2px 12px; flex-wrap: wrap; }
+  .track-head h2 { font-size: 16px; margin: 0; font-weight: 800; }
+  .track-head .clock { font-size: 12px; color: var(--color-ink-faint); }
+  .track-head .axis { margin-left: auto; font-size: 11px; color: var(--color-ink-faint); font-weight: 600; }
+
+  .rail {
+    display: flex; gap: 0; overflow-x: auto; padding: 6px 2px 16px;
+    scroll-snap-type: x proximity;
+  }
+  .rail::-webkit-scrollbar { height: 8px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 8px; }
+
+  .step { display: flex; align-items: stretch; scroll-snap-align: start; }
+  .step .arrow {
+    align-self: center; flex: 0 0 26px; display: flex; align-items: center; justify-content: center;
+    color: var(--color-border);
+  }
+  .step .arrow svg { width: 18px; height: 18px; }
+
+  .tp-card {
+    flex: 0 0 220px; width: 220px;
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-card); padding: 14px 14px 13px;
+    cursor: pointer; position: relative; transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .tp-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.10); border-color: var(--color-primary-light); }
+  .tp-card.has-sms { border-color: var(--color-sms); }
+  .tp-card.has-sms::after {
+    content: ""; position: absolute; inset: 0; border-radius: var(--radius-card);
+    box-shadow: inset 0 0 0 1px var(--color-sms); pointer-events: none;
+  }
+
+  .tp-timing {
+    font-size: 11px; font-weight: 700; color: var(--color-primary-dark);
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  [data-theme="dark"] .tp-timing { color: var(--color-primary-light); }
+  .tp-node { width: 10px; height: 10px; border-radius: 50%; background: var(--color-primary); margin-bottom: 2px; }
+  .tp-card.has-sms .tp-node { background: var(--color-sms); }
+  .tp-name { font-size: 14px; font-weight: 700; line-height: 1.25; }
+  .tp-trigger { font-size: 11px; color: var(--color-ink-faint); line-height: 1.35; }
+  .tp-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+
+  /* dimming for channel filter */
+  .wrap.filter-email .tp-card:not(.has-email),
+  .wrap.filter-sms .tp-card:not(.has-sms) { opacity: 0.28; filter: grayscale(0.5); }
+  .wrap.filter-sms .tp-card:not(.has-sms):hover { transform: none; box-shadow: none; }
+
+  /* Detail drawer --------------------------------------------- */
+  .scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 40; }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; height: 100%; width: 380px; max-width: 92vw;
+    background: var(--color-surface); border-left: 1px solid var(--color-border);
+    transform: translateX(100%); transition: transform .24s ease; z-index: 50;
+    padding: 24px 24px 32px; overflow-y: auto;
+  }
+  .drawer.open { transform: translateX(0); box-shadow: -12px 0 40px rgba(0,0,0,0.18); }
+  .drawer-close { position: absolute; top: 16px; right: 16px; border: 0; background: transparent; font-size: 22px; line-height: 1; cursor: pointer; color: var(--color-ink-faint); }
+  .drawer h3 { margin: 4px 0 2px; font-size: 19px; font-weight: 800; }
+  .drawer .d-track { font-size: 12px; font-weight: 700; color: var(--color-ink-faint); text-transform: uppercase; letter-spacing: 0.04em; }
+  .drawer .d-chips { display: flex; gap: 6px; margin: 14px 0 18px; flex-wrap: wrap; }
+  .d-row { margin-bottom: 14px; }
+  .d-row .d-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-ink-faint); margin-bottom: 3px; }
+  .d-row .d-val { font-size: 14px; line-height: 1.45; color: var(--color-ink-muted); }
+  .d-val code { background: var(--color-surface-muted); padding: 1px 6px; border-radius: 6px; font-size: 12px; }
+  .d-note { background: var(--color-sms-bg); color: var(--color-sms-ink); border-radius: 10px; padding: 10px 12px; font-size: 13px; line-height: 1.4; }
+  .d-note.cond { background: var(--color-amber-bg); color: var(--color-amber-ink); }
+
+  .footnote { font-size: 12px; color: var(--color-ink-faint); line-height: 1.5; border-top: 1px solid var(--color-border); padding-top: 16px; margin-top: 10px; }
+
+  @media (max-width: 600px) {
+    .tp-card { flex-basis: 200px; width: 200px; }
+    .controls { position: static; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div class="page">
+
+    <div class="masthead">
+      <div>
+        <div class="masthead-logo">
+          <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+          <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+        </div>
+        <h1>Customer Communication Timeline</h1>
+        <p class="sub">The single source of truth for every transactional message we send, when it fires, and on which channel. Click any touchpoint for the full trigger and purpose. SMS is reserved for urgent, time-sensitive nudges.</p>
+      </div>
+      <div class="masthead-actions">
+        <a class="viz-nav" href="https://sebastiaanram-coder.github.io/transactionals/order-confirmation-unified.html">View the email overview &rarr;</a>
+        <div class="theme-toggle"><button id="themeBtn" type="button">&#9728; Light</button></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <span class="controls-label">Channel</span>
+      <div class="seg" id="filterSeg">
+        <button data-filter="all" class="is-active">All</button>
+        <button data-filter="email">Email</button>
+        <button data-filter="sms">SMS</button>
+      </div>
+      <div class="legend">
+        <span class="chip email">&#9993; Email</span>
+        <span class="chip sms">&#128241; SMS</span>
+        <span class="chip sms-proposed">&#128241; SMS (proposed)</span>
+        <span class="chip cond">Conditional</span>
+      </div>
+    </div>
+    <p class="summary" id="summary"></p>
+
+    <div id="tracks"></div>
+
+    <p class="footnote">
+      <strong>Reading this timeline.</strong> Each track runs on its own clock: the order journey is relative to checkout and to order events (proof, shipment); billing is relative to the invoice due date; account messages are event-driven. Timings shown are when each message fires. Conditional messages only send when their condition is met (e.g. reminders only if an action is still open). SMS currently covers the 1-day reminder, the proof reminder, and the friendly invoice reminder; the dunning second reminder and notice of default are flagged as SMS candidates for review.
+    </p>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <button class="drawer-close" id="drawerClose" aria-label="Close">&times;</button>
+  <div id="drawerBody"></div>
+</aside>
+
+<script>
+  // ── Single source of data for every touchpoint ───────────────
+  var TRACKS = [
+    { id: 'order',   name: 'Order journey',     clock: 'Clock: from checkout + order events' },
+    { id: 'billing', name: 'Billing & payment', clock: 'Clock: relative to the invoice due date' },
+    { id: 'account', name: 'Account & lifecycle', clock: 'Event-driven' }
+  ];
+
+  var COMMS = [
+    // ── Order journey ──────────────────────────────────────────
+    { track:'order', name:'Order confirmation', timing:'At checkout', channels:['email'],
+      trigger:'Order Placed · Klaviyo · immediate',
+      purpose:'Confirm the order, set delivery expectations, and surface any actions still open (payment, artwork).' },
+    { track:'order', name:'Order reminder · 1 hour', timing:'+ 1 hour', channels:['email'], conditional:true,
+      trigger:'OrderActionReminderDue · filtered on 1-hour · Klaviyo',
+      purpose:'Nudge while the customer is still warm if payment, file upload or proof approval is still open.',
+      condition:'Only sends if one or more actions are still open an hour after checkout.' },
+    { track:'order', name:'Order reminder · 1 day', timing:'+ 1 day', channels:['email','sms'], conditional:true,
+      trigger:'OrderActionReminderDue · filtered on 1-day · Klaviyo',
+      purpose:'Last nudge to complete open actions before the delivery date slips.',
+      condition:'Only sends if actions are still open the next day.',
+      sms:'Time-sensitive: the delivery date is at risk if the customer does not act.' },
+    { track:'order', name:'Proof ready', timing:'When a proof is prepared', channels:['email'],
+      trigger:'Artwork Proof · Manual · per line item · Klaviyo',
+      purpose:'Ask the customer to review and approve a manually prepared proof so production can start.' },
+    { track:'order', name:'Proof reminder', timing:'While a proof waits', channels:['email','sms'], conditional:true,
+      trigger:'Artwork Proof Reminder · per line item · Klaviyo',
+      purpose:'Recover an open proof approval before production stalls.',
+      condition:'Only sends while a proof is still awaiting approval.',
+      sms:'Urgent: production is on hold until the proof is approved.' },
+    { track:'order', name:'Order shipped', timing:'When a shipment dispatches', channels:['email'],
+      trigger:'Order Shipped · per shipment · Klaviyo',
+      purpose:'Confirm dispatch and hand over the tracking link and expected delivery date.',
+      condition:'Sent per shipment, so multi-supplier orders trigger one per parcel.' },
+    { track:'order', name:'Order delivered', timing:'When a shipment is delivered', channels:['email'],
+      trigger:'Order Delivered · per shipment · Klaviyo',
+      purpose:'Confirm arrival on a high note and ask for a Trustpilot review (or invite feedback).',
+      condition:'Sent per shipment.' },
+    { track:'order', name:'Order cancelled', timing:'If the order is cancelled', channels:['email'], conditional:true,
+      trigger:'Order Cancelled · per order · Klaviyo',
+      purpose:'Confirm the cancellation and explain the refund (when the order was paid).',
+      condition:'Only sends when an order (or part of one) is cancelled.' },
+
+    // ── Billing & payment ──────────────────────────────────────
+    { track:'billing', name:'Invoice ready', timing:'When the invoice is issued', channels:['email'],
+      trigger:'Invoice Issued · SendGrid',
+      purpose:'Deliver the official invoice PDF and show whether payment is settled or still due.' },
+    { track:'billing', name:'Friendly reminder', timing:'3 days before due', channels:['email','sms'], conditional:true,
+      trigger:'InvoiceFriendlyReminder · scheduled · SendGrid',
+      purpose:'A warm, pre-due payment nudge so the invoice gets paid before the dunning clock starts.',
+      condition:'Only for unpaid invoices approaching their due date.',
+      sms:'Time-sensitive payment nudge before the due date.' },
+    { track:'billing', name:'First reminder', timing:'4 days overdue', channels:['email'], conditional:true,
+      trigger:'InvoiceOverdueReminder · first · aggregated · SendGrid',
+      purpose:'Open the conversation and make the path to pay obvious before escalating.',
+      condition:'Aggregated: one email covering all of the customer’s overdue invoices.' },
+    { track:'billing', name:'Second reminder', timing:'11 days overdue', channels:['email'], conditional:true, smsProposed:true,
+      trigger:'InvoiceOverdueReminder · second · aggregated · SendGrid',
+      purpose:'A firm push before the D+14 cliff (€4 fee + notice of default + Pay-on-Invoice suspended).',
+      condition:'Aggregated per customer.',
+      sms:'Proposed SMS candidate: this is the most urgent payment reminder before formal default.' },
+    { track:'billing', name:'Notice of default', timing:'14 days overdue', channels:['email'], conditional:true, smsProposed:true,
+      trigger:'NoticeOfDefaultIssued · legal · SendGrid',
+      purpose:'Formal legal notice (Dutch Civil Code 6:82). Sets the 7-day cliff and unlocks collection costs.',
+      condition:'Aggregated into one notice covering all defaulted invoices.',
+      sms:'Proposed SMS candidate: final, high-urgency notice before transfer to collections.' },
+
+    // ── Account & lifecycle ────────────────────────────────────
+    { track:'account', name:'Password reset', timing:'On request', channels:['email'],
+      trigger:'Password Reset Requested · Klaviyo · immediate',
+      purpose:'Securely return the user to their account via a time-limited reset link.' },
+    { track:'account', name:'Newsletter signup', timing:'On signup', channels:['email'],
+      trigger:'Newsletter Subscribed · Klaviyo · marketing',
+      purpose:'Welcome a soft lead with a 5% first-order discount and introduce the brand.' },
+    { track:'account', name:'Account welcome', timing:'On account creation', channels:['email'], conditional:true,
+      trigger:'Account Created · gated on no order at signup · Klaviyo',
+      purpose:'Activate the account and drive the first purchase.',
+      condition:'Suppressed if an order is placed at signup (the order confirmation covers it).' }
+  ];
+
+  var ICON_EMAIL = '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4.5h12v8H2v-8z" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 5l5.5 4 5.5-4" stroke="currentColor" stroke-width="1.4"/></svg>';
+  var ICON_SMS = '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="1.5" width="10" height="13" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 12h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  var ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function chipsHtml(c) {
+    var html = '';
+    if (c.channels.indexOf('email') > -1) html += '<span class="chip email">' + ICON_EMAIL + 'Email</span>';
+    if (c.channels.indexOf('sms') > -1) html += '<span class="chip sms">' + ICON_SMS + 'SMS</span>';
+    if (c.smsProposed) html += '<span class="chip sms-proposed">' + ICON_SMS + 'SMS?</span>';
+    if (c.conditional) html += '<span class="chip cond">Conditional</span>';
+    return html;
+  }
+
+  // ── Render tracks + cards ─────────────────────────────────────
+  var tracksEl = document.getElementById('tracks');
+  TRACKS.forEach(function (t) {
+    var items = COMMS.filter(function (c) { return c.track === t.id; });
+    var section = document.createElement('div');
+    section.className = 'track';
+    var axis = t.id === 'account' ? '' : '<span class="axis">time &rarr;</span>';
+    section.innerHTML = '<div class="track-head"><h2>' + t.name + '</h2><span class="clock">' + t.clock + '</span>' + axis + '</div>';
+    var rail = document.createElement('div');
+    rail.className = 'rail';
+    items.forEach(function (c, i) {
+      var step = document.createElement('div');
+      step.className = 'step';
+      var hasSms = c.channels.indexOf('sms') > -1;
+      var cardCls = 'tp-card' + (c.channels.indexOf('email') > -1 ? ' has-email' : '') + (hasSms ? ' has-sms' : '');
+      var idx = COMMS.indexOf(c);
+      var arrow = i > 0 ? '<div class="arrow">' + ICON_ARROW + '</div>' : '';
+      step.innerHTML = arrow +
+        '<div class="' + cardCls + '" data-idx="' + idx + '">' +
+          '<span class="tp-node"></span>' +
+          '<div class="tp-timing">' + c.timing + '</div>' +
+          '<div class="tp-name">' + c.name + '</div>' +
+          '<div class="tp-trigger">' + c.trigger + '</div>' +
+          '<div class="tp-chips">' + chipsHtml(c) + '</div>' +
+        '</div>';
+      rail.appendChild(step);
+    });
+    section.appendChild(rail);
+    tracksEl.appendChild(section);
+  });
+
+  // ── Summary line ──────────────────────────────────────────────
+  var smsCount = COMMS.filter(function (c) { return c.channels.indexOf('sms') > -1; }).length;
+  var proposedCount = COMMS.filter(function (c) { return c.smsProposed; }).length;
+  document.getElementById('summary').innerHTML =
+    '<strong>' + COMMS.length + '</strong> touchpoints across ' + TRACKS.length + ' tracks · ' +
+    '<strong>' + smsCount + '</strong> currently include SMS · ' +
+    '<strong>' + proposedCount + '</strong> proposed SMS candidates.';
+
+  // ── Detail drawer ─────────────────────────────────────────────
+  var drawer = document.getElementById('drawer');
+  var scrim = document.getElementById('scrim');
+  var drawerBody = document.getElementById('drawerBody');
+  var trackName = {};
+  TRACKS.forEach(function (t) { trackName[t.id] = t.name; });
+
+  function openDrawer(idx) {
+    var c = COMMS[idx];
+    var rows = '';
+    rows += '<div class="d-row"><div class="d-label">When it fires</div><div class="d-val">' + c.timing + '</div></div>';
+    rows += '<div class="d-row"><div class="d-label">Trigger</div><div class="d-val"><code>' + c.trigger + '</code></div></div>';
+    rows += '<div class="d-row"><div class="d-label">Purpose</div><div class="d-val">' + c.purpose + '</div></div>';
+    if (c.condition) rows += '<div class="d-row"><div class="d-label">Conditions</div><div class="d-val">' + c.condition + '</div></div>';
+    if (c.sms) {
+      var noteCls = c.smsProposed ? 'd-note' : 'd-note';
+      rows += '<div class="d-row"><div class="d-label">' + (c.smsProposed ? 'SMS (proposed)' : 'Why SMS') + '</div><div class="' + noteCls + '">' + c.sms + '</div></div>';
+    }
+    drawerBody.innerHTML =
+      '<div class="d-track">' + trackName[c.track] + '</div>' +
+      '<h3>' + c.name + '</h3>' +
+      '<div class="d-chips">' + chipsHtml(c) + '</div>' +
+      rows;
+    drawer.classList.add('open'); scrim.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open'); scrim.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+  tracksEl.addEventListener('click', function (e) {
+    var card = e.target.closest('.tp-card');
+    if (card) openDrawer(parseInt(card.getAttribute('data-idx'), 10));
+  });
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
+
+  // ── Channel filter ────────────────────────────────────────────
+  var wrap = document.getElementById('wrap');
+  document.getElementById('filterSeg').addEventListener('click', function (e) {
+    var btn = e.target.closest('button'); if (!btn) return;
+    this.querySelectorAll('button').forEach(function (b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+    wrap.classList.remove('filter-email', 'filter-sms');
+    var f = btn.getAttribute('data-filter');
+    if (f === 'email') wrap.classList.add('filter-email');
+    if (f === 'sms') wrap.classList.add('filter-sms');
+  });
+
+  // ── Theme toggle ──────────────────────────────────────────────
+  var themeBtn = document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', function () {
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+    themeBtn.innerHTML = dark ? '☀ Light' : '☾ Dark';
+  });
+</script>
+</body>
+</html>
