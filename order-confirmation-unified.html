@@ -358,6 +358,15 @@
     margin: 0 auto;
     max-width: 720px;
   }
+  .viz-nav {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 14px;
+    padding: 9px 18px;
+    background: var(--color-primary); color: #fff !important;
+    text-decoration: none; border-radius: var(--radius-pill);
+    font-size: 13px; font-weight: 600;
+  }
+  .viz-nav:hover { background: var(--color-primary-dark); }
 
   /* Theme toggle (fixed top-right) ---------------------------- */
   .theme-toggle {
@@ -1726,6 +1735,7 @@
 <div class="preview-wrap">
   <div class="preview-header">
     <h1>Transactional Email Flow Visualised</h1>
+    <a class="viz-nav" href="https://sebastiaanram-coder.github.io/transactionals/communication-timeline.html">View the communication timeline &rarr;</a>
   </div>
 
   <!-- ── 3-column preview layout: flow chapters | email | metadata + toggles ── -->
