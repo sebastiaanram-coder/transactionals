@@ -271,6 +271,7 @@
   .emails-wrap[data-active-flow="order-shipped"]        .event-vars[data-for-flow="order-shipped"],
   .emails-wrap[data-active-flow="order-delivered"]      .event-vars[data-for-flow="order-delivered"],
   .emails-wrap[data-active-flow="order-cancelled"]      .event-vars[data-for-flow="order-cancelled"],
+  .emails-wrap[data-active-flow="credit-note"]          .event-vars[data-for-flow="credit-note"],
   .emails-wrap[data-active-flow="invoice-ready"]        .event-vars[data-for-flow="invoice-ready"],
   .emails-wrap[data-active-flow="reminder-friendly"]    .event-vars[data-for-flow="reminder-friendly"],
   .emails-wrap[data-active-flow="reminder-first"]       .event-vars[data-for-flow="reminder-first"],
@@ -294,6 +295,7 @@
   .emails-wrap[data-active-flow="order-shipped"]        .email-meta[data-for-flow="order-shipped"],
   .emails-wrap[data-active-flow="order-delivered"]      .email-meta[data-for-flow="order-delivered"],
   .emails-wrap[data-active-flow="order-cancelled"]      .email-meta[data-for-flow="order-cancelled"],
+  .emails-wrap[data-active-flow="credit-note"]          .email-meta[data-for-flow="credit-note"],
   .emails-wrap[data-active-flow="invoice-ready"]        .email-meta[data-for-flow="invoice-ready"],
   .emails-wrap[data-active-flow="reminder-friendly"]    .email-meta[data-for-flow="reminder-friendly"],
   .emails-wrap[data-active-flow="reminder-first"]       .email-meta[data-for-flow="reminder-first"],
@@ -542,6 +544,7 @@
   .emails-wrap[data-active-flow="order-cancelled"]    .toggle-group[data-for-flow~="order-cancelled"],
   .emails-wrap[data-active-flow="order-shipped"]      .toggle-group[data-for-flow~="order-shipped"],
   .emails-wrap[data-active-flow="order-delivered"]    .toggle-group[data-for-flow~="order-delivered"],
+  .emails-wrap[data-active-flow="credit-note"]        .toggle-group[data-for-flow~="credit-note"],
   .emails-wrap[data-active-flow="invoice-ready"]      .toggle-group[data-for-flow~="invoice-ready"],
   .emails-wrap[data-active-flow="reminder-friendly"]  .toggle-group[data-for-flow~="reminder-friendly"],
   .emails-wrap[data-active-flow="reminder-first"]     .toggle-group[data-for-flow~="reminder-first"],
@@ -555,6 +558,7 @@
   .emails-wrap[data-active-flow="artwork-reminder"]   .email[data-flow="artwork-reminder"],
   .emails-wrap[data-active-flow="proof-ready"]        .email[data-flow="proof-ready"],
   .emails-wrap[data-active-flow="order-cancelled"]    .email[data-flow="order-cancelled"],
+  .emails-wrap[data-active-flow="credit-note"]        .email[data-flow="credit-note"],
   .emails-wrap[data-active-flow="order-shipped"]      .email[data-flow="order-shipped"],
   .emails-wrap[data-active-flow="order-delivered"]    .email[data-flow="order-delivered"],
   .emails-wrap[data-active-flow="invoice-ready"]      .email[data-flow="invoice-ready"],
@@ -1842,6 +1846,40 @@
     <a class="viz-nav" href="https://sebastiaanram-coder.github.io/transactionals/communication-timeline.html">View the communication timeline &rarr;</a>
   </div>
 
+  <!-- ── Klaviyo trigger metric status ─────────────────────────────────────
+       Audit of doc triggers vs metrics actually present in the Klaviyo
+       account (checked 2026-06-12 via Klaviyo API). SendGrid finance flows
+       are out of scope for Klaviyo. -->
+  <details class="trigger-status" style="margin:0 0 24px; border:1px solid rgba(128,128,128,.3); border-radius:10px; padding:14px 18px; font-size:14px;">
+    <summary style="cursor:pointer; font-weight:700; font-size:15px;">Klaviyo trigger metric status <span style="font-weight:400; opacity:.65">— checked 12 Jun 2026 · 7 live · 4 missing · 8 N/A (SendGrid)</span></summary>
+    <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+      <thead>
+        <tr style="text-align:left; border-bottom:2px solid rgba(128,128,128,.35);">
+          <th style="padding:6px 10px 6px 0;">#</th>
+          <th style="padding:6px 10px 6px 0;">Email</th>
+          <th style="padding:6px 10px 6px 0;">Trigger (doc)</th>
+          <th style="padding:6px 10px 6px 0;">Metric in Klaviyo</th>
+          <th style="padding:6px 0;">Status</th>
+        </tr>
+      </thead>
+      <tbody style="vertical-align:top;">
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">1</td><td style="padding:6px 10px 6px 0;">Order confirmation</td><td style="padding:6px 10px 6px 0;"><code>Order Placed</code></td><td style="padding:6px 10px 6px 0;"><code>Placed Order</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">2</td><td style="padding:6px 10px 6px 0;">Order Reminder 1 Hour</td><td style="padding:6px 10px 6px 0;"><code>OrderActionReminderDue</code> (1-hour)</td><td style="padding:6px 10px 6px 0;"><code>OrderActionReminderDue</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">3</td><td style="padding:6px 10px 6px 0;">Order Reminder 1 Day</td><td style="padding:6px 10px 6px 0;"><code>OrderActionReminderDue</code> (1-day)</td><td style="padding:6px 10px 6px 0;"><code>OrderActionReminderDue</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">4</td><td style="padding:6px 10px 6px 0;">Manual proof created</td><td style="padding:6px 10px 6px 0;"><code>Artwork Proof</code> (Type == Manual)</td><td style="padding:6px 10px 6px 0;">—</td><td style="padding:6px 0; color:#c0392b; font-weight:600;">❌ Missing</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">5</td><td style="padding:6px 10px 6px 0;">Artwork proof reminder</td><td style="padding:6px 10px 6px 0;"><code>Artwork Proof Reminder</code></td><td style="padding:6px 10px 6px 0;">—</td><td style="padding:6px 0; color:#c0392b; font-weight:600;">❌ Missing</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">6</td><td style="padding:6px 10px 6px 0;">Order shipped</td><td style="padding:6px 10px 6px 0;"><code>Order Shipped</code> → <code>Fulfilled Order</code></td><td style="padding:6px 10px 6px 0;"><code>Fulfilled Order</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (uses Fulfilled Order)</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">7</td><td style="padding:6px 10px 6px 0;">Order delivered</td><td style="padding:6px 10px 6px 0;"><code>Order Delivered</code></td><td style="padding:6px 10px 6px 0;">—</td><td style="padding:6px 0; color:#c0392b; font-weight:600;">❌ Missing</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">8</td><td style="padding:6px 10px 6px 0;">Order cancelled</td><td style="padding:6px 10px 6px 0;"><code>Order Cancelled</code></td><td style="padding:6px 10px 6px 0;"><code>Cancelled Order</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">9–17</td><td style="padding:6px 10px 6px 0;">Credit Note Issued, Invoice ready, Friendly/First/Second reminder, Notice of default, Collection 1–3</td><td style="padding:6px 10px 6px 0;">SendGrid · finance pipeline / scheduled</td><td style="padding:6px 10px 6px 0;">n/a</td><td style="padding:6px 0; opacity:.6; font-weight:600;">➖ N/A (not Klaviyo)</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">18</td><td style="padding:6px 10px 6px 0;">Password reset</td><td style="padding:6px 10px 6px 0;"><code>Password Reset Requested</code></td><td style="padding:6px 10px 6px 0;"><code>Reset Password</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">19</td><td style="padding:6px 10px 6px 0;">Newsletter signup</td><td style="padding:6px 10px 6px 0;"><code>Newsletter Subscribed</code></td><td style="padding:6px 10px 6px 0;">—</td><td style="padding:6px 0; color:#c0392b; font-weight:600;">❌ Missing (no metric — likely list-triggered instead)</td></tr>
+        <tr><td style="padding:6px 10px 6px 0;">20</td><td style="padding:6px 10px 6px 0;">Account welcome</td><td style="padding:6px 10px 6px 0;"><code>Account Created</code></td><td style="padding:6px 10px 6px 0;"><code>Created Account</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:10px 0 2px; opacity:.7;">Missing in Klaviyo: <code>Artwork Proof</code>, <code>Artwork Proof Reminder</code>, <code>Order Delivered</code>, <code>Newsletter Subscribed</code>. Order shipped uses the existing <code>Fulfilled Order</code> metric instead of <code>Order Shipped</code>.</p>
+  </details>
+
   <!-- ── 3-column preview layout: flow chapters | email | metadata + toggles ── -->
   <div class="emails-wrap preview-layout" data-active-flow="order-confirmation">
 
@@ -1895,66 +1933,71 @@
         </button>
 
         <div class="flow-group-label">Invoice delivery</div>
-        <button type="button" data-flow="invoice-ready">
+        <button type="button" data-flow="credit-note">
           <span class="flow-num">9.</span>
+          <span class="flow-name">Credit Note Issued</span>
+          <span class="flow-version is-v1">V1</span>
+        </button>
+        <button type="button" data-flow="invoice-ready">
+          <span class="flow-num">10.</span>
           <span class="flow-name">Invoice ready</span>
           <span class="flow-version is-v1">V1</span>
         </button>
         <button type="button" data-flow="reminder-friendly">
-          <span class="flow-num">10.</span>
+          <span class="flow-num">11.</span>
           <span class="flow-name">Friendly reminder</span>
           <span class="flow-version is-v1">V1</span>
         </button>
 
         <div class="flow-group-label">Dunning sequence</div>
         <button type="button" data-flow="reminder-first">
-          <span class="flow-num">11.</span>
+          <span class="flow-num">12.</span>
           <span class="flow-name">First reminder</span>
           <span class="flow-version is-v2">V2</span>
         </button>
         <button type="button" data-flow="reminder-second">
-          <span class="flow-num">12.</span>
+          <span class="flow-num">13.</span>
           <span class="flow-name">Second reminder</span>
           <span class="flow-version is-v2">V2</span>
         </button>
         <button type="button" data-flow="notice-of-default">
-          <span class="flow-num">13.</span>
+          <span class="flow-num">14.</span>
           <span class="flow-name">Notice of default</span>
           <span class="flow-version is-v2">V2</span>
         </button>
 
         <div class="flow-group-label">Amicable Dunning</div>
         <button type="button" data-flow="collection-1">
-          <span class="flow-num">14.</span>
+          <span class="flow-num">15.</span>
           <span class="flow-name">Collection 1</span>
           <span class="flow-version is-v2">V2</span>
         </button>
         <button type="button" data-flow="collection-2">
-          <span class="flow-num">15.</span>
+          <span class="flow-num">16.</span>
           <span class="flow-name">Collection 2</span>
           <span class="flow-version is-v2">V2</span>
         </button>
         <button type="button" data-flow="collection-3">
-          <span class="flow-num">16.</span>
+          <span class="flow-num">17.</span>
           <span class="flow-name">Collection 3</span>
           <span class="flow-version is-v2">V2</span>
         </button>
 
         <div class="flow-group-label">Account emails</div>
         <button type="button" data-flow="password-reset">
-          <span class="flow-num">17.</span>
+          <span class="flow-num">18.</span>
           <span class="flow-name">Password reset</span>
           <span class="flow-version is-v1">V1</span>
         </button>
 
         <div class="flow-group-label">Welcome &amp; onboarding</div>
         <button type="button" data-flow="newsletter-signup">
-          <span class="flow-num">18.</span>
+          <span class="flow-num">19.</span>
           <span class="flow-name">Newsletter signup</span>
           <span class="flow-version is-v1">V1</span>
         </button>
         <button type="button" data-flow="account-welcome">
-          <span class="flow-num">19.</span>
+          <span class="flow-num">20.</span>
           <span class="flow-name">Account welcome</span>
           <span class="flow-version is-v2">V2</span>
         </button>
@@ -3534,6 +3577,186 @@
     <!-- ── End order cancelled email ───────────────────────── -->
 
     <!-- ══════════════════════════════════════════════════════════════════
+         CREDIT NOTE ISSUED, SendGrid (finance email, PDF attached)
+         ─────────────────────────────────────────────────────────────────
+         Channel:        SendGrid (NOT Klaviyo, per finance flow:
+                         CT → Jitsu → PubSub → Middle Layer → SendGrid).
+         Trigger:        A credit note was issued against an invoice
+                         (full or partial cancellation, correction, refund).
+         Subject:        Credit note CN-2026-00417 for invoice INV-2026-08291
+         Preheader:      PDF attached · €620.06 credited · Keep for your records
+         Attachment:     CN-2026-00417.pdf (always include; never strip).
+         Tone:           Transactional, neutral, reassuring. No upsell.
+         Two outcomes (refund-method tweak toggle):
+           • refund  → paid amount refunded to the original payment method.
+           • offset  → credit deducted from an open/outstanding invoice.
+         Best practice:  Repeat credit-note number / date / amount + the
+                         invoice it relates to in the body, so the email
+                         still works if the PDF is stripped. State VAT +
+                         legal entity for B2B accounting compliance.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="credit-note" data-lines="multi" data-refund="refund">
+
+      <!-- Logo -->
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero, lead + secondary CTA switch on data-refund.
+             Bindings (filled by SendGrid templating):
+               Credit note no.:  {{credit_note.number}}
+               Related invoice:  {{credit_note.invoice_number}}
+               Issued:           {{credit_note.issued_date | date:"d MMM yyyy"}}
+               Amount credited:  {{credit_note.amount | money}}
+               PDF URL:          {{credit_note.pdf_url}}   (same PDF as the attachment)
+               Refund method:    {{credit_note.refund_method}}  ("refund" | "offset")
+               Pay method label: {{credit_note.payment_method_label}}  (e.g. "Visa ending 4242")
+               Refund ETA:       {{credit_note.refund_expected_days}}  (e.g. "3-5")
+               Open invoice no.: {{credit_note.offset_invoice_number}}  (offset only)
+               Balance left:     {{credit_note.remaining_balance | money}}  (offset only) -->
+        <div class="hero">
+          <h1 id="cn-hero-title">Sebastiaan, we've issued a credit note</h1>
+          <p class="lead" id="cn-hero-lead"></p>
+          <a class="btn-primary" href="#download-credit-note" id="cn-hero-cta">Download credit note (PDF) →</a>
+          <a class="btn-secondary" href="#my-account-invoices" id="cn-hero-cta-secondary">View in My Account</a>
+        </div>
+
+        <!-- Refund / offset explainer callout, the heart of this email.
+             JS swaps heading + body on data-refund. -->
+        <div class="action-callout" id="cn-refund-callout">
+          <h3 id="cn-refund-heading">What happens with the money</h3>
+          <p class="callout-line">
+            <span class="callout-text" id="cn-refund-text"></span>
+          </p>
+        </div>
+
+        <!-- What was credited, same line-item layout as the invoice, grouped
+             by order. Single order group here (a credit note is raised against
+             a specific invoice). -->
+        <h2 class="section-h2">What was credited</h2>
+
+        <div class="invoice-order-group">
+          <p class="invoice-group-ref">Credit note CN-2026-00417 · against invoice INV-2026-08291 · Order #HP-24819</p>
+          <div class="line-items">
+            <div class="line-item">
+              <div class="line-thumb">
+                <img src="https://images.ctfassets.net/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?w=380&fm=webp&q=80" alt="A5 Flyers" width="64" height="64">
+              </div>
+              <div class="line-body">
+                <div class="line-head">
+                  <p class="line-name">A5 Flyers</p>
+                </div>
+                <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
+                <p class="line-qty">Qty 2,500</p>
+              </div>
+            </div>
+            <div class="line-item">
+              <div class="line-thumb">
+                <img src="https://images.ctfassets.net/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?w=380&fm=webp&q=80" alt="Business Cards Premium" width="64" height="64">
+              </div>
+              <div class="line-body">
+                <div class="line-head">
+                  <p class="line-name">Business Cards Premium</p>
+                </div>
+                <p class="line-config">350 gsm · Round corners · Spot UV front</p>
+                <p class="line-qty">Qty 500</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Amount breakdown, mirrors the invoice totals. The total reads as a
+             credit (negative-sense), shown with a neutral "Credited" pill. -->
+        <div class="totals">
+          <table>
+            <tr><td>Subtotal (ex VAT)</td><td>−€512.45</td></tr>
+            <tr><td>VAT (21%)</td><td>−€107.61</td></tr>
+            <tr class="total-row">
+              <td>Total credited</td>
+              <td class="total-amount">
+                <span class="payment-pill is-paid">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Credited
+                </span>
+                <span class="total-value">−€620.06</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Address block, "Bill to" only, matching the invoice email. -->
+        <div class="addresses" style="grid-template-columns: 1fr; max-width: 320px;">
+          <div class="address">
+            <h3>Bill to</h3>
+            <p>
+              Sebastiaan Ram<br>
+              Beursplein 37<br>
+              3011 AA Rotterdam<br>
+              Netherlands<br>
+              VAT NL000000000B00
+            </p>
+          </div>
+        </div>
+
+        <!-- Credit note FAQ, accounting-focused, NOT marketing.
+             The refund/offset Q&A swaps on data-refund. -->
+        <div class="faq">
+          <h3>About this credit note</h3>
+          <p>A credit note is the official document that reverses all or part of an invoice. The PDF attached (<strong>CN-2026-00417</strong>) is the version your accountant should file alongside the original invoice <strong>INV-2026-08291</strong>. Same content as the summary above, repeated here in case the attachment doesn't load.</p>
+          <h3 id="cn-faq-refund-q">When will I get my refund?</h3>
+          <p id="cn-faq-refund-a"></p>
+          <h3>Do I need to do anything?</h3>
+          <p id="cn-faq-action">No action is needed from your side, this email is for your records. If anything looks off, reply within <strong>14 days</strong> and we'll take another look.</p>
+          <h3>Where can I find this credit note?</h3>
+          <p>All your invoices and credit notes live in <strong>My account → Invoices</strong>. You can download any of them as PDF, any time.</p>
+        </div>
+
+        <!-- Help CTA -->
+        <div class="help-cta">
+          <h3>Questions about billing?</h3>
+          <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+        <!-- Trustpilot, kept for visual consistency across the flow. -->
+        <div class="trustpilot">
+          <span class="trustpilot-inner">
+            <span class="trustpilot-stars" aria-label="Rated 4.5 out of 5">
+              <span class="star-bg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="star-fg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+            </span>
+            <span class="trustpilot-label">
+              <strong>Excellent</strong> · 4.5 out of 5 · <strong>32,894</strong> reviews on Trustpilot
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Footer, transactional notice. No marketing unsubscribe (this is a legal/tax document). -->
+      <div class="email-footer">
+        <p>You received this email because a credit note was issued for your order with Helloprint. This is a transactional message and cannot be unsubscribed from.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End credit note issued email ────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
          INVOICE READY, SendGrid (finance email, PDF attached)
          ─────────────────────────────────────────────────────────────────
          Channel:        SendGrid (NOT Klaviyo, per finance flow:
@@ -4927,7 +5150,7 @@
         </div>
         <div class="email-meta-field">
           <div class="email-meta-label">Trigger</div>
-          <div class="email-meta-value"><code>Order Shipped</code> · per shipment · Klaviyo</div>
+          <div class="email-meta-value"><code>Fulfilled Order</code> · per shipment · Klaviyo <span style="opacity:.65">(was <code>Order Shipped</code> in earlier spec, the live metric is <code>Fulfilled Order</code>)</span></div>
         </div>
         <div class="email-meta-field">
           <div class="email-meta-label">Goal</div>
@@ -4974,6 +5197,29 @@
         <div class="email-meta-field">
           <div class="email-meta-label">Main CTA</div>
           <div class="email-meta-value"><code>View your order →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="credit-note">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A credit note was issued against an invoice, after a full or partial cancellation, a correction, or an agreed refund. Sent the moment the credit note is generated.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Credit Note Issued</code> · SendGrid · finance pipeline (CT → Jitsu → PubSub → Middle Layer → SendGrid)</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Deliver the legal credit-note PDF, explain what was credited, and make crystal clear what happens to the money next: a refund to the original payment method, or a deduction from an open invoice.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Two outcomes</div>
+          <div class="email-meta-value"><strong>Refund</strong> → paid amount goes back to the payment method used.<br><strong>Offset</strong> → credit is deducted from an outstanding open invoice. Driven by <code>credit_note.refund_method</code> (the <em>Refund method</em> toggle).</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Download credit note (PDF) →</code></div>
         </div>
       </div>
 
@@ -5341,7 +5587,7 @@
       <details class="event-vars" data-for-flow="order-shipped">
         <summary>Event payload</summary>
         <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
-  <span class="k">"event"</span><span class="p">:</span> <span class="s">"Order Shipped"</span><span class="p">,</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"Fulfilled Order"</span><span class="p">,</span>      <span class="c">// was "Order Shipped", live Klaviyo metric is Fulfilled Order</span>
   <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-20260601-73AB632C"</span><span class="p">,</span>
   <span class="k">"ShipmentId"</span><span class="p">:</span> <span class="s">"SHP-2026-04812"</span><span class="p">,</span>
   <span class="k">"Carrier"</span><span class="p">:</span> <span class="s">"DPD Ireland"</span><span class="p">,</span>
@@ -5397,6 +5643,33 @@
     <span class="k">"ImageURL"</span><span class="p">:</span> <span class="s">"..."</span>
   <span class="p">},</span> <span class="p">...]</span><span class="p">,</span>
   <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="credit-note">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"Credit Note Issued"</span><span class="p">,</span>
+  <span class="k">"channel"</span><span class="p">:</span> <span class="s">"SendGrid"</span><span class="p">,</span>             <span class="c">// finance pipeline (not Klaviyo)</span>
+  <span class="k">"currency"</span><span class="p">:</span> <span class="s">"EUR"</span><span class="p">,</span>               <span class="c">// ISO 4217 - drives all money formatting</span>
+  <span class="k">"person"</span><span class="p">:</span> <span class="p">{</span> <span class="k">"first_name"</span><span class="p">:</span> <span class="s">"Sebastiaan"</span> <span class="p">},</span>
+  <span class="k">"credit_note"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="k">"number"</span><span class="p">:</span> <span class="s">"CN-2026-00417"</span><span class="p">,</span>
+    <span class="k">"invoice_number"</span><span class="p">:</span> <span class="s">"INV-2026-08291"</span><span class="p">,</span>   <span class="c">// the invoice this credit note reverses</span>
+    <span class="k">"issued_date"</span><span class="p">:</span> <span class="s">"2026-06-12"</span><span class="p">,</span>
+    <span class="k">"subtotal_excl_vat"</span><span class="p">:</span> <span class="n">512.45</span><span class="p">,</span>
+    <span class="k">"tax_lines"</span><span class="p">:</span> <span class="p">[{</span> <span class="k">"rate"</span><span class="p">:</span> <span class="n">21</span><span class="p">,</span> <span class="k">"amount"</span><span class="p">:</span> <span class="n">107.61</span> <span class="p">}],</span>
+    <span class="k">"amount"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>                <span class="c">// total credited (incl VAT)</span>
+    <span class="k">"pdf_url"</span><span class="p">:</span> <span class="s">"https://.../CN-2026-00417.pdf"</span><span class="p">,</span>      <span class="c">// download + attachment</span>
+    <span class="k">"my_account_url"</span><span class="p">:</span> <span class="s">"https://my.helloprint.com/invoices"</span><span class="p">,</span>  <span class="c">// secondary CTA</span>
+    <span class="k">"refund_method"</span><span class="p">:</span> <span class="s">"refund"</span><span class="p">,</span>         <span class="c">// "refund" | "offset" - drives the explainer + FAQ</span>
+    <span class="k">"payment_method_label"</span><span class="p">:</span> <span class="s">"Visa ending 4242"</span><span class="p">,</span>  <span class="c">// refund only</span>
+    <span class="k">"refund_expected_days"</span><span class="p">:</span> <span class="s">"3-5"</span><span class="p">,</span>     <span class="c">// refund only</span>
+    <span class="k">"offset_invoice_number"</span><span class="p">:</span> <span class="s">"INV-2026-08312"</span><span class="p">,</span>  <span class="c">// offset only - the open invoice the credit is applied to</span>
+    <span class="k">"remaining_balance"</span><span class="p">:</span> <span class="n">214.50</span><span class="p">,</span>      <span class="c">// offset only - balance left on that invoice after the credit</span>
+    <span class="k">"orders"</span><span class="p">:</span> <span class="p">[{</span> <span class="k">"number"</span><span class="p">:</span> <span class="s">"HP-24819"</span><span class="p">,</span> <span class="k">"items"</span><span class="p">:</span> <span class="p">[{</span> <span class="k">"product_name"</span><span class="p">:</span> <span class="s">"A5 Flyers"</span><span class="p">,</span> <span class="k">"config_summary"</span><span class="p">:</span> <span class="s">"..."</span><span class="p">,</span> <span class="k">"quantity"</span><span class="p">:</span> <span class="n">2500</span><span class="p">,</span> <span class="k">"image_url"</span><span class="p">:</span> <span class="s">"..."</span> <span class="p">}]</span> <span class="p">}]</span>
+  <span class="p">},</span>
+  <span class="k">"bill_to"</span><span class="p">:</span> <span class="p">{</span> <span class="k">"company"</span><span class="p">:</span> <span class="s">"..."</span><span class="p">,</span> <span class="k">"vat"</span><span class="p">:</span> <span class="s">"NL..."</span><span class="p">,</span> <span class="k">"address_lines"</span><span class="p">:</span> <span class="p">[</span><span class="s">"..."</span><span class="p">]</span> <span class="p">}</span>
 <span class="p">}</span></pre></div>
       </details>
 
@@ -5654,6 +5927,14 @@
           <div class="toggle-options" data-toggle="lines">
             <button type="button" data-value="one">1 item</button>
             <button type="button" data-value="multi" class="is-active">3 items</button>
+          </div>
+        </div>
+        <!-- Refund method: credit-note flows. Switches what happens to the money. -->
+        <div class="toggle-group full" data-for-flow="credit-note">
+          <span class="toggle-group-label">Refund method</span>
+          <div class="toggle-options" data-toggle="refund">
+            <button type="button" data-value="refund" class="is-active">Refund to payment method</button>
+            <button type="button" data-value="offset">Deduct from open invoice</button>
           </div>
         </div>
         <!-- Orders covered: invoice flows where one PDF can cover 1 or N orders. -->
@@ -6245,6 +6526,42 @@
       // Collective explainer shows only when the invoice covers multiple orders.
       var ivCollectiveNote = document.getElementById('iv-collective-note');
       if (ivCollectiveNote) ivCollectiveNote.style.display = (ivLines === 'one') ? 'none' : '';
+    }
+
+    // Credit note issued, lead + refund explainer + refund FAQ all switch on
+    // data-refund: "refund" (back to payment method) vs "offset" (deducted from
+    // an open invoice). Numbers below mirror the credit-note event payload.
+    var cnEmail = document.querySelector('.email[data-flow="credit-note"]');
+    if (cnEmail) {
+      var cnMethod = cnEmail.dataset.refund || 'refund';
+      var CN_NUMBER = 'CN-2026-00417';
+      var CN_INVOICE = 'INV-2026-08291';
+      var CN_ISSUED = '12 Jun 2026';
+      var CN_AMOUNT = '€620.06';
+      var CN_PAY_METHOD = 'Visa ending 4242';
+      var CN_REFUND_DAYS = '3–5';
+      var CN_OFFSET_INVOICE = 'INV-2026-08312';
+      var CN_REMAINING = '€214.50';
+
+      var cnLead = document.getElementById('cn-hero-lead');
+      var cnRefundHeading = document.getElementById('cn-refund-heading');
+      var cnRefundText = document.getElementById('cn-refund-text');
+      var cnFaqQ = document.getElementById('cn-faq-refund-q');
+      var cnFaqA = document.getElementById('cn-faq-refund-a');
+
+      if (cnMethod === 'offset') {
+        if (cnLead) cnLead.innerHTML = 'We’ve issued credit note <strong>' + CN_NUMBER + '</strong> for <strong>' + CN_AMOUNT + '</strong> against invoice <strong>' + CN_INVOICE + '</strong>, issued <strong>' + CN_ISSUED + '</strong>. It’s attached as a PDF. Because you have an open invoice, we’ve applied the credit there, so there’s nothing for you to do.';
+        if (cnRefundHeading) cnRefundHeading.textContent = 'Applied to your open invoice';
+        if (cnRefundText) cnRefundText.innerHTML = '<strong>' + CN_AMOUNT + '</strong> has been deducted from your open invoice <strong>' + CN_OFFSET_INVOICE + '</strong>. Your remaining balance on that invoice is now <strong>' + CN_REMAINING + '</strong>. No refund is sent to your card, the credit simply lowers what you owe.';
+        if (cnFaqQ) cnFaqQ.textContent = 'Where did the money go?';
+        if (cnFaqA) cnFaqA.innerHTML = 'Rather than refunding your card, we deducted <strong>' + CN_AMOUNT + '</strong> from your open invoice <strong>' + CN_OFFSET_INVOICE + '</strong>. You’ll see the lower balance reflected on that invoice and in <strong>My account → Invoices</strong>. If that invoice ends up fully covered, any leftover credit is refunded to your original payment method.';
+      } else {
+        if (cnLead) cnLead.innerHTML = 'We’ve issued credit note <strong>' + CN_NUMBER + '</strong> for <strong>' + CN_AMOUNT + '</strong> against invoice <strong>' + CN_INVOICE + '</strong>, issued <strong>' + CN_ISSUED + '</strong>. It’s attached as a PDF, and your refund is already on its way.';
+        if (cnRefundHeading) cnRefundHeading.textContent = 'Your refund is on its way';
+        if (cnRefundText) cnRefundText.innerHTML = '<strong>' + CN_AMOUNT + '</strong> will be refunded to the <strong>' + CN_PAY_METHOD + '</strong> you used to pay. Refunds usually land within <strong>' + CN_REFUND_DAYS + ' business days</strong>, depending on your bank.';
+        if (cnFaqQ) cnFaqQ.textContent = 'When will I get my refund?';
+        if (cnFaqA) cnFaqA.innerHTML = 'Your refund of <strong>' + CN_AMOUNT + '</strong> goes back to the <strong>' + CN_PAY_METHOD + '</strong> used for the original payment, typically within <strong>' + CN_REFUND_DAYS + ' business days</strong>. The exact timing depends on your bank or card provider.';
+      }
     }
 
     // Day-1 reminder, payment line (conditional) + artwork line (when any artwork
