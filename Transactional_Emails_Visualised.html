@@ -6535,10 +6535,7 @@
     if (cnEmail) {
       var cnMethod = cnEmail.dataset.refund || 'refund';
       var CN_NUMBER = 'CN-2026-00417';
-      var CN_INVOICE = 'INV-2026-08291';
-      var CN_ISSUED = '12 Jun 2026';
       var CN_AMOUNT = '€620.06';
-      var CN_PAY_METHOD = 'Visa ending 4242';
       var CN_REFUND_DAYS = '3–5';
       var CN_OFFSET_INVOICE = 'INV-2026-08312';
       var CN_REMAINING = '€214.50';
@@ -6550,17 +6547,17 @@
       var cnFaqA = document.getElementById('cn-faq-refund-a');
 
       if (cnMethod === 'offset') {
-        if (cnLead) cnLead.innerHTML = 'We’ve issued credit note <strong>' + CN_NUMBER + '</strong> for <strong>' + CN_AMOUNT + '</strong> against invoice <strong>' + CN_INVOICE + '</strong>, issued <strong>' + CN_ISSUED + '</strong>. It’s attached as a PDF. Because you have an open invoice, we’ve applied the credit there, so there’s nothing for you to do.';
+        if (cnLead) cnLead.innerHTML = 'We’ve issued credit note <strong>' + CN_NUMBER + '</strong> for <strong>' + CN_AMOUNT + '</strong>. It’s attached as a PDF. Because you have an open invoice, we’ve applied the credit there, so there’s nothing for you to do.';
         if (cnRefundHeading) cnRefundHeading.textContent = 'Applied to your open invoice';
         if (cnRefundText) cnRefundText.innerHTML = '<strong>' + CN_AMOUNT + '</strong> has been deducted from your open invoice <strong>' + CN_OFFSET_INVOICE + '</strong>. Your remaining balance on that invoice is now <strong>' + CN_REMAINING + '</strong>. No refund is sent to your card, the credit simply lowers what you owe.';
         if (cnFaqQ) cnFaqQ.textContent = 'Where did the money go?';
         if (cnFaqA) cnFaqA.innerHTML = 'Rather than refunding your card, we deducted <strong>' + CN_AMOUNT + '</strong> from your open invoice <strong>' + CN_OFFSET_INVOICE + '</strong>. You’ll see the lower balance reflected on that invoice and in <strong>My account → Invoices</strong>. If that invoice ends up fully covered, any leftover credit is refunded to your original payment method.';
       } else {
-        if (cnLead) cnLead.innerHTML = 'We’ve issued credit note <strong>' + CN_NUMBER + '</strong> for <strong>' + CN_AMOUNT + '</strong> against invoice <strong>' + CN_INVOICE + '</strong>, issued <strong>' + CN_ISSUED + '</strong>. It’s attached as a PDF, and your refund is already on its way.';
+        if (cnLead) cnLead.innerHTML = 'We’ve issued credit note <strong>' + CN_NUMBER + '</strong> for <strong>' + CN_AMOUNT + '</strong>. It’s attached as a PDF, and your refund is on its way, usually within <strong>' + CN_REFUND_DAYS + ' business days</strong>.';
         if (cnRefundHeading) cnRefundHeading.textContent = 'Your refund is on its way';
-        if (cnRefundText) cnRefundText.innerHTML = '<strong>' + CN_AMOUNT + '</strong> will be refunded to the <strong>' + CN_PAY_METHOD + '</strong> you used to pay. Refunds usually land within <strong>' + CN_REFUND_DAYS + ' business days</strong>, depending on your bank.';
+        if (cnRefundText) cnRefundText.innerHTML = '<strong>' + CN_AMOUNT + '</strong> will be refunded to the payment method you used for ordering. Refunds usually land within <strong>' + CN_REFUND_DAYS + ' business days</strong>, depending on your bank.';
         if (cnFaqQ) cnFaqQ.textContent = 'When will I get my refund?';
-        if (cnFaqA) cnFaqA.innerHTML = 'Your refund of <strong>' + CN_AMOUNT + '</strong> goes back to the <strong>' + CN_PAY_METHOD + '</strong> used for the original payment, typically within <strong>' + CN_REFUND_DAYS + ' business days</strong>. The exact timing depends on your bank or card provider.';
+        if (cnFaqA) cnFaqA.innerHTML = 'Your refund of <strong>' + CN_AMOUNT + '</strong> goes back to the payment method you used for ordering, typically within <strong>' + CN_REFUND_DAYS + ' business days</strong>. The exact timing depends on your bank or card provider.';
       }
     }
 
