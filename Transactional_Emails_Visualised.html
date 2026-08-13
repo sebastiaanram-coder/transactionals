@@ -155,8 +155,10 @@
   }
   .flow-version.is-v1 { color: var(--color-primary); background: rgba(0,133,57,0.10); }
   .flow-version.is-v2 { color: var(--color-ink-faint); background: rgba(0,0,0,0.06); }
+  .flow-version.is-new { color: #b45309; background: rgba(245,158,11,0.14); }
   [data-theme="dark"] .flow-version.is-v1 { color: #4ade80; background: rgba(74,222,128,0.12); }
   [data-theme="dark"] .flow-version.is-v2 { color: var(--color-ink-muted); background: rgba(255,255,255,0.08); }
+  [data-theme="dark"] .flow-version.is-new { color: #fbbf24; background: rgba(245,158,11,0.16); }
 
   .meta-column {
     position: sticky;
@@ -281,8 +283,17 @@
   .emails-wrap[data-active-flow="collection-2"]         .event-vars[data-for-flow="collection-2"],
   .emails-wrap[data-active-flow="collection-3"]         .event-vars[data-for-flow="collection-3"],
   .emails-wrap[data-active-flow="password-reset"]       .event-vars[data-for-flow="password-reset"],
+  .emails-wrap[data-active-flow="password-changed"]     .event-vars[data-for-flow="password-changed"],
   .emails-wrap[data-active-flow="newsletter-signup"]    .event-vars[data-for-flow="newsletter-signup"],
   .emails-wrap[data-active-flow="account-welcome"]      .event-vars[data-for-flow="account-welcome"],
+  .emails-wrap[data-active-flow="pl-payment-link"]      .event-vars[data-for-flow="pl-payment-link"],
+  .emails-wrap[data-active-flow="pl-link-sent"]         .event-vars[data-for-flow="pl-link-sent"],
+  .emails-wrap[data-active-flow="pl-reminder-d1"]       .event-vars[data-for-flow="pl-reminder-d1"],
+  .emails-wrap[data-active-flow="pl-reminder-d3"]       .event-vars[data-for-flow="pl-reminder-d3"],
+  .emails-wrap[data-active-flow="pl-reminder-d7"]       .event-vars[data-for-flow="pl-reminder-d7"],
+  .emails-wrap[data-active-flow="pl-warning-d12"]       .event-vars[data-for-flow="pl-warning-d12"],
+  .emails-wrap[data-active-flow="pl-cancelled-d14"]     .event-vars[data-for-flow="pl-cancelled-d14"],
+  .emails-wrap[data-active-flow="email-verification"]   .event-vars[data-for-flow="email-verification"],
   .emails-wrap[data-active-flow="artwork-proof-reminder"] .event-vars[data-for-flow="artwork-proof-reminder"] {
     display: block;
   }
@@ -305,8 +316,17 @@
   .emails-wrap[data-active-flow="collection-2"]         .email-meta[data-for-flow="collection-2"],
   .emails-wrap[data-active-flow="collection-3"]         .email-meta[data-for-flow="collection-3"],
   .emails-wrap[data-active-flow="password-reset"]       .email-meta[data-for-flow="password-reset"],
+  .emails-wrap[data-active-flow="password-changed"]     .email-meta[data-for-flow="password-changed"],
   .emails-wrap[data-active-flow="newsletter-signup"]    .email-meta[data-for-flow="newsletter-signup"],
   .emails-wrap[data-active-flow="account-welcome"]      .email-meta[data-for-flow="account-welcome"],
+  .emails-wrap[data-active-flow="pl-payment-link"]      .email-meta[data-for-flow="pl-payment-link"],
+  .emails-wrap[data-active-flow="pl-link-sent"]         .email-meta[data-for-flow="pl-link-sent"],
+  .emails-wrap[data-active-flow="pl-reminder-d1"]       .email-meta[data-for-flow="pl-reminder-d1"],
+  .emails-wrap[data-active-flow="pl-reminder-d3"]       .email-meta[data-for-flow="pl-reminder-d3"],
+  .emails-wrap[data-active-flow="pl-reminder-d7"]       .email-meta[data-for-flow="pl-reminder-d7"],
+  .emails-wrap[data-active-flow="pl-warning-d12"]       .email-meta[data-for-flow="pl-warning-d12"],
+  .emails-wrap[data-active-flow="pl-cancelled-d14"]     .email-meta[data-for-flow="pl-cancelled-d14"],
+  .emails-wrap[data-active-flow="email-verification"]   .email-meta[data-for-flow="email-verification"],
   .emails-wrap[data-active-flow="artwork-proof-reminder"] .email-meta[data-for-flow="artwork-proof-reminder"] {
     display: block;
   }
@@ -549,7 +569,8 @@
   .emails-wrap[data-active-flow="reminder-friendly"]  .toggle-group[data-for-flow~="reminder-friendly"],
   .emails-wrap[data-active-flow="reminder-first"]     .toggle-group[data-for-flow~="reminder-first"],
   .emails-wrap[data-active-flow="reminder-second"]    .toggle-group[data-for-flow~="reminder-second"],
-  .emails-wrap[data-active-flow="notice-of-default"]  .toggle-group[data-for-flow~="notice-of-default"] {
+  .emails-wrap[data-active-flow="notice-of-default"]  .toggle-group[data-for-flow~="notice-of-default"],
+  .emails-wrap[data-active-flow="pl-payment-link"]    .toggle-group[data-for-flow~="pl-payment-link"] {
     display: flex;
   }
   .email[data-flow] { display: none; }
@@ -570,19 +591,50 @@
   .emails-wrap[data-active-flow="collection-2"]       .email[data-flow="collection-2"],
   .emails-wrap[data-active-flow="collection-3"]       .email[data-flow="collection-3"],
   .emails-wrap[data-active-flow="password-reset"]     .email[data-flow="password-reset"],
+  .emails-wrap[data-active-flow="password-changed"]   .email[data-flow="password-changed"],
   .emails-wrap[data-active-flow="newsletter-signup"]  .email[data-flow="newsletter-signup"],
   .emails-wrap[data-active-flow="account-welcome"]    .email[data-flow="account-welcome"],
+  .emails-wrap[data-active-flow="pl-payment-link"]    .email[data-flow="pl-payment-link"],
+  .emails-wrap[data-active-flow="pl-link-sent"]       .email[data-flow="pl-link-sent"],
+  .emails-wrap[data-active-flow="pl-reminder-d1"]     .email[data-flow="pl-reminder-d1"],
+  .emails-wrap[data-active-flow="pl-reminder-d3"]     .email[data-flow="pl-reminder-d3"],
+  .emails-wrap[data-active-flow="pl-reminder-d7"]     .email[data-flow="pl-reminder-d7"],
+  .emails-wrap[data-active-flow="pl-warning-d12"]     .email[data-flow="pl-warning-d12"],
+  .emails-wrap[data-active-flow="pl-cancelled-d14"]   .email[data-flow="pl-cancelled-d14"],
+  .emails-wrap[data-active-flow="review-service"]     .email[data-flow="review-service"],
+  .emails-wrap[data-active-flow="review-product"]     .email[data-flow="review-product"],
+  .emails-wrap[data-active-flow="guest-order-link"]   .email[data-flow="guest-order-link"],
+  .emails-wrap[data-active-flow="email-verification"] .email[data-flow="email-verification"],
   .emails-wrap[data-active-flow="artwork-proof-reminder"] .email[data-flow="artwork-proof-reminder"] {
     display: block;
   }
   /* Hide the toggle panel for flows with no state to switch. */
   .emails-wrap[data-active-flow="notice-of-default"] .toggle-panel,
   .emails-wrap[data-active-flow="password-reset"] .toggle-panel,
+  .emails-wrap[data-active-flow="password-changed"] .toggle-panel,
   .emails-wrap[data-active-flow="newsletter-signup"] .toggle-panel,
   .emails-wrap[data-active-flow="account-welcome"] .toggle-panel,
+  .emails-wrap[data-active-flow="pl-link-sent"] .toggle-panel,
+  .emails-wrap[data-active-flow="pl-reminder-d1"] .toggle-panel,
+  .emails-wrap[data-active-flow="pl-reminder-d3"] .toggle-panel,
+  .emails-wrap[data-active-flow="pl-reminder-d7"] .toggle-panel,
+  .emails-wrap[data-active-flow="pl-warning-d12"] .toggle-panel,
+  .emails-wrap[data-active-flow="pl-cancelled-d14"] .toggle-panel,
+  .emails-wrap[data-active-flow="review-service"] .toggle-panel,
+  .emails-wrap[data-active-flow="review-product"] .toggle-panel,
+  .emails-wrap[data-active-flow="guest-order-link"] .toggle-panel,
+  .emails-wrap[data-active-flow="email-verification"] .toggle-panel,
   .emails-wrap[data-active-flow="artwork-proof-reminder"] .toggle-panel {
     display: none;
   }
+
+  /* Pay Later, payment-link recipient toggle (Self vs Someone else).
+     The generic toggle handler sets data-recipient on every .email; CSS
+     shows the matching recipient block. Scoped to the two flows that vary. */
+  .email[data-flow="pl-payment-link"] [data-recipient-block] { display: none; }
+  .email[data-flow="pl-payment-link"][data-recipient="self"]  [data-recipient-block="self"],
+  .email[data-flow="pl-payment-link"][data-recipient="other"] [data-recipient-block="other"] { display: block; }
+  .emails-wrap[data-active-flow="pl-payment-link"] .toggle-panel { grid-template-columns: 1fr; }
 
   /* ── Welcome / marketing email components ──────────────────────────
      Discount code block, USP grid, category grid + unsubscribe footer.
@@ -734,6 +786,29 @@
     margin: 0;
   }
 
+  /* Email verification, single-column benefits as a clean, borderless
+     list (no card outline, no divider lines between rows). */
+  .email[data-flow="email-verification"] .feature-list {
+    display: block;
+    margin: 0 0 28px;
+  }
+  .email[data-flow="email-verification"] .feature-row {
+    grid-template-columns: 38px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+  }
+  .email[data-flow="email-verification"] .feature-row-icon {
+    width: 38px; height: 38px;
+  }
+  .email[data-flow="email-verification"] .feature-row-icon svg { width: 19px; height: 19px; }
+  .email[data-flow="email-verification"] .feature-row-title {
+    font-size: 15px; line-height: 21px; margin: 0 0 3px;
+  }
+  .email[data-flow="email-verification"] .feature-row-desc {
+    font-size: 14px; line-height: 20px;
+  }
+
   /* Footer with unsubscribe link, marketing emails must include this. */
   .email-footer .unsub {
     margin-top: 6px;
@@ -795,7 +870,7 @@
     grid-template-columns: 1fr;
     max-width: 420px;
   }
-  /* Proof ready is always per line item, no toggles apply */
+  /* Proof-approval reminder (proof-ready) has no interactive toggles */
   .emails-wrap[data-active-flow="proof-ready"] .toggle-panel {
     display: none;
   }
@@ -1873,8 +1948,9 @@
         <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">8</td><td style="padding:6px 10px 6px 0;">Order cancelled</td><td style="padding:6px 10px 6px 0;"><code>Order Cancelled</code></td><td style="padding:6px 10px 6px 0;"><code>Cancelled Order</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
         <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">9–17</td><td style="padding:6px 10px 6px 0;">Credit Note Issued, Invoice ready, Friendly/First/Second reminder, Notice of default, Collection 1–3</td><td style="padding:6px 10px 6px 0;">SendGrid · finance pipeline / scheduled</td><td style="padding:6px 10px 6px 0;">n/a</td><td style="padding:6px 0; opacity:.6; font-weight:600;">➖ N/A (not Klaviyo)</td></tr>
         <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">18</td><td style="padding:6px 10px 6px 0;">Password reset</td><td style="padding:6px 10px 6px 0;"><code>Password Reset Requested</code></td><td style="padding:6px 10px 6px 0;"><code>Reset Password</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
-        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">19</td><td style="padding:6px 10px 6px 0;">Newsletter signup</td><td style="padding:6px 10px 6px 0;"><code>Newsletter Subscribed</code></td><td style="padding:6px 10px 6px 0;">—</td><td style="padding:6px 0; color:#c0392b; font-weight:600;">❌ Missing (no metric — likely list-triggered instead)</td></tr>
-        <tr><td style="padding:6px 10px 6px 0;">20</td><td style="padding:6px 10px 6px 0;">Account welcome</td><td style="padding:6px 10px 6px 0;"><code>Account Created</code></td><td style="padding:6px 10px 6px 0;"><code>Created Account</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">19</td><td style="padding:6px 10px 6px 0;">Password changed</td><td style="padding:6px 10px 6px 0;"><code>Password Changed</code></td><td style="padding:6px 10px 6px 0;">—</td><td style="padding:6px 0; color:#c0392b; font-weight:600;">❌ Missing (to be built)</td></tr>
+        <tr style="border-bottom:1px solid rgba(128,128,128,.18);"><td style="padding:6px 10px 6px 0;">20</td><td style="padding:6px 10px 6px 0;">Newsletter signup</td><td style="padding:6px 10px 6px 0;"><code>Newsletter Subscribed</code></td><td style="padding:6px 10px 6px 0;">—</td><td style="padding:6px 0; color:#c0392b; font-weight:600;">❌ Missing (no metric — likely list-triggered instead)</td></tr>
+        <tr><td style="padding:6px 10px 6px 0;">21</td><td style="padding:6px 10px 6px 0;">Account welcome</td><td style="padding:6px 10px 6px 0;"><code>Account Created</code></td><td style="padding:6px 10px 6px 0;"><code>Created Account</code></td><td style="padding:6px 0; color:#008539; font-weight:600;">✅ Live (name differs from doc)</td></tr>
       </tbody>
     </table>
     <p style="margin:10px 0 2px; opacity:.7;">Missing in Klaviyo: <code>Artwork Proof</code>, <code>Artwork Proof Reminder</code>, <code>Order Delivered</code>, <code>Newsletter Subscribed</code>. Order shipped uses the existing <code>Fulfilled Order</code> metric instead of <code>Order Shipped</code>.</p>
@@ -1989,17 +2065,83 @@
           <span class="flow-name">Password reset</span>
           <span class="flow-version is-v1">V1</span>
         </button>
+        <button type="button" data-flow="password-changed">
+          <span class="flow-num">19.</span>
+          <span class="flow-name">Password changed</span>
+          <span class="flow-version is-v1">V1</span>
+        </button>
 
         <div class="flow-group-label">Welcome &amp; onboarding</div>
         <button type="button" data-flow="newsletter-signup">
-          <span class="flow-num">19.</span>
+          <span class="flow-num">20.</span>
           <span class="flow-name">Newsletter signup</span>
           <span class="flow-version is-v1">V1</span>
         </button>
         <button type="button" data-flow="account-welcome">
-          <span class="flow-num">20.</span>
+          <span class="flow-num">21.</span>
           <span class="flow-name">Account welcome</span>
           <span class="flow-version is-v2">V2</span>
+        </button>
+
+        <div class="flow-group-label">Pay Later (pay-by-link)</div>
+        <button type="button" data-flow="pl-payment-link">
+          <span class="flow-num">22.</span>
+          <span class="flow-name">Payment link (pay-per-mail)</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="pl-link-sent">
+          <span class="flow-num">23.</span>
+          <span class="flow-name">Payment link sent to…</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="pl-reminder-d1">
+          <span class="flow-num">24.</span>
+          <span class="flow-name">Payment reminder · day 1</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="pl-reminder-d3">
+          <span class="flow-num">25.</span>
+          <span class="flow-name">Payment reminder · day 3</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="pl-reminder-d7">
+          <span class="flow-num">26.</span>
+          <span class="flow-name">Payment reminder · day 7</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="pl-warning-d12">
+          <span class="flow-num">27.</span>
+          <span class="flow-name">Cancellation warning · day 12</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="pl-cancelled-d14">
+          <span class="flow-num">28.</span>
+          <span class="flow-name">Order cancelled · day 14</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+
+        <div class="flow-group-label">Reviews (Trustpilot)</div>
+        <button type="button" data-flow="review-service">
+          <span class="flow-num">29.</span>
+          <span class="flow-name">Service review invite</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="review-product">
+          <span class="flow-num">30.</span>
+          <span class="flow-name">Product review invite</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+
+        <div class="flow-group-label">Guest order access</div>
+        <button type="button" data-flow="guest-order-link">
+          <span class="flow-num">31.</span>
+          <span class="flow-name">View-order link resend</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+        <button type="button" data-flow="email-verification">
+          <span class="flow-num">32.</span>
+          <span class="flow-name">Email verification</span>
+          <span class="flow-version is-new">NEW</span>
         </button>
 
       </nav>
@@ -2792,10 +2934,18 @@
     <!-- ── End Day-1 reminder email ────────────────────────── -->
 
     <!-- ══════════════════════════════════════════════════════ -->
-    <!--  MANUAL PROOF CREATED, per-line-item                    -->
-    <!--  Event:    Artwork Proof                                 -->
-    <!--  Filter:   Type == "Manual"   (Type == "Automatic"       -->
-    <!--            does NOT trigger this email)                  -->
+    <!--  PROOF READY FOR APPROVAL (order-level)                 -->
+    <!--  Event:    OrderActionReminderDue                        -->
+    <!--  Trigger:  ReminderSequence == "proof-approval"          -->
+    <!--            Fires for EVERY proof created, automatic and   -->
+    <!--            manual. No longer manual-only.                 -->
+    <!--  Loops:    Items where StateKey ==                        -->
+    <!--            "li-proof-ready-for-approval"                  -->
+    <!--            count = PendingActions.ActionableLineItemCount -->
+    <!--  CTA:      event.ProofUrl (tokenised by-token link)       -->
+    <!--  Dates:    PromiseCutoffTime = approve-by deadline        -->
+    <!--            PromisedDeliveryDate = delivery promise        -->
+    <!--  Absent in event: ConfigSummary, proof-preview image     -->
     <!-- ══════════════════════════════════════════════════════ -->
     <div class="email" data-flow="proof-ready">
 
@@ -2809,8 +2959,8 @@
 
         <!-- Grey hero with main message + CTA -->
         <div class="hero">
-          <h1>Sebastiaan, your proof is ready</h1>
-          <p class="lead">We've prepared your proof for A5 Flyers, order <strong>#3781204</strong>. Take a quick look and approve. Once you do, we'll send it straight to print.</p>
+          <h1>Sebastiaan, your proof is ready to approve</h1>
+          <p class="lead">We've prepared your proof for order <strong>#3781204</strong>. Take a quick look and approve, and the moment you do, we'll send it straight to print.</p>
           <p class="hero-deadline">Approve your proof by <strong>Mon 18 May, 10:00</strong> to keep delivery on <strong>Tue 19 May</strong>. Miss the cut-off and your delivery moves to the next available date.</p>
           <a class="btn-primary" href="#">Review your proof →</a>
         </div>
@@ -2848,12 +2998,16 @@
           <h3>What we need from you</h3>
           <p class="callout-line">
             <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
-            <span class="callout-text"><strong>Approve your proof for A5 Flyers.</strong></span>
+            <span class="callout-text"><strong>Approve your proof for A5 Flyers to keep production on track.</strong></span>
           </p>
           <p class="callout-hint">Spot something off? Send back for changes, we'll re-proof inside one business day.</p>
         </div>
 
-        <!-- Line item affected (always one, per-line-item email) -->
+        <!-- Line items awaiting approval. LOOP: render each item where
+             StateKey == 'li-proof-ready-for-approval'. Count comes from
+             PendingActions.ActionableLineItemCount (usually 1, can be more).
+             Available per item: ProductName, ProductImageURL (catalog image),
+             Quantity. NOT in the event: ConfigSummary, per-item proof preview. -->
         <h2 class="section-h2">Waiting on your approval</h2>
         <div class="line-items">
 
@@ -2869,7 +3023,6 @@
                   Proof ready
                 </span>
               </div>
-              <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
               <p class="line-qty">Qty 2,500</p>
             </div>
           </div>
@@ -3426,6 +3579,219 @@
       </div>
     </div>
     <!-- ── End order delivered email ───────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════
+         TRUSTPILOT · SERVICE REVIEW INVITATION  (flow "review-service")
+         ─────────────────────────────────────────────────────
+         Purpose: one review of the overall experience (ordering,
+                  communication, delivery). NOT product-specific.
+         Trigger: "Order delivered" + delay (suggest +3 days), or a
+                  dedicated "Review Invitation" event from the backend.
+         Send once per order; suppress if a service review already exists.
+         Data contract:
+           first_name              Klaviyo profile, fallback event.BillingAddress.firstName
+           event.OrderId           order reference
+           event.ServiceReviewUrl  Trustpilot Service Review invitation link
+                                   (unique link via Trustpilot AFS / "create invitation link").
+                                   Star deep-link: append &stars=N (1..5) so the tapped
+                                   rating pre-selects on Trustpilot's review page.
+         ══════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="review-service">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero
+             Name:  {{ first_name|default:event.BillingAddress.firstName|default:'there' }}
+             Order: event.OrderId -->
+        <div class="hero">
+          <h1>Sebastiaan, how did we do?</h1>
+          <p class="lead">Your order <strong>#3781204</strong> arrived a few days ago. We'd love to hear how the whole experience was, from placing your order to it landing on your desk. It takes less than a minute.</p>
+        </div>
+
+        <!-- Star rating selector. Each star is a link to event.ServiceReviewUrl
+             with &stars=N so the rating is pre-filled on Trustpilot. -->
+        <div class="review-rate" style="text-align:center; margin:0 0 28px;">
+          <p style="margin:0 0 12px; font-size:15px; color:#555555;">Tap a rating to get started</p>
+          <div style="font-size:0; line-height:0;">
+            <a href="#" title="1 star"  style="display:inline-block; width:44px; height:44px; margin:0 4px; background:#00b67a; border-radius:6px; text-align:center; line-height:44px; text-decoration:none;"><svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></a><a href="#" title="2 stars" style="display:inline-block; width:44px; height:44px; margin:0 4px; background:#00b67a; border-radius:6px; text-align:center; line-height:44px; text-decoration:none;"><svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></a><a href="#" title="3 stars" style="display:inline-block; width:44px; height:44px; margin:0 4px; background:#00b67a; border-radius:6px; text-align:center; line-height:44px; text-decoration:none;"><svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></a><a href="#" title="4 stars" style="display:inline-block; width:44px; height:44px; margin:0 4px; background:#00b67a; border-radius:6px; text-align:center; line-height:44px; text-decoration:none;"><svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></a><a href="#" title="5 stars" style="display:inline-block; width:44px; height:44px; margin:0 4px; background:#00b67a; border-radius:6px; text-align:center; line-height:44px; text-decoration:none;"><svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></a>
+          </div>
+        </div>
+
+        <!-- Primary ask (reuses .help-cta). CTA → event.ServiceReviewUrl -->
+        <div class="help-cta">
+          <h3>Rate your experience on Trustpilot</h3>
+          <p>Your feedback helps other small businesses find a printer they can trust, and it tells us exactly what we're getting right and where we can do better.</p>
+          <a class="btn-primary" href="#">Write a review →</a>
+        </div>
+
+        <div class="faq">
+          <h3>Something not quite right?</h3>
+          <p>Reply to this email before you review. We read every message and we'll put it right.</p>
+          <h3>Why Trustpilot?</h3>
+          <p>Trustpilot is independent, so your review is public and verified, and it helps the next customer buy with confidence.</p>
+        </div>
+
+        <!-- Live company rating (same component as the delivered email) -->
+        <div class="trustpilot">
+          <span class="trustpilot-inner">
+            <span class="trustpilot-stars" aria-label="Rated 4.5 out of 5">
+              <span class="star-bg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="star-fg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+            </span>
+            <span class="trustpilot-label">
+              <strong>Excellent</strong> · 4.5 out of 5 · <strong>32,894</strong> reviews on Trustpilot
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because your order #3781204 was delivered. This is a one-time review invitation.</p>
+        <p>All rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End service review invitation email ─────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════
+         TRUSTPILOT · PRODUCT REVIEW INVITATION  (flow "review-product")
+         ─────────────────────────────────────────────────────
+         Purpose: one review per product bought. Lists each product
+                  line with its own review link.
+         Trigger: "Order delivered" + delay (suggest +5 days, after the
+                  service review), or a dedicated event.
+         Data contract:
+           first_name                 Klaviyo profile, fallback event.BillingAddress.firstName
+           event.OrderId              order reference
+           Loop event.Items where Kind == "product" (skip services):
+             item.ProductName, item.ProductImageURL, item.ConfigSummary
+             item.ProductReviewUrl    Trustpilot Product Review link for that SKU
+           event.ProductReviewUrl     (optional) landing page listing all products to review
+         ══════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="review-product">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>Sebastiaan, what did you think of your prints?</h1>
+          <p class="lead">You recently received order <strong>#3781204</strong>. Tell other customers what you thought of each product, it takes a moment and helps them choose with confidence.</p>
+        </div>
+
+        <!-- One row per product. Each row carries its own review link
+             (item.ProductReviewUrl). Services are skipped in this loop. -->
+        <h2 class="section-h2">Review your products</h2>
+        <div class="line-items">
+
+          <div class="line-item line-item-action line-item-1">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?w=380&fm=webp&q=80" alt="A5 Flyers" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">A5 Flyers</p>
+              </div>
+              <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
+              <a href="#" style="display:inline-block; margin-top:10px; padding:6px 14px; font-size:13px; font-weight:600; color:#008539; text-decoration:none; border:1px solid #008539; border-radius:9999px;">Review this product →</a>
+            </div>
+          </div>
+
+          <div class="line-item line-item-action line-item-2">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?w=380&fm=webp&q=80" alt="Business Cards Premium" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Business Cards Premium</p>
+              </div>
+              <p class="line-config">350 gsm · Round corners · Spot UV front</p>
+              <a href="#" style="display:inline-block; margin-top:10px; padding:6px 14px; font-size:13px; font-weight:600; color:#008539; text-decoration:none; border:1px solid #008539; border-radius:9999px;">Review this product →</a>
+            </div>
+          </div>
+
+          <div class="line-item line-item-action line-item-3">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/41Y1y3jMop3QZACNSW5h7g/57b1c68acebbea0a04a384908da64759/banners_retractable_banners__1_.png?w=380&fm=webp&q=80" alt="Roll-up Banner Premium" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Roll-up Banner Premium</p>
+              </div>
+              <p class="line-config">85 × 200 cm · Aluminium base · Carry bag included</p>
+              <a href="#" style="display:inline-block; margin-top:10px; padding:6px 14px; font-size:13px; font-weight:600; color:#008539; text-decoration:none; border:1px solid #008539; border-radius:9999px;">Review this product →</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Fallback single CTA → event.ProductReviewUrl (all products in one place) -->
+        <div class="help-cta">
+          <h3>Share your thoughts</h3>
+          <p>Rate quality, finish and value on each product. Adding a photo of your print in the wild helps other customers most of all.</p>
+          <a class="btn-primary" href="#">Review your products →</a>
+        </div>
+
+        <div class="faq">
+          <h3>How long does it take?</h3>
+          <p>About a minute per product. You can review one and come back for the rest later.</p>
+          <h3>Something not right with a product?</h3>
+          <p>Reply to this email with a photo and a quick note before you review, and we'll sort it out for you.</p>
+        </div>
+
+        <!-- Live company rating (same component as the delivered email) -->
+        <div class="trustpilot">
+          <span class="trustpilot-inner">
+            <span class="trustpilot-stars" aria-label="Rated 4.5 out of 5">
+              <span class="star-bg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="star-fg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+            </span>
+            <span class="trustpilot-label">
+              <strong>Excellent</strong> · 4.5 out of 5 · <strong>32,894</strong> reviews on Trustpilot
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because your order #3781204 was delivered. This is a one-time review invitation.</p>
+        <p>All rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End product review invitation email ─────────────── -->
 
     <!-- ══════════════════════════════════════════════════════ -->
     <!--  ORDER CANCELLED, per order                            -->
@@ -4746,6 +5112,241 @@
     <!-- ── End Password Reset email ────────────────────────── -->
 
     <!-- ══════════════════════════════════════════════════════════════════
+         PASSWORD CHANGED, security confirmation email
+         ─────────────────────────────────────────────────────────────────
+         Channel:        Klaviyo (transactional template)
+         Trigger:        Password successfully changed (after reset or from
+                         account settings). Sent immediately.
+         Subject:        Your Helloprint password was changed
+         Preheader:      If this wasn't you, secure your account now
+         Tone:           Calm, factual, reassuring. No marketing.
+         Best practices applied:
+           • Single clear statement of what happened
+           • When/where context for the user to recognise the action
+           • Prominent "wasn't me" path (secure account / reset)
+           • No login button (avoid phishing-style CTAs)
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="password-changed">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero, single-purpose: confirm the change clearly. -->
+        <div class="hero">
+          <h1>Your password was changed</h1>
+          <p class="lead">Hi Sebastiaan, this is a confirmation that the password for your Helloprint account was just changed.</p>
+          <p class="hero-deadline" style="margin-top:14px;">Changed on <strong>1 June 2026 at 09:32 (CET)</strong></p>
+        </div>
+
+        <hr class="email-divider">
+
+        <!-- Security path, the important bit: what to do if it wasn't them. -->
+        <p class="security-note"><strong>Didn't change your password?</strong> Your account may be at risk. Reset your password straight away to lock it back down, and contact us so we can help secure it.</p>
+
+        <div style="text-align:center; margin:18px 0 4px;">
+          <a class="btn-primary" href="#reset-link" data-no-track="true">Secure my account →</a>
+        </div>
+
+        <!-- Help -->
+        <div class="help-cta">
+          <h3>Need a hand?</h3>
+          <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because the password was changed for the Helloprint account linked to this address. It's a security notification, so it's always sent.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End Password Changed email ────────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         GUEST · VIEW-ORDER LINK RESEND  (expired link re-trigger)
+         ─────────────────────────────────────────────────────────────────
+         Channel:  Klaviyo (transactional)
+         Trigger:  A guest opens an expired View-Order link (links expire
+                   after 7 days) and clicks "Send me a new link". Sent
+                   immediately with a fresh tokenised link.
+         Subject:  Your new order link
+         Preheader: Your previous link had expired · valid 7 days
+         Note:      Guests have no account, so this is the tokenised order
+                    link, not a login. Draft proposal — to be tuned once the
+                    real event exists.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="guest-order-link">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero, single-purpose: the fresh link + the button. -->
+        <div class="hero">
+          <h1>Your new order link</h1>
+          <p class="lead">Hi, your previous link to view Helloprint order <strong>#3781204</strong> had expired. Use the button below to open your order again.</p>
+          <a class="btn-primary" href="#view-order" data-no-track="true">View your order →</a>
+          <p class="hero-deadline" style="margin-top:14px;">This link expires in <strong>7 days</strong>.</p>
+        </div>
+
+        <!-- Fallback URL, some clients strip buttons; guests may want to verify first. -->
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#view-order" data-no-track="true">https://www.helloprint.com/en-ie/orders/75700a4e-3d2e-4501-b7f0-e433bf4ede26/by-token?t=xjCvV59CG5OPRHTO7nuIn6XzspuK0mxyRP2Q</a>
+        </div>
+
+        <!-- Tip: claim the order by creating an account, no more expiring links. No button, informational. -->
+        <div style="display:flex; gap:12px; align-items:flex-start; background:#f1f8f3; border:1px solid #cfe8d6; border-radius:12px; padding:16px 18px; margin:4px 0 0;">
+          <span style="flex:0 0 auto; width:32px; height:32px; border-radius:9999px; background:#008539; display:inline-flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg>
+          </span>
+          <div>
+            <p style="margin:0 0 3px; font-weight:700; color:#191919;">Tip: never wait for a link again</p>
+            <p style="margin:0; font-size:14px; line-height:21px; color:#333;">On your order page you can <strong>claim this order</strong> by creating a free Helloprint account. Your orders then live in your account, so you always have access, no more links that expire.</p>
+          </div>
+        </div>
+
+        <hr class="email-divider">
+
+        <!-- Reassurance, no scare tactics. -->
+        <p class="security-note">Didn't ask for this? You can safely ignore this email, nothing about your order has changed.</p>
+
+        <!-- Help -->
+        <div class="help-cta">
+          <h3>Need a hand?</h3>
+          <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because a new link to view your Helloprint order was requested from this address.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End Guest view-order link resend email ────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         EMAIL VERIFICATION, link guest orders to a Helloprint account
+         ─────────────────────────────────────────────────────────────────
+         Channel:  Klaviyo (transactional)
+         Trigger:  Email Verification Requested · sent immediately when a
+                   customer asks to link the guest orders placed on this
+                   address to their account.
+         Purpose:  The customer verifies ownership of the email address by
+                   clicking the link. On verify, every guest order ever
+                   placed on that address is attached to their account, so
+                   they can log in and see, track and reorder all of them
+                   in one place, no more one-off expiring guest links.
+         Subject:  Verify your email to see all your Helloprint orders
+         Preheader: One click links every guest order to your account.
+         Data notes:
+           • verify_link  = one-time link · TTL below (expires_in_days).
+           • order_count  = number of guest orders found on this address.
+                            If backend cannot count cheaply at send time,
+                            hide the "orders found" line and keep the copy
+                            generic (component degrades gracefully).
+           • Reassurance line for anyone who did not request this.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="email-verification">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero, single purpose: confirm ownership of the address, then link
+             every guest order to the account. -->
+        <div class="hero">
+          <h1>Verify your email to see all your orders</h1>
+          <p class="lead">You asked to link your Helloprint orders to your account. Confirm this is your email address and we'll bring every order you placed as a guest on <strong>sebastiaan.ram@helloprint.com</strong> into one place, ready to track, download and reorder whenever you need.</p>
+          <a class="btn-primary" href="#verify-email" data-no-track="true">Verify email address →</a>
+          <p class="hero-deadline" style="margin-top:14px;">This verification link expires in <strong>7 days</strong>.</p>
+        </div>
+
+        <!-- Orders-found highlight. Populated from order_count. Degrades to
+             hidden if the backend cannot count orders at send time. -->
+        <div style="display:flex; gap:12px; align-items:center; background:#f1f8f3; border:1px solid #cfe8d6; border-radius:12px; padding:16px 18px; margin:4px 0 30px;">
+          <span style="flex:0 0 auto; width:36px; height:36px; border-radius:9999px; background:#008539; display:inline-flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h13l5 5v5a1 1 0 0 1-1 1H3z"/><path d="M3 7l3-4h8l2 4"/><path d="M8 21v-6h6v6"/></svg>
+          </span>
+          <div>
+            <p style="margin:0 0 2px; font-weight:700; color:#191919;">We found 4 orders on this email address</p>
+            <p style="margin:0; font-size:14px; line-height:21px; color:#333;">Verify to link all of them to your account in one step.</p>
+          </div>
+        </div>
+
+        <!-- What verifying unlocks. Reuses the account-benefits feature list. -->
+        <h2 class="section-h2">What you get once it's linked</h2>
+        <div class="feature-list">
+          <div class="feature-row">
+            <div class="feature-row-icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h10M3 8h10M3 11h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <p class="feature-row-title">All your orders in one place</p>
+              <p class="feature-row-desc">Every guest order on this address, together in your account, no order numbers to dig up.</p>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-row-icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <p class="feature-row-title">Track without waiting for a link</p>
+              <p class="feature-row-desc">Log in any time to follow production and delivery. No more one-off links that expire.</p>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-row-icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8a5 5 0 0 1 8.5-3.5L13 6M13 3v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8a5 5 0 0 1-8.5 3.5L3 10M3 13v-3h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <p class="feature-row-title">Reorder in one click</p>
+              <p class="feature-row-desc">Same file, same setup. Repeat any past order without starting over.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fallback URL, some clients strip buttons. -->
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#verify-email" data-no-track="true">https://www.helloprint.com/en-ie/account/verify-email?t=xjCvV59CG5OPRHTO7nuIn6XzspuK0mxyRP2Q</a>
+        </div>
+
+        <hr class="email-divider">
+
+        <!-- Reassurance, no scare tactics. -->
+        <p class="security-note">Didn't ask to link your orders? You can safely ignore this email. Nothing changes and your orders stay exactly where they are.</p>
+
+        <!-- Help -->
+        <div class="help-cta">
+          <h3>Need a hand?</h3>
+          <p>Reply to this email, chat with us, or visit our Help Centre.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because linking your Helloprint orders to an account was requested from this address.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End Email verification email ──────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
          NEWSLETTER SIGNUP, lead-to-buyer welcome with 5% discount
          ─────────────────────────────────────────────────────────────────
          Channel:        Klaviyo (marketing)
@@ -5040,6 +5641,543 @@
       </div>
     </div>
     <!-- ── End Account Welcome email ───────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         PAY LATER (pay-by-link) — deferred-payment checkout flow.
+         Brief: 2026-07-14_brief_pay-by-link-pay-later_SR.md (approved).
+         Pilot locales en-IE + it-IT. Customer-facing "Pay Later",
+         internal slug pay-by-link. Payment is settled via an emailed Adyen
+         Pay-by-Link; 14-day link expiry, auto-cancel on expiry.
+
+         FLOW ORDER (updated 2026-07-17): the order-creation event only fires
+         once payment is made, so the standard Order confirmation (#1) is sent
+         AFTER payment, exactly as for any paid order — email #1 is unchanged.
+         Everything below is pre-payment, triggered by PaymentLinkCreated.
+
+         Email 22 is ONE Klaviyo template whose content switches on event
+         properties (SentToSelf → buyer vs nominated recipient); it is not
+         two templates.
+
+         7 flows (22–28):
+           22 pl-payment-link        pay-per-mail, carries the Adyen link · ONE template, buyer OR recipient via event props
+           23 pl-link-sent           note to the ordering customer when link goes to someone else
+           24 pl-reminder-d1         payment reminder, day 1   (to the payer)
+           25 pl-reminder-d3         payment reminder, day 3   (to the payer)
+           26 pl-reminder-d7         payment reminder, day 7   (to the payer)
+           27 pl-warning-d12         cancellation warning, day 12 (to BOTH payer + customer)
+           28 pl-cancelled-d14       order cancelled, link expired, day 14
+         ════════════════════════════════════════════════════════════════ -->
+
+    <!-- ══ 22 · PAYMENT LINK (pay-per-mail) ══════════════════════════════
+         The core email: carries the Adyen Pay-by-Link. Triggered by the
+         PaymentLinkCreated event (before payment; the order-creation event
+         and the confirmation only follow once this link is paid).
+         ONE Klaviyo template. Content switches on the SentToSelf event
+         property: the recipient toggle below simulates buyer vs nominated
+         recipient (greeting + the optional message block).
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="pl-payment-link" data-recipient="other">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <div data-recipient-block="self">
+            <h1>Your payment link is ready, Sebastiaan</h1>
+            <p class="lead">Here's the secure link to pay for your Helloprint order. Your proofs are already being prepared, and production starts the moment your payment lands.</p>
+          </div>
+          <div data-recipient-block="other">
+            <h1>A payment request from Sebastiaan</h1>
+            <p class="lead">Sebastiaan Ram placed an order with Helloprint and asked you to complete the payment. Here's the secure link, production starts as soon as it's paid.</p>
+          </div>
+          <a class="btn-primary" href="#adyen-payment-link">Pay €620.06 →</a>
+          <p class="hero-deadline">This link expires on <strong>28 May 2026</strong>.</p>
+        </div>
+
+        <!-- Optional message from the customer, only when sent to someone else. -->
+        <div class="action-callout" data-recipient-block="other">
+          <h3>Message from Sebastiaan</h3>
+          <p class="callout-line">
+            <svg class="info-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.6" r="0.9" fill="currentColor"/></svg>
+            <span class="callout-text">"PO 4471, please approve when you can. Thanks, Sebastiaan."</span>
+          </p>
+        </div>
+
+        <!-- What is in this order, same items + summary as the Order confirmation,
+             populated from the same event properties. Payment state is "Open".
+             No per-line artwork/production badges here: this is pre-payment and
+             nothing is produced until the link is paid. -->
+        <h2 class="section-h2">What is in this order</h2>
+        <div class="line-items">
+          <div class="line-item line-item-1">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?w=380&fm=webp&q=80" alt="A5 Flyers" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">A5 Flyers</p>
+              </div>
+              <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
+              <p class="line-qty">Qty 2,500</p>
+            </div>
+            <div class="line-price">€189.00</div>
+          </div>
+          <div class="line-item line-item-2">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?w=380&fm=webp&q=80" alt="Business Cards Premium" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Business Cards Premium</p>
+              </div>
+              <p class="line-config">350 gsm · Round corners · Spot UV front</p>
+              <p class="line-qty">Qty 500</p>
+            </div>
+            <div class="line-price">€64.50</div>
+          </div>
+          <div class="line-item line-item-3">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/41Y1y3jMop3QZACNSW5h7g/57b1c68acebbea0a04a384908da64759/banners_retractable_banners__1_.png?w=380&fm=webp&q=80" alt="Roll-up Banner Premium" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Roll-up Banner Premium</p>
+              </div>
+              <p class="line-config">85 × 200 cm · Aluminium base · Carry bag included</p>
+              <p class="line-qty">Qty 3</p>
+            </div>
+            <div class="line-price">€237.00</div>
+          </div>
+          <div class="line-item line-item-service" data-kind="service">
+            <div class="line-thumb">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="color: var(--color-ink-muted);"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Premium Artwork Check</p>
+              </div>
+              <p class="line-config">Pre-press review of your files by our team before printing</p>
+            </div>
+            <div class="line-price">€12.00</div>
+          </div>
+        </div>
+
+        <!-- Totals, identical to the Order confirmation. Payment pill = Open. -->
+        <div class="totals">
+          <table>
+            <tr><td>Articles</td><td>€490.50</td></tr>
+            <tr><td>Services</td><td>€12.00</td></tr>
+            <tr><td>Delivery</td><td>€14.95</td></tr>
+            <tr class="discount-row"><td>Discount (WELCOME5)</td><td>−€5.00</td></tr>
+            <tr><td>Subtotal</td><td>€512.45</td></tr>
+            <tr><td>VAT</td><td>€107.61</td></tr>
+            <tr class="total-row">
+              <td>Total</td>
+              <td class="total-amount">
+                <span class="payment-pill is-pending">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Awaiting payment
+                </span>
+                <span class="total-value">€620.06</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Fallback URL for clients that strip buttons. -->
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#adyen-payment-link" data-no-track="true">https://pay.helloprint.com/l/HP-2026-118834?t=9f2c7ad4e1b0</a>
+        </div>
+
+        <hr class="email-divider">
+
+        <p class="security-note">This payment link is unique to this order and can be paid once. Please don't share it publicly. If you weren't expecting this request, you can ignore this email.</p>
+
+        <div class="help-cta">
+          <h3>Questions about this payment?</h3>
+          <p>Reply to this email or visit our Help Centre and our team will help you out.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because a Helloprint order was placed with a request to pay via this link. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 22 · Payment link (pay-per-mail) ────────────── -->
+
+    <!-- ══ 23 · PAYMENT LINK SENT TO… ════════════════════════════════════
+         A short note to the ORDERING CUSTOMER, sent only when the payment
+         link went to someone else, so they can track and chase it.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="pl-link-sent">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>Your payment link is on its way to Maria</h1>
+          <p class="lead">We've emailed the secure payment link for order <strong>#HP-2026-118834</strong> to Maria (finance@acme.com). We'll let you know the moment it's paid, and production starts right after.</p>
+          <a class="btn-primary" href="#">View your order →</a>
+        </div>
+
+        <div class="action-callout">
+          <h3>Need to chase it or change who pays?</h3>
+          <p class="callout-line">
+            <svg class="info-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.6" r="0.9" fill="currentColor"/></svg>
+            <span class="callout-text">Open your order and use <strong>Resend</strong> to send the link again, or change the recipient. Sending a new link cancels the previous one, so only the latest link can be paid.</span>
+          </p>
+        </div>
+
+        <div class="totals">
+          <table>
+            <tr><td>Order</td><td>#HP-2026-118834</td></tr>
+            <tr class="total-row">
+              <td>Total</td>
+              <td class="total-amount">
+                <span class="payment-pill is-pending">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Awaiting payment
+                </span>
+                <span class="total-value">€620.06</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="help-cta">
+          <h3>Questions about your order?</h3>
+          <p>Just reply and a real person will get back to you. Or visit our Help Centre.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because you asked us to send the payment link for your order to someone else. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 23 · Payment link sent to… ──────────────────── -->
+
+    <!-- ══ 24 · PAYMENT REMINDER · DAY 1 ═════════════════════════════════
+         Klaviyo reminder flow, driven off the payment-link event, halted
+         by a Laravel paid/cancelled stop event. Follows the PAYER.
+         Gentle nudge.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="pl-reminder-d1">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>A quick reminder: your order is waiting for payment</h1>
+          <p class="lead">Order <strong>#HP-2026-118834</strong> is confirmed and your proofs are being prepared. Pay the secure link below and we'll move it straight to production.</p>
+          <a class="btn-primary" href="#adyen-payment-link">Pay €620.06 →</a>
+          <p class="hero-deadline">Your payment link expires on <strong>28 May 2026</strong>.</p>
+        </div>
+
+        <div class="action-callout">
+          <h3>Already paid?</h3>
+          <p class="callout-line">
+            <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text">Bank transfers can take 1–2 business days to clear. If you've already paid, this reminder stops automatically once your payment lands, no action needed.</span>
+          </p>
+        </div>
+
+        <div class="totals">
+          <table>
+            <tr><td>Order</td><td>#HP-2026-118834</td></tr>
+            <tr class="total-row">
+              <td>Amount due</td>
+              <td class="total-amount"><span class="total-value">€620.06</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#adyen-payment-link" data-no-track="true">https://pay.helloprint.com/l/HP-2026-118834?t=9f2c7ad4e1b0</a>
+        </div>
+
+        <div class="help-cta">
+          <h3>Questions about this payment?</h3>
+          <p>Reply to this email or visit our Help Centre, we're happy to help.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because a Helloprint order is awaiting payment via your link. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 24 · Payment reminder · day 1 ───────────────── -->
+
+    <!-- ══ 25 · PAYMENT REMINDER · DAY 3 ═════════════════════════════════
+         Follows the PAYER. A touch more urgency, ties to the delivery date.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="pl-reminder-d3">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>Still waiting on payment for your order</h1>
+          <p class="lead">Your proofs for order <strong>#HP-2026-118834</strong> are ready to move, we just need the payment to start production. The sooner it's paid, the sooner it ships.</p>
+          <a class="btn-primary" href="#adyen-payment-link">Pay €620.06 →</a>
+          <p class="hero-deadline">Your payment link expires on <strong>28 May 2026</strong>. After that the order is cancelled.</p>
+        </div>
+
+        <div class="action-callout">
+          <h3>Already paid?</h3>
+          <p class="callout-line">
+            <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text">Bank transfers can take 1–2 business days to clear. If you've already paid, this reminder stops automatically once your payment lands.</span>
+          </p>
+        </div>
+
+        <div class="totals">
+          <table>
+            <tr><td>Order</td><td>#HP-2026-118834</td></tr>
+            <tr class="total-row">
+              <td>Amount due</td>
+              <td class="total-amount"><span class="total-value">€620.06</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#adyen-payment-link" data-no-track="true">https://pay.helloprint.com/l/HP-2026-118834?t=9f2c7ad4e1b0</a>
+        </div>
+
+        <div class="help-cta">
+          <h3>Questions about this payment?</h3>
+          <p>Reply to this email or visit our Help Centre, we're happy to help.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because a Helloprint order is awaiting payment via your link. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 25 · Payment reminder · day 3 ───────────────── -->
+
+    <!-- ══ 26 · PAYMENT REMINDER · DAY 7 ═════════════════════════════════
+         Follows the PAYER. Halfway warning, names the cancellation cliff.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="pl-reminder-d7">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>Your order is halfway to its deadline</h1>
+          <p class="lead">It's been a week and order <strong>#HP-2026-118834</strong> is still unpaid. If we don't receive payment by <strong>28 May 2026</strong>, the order is cancelled and your prepared proofs are released.</p>
+          <a class="btn-primary" href="#adyen-payment-link">Pay €620.06 →</a>
+        </div>
+
+        <!-- Payment-window timeline, current step is "Day 7 reminder". -->
+        <div class="timeline dunning-timeline">
+          <div class="timeline-row">
+            <div class="timeline-connector timeline-connector-done" style="left:12.5%; right:62.5%;"></div>
+            <div class="timeline-connector timeline-connector-done" style="left:37.5%; right:37.5%;"></div>
+            <div class="timeline-connector" style="left:62.5%; right:12.5%;"></div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">Link sent</div>
+            </div>
+            <div class="timeline-step">
+              <span class="timeline-dot is-current-action"></span>
+              <div class="timeline-label">Day 7 reminder</div>
+            </div>
+            <div class="timeline-step is-pending">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">Final warning<br><span style="font-size:11px;opacity:0.7;">day 12</span></div>
+            </div>
+            <div class="timeline-step is-pending">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">Auto-cancel<br><span style="font-size:11px;opacity:0.7;">day 14</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="totals">
+          <table>
+            <tr><td>Order</td><td>#HP-2026-118834</td></tr>
+            <tr class="total-row">
+              <td>Amount due</td>
+              <td class="total-amount"><span class="total-value">€620.06</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#adyen-payment-link" data-no-track="true">https://pay.helloprint.com/l/HP-2026-118834?t=9f2c7ad4e1b0</a>
+        </div>
+
+        <div class="help-cta">
+          <h3>Need to talk this through?</h3>
+          <p>Reply to this email or chat with us, we're happy to help you sort it out.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because a Helloprint order is awaiting payment via your link. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 26 · Payment reminder · day 7 ───────────────── -->
+
+    <!-- ══ 27 · CANCELLATION WARNING · DAY 12 ════════════════════════════
+         Sent to BOTH the payer (link recipient) AND the ordering customer,
+         because it's the customer's order about to be cancelled.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="pl-warning-d12">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>Last chance: your order is cancelled in 2 days</h1>
+          <p class="lead">We still haven't received payment for order <strong>#HP-2026-118834</strong>. If it isn't paid by <strong>28 May 2026</strong>, we'll cancel it automatically and you'll need to place it again.</p>
+          <a class="btn-primary" href="#adyen-payment-link">Pay now, €620.06 →</a>
+        </div>
+
+        <div class="action-callout is-danger">
+          <h3>What happens if you don't pay</h3>
+          <p class="callout-line">
+            <svg class="warning-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 2L1.5 14h13L8 2z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.8" r="0.85" fill="#fff"/></svg>
+            <span class="callout-text">On <strong>28 May 2026</strong> the order is cancelled, the payment link expires, and the prepared proofs are released. Nothing is printed and you're not charged, but the order can't be recovered, you'd need to reorder.</span>
+          </p>
+        </div>
+
+        <div class="totals">
+          <table>
+            <tr><td>Order</td><td>#HP-2026-118834</td></tr>
+            <tr class="total-row">
+              <td>Amount due</td>
+              <td class="total-amount"><span class="total-value">€620.06</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#adyen-payment-link" data-no-track="true">https://pay.helloprint.com/l/HP-2026-118834?t=9f2c7ad4e1b0</a>
+        </div>
+
+        <p class="security-note">This warning was sent to both the person paying and the person who placed the order.</p>
+
+        <div class="help-cta">
+          <h3>Need to talk this through?</h3>
+          <p>Reply to this email or chat with us before the deadline and we'll help you sort it out.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because a Helloprint order is about to be cancelled for non-payment. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 27 · Cancellation warning · day 12 ──────────── -->
+
+    <!-- ══ 28 · ORDER CANCELLED · DAY 14 ═════════════════════════════════
+         Link expired, order auto-cancelled, Presta hold released. Neutral,
+         reassuring tone. Offers an easy reorder.
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="pl-cancelled-d14">
+
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <div class="hero">
+          <h1>Your order has been cancelled</h1>
+          <p class="lead">We didn't receive payment within 14 days, so order <strong>#HP-2026-118834</strong> has been cancelled and the payment link has expired. Nothing was printed and you haven't been charged.</p>
+          <a class="btn-primary" href="#">Start a new order →</a>
+        </div>
+
+        <div class="action-callout">
+          <h3>Still need these?</h3>
+          <p class="callout-line">
+            <svg class="info-icon" viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.6" r="0.9" fill="currentColor"/></svg>
+            <span class="callout-text">Your configuration is saved. You can reorder in a couple of clicks and, if you'd like, pay straight away or use Pay Later again.</span>
+          </p>
+        </div>
+
+        <div class="totals">
+          <table>
+            <tr><td>Order</td><td>#HP-2026-118834</td></tr>
+            <tr class="total-row">
+              <td>Status</td>
+              <td class="total-amount">
+                <span class="payment-pill is-pending">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Cancelled
+                </span>
+                <span class="total-value">€620.06</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="help-cta">
+          <h3>Changed your mind, or need a hand?</h3>
+          <p>Reply to this email or visit our Help Centre, we're happy to help you place the order again.</p>
+          <a class="btn-primary" href="#">Help Centre →</a>
+        </div>
+
+      </div>
+
+      <div class="email-footer">
+        <p>You received this email because your unpaid Helloprint order was cancelled after 14 days. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 28 · Order cancelled · day 14 ───────────────── -->
 
     </div>
     <!-- /.preview-grid -->
@@ -5418,6 +6556,25 @@
         </div>
       </div>
 
+      <div class="email-meta" data-for-flow="password-changed">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A user's password was successfully changed, either by completing a reset or from account settings. Sent immediately as a security notification.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Password Changed</code> · Klaviyo · immediate · always sent (not opt-out)</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Confirm the change to the account owner and give them a fast, clear path to secure the account if they didn't make it.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Secure my account →</code></div>
+        </div>
+      </div>
+
       <div class="email-meta" data-for-flow="newsletter-signup">
         <div class="email-meta-field">
           <div class="email-meta-label">When</div>
@@ -5453,6 +6610,167 @@
         <div class="email-meta-field">
           <div class="email-meta-label">Main CTA</div>
           <div class="email-meta-value"><code>Browse products →</code></div>
+        </div>
+      </div>
+
+      <!-- ── Pay Later (pay-by-link) metadata blocks (22–28) ──────────── -->
+      <div class="email-meta" data-for-flow="pl-payment-link">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">The payment link is created at checkout, before payment. Carries the Adyen Pay-by-Link. The order-creation event and the standard Order confirmation (#1) only follow once this link is paid.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>PaymentLinkCreated</code> · Klaviyo · immediate · also the entry event for the reminder flow</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Template</div>
+          <div class="email-meta-value"><strong>One</strong> Klaviyo template. Content switches on <code>SentToSelf</code>: sends to the <strong>buyer</strong> or the <strong>nominated recipient</strong> (colleague/finance). The toggle simulates both; greeting + optional message block change, not the template.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Get the order paid. Resending mints a fresh link and expires the previous one, so only the latest link is payable.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay €620.06 →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="pl-link-sent">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">Only when the payment link was sent to someone else. A short note so the customer can track and chase it.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>PaymentLinkCreated</code> · gated on <code>AlternateRecipient != null</code> · Klaviyo · immediate</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Recipient</div>
+          <div class="email-meta-value">The <strong>ordering customer</strong> (not the payer).</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Confirm who the link went to and offer resend / change-recipient.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>View your order →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="pl-reminder-d1">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">1 day after the link was issued and it's still unpaid. Gentle nudge.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">Klaviyo reminder flow off <code>PaymentLinkCreated</code> · day-1 step · halted by the Laravel <code>paid</code>/<code>cancelled</code> stop event</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Recipient</div>
+          <div class="email-meta-value">The <strong>payer</strong> (link recipient).</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay €620.06 →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="pl-reminder-d3">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">3 days in, still unpaid. Slightly firmer, ties to the delivery date.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">Klaviyo reminder flow · day-3 step · same stop event</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Recipient</div>
+          <div class="email-meta-value">The <strong>payer</strong>.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay €620.06 →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="pl-reminder-d7">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">7 days in, halfway to expiry. Names the cancellation cliff (day 14).</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">Klaviyo reminder flow · day-7 step · same stop event</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Recipient</div>
+          <div class="email-meta-value">The <strong>payer</strong>.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay €620.06 →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="pl-warning-d12">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">Day 12, 2 days before auto-cancel. Final warning.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value">Klaviyo reminder flow · day-12 step · same stop event</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Recipient</div>
+          <div class="email-meta-value"><strong>Both</strong> the payer and the ordering customer, it's the customer's order being cancelled. <em>Routing recommended in brief, not final (owner analytics/CRM).</em></div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Pay now, €620.06 →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="pl-cancelled-d14">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">Day 14. Link expired, order auto-cancelled, Presta hold released. Neutral, reassuring.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>OrderCancelled</code> · reason <code>pay-by-link-expired</code> · Klaviyo · immediate (also the flow stop event)</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Recipient</div>
+          <div class="email-meta-value">The <strong>ordering customer</strong>.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Start a new order →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="email-verification">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A customer who ordered as a guest wants their orders in an account. They enter this email address, we send this to confirm they own it before linking anything.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Email Verification Requested</code> · Klaviyo · immediate · one-time link (7-day TTL)</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Get the click that verifies ownership. On verify, every guest order on this address is attached to the account, so the customer can log in to see, track and reorder all of them.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>Verify email address →</code></div>
         </div>
       </div>
 
@@ -5883,6 +7201,19 @@
 <span class="p">}</span></pre></div>
       </details>
 
+      <details class="event-vars" data-for-flow="password-changed">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"Password Changed"</span><span class="p">,</span>
+  <span class="k">"channel"</span><span class="p">:</span> <span class="s">"Klaviyo"</span><span class="p">,</span>             <span class="c">// transactional template</span>
+  <span class="k">"person"</span><span class="p">:</span> <span class="p">{</span> <span class="k">"first_name"</span><span class="p">:</span> <span class="s">"Sebastiaan"</span> <span class="p">},</span>
+  <span class="k">"changed_at"</span><span class="p">:</span> <span class="s">"2026-06-01T09:32:00Z"</span><span class="p">,</span>
+  <span class="k">"change_source"</span><span class="p">:</span> <span class="s">"password-reset"</span><span class="p">,</span>  <span class="c">// "password-reset" | "account-settings"</span>
+  <span class="k">"reset_link"</span><span class="p">:</span> <span class="s">"https://my.helloprint.com/account/password/reset?token=..."</span><span class="p">,</span> <span class="c">// "wasn't me" path</span>
+  <span class="k">"changed_ip"</span><span class="p">:</span> <span class="s">"81.205.xx.xx"</span>          <span class="c">// optional, for security awareness</span>
+<span class="p">}</span></pre></div>
+      </details>
+
       <details class="event-vars" data-for-flow="newsletter-signup">
         <summary>Event payload</summary>
         <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
@@ -5918,9 +7249,156 @@
 <span class="p">}</span></pre></div>
       </details>
 
+      <!-- ── Pay Later (pay-by-link) event payloads (22–28) ─────────────── -->
+      <details class="event-vars" data-for-flow="pl-payment-link">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"PaymentLinkCreated"</span><span class="p">,</span>   <span class="c">// entry event for the reminder flow</span>
+  <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"PayLinkUrl"</span><span class="p">:</span> <span class="s">"https://pay.helloprint.com/l/HP-2026-118834?t=..."</span><span class="p">,</span>
+  <span class="k">"AmountDue"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>          <span class="c">// incl VAT, full order total</span>
+  <span class="k">"Currency"</span><span class="p">:</span> <span class="s">"EUR"</span><span class="p">,</span>
+  <span class="k">"LinkExpiresAt"</span><span class="p">:</span> <span class="s">"2026-05-28T12:00:00Z"</span><span class="p">,</span>
+  <span class="k">"SentToSelf"</span><span class="p">:</span> <span class="b">false</span><span class="p">,</span>          <span class="c">// drives greeting + message block</span>
+  <span class="k">"AlternateRecipient"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="k">"name"</span><span class="p">:</span> <span class="s">"Maria"</span><span class="p">,</span>
+    <span class="k">"email"</span><span class="p">:</span> <span class="s">"finance@acme.com"</span><span class="p">,</span>
+    <span class="k">"message"</span><span class="p">:</span> <span class="s">"PO 4471, please approve when you can."</span>  <span class="c">// optional</span>
+  <span class="p">},</span>
+  <span class="k">"OrderedByName"</span><span class="p">:</span> <span class="s">"Sebastiaan Ram"</span><span class="p">,</span>
+
+  <span class="c">// Same order-content properties as "Order Placed", so the</span>
+  <span class="c">// "What is in this order" block renders identically. PaymentState = "Open".</span>
+  <span class="k">"PaymentState"</span><span class="p">:</span> <span class="s">"Open"</span><span class="p">,</span>
+  <span class="k">"OrderTotalExclTax"</span><span class="p">:</span> <span class="n">512.45</span><span class="p">,</span>
+  <span class="k">"TaxTotal"</span><span class="p">:</span> <span class="n">107.61</span><span class="p">,</span>
+  <span class="k">"ShippingExclTax"</span><span class="p">:</span> <span class="n">14.95</span><span class="p">,</span>
+  <span class="k">"DiscountTotal"</span><span class="p">:</span> <span class="n">5.00</span><span class="p">,</span>
+  <span class="k">"DiscountCode"</span><span class="p">:</span> <span class="s">"WELCOME5"</span><span class="p">,</span>
+  <span class="k">"Items"</span><span class="p">:</span> <span class="p">[{</span>
+    <span class="k">"ProductName"</span><span class="p">:</span> <span class="s">"A5 Flyers"</span><span class="p">,</span>
+    <span class="k">"ConfigSummary"</span><span class="p">:</span> <span class="s">"170 gsm Silk · Double-sided · Matte finish"</span><span class="p">,</span>
+    <span class="k">"Quantity"</span><span class="p">:</span> <span class="n">2500</span><span class="p">,</span>
+    <span class="k">"RowTotalExclTax"</span><span class="p">:</span> <span class="n">189.00</span><span class="p">,</span>
+    <span class="k">"ImageURL"</span><span class="p">:</span> <span class="s">"https://contentful..."</span><span class="p">,</span>
+    <span class="k">"Kind"</span><span class="p">:</span> <span class="s">"product"</span>
+  <span class="p">},</span> <span class="p">...]</span><span class="p">,</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="pl-link-sent">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"PaymentLinkCreated"</span><span class="p">,</span>
+  <span class="k">"gate"</span><span class="p">:</span> <span class="s">"AlternateRecipient != null"</span><span class="p">,</span>  <span class="c">// note only when sent to someone else</span>
+  <span class="k">"toCustomer"</span><span class="p">:</span> <span class="b">true</span><span class="p">,</span>            <span class="c">// this note goes to the ordering customer</span>
+  <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"OrderUrl"</span><span class="p">:</span> <span class="s">"https://v4.../account/orders/..."</span><span class="p">,</span>
+  <span class="k">"AmountDue"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>
+  <span class="k">"AlternateRecipient"</span><span class="p">:</span> <span class="p">{</span> <span class="k">"name"</span><span class="p">:</span> <span class="s">"Maria"</span><span class="p">,</span> <span class="k">"email"</span><span class="p">:</span> <span class="s">"finance@acme.com"</span> <span class="p">},</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="pl-reminder-d1">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"PaymentLinkCreated"</span><span class="p">,</span>   <span class="c">// reminder flow, day-1 step</span>
+  <span class="k">"ReminderDay"</span><span class="p">:</span> <span class="n">1</span><span class="p">,</span>
+  <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"PayLinkUrl"</span><span class="p">:</span> <span class="s">"https://pay.helloprint.com/l/HP-2026-118834?t=..."</span><span class="p">,</span>
+  <span class="k">"AmountDue"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>
+  <span class="k">"LinkExpiresAt"</span><span class="p">:</span> <span class="s">"2026-05-28T12:00:00Z"</span><span class="p">,</span>
+  <span class="k">"stopEvents"</span><span class="p">:</span> <span class="p">[</span> <span class="s">"PaymentReceived"</span><span class="p">,</span> <span class="s">"OrderCancelled"</span> <span class="p">],</span>  <span class="c">// Laravel-emitted, halts the flow</span>
+  <span class="k">"recipient"</span><span class="p">:</span> <span class="s">"payer"</span><span class="p">,</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="pl-reminder-d3">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"PaymentLinkCreated"</span><span class="p">,</span>   <span class="c">// reminder flow, day-3 step</span>
+  <span class="k">"ReminderDay"</span><span class="p">:</span> <span class="n">3</span><span class="p">,</span>
+  <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"PayLinkUrl"</span><span class="p">:</span> <span class="s">"https://pay.helloprint.com/l/HP-2026-118834?t=..."</span><span class="p">,</span>
+  <span class="k">"AmountDue"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>
+  <span class="k">"LinkExpiresAt"</span><span class="p">:</span> <span class="s">"2026-05-28T12:00:00Z"</span><span class="p">,</span>
+  <span class="k">"recipient"</span><span class="p">:</span> <span class="s">"payer"</span><span class="p">,</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="pl-reminder-d7">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"PaymentLinkCreated"</span><span class="p">,</span>   <span class="c">// reminder flow, day-7 step</span>
+  <span class="k">"ReminderDay"</span><span class="p">:</span> <span class="n">7</span><span class="p">,</span>
+  <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"PayLinkUrl"</span><span class="p">:</span> <span class="s">"https://pay.helloprint.com/l/HP-2026-118834?t=..."</span><span class="p">,</span>
+  <span class="k">"AmountDue"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>
+  <span class="k">"LinkExpiresAt"</span><span class="p">:</span> <span class="s">"2026-05-28T12:00:00Z"</span><span class="p">,</span>
+  <span class="k">"recipient"</span><span class="p">:</span> <span class="s">"payer"</span><span class="p">,</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="pl-warning-d12">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"PaymentLinkCreated"</span><span class="p">,</span>   <span class="c">// reminder flow, day-12 step</span>
+  <span class="k">"ReminderDay"</span><span class="p">:</span> <span class="n">12</span><span class="p">,</span>
+  <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"PayLinkUrl"</span><span class="p">:</span> <span class="s">"https://pay.helloprint.com/l/HP-2026-118834?t=..."</span><span class="p">,</span>
+  <span class="k">"AmountDue"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>
+  <span class="k">"CancelsAt"</span><span class="p">:</span> <span class="s">"2026-05-28T12:00:00Z"</span><span class="p">,</span>
+  <span class="k">"recipient"</span><span class="p">:</span> <span class="s">"payer + customer"</span><span class="p">,</span>  <span class="c">// both, recommended in brief</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="pl-cancelled-d14">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"OrderCancelled"</span><span class="p">,</span>      <span class="c">// also the reminder-flow stop event</span>
+  <span class="k">"Reason"</span><span class="p">:</span> <span class="s">"pay-by-link-expired"</span><span class="p">,</span>
+  <span class="k">"OrderId"</span><span class="p">:</span> <span class="s">"HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"ReorderUrl"</span><span class="p">:</span> <span class="s">"https://v4.../reorder/HP-2026-118834"</span><span class="p">,</span>
+  <span class="k">"Total"</span><span class="p">:</span> <span class="n">620.06</span><span class="p">,</span>
+  <span class="k">"PrestaHoldReleased"</span><span class="p">:</span> <span class="b">true</span><span class="p">,</span>
+  <span class="k">"recipient"</span><span class="p">:</span> <span class="s">"customer"</span><span class="p">,</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
+      <details class="event-vars" data-for-flow="email-verification">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"Email Verification Requested"</span><span class="p">,</span>
+  <span class="k">"channel"</span><span class="p">:</span> <span class="s">"Klaviyo"</span><span class="p">,</span>             <span class="c">// transactional template</span>
+  <span class="k">"person"</span><span class="p">:</span> <span class="p">{</span> <span class="k">"first_name"</span><span class="p">:</span> <span class="s">"Sebastiaan"</span> <span class="p">},</span>
+  <span class="k">"email"</span><span class="p">:</span> <span class="s">"sebastiaan.ram@helloprint.com"</span><span class="p">,</span>  <span class="c">// address being verified</span>
+  <span class="k">"verify_link"</span><span class="p">:</span> <span class="s">"https://www.helloprint.com/en-ie/account/verify-email?t=..."</span><span class="p">,</span>
+  <span class="k">"expires_in_days"</span><span class="p">:</span> <span class="n">7</span><span class="p">,</span>          <span class="c">// one-time link · TTL</span>
+  <span class="k">"order_count"</span><span class="p">:</span> <span class="n">4</span><span class="p">,</span>              <span class="c">// guest orders on this address · hide the "orders found" line if unavailable</span>
+  <span class="k">"requested_at"</span><span class="p">:</span> <span class="s">"2026-08-13T09:30:00Z"</span><span class="p">,</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span>
+<span class="p">}</span></pre></div>
+      </details>
+
       <!-- State toggles for the active flow. Groups with data-for-flow only
            render when the active flow matches (CSS); otherwise hidden. -->
       <div class="toggle-panel">
+        <!-- Pay Later: who the payment link goes to. The generic toggle handler
+             sets data-recipient on every .email; CSS shows the matching block. -->
+        <div class="toggle-group full" data-for-flow="pl-payment-link">
+          <span class="toggle-group-label">Payment link recipient</span>
+          <div class="toggle-options" data-toggle="recipient">
+            <button type="button" data-value="self">Pay myself</button>
+            <button type="button" data-value="other" class="is-active">Send to someone else</button>
+          </div>
+        </div>
         <!-- Line items: scoped to order-side flows. -->
         <div class="toggle-group" data-for-flow="order-confirmation artwork-reminder day-1-reminder order-shipped order-delivered order-cancelled">
           <span class="toggle-group-label">Line items</span>
