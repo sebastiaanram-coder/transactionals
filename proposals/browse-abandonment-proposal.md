@@ -231,38 +231,75 @@ I would not ship email 1 on option 2, because the packshot *is* the email.
 Also: 1 in 100 IE images is `.webp`, which Outlook on Windows cannot render. Worth excluding
 webp in the same feed change.
 
-### 6.3 Product recommendations: what is and is not possible
+### 6.3 Product recommendations: same-category siblings
 
-Asked whether Klaviyo can do "other products you might like". Tested rather than assumed:
+Asked whether Klaviyo can do "other products you might like", and then whether siblings could
+be found via the product's own category. Tested rather than assumed.
 
-- `{% catalog-recommendations %}` and `{% recommendations %}` **do not exist** as tags in a
-  CODE template. Both 400 the render. Klaviyo's recommendation engine lives in the
-  drag-and-drop product block, which would mean abandoning the one-custom-HTML-block pattern
-  the whole programme is built on.
-- **Category filtering is impossible.** Every catalog category comes back with
-  `external_id: ""` and id `$custom:::$default:::` — they all share one id, so no category can
-  be addressed. "More in Flyers" cannot be built from the catalog.
-- The catalog is also **mixed in with promotional merchandise** — categories include
-  Powerbanks, Thermos bottles, Beachgames, `material_bamboo`, `size_14_x_7_9_x_1_4_cm`. Even
-  if the engine were reachable, algorithmic recommendations could surface a bamboo cutting
-  board to someone pricing flyers. These are the same items carrying the 4-6 MB images.
+**What does not work**
 
-What **does** work, and is what shipped:
+- `{% catalog-recommendations %}` and `{% recommendations %}` do not exist as tags in a CODE
+  template. Both 400 the render. Klaviyo's recommendation engine is drag-and-drop only, and
+  using it would mean giving up the one-custom-HTML-block pattern.
+- **Catalog-side category filtering is impossible.** Every catalog category returns
+  `external_id: ""`, so they all share the compound id `$custom:::$default:::`. Filtering
+  items by `category.id` returns
+  `Invalid external ID: external id cannot be an empty string`.
+- `catalog_item` does not expose its own categories, so a sibling cannot be found at send time
+  from the item itself.
 
-- sequential `{% catalog "LITERAL-ID" %}` blocks, so a hand-curated row is fine
-- `catalog_item` is correctly scoped, it does not leak outside its own block
-- `event.Categories` **is** readable (`event.Categories.0` = "Flyers", and
-  `{% if 'Flyers' in event.Categories %}` works), so category-aware relevance is possible from
-  the *event* even though it is impossible from the catalog. Not used yet, noted for later.
+**What does work, and is what shipped**
 
-So email 1 carries a curated 2x2 row, market-aware via `{% if 'GB-' in event.ProductID %}`,
-with a per-tile guard that swaps in Letterheads if a tile would otherwise show the product
-the recipient had just been looking at. Verified by render in three cases: `IE-flyera5`
-(clean IE set), `IE-posters` (Letterheads substituted), `GB-stickers` (GB set, Letterheads
-substituted).
+1. **The reverse lookup is fine.** `get_catalog_categories` filtered by
+   `equals(item.id,"$custom:::$default:::IE-flyera5")` returns real names: `market_IE`,
+   `Flyers`, `All Flyers`, `Commercial Print`, plus material/size noise. So a real taxonomy
+   exists and can be read *at build time* even though it cannot be queried at send time.
+2. **The event carries the category.** Across 200 sampled `Viewed Product` events,
+   `Categories` was **always exactly one value**, so `{% if 'Flyers' in event.Categories %}`
+   is a reliable switch. The top ten categories cover about 55% of views:
+   Business Cards 26, Flyers 16, Panels 15, Folded Leaflets 10, Roll-up Banners 9,
+   Stapled Booklets 9, Stickers 7, Posters 6, Perfect Bound Booklets 6, Cards 5.
+3. **The item id can be built at render time**, which removes the per-market branch entirely:
 
-Product selection is a merchandising call, not a technical one — the four per market are in
-`CROSS_SELL` in the builder and are trivial to change.
+   ```django
+   {% catalog event.ProductID|slice:":3"|add:"flyera4" %}
+   ```
+
+   `event.ProductID` is `GB-flyera5`, so `slice:":3"` is the market prefix. Verified: renders
+   `A4 Flyers | GBP 70.79 | https://www.helloprint.com/en-gb/flyera4`. The block is therefore
+   market-agnostic and will work unchanged in NL, FR, BE and the rest as those feeds come
+   online.
+
+So the section is a 2x2 grid of same-category siblings, with a curated default for categories
+we have no set for, and a per-tile guard using
+`{% if event.ProductID|slice:"3:" == 'flyera4' %}` that swaps in Letterheads so a tile can
+never show the product the recipient was just looking at.
+
+Verified by render in four cases:
+
+| viewed | category | result |
+|---|---|---|
+| `IE-flyera5` | Flyers | A4, A6, DL, Folded leaflets, in EUR |
+| `GB-flyera4` | Flyers | A4 tile becomes Letterheads, rest in GBP |
+| `GB-businesscardsstandard` | Business Cards | default set, cards tile becomes Letterheads |
+| `GB-stickers` | (default) | GB set with the substitution |
+
+**Cost and ceiling.** Each category set adds roughly 7 KB. The base is 13 KB, so with Gmail
+clipping at about 102 KB the practical ceiling is around ten category sets plus the default.
+Currently one set (Flyers) plus the default, at 27 KB.
+
+**The constraint to respect.** A slug listed in a set must exist in **every** market the flow
+can fire in, because a missing catalog item fails the whole render with a 400. All slugs used
+are verified present in IE and GB. Adding a market means re-verifying them, which is exactly
+what the flow's market filter is protecting.
+
+**Next categories** need a merchandising decision, not more engineering: which four siblings
+belong to Business Cards, Panels, Folded Leaflets and Roll-up Banners. Add them to
+`XSELL_SETS` in the builder.
+
+**Feed bug spotted on the way**: `GB-gatefoldfoldedleaflets` has the title
+`gatefoldfoldedleaflets` — an untranslated slug. If anyone views that product the email would
+print the slug as the product name. Worth a sweep of the feed for titles that equal their slug.
 
 ### 6.4 Does `{% catalog %}` work in a subject line?
 

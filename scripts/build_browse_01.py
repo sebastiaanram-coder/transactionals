@@ -82,32 +82,51 @@ LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in {
 
 P = "hp-b1"
 
-# Curated cross-sell, per pilot market. Hand-picked rather than algorithmic:
-# Klaviyo's recommendation tags do not exist in a CODE template (verified), the
-# catalog's category ids are all empty so category filtering is impossible, and
-# the catalog is mixed in with promotional merchandise (powerbanks, bamboo
-# boards) that must never surface in a print email.
-# FALLBACK is swapped in for any tile that would show the product just viewed.
-CROSS_SELL = {
-    "IE": ["IE-businesscardsstandard", "IE-posters", "IE-rollupbannersv2", "IE-stickers"],
-    "GB": ["GB-businesscardsstandard", "GB-posters", "GB-rollupbannersv2", "GB-stickers"],
-}
-FALLBACK = {"IE": "IE-letterheads", "GB": "GB-letterheads"}
+# ---------------------------------------------------------------- cross-sell
+# Klaviyo's recommendation engine is NOT reachable from a CODE template:
+# {% catalog-recommendations %} and {% recommendations %} both 400 the render.
+# Catalog-side category filtering is impossible too, because every catalog
+# category comes back with external_id "" and so shares one compound id.
+#
+# What works instead, all verified by live render:
+#   - the EVENT carries the category, always exactly one value, so
+#     event.Categories.0 / {% if 'X' in event.Categories %} can pick a set
+#   - the item id can be BUILT at render time:
+#       {% catalog event.ProductID|slice:":3"|add:"flyera4" %}
+#     event.ProductID is e.g. "GB-flyera5", so slice ":3" is the market prefix.
+#     That removes any need for a per-market branch and means the block works
+#     unchanged in every market as the feeds come online.
+#
+# The catch: a slug listed here must exist in EVERY market the flow can fire
+# in, because a missing catalog item fails the whole render with a 400. All
+# slugs below are verified present in both IE and GB. Adding a market means
+# re-verifying them, which is what the flow's market filter protects.
+XSELL_FALLBACK = "letterheads"          # swapped in when a tile would show the viewed product
 
-# real feed values, IE only, for the preview build
+# (liquid condition, heading, four slugs). First match wins; default is last.
+XSELL_SETS = [
+    ("'Flyers' in event.Categories", "Other sizes and folds",
+     ["flyera4", "flyera6", "flyerdl", "canvafoldedleaflets"]),
+]
+XSELL_DEFAULT = ("You might also need",
+                 ["businesscardsstandard", "posters", "rollupbannersv2", "stickers"])
+
+# real IE feed values for the preview build; the sample product is IE-flyera5,
+# whose category is "Flyers", so the preview shows the Flyers set
+SAMPLE_XSELL_HEADING = "Other sizes and folds"
 SAMPLE_TILES = [
-    ("Classic Business Cards", "https://www.helloprint.com/en-ie/standardbusinesscards",
-     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/classic-business-cards-packshot-1x1-3f94b7c9.jpg",
-     "for 500 units", "25.82"),
-    ("Standard Posters", "https://www.helloprint.com/en-ie/posters",
-     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/standard-posters-packshot-1x1-43ad3e79.png",
-     "for 50 units", "55.34"),
-    ("Roller Banners", "https://www.helloprint.com/en-ie/budgetrollupbanners",
-     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-roll-up-banner-packshot-1x1-ae375736.jpg",
-     "&nbsp;", "60.87"),
-    ("Individual Stickers", "https://www.helloprint.com/en-ie/stickers",
-     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/individual-stickers-packshot-1x1-f3214226.jpg",
-     "for 1000 units", "75.02"),
+    ("A4 Flyers", "https://www.helloprint.com/en-ie/flyera4",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-a4-flyers-packshot-1x1-cfe4f322.png",
+     "for 1000 units", "62.72"),
+    ("A6 Flyers and Leaflets", "https://www.helloprint.com/en-ie/flyera6",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-a6-flyers-and-leaflets-packshot-1x1-a6c2548b.png",
+     "for 1000 units", "24.59"),
+    ("DL Flyers and Leaflets", "https://www.helloprint.com/en-ie/flyerdl",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-dl-flyers-and-leaflets-packshot-1x1-89ab1eda.jpg",
+     "for 1000 units", "34.43"),
+    ("Folded leaflets", "https://www.helloprint.com/en-ie/foldedleafletscanva",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-folded-leaflets-packshot-1x1-a138679a.jpg",
+     "for 1000 units", "84.86"),
 ]
 
 TILE = ('<a class="{P}-tile" href="{url}">'
@@ -118,45 +137,50 @@ TILE = ('<a class="{P}-tile" href="{url}">'
         '<span class="{P}-tiprice">From {cur}{price}</span>'
         '</span></a>')
 
-def grid(cells):
-    """cells: list of 4 html strings -> 2x2 table"""
-    rows = []
-    for i in (0, 2):
-        rows.append('<tr><td class="%s-cellpad">%s</td><td class="%s-cellpad">%s</td></tr>'
-                    % (P, cells[i], P, cells[i + 1]))
-    return ('<table class="%s-grid" role="presentation" cellpadding="0" cellspacing="0">%s</table>'
-            % (P, "".join(rows)))
+def section(heading, cells):
+    rows = "".join(
+        '<tr><td class="%s-cellpad">%s</td><td class="%s-cellpad">%s</td></tr>'
+        % (P, cells[i], P, cells[i + 1]) for i in (0, 2))
+    return ('<div class="%s-xs">'
+            '<h2 class="%s-xsttl">%s</h2>'
+            '<p class="%s-xssub">Prices exclude VAT and delivery.</p>'
+            '<table class="%s-grid" role="presentation" cellpadding="0" cellspacing="0">%s</table>'
+            '</div>' % (P, P, heading, P, P, rows))
 
 def sample_xsell():
     cells = [TILE.format(P=P, url=u, img=im, title=t, qty=q, cur="&euro;", price=pr)
              for (t, u, im, q, pr) in SAMPLE_TILES]
-    return grid(cells)
+    return section(SAMPLE_XSELL_HEADING, cells)
+
+LIVE_TILE = TILE.format(
+    P=P,
+    url="{{ catalog_item.url }}",
+    img="{{ catalog_item.featured_image.full.src }}",
+    title="{{ catalog_item.title }}",
+    qty=("{% if catalog_item.metadata.min_order_quantity > 1 %}"
+         "for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} "
+         "{{ catalog_item.metadata.unit }}{% else %}&nbsp;{% endif %}"),
+    cur="{% if catalog_item.metadata.currency == 'GBP' %}&pound;{% else %}&euro;{% endif %}",
+    price="{{ catalog_item.metadata.from_price|floatformat:2 }}")
+
+def live_cell(slug):
+    """Build the id from the recipient's own market prefix, and swap in the
+    fallback if this tile would show the product they were just looking at."""
+    mk = 'event.ProductID|slice:":3"|add:"%s"'
+    return ('{%% if event.ProductID|slice:"3:" == \'%s\' %%}'
+            '{%% catalog %s %%}%s{%% endcatalog %%}'
+            '{%% else %%}'
+            '{%% catalog %s %%}%s{%% endcatalog %%}'
+            '{%% endif %%}'
+            % (slug, mk % XSELL_FALLBACK, LIVE_TILE, mk % slug, LIVE_TILE))
 
 def live_xsell():
-    """Market branch, and a per-tile guard so a tile never shows the viewed product."""
-    tile = TILE.format(
-        P=P,
-        url="{{ catalog_item.url }}",
-        img="{{ catalog_item.featured_image.full.src }}",
-        title="{{ catalog_item.title }}",
-        qty=("{% if catalog_item.metadata.min_order_quantity > 1 %}"
-             "for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} "
-             "{{ catalog_item.metadata.unit }}{% else %}&nbsp;{% endif %}"),
-        cur="{% if catalog_item.metadata.currency == 'GBP' %}&pound;{% else %}&euro;{% endif %}",
-        price="{{ catalog_item.metadata.from_price|floatformat:2 }}")
-    out = []
-    for mkt in ("GB", "IE"):
-        cells = []
-        for pid in CROSS_SELL[mkt]:
-            cells.append(
-                "{%% if event.ProductID == '%s' %%}"
-                "{%% catalog \"%s\" %%}%s{%% endcatalog %%}"
-                "{%% else %%}"
-                "{%% catalog \"%s\" %%}%s{%% endcatalog %%}"
-                "{%% endif %%}" % (pid, FALLBACK[mkt], tile, pid, tile))
-        out.append(grid(cells))
-    return ("{%% if 'GB-' in event.ProductID %%}%s{%% else %%}%s{%% endif %%}"
-            % (out[0], out[1]))
+    out = ""
+    for cond, heading, slugs in XSELL_SETS:
+        out += "{%% if %s %%}%s{%% else %%}" % (cond, section(heading, [live_cell(x) for x in slugs]))
+    out += section(XSELL_DEFAULT[0], [live_cell(x) for x in XSELL_DEFAULT[1]])
+    out += "{% endif %}" * len(XSELL_SETS)
+    return out
 
 CSS = """
 .%(P)s-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
@@ -326,12 +350,10 @@ BODY = """
 
     {CATALOG_CLOSE}
 
-    <!-- cross-sell : curated per market, not algorithmic. See CROSS_SELL. -->
-    <div class="{P}-xs">
-      <h2 class="{P}-xsttl">You might also need</h2>
-      <p class="{P}-xssub">Prices exclude VAT and delivery.</p>
-      {XSELL}
-    </div>
+    <!-- cross-sell : same-category siblings where we have a set for the
+         event's category, otherwise a curated default. Ids are built from the
+         recipient's own market prefix, so there is no per-market branch. -->
+    {XSELL}
 
     <!-- trustpilot -->
     <div class="{P}-trust">
@@ -459,9 +481,10 @@ if n_open != n_close:
     errs.append("unbalanced catalog blocks: %d open, %d close" % (n_open, n_close))
 if live_body.count("{% catalog event.ProductID %}") != 1:
     errs.append("the viewed-product lookup must appear exactly once")
-# 1 main + 4 tiles x 2 branches x 2 markets
-if n_open != 1 + len(CROSS_SELL) * 4 * 2:
-    errs.append("expected %d catalog blocks, found %d" % (1 + len(CROSS_SELL) * 4 * 2, n_open))
+# 1 main + 4 tiles x 2 guard branches per set (category sets + the default)
+expected = 1 + (len(XSELL_SETS) + 1) * 4 * 2
+if n_open != expected:
+    errs.append("expected %d catalog blocks, found %d" % (expected, n_open))
 if "image_full_url" in live_body:
     errs.append("Klaviyo build uses image_full_url, which renders empty")
 if "intcomma" in live_body or "{% with " in live_body:
@@ -502,14 +525,20 @@ for tag in ("catalog_item.url", "catalog_item.title", "featured_image.full.src",
             "catalog_item.metadata"):
     if tag not in live_body:
         errs.append("binding never used: " + tag)
-# the cross-sell must be guarded per tile and per market
-if live_body.count("event.ProductID == ") != len(CROSS_SELL) * 4:
+# every cross-sell tile must keep its viewed-product guard
+n_tiles = (len(XSELL_SETS) + 1) * 4
+if live_body.count('event.ProductID|slice:"3:" ==') != n_tiles:
     errs.append("cross-sell tiles are missing their viewed-product guard")
-if "{% if 'GB-' in event.ProductID %}" not in live_body:
-    errs.append("cross-sell is not market-aware")
-for mkt, ids in CROSS_SELL.items():
-    if FALLBACK[mkt] not in live_body:
-        errs.append("missing cross-sell fallback for " + mkt)
+# ids must be built from the recipient's market, never hardcoded to one market
+if live_body.count('event.ProductID|slice:":3"|add:') != n_tiles * 2:
+    errs.append("a cross-sell id is not built from the market prefix")
+for bad in ("IE-", "GB-"):
+    if bad in live_body:
+        errs.append("cross-sell hardcodes market " + bad)
+if XSELL_FALLBACK not in live_body:
+    errs.append("missing cross-sell fallback product")
+if live_body.count("{% if 'Flyers' in event.Categories %}") != len(XSELL_SETS):
+    errs.append("category branch missing")
 
 print("preview: %6d bytes  ->  proposals/browse-01-proposed.html" % len(prev))
 print("klaviyo: %6d bytes  ->  proposals/browse-01-klaviyo.html" % len(live))
