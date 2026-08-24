@@ -226,7 +226,7 @@ CSS = """
    The circle and its green ring are baked into the image, because Outlook
    ignores border-radius. Faces are decorative, so alt is empty. */
 .%(P)s-qatbl{width:100%%;border-collapse:collapse;}
-.%(P)s-qaav{width:70px;vertical-align:top;padding:1px 14px 0 0;}
+.%(P)s-qaav{width:70px;vertical-align:middle;padding:0 14px 0 0;}
 .%(P)s-qaav img{width:56px;height:56px;display:block;border:0;}
 .%(P)s-qatx{vertical-align:top;}
 .%(P)s-qarow + .%(P)s-qarow{border-top:1px solid #e5e5e5;}
@@ -285,7 +285,7 @@ CSS = """
   .%(P)s-sect{padding:26px 14px 0;}
   .%(P)s-secttl{font-size:21px;line-height:28px;}
   .%(P)s-qarow{padding:16px 14px;}
-  .%(P)s-qaav{width:58px;padding:1px 11px 0 0;}
+  .%(P)s-qaav{width:58px;padding:0 11px 0 0;}
   .%(P)s-qaav img{width:47px;height:47px;}
   .%(P)s-qq{font-size:16px;line-height:22px;}
   .%(P)s-qa-a{font-size:14px;line-height:22px;}
@@ -347,8 +347,8 @@ BODY = """
       <div class="{P}-qa">
         <div class="{P}-qarow">
           <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
-            <td class="{P}-qaav"><img src="{AV_DESIGNER}" alt="" width="56" height="56"></td>
-            <td class="{P}-qatx">
+            <td class="{P}-qaav" valign="middle"><img src="{AV_DESIGNER}" alt="" width="56" height="56"></td>
+            <td class="{P}-qatx" valign="top">
               <p class="{P}-qq">Artwork not finished?</p>
               <p class="{P}-qa-a">Send whatever you have, even a rough version. Our designers will tell you what will not print well and fix it before it goes on press.</p>
             </td>
@@ -356,8 +356,8 @@ BODY = """
         </div>
         <div class="{P}-qarow">
           <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
-            <td class="{P}-qaav"><img src="{AV_EXPERT}" alt="" width="56" height="56"></td>
-            <td class="{P}-qatx">
+            <td class="{P}-qaav" valign="middle"><img src="{AV_EXPERT}" alt="" width="56" height="56"></td>
+            <td class="{P}-qatx" valign="top">
               <p class="{P}-qq">Odd size, tight deadline, unusual finish?</p>
               <p class="{P}-qa-a">Our print experts spec jobs like this all day. Describe the job and they will come back with what is possible and what it costs.</p>
             </td>
@@ -365,8 +365,8 @@ BODY = """
         </div>
         <div class="{P}-qarow">
           <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
-            <td class="{P}-qaav"><img src="{AV_QUOTE}" alt="" width="56" height="56"></td>
-            <td class="{P}-qatx">
+            <td class="{P}-qaav" valign="middle"><img src="{AV_QUOTE}" alt="" width="56" height="56"></td>
+            <td class="{P}-qatx" valign="top">
               <p class="{P}-qq">Someone else has to approve it?</p>
               <p class="{P}-qa-a">We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward for sign-off.</p>
             </td>
@@ -538,6 +538,8 @@ if live_body.count('class="%s-qaav"' % P) != 3:
     errs.append("a doubt row is missing its avatar")
 if live_body.count('alt="" width="56"') != 3:
     errs.append("avatars must be decorative (empty alt) and sized")
+if live_body.count('valign="middle"') != 3:
+    errs.append("avatar cells need valign=middle for Outlook")
 if "min_order_quantity > 1" not in live_body:
     errs.append("quantity phrase is not conditional and will render 'for 1 units'")
 if "floatformat:0" not in live_body:
