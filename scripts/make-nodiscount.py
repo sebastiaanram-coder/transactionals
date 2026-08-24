@@ -22,11 +22,16 @@ def strip_discount(s):
     # 4. grid subline stops promising a checkout discount
     s = s.replace('Pick one and your 10% comes off at checkout.',
                   'Where most businesses start.')
-    # 5. per-tile discounted price lines go
-    s = re.sub(r'\s*<span class="hp-w1-tipromo">.*?</span>', '', s, flags=re.S)
-    # 6. the price reclaims the brand green now that nothing sits under it
+    # 5. each tile keeps the catalogue price only, with no strike and no
+    #    second figure beside it
+    s = re.sub(r'<span class="hp-w1-tiprice"><s class="hp-w1-tiwas">(&euro;[\d.,]+)</s>'
+               r'&nbsp;<span class="hp-w1-tinow">&euro;[\d.,]+</span></span>',
+               r'<span class="hp-w1-tiprice">\1</span>', s)
+    # 6. the price reclaims the brand green now that nothing competes with it,
+    #    and the two-figure rules are dead weight
     s = s.replace('.hp-w1-tiprice{display:block;font-size:17px;line-height:22px;font-weight:800;color:#191919;}',
                   '.hp-w1-tiprice{display:block;font-size:17px;line-height:22px;font-weight:800;color:#008539;}')
+    s = re.sub(r'\n\.hp-w1-tiwas\{[^}]*\}\n\.hp-w1-tinow\{[^}]*\}', '', s, count=1)
     # 7. this reader has already bought, so "first order" is wrong
     s = s.replace('Start your first order', 'See what we print')
     # 8. preheader
