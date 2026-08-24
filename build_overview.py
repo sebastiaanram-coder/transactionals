@@ -59,27 +59,53 @@ FLOWS = [
    ]),
  dict(slug="browse-abandonment", name="Browse Abandonment", stage="Convert", flow_id="Wzhp2m",
    trigger="Viewed Product",
-   trigger_detail="Fires on the Viewed Product event: an identified visitor opened a product page but went no further.",
-   audience=["Visitors who did NOT add to cart, start checkout or order after entering", "Ireland + United Kingdom only"],
-   reentry="14 days", incentive="None (deliberate: “the price is already fair”)", cadence="40 minutes after the view, then one email per day for 4 days",
-   flow_note="No discount by design; the sequence sells with trust and help instead.",
-   flow_flags=["Emails 4 and 5 contain the literal text [[ viewed product name ]] in the subject line. These are RFB placeholders, not Klaviyo variables, and would be sent verbatim. Replace with real event personalization in the rebuild."],
+   trigger_detail="Fires on the Viewed Product event: an identified visitor opened a product page but went no further. Filtered to the consumer storefront and to markets whose product feed is live.",
+   audience=["Visitors who did NOT add to cart, start checkout or order after entering",
+             "Ireland + United Kingdom only (ProductID prefix IE- or GB-)",
+             "Excludes the Connect B2B storefront, which is 14–21% of all Viewed Product events"],
+   reentry="14 days", incentive="None, in the rebuild as in the original. Help and proof instead of a code.",
+   cadence="Rebuilt: 1 hour after the view, then 24 hours, then 3 days. Three emails, down from five in four days.",
+   mail_line="1 of 3 rebuilt · 5 RFB emails kept below for reference",
+   flow_note="The facts above describe the rebuilt flow. RFB's five original emails are kept further down this page for reference until the rebuild is signed off. Cut from five emails to three: a product view is a weak signal, and this is the highest-volume flow in the programme (15,307 unique product viewers in August), so its send volume dominates the sending reputation of every other flow.",
+   flow_flags=["Emails 4 and 5 of the RFB flow contain the literal text [[ viewed product name ]] in the subject line. These are RFB placeholders, not Klaviyo variables, and would be sent verbatim.",
+               "RFB email 4 tells the reader to “use your code” in a flow that has no discount.",
+               "The tracked funnel cannot be read as a funnel: in August, Placed Order (11,321 profiles) came out ABOVE Started Checkout (10,267). Frontend events are consent-gated and the backend order event is not, so no view-to-order rate can be computed from these.",
+               "Product feed images are 300 KB to 6.5 MB and cannot be resized by URL, so the packshot may not load on mobile data. Needs a ~600px variant in the feed."],
    emails=[
+    dict(step=1, when="1 hour after the product view", subject="A5 Flyers — from €39.96 for 1000",
+      preview="Still available at the same starting price. Change the spec and the price moves with it.",
+      goal="", who="", tpl="X2GaSL", flags=[], badge=None,
+      section="Rebuilt flow — proposed",
+      section_sub="Three emails instead of five. Email 1 is built; emails 2 and 3 are specified but not yet designed.",
+      final="browse-01-proposed.html"),
+    dict(step=2, when="24 hours after the product view", subject="Send us what you have",
+      preview="You do not need the final file to get this moving.",
+      goal="Dismantle the artwork blocker in full: what we accept, what we check, what we fix, and that the file does not have to be final to order.",
+      who="Same audience, one day later, still no cart or order.", tpl="", flags=[],
+      badge="Specified, not yet designed"),
+    dict(step=3, when="3 days after the product view", subject="Want us to spec it and price it?",
+      preview="A written quote you can forward for sign-off.",
+      goal="Serve the reader who is blocked rather than undecided: odd specs, a deadline, or someone else's signature. Offers a written quote with the true total to forward.",
+      who="Same audience, three days in.", tpl="", flags=[],
+      badge="Specified, not yet designed"),
     dict(step=1, when="40 minutes after the product view", subject="Still thinking it over", preview="The product you looked at, and why people trust us with it.",
+      section="Current RFB flow — for reference",
+      section_sub="The five original emails, all draft, every element a flat image. Kept visible until the rebuild is approved.",
+      ref=True,
       goal="Bring the visitor back to the product they viewed and reassure them with the core trust points.",
       who="Identified visitors who viewed a product but did not add to cart, checkout or buy.", tpl="X2GaSL", flags=[], badge=None),
     dict(step=2, when="Day 1", subject="What people say after they order", preview="Real reviews, real Hello Printers, real delivery dates met.",
       goal="Social proof from customers who completed the same journey: reviews, faces and delivery dates met.",
-      who="Same audience, one day later, still no cart or order.", tpl="UP8Ztf", flags=[], badge=None),
+      who="Same audience, one day later, still no cart or order.", tpl="UP8Ztf", ref=True, flags=[], badge=None),
     dict(step=3, when="Day 2", subject="Print does not have to be complicated", preview="A few honest answers, in case you were unsure.",
       goal="Remove friction: answer the questions that stop people from ordering print (files, formats, help).",
-      who="Same audience, two days in.", tpl="SJV6Kx", flags=[], badge=None),
+      who="Same audience, two days in.", tpl="SJV6Kx", ref=True, flags=[], badge=None),
     dict(step=4, when="Day 3", subject="Still thinking about [[ viewed product name ]]?", preview="The price is already fair, so here is some help instead.",
       goal="Direct nudge back to the exact product; explicitly offers help instead of a discount.",
-      who="Same audience, three days in.", tpl="UtrHWs", flags=["Broken placeholder [[ viewed product name ]] in subject"], badge=None),
+      who="Same audience, three days in.", tpl="UtrHWs", ref=True, flags=["Broken placeholder [[ viewed product name ]] in subject"], badge=None),
     dict(step=5, when="Day 4", subject="Your [[ viewed product name ]] is still here", preview="No deadline, no pressure. Just the product and a bit of help.",
       goal="Final low-pressure reminder; leaves the door open without urgency tricks.",
-      who="Same audience, final email of the series.", tpl="UsXdTy", flags=["Broken placeholder [[ viewed product name ]] in subject"], badge=None),
+      who="Same audience, final email of the series.", tpl="UsXdTy", ref=True, flags=["Broken placeholder [[ viewed product name ]] in subject"], badge=None),
    ]),
  dict(slug="abandoned-cart", name="Abandoned Cart", stage="Convert", flow_id="VCVzm6",
    trigger="Added to Cart",
@@ -217,7 +243,7 @@ FLOWS = [
 # reads: what the email is for, why it sits here in the journey, and why
 # each block is in it.
 # ---------------------------------------------------------------------------
-WELCOME_DETAIL = {
+EMAIL_DETAIL = {
  "Vb23CK": dict(
    goal="Turn a fresh subscriber into a first configured order while intent is at its highest, and set the price expectation before anyone else does.",
    why="Day 0 is the only moment we have undivided attention. They have just raised a hand, and the thing we promised has to arrive now or the consent goes cold. Nothing has been established yet, so this email has to introduce and sell at the same time.",
@@ -230,6 +256,18 @@ WELCOME_DETAIL = {
      ("Product grid: image, title, quantity, was/now price.", "Removes the navigation step at peak intent and puts real prices in front of someone who has never seen one. The catalogue price is struck through in black and the price with the code sits beside it in green, both at the same size on one line, so the saving is legible at a glance rather than read as a footnote. Expires in 5 days sits directly under each price, so the deadline travels with the number it applies to instead of living only in the bar at the top. Each tile click is also a category signal, which is the only thing that can make Browse Abandonment relevant later."),
      ("Artwork reassurance.", "Artwork doubt is the number one blocker on a first print order, so it gets answered before it is asked."),
      ("Trustpilot, agents, footer.", "Third-party proof, and the compliance furniture RFB left out entirely."),
+   ]),
+ "X2GaSL": dict(
+   goal="Bring back the exact product they looked at with numbers that are true, and answer the three things that actually stop a print order.",
+   why="One hour after a product view is the only moment when the job is still on the desk and the spec is still in their head. But a product view is a weak signal: nothing was added to a basket, so nothing was forgotten. This email cannot say \u201cyou left something behind\u201d, which is what RFB\u2019s version said three times. It has to answer why they stopped instead.",
+   variant="No discount in either direction, so there is no second copy to keep in step. The \u201chas this person ordered since\u201d check is done by the flow filters rather than in the HTML: anyone who adds to cart or places an order drops out before the next send, which is also what stops this flow colliding with the abandoned-order sequence.",
+   elements=[
+     ("Light header, black only in the masthead.", "Every other rebuilt email opens on photography. This one deliberately does not. The packshot below should be the only image competing for attention, and a second large photo pushes the product below the fold. Green carries the eyebrow and the button instead."),
+     ("Product card read live from the catalog feed.", "Title, packshot, from-price and preset quantity all come from the Klaviyo catalog, keyed on the ProductID of the Viewed Product event. The event\u2019s own fields cannot be used: ProductName is a slug (flyera5, not A5 Flyers) and Price is unrounded (55.8502). The feed is the only usable source and it arrives already localised per market, which is what makes this work in every language later."),
+     ("Prices marked excl. VAT and delivery.", "The product page defaults to Excl. VAT with delivery chosen separately, so the feed\u2019s from-price is neither the total nor the basis a buyer assumes. The email states the basis rather than claiming an all-inclusive price it cannot support."),
+     ("Three doubts, each with a colleague\u2019s face.", "Artwork, spec-and-deadline, and sign-off. These are the three commonest reasons a print product view does not convert, read off the product page rather than guessed at, and each is answered by the team that handles it rather than by a feature. The circles and their green rings are baked into the image pixels because Outlook ignores border-radius."),
+     ("Same-category cross-sell.", "Someone looking at A5 Flyers is shown A4, A6, DL and Folded leaflets: a size and price ladder rather than a generic bestseller row. The set is picked from the category on the event, and every product id is built from the recipient\u2019s own market prefix, so the block works unchanged in each new market as its feed comes online."),
+     ("Trustpilot, agents, footer.", "Third-party proof and the compliance furniture, identical to the Welcome flow so the two read as one system."),
    ]),
  "TtjyZ4": dict(
    goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",
@@ -280,11 +318,17 @@ ISSUES = [
  "Sunset property is a dead end: nothing excludes Sunset Unengaged profiles yet.",
  "Broken or wrong footer links in RFB templates (LinkedIn icon pointed at Instagram; help links pointed at non-existent /help pages; the real Help Centre is /{locale}/cs). Audit all footers in the rebuild.",
  "Winback timing compresses four emails into four days after a 90-day silence; consider spacing.",
+ "Product feed images are unusable at email size: 300 KB to 6.5 MB, up to 2048px, and the host ignores resize parameters. Klaviyo's own thumbnail URL is byte-identical to the full one. The feed needs to emit a ~600px variant, and to drop .webp, which Outlook cannot render.",
+ "A missing catalog item fails the whole email render with a 400, not just the product block. Ids also carry per-market suffixes (IE-rollupbannersv2 lives at /en-ie/budgetrollupbanners), so product links must always come from catalog_item.url and never from a guessed slug.",
+ "Catalog categories are unusable for filtering: every category returns an empty external_id, so they all share one compound id. Same-category recommendations have to be assembled at build time from the category on the event instead.",
+ "Some feed titles are untranslated slugs, e.g. GB-gatefoldfoldedleaflets is titled “gatefoldfoldedleaflets”. Any email showing that product would print the slug as the product name. Sweep the feed for titles equal to their slug.",
+ "Welcome email 1 claims “Every price includes delivery and VAT” directly above four feed prices that exclude both. The product page defaults to Excl. VAT with delivery chosen separately. Needs replacing, and “All-inclusive prices” in Welcome email 3 needs a ruling on what it is meant to mean.",
+ "Connect, the B2B storefront, fires the same Viewed Product metric as the consumer site and is 14–21% of events. Every conversion flow needs a storefront filter or B2B buyers receive consumer lifecycle mail.",
 ]
 
 TRACKER = [
  ("Welcome (RXBWV9)", "4", "4 of 4", "EN live, IT to redo", "Rebuilt end to end. Assets need uploading to Klaviyo before build."),
- ("Browse Abandonment", "5", "0", "–", "Fix [[ ]] placeholders during rebuild"),
+ ("Browse Abandonment", "5 → 3", "1 of 3", "–", "Email 1 built and render-verified. Feed needs a resized image variant."),
  ("Abandoned Cart", "5", "0", "–", "Can share universal blocks with Checkout"),
  ("Abandoned Checkout", "5", "0", "–", "Can share universal blocks with Cart"),
  ("Site Abandonment", "3", "0", "–", "Fix the Placed Order filter bug first"),
@@ -354,6 +398,18 @@ def lifecycle_bar():
 
 # ---- flow pages ----
 def email_block(f, e):
+    if e.get("badge") == "Specified, not yet designed":
+        return f'''<div class="mail-row mail-row-spec">
+          <div class="mail-meta">
+            <div class="step-line"><span class="step-dot step-dot-open">{e["step"]}</span><span class="when">{esc(e["when"])}</span></div>
+            <h3 class="subj">{esc(e["subject"])}</h3>
+            <p class="prev">{esc(e["preview"])}</p>
+            <span class="badge badge-open">{esc(e["badge"])}</span>
+            <div class="goalbox"><div class="lbl">What it is for</div><p>{esc(e["goal"])}</p></div>
+            <div class="goalbox"><div class="lbl">Who gets it, when</div><p>{esc(e["who"])}</p></div>
+          </div>
+          <div class="mail-pv"><div class="pv-none">Copy and structure agreed.<br>Not yet designed.</div></div>
+        </div>'''
     if not e["tpl"]:
         return f'''<div class="mail-row">
           <div class="mail-meta">
@@ -371,7 +427,7 @@ def email_block(f, e):
     now_shell = f'<div class="pv-shell" data-tpl="{e["tpl"]}"><div class="pv-loading">Loading preview…</div></div>'
 
     if e.get("final"):
-        d = WELCOME_DETAIL.get(e["tpl"], {})
+        d = EMAIL_DETAIL.get(e["tpl"], {})
         preview_area = f'''<div class="pv-pair">
         <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="FIN-{e["tpl"]}" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
         <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-{e["tpl"]}" data-w="375"><div class="pv-loading">Loading preview…</div></div>
@@ -448,15 +504,25 @@ def flow_page(f):
         <div class="notes-body">{note}{fflags}</div>
       </details>'''
         fflags = ""
-    tl_items = "".join(f'<div class="tl-item"><span class="tl-dot"></span><span class="tl-lab">{esc(e["when"].split("·")[0].strip())}</span></div>' for e in f["emails"])
-    mails = "".join(email_block(f, e) for e in f["emails"])
-    n_mail = sum(1 for e in f["emails"] if e["tpl"])
+    tl_items = "".join(f'<div class="tl-item"><span class="tl-dot"></span><span class="tl-lab">{esc(e["when"].split("·")[0].strip())}</span></div>'
+                       for e in f["emails"] if not e.get("ref"))
+    mails = ""
+    cur_sec = None
+    for e in f["emails"]:
+        if e.get("section") and e["section"] != cur_sec:
+            cur_sec = e["section"]
+            sub = e.get("section_sub", "")
+            mails += (f'<div class="mailsec{" mailsec-ref" if e.get("ref") else ""}">'
+                      f'<h2>{esc(cur_sec)}</h2>'
+                      + (f'<p>{esc(sub)}</p>' if sub else "") + '</div>')
+        mails += email_block(f, e)
+    n_mail = sum(1 for e in f["emails"] if e["tpl"] and not e.get("ref"))
     return f'''<section class="page" id="page-{f["slug"]}">
       <a class="backlink" href="#home">{icon("back")}Back to overview</a>
       <div class="flowhead">
         <div><span class="stage {stage_class[f["stage"]]}">{f["stage"]}</span>
         <h1>{esc(f["name"])}</h1>
-        <p class="flowsub">{n_mail} emails · Flow <a href="https://www.klaviyo.com/flow/{f["flow_id"]}/edit" target="_blank" rel="noopener">{f["flow_id"]} {icon("external")}</a> · Status: draft</p></div>
+        <p class="flowsub">{esc(f["mail_line"]) if f.get("mail_line") else f"{n_mail} emails"} · Flow <a href="https://www.klaviyo.com/flow/{f["flow_id"]}/edit" target="_blank" rel="noopener">{f["flow_id"]} {icon("external")}</a> · Status: draft</p></div>
       </div>
       {facts}{note}{fflags}
       <div class="tl">{tl_items}</div>
@@ -469,15 +535,15 @@ tracker_rows = "".join(f'<tr><td>{esc(a)}</td><td>{b}</td><td>{esc(c)}</td><td>{
 
 home = f'''<section class="page" id="page-home">
   <div class="hero">
-    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.2 · 24 Aug 2026</div>
+    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.3 · 24 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Nine journeys, 36 emails, all in draft. The Welcome flow has now been rebuilt: four new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Nine journeys, 36 emails, all in draft. The Welcome flow has been rebuilt in full, and Browse Abandonment is under way: five new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
     <div class="tile"><div class="tile-n">9</div><div class="tile-l">Journeys</div></div>
-    <div class="tile"><div class="tile-n">4 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">5 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
-    <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">13</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
+    <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>
   <h2 class="secttl">The customer lifecycle</h2>
   {lifecycle_bar()}
@@ -493,7 +559,7 @@ home = f'''<section class="page" id="page-home">
 <section class="page" id="page-issues">
   <a class="backlink" href="#home">{icon("back")}Back to overview</a>
   <h1>Issues to fix before go-live</h1>
-  <p class="hero-sub">Found during the audit of 19 Aug 2026. Each becomes part of the rebuild scope.</p>
+  <p class="hero-sub">Items 1 to 13 come from the audit of 19 Aug 2026. Items 14 to 19 were found while rebuilding, mostly in the product feed and the catalog. Each becomes part of the rebuild scope.</p>
   <ol class="issuelist">{issues_rows}</ol>
   <h2 class="secttl">Rebuild tracker</h2>
   <p class="hero-sub">Rebuild = each email as one translatable universal HTML block: real text instead of images, pre-faded hero photos, working unsubscribe. The Welcome flow is complete and is the pattern for the rest.</p>
@@ -622,6 +688,14 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .pv-pair{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:2px}
 .pv-col{flex:0 0 392px;max-width:392px}
 .mail-row-final .pv-pair{gap:30px}
+.mailsec{grid-column:1/-1;margin:34px 0 2px;padding:0 0 10px;border-bottom:1px solid #e3e6e8}
+.mailsec:first-child{margin-top:0}
+.mailsec h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.01em;color:#191919}
+.mailsec p{margin:5px 0 0;font-size:13.5px;line-height:20px;color:#6b7378}
+.mailsec-ref h2{color:#8a9197}
+.mail-row-spec{opacity:.9}
+.step-dot-open{background:#fff!important;color:#8a9197!important;border:1.5px dashed #c3c9cd}
+.badge-open{background:#f2f4f5;color:#6b7378;border:1px solid #dfe3e6}
 .pv-col-desk{flex:0 0 600px;max-width:600px}
 .pv-col-mob{flex:0 0 375px;max-width:375px}
 .pv-col-desk .pv-shell{width:600px;max-width:100%}
