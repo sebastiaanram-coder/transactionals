@@ -371,7 +371,8 @@ def email_block(f, e):
         d = WELCOME_DETAIL.get(e["tpl"], {})
         preview_area = f'''<div class="pv-pair">
         <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="FIN-{e["tpl"]}" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
-        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-{e["tpl"]}" data-w="375"><div class="pv-loading">Loading preview…</div></div></div>
+        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-{e["tpl"]}" data-w="375"><div class="pv-loading">Loading preview…</div></div>
+        <span class="deskhint">Desktop view is hidden on small screens. Use “Open full size” above to see it.</span></div>
       </div>'''
         els = "".join(f'<li><strong>{esc(a)}</strong> {esc(b)}</li>' for a, b in d.get("elements", []))
         notes = ""
@@ -493,7 +494,7 @@ home = f'''<section class="page" id="page-home">
   <ol class="issuelist">{issues_rows}</ol>
   <h2 class="secttl">Rebuild tracker</h2>
   <p class="hero-sub">Rebuild = each email as one translatable universal HTML block: real text instead of images, pre-faded hero photos, working unsubscribe. The Welcome flow is complete and is the pattern for the rest.</p>
-  <table class="trk"><thead><tr><th>Journey</th><th>Emails</th><th>Rebuilt</th><th>Translated</th><th>Notes</th></tr></thead><tbody>{tracker_rows}</tbody></table>
+  <div class="trkwrap"><table class="trk"><thead><tr><th>Journey</th><th>Emails</th><th>Rebuilt</th><th>Translated</th><th>Notes</th></tr></thead><tbody>{tracker_rows}</tbody></table></div>
 </section>'''
 
 pages = home + "".join(flow_page(f) for f in FLOWS)
@@ -647,8 +648,36 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .trk td{border-bottom:1px solid var(--bd);padding:10px 12px;color:var(--ink2);vertical-align:top}
 .foot{border-top:1px solid var(--bd);margin-top:56px;padding:20px 24px;font-size:12px;line-height:16px;color:var(--ink3);text-align:center}
 @media(max-width:1100px){.pv-col-desk,.pv-col-mob{flex:0 0 100%;max-width:100%}}
-@media(max-width:980px){.pv-col{flex:0 0 100%;max-width:100%}.pv-col-desk .pv-shell,.pv-col-mob .pv-shell{width:100%}.grid{grid-template-columns:1fr 1fr}.tiles{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.mail-row{grid-template-columns:1fr}.mail-pv{justify-content:flex-start}.lifecycle{flex-direction:column}.lc-sep{display:none}}
-@media(max-width:620px){.grid{grid-template-columns:1fr}}
+@media(max-width:980px){.pv-col{flex:0 0 100%;max-width:100%}.pv-col-desk .pv-shell{width:600px}.pv-col-mob .pv-shell{width:375px}.grid{grid-template-columns:1fr 1fr}.tiles{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.mail-row{grid-template-columns:1fr}.mail-pv{justify-content:flex-start}.lifecycle{flex-direction:column}.lc-sep{display:none}}
+@media(max-width:620px){
+  .grid{grid-template-columns:1fr}
+  .wrap{padding:0 14px 56px}
+  h1{font-size:26px;line-height:33px}
+  h2.secttl{font-size:18px;line-height:25px;margin:32px 0 12px}
+  .hero-sub{font-size:15px;line-height:24px}
+  .tiles{grid-template-columns:1fr;gap:10px}
+  .facts{grid-template-columns:1fr;gap:10px}
+  .topbar-in{padding:11px 14px;gap:10px}
+  .topbar-r{display:none}
+  .topbar-t{padding-left:10px;font-size:13px}
+  .mail-row{padding:16px 14px}
+  .explain{padding:4px 16px}
+  .flowhead h1{font-size:24px;line-height:31px}
+  /* On a phone the mobile rendering is the useful one. A 600px email shown at
+     46% is illegible, so the desktop frame is dropped and reached via the
+     full-size link in the meta instead. */
+  .pv-col-desk{display:none}
+  .pv-col-mob{flex:0 0 100%;max-width:100%}
+  .pv-col-mob .pv-shell{width:100%;max-width:347px}
+  .pv-pair{gap:0}
+  .deskhint{display:block}
+  .trkwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -14px;padding:0 14px}
+  .trk{min-width:560px}
+  .tpl-line{word-break:break-word}
+  .ellist{padding-left:18px}
+  .notes-body .flagline-big{font-size:13px;line-height:20px}
+}
+.deskhint{display:none;font-size:12px;line-height:18px;color:var(--ink3);margin-top:10px}
 '''
 JS = '''
 const PREVIEWS = __PREVIEWS__;
@@ -696,6 +725,26 @@ function route(){
 }
 window.addEventListener('hashchange', route);
 document.addEventListener('DOMContentLoaded', route);
+
+// Scale is worked out when a preview mounts, so a rotation or a resize would
+// otherwise leave it stale. Recompute for everything already on screen.
+let raf;
+window.addEventListener('resize', () => {
+  clearTimeout(raf);
+  raf = setTimeout(() => {
+    document.querySelectorAll('.pv-shell[data-tpl]').forEach(shell => {
+      const ifr = shell.querySelector('iframe');
+      if (!ifr) return;
+      const vw = +(shell.dataset.w || 600);
+      const disp = shell.getBoundingClientRect().width;
+      if (!disp) return;
+      const sc = Math.min(1, disp / vw);
+      ifr.style.transform = 'scale(' + sc + ')';
+      const h = parseInt(ifr.style.height, 10);
+      if (h) shell.style.height = Math.ceil(h * sc) + 'px';
+    });
+  }, 150);
+});
 '''
 
 doc = f'''<!DOCTYPE html>

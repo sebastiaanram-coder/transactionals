@@ -155,8 +155,36 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .trk td{border-bottom:1px solid var(--bd);padding:10px 12px;color:var(--ink2);vertical-align:top}
 .foot{border-top:1px solid var(--bd);margin-top:56px;padding:20px 24px;font-size:12px;line-height:16px;color:var(--ink3);text-align:center}
 @media(max-width:1100px){.pv-col-desk,.pv-col-mob{flex:0 0 100%;max-width:100%}}
-@media(max-width:980px){.pv-col{flex:0 0 100%;max-width:100%}.pv-col-desk .pv-shell,.pv-col-mob .pv-shell{width:100%}.grid{grid-template-columns:1fr 1fr}.tiles{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.mail-row{grid-template-columns:1fr}.mail-pv{justify-content:flex-start}.lifecycle{flex-direction:column}.lc-sep{display:none}}
-@media(max-width:620px){.grid{grid-template-columns:1fr}}
+@media(max-width:980px){.pv-col{flex:0 0 100%;max-width:100%}.pv-col-desk .pv-shell{width:600px}.pv-col-mob .pv-shell{width:375px}.grid{grid-template-columns:1fr 1fr}.tiles{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.mail-row{grid-template-columns:1fr}.mail-pv{justify-content:flex-start}.lifecycle{flex-direction:column}.lc-sep{display:none}}
+@media(max-width:620px){
+  .grid{grid-template-columns:1fr}
+  .wrap{padding:0 14px 56px}
+  h1{font-size:26px;line-height:33px}
+  h2.secttl{font-size:18px;line-height:25px;margin:32px 0 12px}
+  .hero-sub{font-size:15px;line-height:24px}
+  .tiles{grid-template-columns:1fr;gap:10px}
+  .facts{grid-template-columns:1fr;gap:10px}
+  .topbar-in{padding:11px 14px;gap:10px}
+  .topbar-r{display:none}
+  .topbar-t{padding-left:10px;font-size:13px}
+  .mail-row{padding:16px 14px}
+  .explain{padding:4px 16px}
+  .flowhead h1{font-size:24px;line-height:31px}
+  /* On a phone the mobile rendering is the useful one. A 600px email shown at
+     46% is illegible, so the desktop frame is dropped and reached via the
+     full-size link in the meta instead. */
+  .pv-col-desk{display:none}
+  .pv-col-mob{flex:0 0 100%;max-width:100%}
+  .pv-col-mob .pv-shell{width:100%;max-width:347px}
+  .pv-pair{gap:0}
+  .deskhint{display:block}
+  .trkwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -14px;padding:0 14px}
+  .trk{min-width:560px}
+  .tpl-line{word-break:break-word}
+  .ellist{padding-left:18px}
+  .notes-body .flagline-big{font-size:13px;line-height:20px}
+}
+.deskhint{display:none;font-size:12px;line-height:18px;color:var(--ink3);margin-top:10px}
 </style>
 </head>
 <body>
@@ -266,7 +294,7 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
   <ol class="issuelist"><li>Text-in-image templates everywhere (except Welcome v2): untranslatable, invisible with images off, unreadable for screen readers. The core reason for the rebuild.</li><li>No unsubscribe link in RFB templates (verified on Welcome; check the rest). Compliance risk. The rebuilt Email #2 already fixes this.</li><li>UTM tracking is off on every email: no GA/attribution once live. Define the UTM convention and enable per flow.</li><li>Smart Sending is off everywhere while journeys can overlap (Welcome + Browse + Cart + Site can all hit the same prospect in one week). Enable Smart Sending or add cross-flow exclusions.</li><li>Site Abandonment filter bug: requires Placed Order &gt; 0 since flow start; should almost certainly be = 0.</li><li>Post-Purchase conditional split is a no-op (Placed Order &gt; 0 all time is always true after an order); intent was likely first-order-only (= 1).</li><li>Broken personalization markers [[ viewed product name ]] in Browse Abandonment emails 4 and 5 subject lines: would send verbatim.</li><li>Copy bug: Post-Purchase email 4 reuses email 3&#x27;s preview text (“Simple tips, no jargon.”).</li><li>Post-Purchase vs transactional overlap: emails 1, 2 and 5 partly duplicate the transactional order confirmation / expectations / review emails.</li><li>VIP mechanics undefined: “early access” has no backing mechanic; the buyer-guard filter conflicts with a loyalty audience.</li><li>Sunset property is a dead end: nothing excludes Sunset Unengaged profiles yet.</li><li>Broken or wrong footer links in RFB templates (LinkedIn icon pointed at Instagram; help links pointed at non-existent /help pages; the real Help Centre is /{locale}/cs). Audit all footers in the rebuild.</li><li>Winback timing compresses four emails into four days after a 90-day silence; consider spacing.</li></ol>
   <h2 class="secttl">Rebuild tracker</h2>
   <p class="hero-sub">Rebuild = each email as one translatable universal HTML block: real text instead of images, pre-faded hero photos, working unsubscribe. The Welcome flow is complete and is the pattern for the rest.</p>
-  <table class="trk"><thead><tr><th>Journey</th><th>Emails</th><th>Rebuilt</th><th>Translated</th><th>Notes</th></tr></thead><tbody><tr><td>Welcome (RXBWV9)</td><td>4</td><td>4 of 4</td><td>EN live, IT to redo</td><td>Rebuilt end to end. Assets need uploading to Klaviyo before build.</td></tr><tr><td>Browse Abandonment</td><td>5</td><td>0</td><td>–</td><td>Fix [[ ]] placeholders during rebuild</td></tr><tr><td>Abandoned Cart</td><td>5</td><td>0</td><td>–</td><td>Can share universal blocks with Checkout</td></tr><tr><td>Abandoned Checkout</td><td>5</td><td>0</td><td>–</td><td>Can share universal blocks with Cart</td></tr><tr><td>Site Abandonment</td><td>3</td><td>0</td><td>–</td><td>Fix the Placed Order filter bug first</td></tr><tr><td>Post-Purchase</td><td>5</td><td>0</td><td>–</td><td>Resolve transactional overlap first</td></tr><tr><td>Customer Winback</td><td>4</td><td>0</td><td>–</td><td>Revisit timing</td></tr><tr><td>VIP</td><td>3</td><td>0</td><td>–</td><td>Define the early-access mechanic</td></tr><tr><td>Sunset</td><td>2 + flag step</td><td>0</td><td>–</td><td>Define the downstream exclusion</td></tr></tbody></table>
+  <div class="trkwrap"><table class="trk"><thead><tr><th>Journey</th><th>Emails</th><th>Rebuilt</th><th>Translated</th><th>Notes</th></tr></thead><tbody><tr><td>Welcome (RXBWV9)</td><td>4</td><td>4 of 4</td><td>EN live, IT to redo</td><td>Rebuilt end to end. Assets need uploading to Klaviyo before build.</td></tr><tr><td>Browse Abandonment</td><td>5</td><td>0</td><td>–</td><td>Fix [[ ]] placeholders during rebuild</td></tr><tr><td>Abandoned Cart</td><td>5</td><td>0</td><td>–</td><td>Can share universal blocks with Checkout</td></tr><tr><td>Abandoned Checkout</td><td>5</td><td>0</td><td>–</td><td>Can share universal blocks with Cart</td></tr><tr><td>Site Abandonment</td><td>3</td><td>0</td><td>–</td><td>Fix the Placed Order filter bug first</td></tr><tr><td>Post-Purchase</td><td>5</td><td>0</td><td>–</td><td>Resolve transactional overlap first</td></tr><tr><td>Customer Winback</td><td>4</td><td>0</td><td>–</td><td>Revisit timing</td></tr><tr><td>VIP</td><td>3</td><td>0</td><td>–</td><td>Define the early-access mechanic</td></tr><tr><td>Sunset</td><td>2 + flag step</td><td>0</td><td>–</td><td>Define the downstream exclusion</td></tr></tbody></table></div>
 </section><section class="page" id="page-welcome">
       <a class="backlink" href="#home"><span class="ic "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg></span>Back to overview</a>
       <div class="flowhead">
@@ -295,7 +323,8 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
       </div>
       <div class="pv-pair">
         <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="FIN-Vb23CK" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
-        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-Vb23CK" data-w="375"><div class="pv-loading">Loading preview…</div></div></div>
+        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-Vb23CK" data-w="375"><div class="pv-loading">Loading preview…</div></div>
+        <span class="deskhint">Desktop view is hidden on small screens. Use “Open full size” above to see it.</span></div>
       </div>
     </div><div class="mail-row mail-row-ba mail-row-final">
       <div class="mail-meta">
@@ -308,7 +337,8 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
       </div>
       <div class="pv-pair">
         <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="FIN-TtjyZ4" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
-        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-TtjyZ4" data-w="375"><div class="pv-loading">Loading preview…</div></div></div>
+        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-TtjyZ4" data-w="375"><div class="pv-loading">Loading preview…</div></div>
+        <span class="deskhint">Desktop view is hidden on small screens. Use “Open full size” above to see it.</span></div>
       </div>
     </div><div class="mail-row mail-row-ba mail-row-final">
       <div class="mail-meta">
@@ -321,7 +351,8 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
       </div>
       <div class="pv-pair">
         <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="FIN-RpQvJH" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
-        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-RpQvJH" data-w="375"><div class="pv-loading">Loading preview…</div></div></div>
+        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-RpQvJH" data-w="375"><div class="pv-loading">Loading preview…</div></div>
+        <span class="deskhint">Desktop view is hidden on small screens. Use “Open full size” above to see it.</span></div>
       </div>
     </div><div class="mail-row mail-row-ba mail-row-final">
       <div class="mail-meta">
@@ -334,7 +365,8 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
       </div>
       <div class="pv-pair">
         <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="FIN-XVPf5F" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
-        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-XVPf5F" data-w="375"><div class="pv-loading">Loading preview…</div></div></div>
+        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-XVPf5F" data-w="375"><div class="pv-loading">Loading preview…</div></div>
+        <span class="deskhint">Desktop view is hidden on small screens. Use “Open full size” above to see it.</span></div>
       </div>
     </div></div>
       <div class="pagenav"><a href="#home"><span class="ic "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg></span>All flows</a></div>
@@ -963,6 +995,26 @@ function route(){
 }
 window.addEventListener('hashchange', route);
 document.addEventListener('DOMContentLoaded', route);
+
+// Scale is worked out when a preview mounts, so a rotation or a resize would
+// otherwise leave it stale. Recompute for everything already on screen.
+let raf;
+window.addEventListener('resize', () => {
+  clearTimeout(raf);
+  raf = setTimeout(() => {
+    document.querySelectorAll('.pv-shell[data-tpl]').forEach(shell => {
+      const ifr = shell.querySelector('iframe');
+      if (!ifr) return;
+      const vw = +(shell.dataset.w || 600);
+      const disp = shell.getBoundingClientRect().width;
+      if (!disp) return;
+      const sc = Math.min(1, disp / vw);
+      ifr.style.transform = 'scale(' + sc + ')';
+      const h = parseInt(ifr.style.height, 10);
+      if (h) shell.style.height = Math.ceil(h * sc) + 'px';
+    });
+  }, 150);
+});
 </script>
 </body>
 </html>
