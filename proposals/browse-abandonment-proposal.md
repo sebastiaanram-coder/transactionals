@@ -121,19 +121,34 @@ Gotchas found while testing, all confirmed by render:
 - `title` and `unit` come back already localised per market, which is what makes this work for
   every language later without extra translation strings.
 - `min_order_quantity` is the **preset** quantity, not a minimum. Copy must say
-  "for 1,000 units", never "minimum 1,000".
+  "for 1000 units", never "minimum 1000".
+- `|intcomma` is **not supported**, so quantity renders `1000`, not `1,000`.
+- `{% with %}` is **not supported**.
+- **Preset quantity is often 1** (every banner). `for {{ qty }} {{ unit }}` then renders
+  "for 1 units". The quantity phrase has to be wrapped in
+  `{% if catalog_item.metadata.min_order_quantity > 1 %}`, which does work. Found by
+  rendering `GB-rollupbannersv2`, not by reading the data.
 
 ---
 
 ## 5. The emails
 
-### Email 1 — +1 hour
+### Email 1 — +1 hour — BUILT
 
-Subject: `A5 Flyers — from €39.96 for 1,000`  (dynamic title + price)
+Files: `proposals/browse-01-proposed.html` (preview, sample data) and
+`proposals/browse-01-klaviyo.html` (the template to paste into Klaviyo). Both are generated
+by `scripts/build_browse_01.py` from one source, so the preview and the live template cannot
+drift. The builder self-checks for the traps above and fails the build rather than emitting a
+template with `image_full_url`, a leaked data URI, an unconditional quantity phrase or a
+binding sitting outside the `{% catalog %}` block.
+
+Subject: `A5 Flyers — from €39.96 for 1000`  (dynamic title + price)
 Preview: `Delivery and VAT already included. Change the quantity and the price moves with it.`
 
 1. **Masthead** — black `#191919`, white wordmark. Same universal block as Welcome.
-2. **Dark hero band, no photograph.**
+2. **Dark hero band, no photograph.** Every Welcome email leads with a photo hero. This one
+   deliberately does not: in a product-led email the packshot should be the only image
+   competing for attention, and a second large photo would push the product below the fold.
    - H1: `The one you were looking at`
    - Sub: `Still here, still the same all-inclusive price. Delivery and VAT are already in the number you saw.`
    - CTA: `Back to your product` → `catalog_item.url`
