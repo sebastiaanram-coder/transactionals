@@ -323,22 +323,24 @@ BODY = """
       </span>
     </a>
 
-    <!-- the three real blockers on a print order -->
+    <!-- The three commonest reasons a print product view does not convert,
+         each answered by a person rather than a feature. Evidence for the
+         choice is in proposals/browse-abandonment-proposal.md section 7. -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">Not sure about the spec?</h2>
-      <p class="{P}-sectsub">Three things people usually want to check first.</p>
+      <h2 class="{P}-secttl">Not ready to order yet?</h2>
+      <p class="{P}-sectsub">There is someone here for each of these.</p>
       <div class="{P}-qa">
         <div class="{P}-qarow">
-          <p class="{P}-qq">Need a different quantity?</p>
-          <p class="{P}-qa-a">The quantity on the page is a starting point, not a minimum you are stuck with. Change it and the price updates with it.</p>
-        </div>
-        <div class="{P}-qarow">
           <p class="{P}-qq">Artwork not finished?</p>
-          <p class="{P}-qa-a">Send us what you have. We check every file before it goes on press and tell you if something will not print well, before you pay.</p>
+          <p class="{P}-qa-a">Send us whatever you have, even a rough version or just your logo. Our designers will tell you what will not print well and help you get it right before anything goes on press.</p>
         </div>
         <div class="{P}-qarow">
-          <p class="{P}-qq">Seen it cheaper somewhere?</p>
-          <p class="{P}-qa-a">Send us the quote. We will match it, or tell you straight why we cannot.</p>
+          <p class="{P}-qq">Odd size, tight deadline, unusual finish?</p>
+          <p class="{P}-qa-a">Our print experts spec jobs like this all day. Tell them what you need and they will come back with what is possible and what it costs.</p>
+        </div>
+        <div class="{P}-qarow">
+          <p class="{P}-qq">Someone else has to approve it?</p>
+          <p class="{P}-qa-a">We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward and get signed off.</p>
         </div>
       </div>
     </div>
@@ -491,9 +493,10 @@ if "intcomma" in live_body or "{% with " in live_body:
     errs.append("Klaviyo build uses an unsupported filter/tag")
 if "unsubscribe" not in live_body:
     errs.append("Klaviyo build has no unsubscribe tag")
+price_region = live_body[:live_body.index('%s-sect' % P)]   # preheader, hero, product card
 for claim in ("VAT included", "delivery and VAT", "all-inclusive", "includes delivery",
-              "already included", "in the number you saw"):
-    if claim.lower() in live_body.lower():
+              "already included", "in the number you saw", "VAT and delivery included"):
+    if claim.lower() in price_region.lower():
         errs.append("price-inclusion claim is not true of from_price: " + claim)
 if "min_order_quantity > 1" not in live_body:
     errs.append("quantity phrase is not conditional and will render 'for 1 units'")
