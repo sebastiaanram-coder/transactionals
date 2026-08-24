@@ -321,3 +321,96 @@ alternative is a custom "last viewed" profile property written on every PDP view
 Recommend **no discount in either email**, as RFB had it. The two-version split we agreed for
 Welcome (ordered since / not) is handled here by the flow filters in §2 instead — anyone who
 orders drops out, so there is no need for a second copy.
+
+---
+
+## 7. Why someone views a print product and does not order
+
+The current "Not sure about the spec?" block answers three things: quantity, artwork, price
+match. Two of those are right, one (price match) is a competitive argument rather than a doubt.
+Below are five reasons grounded in the product page itself and in the tracked funnel, rather
+than in guesswork.
+
+**Evidence base**
+
+- `/en-ie/flyera5` page source, read in full
+- August 2026 unique profiles: Viewed Product 15,307, Added to Cart 12,102,
+  Started Checkout 10,267, Placed Order 11,321
+- 200 sampled `Viewed Product` events
+
+Note on the funnel: **Placed Order exceeds Started Checkout**. The frontend events are
+consent-gated and the backend one is not, so these are not comparable populations and a
+view-to-order rate cannot honestly be computed from them. It does confirm the cookie-consent
+theory: frontend events undercount.
+
+### 1. The artwork is not ready
+
+The strongest candidate. The product page is built around file supply: "Have print-ready
+files, or your own designer", a dropzone taking "PDF, AI, EPS, PSD, TIFF, PNG, JPG — up to
+500MB", "File submission guidelines", a Canva editor path, and brand asset controls. Someone
+without a print-ready PDF reasonably concludes they cannot order yet.
+
+The page does offer "Continue to checkout, upload later" — but it sits inside the upload
+component, so it is easy to miss. It also carries real failure states:
+"This file wasn't attached", "This colour isn't available in the editor",
+"Your product configuration changed — re-edit your design so it matches", and
+"Choose your size and quantity first — your Canva design is built to match". Design and spec
+are coupled, so changing the spec invalidates the design.
+
+*Block idea:* lead with permission to order without finished artwork. "You do not need the
+final file yet" plus the fact that we check every file before it goes on press.
+
+### 2. They cannot tell which paper and finish to pick
+
+The specifications are written in print language: material is
+"135 gsm to 400 gsm Silk (Matte) & Gloss art print machine coated paper", and **finishing
+depends on the weight** — 400 gsm offers gloss/matte lamination, 250 gsm offers
+gloss/matte/writable, 170 gsm only matte/writable. To choose a finish you must first
+understand gsm. There is also a "Bundled per 250 / 100 / 50 / 25 / Not bundled" step that
+means nothing to a non-printer.
+
+*Block idea:* offer a recommendation rather than an explanation. "Not sure which paper? Tell
+us what it is for and we will pick it" — or name the default most people choose.
+
+### 3. The price they see is not the price they pay
+
+The page defaults to **Excl. VAT** with a toggle, the footer states "Prices Excl. VAT", and
+delivery is a separate step that loads asynchronously ("Loading delivery options…"). So the
+headline number excludes both VAT and delivery, and the true total is only assembled later.
+Anyone budgeting cannot act on the number in front of them.
+
+*Block idea:* be explicit rather than reassuring. Say what the price does and does not include
+and that the total appears before payment. This is also the honest replacement for the
+all-inclusive claim we just removed.
+
+### 4. They are not the one who decides
+
+Print is frequently bought on someone else's budget or authority. The site carries a whole
+apparatus for it: "Request a quote", "Payment and Invoice", "Business Solutions",
+"Reseller Solutions". And Connect, the B2B storefront, is a real slice of this traffic —
+between 14% (URL aggregate) and 21% (200-event sample) of Viewed Product.
+
+A person who needs sign-off is not undecided, they are waiting. Pressure is the wrong tool;
+something forwardable is the right one.
+
+*Block idea:* a quote or saved-price they can send to whoever approves it, rather than a
+"buy now" nudge.
+
+### 5. They do not know whether it will arrive in time
+
+Print has production time plus shipping, and the page does not answer "will it be here by
+Friday" until delivery options load. For anything tied to an event, a launch or a trade show,
+the deadline is the gating question and everything else is secondary.
+
+*Block idea:* state the realistic turnaround, and make the deadline the entry point —
+"tell us the date and we will tell you what is possible".
+
+### Design constraint
+
+Five rows would make the section far too long; the current three already run to a third of the
+email. Recommend picking **three**, keeping the same visual pattern, and moving one of the
+others into email 2 where the expert help is the subject anyway.
+
+On the evidence, 1, 3 and 5 are the strongest: they are concrete, they are all things the page
+genuinely fails to answer up front, and none of them is a competitive claim. Reason 2 suits
+email 2. Reason 4 arguably deserves its own treatment later.
