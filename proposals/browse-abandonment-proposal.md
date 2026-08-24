@@ -231,7 +231,40 @@ I would not ship email 1 on option 2, because the packshot *is* the email.
 Also: 1 in 100 IE images is `.webp`, which Outlook on Windows cannot render. Worth excluding
 webp in the same feed change.
 
-### 6.3 Does `{% catalog %}` work in a subject line?
+### 6.3 Product recommendations: what is and is not possible
+
+Asked whether Klaviyo can do "other products you might like". Tested rather than assumed:
+
+- `{% catalog-recommendations %}` and `{% recommendations %}` **do not exist** as tags in a
+  CODE template. Both 400 the render. Klaviyo's recommendation engine lives in the
+  drag-and-drop product block, which would mean abandoning the one-custom-HTML-block pattern
+  the whole programme is built on.
+- **Category filtering is impossible.** Every catalog category comes back with
+  `external_id: ""` and id `$custom:::$default:::` — they all share one id, so no category can
+  be addressed. "More in Flyers" cannot be built from the catalog.
+- The catalog is also **mixed in with promotional merchandise** — categories include
+  Powerbanks, Thermos bottles, Beachgames, `material_bamboo`, `size_14_x_7_9_x_1_4_cm`. Even
+  if the engine were reachable, algorithmic recommendations could surface a bamboo cutting
+  board to someone pricing flyers. These are the same items carrying the 4-6 MB images.
+
+What **does** work, and is what shipped:
+
+- sequential `{% catalog "LITERAL-ID" %}` blocks, so a hand-curated row is fine
+- `catalog_item` is correctly scoped, it does not leak outside its own block
+- `event.Categories` **is** readable (`event.Categories.0` = "Flyers", and
+  `{% if 'Flyers' in event.Categories %}` works), so category-aware relevance is possible from
+  the *event* even though it is impossible from the catalog. Not used yet, noted for later.
+
+So email 1 carries a curated 2x2 row, market-aware via `{% if 'GB-' in event.ProductID %}`,
+with a per-tile guard that swaps in Letterheads if a tile would otherwise show the product
+the recipient had just been looking at. Verified by render in three cases: `IE-flyera5`
+(clean IE set), `IE-posters` (Letterheads substituted), `GB-stickers` (GB set, Letterheads
+substituted).
+
+Product selection is a merchandising call, not a technical one — the four per market are in
+`CROSS_SELL` in the builder and are trivial to change.
+
+### 6.4 Does `{% catalog %}` work in a subject line?
 
 Both subject lines above need `catalog_item.title`. Subject lines take template tags, but I
 cannot render a subject through the API, so this needs one live test in Klaviyo. Static
@@ -240,13 +273,13 @@ fallbacks if it does not work:
 - Email 1: `The print you were looking at`
 - Email 2: `Want us to spec it for you?`
 
-### 6.4 Which product, if they viewed several?
+### 6.5 Which product, if they viewed several?
 
 Klaviyo binds the **triggering** event, so we show the first product of the session, not the
 last. Usually the intent anchor, but not always. Living with it is the pragmatic call; the
 alternative is a custom "last viewed" profile property written on every PDP view.
 
-### 6.5 Discount variants
+### 6.6 Discount variants
 
 Recommend **no discount in either email**, as RFB had it. The two-version split we agreed for
 Welcome (ordered since / not) is handled here by the flow filters in §2 instead — anyone who

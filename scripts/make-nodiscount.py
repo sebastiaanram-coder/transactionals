@@ -27,6 +27,11 @@ def strip_discount(s):
     s = re.sub(r'<span class="hp-w1-tiprice"><s class="hp-w1-tiwas">(&euro;[\d.,]+)</s>'
                r'&nbsp;<span class="hp-w1-tinow">&euro;[\d.,]+</span></span>',
                r'<span class="hp-w1-tiprice">\1</span>', s)
+    # 5b. the per-tile expiry goes with the offer. A customer who has already
+    #     ordered has no code, so a countdown on it would be nonsense.
+    s = re.sub(r'\s*<span class="hp-w1-tiexp">[^<]*</span>', '', s)
+    s = re.sub(r'\n\.hp-w1-tiexp\{[^}]*\}', '', s, count=1)
+    s = re.sub(r'\n  \.hp-w1-tiexp\{[^}]*\}', '', s, count=1)
     # 6. the price reclaims the brand green now that nothing competes with it,
     #    and the two-figure rules are dead weight
     s = s.replace('.hp-w1-tiprice{display:block;font-size:17px;line-height:22px;font-weight:800;color:#191919;}',
@@ -46,6 +51,6 @@ if __name__ == '__main__':
     s = open(src, encoding='utf-8').read()
     t = strip_discount(s)
     open(out, 'w', encoding='utf-8').write(t)
-    left = len(re.findall(r'10%|HELLO10', t))
+    left = len(re.findall(r'10%|HELLO10|Expires in|days left|Last day|Valid only', t))
     print(f"wrote {out}")
     print(f"  discount references remaining: {left}")

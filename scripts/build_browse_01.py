@@ -47,6 +47,7 @@ SAMPLE = {
     # wrong, so the whole phrase is conditional and drops out at qty 1
     "QTY_PHRASE": "for 1000 units &middot; ",
     "UNSUB":      '<a href="#">Unsubscribe</a>',
+    "XSELL":      None,  # filled in build()
 }
 
 LIVE = {
@@ -63,6 +64,7 @@ LIVE = {
                    "for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} "
                    "{{ catalog_item.metadata.unit }} &middot; {% endif %}"),
     "UNSUB":      "{% unsubscribe 'Unsubscribe' %}",
+    "XSELL":      None,  # filled in build()
 }
 
 # brand assets: data URIs locally, obvious sentinels in the Klaviyo build so a
@@ -79,6 +81,82 @@ LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in {
 }.items()}
 
 P = "hp-b1"
+
+# Curated cross-sell, per pilot market. Hand-picked rather than algorithmic:
+# Klaviyo's recommendation tags do not exist in a CODE template (verified), the
+# catalog's category ids are all empty so category filtering is impossible, and
+# the catalog is mixed in with promotional merchandise (powerbanks, bamboo
+# boards) that must never surface in a print email.
+# FALLBACK is swapped in for any tile that would show the product just viewed.
+CROSS_SELL = {
+    "IE": ["IE-businesscardsstandard", "IE-posters", "IE-rollupbannersv2", "IE-stickers"],
+    "GB": ["GB-businesscardsstandard", "GB-posters", "GB-rollupbannersv2", "GB-stickers"],
+}
+FALLBACK = {"IE": "IE-letterheads", "GB": "GB-letterheads"}
+
+# real feed values, IE only, for the preview build
+SAMPLE_TILES = [
+    ("Classic Business Cards", "https://www.helloprint.com/en-ie/standardbusinesscards",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/classic-business-cards-packshot-1x1-3f94b7c9.jpg",
+     "for 500 units", "25.82"),
+    ("Standard Posters", "https://www.helloprint.com/en-ie/posters",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/standard-posters-packshot-1x1-43ad3e79.png",
+     "for 50 units", "55.34"),
+    ("Roller Banners", "https://www.helloprint.com/en-ie/budgetrollupbanners",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-roll-up-banner-packshot-1x1-ae375736.jpg",
+     "&nbsp;", "60.87"),
+    ("Individual Stickers", "https://www.helloprint.com/en-ie/stickers",
+     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/individual-stickers-packshot-1x1-f3214226.jpg",
+     "for 1000 units", "75.02"),
+]
+
+TILE = ('<a class="{P}-tile" href="{url}">'
+        '<img src="{img}" alt="{title}" width="270">'
+        '<span class="{P}-tilebody">'
+        '<span class="{P}-tiname">{title}</span>'
+        '<span class="{P}-tiqty">{qty}</span>'
+        '<span class="{P}-tiprice">From {cur}{price}</span>'
+        '</span></a>')
+
+def grid(cells):
+    """cells: list of 4 html strings -> 2x2 table"""
+    rows = []
+    for i in (0, 2):
+        rows.append('<tr><td class="%s-cellpad">%s</td><td class="%s-cellpad">%s</td></tr>'
+                    % (P, cells[i], P, cells[i + 1]))
+    return ('<table class="%s-grid" role="presentation" cellpadding="0" cellspacing="0">%s</table>'
+            % (P, "".join(rows)))
+
+def sample_xsell():
+    cells = [TILE.format(P=P, url=u, img=im, title=t, qty=q, cur="&euro;", price=pr)
+             for (t, u, im, q, pr) in SAMPLE_TILES]
+    return grid(cells)
+
+def live_xsell():
+    """Market branch, and a per-tile guard so a tile never shows the viewed product."""
+    tile = TILE.format(
+        P=P,
+        url="{{ catalog_item.url }}",
+        img="{{ catalog_item.featured_image.full.src }}",
+        title="{{ catalog_item.title }}",
+        qty=("{% if catalog_item.metadata.min_order_quantity > 1 %}"
+             "for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} "
+             "{{ catalog_item.metadata.unit }}{% else %}&nbsp;{% endif %}"),
+        cur="{% if catalog_item.metadata.currency == 'GBP' %}&pound;{% else %}&euro;{% endif %}",
+        price="{{ catalog_item.metadata.from_price|floatformat:2 }}")
+    out = []
+    for mkt in ("GB", "IE"):
+        cells = []
+        for pid in CROSS_SELL[mkt]:
+            cells.append(
+                "{%% if event.ProductID == '%s' %%}"
+                "{%% catalog \"%s\" %%}%s{%% endcatalog %%}"
+                "{%% else %%}"
+                "{%% catalog \"%s\" %%}%s{%% endcatalog %%}"
+                "{%% endif %%}" % (pid, FALLBACK[mkt], tile, pid, tile))
+        out.append(grid(cells))
+    return ("{%% if 'GB-' in event.ProductID %%}%s{%% else %%}%s{%% endif %%}"
+            % (out[0], out[1]))
 
 CSS = """
 .%(P)s-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
@@ -120,6 +198,17 @@ CSS = """
 .%(P)s-mid{padding:24px 24px 0;text-align:center;}
 .%(P)s-midnote{margin:11px 0 0;font-size:13px;line-height:20px;color:#767676;}
 
+.%(P)s-xs{padding:32px 24px 0;}
+.%(P)s-xsttl{margin:0 0 6px;font-size:22px;line-height:29px;font-weight:800;color:#191919;text-align:center;letter-spacing:-.01em;}
+.%(P)s-xssub{margin:0 0 18px;font-size:14px;line-height:21px;color:#555555;text-align:center;}
+.%(P)s-grid{width:100%%;border-collapse:separate;border-spacing:0;}
+.%(P)s-cellpad{padding:0 6px 12px;vertical-align:top;width:50%%;}
+.%(P)s-tile{display:block;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;background:#ffffff;text-decoration:none;}
+.%(P)s-tile img{display:block;width:100%%;height:auto;border:0;background:#f8f8f8;}
+.%(P)s-tilebody{display:block;padding:13px 16px 15px;}
+.%(P)s-tiname{display:block;font-size:14px;line-height:19px;font-weight:700;color:#191919;margin:0 0 5px;}
+.%(P)s-tiqty{display:block;font-size:11px;line-height:16px;color:#555555;margin:0 0 5px;}
+.%(P)s-tiprice{display:block;font-size:16px;line-height:21px;font-weight:800;color:#008539;}
 .%(P)s-trust{margin:28px 24px 0;border-top:1px solid #e5e5e5;padding:24px 0 4px;text-align:center;}
 .%(P)s-tp-link{display:inline-block;text-decoration:none;}
 .%(P)s-tp-stars{display:block;margin:0 auto 9px;border:0;width:135px;height:28px;}
@@ -162,6 +251,13 @@ CSS = """
   .%(P)s-qq{font-size:16px;line-height:22px;}
   .%(P)s-qa-a{font-size:14px;line-height:22px;}
   .%(P)s-mid{padding:22px 14px 0;}
+  .%(P)s-xs{padding:28px 14px 0;}
+  .%(P)s-xsttl{font-size:20px;line-height:27px;}
+  .%(P)s-cellpad{padding:0 4px 10px!important;}
+  .%(P)s-tilebody{padding:11px 12px 13px;}
+  .%(P)s-tiname{font-size:13px;line-height:17px;}
+  .%(P)s-tiqty{font-size:11px;line-height:15px;}
+  .%(P)s-tiprice{font-size:15px;line-height:20px;}
   .%(P)s-trust,.%(P)s-help{margin:20px 14px 0;}
 }
 """ % {"P": P}
@@ -228,6 +324,15 @@ BODY = """
       <p class="{P}-midnote">Or just reply to this email and a print expert will pick it up.</p>
     </div>
 
+    {CATALOG_CLOSE}
+
+    <!-- cross-sell : curated per market, not algorithmic. See CROSS_SELL. -->
+    <div class="{P}-xs">
+      <h2 class="{P}-xsttl">You might also need</h2>
+      <p class="{P}-xssub">Prices exclude VAT and delivery.</p>
+      {XSELL}
+    </div>
+
     <!-- trustpilot -->
     <div class="{P}-trust">
       <a class="{P}-tp-link" href="https://ie.trustpilot.com/review/helloprint.com">
@@ -247,8 +352,6 @@ BODY = """
         <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
     </div>
-
-    {CATALOG_CLOSE}
 
   </div>
 
@@ -273,10 +376,11 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets):
+def build(bindings, assets, xsell):
     vals = {"P": P, "CSS": CSS}
     vals.update(bindings)
     vals.update(assets)
+    vals["XSELL"] = xsell
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>
@@ -332,8 +436,8 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS)
-live_body = build(LIVE, LIVE_ASSETS)
+prev_body = build(SAMPLE, SAMPLE_ASSETS, sample_xsell())
+live_body = build(LIVE, LIVE_ASSETS, live_xsell())
 prev = PREVIEW_DOC % prev_body
 live = KLAVIYO_DOC % live_body
 
@@ -350,8 +454,14 @@ if "data:image" in live_body:
     errs.append("Klaviyo build leaked a data URI (stripped by Gmail/Outlook)")
 if "{%" in prev_body or "{{" in prev_body:
     errs.append("preview build leaked an unrendered template tag")
-if live_body.count("{% catalog ") != 1 or live_body.count("{% endcatalog %}") != 1:
-    errs.append("Klaviyo build must open and close {% catalog %} exactly once")
+n_open, n_close = live_body.count("{% catalog "), live_body.count("{% endcatalog %}")
+if n_open != n_close:
+    errs.append("unbalanced catalog blocks: %d open, %d close" % (n_open, n_close))
+if live_body.count("{% catalog event.ProductID %}") != 1:
+    errs.append("the viewed-product lookup must appear exactly once")
+# 1 main + 4 tiles x 2 branches x 2 markets
+if n_open != 1 + len(CROSS_SELL) * 4 * 2:
+    errs.append("expected %d catalog blocks, found %d" % (1 + len(CROSS_SELL) * 4 * 2, n_open))
 if "image_full_url" in live_body:
     errs.append("Klaviyo build uses image_full_url, which renders empty")
 if "intcomma" in live_body or "{% with " in live_body:
@@ -366,15 +476,40 @@ if "min_order_quantity > 1" not in live_body:
     errs.append("quantity phrase is not conditional and will render 'for 1 units'")
 if "floatformat:0" not in live_body:
     errs.append("min_order_quantity is missing |floatformat:0 and will render 1000.0")
-# the catalog block must enclose every product binding
-ci = live_body.index("{% catalog "); co = live_body.index("{% endcatalog %}")
+# Every catalog_item reference must sit inside SOME catalog block. Walk the
+# body tracking depth rather than assuming a single range, now that the
+# cross-sell adds sixteen more blocks.
+depth, pos, outside = 0, 0, 0
+events = []
+for m in re.finditer(r"\{% catalog |\{% endcatalog %\}|catalog_item\.", live_body):
+    events.append((m.start(), m.group(0)))
+for _, kind in events:
+    if kind.startswith("{% catalog"):
+        depth += 1
+    elif kind.startswith("{% endcatalog"):
+        depth -= 1
+        if depth < 0:
+            errs.append("{% endcatalog %} without a matching open")
+            depth = 0
+    else:
+        if depth == 0:
+            outside += 1
+if outside:
+    errs.append("%d catalog_item reference(s) sit outside any catalog block" % outside)
+if depth != 0:
+    errs.append("catalog block left open at end of template")
 for tag in ("catalog_item.url", "catalog_item.title", "featured_image.full.src",
             "catalog_item.metadata"):
-    hits = list(re.finditer(re.escape(tag), live_body))
-    if not hits:
+    if tag not in live_body:
         errs.append("binding never used: " + tag)
-    if not all(ci < m.start() < co for m in hits):
-        errs.append("binding outside the catalog block: " + tag)
+# the cross-sell must be guarded per tile and per market
+if live_body.count("event.ProductID == ") != len(CROSS_SELL) * 4:
+    errs.append("cross-sell tiles are missing their viewed-product guard")
+if "{% if 'GB-' in event.ProductID %}" not in live_body:
+    errs.append("cross-sell is not market-aware")
+for mkt, ids in CROSS_SELL.items():
+    if FALLBACK[mkt] not in live_body:
+        errs.append("missing cross-sell fallback for " + mkt)
 
 print("preview: %6d bytes  ->  proposals/browse-01-proposed.html" % len(prev))
 print("klaviyo: %6d bytes  ->  proposals/browse-01-klaviyo.html" % len(live))
