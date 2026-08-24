@@ -35,15 +35,17 @@
 .hp-b1-root *{box-sizing:border-box;}
 .hp-b1-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
 .hp-b1-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
-.hp-b1-logobar{background:#191919;padding:15px 24px 13px;text-align:center;}
-.hp-b1-logobar img{width:170px;max-width:56%;height:auto;display:inline-block;border:0;}
+.hp-b1-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
+.hp-b1-logobar img{width:150px;max-width:50%;height:auto;display:inline-block;border:0;}
 
-/* Hero is deliberately typographic, no photograph. In a product-led email the
-   packshot below should be the only image competing for attention. */
-.hp-b1-hero{background:#191919;text-align:center;padding:34px 24px 36px;}
-.hp-b1-h1{margin:0 0 10px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.01em;}
-.hp-b1-sub{margin:0 auto 22px;max-width:430px;font-size:17px;line-height:25px;color:#ffffff;opacity:.88;}
-.hp-b1-cta{display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+/* Option C: black is reduced to the masthead, the hero goes light and the green
+   carries the eyebrow and the button. No photograph on purpose either way, so
+   the packshot is the only image competing for attention. */
+.hp-b1-hero{background:#ffffff;text-align:center;padding:32px 24px 2px;}
+.hp-b1-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
+.hp-b1-h1{margin:0 0 10px;font-size:31px;line-height:38px;font-weight:800;color:#191919;letter-spacing:-.015em;}
+.hp-b1-sub{margin:0 auto 20px;max-width:440px;font-size:17px;line-height:25px;color:#555555;}
+.hp-b1-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .hp-b1-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 /* product card : the hero of this email */
@@ -91,9 +93,10 @@
 .hp-b1-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
 .hp-b1-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
-  .hp-b1-logobar{padding:13px 20px 11px;}
-  .hp-b1-logobar img{width:148px;}
-  .hp-b1-hero{padding:28px 18px 30px;}
+  .hp-b1-logobar{padding:11px 20px 9px;}
+  .hp-b1-logobar img{width:132px;}
+  .hp-b1-hero{padding:26px 18px 2px;}
+  .hp-b1-eyebrow{font-size:10px;letter-spacing:.13em;}
   .hp-b1-h1{font-size:27px;line-height:34px;}
   .hp-b1-sub{font-size:16px;line-height:25px;max-width:none;margin-bottom:20px;}
   .hp-b1-cta,.hp-b1-cta-g{padding:15px 26px;}
@@ -113,7 +116,7 @@
 }
 </style>
 
-<div class="hp-b1-pre">Still at the same all-inclusive price. Delivery and VAT are already included.</div>
+<div class="hp-b1-pre">Still available at the same starting price. Change the spec and the price moves with it.</div>
 
 <div class="hp-b1-wrap">
   <div class="hp-b1-shell">
@@ -125,10 +128,12 @@
       <a href="{{ catalog_item.url }}"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="170"></a>
     </div>
 
-    <!-- hero : typographic on purpose, the packshot is the only image -->
+    <!-- hero : light, green does the accent work. No photograph, so the
+         packshot below is the only image competing for attention. -->
     <div class="hp-b1-hero">
-      <h1 class="hp-b1-h1">The one you were looking at</h1>
-      <p class="hp-b1-sub">Still here, and still the same all-inclusive price. Delivery and VAT are already in the number you saw.</p>
+      <span class="hp-b1-eyebrow">STILL AVAILABLE</span>
+      <h1 class="hp-b1-h1">Still thinking it over?</h1>
+      <p class="hp-b1-sub">Nothing has changed since you looked. Pick up where you left off, or change the spec and see what it comes to.</p>
       <a class="hp-b1-cta" href="{{ catalog_item.url }}">Back to your product</a>
     </div>
 
@@ -139,7 +144,7 @@
       <span class="hp-b1-pbody">
         <span class="hp-b1-pname">{{ catalog_item.title }}</span>
         <span class="hp-b1-pprice">From {% if catalog_item.metadata.currency == 'GBP' %}&pound;{% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}</span>
-        <span class="hp-b1-pqty">{% if catalog_item.metadata.min_order_quantity > 1 %}for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}, {% endif %}delivery and VAT included</span>
+        <span class="hp-b1-pqty">{% if catalog_item.metadata.min_order_quantity > 1 %}for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }} &middot; {% endif %}excl. VAT and delivery</span>
         <span class="hp-b1-plink">View product &rarr;</span>
       </span>
     </a>

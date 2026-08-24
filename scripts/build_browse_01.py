@@ -45,7 +45,7 @@ SAMPLE = {
     "PROD_UNIT":  "units",
     # preset quantity of 1 is common (all the banners), and "for 1 units" is
     # wrong, so the whole phrase is conditional and drops out at qty 1
-    "QTY_PHRASE": "for 1000 units, ",
+    "QTY_PHRASE": "for 1000 units &middot; ",
     "UNSUB":      '<a href="#">Unsubscribe</a>',
 }
 
@@ -61,7 +61,7 @@ LIVE = {
     "PROD_UNIT":  "{{ catalog_item.metadata.unit }}",
     "QTY_PHRASE": ("{% if catalog_item.metadata.min_order_quantity > 1 %}"
                    "for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} "
-                   "{{ catalog_item.metadata.unit }}, {% endif %}"),
+                   "{{ catalog_item.metadata.unit }} &middot; {% endif %}"),
     "UNSUB":      "{% unsubscribe 'Unsubscribe' %}",
 }
 
@@ -85,15 +85,17 @@ CSS = """
 .%(P)s-root *{box-sizing:border-box;}
 .%(P)s-wrap{width:100%%;background:#f8f8f8;padding:0 0 32px;}
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
-.%(P)s-logobar{background:#191919;padding:15px 24px 13px;text-align:center;}
-.%(P)s-logobar img{width:170px;max-width:56%%;height:auto;display:inline-block;border:0;}
+.%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
+.%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
 
-/* Hero is deliberately typographic, no photograph. In a product-led email the
-   packshot below should be the only image competing for attention. */
-.%(P)s-hero{background:#191919;text-align:center;padding:34px 24px 36px;}
-.%(P)s-h1{margin:0 0 10px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.01em;}
-.%(P)s-sub{margin:0 auto 22px;max-width:430px;font-size:17px;line-height:25px;color:#ffffff;opacity:.88;}
-.%(P)s-cta{display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+/* Option C: black is reduced to the masthead, the hero goes light and the green
+   carries the eyebrow and the button. No photograph on purpose either way, so
+   the packshot is the only image competing for attention. */
+.%(P)s-hero{background:#ffffff;text-align:center;padding:32px 24px 2px;}
+.%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
+.%(P)s-h1{margin:0 0 10px;font-size:31px;line-height:38px;font-weight:800;color:#191919;letter-spacing:-.015em;}
+.%(P)s-sub{margin:0 auto 20px;max-width:440px;font-size:17px;line-height:25px;color:#555555;}
+.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 /* product card : the hero of this email */
@@ -141,9 +143,10 @@ CSS = """
 .%(P)s-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
 .%(P)s-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
-  .%(P)s-logobar{padding:13px 20px 11px;}
-  .%(P)s-logobar img{width:148px;}
-  .%(P)s-hero{padding:28px 18px 30px;}
+  .%(P)s-logobar{padding:11px 20px 9px;}
+  .%(P)s-logobar img{width:132px;}
+  .%(P)s-hero{padding:26px 18px 2px;}
+  .%(P)s-eyebrow{font-size:10px;letter-spacing:.13em;}
   .%(P)s-h1{font-size:27px;line-height:34px;}
   .%(P)s-sub{font-size:16px;line-height:25px;max-width:none;margin-bottom:20px;}
   .%(P)s-cta,.%(P)s-cta-g{padding:15px 26px;}
@@ -167,7 +170,7 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">Still at the same all-inclusive price. Delivery and VAT are already included.</div>
+<div class="{P}-pre">Still available at the same starting price. Change the spec and the price moves with it.</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -179,10 +182,12 @@ BODY = """
       <a href="{PROD_URL}"><img src="{IMG_WORDMARK}" alt="Helloprint" width="170"></a>
     </div>
 
-    <!-- hero : typographic on purpose, the packshot is the only image -->
+    <!-- hero : light, green does the accent work. No photograph, so the
+         packshot below is the only image competing for attention. -->
     <div class="{P}-hero">
-      <h1 class="{P}-h1">The one you were looking at</h1>
-      <p class="{P}-sub">Still here, and still the same all-inclusive price. Delivery and VAT are already in the number you saw.</p>
+      <span class="{P}-eyebrow">STILL AVAILABLE</span>
+      <h1 class="{P}-h1">Still thinking it over?</h1>
+      <p class="{P}-sub">Nothing has changed since you looked. Pick up where you left off, or change the spec and see what it comes to.</p>
       <a class="{P}-cta" href="{PROD_URL}">Back to your product</a>
     </div>
 
@@ -193,7 +198,7 @@ BODY = """
       <span class="{P}-pbody">
         <span class="{P}-pname">{PROD_TITLE}</span>
         <span class="{P}-pprice">From {CUR}{PROD_PRICE}</span>
-        <span class="{P}-pqty">{QTY_PHRASE}delivery and VAT included</span>
+        <span class="{P}-pqty">{QTY_PHRASE}excl. VAT and delivery</span>
         <span class="{P}-plink">View product &rarr;</span>
       </span>
     </a>
@@ -353,6 +358,10 @@ if "intcomma" in live_body or "{% with " in live_body:
     errs.append("Klaviyo build uses an unsupported filter/tag")
 if "unsubscribe" not in live_body:
     errs.append("Klaviyo build has no unsubscribe tag")
+for claim in ("VAT included", "delivery and VAT", "all-inclusive", "includes delivery",
+              "already included", "in the number you saw"):
+    if claim.lower() in live_body.lower():
+        errs.append("price-inclusion claim is not true of from_price: " + claim)
 if "min_order_quantity > 1" not in live_body:
     errs.append("quantity phrase is not conditional and will render 'for 1 units'")
 if "floatformat:0" not in live_body:
