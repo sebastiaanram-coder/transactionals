@@ -71,11 +71,17 @@ LIVE = {
 # forgotten swap breaks loudly in a test send instead of silently in Gmail
 SAMPLE_ASSETS = {
     "IMG_WORDMARK": datauri("helloprint-wordmark-white-on-ink.png"),
+    "AV_DESIGNER":  datauri("browse-01-avatar-designer.jpg"),
+    "AV_EXPERT":    datauri("welcome-04-john-avatar.jpg"),
+    "AV_QUOTE":     datauri("browse-01-avatar-quote.jpg"),
     "IMG_STARS":    datauri("trustpilot-stars-4-5.png"),
     "IMG_AGENTS":   datauri("cs-agents-ellipse.png"),
 }
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
+    "AV_DESIGNER":  "browse-01-avatar-designer.jpg",
+    "AV_EXPERT":    "welcome-04-john-avatar.jpg",
+    "AV_QUOTE":     "browse-01-avatar-quote.jpg",
     "IMG_STARS":    "trustpilot-stars-4-5.png",
     "IMG_AGENTS":   "cs-agents-ellipse.png",
 }.items()}
@@ -216,6 +222,13 @@ CSS = """
 .%(P)s-sectsub{margin:0 0 20px;font-size:15px;line-height:22px;color:#555555;text-align:center;}
 .%(P)s-qa{border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;}
 .%(P)s-qarow{padding:18px 20px;}
+/* avatar sits in its own table cell so Outlook keeps the two columns.
+   The circle and its green ring are baked into the image, because Outlook
+   ignores border-radius. Faces are decorative, so alt is empty. */
+.%(P)s-qatbl{width:100%%;border-collapse:collapse;}
+.%(P)s-qaav{width:70px;vertical-align:top;padding:1px 14px 0 0;}
+.%(P)s-qaav img{width:56px;height:56px;display:block;border:0;}
+.%(P)s-qatx{vertical-align:top;}
 .%(P)s-qarow + .%(P)s-qarow{border-top:1px solid #e5e5e5;}
 .%(P)s-qq{margin:0 0 5px;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
 .%(P)s-qa-a{margin:0;font-size:15px;line-height:23px;color:#555555;}
@@ -271,7 +284,9 @@ CSS = """
   .%(P)s-pprice{font-size:20px;line-height:26px;}
   .%(P)s-sect{padding:26px 14px 0;}
   .%(P)s-secttl{font-size:21px;line-height:28px;}
-  .%(P)s-qarow{padding:16px 16px;}
+  .%(P)s-qarow{padding:16px 14px;}
+  .%(P)s-qaav{width:58px;padding:1px 11px 0 0;}
+  .%(P)s-qaav img{width:47px;height:47px;}
   .%(P)s-qq{font-size:16px;line-height:22px;}
   .%(P)s-qa-a{font-size:14px;line-height:22px;}
   .%(P)s-mid{padding:22px 14px 0;}
@@ -331,16 +346,31 @@ BODY = """
       <p class="{P}-sectsub">There is someone here for each of these.</p>
       <div class="{P}-qa">
         <div class="{P}-qarow">
-          <p class="{P}-qq">Artwork not finished?</p>
-          <p class="{P}-qa-a">Send us whatever you have, even a rough version or just your logo. Our designers will tell you what will not print well and help you get it right before anything goes on press.</p>
+          <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+            <td class="{P}-qaav"><img src="{AV_DESIGNER}" alt="" width="56" height="56"></td>
+            <td class="{P}-qatx">
+              <p class="{P}-qq">Artwork not finished?</p>
+              <p class="{P}-qa-a">Send whatever you have, even a rough version. Our designers will tell you what will not print well and fix it before it goes on press.</p>
+            </td>
+          </tr></table>
         </div>
         <div class="{P}-qarow">
-          <p class="{P}-qq">Odd size, tight deadline, unusual finish?</p>
-          <p class="{P}-qa-a">Our print experts spec jobs like this all day. Tell them what you need and they will come back with what is possible and what it costs.</p>
+          <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+            <td class="{P}-qaav"><img src="{AV_EXPERT}" alt="" width="56" height="56"></td>
+            <td class="{P}-qatx">
+              <p class="{P}-qq">Odd size, tight deadline, unusual finish?</p>
+              <p class="{P}-qa-a">Our print experts spec jobs like this all day. Describe the job and they will come back with what is possible and what it costs.</p>
+            </td>
+          </tr></table>
         </div>
         <div class="{P}-qarow">
-          <p class="{P}-qq">Someone else has to approve it?</p>
-          <p class="{P}-qa-a">We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward and get signed off.</p>
+          <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+            <td class="{P}-qaav"><img src="{AV_QUOTE}" alt="" width="56" height="56"></td>
+            <td class="{P}-qatx">
+              <p class="{P}-qq">Someone else has to approve it?</p>
+              <p class="{P}-qa-a">We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward for sign-off.</p>
+            </td>
+          </tr></table>
         </div>
       </div>
     </div>
@@ -498,6 +528,16 @@ for claim in ("VAT included", "delivery and VAT", "all-inclusive", "includes del
               "already included", "in the number you saw", "VAT and delivery included"):
     if claim.lower() in price_region.lower():
         errs.append("price-inclusion claim is not true of from_price: " + claim)
+import re as _re
+_ans = _re.findall(r'class="%s-qa-a">([^<]+)<' % P, live_body)
+if len(_ans) != 3:
+    errs.append("expected 3 doubt explanations, found %d" % len(_ans))
+elif max(map(len, _ans)) - min(map(len, _ans)) > 12:
+    errs.append("doubt explanations are uneven: lengths %s" % [len(a) for a in _ans])
+if live_body.count('class="%s-qaav"' % P) != 3:
+    errs.append("a doubt row is missing its avatar")
+if live_body.count('alt="" width="56"') != 3:
+    errs.append("avatars must be decorative (empty alt) and sized")
 if "min_order_quantity > 1" not in live_body:
     errs.append("quantity phrase is not conditional and will render 'for 1 units'")
 if "floatformat:0" not in live_body:

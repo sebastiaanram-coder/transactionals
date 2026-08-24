@@ -64,6 +64,13 @@
 .hp-b1-sectsub{margin:0 0 20px;font-size:15px;line-height:22px;color:#555555;text-align:center;}
 .hp-b1-qa{border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;}
 .hp-b1-qarow{padding:18px 20px;}
+/* avatar sits in its own table cell so Outlook keeps the two columns.
+   The circle and its green ring are baked into the image, because Outlook
+   ignores border-radius. Faces are decorative, so alt is empty. */
+.hp-b1-qatbl{width:100%;border-collapse:collapse;}
+.hp-b1-qaav{width:70px;vertical-align:top;padding:1px 14px 0 0;}
+.hp-b1-qaav img{width:56px;height:56px;display:block;border:0;}
+.hp-b1-qatx{vertical-align:top;}
 .hp-b1-qarow + .hp-b1-qarow{border-top:1px solid #e5e5e5;}
 .hp-b1-qq{margin:0 0 5px;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
 .hp-b1-qa-a{margin:0;font-size:15px;line-height:23px;color:#555555;}
@@ -119,7 +126,9 @@
   .hp-b1-pprice{font-size:20px;line-height:26px;}
   .hp-b1-sect{padding:26px 14px 0;}
   .hp-b1-secttl{font-size:21px;line-height:28px;}
-  .hp-b1-qarow{padding:16px 16px;}
+  .hp-b1-qarow{padding:16px 14px;}
+  .hp-b1-qaav{width:58px;padding:1px 11px 0 0;}
+  .hp-b1-qaav img{width:47px;height:47px;}
   .hp-b1-qq{font-size:16px;line-height:22px;}
   .hp-b1-qa-a{font-size:14px;line-height:22px;}
   .hp-b1-mid{padding:22px 14px 0;}
@@ -175,16 +184,31 @@
       <p class="hp-b1-sectsub">There is someone here for each of these.</p>
       <div class="hp-b1-qa">
         <div class="hp-b1-qarow">
-          <p class="hp-b1-qq">Artwork not finished?</p>
-          <p class="hp-b1-qa-a">Send us whatever you have, even a rough version or just your logo. Our designers will tell you what will not print well and help you get it right before anything goes on press.</p>
+          <table class="hp-b1-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+            <td class="hp-b1-qaav"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-01-avatar-designer.jpg" alt="" width="56" height="56"></td>
+            <td class="hp-b1-qatx">
+              <p class="hp-b1-qq">Artwork not finished?</p>
+              <p class="hp-b1-qa-a">Send whatever you have, even a rough version. Our designers will tell you what will not print well and fix it before it goes on press.</p>
+            </td>
+          </tr></table>
         </div>
         <div class="hp-b1-qarow">
-          <p class="hp-b1-qq">Odd size, tight deadline, unusual finish?</p>
-          <p class="hp-b1-qa-a">Our print experts spec jobs like this all day. Tell them what you need and they will come back with what is possible and what it costs.</p>
+          <table class="hp-b1-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+            <td class="hp-b1-qaav"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/welcome-04-john-avatar.jpg" alt="" width="56" height="56"></td>
+            <td class="hp-b1-qatx">
+              <p class="hp-b1-qq">Odd size, tight deadline, unusual finish?</p>
+              <p class="hp-b1-qa-a">Our print experts spec jobs like this all day. Describe the job and they will come back with what is possible and what it costs.</p>
+            </td>
+          </tr></table>
         </div>
         <div class="hp-b1-qarow">
-          <p class="hp-b1-qq">Someone else has to approve it?</p>
-          <p class="hp-b1-qa-a">We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward and get signed off.</p>
+          <table class="hp-b1-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+            <td class="hp-b1-qaav"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-01-avatar-quote.jpg" alt="" width="56" height="56"></td>
+            <td class="hp-b1-qatx">
+              <p class="hp-b1-qq">Someone else has to approve it?</p>
+              <p class="hp-b1-qa-a">We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward for sign-off.</p>
+            </td>
+          </tr></table>
         </div>
       </div>
     </div>
