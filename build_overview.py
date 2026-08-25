@@ -382,6 +382,18 @@ for f in FLOWS:
                 previews["FIN-" + e["tpl"]] = fh.read()
 pv_json = json.dumps(previews, ensure_ascii=False).replace("</", "<\\/")
 
+# Every preview is also a real file in the repo, and the repo is published, so
+# each one has a shareable URL. openFull() prefers it and only falls back to a
+# blob if something is missing. Relative paths, so this works from file:// too.
+pv_urls = {}
+for f in FLOWS:
+    for e in f["emails"]:
+        if e["tpl"]:
+            pv_urls[e["tpl"]] = "previews/%s.html" % e["tpl"]
+        if e.get("final"):
+            pv_urls["FIN-" + e["tpl"]] = "proposals/%s" % e["final"]
+pv_url_json = json.dumps(pv_urls, ensure_ascii=False)
+
 ICON = {
  "mail": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
  "zap": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.1 12.5a.5.5 0 0 0 .4.8H11l-1 8.7 8.9-10.5a.5.5 0 0 0-.4-.8H13z"/></svg>',
@@ -477,7 +489,7 @@ def email_block(f, e):
         <p class="prev">{esc(e["preview"])}</p>
         <span class="badge badge-green">Rebuilt · universal HTML block</span>
         {notes}
-        <div class="tpl-line">Replaces RFB template <a href="https://www.klaviyo.com/email-template-editor/{e["tpl"]}" target="_blank" rel="noopener">{e["tpl"]} {icon("external")}</a> · <a href="javascript:void(0)" onclick="openFull('FIN-{e["tpl"]}')">Open full size</a></div>
+        <div class="tpl-line">Replaces RFB template <a href="https://www.klaviyo.com/email-template-editor/{e["tpl"]}" target="_blank" rel="noopener">{e["tpl"]} {icon("external")}</a> · <a href="javascript:void(0)" onclick="openFull('FIN-{e["tpl"]}')">Open full size</a> · <a href="javascript:void(0)" onclick="copyLink('FIN-{e["tpl"]}', this)">Copy shareable link</a></div>
       </div>
       {preview_area}
     </div>'''
@@ -799,6 +811,7 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 '''
 JS = '''
 const PREVIEWS = __PREVIEWS__;
+const PREVIEW_URLS = __PREVIEW_URLS__;
 const mounted = new Set();
 function mountPreviews(pageEl){
   pageEl.querySelectorAll('.pv-shell[data-tpl]').forEach(shell => {
@@ -829,8 +842,21 @@ function mountPreviews(pageEl){
   });
 }
 function openFull(id){
+  // A real URL can be copied out of the address bar and sent to someone. A
+  // blob: URL cannot: it only exists in this tab's memory and dies with it.
+  const u = PREVIEW_URLS[id];
+  if (u) { window.open(u, '_blank'); return; }
   const blob = new Blob([PREVIEWS[id]], {type:'text/html'});
   window.open(URL.createObjectURL(blob), '_blank');
+}
+function copyLink(id, el){
+  const u = PREVIEW_URLS[id];
+  if (!u) return;
+  const abs = new URL(u, location.href).href;
+  navigator.clipboard.writeText(abs).then(function(){
+    const was = el.textContent; el.textContent = 'Link copied';
+    setTimeout(function(){ el.textContent = was; }, 1600);
+  });
 }
 function route(){
   let h = (location.hash || '#home').slice(1);
@@ -879,7 +905,7 @@ doc = f'''<!DOCTYPE html>
 <div class="topbar"><div class="topbar-in">{LOGO.replace("<svg", '<svg class="logo"', 1)}<span class="topbar-t">Behavioural Emails</span><span class="topbar-r">v0.2 · 24 Aug 2026 · Welcome rebuilt · all flows in draft</span></div></div>
 <div class="wrap">{pages}</div>
 <div class="foot">Helloprint · Behavioural Email Program overview · v0.2, 24 Aug 2026 · Welcome flow shows the rebuilt emails; the other eight flows show the RFB originals as delivered</div>
-<script>{JS.replace("__PREVIEWS__", pv_json)}</script>
+<script>{JS.replace("__PREVIEWS__", pv_json).replace("__PREVIEW_URLS__", pv_url_json)}</script>
 </body>
 </html>'''
 
