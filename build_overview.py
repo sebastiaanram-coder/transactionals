@@ -65,7 +65,7 @@ FLOWS = [
              "Excludes the Connect B2B storefront, which is 14–21% of all Viewed Product events"],
    reentry="14 days", incentive="None, in the rebuild as in the original. Help and proof instead of a code.",
    cadence="Rebuilt: 1 hour after the view, then 24 hours, then 3 days. Three emails, down from five in four days.",
-   mail_line="1 of 3 rebuilt · 5 RFB emails kept below for reference",
+   mail_line="2 of 3 rebuilt · 5 RFB emails kept below for reference",
    flow_note="The facts above describe the rebuilt flow. RFB's five original emails are kept further down this page for reference until the rebuild is signed off. Cut from five emails to three: a product view is a weak signal, and this is the highest-volume flow in the programme (15,307 unique product viewers in August), so its send volume dominates the sending reputation of every other flow.",
    flow_flags=["Emails 4 and 5 of the RFB flow contain the literal text [[ viewed product name ]] in the subject line. These are RFB placeholders, not Klaviyo variables, and would be sent verbatim.",
                "RFB email 4 tells the reader to “use your code” in a flow that has no discount.",
@@ -80,9 +80,8 @@ FLOWS = [
       final="browse-01-proposed.html"),
     dict(step=2, when="24 hours after the product view", subject="You do not need the finished artwork yet",
       preview="We check every file for free before it prints. Or our designers can make it for you.",
-      goal="Remove the artwork blocker outright. Opens with the permission the product page hides \u2014 you can order before the file is final \u2014 then forks for the two readers the site itself names: those with a file, who get a free check on bleed, safe area, resolution and colour, and those starting from scratch, who get the design service that can create artwork outright.",
-      who="Same audience, one day later, still no cart or order.", tpl="", flags=[],
-      badge="Specified, not yet designed"),
+      goal="", who="", tpl="SJV6Kx", flags=[], badge=None,
+      final="browse-02-proposed.html"),
     dict(step=3, when="3 days after the product view", subject="Want us to spec it and price it?",
       preview="A written quote you can forward for sign-off.",
       goal="Serve the reader who is blocked rather than undecided: odd specs, a deadline, or someone else's signature. Offers a written quote with the true total to forward.",
@@ -269,6 +268,19 @@ EMAIL_DETAIL = {
      ("Same-category cross-sell.", "Someone looking at A5 Flyers is shown A4, A6, DL and Folded leaflets: a size and price ladder rather than a generic bestseller row. The set is picked from the category on the event, and every product id is built from the recipient\u2019s own market prefix, so the block works unchanged in each new market as its feed comes online."),
      ("Trustpilot, agents, footer.", "Third-party proof and the compliance furniture, identical to the Welcome flow so the two read as one system."),
    ]),
+ "SJV6Kx": dict(
+   goal="Remove the artwork blocker outright, because it is the biggest single gate on a first print order and the product page makes it look larger than it is.",
+   why="Day 1. They looked, they did not add to cart, and email 1 has already offered help on three fronts. Only one of those blockers is big enough to deserve a whole email. The product page is built around supplying a file and never says the quiet part out loud, which is that the order can start before the file exists. This email says it in the subject line.",
+   variant="No discount in either direction, so there is no second version. Anyone who orders drops out on the flow filter before this send.",
+   elements=[
+     ("Permission in the headline, not the footnotes.", "The product page hides \u201cContinue to checkout, upload later\u201d inside the upload component, where almost nobody finds it. It is the most conversion-relevant fact we hold, so it becomes both the subject line and the H1."),
+     ("A small product anchor rather than a product card.", "Artwork is the subject here, so the job is named in a single line instead of getting the hero treatment it has in email 1."),
+     ("Two ways in.", "The site names its own two readers \u2014 \u201cwhether you upload a ready-made file or are starting from scratch\u201d \u2014 so each gets a card and nobody has to read past the half that is not about them. The file check is stated as free because it is; the design service is not, because its price is not published."),
+     ("The check, set as data.", "Bleed 3 mm, safe area 3 mm, 300 dpi, CMYK, read off the Always a good design page. The specifics are what turn \u201cwe check your files\u201d from a slogan into something a designer recognises, and they qualify the reader both ways: whoever knows what bleed is now trusts us, and whoever does not now knows why they need us."),
+     ("Templates, per product.", "Links back to the product page\u2019s own templates and guidelines, already the right size and bleed. The cheapest possible unblock for someone who simply started on the wrong canvas."),
+     ("A designer, by e-mail.", "Same face as email 1, so the cast stays consistent. E-mail rather than chat, because chat is Anna, the AI. No phone number, because it differs per market and this flow runs in two."),
+     ("No price, and no cross-sell.", "Both deliberate. A price would drag the excl-VAT basis question into an email that does not need it, and a size ladder would pull against the one job this email has."),
+   ]),
  "TtjyZ4": dict(
    goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",
    why="They did not buy on day 0, so price alone was not the answer. Pushing product again would just repeat yesterday. Day 1 is early enough that the brand is still unformed in their mind, which makes it cheap to shape, and it is the right moment to say who is behind the transaction.",
@@ -328,7 +340,7 @@ ISSUES = [
 
 TRACKER = [
  ("Welcome (RXBWV9)", "4", "4 of 4", "EN live, IT to redo", "Rebuilt end to end. Assets need uploading to Klaviyo before build."),
- ("Browse Abandonment", "5 → 3", "1 of 3", "–", "Email 1 built and render-verified. Feed needs a resized image variant."),
+ ("Browse Abandonment", "5 → 3", "2 of 3", "–", "Emails 1 and 2 built and render-verified. Feed needs a resized image variant."),
  ("Abandoned Cart", "5", "0", "–", "Can share universal blocks with Checkout"),
  ("Abandoned Checkout", "5", "0", "–", "Can share universal blocks with Cart"),
  ("Site Abandonment", "3", "0", "–", "Fix the Placed Order filter bug first"),
@@ -535,13 +547,13 @@ tracker_rows = "".join(f'<tr><td>{esc(a)}</td><td>{b}</td><td>{esc(c)}</td><td>{
 
 home = f'''<section class="page" id="page-home">
   <div class="hero">
-    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.3 · 24 Aug 2026</div>
+    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.4 · 25 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Nine journeys, 36 emails, all in draft. The Welcome flow has been rebuilt in full, and Browse Abandonment is under way: five new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Nine journeys, 36 emails, all in draft. The Welcome flow has been rebuilt in full, and Browse Abandonment is under way: six new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
     <div class="tile"><div class="tile-n">9</div><div class="tile-l">Journeys</div></div>
-    <div class="tile"><div class="tile-n">5 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">6 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>
