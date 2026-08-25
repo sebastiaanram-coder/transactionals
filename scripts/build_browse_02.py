@@ -2,24 +2,22 @@
 """
 Build Browse Abandonment email 2 - the artwork email.
 
-Emits two files from one source so they cannot drift:
-  proposals/browse-02-proposed.html   preview, sample data for IE-flyera5
-  proposals/browse-02-klaviyo.html    the template to paste into Klaviyo
+Emits proposals/browse-02-proposed.html (preview) and browse-02-klaviyo.html
+(the template) from one source so they cannot drift.
 
-Every claim here is verifiable on /en-ie/always-a-perfect-design:
-  - "Our design service can edit or create custom artwork for you"
-  - "We check your files at no extra cost"
-  - bleed 3mm, safe area 3mm, 300 dpi, CMYK, PDF/AI/EPS/JPEG/PNG
-  - free online design tools with 3D preview, templates per product
-The "order now, send the file later" permission is the product page's own
-"Continue to checkout, upload later".
+ACCURACY NOTE, corrected after seeing the live cart step. The marketing page
+says "we check your files at no extra cost", but the cart makes the tiers
+explicit: the free Basic check is AUTOMATED ONLY - "your file is not reviewed
+by a print expert". Manual expert review is the paid Premium tier. So this
+email must never say or imply that a person checks every file for free. A
+build check enforces that.
 
-Deliberately NOT in this email: any price. Artwork is the subject, and leaving
-price out also keeps it clear of the excl-VAT basis problem. A build check
-enforces that.
+Prices: none. The Premium check is EUR 4.99 in Ireland but Design Check is not
+a catalog item, so there is no GB figure to bind and hardcoding euro would be
+wrong in a two-market flow. The value is argued without a number instead.
 
-Design-service pricing is not published anywhere we can see, so the copy must
-not imply the service is free. A build check enforces that too.
+Icons, tick and the circular avatar are baked images: Outlook ignores
+border-radius and most clients strip inline SVG.
 """
 import base64, os, re
 
@@ -49,32 +47,43 @@ LIVE = {
     "PROD_IMG":   "{{ catalog_item.featured_image.full.src }}",
     "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
 }
-SAMPLE_ASSETS = {
-    "IMG_WORDMARK": datauri("helloprint-wordmark-white-on-ink.png"),
-    "AV_DESIGNER":  datauri("browse-01-avatar-designer.jpg"),
-}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in {
+_A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
+    "IMG_HERO":     "browse-02-hero-team-checking.jpg",
+    "IC_LATER":     "browse-02-icon-later.jpg",
+    "IC_DESIGN":    "browse-02-icon-design.jpg",
+    "IC_UPLOAD":    "browse-02-icon-upload.jpg",
+    "IMG_TICK":     "browse-02-tick.jpg",
     "AV_DESIGNER":  "browse-01-avatar-designer.jpg",
-}.items()}
+}
+SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
+LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
-# ---- the two paths the site itself names: "whether you upload a ready-made
-# ---- file or are starting from scratch"
-FORK = [
-    ("You already have a file",
-     "Upload it whenever suits, before or after you order. We check every file "
-     "at no extra cost and tell you exactly what needs changing."),
-    ("You are starting from scratch",
-     "Use the online editor and the templates for this product, or hand it to our "
-     "design service and they will create the artwork for you."),
+# The product page's own three options, in its own words and order, so the
+# email matches what they meet when they click through.
+ROUTES = [
+    ("IC_LATER",  "Upload later",
+     "Add to cart now and send your files after checkout."),
+    ("IC_DESIGN", "Design online",
+     "Customise it in our editor, with a live preview."),
+    ("IC_UPLOAD", "Upload your design",
+     "You have print-ready files, or your own designer."),
 ]
-# what the free check actually looks at. Specific enough that a designer
-# recognises it as real rather than as a slogan.
+
+# Plain language on purpose. The house style is no jargon, so bleed, safe area,
+# dpi and CMYK are stated as the outcomes a buyer actually cares about.
 CHECKS = [
-    ("3 mm", "bleed beyond the trim line"),
-    ("3 mm", "safe area inside the trim"),
-    ("300 dpi", "minimum image resolution"),
-    ("CMYK", "colour mode for accurate print"),
+    "Nothing important gets cut off at the edges",
+    "Photos and logos come out sharp, not fuzzy",
+    "Colours print the way you expect them to",
+    "If something looks wrong, you hear from us first",
+]
+
+# The Premium tier, argued without a price. All three claims are on the cart step.
+PREMIUM = [
+    "A print expert reviews it, not just software",
+    "We contact you before printing if anything looks off",
+    "Backed by our 100% Satisfaction Guarantee",
 ]
 
 CSS = """
@@ -84,16 +93,16 @@ CSS = """
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
 .%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
-
-/* same light header as email 1, so the flow reads as one system */
-.%(P)s-hero{background:#ffffff;text-align:center;padding:32px 24px 4px;}
+/* the team checking work on screen. No fade needed: it sits between the black
+   masthead and the white hero, so both edges are clean. */
+.%(P)s-heroimg{display:block;width:100%%;height:auto;border:0;}
+.%(P)s-hero{background:#ffffff;text-align:center;padding:28px 24px 4px;}
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
-.%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#191919;letter-spacing:-.015em;}
+.%(P)s-h1{margin:0 0 10px;font-size:29px;line-height:36px;font-weight:800;color:#191919;letter-spacing:-.015em;}
 .%(P)s-sub{margin:0 auto 20px;max-width:450px;font-size:17px;line-height:25px;color:#555555;}
 .%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
-/* which job this is about. Small on purpose: artwork is the subject here. */
-.%(P)s-anchor{margin:24px 24px 0;border:1px solid #e5e5e5;border-radius:12px;padding:11px 14px;text-decoration:none;display:block;}
+.%(P)s-anchor{margin:22px 24px 0;border:1px solid #e5e5e5;border-radius:12px;padding:11px 14px;text-decoration:none;display:block;}
 .%(P)s-antbl{width:100%%;border-collapse:collapse;}
 .%(P)s-anim{width:64px;vertical-align:middle;padding:0 13px 0 0;}
 .%(P)s-anim img{width:52px;height:auto;display:block;border:0;background:#f8f8f8;border-radius:8px;}
@@ -102,37 +111,39 @@ CSS = """
 .%(P)s-anname{display:block;font-size:16px;line-height:22px;font-weight:800;color:#191919;}
 .%(P)s-anlink{width:96px;text-align:right;vertical-align:middle;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
 
-.%(P)s-sect{padding:32px 24px 0;}
-.%(P)s-secttl{margin:0 0 6px;font-size:24px;line-height:31px;font-weight:800;color:#191919;text-align:center;letter-spacing:-.01em;}
+.%(P)s-sect{padding:30px 24px 0;}
+.%(P)s-secttl{margin:0 0 6px;font-size:23px;line-height:30px;font-weight:800;color:#191919;text-align:center;letter-spacing:-.01em;}
 .%(P)s-sectsub{margin:0 0 20px;font-size:15px;line-height:22px;color:#555555;text-align:center;}
 
-/* two paths side by side, stacking on small screens */
-.%(P)s-fork{width:100%%;border-collapse:separate;border-spacing:0;}
-.%(P)s-forkcell{width:50%%;vertical-align:top;padding:0 6px;}
-.%(P)s-card{border:1px solid #e5e5e5;border-radius:14px;padding:18px 18px 20px;height:100%%;}
-.%(P)s-cardttl{margin:0 0 7px;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
-.%(P)s-cardtx{margin:0;font-size:15px;line-height:23px;color:#555555;}
+/* three routes, mirroring the product page's own cards */
+.%(P)s-rt{width:100%%;border-collapse:separate;border-spacing:0;}
+.%(P)s-rtcell{width:33.33%%;vertical-align:top;padding:0 5px;}
+.%(P)s-card{border:1px solid #e5e5e5;border-radius:14px;padding:16px 13px 18px;text-align:center;min-height:182px;}
+.%(P)s-rticon{width:48px;height:48px;display:block;margin:0 auto 11px;border:0;border-radius:11px;}
+.%(P)s-rtttl{margin:0 0 5px;font-size:15px;line-height:21px;font-weight:800;color:#191919;}
+.%(P)s-rttx{margin:0;font-size:13px;line-height:20px;color:#555555;}
+.%(P)s-tplline{margin:14px 0 0;font-size:14px;line-height:21px;color:#555555;text-align:center;}
+.%(P)s-tplline a{color:#008539;text-decoration:none;font-weight:700;}
 
-/* the free check, set as data rather than prose */
-.%(P)s-spec{border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;}
-.%(P)s-spectbl{width:100%%;border-collapse:collapse;}
-.%(P)s-speccell{width:50%%;padding:16px 18px;border-bottom:1px solid #e5e5e5;border-right:1px solid #e5e5e5;}
-.%(P)s-speccell-r{border-right:0;}
-.%(P)s-speccell-b{border-bottom:0;}
-.%(P)s-specval{display:block;font-size:21px;line-height:27px;font-weight:800;color:#008539;letter-spacing:-.01em;}
-.%(P)s-speclab{display:block;font-size:13px;line-height:19px;color:#555555;margin-top:2px;}
-.%(P)s-formats{margin:12px 0 0;font-size:13px;line-height:20px;color:#767676;text-align:center;}
+/* what we look at, in plain words */
+.%(P)s-checks{border:1px solid #e5e5e5;border-radius:14px;padding:6px 18px;}
+.%(P)s-ck{width:100%%;border-collapse:collapse;}
+.%(P)s-cktick{width:34px;vertical-align:top;padding:11px 10px 11px 0;}
+.%(P)s-cktick img{width:22px;height:22px;display:block;border:0;}
+.%(P)s-cktx{vertical-align:top;padding:11px 0;font-size:15px;line-height:22px;color:#191919;}
 
-.%(P)s-tpl{margin:0 24px;padding:24px 0 0;border-top:1px solid #e5e5e5;}
-.%(P)s-tplttl{margin:26px 0 6px;font-size:19px;line-height:26px;font-weight:800;color:#191919;text-align:center;}
-.%(P)s-tpltx{margin:0 0 14px;font-size:15px;line-height:23px;color:#555555;text-align:center;}
-.%(P)s-link{display:block;text-align:center;font-size:15px;line-height:21px;font-weight:700;color:#008539;text-decoration:none;}
+/* the assurance centrepiece */
+.%(P)s-prem{margin:30px 24px 0;background:#f1f8f4;border:1px solid #cfe4d8;border-radius:14px;padding:22px 20px;}
+.%(P)s-premlbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.13em;color:#008539;margin-bottom:8px;}
+.%(P)s-premttl{margin:0 0 8px;font-size:20px;line-height:27px;font-weight:800;color:#191919;letter-spacing:-.01em;}
+.%(P)s-premtx{margin:0 0 13px;font-size:15px;line-height:23px;color:#41484c;}
+.%(P)s-premnote{margin:13px 0 0;font-size:13px;line-height:20px;color:#5c6benn;}
+.%(P)s-premnote{color:#5f6a63;}
 
-/* a face and the human routes. Not chat: chat is Anna, the AI. */
-.%(P)s-help{margin:26px 24px 0;background:#f8f8f8;border-radius:14px;padding:20px 18px;text-align:center;}
+.%(P)s-help{margin:28px 24px 0;padding:24px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
 .%(P)s-helpav{width:64px;height:64px;display:block;margin:0 auto 11px;border:0;}
 .%(P)s-helpttl{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;margin-bottom:5px;}
-.%(P)s-helptx{margin:0 auto 13px;max-width:400px;font-size:15px;line-height:22px;color:#555555;}
+.%(P)s-helptx{margin:0 auto 13px;max-width:410px;font-size:15px;line-height:22px;color:#555555;}
 .%(P)s-helplinks{font-size:14px;line-height:21px;}
 .%(P)s-helplinks a{color:#008539;text-decoration:none;font-weight:700;}
 .%(P)s-helplinks span{color:#c3c9cd;padding:0 8px;}
@@ -151,53 +162,55 @@ CSS = """
 @media only screen and (max-width:480px){
   .%(P)s-logobar{padding:11px 20px 9px;}
   .%(P)s-logobar img{width:132px;}
-  .%(P)s-hero{padding:26px 18px 2px;}
-  .%(P)s-h1{font-size:26px;line-height:33px;}
+  .%(P)s-hero{padding:24px 18px 2px;}
+  .%(P)s-h1{font-size:25px;line-height:32px;}
   .%(P)s-sub{font-size:16px;line-height:24px;max-width:none;}
   .%(P)s-cta{padding:15px 26px;}
   .%(P)s-anchor{margin:18px 14px 0;}
   .%(P)s-anlink{width:62px;font-size:12px;}
-  .%(P)s-sect{padding:28px 14px 0;}
+  .%(P)s-sect{padding:26px 14px 0;}
   .%(P)s-secttl{font-size:21px;line-height:28px;}
-  .%(P)s-forkcell{display:block!important;width:100%%!important;padding:0 0 12px!important;}
-  .%(P)s-speccell{padding:14px 14px;}
-  .%(P)s-specval{font-size:19px;line-height:25px;}
-  .%(P)s-speclab{font-size:12px;line-height:18px;}
-  .%(P)s-tpl,.%(P)s-help{margin-left:14px;margin-right:14px;}
+  .%(P)s-rtcell{display:block!important;width:100%%!important;padding:0 0 10px!important;}
+  .%(P)s-card{min-height:0;}
+  .%(P)s-checks{padding:4px 14px;}
+  .%(P)s-cktx{font-size:14px;line-height:21px;}
+  .%(P)s-prem{margin:26px 14px 0;padding:20px 16px;}
+  .%(P)s-premttl{font-size:19px;line-height:26px;}
+  .%(P)s-help{margin:26px 14px 0;}
   .%(P)s-mid{padding:22px 14px 4px;}
 }
 """ % {"P": P}
 
-def fork_html():
-    cells = []
-    for i, (t, b) in enumerate(FORK):
-        cells.append('<td class="{P}-forkcell" valign="top"><div class="{P}-card">'
-                     '<p class="{P}-cardttl">%s</p><p class="{P}-cardtx">%s</p>'
-                     '</div></td>' % (t, b))
-    return ('<table class="{P}-fork" role="presentation" cellpadding="0" cellspacing="0">'
-            '<tr>%s</tr></table>' % "".join(cells))
+def routes_html(a):
+    cells = "".join(
+        '<td class="%s-rtcell" valign="top"><div class="%s-card">'
+        '<img class="%s-rticon" src="%s" alt="" width="48" height="48">'
+        '<p class="%s-rtttl">%s</p><p class="%s-rttx">%s</p></div></td>'
+        % (P, P, P, a[ic], P, t, P, b) for ic, t, b in ROUTES)
+    return ('<table class="%s-rt" role="presentation" cellpadding="0" cellspacing="0">'
+            '<tr>%s</tr></table>' % (P, cells))
 
-def spec_html():
-    rows = ""
-    for r in (0, 2):
-        cells = ""
-        for c in (0, 1):
-            v, lab = CHECKS[r + c]
-            cls = "{P}-speccell"
-            if c == 1: cls += " {P}-speccell-r"
-            if r == 2: cls += " {P}-speccell-b"
-            cells += ('<td class="%s" valign="top">'
-                      '<span class="{P}-specval">%s</span>'
-                      '<span class="{P}-speclab">%s</span></td>' % (cls, v, lab))
-        rows += "<tr>%s</tr>" % cells
-    return ('<div class="{P}-spec"><table class="{P}-spectbl" role="presentation" '
-            'cellpadding="0" cellspacing="0">%s</table></div>' % rows)
+def _ticklist(a, items):
+    return "".join(
+        '<tr><td class="%s-cktick" valign="top">'
+        '<img src="%s" alt="" width="22" height="22"></td>'
+        '<td class="%s-cktx" valign="top">%s</td></tr>' % (P, a["IMG_TICK"], P, c)
+        for c in items)
+
+def checks_html(a):
+    return ('<div class="%s-checks"><table class="%s-ck" role="presentation" '
+            'cellpadding="0" cellspacing="0">%s</table></div>'
+            % (P, P, _ticklist(a, CHECKS)))
+
+def premium_html(a):
+    return ('<table class="%s-ck" role="presentation" cellpadding="0" cellspacing="0">'
+            '%s</table>' % (P, _ticklist(a, PREMIUM)))
 
 BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">Order now and send the file later. We check every file at no extra cost.</div>
+<div class="{P}-pre">Order now and send your file later. Nothing goes on press until it has been checked.</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -208,17 +221,17 @@ BODY = """
       <a href="{PROD_URL}"><img src="{IMG_WORDMARK}" alt="Helloprint" width="150"></a>
     </div>
 
-    <!-- The permission the product page buries inside its upload component:
-         "Continue to checkout, upload later". Most people never find it, so it
-         leads here. -->
+    <img class="{P}-heroimg" src="{IMG_HERO}" alt="Helloprint colleagues checking customer print files on screen" width="600">
+
+    <!-- The permission the product page buries inside its upload component.
+         Most people never find it, so it leads here. -->
     <div class="{P}-hero">
       <span class="{P}-eyebrow">ARTWORK</span>
       <h1 class="{P}-h1">You do not need the finished artwork yet</h1>
-      <p class="{P}-sub">Place the order when you are ready and send your file afterwards. Nothing goes on press until it is right.</p>
+      <p class="{P}-sub">Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.</p>
       <a class="{P}-cta" href="{PROD_URL}">Back to your product</a>
     </div>
 
-    <!-- which job this is about, kept small: artwork is the subject -->
     <a class="{P}-anchor" href="{PROD_URL}">
       <table class="{P}-antbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
         <td class="{P}-anim" valign="middle"><img src="{PROD_IMG}" alt="" width="52"></td>
@@ -230,25 +243,29 @@ BODY = """
       </tr></table>
     </a>
 
-    <!-- the two readers the site names itself -->
+    <!-- the product page's own three options, same words and order -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">Two ways in</h2>
-      <p class="{P}-sectsub">Whichever one you are, the order can start today.</p>
-      {FORK}
+      <h2 class="{P}-secttl">Three ways to get us your design</h2>
+      <p class="{P}-sectsub">Pick whichever suits. All three end up in the same place.</p>
+      {ROUTES}
+      <p class="{P}-tplline">Every product has templates to download, already the right size. <a href="{PROD_URL}">Get the ones for {PROD_TITLE} &rarr;</a></p>
     </div>
 
-    <!-- the free check, as data. This is the credibility block. -->
+    <!-- plain language on purpose: no bleed, no dpi, no CMYK -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">What we check, at no extra cost</h2>
-      <p class="{P}-sectsub">On every file, before it goes on press.</p>
-      {SPEC}
-      <p class="{P}-formats">Send it as PDF, AI, EPS, JPEG or PNG.</p>
+      <h2 class="{P}-secttl">We look at every file before it prints</h2>
+      <p class="{P}-sectsub">So the thing that arrives is the thing you pictured.</p>
+      {CHECKS}
     </div>
 
-    <div class="{P}-tpl">
-      <p class="{P}-tplttl">Start from the right canvas</p>
-      <p class="{P}-tpltx">Every product has templates and guidelines to download, already the correct size and bleed, so nothing has to be redrawn later.</p>
-      <a class="{P}-link" href="{PROD_URL}">Get the templates for {PROD_TITLE} &rarr;</a>
+    <!-- the assurance centrepiece. The free check is automated; a person is
+         the paid Premium tier, and the copy must keep that distinction. -->
+    <div class="{P}-prem">
+      <span class="{P}-premlbl">PREMIUM DESIGN CHECK</span>
+      <h2 class="{P}-premttl">Want a person to check it as well?</h2>
+      <p class="{P}-premtx">Every file gets an automatic check at no cost. For a little extra at checkout, one of our print experts goes through it by hand as well.</p>
+      {PREMIUM}
+      <p class="{P}-premnote">Eight out of ten customers add it. Reprinting a job costs many times more than the check does.</p>
     </div>
 
     <div class="{P}-help">
@@ -290,8 +307,10 @@ BODY = """
 """
 
 def build(bindings, assets):
-    vals = {"P": P, "CSS": CSS, "FORK": fork_html().replace("{P}", P),
-            "SPEC": spec_html().replace("{P}", P)}
+    # fragments are fully resolved before insertion, so BODY.format runs once
+    # and never meets a stray CSS brace
+    vals = {"P": P, "CSS": CSS, "ROUTES": routes_html(assets),
+            "CHECKS": checks_html(assets), "PREMIUM": premium_html(assets)}
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
 
@@ -301,8 +320,8 @@ PREVIEW_DOC = """<!DOCTYPE html>
 <title>Browse abandonment 02 proposed</title></head>
 <body style="margin:0;padding:0;background:#f8f8f8;">
 <!-- HP - Browse abandonment - 02 - The artwork email
-     Preview build: sample data for IE-flyera5, brand assets inlined.
-     Generated by scripts/build_browse_02.py - do not hand-edit. -->
+     Preview build, sample data for IE-flyera5. Generated by
+     scripts/build_browse_02.py - do not hand-edit. -->
 %s
 </body></html>
 """
@@ -313,18 +332,20 @@ KLAVIYO_DOC = """<!--
 
   Trigger    Viewed Product (WX8EsF), 24 hours after the view
   Subject    You do not need the finished artwork yet
-  Preheader  We check every file for free before it prints. Or our designers can make it for you.
-             The subject carries no product name on purpose, so this email does
-             not depend on {%% catalog %%} resolving in a Klaviyo subject line.
+  Preheader  Order now and send your file later. Nothing goes on press until it has been checked.
+             No product name in the subject on purpose, so this email does not
+             depend on {%% catalog %%} resolving in a Klaviyo subject line.
 
   BEFORE SENDING:
     1. every https://REPLACE-WITH-KLAVIYO-ASSET/... becomes the uploaded URL
-    2. the /en-ie/ links (design-check page, footer logo) become per-market
-    3. no phone number is used here on purpose: it differs per market
+    2. the /en-ie/ links become per-market
+    3. no phone number is used: it differs per market
 
-  OPEN POINT: the design service's price and turnaround are not published, so
-  the copy says only that the service exists and creates artwork. It must not
-  be made to sound free - a build check enforces that.
+  TWO THINGS THE COPY MUST KEEP RIGHT, both enforced by build checks:
+    - the FREE check is automated only. The cart says plainly "your file is not
+      reviewed by a print expert". A person is the paid Premium tier.
+    - no prices. Premium is EUR 4.99 in Ireland but Design Check is not a
+      catalog item, so there is no GB figure to bind.
 -->
 %s
 """
@@ -345,29 +366,42 @@ if live_body.count("{% catalog ") != 1 or live_body.count("{% endcatalog %}") !=
     errs.append("must open and close {% catalog %} exactly once")
 if "unsubscribe" not in live_body: errs.append("no unsubscribe tag")
 if "image_full_url" in live_body: errs.append("image_full_url renders empty")
-for bad in ("intcomma", "{% with "): 
+for bad in ("intcomma", "{% with "):
     if bad in live_body: errs.append("unsupported tag/filter: " + bad)
-# every catalog_item reference must sit inside the catalog block
 ci, co = live_body.index("{% catalog "), live_body.index("{% endcatalog %}")
 for m in re.finditer(r"catalog_item\.", live_body):
     if not (ci < m.start() < co): errs.append("binding outside the catalog block")
-# this email shows no price at all: it is about artwork, and staying away from
-# price keeps it clear of the excl-VAT basis problem
-for sym in ("&euro;", "&pound;", "from_price", "From &"):
+# no prices anywhere: no GB figure exists for the Design Check
+for sym in ("&euro;", "&pound;", "from_price", "4.99", "17.00"):
     if sym in live_body: errs.append("email 2 must not show a price: found " + sym)
-# the design service is not known to be free, so it must not read as free
-svc = FORK[1][1].lower()
-if "free" in svc or "no extra cost" in svc:
-    errs.append("design-service copy implies it is free, which is unverified")
-if "create the artwork" not in FORK[1][1]:
-    errs.append("design service should state that it creates artwork, per the site")
-if "no extra cost" not in FORK[0][1]:
-    errs.append("the file check is free and should say so")
-if len(CHECKS) != 4: errs.append("expected 4 check specs")
-# keep the two path cards within a line of each other so they sit level
-_fl = [len(b) for _, b in FORK]
-if max(_fl) - min(_fl) > 12:
-    errs.append("fork cards are uneven: lengths %s" % _fl)
+# the free check is automated. Never imply a human reviews every file for free.
+low = live_body.lower()
+for phrase in ("expert checks every file", "a person checks every file",
+               "expert reviews every file", "free expert", "expert check at no cost",
+               "expert review at no cost"):
+    if phrase in low: errs.append("implies free human review: " + phrase)
+if "automatic check at no cost" not in live_body:
+    errs.append("the free tier must be described as automatic")
+if "by hand" not in live_body:
+    errs.append("the Premium tier must be described as done by hand")
+# jargon ban: house style is no technical terms. Scan VISIBLE copy only -
+# developer comments are allowed to name the jargon they are avoiding.
+visible = re.sub(r"<!--.*?-->", "", live_body, flags=re.S)
+visible = re.sub(r"<style[^>]*>.*?</style>", "", visible, flags=re.S).lower()
+for j in ("bleed", "dpi", "cmyk", "safe area", "pre-flight", "resolution"):
+    if j in visible: errs.append("jargon found, house style forbids it: " + j)
+# equal-length route and check copy so the cards sit level
+rl = [len(b) for _, _, b in ROUTES]
+if max(rl) - min(rl) > 8: errs.append("route cards uneven: %s" % rl)
+cl = [len(c) for c in CHECKS]
+if max(cl) - min(cl) > 8: errs.append("check lines uneven: %s" % cl)
+if len(ROUTES) != 3: errs.append("expected 3 routes")
+if live_body.count('class="%s-rtcell"' % P) != 3: errs.append("route cells missing")
+# the cards must be levelled structurally, not by counting characters, because
+# translation changes the wrapping
+if "min-height:182px" not in live_body:
+    errs.append("route cards need a min-height to stay level across languages")
+if live_body.count('{IMG_TICK}') or live_body.count('{IC_'): errs.append("unresolved asset placeholder")
 
 print("preview: %6d bytes  ->  proposals/browse-02-proposed.html" % len(prev))
 print("klaviyo: %6d bytes  ->  proposals/browse-02-klaviyo.html" % len(live))
