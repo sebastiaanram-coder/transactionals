@@ -113,21 +113,46 @@ FLOWS = [
    reentry="14 days",
    incentive="Split by cart value. High value: no code until email 3, then 10% for 72 hours, with the print expert still the headline. Low value: 10% in email 2, then 25% capped at 25 off for the final 24 hours.",
    cadence="Proposed: 1 hour, 24 hours, 72 hours. Three emails on each branch, down from five in four days across two flows.",
-   mail_line="0 of 3 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
+   mail_line="1 of 5 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
    flow_note="This is the merged flow, and it splits by cart value at entry: at 150, in either currency, about a quarter of carts go to a high-value branch that leads with a print expert and discounts lightly, and the rest to a low-value branch that leads with the incentive and closes at 25% capped. The cap exists because a flat 25% would leave a 149 cart better off than a 151 one. RFB ran four separate abandonment journeys — Site, Browse, Cart and Checkout — whose copy was largely interchangeable; Cart and Checkout were near-identical apart from the trigger. The rebuild runs two: Browse Abandonment for a product view, and this one for anything that reached a basket. Site Abandonment is dropped entirely, because a visit with no product view carries too little intent to say anything useful about. The five RFB emails below are the current state and have not been rebuilt yet.",
    emails=[
-    dict(step=1, when="30 minutes after add-to-cart", subject="Your order is still here", preview="Your design and delivery date are saved, ready when you are.",
+    dict(step=1, when="1 hour after checkout was started", subject="Your basket is still here",
+      preview="Everything you configured is saved. Pick up where you left off.",
+      goal="", who="", tpl="TduDdY", flags=[], badge=None,
+      section="Rebuilt flow \u2014 proposed",
+      section_sub="Three emails on each of two value branches, replacing five across two flows. This first one is shared by both branches and carries no offer.",
+      final="order-01-proposed.html"),
+    dict(step=2, when="24 hours \u00b7 high value", subject="Finish it with a print expert",
+      preview="Someone can check the spec and confirm the date before you pay.",
+      goal="High-value branch. A quarter of carts carry over half the value, and on those the blocker is usually confidence or sign-off rather than price, so this leads with a person and no code at all.",
+      who="Carts at or above 150, one day on.", tpl="", flags=[], badge="Specified, not yet designed"),
+    dict(step=3, when="24 hours \u00b7 low value", subject="10% off, for the next 72 hours",
+      preview="Change the quantity, watch the price move, order in three clicks.",
+      goal="Low-value branch. Self-service and price-sensitive, so the incentive leads: 10% with a 72 hour expiry.",
+      who="Carts below 150, one day on.", tpl="", flags=[], badge="Specified, not yet designed"),
+    dict(step=4, when="72 hours \u00b7 high value", subject="Still here, and now with 10% off",
+      preview="The expert offer stands. The code runs for 72 hours.",
+      goal="High-value close. The expert stays the headline and the code sits underneath it.",
+      who="Carts at or above 150, three days on.", tpl="", flags=[], badge="Specified, not yet designed"),
+    dict(step=5, when="72 hours \u00b7 low value", subject="25% off, 24 hours only",
+      preview="Last call on the basket you saved.",
+      goal="Low-value close. 25% capped at 25 off, expiring in 24 hours. The cap exists because a flat 25% would leave a 149 cart paying less than a 151 one.",
+      who="Carts below 150, three days on.", tpl="", flags=[], badge="Specified, not yet designed"),
+    dict(step=1, when="30 minutes after add-to-cart",
+      section="Current RFB flow \u2014 for reference",
+      section_sub="The five originals from the Abandoned Cart flow, all draft. The Abandoned Checkout flow ran nearly the same five again.",
+      ref=True, subject="Your order is still here", preview="Your design and delivery date are saved, ready when you are.",
       goal="Recover the cart while it is warm: everything is saved (design, delivery date), one click to continue.",
       who="Shoppers with an abandoned cart who did not start checkout.", tpl="TduDdY", flags=[], badge=None),
     dict(step=2, when="Day 1", subject="Thousands of businesses have been here too", preview="See why they finished their order.",
       goal="Normalise the hesitation and add peer proof from businesses that completed the same order.",
-      who="Same audience, one day later, still no checkout or order.", tpl="UnTu7Q", flags=[], badge=None),
+      who="Same audience, one day later, still no checkout or order.", tpl="UnTu7Q", ref=True, flags=[], badge=None),
     dict(step=3, when="Day 2", subject="A quick word about your order", preview="In case something gave you pause.",
       goal="Objection handling: address whatever caused the pause (price, files, uncertainty) in a personal tone.",
-      who="Same audience, two days in.", tpl="SvQkfX", flags=[], badge=None),
+      who="Same audience, two days in.", tpl="SvQkfX", ref=True, flags=[], badge=None),
     dict(step=4, when="Day 3", subject="10% off the order you saved", preview="A genuine extra to help you finish.",
       goal="First incentive of the sequence: 10% off the saved order to tip the decision.",
-      who="Same audience, three days in, still not converted.", tpl="VtF4Ei", flags=[], badge=None),
+      who="Same audience, three days in, still not converted.", tpl="VtF4Ei", ref=True, flags=[], badge=None),
     dict(step=5, when="Day 4", subject="Your 10% ends in 24 hours", preview="After that, your saved order stays, the code does not.",
       goal="Urgency close: the code expires in 24 hours, the saved order does not. Last email of the sequence.",
       who="Same audience, final email.", tpl="YrvM4D", flags=[], badge=None),
@@ -255,6 +280,15 @@ EMAIL_DETAIL = {
      ("Product grid with real prices.", "Removes the navigation step at peak intent, and each click is a category signal Browse Abandonment can use later."),
      ("Artwork reassurance.", "The number one blocker on a first print order, answered before it is asked."),
    ]),
+ "TduDdY": dict(
+   goal="Put the real basket back in front of them while it is still warm, with nothing to reconstruct.",
+   why="An hour after checkout was started, the configuration is done and the only thing missing is the last click. Shared by both value branches, so it carries no offer: there is nothing to discount yet, and spending the incentive here would waste it on people who were coming back anyway.",
+   variant="This is the shared email, so there is no variant. The value split changes what arrives at 24 and 72 hours, not this.",
+   elements=[
+     ("The actual basket, line by line.", "Product titles come from the catalog and service lines from the event, because Started Checkout carries the whole basket rather than one item. Each product links back to its own configured URL."),
+     ("A total taken from the event, not added up.", "$value disagrees with the sum of the rows on 6% of events, so the rows are shown and the total is printed as sent."),
+     ("Three reassurances and no offer.", "The configuration is saved, files get checked, nothing is charged until they confirm. That is what an hour-old basket needs."),
+   ]),
  "TtjyZ4": dict(
    goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",
    why="Price alone did not work on day 0, and pushing product again would just repeat yesterday. Day 1 is the cheapest moment to shape what the brand means.",
@@ -337,7 +371,7 @@ ISSUES = [
 TRACKER = [
  ("Welcome (RXBWV9)", "4", "4 of 4", "EN live, IT to redo", "Rebuilt end to end. Assets need uploading to Klaviyo before build."),
  ("Browse Abandonment", "5 → 3", "3 of 3", "–", "Complete and render-verified. Feed needs a resized image variant."),
- ("Abandoned Order (merged)", "5", "0", "–", "Absorbs the old Checkout flow; one set of blocks"),
+ ("Abandoned Order (merged)", "5 → 3 x 2", "1 of 5", "–", "Shared email 1 built. Absorbs the old Checkout flow."),
  ("Abandoned Checkout", "—", "—", "—", "Superseded, merged into Abandoned Order"),
  ("Site Abandonment", "—", "—", "—", "Dropped: a visit with no product view carries too little intent"),
  ("Post-Purchase", "5", "0", "–", "Resolve transactional overlap first"),
@@ -578,11 +612,11 @@ home = f'''<section class="page" id="page-home">
   <div class="hero">
     <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.6 · 25 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: seven new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: eight new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
     <div class="tile"><div class="tile-n">7</div><div class="tile-l">Journeys, down from 9</div></div>
-    <div class="tile"><div class="tile-n">7 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">8 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>
