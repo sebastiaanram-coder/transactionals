@@ -56,7 +56,7 @@ SAMPLE = {
     "CATALOG_OPEN": "", "CATALOG_CLOSE": "",
     "CHECKOUT_URL": "https://www.helloprint.com/en-gb/basket",
     "CUR": "&pound;", "TOTAL": "116.04",
-    "COUNT": "3 items",
+    "NUM": "3",
     "UNSUB": '<a href="#">Unsubscribe</a>',
 }
 LIVE = {
@@ -65,8 +65,7 @@ LIVE = {
     # only IE and GB are in scope, so the first line's prefix decides the symbol
     "CUR": '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}',
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
-    "COUNT": ('{{ event.Items|length }} item'
-              '{% if event.Items|length != 1 %}s{% endif %}'),
+    "NUM": "{{ event.Items|length }}",
     "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
 }
 
@@ -110,25 +109,33 @@ CSS = """
 .%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#f7f1e9;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
-/* a label on the card stops the list reading as a receipt */
-.%(P)s-bhead{background:#f1f8f4;border-bottom:1px solid #e5e5e5;padding:10px 16px;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.11em;color:#008539;}
-.%(P)s-basket{margin:24px 24px 0;border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;}
+/* Option A: hairlines rather than boxes. The outer card border and the grey
+   fill behind the total are both gone - they were what made this read as a
+   receipt. Every row carries a top border, including the first, so the rule
+   under the heading comes for free and no :first-child is needed, which
+   Outlook does not support anyway. */
+.%(P)s-bwrap{margin:26px 24px 0;}
+.%(P)s-bhd{width:100%%;border-collapse:collapse;margin:0 0 2px;}
+.%(P)s-bhdl{font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;vertical-align:middle;white-space:nowrap;}
+.%(P)s-bhdb{width:35px;vertical-align:middle;padding-left:9px;}
+.%(P)s-bhdr{text-align:right;vertical-align:middle;font-size:13px;line-height:19px;color:#8a9197;}
+/* notification-style count. bgcolor on a table cell survives Outlook, where
+   border-radius is dropped and it degrades to a square green chip. */
+.%(P)s-badge{border-radius:9999px;color:#ffffff;font-family:'Inter',Arial,sans-serif;font-size:13px;line-height:26px;font-weight:800;text-align:center;}
 .%(P)s-btbl{width:100%%;border-collapse:collapse;}
-.%(P)s-brow td{border-top:1px solid #e5e5e5;padding:14px 16px;vertical-align:middle;}
-.%(P)s-brow:first-child td{border-top:0;}
-.%(P)s-lim{width:78px;}
-.%(P)s-lim img{width:62px;height:auto;display:block;border:0;background:#f8f8f8;border-radius:8px;}
-.%(P)s-limsvc{width:78px;text-align:center;}
-.%(P)s-limsvc img{width:22px;height:22px;display:inline-block;border:0;}
+.%(P)s-brow td{padding:16px 0;border-top:1px solid #ececec;vertical-align:middle;}
+.%(P)s-lim{width:96px;}
+.%(P)s-lim img{width:80px;height:auto;display:block;border:0;background:#f4f6f7;border-radius:10px;}
+.%(P)s-limsvc{width:96px;text-align:center;}
+.%(P)s-limsvc img{width:24px;height:24px;display:inline-block;border:0;}
 .%(P)s-litx a{text-decoration:none;}
-.%(P)s-liname{display:block;font-size:16px;line-height:22px;font-weight:800;color:#191919;}
+.%(P)s-liname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
 .%(P)s-liqty{display:block;font-size:13px;line-height:19px;color:#767676;margin-top:2px;}
-.%(P)s-lip{width:92px;text-align:right;font-size:16px;line-height:22px;font-weight:800;color:#191919;white-space:nowrap;}
-.%(P)s-trow td{border-top:2px solid #e5e5e5;padding:15px 16px;background:#f8f8f8;}
+.%(P)s-lip{width:104px;text-align:right;font-size:17px;line-height:23px;font-weight:800;color:#191919;white-space:nowrap;}
+.%(P)s-trow td{border-top:2px solid #191919;padding:16px 0 0;}
 .%(P)s-tlbl{font-size:15px;line-height:21px;font-weight:800;color:#191919;}
-.%(P)s-tval{text-align:right;font-size:20px;line-height:26px;font-weight:800;color:#008539;white-space:nowrap;}
-.%(P)s-tnote{margin:9px 24px 0;font-size:12px;line-height:18px;color:#767676;text-align:center;}
-
+.%(P)s-tval{text-align:right;font-size:26px;line-height:32px;font-weight:800;color:#008539;letter-spacing:-.015em;white-space:nowrap;}
+.%(P)s-tnote{margin:10px 24px 0;font-size:12px;line-height:18px;color:#767676;text-align:right;}
 .%(P)s-mid{padding:24px 24px 0;text-align:center;}
 .%(P)s-rs{margin:26px 24px 0;padding:22px 0 0;border-top:1px solid #e5e5e5;}
 .%(P)s-rstbl{margin:0 auto;border-collapse:collapse;}
@@ -179,13 +186,15 @@ CSS = """
   .%(P)s-h1{font-size:26px;line-height:33px;}
   .%(P)s-sub{font-size:16px;line-height:24px;max-width:none;}
   .%(P)s-cta,.%(P)s-cta-g{padding:15px 26px;}
-  .%(P)s-basket{margin:18px 14px 0;}
-  .%(P)s-brow td{padding:12px 12px;}
-  .%(P)s-lim,.%(P)s-limsvc{width:60px;}
-  .%(P)s-lim img{width:48px;}
+  .%(P)s-bwrap{margin:20px 14px 0;}
+  .%(P)s-bhdl{font-size:17px;line-height:24px;}
+  .%(P)s-brow td{padding:13px 0;}
+  .%(P)s-lim,.%(P)s-limsvc{width:74px;}
+  .%(P)s-lim img{width:62px;}
   .%(P)s-liname{font-size:15px;line-height:21px;}
-  .%(P)s-lip{width:76px;font-size:15px;}
-  .%(P)s-tval{font-size:18px;line-height:24px;}
+  .%(P)s-liqty{font-size:12px;line-height:18px;}
+  .%(P)s-lip{width:84px;font-size:15px;line-height:21px;}
+  .%(P)s-tval{font-size:22px;line-height:28px;}
   .%(P)s-tnote{margin:9px 14px 0;}
   .%(P)s-mid{padding:22px 14px 0;}
   .%(P)s-rs,.%(P)s-rev,.%(P)s-help,.%(P)s-exp{margin-left:14px;margin-right:14px;}
@@ -279,7 +288,7 @@ BODY = """
     <div class="{P}-hero">
       <div class="{P}-heroov">
         <span class="{P}-eyebrow">YOUR BASKET</span>
-        <h1 class="{P}-h1">Your basket is still here</h1>
+        <h1 class="{P}-h1">Left something behind?</h1>
         <p class="{P}-sub">Nothing has been lost. Every option you picked is saved exactly as you left it.</p>
         <a class="{P}-cta" href="{CHECKOUT_URL}">Return to checkout</a>
       </div>
@@ -289,12 +298,24 @@ BODY = """
     <!-- the real basket: one row per line, product titles from the catalog,
          service lines from the event, each product linking back to its own
          configured URL -->
-    <div class="{P}-basket">
-      <div class="{P}-bhead">SAVED FOR YOU &middot; {COUNT}</div>
+    <div class="{P}-bwrap">
+      <table class="{P}-bhd" role="presentation" cellpadding="0" cellspacing="0"><tr>
+        <td valign="middle">
+          <table role="presentation" cellpadding="0" cellspacing="0" align="left"><tr>
+            <td class="{P}-bhdl">Your basket</td>
+            <td class="{P}-bhdb">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="26"><tr>
+                <td width="26" height="26" bgcolor="#008539" align="center" valign="middle" class="{P}-badge">{NUM}</td>
+              </tr></table>
+            </td>
+          </tr></table>
+        </td>
+        <td class="{P}-bhdr" valign="middle">Saved for you</td>
+      </tr></table>
       <table class="{P}-btbl" role="presentation" cellpadding="0" cellspacing="0">
         {LINES}
         <tr class="{P}-trow">
-          <td class="{P}-tlbl" colspan="2">Basket total</td>
+          <td class="{P}-tlbl" colspan="2">Total</td>
           <td class="{P}-tval">{CUR}{TOTAL}</td>
         </tr>
       </table>
@@ -369,7 +390,7 @@ KLAVIYO_DOC = """<!--
 
   Trigger   Started Checkout (T3uGk6), 1 hour after
   Branch    %s VALUE. No discount code on either branch.
-  Subject   Your basket is still here
+  Subject   Left something behind?
   Filters   production host only (excludes Connect, 21%%, and staging, 4%%),
             ProductID prefix IE- or GB-, no order since entering
 
@@ -424,10 +445,17 @@ def check(live_body, prev_body, high, tag):
     for word in ("10%", "15%", "25%", "discount", "voucher", "off your"):
         if word in low: errs.append(tag+": email 1 carries no offer on either branch: "+word)
     if live_body.count("{% for it in event.Items %}") != 1: errs.append(tag+": expected one line loop")
-    for need in ("margin-top:-190px", "z-index:2", "%s-bhead" % P, "%s-revq" % P):
+    for need in ("margin-top:-190px", "z-index:2", "%s-badge" % P, "%s-revq" % P):
         if need not in live_body: errs.append(tag+": missing "+need)
-    if "item{% if event.Items|length != 1 %}s{% endif %}" not in live_body:
-        errs.append(tag+": item count must be pluralised")
+    if "{{ event.Items|length }}" not in live_body:
+        errs.append(tag+": the badge must carry the live item count")
+    if 'bgcolor="#008539"' not in live_body:
+        errs.append(tag+": the count badge needs bgcolor, not just border-radius")
+    # option A removed both of these on purpose
+    if "%s-basket{" % P in live_body or "%s-bhead" % P in live_body:
+        errs.append(tag+": the outer basket box should be gone")
+    if "background:#f8f8f8" in live_body.split("%s-trow" % P)[-1][:200]:
+        errs.append(tag+": the total should have no fill")
     # banner and headline share a warm palette; pure white would read as a
     # separate piece of design sitting on top of the photograph
     if "color:#f4ece2" not in live_body:

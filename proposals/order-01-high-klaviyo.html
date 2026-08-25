@@ -5,7 +5,7 @@
 
   Trigger   Started Checkout (T3uGk6), 1 hour after
   Branch    HIGH VALUE. No discount code on either branch.
-  Subject   Your basket is still here
+  Subject   Left something behind?
   Filters   production host only (excludes Connect, 21%, and staging, 4%),
             ProductID prefix IE- or GB-, no order since entering
 
@@ -47,25 +47,33 @@
 .hp-ao1-cta{position:relative;z-index:2;display:inline-block;background:#f7f1e9;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .hp-ao1-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
-/* a label on the card stops the list reading as a receipt */
-.hp-ao1-bhead{background:#f1f8f4;border-bottom:1px solid #e5e5e5;padding:10px 16px;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.11em;color:#008539;}
-.hp-ao1-basket{margin:24px 24px 0;border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;}
+/* Option A: hairlines rather than boxes. The outer card border and the grey
+   fill behind the total are both gone - they were what made this read as a
+   receipt. Every row carries a top border, including the first, so the rule
+   under the heading comes for free and no :first-child is needed, which
+   Outlook does not support anyway. */
+.hp-ao1-bwrap{margin:26px 24px 0;}
+.hp-ao1-bhd{width:100%;border-collapse:collapse;margin:0 0 2px;}
+.hp-ao1-bhdl{font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;vertical-align:middle;white-space:nowrap;}
+.hp-ao1-bhdb{width:35px;vertical-align:middle;padding-left:9px;}
+.hp-ao1-bhdr{text-align:right;vertical-align:middle;font-size:13px;line-height:19px;color:#8a9197;}
+/* notification-style count. bgcolor on a table cell survives Outlook, where
+   border-radius is dropped and it degrades to a square green chip. */
+.hp-ao1-badge{border-radius:9999px;color:#ffffff;font-family:'Inter',Arial,sans-serif;font-size:13px;line-height:26px;font-weight:800;text-align:center;}
 .hp-ao1-btbl{width:100%;border-collapse:collapse;}
-.hp-ao1-brow td{border-top:1px solid #e5e5e5;padding:14px 16px;vertical-align:middle;}
-.hp-ao1-brow:first-child td{border-top:0;}
-.hp-ao1-lim{width:78px;}
-.hp-ao1-lim img{width:62px;height:auto;display:block;border:0;background:#f8f8f8;border-radius:8px;}
-.hp-ao1-limsvc{width:78px;text-align:center;}
-.hp-ao1-limsvc img{width:22px;height:22px;display:inline-block;border:0;}
+.hp-ao1-brow td{padding:16px 0;border-top:1px solid #ececec;vertical-align:middle;}
+.hp-ao1-lim{width:96px;}
+.hp-ao1-lim img{width:80px;height:auto;display:block;border:0;background:#f4f6f7;border-radius:10px;}
+.hp-ao1-limsvc{width:96px;text-align:center;}
+.hp-ao1-limsvc img{width:24px;height:24px;display:inline-block;border:0;}
 .hp-ao1-litx a{text-decoration:none;}
-.hp-ao1-liname{display:block;font-size:16px;line-height:22px;font-weight:800;color:#191919;}
+.hp-ao1-liname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
 .hp-ao1-liqty{display:block;font-size:13px;line-height:19px;color:#767676;margin-top:2px;}
-.hp-ao1-lip{width:92px;text-align:right;font-size:16px;line-height:22px;font-weight:800;color:#191919;white-space:nowrap;}
-.hp-ao1-trow td{border-top:2px solid #e5e5e5;padding:15px 16px;background:#f8f8f8;}
+.hp-ao1-lip{width:104px;text-align:right;font-size:17px;line-height:23px;font-weight:800;color:#191919;white-space:nowrap;}
+.hp-ao1-trow td{border-top:2px solid #191919;padding:16px 0 0;}
 .hp-ao1-tlbl{font-size:15px;line-height:21px;font-weight:800;color:#191919;}
-.hp-ao1-tval{text-align:right;font-size:20px;line-height:26px;font-weight:800;color:#008539;white-space:nowrap;}
-.hp-ao1-tnote{margin:9px 24px 0;font-size:12px;line-height:18px;color:#767676;text-align:center;}
-
+.hp-ao1-tval{text-align:right;font-size:26px;line-height:32px;font-weight:800;color:#008539;letter-spacing:-.015em;white-space:nowrap;}
+.hp-ao1-tnote{margin:10px 24px 0;font-size:12px;line-height:18px;color:#767676;text-align:right;}
 .hp-ao1-mid{padding:24px 24px 0;text-align:center;}
 .hp-ao1-rs{margin:26px 24px 0;padding:22px 0 0;border-top:1px solid #e5e5e5;}
 .hp-ao1-rstbl{margin:0 auto;border-collapse:collapse;}
@@ -116,13 +124,15 @@
   .hp-ao1-h1{font-size:26px;line-height:33px;}
   .hp-ao1-sub{font-size:16px;line-height:24px;max-width:none;}
   .hp-ao1-cta,.hp-ao1-cta-g{padding:15px 26px;}
-  .hp-ao1-basket{margin:18px 14px 0;}
-  .hp-ao1-brow td{padding:12px 12px;}
-  .hp-ao1-lim,.hp-ao1-limsvc{width:60px;}
-  .hp-ao1-lim img{width:48px;}
+  .hp-ao1-bwrap{margin:20px 14px 0;}
+  .hp-ao1-bhdl{font-size:17px;line-height:24px;}
+  .hp-ao1-brow td{padding:13px 0;}
+  .hp-ao1-lim,.hp-ao1-limsvc{width:74px;}
+  .hp-ao1-lim img{width:62px;}
   .hp-ao1-liname{font-size:15px;line-height:21px;}
-  .hp-ao1-lip{width:76px;font-size:15px;}
-  .hp-ao1-tval{font-size:18px;line-height:24px;}
+  .hp-ao1-liqty{font-size:12px;line-height:18px;}
+  .hp-ao1-lip{width:84px;font-size:15px;line-height:21px;}
+  .hp-ao1-tval{font-size:22px;line-height:28px;}
   .hp-ao1-tnote{margin:9px 14px 0;}
   .hp-ao1-mid{padding:22px 14px 0;}
   .hp-ao1-rs,.hp-ao1-rev,.hp-ao1-help,.hp-ao1-exp{margin-left:14px;margin-right:14px;}
@@ -147,7 +157,7 @@
     <div class="hp-ao1-hero">
       <div class="hp-ao1-heroov">
         <span class="hp-ao1-eyebrow">YOUR BASKET</span>
-        <h1 class="hp-ao1-h1">Your basket is still here</h1>
+        <h1 class="hp-ao1-h1">Left something behind?</h1>
         <p class="hp-ao1-sub">Nothing has been lost. Every option you picked is saved exactly as you left it.</p>
         <a class="hp-ao1-cta" href="{{ event.CheckoutURL }}">Return to checkout</a>
       </div>
@@ -157,12 +167,24 @@
     <!-- the real basket: one row per line, product titles from the catalog,
          service lines from the event, each product linking back to its own
          configured URL -->
-    <div class="hp-ao1-basket">
-      <div class="hp-ao1-bhead">SAVED FOR YOU &middot; {{ event.Items|length }} item{% if event.Items|length != 1 %}s{% endif %}</div>
+    <div class="hp-ao1-bwrap">
+      <table class="hp-ao1-bhd" role="presentation" cellpadding="0" cellspacing="0"><tr>
+        <td valign="middle">
+          <table role="presentation" cellpadding="0" cellspacing="0" align="left"><tr>
+            <td class="hp-ao1-bhdl">Your basket</td>
+            <td class="hp-ao1-bhdb">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="26"><tr>
+                <td width="26" height="26" bgcolor="#008539" align="center" valign="middle" class="hp-ao1-badge">{{ event.Items|length }}</td>
+              </tr></table>
+            </td>
+          </tr></table>
+        </td>
+        <td class="hp-ao1-bhdr" valign="middle">Saved for you</td>
+      </tr></table>
       <table class="hp-ao1-btbl" role="presentation" cellpadding="0" cellspacing="0">
         {% for it in event.Items %}{% if it.ProductID|slice:"2:3" == "-" %}{% catalog it.ProductID %}<tr class="hp-ao1-brow"><td class="hp-ao1-lim"><img src="{{ catalog_item.featured_image.full.src }}" alt="" width="62"></td><td class="hp-ao1-litx"><a href="{{ it.ProductURL }}"><span class="hp-ao1-liname">{{ catalog_item.title }}</span></a><span class="hp-ao1-liqty">Quantity {{ it.Quantity }}</span></td><td class="hp-ao1-lip">{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}{{ it.RowTotal|floatformat:2 }}</td></tr>{% endcatalog %}{% else %}<tr class="hp-ao1-brow"><td class="hp-ao1-limsvc"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-ao1-litx"><span class="hp-ao1-liname">{{ it.ProductName }}</span><span class="hp-ao1-liqty">Added at checkout</span></td><td class="hp-ao1-lip">{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}{{ it.RowTotal|floatformat:2 }}</td></tr>{% endif %}{% endfor %}
         <tr class="hp-ao1-trow">
-          <td class="hp-ao1-tlbl" colspan="2">Basket total</td>
+          <td class="hp-ao1-tlbl" colspan="2">Total</td>
           <td class="hp-ao1-tval">{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}{{ event|lookup:"$value"|floatformat:2 }}</td>
         </tr>
       </table>
