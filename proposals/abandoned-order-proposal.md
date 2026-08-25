@@ -174,28 +174,57 @@ Sending on. **Split at entry** on `$value >= 150`.
 
 | | +1 hour | +24 hours | +72 hours |
 |---|---|---|---|
-| **High value**<br>~24% of carts<br>~56–68% of value | **The basket, restored.**<br>Every line with its configured spec, the real total, and the checkout link. No code. | **Finish it with a print expert.**<br>Someone checks the spec, confirms the delivery date, and can invoice rather than take a card. No code. | **10% code, expires in 72 hours.**<br>Plus the expert offer repeated. |
-| **Low value**<br>~76% of carts | **The basket, restored.**<br>Same email, shared template. | **10% code, expires in 72 hours.**<br>Self-service: change the quantity, see the price move, order in three clicks. | **15%, expires in 24 hours.**<br>Final email, deadline is the message. |
+| **High value**<br>~24% of carts<br>~56–68% of value | **The basket, restored.**<br>Every line with its configured spec, the real total, and the checkout link. No code. | **Finish it with a print expert.**<br>Someone checks the spec, confirms the delivery date, and can invoice rather than take a card. No code. | **10% code, expires in 72 hours.**<br>The expert offer stays the headline; the code sits underneath it. |
+| **Low value**<br>~76% of carts | **The basket, restored.**<br>Same email, shared template. | **10% code, expires in 72 hours.**<br>Self-service: change the quantity, see the price move, order in three clicks. | **25%, capped, expires in 24 hours.**<br>Final email. The deadline is the message. |
 
 Email 1 is one template used by both branches: **five templates, six message nodes**.
 
 **Why the branches differ this way.** A quarter of carts carry well over half the value, so a
-blanket 10% there is where the margin leaks — and on those carts the blocker is usually
+blanket discount there is where the margin leaks — and on those carts the blocker is usually
 confidence or sign-off rather than price. A person answers that more cheaply than a discount
-does. On a low-value cart the buyer is self-serving and price-sensitive, so the incentive does
-the work and can escalate.
+does, which is why the high branch keeps the expert as the headline even in email 3 and lets the
+code sit under it. On a low-value cart the buyer is self-serving and price-sensitive, so the
+incentive does the work and can go hard at the end.
 
-## 9. Things to settle
+## 9. 25% needs a cap, or the boundary inverts
 
-1. **Currency cannot come from the event.** `Currency` is present on only 6% of Started Checkout
-   events. Derive the symbol from the `ProductID` market prefix, or from
-   `catalog_item.metadata.currency` inside the line loop, which is already proven.
-2. **Do not recompute the total.** `$value` disagrees with the sum of `RowTotal` on 6% of events,
-   presumably shipping or a service line. Print `$value` via `{{ event|lookup:"$value" }}`.
-3. **Escalating 10% to 15% teaches people to wait.** Right lever for a small cart, but note it is
-   now reachable within three days of a first visit, and Winback also offers 15%.
-4. **Two coupon codes needed**, 10% and 15%, and the static-versus-per-customer question from the
-   Welcome discussion is still open.
-5. **The 72-hour expiry has to actually expire.** Second flow to use that mechanic.
-6. **Non-catalog and unprefixed line items** still need the §4.1 guard: the Premium Design Check
-   appears as a line item and would otherwise fail the whole render.
+At a flat 25% the split produces an inconsistency a reseller will find:
+
+| Cart | Branch | Discount | Pays |
+|---|---|---|---|
+| £149 | low, 25% | £37.25 | **£111.75** |
+| £151 | high, 10% | £15.10 | **£135.90** |
+
+Spending £2 more costs £24 at the till. The inversion is inherent to splitting a percentage by
+value, and the clean fix is an absolute cap:
+
+| Cart | Branch | With a £25 cap | Pays |
+|---|---|---|---|
+| £60 | low, 25% | £15.00 | £45.00 |
+| £149 | low, 25% capped | £25.00 | £124.00 |
+| £151 | high, 10% | £15.10 | £135.90 |
+
+**Recommend 25% up to a maximum of £25 / €25 off.** It reads as "25% off" to almost everyone —
+the median GB cart is £60, where the cap never binds — and it only engages on carts between £100
+and £150, which is about **13% of the low branch**. Talon.one can express a capped percentage.
+
+## 10. Two things worth deciding with open eyes
+
+1. **25% becomes the deepest discount in the programme.** Welcome offers 10%, Winback 15%. A
+   low-value abandoner can now reach 25% within 72 hours of a first visit, which is a
+   discoverable pattern: add something cheap, abandon, wait three days. Worth capping the number
+   of times a profile can enter this flow, or excluding anyone who already used a code in the
+   last N days.
+2. **Three codes now, not two** — 10% and capped-25% here, plus Welcome's 10% and Winback's 15%.
+   The static-versus-per-customer question from the Welcome discussion is now the difference
+   between four shared codes circulating publicly and codes that cannot be posted to a voucher
+   site.
+
+## 11. Still to settle
+
+1. **Currency cannot come from the event.** Present on only 6% of Started Checkout events.
+   Derive it from the `ProductID` prefix or from `catalog_item.metadata.currency` in the loop.
+2. **Do not recompute the total.** `$value` disagrees with the sum of `RowTotal` on 6% of events.
+3. **The expiries have to be real** — 72 hours on email 2's code, 24 on email 3's.
+4. **Non-catalog line items** still need the §4.1 guard; the Premium Design Check would otherwise
+   fail the whole render.
