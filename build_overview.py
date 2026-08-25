@@ -324,7 +324,7 @@ EMAIL_DETAIL = {
    variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. France sees two tiles: FR-stickers does not exist in the feed.",
    elements=[
      ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "Labels on roll, individual stickers and sticker sheets, from 20 line items."),
+     ("Most ordered, chosen from real orders.", "Labels on roll, individual stickers and custom-shape stickers \u2014 59% of category gross profit. Sticker sheets were dropped at 3.6%."),
      ("Every tile is market-guarded.", "France sees two tiles: FR-stickers does not exist in the feed. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
      ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
    ]),
@@ -335,7 +335,7 @@ EMAIL_DETAIL = {
    variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. Britain sees one tile: neither kraft bag exists in GB.",
    elements=[
      ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "Burger boxes and two kraft bags. Only two packaging products appeared in the order sample, so the third came from the catalogue."),
+     ("Most ordered, chosen from real orders.", "Budget paper bags, kraft bags and greaseproof paper. The smallest category by far \u2014 879 order items and 77k gross profit in the period \u2014 so these are the top of a small pool."),
      ("Every tile is market-guarded.", "Britain sees one tile: neither kraft bag exists in GB. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
      ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
    ]),
@@ -346,7 +346,7 @@ EMAIL_DETAIL = {
    variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. Full coverage in all six markets.",
    elements=[
      ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "A t-shirt, a hoodie and a cap. Only 7 line items in the sample, so these are representatives rather than proven best sellers."),
+     ("Most ordered, chosen from real orders.", "Two t-shirts and a tablecloth, which is genuinely the category\u2019s top three by gross profit. Hoodies and caps did not reach the top eight."),
      ("Every tile is market-guarded.", "Full coverage in all six markets. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
      ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
    ]),
@@ -357,7 +357,7 @@ EMAIL_DETAIL = {
    variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. Spain sees two tiles: ES-notepads does not exist in the feed.",
    elements=[
      ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "A key ring, notepads and a cotton tote. 20 line items with no clear leader, so these are representatives."),
+     ("Most ordered, chosen from real orders.", "A tote, a notebook and pens. The tote alone is 10.1% of category gross profit and the most ordered item in it. Notepads was removed \u2014 it is a Commercial Print product that had been filed here by mistake."),
      ("Every tile is market-guarded.", "Spain sees two tiles: ES-notepads does not exist in the feed. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
      ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
    ]),

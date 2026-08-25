@@ -12,7 +12,7 @@
   and fr-BE into BE, which is the catalogue's market prefix, so one template
   serves every market. Nothing is hardcoded to Ireland except the preview.
 
-  *** MARKETS ARE ALLOW-LISTED: IE, GB, NL, BE, FR. *** A catalogue item that does not
+  *** MARKETS ARE ALLOW-LISTED: IE, GB, NL, BE, FR, ES. *** A catalogue item that does not
   exist returns HTTP 400 and the WHOLE email fails to send - not a blank tile.
   IT is excluded because IT-notepads is already known missing from the feed. Run
   the id checklist below before adding a market.
@@ -28,9 +28,9 @@
   because the category landing URL pattern is unconfirmed.
 
   Catalogue ids this email needs, all of which must exist:
-    panelsfoamex               IE GB NL BE FR
-    flagcustomsize             IE GB NL BE FR
-    rollupbannersv2            IE GB NL BE FR
+    banners                    IE GB NL BE FR
+    featherflags               IE GB NL BE FR ES
+    rollupbannersv2            IE GB NL BE FR ES
 -->
 
 <div class="hp-catso-root">
@@ -121,13 +121,13 @@
       <span class="hp-catso-eyebrow">SIGNAGE & OUTDOOR</span>
       <h1 class="hp-catso-h1">For the next event, or the front of the building?</h1>
       <p class="hp-catso-sub">Signs, flags and banners, built for one afternoon outdoors or several years of it.</p>
-      <a class="hp-catso-cta" href="https://www.helloprint.com/en-ie/foamexsigns">See the range</a>
+      <a class="hp-catso-cta" href="https://www.helloprint.com/en-ie/banners">See the range</a>
     </div>
 
     <div class="hp-catso-sect">
-      <h2 class="hp-catso-sh">Most ordered in Signage & Outdoor</h2>
-      <p class="hp-catso-ss">Based on what other businesses ordered most this month.</p>
-      {% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" %}<table class="hp-catso-tiles" role="presentation" cellpadding="0" cellspacing="0"><tr>{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" %}<td class="hp-catso-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-panelsfoamex" %}<a class="hp-catso-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catso-tin"><span class="hp-catso-tname">{{ catalog_item.title }}</span><span class="hp-catso-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catso-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" %}<td class="hp-catso-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-flagcustomsize" %}<a class="hp-catso-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catso-tin"><span class="hp-catso-tname">{{ catalog_item.title }}</span><span class="hp-catso-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catso-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" %}<td class="hp-catso-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-rollupbannersv2" %}<a class="hp-catso-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catso-tin"><span class="hp-catso-tname">{{ catalog_item.title }}</span><span class="hp-catso-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catso-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}</tr></table>{% else %}<p class="hp-catso-ss">The full range is on the site, priced for your country.</p>{% endif %}
+      <h2 class="hp-catso-sh">Popular in Signage & Outdoor</h2>
+      <p class="hp-catso-ss">Among the most ordered in this category by businesses like yours.</p>
+      {% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<table class="hp-catso-tiles" role="presentation" cellpadding="0" cellspacing="0"><tr>{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" %}<td class="hp-catso-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-banners" %}<a class="hp-catso-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catso-tin"><span class="hp-catso-tname">{{ catalog_item.title }}</span><span class="hp-catso-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catso-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catso-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-featherflags" %}<a class="hp-catso-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catso-tin"><span class="hp-catso-tname">{{ catalog_item.title }}</span><span class="hp-catso-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catso-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catso-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-rollupbannersv2" %}<a class="hp-catso-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catso-tin"><span class="hp-catso-tname">{{ catalog_item.title }}</span><span class="hp-catso-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catso-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}</tr></table>{% else %}<p class="hp-catso-ss">The full range is on the site, priced for your country.</p>{% endif %}
     </div>
 
     <div class="hp-catso-cb">
@@ -135,8 +135,8 @@
         <tr>
           <td class="hp-catso-cbic" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/icon-layers.png" alt="" width="38" height="38"></td>
           <td class="hp-catso-cbtx" valign="top">
-            <p class="hp-catso-cbh">Indoors and outdoors are different materials</p>
-            <p class="hp-catso-cbb">Foamex is light and right for inside or under cover. Aluminium takes weather and years of it. Tell us where the sign is going and we will match it.</p>
+            <p class="hp-catso-cbh">Built for where it is going</p>
+            <p class="hp-catso-cbb">A banner on a fence takes wind and rain for months. A feather flag is made to be moved between events. Tell us where it is going and we will match the material to it.</p>
           </td>
         </tr>
       </table>
@@ -175,7 +175,7 @@
     </div>
 
     <div class="hp-catso-tail">
-      <a class="hp-catso-cta2" href="https://www.helloprint.com/en-ie/foamexsigns">See the range</a>
+      <a class="hp-catso-cta2" href="https://www.helloprint.com/en-ie/banners">See the range</a>
     </div>
 
   </div>

@@ -1,22 +1,34 @@
 """
 The products shown in each category nudge email.
 
-CHOSEN FROM REAL ORDERS, not from a hunch. 600 Ordered Product events
-(metric XGuVCG), Connect resellers and the extraservice add-on removed, grouped
-by the FIRST element of the event's Categories path - which is the top-level
-category the email is keyed on. Counts as at 2026-08-25:
+CHOSEN FROM THE CATEGORY PERFORMANCE REPORT, April to 2026-08-25, covering
+2,724 products with order items, revenue and gross profit per product. Ranked on
+gross profit contribution within each category and cross-checked against order
+volume, because an email tile is a click target and the thing worth clicking is
+both wanted and worth selling.
 
-  Commercial Print     133 line items   flyers 52, posters 25, booklets 11
-  Signage & Outdoor     57              foamex 10, custom flags 8, roll-ups 7
-  Labels                20              stickers 5, labels on roll 4, sheets 2
-  Corporate Gifts       20              long tail, no clear leader
-  Clothing & Textiles    7              long tail, no clear leader
-  Packaging              2              two kraft bags only
+This replaced an earlier pick made from a 600-event sample of Ordered Product,
+which was about ninety minutes of trading. Four of the six categories changed:
 
-So the first three categories are genuinely data-led. The last three are thin
-enough that the picks are "plausible representatives that really do sell",
-not best sellers - Packaging's third product was chosen from the catalogue
-because the order data only had two. Worth re-running on a larger sample.
+  Signage      foamex + custom flags -> banners + feather flags. The old pick
+               held the category's 4th and 7th products by gross profit and left
+               Spain with no tiles at all. The new pick is 48.7% of category GP
+               and gives Spain two.
+  Labels       sticker sheets -> custom-shape stickers. Sheets were 3.6% of
+               category GP on 664 items; custom-shape is 12.2%.
+  Packaging    all three replaced. Burger boxes were not in the category's top
+               eight on any measure.
+  Gifts        key ring + notepads -> tote, notebook, pens. The key ring was
+               outside the top eight, and notepads is a Commercial Print
+               product that had been filed here by mistake.
+
+Commercial Print and Clothing kept their leaders and changed their third.
+
+CATEGORY SIZE VARIES ENORMOUSLY, which is worth knowing before reading much into
+the smaller sets. Gross profit for the period: Commercial Print 5.45M, Signage
+1.35M, Corporate Gifts 903k, Labels 490k, Clothing 239k, Packaging 77k. The
+Packaging email is picked from 879 order items in total, so its three products
+are the top of a small pool rather than a strong signal.
 
 PRICES AND NAMES ARE A DATED SNAPSHOT of the IE catalogue, used for the preview
 only. The Klaviyo build reads the live feed, so a stale figure here shows up in
@@ -60,14 +72,13 @@ MARKETS = ["IE", "GB", "NL", "BE", "FR", "ES"]
 # IT is absent from MARKETS entirely: IT-notepads was already found missing, and
 # Italy is the v4 rollout where coverage is still moving.
 ABSENT = {
-    "booklets5":            ["FR"],
-    "stickers":             ["FR"],
-    "panelsfoamex":         ["ES"],
-    "flagcustomsize":       ["ES"],
-    "rollupbannersv2":      ["ES"],
-    "notepads":             ["ES"],
-    "kraftbagsnonrib":      ["GB"],
-    "kraftbagswithrib":     ["GB"],
+    "booklets5":             ["FR"],
+    "businesscardsstandard": ["ES"],
+    "banners":               ["ES"],
+    "stickers":              ["FR"],
+    "stickersownsize":       ["ES"],
+    "kraftbagsnonrib":       ["GB"],
+    "budgetpaperbags":       ["GB"],
 }
 
 def markets_for(base_id):
@@ -80,36 +91,62 @@ def categories_markets(slug):
                   key=MARKETS.index)
 
 #  slug: (base product id, display name, from_price, min_order_qty, unit, url path)
+#
+# Ranked by gross profit contribution within the category, cross-checked against
+# order volume. Percentages are share of the category's gross profit.
 PRODUCTS = {
+    # flyers 16.1% of category GP and by far the most ordered; booklets 28.3%
+    # and EUR78 gross profit per item, the single most valuable product we sell;
+    # business cards 5.7% with the best margin of the four at 38.7%.
+    # Posters dropped: 5.5% of GP at EUR12.99 per item, below all three.
     "commercial-print": [
         ("standardflyers", "Flyers", 39.96, 1000, "units", "standardflyers"),
-        ("posters", "Standard Posters", 55.34, 50, "units", "posters"),
+        ("businesscardsstandard", "Classic Business Cards", 25.82, 500, "units", "standardbusinesscards"),
         ("booklets5", "Stapled Booklets", 269.36, 500, "units", "booklets"),
     ],
+    # banners 23.6% of category GP and the most ordered; feather flags 13.4% at
+    # EUR45 per item; roll-ups 11.7%. Together just under half the category.
+    # Foamex dropped (9.3% at EUR10.57 per item) and custom-size flags dropped
+    # (3.8%) - the previous pick had the category's 4th and 7th products, and
+    # left Spain with nothing at all.
     "signage-outdoor": [
-        ("panelsfoamex", "Foamex Signs", 31.51, 1, "units", "foamexsigns"),
-        ("flagcustomsize", "Custom Size Flags", 35.32, 1, "units", "flagcustomsize"),
+        ("banners", "Banners", 36.79, 1, "units", "banners"),
+        ("featherflags", "Custom Feather Flags", 67.64, 1, "units", "featherflags"),
         ("rollupbannersv2", "Roller Banners", 60.87, 1, "units", "budgetrollupbanners"),
     ],
+    # labels on roll 28.1% of category GP at the best margin in the category
+    # (41.6%); stickers 19.0%; custom-size stickers 12.2%. Sticker sheets
+    # dropped: 3.6% of GP on 664 items, the weakest of the eight.
     "labels": [
         ("labelsonroll", "Labels on Roll", 59.64, 1000, "units", "labels"),
         ("stickers", "Individual Stickers", 75.02, 1000, "units", "stickers"),
-        ("stickersonsheet", "Sticker Sheets", 71.33, 1000, "units", "stickersonsheet"),
+        ("stickersownsize", "Custom Shape Stickers", 57.45, 1, "units", "customsizestickers"),
     ],
+    # The smallest category by a wide margin - 879 order items and EUR77k gross
+    # profit across the whole period - so these are the top three of a small
+    # pool. Burger boxes dropped: not in the category's top eight at all.
     "packaging": [
-        ("burgerboxlargeprinted", "Burger Boxes", 71.24, 5, "units", "burgerboxlargeprinted"),
+        ("budgetpaperbags", "Budget Paper Bags", 102.30, 100, "units", "budgetpaperbags"),
         ("kraftbagsnonrib", "Smooth Kraft Paper Bags", 116.19, 100, "units", "kraftbagsnonrib"),
-        ("kraftbagswithrib", "Kraft Bags, White Inside", 125.01, 100, "units", "kraftbagswithrib"),
+        ("greaseproofpaper", "Greaseproof Paper", 243.47, 1000, "units", "greaseproofpaper"),
     ],
+    # Top three by gross profit: 10.7%, 6.4% and 5.4%. Two of them are t-shirts
+    # because that is what the category actually sells. Hoodies and caps dropped
+    # - neither reached the top eight.
     "clothing-textiles": [
-        ("tshirtsbasicsols", "Sol's Imperial T-shirt", 202.75, 1, "units", "tshirtbasicroundneck"),
-        ("classichoodedsweat260gsm", "Classic Hooded Sweat", 294.07, 1, "units", "classichoodedsweat260gsm"),
-        ("relaxed5panelvintagecap", "Vintage Five Panel Cap", 246.75, 25, "units", "relaxed5panelvintagecap"),
+        ("fullcutshirt140gsm", "Fruit of the Loom Original T", 184.19, 1, "units", "fullcutshirtgsm140"),
+        ("tshirtsbasicsols", "Sol\u2019s Imperial T-shirt", 202.75, 1, "units", "tshirtbasicroundneck"),
+        ("tableclothregular", "Tablecloth, Rectangle", 46.11, 1, "units", "tableclothregular"),
     ],
+    # 1,293 products and a very long tail. The tote alone is 10.1% of category
+    # gross profit and the most ordered; the notebook 2.8%; pens 2.0%. A tote, a
+    # notebook and a pen is also the classic three of promotional print.
+    # Previous picks dropped: the key ring was outside the top eight, and
+    # notepads is a Commercial Print product that was in here by mistake.
     "corporate-gifts": [
-        ("roundyroundshapedkeyring", "Roundy Metal Key Ring", 104.95, 5, "units", "roundyroundshapedkeyring"),
-        ("notepads", "Notepads", 204.17, 100, "units", "notepads"),
-        ("carolina100gm7l", "Carolina Cotton Tote Bag", 621.14, 500, "units", "carolina100gm7l"),
+        ("madras140gmcottontotebag", "Premium Tote Bags", 82.40, 1, "units", "cottonbagslonghandles140gm"),
+        ("spectruma5hardcovernotebook", "Spectrum A5 Notebook", 300.11, 100, "units", "spectruma5hardcovernotebook"),
+        ("deluxepens", "Deluxe Pens", 323.51, 500, "units", "deluxepen"),
     ],
 }
 
@@ -122,6 +159,16 @@ PRODUCTS = {
 # size, up to about 500 KB each. That is the feed problem written up in the
 # briefing; it is not fixable from here.
 IMAGES = {
+    "banners":                     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-banners-personalise-with-your-own-design-packshot-1x1-e9f09deb.jpg",
+    "featherflags":                "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-feather-flags-packshot-1x1-3a042178.jpg",
+    "stickersownsize":             "https://contentful.helloprint.com/wm1n7oady8a5/56TXhD9209PYhFt3BL9Ko7/b195d26bfe52100a9709a2b9c5733327/Custom__3_.png",
+    "greaseproofpaper":            "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/printed-greaseproof-paper-for-takeaway-restaurant-wrapping-packshot-1x1-3567d78b.jpg",
+    "budgetpaperbags":             "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-budget-paper-bags-packshot-1x1-7f9eb5ea.jpg",
+    "fullcutshirt140gsm":          "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-fruit-of-the-loom-original-cotton-t-shirt-packshot-1x1-ceae21ec.jpg",
+    "tableclothregular":           "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/tablecloth-rectangle-packshot-1x1-44771b28.jpg",
+    "madras140gmcottontotebag":    "https://images.ctfassets.net/wm1n7oady8a5/4FBEIu1SINb049rxtmWxQ2/cc0f1d93b3de6635310403a0cfcf6b47/89._madras140gmcottontotebag_DPD_Image_2.png",
+    "spectruma5hardcovernotebook": "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/spectrum-a5-notebook-packshot-1x1-8256e2a1.jpg",
+    "deluxepens":                  "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/printed-deluxe-pens-with-your-logo-packshot-1x1-45b69385.png",
     "standardflyers":           "https://contentful.helloprint.com/wm1n7oady8a5/2ZSmk9FPtHHtxqOyATbdAE/c8748c210f9219fa1673b74cfd4dc417/flyers5x7us.webp",
     "posters":                  "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/standard-posters-packshot-1x1-43ad3e79.png",
     "booklets5":                "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-stapled-booklets-packshot-1x1-6e4ab558.jpg",
@@ -138,6 +185,7 @@ IMAGES = {
     "classichoodedsweat260gsm": "https://images.ctfassets.net/wm1n7oady8a5/PKmBCXDfc2wtOdetvW2rp/12d48165eea7832d33e2795f3cad6560/Fruit_of_the_Loom_Classic_Hoodie_ICON__black.png",
     "relaxed5panelvintagecap":  "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/relaxed-vintage-five-panel-cap-packshot-1x1-2e487f02.jpg",
     "roundyroundshapedkeyring": "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/roundy-metal-key-ring-packshot-1x1-c081ae00.jpg",
+    "businesscardsstandard":    "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/classic-business-cards-packshot-1x1-3f94b7c9.jpg",
     "notepads":                 "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/personalised-notepads-packshot-1x1-34e64842.jpg",
     "carolina100gm7l":          "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/personalised-carolina-100-g-m2-cotton-tote-bag-packshot-1x1-205390fc.jpg",
 }

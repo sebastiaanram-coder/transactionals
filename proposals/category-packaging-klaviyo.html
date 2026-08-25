@@ -28,9 +28,9 @@
   because the category landing URL pattern is unconfirmed.
 
   Catalogue ids this email needs, all of which must exist:
-    burgerboxlargeprinted      IE GB NL BE FR ES
+    budgetpaperbags            IE NL BE FR ES
     kraftbagsnonrib            IE NL BE FR ES
-    kraftbagswithrib           IE NL BE FR ES
+    greaseproofpaper           IE GB NL BE FR ES
 -->
 
 <div class="hp-catpk-root">
@@ -121,13 +121,13 @@
       <span class="hp-catpk-eyebrow">PACKAGING</span>
       <h1 class="hp-catpk-h1">Packaging that does some of the selling</h1>
       <p class="hp-catpk-sub">Bags and boxes with your name on them, in runs small enough to try first.</p>
-      <a class="hp-catpk-cta" href="https://www.helloprint.com/en-ie/burgerboxlargeprinted">See the range</a>
+      <a class="hp-catpk-cta" href="https://www.helloprint.com/en-ie/budgetpaperbags">See the range</a>
     </div>
 
     <div class="hp-catpk-sect">
-      <h2 class="hp-catpk-sh">Most ordered in Packaging</h2>
-      <p class="hp-catpk-ss">Based on what other businesses ordered most this month.</p>
-      {% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<table class="hp-catpk-tiles" role="presentation" cellpadding="0" cellspacing="0"><tr>{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catpk-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-burgerboxlargeprinted" %}<a class="hp-catpk-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catpk-tin"><span class="hp-catpk-tname">{{ catalog_item.title }}</span><span class="hp-catpk-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catpk-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catpk-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-kraftbagsnonrib" %}<a class="hp-catpk-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catpk-tin"><span class="hp-catpk-tname">{{ catalog_item.title }}</span><span class="hp-catpk-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catpk-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catpk-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-kraftbagswithrib" %}<a class="hp-catpk-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catpk-tin"><span class="hp-catpk-tname">{{ catalog_item.title }}</span><span class="hp-catpk-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catpk-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}</tr></table>{% else %}<p class="hp-catpk-ss">The full range is on the site, priced for your country.</p>{% endif %}
+      <h2 class="hp-catpk-sh">Popular in Packaging</h2>
+      <p class="hp-catpk-ss">Among the most ordered in this category by businesses like yours.</p>
+      {% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<table class="hp-catpk-tiles" role="presentation" cellpadding="0" cellspacing="0"><tr>{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catpk-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-budgetpaperbags" %}<a class="hp-catpk-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catpk-tin"><span class="hp-catpk-tname">{{ catalog_item.title }}</span><span class="hp-catpk-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catpk-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catpk-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-kraftbagsnonrib" %}<a class="hp-catpk-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catpk-tin"><span class="hp-catpk-tname">{{ catalog_item.title }}</span><span class="hp-catpk-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catpk-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catpk-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-greaseproofpaper" %}<a class="hp-catpk-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catpk-tin"><span class="hp-catpk-tname">{{ catalog_item.title }}</span><span class="hp-catpk-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catpk-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}</tr></table>{% else %}<p class="hp-catpk-ss">The full range is on the site, priced for your country.</p>{% endif %}
     </div>
 
     <div class="hp-catpk-cb">
@@ -136,7 +136,7 @@
           <td class="hp-catpk-cbic" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/icon-tag.png" alt="" width="38" height="38"></td>
           <td class="hp-catpk-cbtx" valign="top">
             <p class="hp-catpk-cbh">Smaller runs than you would expect</p>
-            <p class="hp-catpk-cbb">Burger boxes start at five and paper bags at a hundred, so a new design does not have to arrive on a pallet.</p>
+            <p class="hp-catpk-cbb">Paper bags start at a hundred, so a new design does not have to arrive on a pallet. Order one run, see it in a customer’s hand, then scale it.</p>
           </td>
         </tr>
       </table>
@@ -175,7 +175,7 @@
     </div>
 
     <div class="hp-catpk-tail">
-      <a class="hp-catpk-cta2" href="https://www.helloprint.com/en-ie/burgerboxlargeprinted">See the range</a>
+      <a class="hp-catpk-cta2" href="https://www.helloprint.com/en-ie/budgetpaperbags">See the range</a>
     </div>
 
   </div>

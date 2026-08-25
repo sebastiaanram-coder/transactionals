@@ -21,16 +21,16 @@
   review before sending. There are no reviews in Klaviyo to pull from, and a
   made-up quote under "Verified Trustpilot review" would be a fabricated record.
 
-  IMAGE SLOT IS A PLACEHOLDER: A team in branded shirts, or a folded stack with a visible logo.
+  IMAGE SLOT IS A PLACEHOLDER: A team in branded shirts, or a dressed table at an event.
 
   ALSO BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, and replace the
   category call-to-action URL - it currently points at the leading product page
   because the category landing URL pattern is unconfirmed.
 
   Catalogue ids this email needs, all of which must exist:
+    fullcutshirt140gsm         IE GB NL BE FR ES
     tshirtsbasicsols           IE GB NL BE FR ES
-    classichoodedsweat260gsm   IE GB NL BE FR ES
-    relaxed5panelvintagecap    IE GB NL BE FR ES
+    tableclothregular          IE GB NL BE FR ES
 -->
 
 <div class="hp-catct-root">
@@ -111,7 +111,7 @@
 }
 </style>
 
-<div class="hp-catct-pre">T-shirts, hoodies and caps with your logo on them.</div>
+<div class="hp-catct-pre">T-shirts and table linen with your logo on them.</div>
 
 <div class="hp-catct-wrap">
   <div class="hp-catct-shell">
@@ -120,14 +120,14 @@
       <a href="https://www.helloprint.com/en-ie/"><img class="hp-catct-mark" src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="142"></a>
       <span class="hp-catct-eyebrow">CLOTHING & TEXTILES</span>
       <h1 class="hp-catct-h1">Kitting out the team?</h1>
-      <p class="hp-catct-sub">T-shirts, hoodies and caps, with your logo printed or stitched on.</p>
-      <a class="hp-catct-cta" href="https://www.helloprint.com/en-ie/tshirtbasicroundneck">See the range</a>
+      <p class="hp-catct-sub">T-shirts and table linen, with your logo printed or stitched on.</p>
+      <a class="hp-catct-cta" href="https://www.helloprint.com/en-ie/fullcutshirtgsm140">See the range</a>
     </div>
 
     <div class="hp-catct-sect">
-      <h2 class="hp-catct-sh">Most ordered in Clothing & Textiles</h2>
-      <p class="hp-catct-ss">Based on what other businesses ordered most this month.</p>
-      {% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<table class="hp-catct-tiles" role="presentation" cellpadding="0" cellspacing="0"><tr>{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catct-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-tshirtsbasicsols" %}<a class="hp-catct-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catct-tin"><span class="hp-catct-tname">{{ catalog_item.title }}</span><span class="hp-catct-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catct-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catct-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-classichoodedsweat260gsm" %}<a class="hp-catct-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catct-tin"><span class="hp-catct-tname">{{ catalog_item.title }}</span><span class="hp-catct-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catct-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catct-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-relaxed5panelvintagecap" %}<a class="hp-catct-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catct-tin"><span class="hp-catct-tname">{{ catalog_item.title }}</span><span class="hp-catct-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catct-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}</tr></table>{% else %}<p class="hp-catct-ss">The full range is on the site, priced for your country.</p>{% endif %}
+      <h2 class="hp-catct-sh">Popular in Clothing & Textiles</h2>
+      <p class="hp-catct-ss">Among the most ordered in this category by businesses like yours.</p>
+      {% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<table class="hp-catct-tiles" role="presentation" cellpadding="0" cellspacing="0"><tr>{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catct-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-fullcutshirt140gsm" %}<a class="hp-catct-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catct-tin"><span class="hp-catct-tname">{{ catalog_item.title }}</span><span class="hp-catct-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catct-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catct-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-tshirtsbasicsols" %}<a class="hp-catct-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catct-tin"><span class="hp-catct-tname">{{ catalog_item.title }}</span><span class="hp-catct-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catct-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}{% if event.Locale|slice:"3:5" == "IE" or event.Locale|slice:"3:5" == "GB" or event.Locale|slice:"3:5" == "NL" or event.Locale|slice:"3:5" == "BE" or event.Locale|slice:"3:5" == "FR" or event.Locale|slice:"3:5" == "ES" %}<td class="hp-catct-tile" valign="top">{% catalog event.Locale|slice:"3:5"|add:"-tableclothregular" %}<a class="hp-catct-card" href="{{ catalog_item.url }}"><img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172"><span class="hp-catct-tin"><span class="hp-catct-tname">{{ catalog_item.title }}</span><span class="hp-catct-tprice">from {% if catalog_item.metadata.currency == "GBP" %}&pound;{% elif catalog_item.metadata.currency == "SEK" %}SEK {% else %}&euro;{% endif %}{{ catalog_item.metadata.from_price|floatformat:2 }}{% if catalog_item.metadata.min_order_quantity > 1 %} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{% endif %}</span><span class="hp-catct-tlink">Order again &rarr;</span></span></a>{% endcatalog %}</td>{% endif %}</tr></table>{% else %}<p class="hp-catct-ss">The full range is on the site, priced for your country.</p>{% endif %}
     </div>
 
     <div class="hp-catct-cb">
@@ -148,7 +148,7 @@
           <td class="hp-catct-cbic" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/icon-tag.png" alt="" width="38" height="38"></td>
           <td class="hp-catct-cbtx" valign="top">
             <p class="hp-catct-cbh">Printed or embroidered</p>
-            <p class="hp-catct-cbb">Print handles detail and lots of colour. Embroidery lasts longer on workwear and sits better on a cap. Send your logo and we will say which suits it.</p>
+            <p class="hp-catct-cbb">Print handles detail and lots of colour. Embroidery lasts longer on workwear and washes better. Send your logo and we will say which suits it.</p>
           </td>
         </tr>
       </table>
@@ -156,7 +156,7 @@
 
     <div class="hp-catct-ph">
       <span class="hp-catct-phl">IMAGE TO BE SUPPLIED</span>
-      <span class="hp-catct-pht">A team in branded shirts, or a folded stack with a visible logo</span>
+      <span class="hp-catct-pht">A team in branded shirts, or a dressed table at an event</span>
     </div>
 
     <div class="hp-catct-rev">
@@ -175,7 +175,7 @@
     </div>
 
     <div class="hp-catct-tail">
-      <a class="hp-catct-cta2" href="https://www.helloprint.com/en-ie/tshirtbasicroundneck">See the range</a>
+      <a class="hp-catct-cta2" href="https://www.helloprint.com/en-ie/fullcutshirtgsm140">See the range</a>
     </div>
 
   </div>

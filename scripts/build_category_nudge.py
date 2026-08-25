@@ -79,9 +79,9 @@ CATEGORIES = [
         sub="Signs, flags and banners, built for one afternoon outdoors or several years of it.",
         pre="Signs, flags and banners, for a day out or a decade.",
         blocks=[
-            ("ICON_LAYERS", "Indoors and outdoors are different materials",
-             "Foamex is light and right for inside or under cover. Aluminium takes weather and years "
-             "of it. Tell us where the sign is going and we will match it."),
+            ("ICON_LAYERS", "Built for where it is going",
+             "A banner on a fence takes wind and rain for months. A feather flag is made to be moved "
+             "between events. Tell us where it is going and we will match the material to it."),
             ("ICON_CLOCK", "Roller banners travel",
              "They roll into their own case, go up in seconds, and come back out for the next event. "
              "One order that keeps earning."),
@@ -96,9 +96,9 @@ CATEGORIES = [
         sub="On a roll, on a sheet, or cut to whatever shape your product needs.",
         pre="On a roll, on a sheet, or cut to your own shape.",
         blocks=[
-            ("ICON_LAYERS", "On a roll, or on a sheet",
-             "Rolls suit an applicator or a production line. Sheets are easier to apply by hand and "
-             "make more sense for smaller batches."),
+            ("ICON_LAYERS", "On a roll, or cut to your own shape",
+             "Rolls suit an applicator or a production line. Individual and custom-shape stickers go "
+             "on by hand and make more sense for smaller batches."),
             ("ICON_TAG", "An odd shape costs the same as a square",
              "Circles, ovals and cut-to-outline are priced the same way as a rectangle, so the shape "
              "can be whatever suits the product."),
@@ -114,8 +114,8 @@ CATEGORIES = [
         pre="Bags and boxes with your name on them.",
         blocks=[
             ("ICON_TAG", "Smaller runs than you would expect",
-             "Burger boxes start at five and paper bags at a hundred, so a new design does not have "
-             "to arrive on a pallet."),
+             "Paper bags start at a hundred, so a new design does not have to arrive on a pallet. "
+             "Order one run, see it in a customer\u2019s hand, then scale it."),
             ("ICON_LAYERS", "Send the whole list at once",
              "If you are ordering a bag and a box together, send both and we will keep the colour "
              "consistent across them rather than treating them as two jobs."),
@@ -127,29 +127,29 @@ CATEGORIES = [
         slug="clothing-textiles", code="ct", label="Clothing & Textiles",
         match="Clothing & Textiles",
         h1="Kitting out the team?",
-        sub="T-shirts, hoodies and caps, with your logo printed or stitched on.",
-        pre="T-shirts, hoodies and caps with your logo on them.",
+        sub="T-shirts and table linen, with your logo printed or stitched on.",
+        pre="T-shirts and table linen with your logo on them.",
         blocks=[
             ("ICON_LAYERS", "Mixed sizes in one order",
              "You do not have to order the same size throughout. Send the breakdown you actually "
              "need and we will put it together."),
             ("ICON_TAG", "Printed or embroidered",
-             "Print handles detail and lots of colour. Embroidery lasts longer on workwear and sits "
-             "better on a cap. Send your logo and we will say which suits it."),
+             "Print handles detail and lots of colour. Embroidery lasts longer on workwear and "
+             "washes better. Send your logo and we will say which suits it."),
         ],
-        img_note="A team in branded shirts, or a folded stack with a visible logo",
+        img_note="A team in branded shirts, or a dressed table at an event",
         review_hint="pick a review about clothing, ideally mentioning fit, sizing or print quality",
     ),
     dict(
         slug="corporate-gifts", code="cg", label="Corporate Gifts",
         match="Corporate Gifts",
         h1="Something to hand out at the next event?",
-        sub="Bags, notebooks and keyrings that stay on a desk longer than a flyer stays in a pocket.",
-        pre="Things that stay on a desk longer than a flyer.",
+        sub="Totes, notebooks and pens that stay in use long after a flyer is in the bin.",
+        pre="Things that stay in use long after a flyer is in the bin.",
         blocks=[
             ("ICON_TAG", "Minimums are lower than you would think",
-             "Keyrings start at five and notepads at a hundred, so a small event does not need a "
-             "warehouse order to go with it."),
+             "Tote bags start at one, so you can hold a sample before committing to a crate of them. "
+             "Tell us the headcount and we will price to it."),
             ("ICON_LAYERS", "If we do not list it, we can still find it",
              "The catalogue is a starting point. Tell our team what you have in mind and they will "
              "source it and come back with a price."),
@@ -258,8 +258,8 @@ BODY = """
     </div>
 
     <div class="{P}-sect">
-      <h2 class="{P}-sh">Most ordered in {LABEL}</h2>
-      <p class="{P}-ss">Based on what other businesses ordered most this month.</p>
+      <h2 class="{P}-sh">Popular in {LABEL}</h2>
+      <p class="{P}-ss">Among the most ordered in this category by businesses like yours.</p>
       {TILES}
     </div>
 
@@ -545,6 +545,25 @@ for cat in CATEGORIES:
     vis = (txt + " " + alts).lower()
     for j in ("bleed", "dpi", "cmyk", "safe area", "pre-flight", "gsm"):
         if j in vis: errs.append("%s: jargon found, house style forbids it: %s" % (t, j))
+    # A MINIMUM QUOTED IN COPY MUST BELONG TO A PRODUCT ON SCREEN. The Corporate
+    # Gifts copy claimed "notepads at a hundred" while notepads was not one of
+    # its tiles - and notepads is a Commercial Print product, so the sentence
+    # described something the reader could not see under a heading saying these
+    # were the category's most ordered.
+    WORDS = {"one": 1, "five": 5, "ten": 10, "twenty-five": 25, "fifty": 50,
+             "a hundred": 100, "two hundred": 200, "five hundred": 500,
+             "a thousand": 1000}
+    shown = {p[3] for p in cp.PRODUCTS[cat["slug"]]}
+    for _, _, body in [(b[0], b[1], b[2]) for b in cat["blocks"]]:
+        for phrase, n in WORDS.items():
+            if re.search(r"start(?:s)? at %s\b" % re.escape(phrase), body) and n not in shown:
+                errs.append("%s: copy says a minimum of %d, but no product shown has that "
+                            "minimum order quantity" % (t, n))
+        for m in re.finditer(r"and ([a-z ]+?) at ([a-z ]+?)(?:,|\.| so)", body):
+            n = WORDS.get(m.group(2).strip())
+            if n is not None and n not in shown:
+                errs.append("%s: copy says %r at %d, which is not a minimum of anything shown"
+                            % (t, m.group(1).strip(), n))
     # a figure must never be split from its unit
     for loose in re.findall(r"\d+ (?:units|unit)", vis):
         errs.append("%s: %r can break across lines" % (t, loose))
@@ -567,7 +586,9 @@ if len(cp.PRODUCTS) != len(CATEGORIES):
 for label, a, b in written:
     print("  %-20s preview %6d   klaviyo %6d" % (label, a, b))
 print("\n%d emails, snapshot refreshed %s" % (len(written), cp.REFRESHED))
-print("catalogue ids requested: %d (of 108 possible; 8 do not exist)" % len(cp.all_ids()))
+total = len(cp.MARKETS) * sum(len(v) for v in cp.PRODUCTS.values())
+print("catalogue ids requested: %d of %d possible; %d verified missing from the feed"
+      % (len(cp.all_ids()), total, total - len(cp.all_ids())))
 print("\ntiles each market sees:")
 print("  %-20s %s" % ("", "  ".join(cp.MARKETS)))
 for slug, row in cp.coverage().items():
