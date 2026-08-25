@@ -1,0 +1,173 @@
+"""
+The products shown in each category nudge email.
+
+CHOSEN FROM REAL ORDERS, not from a hunch. 600 Ordered Product events
+(metric XGuVCG), Connect resellers and the extraservice add-on removed, grouped
+by the FIRST element of the event's Categories path - which is the top-level
+category the email is keyed on. Counts as at 2026-08-25:
+
+  Commercial Print     133 line items   flyers 52, posters 25, booklets 11
+  Signage & Outdoor     57              foamex 10, custom flags 8, roll-ups 7
+  Labels                20              stickers 5, labels on roll 4, sheets 2
+  Corporate Gifts       20              long tail, no clear leader
+  Clothing & Textiles    7              long tail, no clear leader
+  Packaging              2              two kraft bags only
+
+So the first three categories are genuinely data-led. The last three are thin
+enough that the picks are "plausible representatives that really do sell",
+not best sellers - Packaging's third product was chosen from the catalogue
+because the order data only had two. Worth re-running on a larger sample.
+
+PRICES AND NAMES ARE A DATED SNAPSHOT of the IE catalogue, used for the preview
+only. The Klaviyo build reads the live feed, so a stale figure here shows up in
+review rather than in a customer's inbox. Refresh by re-querying the catalogue
+and updating this file.
+
+MARKET IS DERIVED FROM THE LOCALE, which is the whole reason one template can
+serve every market. event.Locale is "nl-NL", "fr-BE", "es-ES" and so on, so
+Locale|slice:"3:5" gives NL, BE, ES - exactly the market prefix the catalogue
+uses. One catalog expression, no per-market duplication:
+
+    {% catalog event.Locale|slice:"3:5"|add:"-standardflyers" %}
+
+Note fr-BE and nl-BE both resolve to BE, which is correct - Belgium is one
+catalogue market with two languages.
+
+BELGIUM HAS A FEED PROBLEM THIS TEMPLATE CANNOT FIX. Rendering the live template
+for nl-BE returns "Flyer classique ... unites" for one product and "Geniete
+boekjes ... stuks" for another, in the same email. One catalogue market, two
+languages, and the titles are inconsistent per product - so a Dutch-speaking
+Belgian sees some products named in French. Product names come from the feed, so
+the fix belongs there. Verified by render on 2026-08-25, not inferred.
+"""
+REFRESHED = "2026-08-25"
+
+MARKETS = ["IE", "GB", "NL", "BE", "FR", "ES"]
+
+# WHICH PRODUCTS ACTUALLY EXIST IN WHICH MARKET. Verified against the live
+# catalogue on 2026-08-25, all 108 combinations.
+#
+# This table exists because the first version of this file had a per-MARKET
+# allow-list, which was the wrong shape. The gaps are not "this market is
+# missing" - they are "this product is missing in this market", and 8 of the 108
+# were missing. A catalogue miss does not blank a tile, it returns HTTP 400 and
+# the entire email fails to send, so France would have lost its Commercial Print
+# email (no FR-booklets5) and Spain its whole Signage email (none of the three).
+#
+# So every tile carries its own market condition, and a market with no products
+# left in a category gets a text fallback instead of an empty row.
+#
+# IT is absent from MARKETS entirely: IT-notepads was already found missing, and
+# Italy is the v4 rollout where coverage is still moving.
+ABSENT = {
+    "booklets5":            ["FR"],
+    "stickers":             ["FR"],
+    "panelsfoamex":         ["ES"],
+    "flagcustomsize":       ["ES"],
+    "rollupbannersv2":      ["ES"],
+    "notepads":             ["ES"],
+    "kraftbagsnonrib":      ["GB"],
+    "kraftbagswithrib":     ["GB"],
+}
+
+def markets_for(base_id):
+    """The markets where this product exists, highest confidence first."""
+    return [m for m in MARKETS if m not in ABSENT.get(base_id, [])]
+
+def categories_markets(slug):
+    """Markets that have at least one product left in this category."""
+    return sorted({m for p in PRODUCTS[slug] for m in markets_for(p[0])},
+                  key=MARKETS.index)
+
+#  slug: (base product id, display name, from_price, min_order_qty, unit, url path)
+PRODUCTS = {
+    "commercial-print": [
+        ("standardflyers", "Flyers", 39.96, 1000, "units", "standardflyers"),
+        ("posters", "Standard Posters", 55.34, 50, "units", "posters"),
+        ("booklets5", "Stapled Booklets", 269.36, 500, "units", "booklets"),
+    ],
+    "signage-outdoor": [
+        ("panelsfoamex", "Foamex Signs", 31.51, 1, "units", "foamexsigns"),
+        ("flagcustomsize", "Custom Size Flags", 35.32, 1, "units", "flagcustomsize"),
+        ("rollupbannersv2", "Roller Banners", 60.87, 1, "units", "budgetrollupbanners"),
+    ],
+    "labels": [
+        ("labelsonroll", "Labels on Roll", 59.64, 1000, "units", "labels"),
+        ("stickers", "Individual Stickers", 75.02, 1000, "units", "stickers"),
+        ("stickersonsheet", "Sticker Sheets", 71.33, 1000, "units", "stickersonsheet"),
+    ],
+    "packaging": [
+        ("burgerboxlargeprinted", "Burger Boxes", 71.24, 5, "units", "burgerboxlargeprinted"),
+        ("kraftbagsnonrib", "Smooth Kraft Paper Bags", 116.19, 100, "units", "kraftbagsnonrib"),
+        ("kraftbagswithrib", "Kraft Bags, White Inside", 125.01, 100, "units", "kraftbagswithrib"),
+    ],
+    "clothing-textiles": [
+        ("tshirtsbasicsols", "Sol's Imperial T-shirt", 202.75, 1, "units", "tshirtbasicroundneck"),
+        ("classichoodedsweat260gsm", "Classic Hooded Sweat", 294.07, 1, "units", "classichoodedsweat260gsm"),
+        ("relaxed5panelvintagecap", "Vintage Five Panel Cap", 246.75, 25, "units", "relaxed5panelvintagecap"),
+    ],
+    "corporate-gifts": [
+        ("roundyroundshapedkeyring", "Roundy Metal Key Ring", 104.95, 5, "units", "roundyroundshapedkeyring"),
+        ("notepads", "Notepads", 204.17, 100, "units", "notepads"),
+        ("carolina100gm7l", "Carolina Cotton Tote Bag", 621.14, 500, "units", "carolina100gm7l"),
+    ],
+}
+
+# Preview images, from the live IE feed.
+#
+# TWO HOSTS, ONLY ONE OF WHICH CAN RESIZE. contentful.helloprint.com and
+# images.ctfassets.net accept transform parameters, so those get asked for a
+# 600px JPEG - which also converts the .webp files that Outlook cannot display.
+# storage.googleapis.com ignores every parameter, so those are served at full
+# size, up to about 500 KB each. That is the feed problem written up in the
+# briefing; it is not fixable from here.
+IMAGES = {
+    "standardflyers":           "https://contentful.helloprint.com/wm1n7oady8a5/2ZSmk9FPtHHtxqOyATbdAE/c8748c210f9219fa1673b74cfd4dc417/flyers5x7us.webp",
+    "posters":                  "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/standard-posters-packshot-1x1-43ad3e79.png",
+    "booklets5":                "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-stapled-booklets-packshot-1x1-6e4ab558.jpg",
+    "panelsfoamex":             "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-foamex-sign-packshot-1x1-7a6bc18f.jpg",
+    "flagcustomsize":           "https://contentful.helloprint.com/wm1n7oady8a5/2eSsJZB52MNk2gJifYPbKC/ac52b8225a6c7e596f31c79e97d49b7f/canvaflagcustomsize.webp",
+    "rollupbannersv2":          "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-roll-up-banner-packshot-1x1-ae375736.jpg",
+    "labelsonroll":             "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-labels-on-roll-packshot-1x1-4b14ae99.jpg",
+    "stickers":                 "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/individual-stickers-packshot-1x1-f3214226.jpg",
+    "stickersonsheet":          "https://contentful.helloprint.com/wm1n7oady8a5/62zsvuvy6Bermv50U1J19f/fdb3592fa470637d41334afd772cb2c8/stickers_on_sheet_pdp_1.png",
+    "burgerboxlargeprinted":    "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/printed-large-burger-box-14-x-14-x-8-cm-packshot-1x1-266dbde7.jpg",
+    "kraftbagsnonrib":          "https://images.ctfassets.net/wm1n7oady8a5/5TsmjeazMbKjUL3KHTPt0J/5ed61cfe8dda29756df2f8ea23483e81/Ecru_Kraft_bags_color_big_icons.png",
+    "kraftbagswithrib":         "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-white-interior-kraft-paper-bags-packshot-1x1-3b8f0233.jpg",
+    "tshirtsbasicsols":         "https://images.ctfassets.net/wm1n7oady8a5/01i9y0v1bVr32r65xAqqJn/5dd52ef3c62444dde86a8e47f3fad8d2/11.png",
+    "classichoodedsweat260gsm": "https://images.ctfassets.net/wm1n7oady8a5/PKmBCXDfc2wtOdetvW2rp/12d48165eea7832d33e2795f3cad6560/Fruit_of_the_Loom_Classic_Hoodie_ICON__black.png",
+    "relaxed5panelvintagecap":  "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/relaxed-vintage-five-panel-cap-packshot-1x1-2e487f02.jpg",
+    "roundyroundshapedkeyring": "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/roundy-metal-key-ring-packshot-1x1-c081ae00.jpg",
+    "notepads":                 "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/personalised-notepads-packshot-1x1-34e64842.jpg",
+    "carolina100gm7l":          "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/personalised-carolina-100-g-m2-cotton-tote-bag-packshot-1x1-205390fc.jpg",
+}
+
+TRANSFORMABLE = ("contentful.helloprint.com", "images.ctfassets.net")
+
+def preview_image(base_id):
+    """600px JPEG where the host allows it, untouched where it does not."""
+    u = IMAGES[base_id]
+    if any(h in u for h in TRANSFORMABLE):
+        return u + "?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80"
+    return u
+
+def qty_line(price, moq, unit, cur="&euro;"):
+    """"from EUR39.96 for 1,000 units" - and just "from EUR31.51" when the
+    minimum is one, because "for 1 units" is how the banner emails got it wrong
+    the first time."""
+    out = "from %s%s" % (cur, format(price, ".2f"))
+    if moq > 1:
+        out += " for %s %s" % (format(moq, ","), unit)
+    return out
+
+def all_ids():
+    """Every catalogue id this programme actually asks for - the ABSENT ones are
+    never requested, which is the whole point of the table above."""
+    return ["%s-%s" % (m, p[0])
+            for cat in PRODUCTS.values() for p in cat
+            for m in markets_for(p[0])]
+
+def coverage():
+    """Tiles each market sees per category, for the build report."""
+    return {slug: {m: sum(1 for p in ps if m in markets_for(p[0])) for m in MARKETS}
+            for slug, ps in PRODUCTS.items()}
