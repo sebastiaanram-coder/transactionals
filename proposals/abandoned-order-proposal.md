@@ -438,35 +438,59 @@ clicks. It also differentiates the two branches for anyone who ever sees both.
 No cross-sell and no expert block. A size ladder invites reconsidering a decision already made,
 and the expert is the other branch's argument.
 
-### The discounted total cannot be shown, and it is worth knowing why
+### The discount arithmetic: what is and is not possible
 
-Showing "€64.50 becomes €58.05" would be materially more persuasive than "10% off". It is not
-possible in Klaviyo's template language:
+**Why it worked in Welcome, and why that is not a precedent.** Welcome shows four *fixed*
+products, so the arithmetic happened at build time — 39.96 × 0.9 = 35.96 was worked out in
+Python and both numbers were written into the HTML as literals. No template maths at all.
 
-- `{% widthratio total 100 90 %}` returns **58** — integers only, so the cents are lost.
-- `{% widthratio total 1 90 %}` returns **5805**, which is the right number in cents, but there
-  is no way to insert the decimal point: that needs the output captured into a variable, and
-  `{% with %}` is not supported.
-- Rounding the *saving* instead — "about €6 off" — works arithmetically but `widthratio` rounds
-  to nearest, so a €68 basket would advertise "about €7" against a real £6.80. Small, but it is
-  a discount overstated in writing.
+That is also a problem Welcome has not yet had to face. Its prices are hardcoded, and the feed
+is live: today the four still match the catalog exactly (39.96, 25.82, 55.34, 60.87), but the
+moment a price moves, the email is wrong and nothing will say so. Fixing that means binding the
+prices to `{% catalog %}` — at which point Welcome hits the same wall this email does. See §15.
 
-So the email states the percentage and lets checkout do the arithmetic, exactly as Welcome does.
-**If showing the saving matters commercially, the clean fix is upstream**: have the Started
-Checkout event carry a discounted-total property, and the email can print it.
+**For a dynamic basket, the exact discounted total is not available.** Verified:
 
-### Three things to settle
+| Attempt | Result |
+|---|---|
+| `{% widthratio total 100 90 %}` | `58` — integers only, cents gone |
+| `{% widthratio total 1 90 %}` | `5805` — right in cents, but no way to place the decimal: that needs the value in a variable and `{% with %}` is unsupported |
+| `{{ total\|add:"-6.45" }}` | empty — `add` will not subtract a float |
 
-1. **Which code.** `HELLO10` is the Welcome code. Reusing it here means a Welcome recipient sees
-   the same code twice, the attribution is unusable, and if it is restricted to first orders it
-   will silently fail for returning customers. This branch needs its own, and email 3 a third.
-2. **Free delivery as the alternative.** Klaviyo's guidance cites 39% of abandoners leaving over
-   extra costs. On a £40 basket an £8 delivery is a 20% surcharge where 10% off the goods is £4,
-   so free delivery may convert better *and* cost less. This is the branch to test it on.
-3. **The 72-hour expiry has to actually expire**, or the deadline stops working across the whole
-   programme.
+**But a banded figure is available, and it is safe.** Comparisons on the total work inside
+`{% if %}`, verified on a €64.50 basket:
 
-### Subject
+```django
+{% if event|lookup:"$value" >= 100 %}at least &euro;10 off
+{% elif event|lookup:"$value" >= 75 %}at least &euro;7 off
+{% elif event|lookup:"$value" >= 50 %}at least &euro;5 off
+{% elif event|lookup:"$value" >= 25 %}at least &euro;2 off
+{% else %}10% off{% endif %}
+```
 
-Primary: **"10% off, for the next 72 hours"**
-Preview: *The basket is still saved. The code comes off at checkout.*
+Every band floors the real saving, so the number is always true and never overstated — €64.50
+advertises "at least €5 off" against a real €6.45. That is a concrete number where "10% off" is
+an abstraction, which is most of the persuasive gap, without inventing precision the template
+cannot deliver.
+
+**Recommend using the bands**, and stating the exact new total nowhere. The clean fix remains
+upstream: a discounted-total property on the Started Checkout event would let the email print
+"€64.50 becomes €58.05" and would fix Welcome at the same time.
+
+## 15. Welcome email 1 has the same problem, dormant
+
+Its eight price figures are literals. They are correct today — checked against the catalog — but
+they will drift silently, and a struck-through "was" price that no longer matches the site is
+worse than no struck-through price at all.
+
+Two ways out:
+
+1. **Generate Welcome from the catalog at build time.** A build script pulls the four live
+   `from_price` values, computes the discounted pair, and writes both. Accurate as of every
+   build, and the struck-through pair survives. Welcome is currently hand-written HTML, so this
+   means giving it a builder like the other seven emails have.
+2. **Bind the prices to `{% catalog %}` and drop the computed figure**, replacing it with "your
+   10% comes off at checkout". Always accurate, never stale, but the strike-through goes.
+
+Option 1 keeps the design that was signed off, so it is the one to take. It is also the only one
+of the two that survives a price change without anyone noticing.
