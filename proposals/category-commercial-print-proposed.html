@@ -28,11 +28,15 @@
 .hp-catcp-sh{margin:0 0 4px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .hp-catcp-ss{margin:0 0 18px;font-size:14px;line-height:21px;color:#767676;}
 .hp-catcp-tiles{width:100%;border-collapse:separate;border-spacing:0;}
-.hp-catcp-tile{width:184px;vertical-align:top;padding:0 12px 0 0;}
+.hp-catcp-tile{width:50%;vertical-align:top;padding:0 6px 14px;}
 .hp-catcp-card{display:block;text-decoration:none;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;}
 .hp-catcp-card img{width:100%;max-width:100%;height:auto;display:block;border:0;background:#ffffff;}
+.hp-catcp-tiles{table-layout:fixed;}
 .hp-catcp-tin{padding:12px 12px 14px;}
-.hp-catcp-tname{display:block;font-size:14px;line-height:20px;font-weight:800;color:#191919;margin:0 0 3px;}
+/* Reserve two lines for the name so cards in a row stay aligned. Names
+   come from the feed per market, so "Flyers" sits beside "Standaard
+   visitekaartjes" and one wraps while the other does not. */
+.hp-catcp-tname{display:block;font-size:14px;line-height:20px;font-weight:800;color:#191919;margin:0 0 3px;min-height:40px;}
 .hp-catcp-tprice{display:block;font-size:13px;line-height:19px;color:#555555;}
 .hp-catcp-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;margin-top:7px;}
 /* content blocks */
@@ -78,8 +82,13 @@
   .hp-catcp-sub{font-size:15px;line-height:23px;max-width:none;}
   .hp-catcp-cta,.hp-catcp-cta2{padding:15px 26px;}
   .hp-catcp-sect{margin-left:14px;margin-right:14px;}
-  /* tiles stack rather than shrinking to thumbnails */
-  .hp-catcp-tile{display:block;width:100%!important;padding:0 0 12px 0;}
+  /* tiles stay two-up on mobile - that is the whole point of the grid.
+     Only the padding tightens. */
+  .hp-catcp-tile{padding:0 4px 12px;}
+  /* three lines on a phone: the longest localised names, like the French
+     water bottle at 47 characters, genuinely need it in a 150px column */
+  .hp-catcp-tname{font-size:13px;line-height:18px;min-height:54px;}
+  .hp-catcp-tprice,.hp-catcp-tlink{font-size:12px;line-height:17px;}
   .hp-catcp-cb,.hp-catcp-ph,.hp-catcp-rev,.hp-catcp-help,.hp-catcp-tail{margin-left:14px;margin-right:14px;}
   .hp-catcp-foot{padding-left:18px;padding-right:18px;}
 }
@@ -101,7 +110,7 @@
     <div class="hp-catcp-sect">
       <h2 class="hp-catcp-sh">Popular in Commercial Print</h2>
       <p class="hp-catcp-ss">Among the most ordered in this category by businesses like yours.</p>
-      <table class="hp-catcp-tiles" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-catcp-tile" valign="top"><a class="hp-catcp-card" href="https://www.helloprint.com/en-ie/standardflyers"><img src="https://contentful.helloprint.com/wm1n7oady8a5/2ZSmk9FPtHHtxqOyATbdAE/c8748c210f9219fa1673b74cfd4dc417/flyers5x7us.webp?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80" alt="Flyers" width="172"><span class="hp-catcp-tin"><span class="hp-catcp-tname">Flyers</span><span class="hp-catcp-tprice">from &euro;39.96 for 1,000 units</span><span class="hp-catcp-tlink">Order again &rarr;</span></span></a></td><td class="hp-catcp-tile" valign="top"><a class="hp-catcp-card" href="https://www.helloprint.com/en-ie/standardbusinesscards"><img src="https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/classic-business-cards-packshot-1x1-3f94b7c9.jpg" alt="Classic Business Cards" width="172"><span class="hp-catcp-tin"><span class="hp-catcp-tname">Classic Business Cards</span><span class="hp-catcp-tprice">from &euro;25.82 for 500 units</span><span class="hp-catcp-tlink">Order again &rarr;</span></span></a></td><td class="hp-catcp-tile" valign="top"><a class="hp-catcp-card" href="https://www.helloprint.com/en-ie/booklets"><img src="https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-stapled-booklets-packshot-1x1-6e4ab558.jpg" alt="Stapled Booklets" width="172"><span class="hp-catcp-tin"><span class="hp-catcp-tname">Stapled Booklets</span><span class="hp-catcp-tprice">from &euro;269.36 for 500 units</span><span class="hp-catcp-tlink">Order again &rarr;</span></span></a></td></tr></table>
+      <table class="hp-catcp-tiles" role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="hp-catcp-tile" valign="top"><a class="hp-catcp-card" href="https://www.helloprint.com/en-ie/standardflyers"><img src="https://contentful.helloprint.com/wm1n7oady8a5/2ZSmk9FPtHHtxqOyATbdAE/c8748c210f9219fa1673b74cfd4dc417/flyers5x7us.webp?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80" alt="Flyers"><span class="hp-catcp-tin"><span class="hp-catcp-tname">Flyers</span><span class="hp-catcp-tprice">from &euro;39.96 for 1,000 units</span><span class="hp-catcp-tlink">Order again &rarr;</span></span></a></td><td class="hp-catcp-tile" valign="top"><a class="hp-catcp-card" href="https://www.helloprint.com/en-ie/standardbusinesscards"><img src="https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/classic-business-cards-packshot-1x1-3f94b7c9.jpg" alt="Classic Business Cards"><span class="hp-catcp-tin"><span class="hp-catcp-tname">Classic Business Cards</span><span class="hp-catcp-tprice">from &euro;25.82 for 500 units</span><span class="hp-catcp-tlink">Order again &rarr;</span></span></a></td></tr><tr><td class="hp-catcp-tile" valign="top"><a class="hp-catcp-card" href="https://www.helloprint.com/en-ie/booklets"><img src="https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-stapled-booklets-packshot-1x1-6e4ab558.jpg" alt="Stapled Booklets"><span class="hp-catcp-tin"><span class="hp-catcp-tname">Stapled Booklets</span><span class="hp-catcp-tprice">from &euro;269.36 for 500 units</span><span class="hp-catcp-tlink">Order again &rarr;</span></span></a></td><td class="hp-catcp-tile" valign="top"><a class="hp-catcp-card" href="https://www.helloprint.com/en-ie/posters"><img src="https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/standard-posters-packshot-1x1-43ad3e79.png" alt="Standard Posters"><span class="hp-catcp-tin"><span class="hp-catcp-tname">Standard Posters</span><span class="hp-catcp-tprice">from &euro;55.34 for 50 units</span><span class="hp-catcp-tlink">Order again &rarr;</span></span></a></td></tr></table>
     </div>
 
     <div class="hp-catcp-cb">

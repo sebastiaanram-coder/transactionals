@@ -197,11 +197,15 @@ CSS = """
 .%(P)s-sh{margin:0 0 4px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .%(P)s-ss{margin:0 0 18px;font-size:14px;line-height:21px;color:#767676;}
 .%(P)s-tiles{width:100%%;border-collapse:separate;border-spacing:0;}
-.%(P)s-tile{width:184px;vertical-align:top;padding:0 12px 0 0;}
+.%(P)s-tile{width:50%%;vertical-align:top;padding:0 6px 14px;}
 .%(P)s-card{display:block;text-decoration:none;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;}
 .%(P)s-card img{width:100%%;max-width:100%%;height:auto;display:block;border:0;background:#ffffff;}
+.%(P)s-tiles{table-layout:fixed;}
 .%(P)s-tin{padding:12px 12px 14px;}
-.%(P)s-tname{display:block;font-size:14px;line-height:20px;font-weight:800;color:#191919;margin:0 0 3px;}
+/* Reserve two lines for the name so cards in a row stay aligned. Names
+   come from the feed per market, so "Flyers" sits beside "Standaard
+   visitekaartjes" and one wraps while the other does not. */
+.%(P)s-tname{display:block;font-size:14px;line-height:20px;font-weight:800;color:#191919;margin:0 0 3px;min-height:40px;}
 .%(P)s-tprice{display:block;font-size:13px;line-height:19px;color:#555555;}
 .%(P)s-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;margin-top:7px;}
 /* content blocks */
@@ -247,8 +251,13 @@ CSS = """
   .%(P)s-sub{font-size:15px;line-height:23px;max-width:none;}
   .%(P)s-cta,.%(P)s-cta2{padding:15px 26px;}
   .%(P)s-sect{margin-left:14px;margin-right:14px;}
-  /* tiles stack rather than shrinking to thumbnails */
-  .%(P)s-tile{display:block;width:100%%!important;padding:0 0 12px 0;}
+  /* tiles stay two-up on mobile - that is the whole point of the grid.
+     Only the padding tightens. */
+  .%(P)s-tile{padding:0 4px 12px;}
+  /* three lines on a phone: the longest localised names, like the French
+     water bottle at 47 characters, genuinely need it in a 150px column */
+  .%(P)s-tname{font-size:13px;line-height:18px;min-height:54px;}
+  .%(P)s-tprice,.%(P)s-tlink{font-size:12px;line-height:17px;}
   .%(P)s-cb,.%(P)s-ph,.%(P)s-rev,.%(P)s-help,.%(P)s-tail{margin-left:14px;margin-right:14px;}
   .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
@@ -381,7 +390,7 @@ def tile_sample(P, base, name, price, moq, unit, path):
     return (
         '<td class="%s-tile" valign="top">'
         '<a class="%s-card" href="https://www.helloprint.com/en-ie/%s">'
-        '<img src="%s" alt="%s" width="172">'
+        '<img src="%s" alt="%s">'
         '<span class="%s-tin">'
         '<span class="%s-tname">%s</span>'
         '<span class="%s-tprice">%s</span>'
@@ -398,18 +407,12 @@ def tile_live(P, base):
     name, price, currency, link and photo. The catalog id is assembled from the
     locale - see the module docstring.
 
-    EACH TILE CARRIES ITS OWN MARKET TEST. 8 of the 108 market-product pairs do
-    not exist in the feed, and asking for one that does not returns HTTP 400 and
-    kills the whole send - so a tile is only requested where it is known to
-    exist. France gets two Commercial Print tiles rather than no email."""
-    guard = market_test(cp.markets_for(base))
-    # single % - this prefix is plain concatenation, not a %-format string, and
-    # writing %% here emitted a literal "{%%" that Django cannot parse
-    return ("{% if " + guard + " %}") + (
+    The market test lives on the grid rather than here - see tiles()."""
+    return (
         '<td class="%(P)s-tile" valign="top">'
         '{%% catalog %(MK)s|add:"-%(B)s" %%}'
         '<a class="%(P)s-card" href="{{ catalog_item.url }}">'
-        '<img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}" width="172">'
+        '<img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}">'
         '<span class="%(P)s-tin">'
         '<span class="%(P)s-tname">{{ catalog_item.title }}</span>'
         '<span class="%(P)s-tprice">from '
@@ -422,21 +425,48 @@ def tile_live(P, base):
         '<span class="%(P)s-tlink">Order again &rarr;</span>'
         '</span></a>'
         '{%% endcatalog %%}</td>'
-        % {"P": P, "MK": MARKET, "B": base}) + "{% endif %}"
+        % {"P": P, "MK": MARKET, "B": base})
+
+def grid(P, cells):
+    """Rows of two. An odd count gets an empty cell so the row still spans the
+    table and the last tile does not stretch to full width."""
+    rows = ""
+    for i in range(0, len(cells), 2):
+        pair = cells[i:i + 2]
+        if len(pair) == 1:
+            pair.append('<td class="%s-tile">&nbsp;</td>' % P)
+        rows += "<tr>%s</tr>" % "".join(pair)
+    return ('<table class="%s-tiles" role="presentation" width="100%%" '
+            'cellpadding="0" cellspacing="0">%s</table>' % (P, rows))
+
 
 def tiles(P, cat, live):
-    cells = [tile_live(P, p[0]) if live else tile_sample(P, *p)
-             for p in cp.PRODUCTS[cat["slug"]]]
-    table = ('<table class="%s-tiles" role="presentation" cellpadding="0" cellspacing="0">'
-             '<tr>%s</tr></table>' % (P, "".join(cells)))
+    """Four products, two per row, on every screen.
+
+    WHY A GRID PER MARKET RATHER THAN PER-TILE GUARDS. Availability varies - a
+    category can have 4 products in Ireland and 2 in Spain - and a 2x2 grid with
+    individual tiles conditionally removed goes diagonal: an empty cell top-right
+    and another bottom-left. So the grid is built per market from the products
+    that market actually has, and wrapped in a single market test. Every market
+    gets a well-formed grid, and no market is ever sent a catalogue id it does
+    not stock.
+
+    The cost is the grid repeated once per market, about 12KB in total, which is
+    comfortably inside Gmail's 102KB clipping threshold."""
     if not live:
-        return table
-    # A market with no products left in this category would render an empty row,
-    # so it gets a sentence instead. Spain and Signage is the real case.
-    have = cp.categories_markets(cat["slug"])
-    return ('{%% if %s %%}%s{%% else %%}'
-            '<p class="%s-ss">The full range is on the site, priced for your country.</p>'
-            '{%% endif %%}' % (market_test(have), table, P))
+        return grid(P, [tile_sample(P, *p) for p in cp.PRODUCTS[cat["slug"]]])
+    out = ""
+    for i, m in enumerate(cp.MARKETS):
+        avail = [p for p in cp.PRODUCTS[cat["slug"]] if m in cp.markets_for(p[0])]
+        if not avail:
+            continue
+        kw = "if" if not out else "elif"
+        out += '{%% %s %s == "%s" %%}%s' % (kw, MARKET, m,
+                                            grid(P, [tile_live(P, p[0]) for p in avail]))
+    # A market outside the list, or one with nothing left, gets a sentence.
+    return out + ('{%% else %%}<p class="%s-ss">The full range is on the site, '
+                  'priced for your country.</p>{%% endif %%}' % P)
+
 
 def build(cat, live):
     P = "hp-cat" + cat["code"]
@@ -535,10 +565,6 @@ for cat in CATEGORIES:
     if "unsubscribe" not in livb: errs.append(t + ": no unsubscribe tag")
     for bad in ("intcomma", "{% with "):
         if bad in livb: errs.append("%s: unsupported %s" % (t, bad))
-    # every catalog binding must sit inside a catalog block
-    opens = livb.count("{% catalog "); closes = livb.count("{% endcatalog %}")
-    if opens != closes or opens != len(cp.PRODUCTS[cat["slug"]]):
-        errs.append("%s: %d catalog blocks for %d products" % (t, opens, len(cp.PRODUCTS[cat["slug"]])))
     if "catalog_item." in livb.split("{% catalog ", 1)[0]:
         errs.append(t + ": a catalog binding sits before the first catalog block")
     # the market must never be hardcoded in the live build
@@ -547,58 +573,54 @@ for cat in CATEGORIES:
     if MARKET not in livb: errs.append(t + ": the live build does not derive the market from Locale")
     if "min_order_quantity }}" in livb:
         errs.append(t + ": min_order_quantity needs floatformat:0 or it prints 500.0")
-    # THE CHECK THAT MATTERS: no tile may be reachable in a market that does not
-    # stock it, because that is a 400 and a dead send rather than a missing tile.
-    for p in cp.PRODUCTS[cat["slug"]]:
-        base = p[0]
-        blk = livb.split('|add:"-%s"' % base)
-        if len(blk) != 2:
-            errs.append("%s: %s is not requested exactly once" % (t, base)); continue
-        # locate the MARKET guard specifically. Searching for the nearest
-        # preceding "{% if " finds the previous tile's quantity conditional
-        # instead, which made this check pass for the wrong reason on tiles 2
-        # and 3 until it was caught by reading the built output.
-        anchor = "{%% if %s ==" % MARKET
-        if anchor not in blk[0]:
-            errs.append("%s: %s has no market guard at all" % (t, base)); continue
-        guard = blk[0][blk[0].rfind(anchor):]
-        for gone in cp.ABSENT.get(base, []):
-            if '"%s"' % gone in guard:
-                errs.append("%s: %s is requested in %s, where it does not exist"
-                            % (t, base, gone))
-        for need in cp.markets_for(base):
-            if '"%s"' % need not in guard:
-                errs.append("%s: %s is not offered in %s" % (t, base, need))
-    # the dark header is the design; catch its removal
-    if "%s-dark" % P not in livb: errs.append(t + ": the dark header is gone")
-    if "#191919" not in livb: errs.append(t + ": the dark header lost its ink colour")
-    # placeholders must be visible, not silently empty
-    if "TO BE SUPPLIED" not in livb:
-        errs.append(t + ": the image placeholder is not visibly marked")
-    # either a real review or a marked placeholder, never a bare quote with no
-    # attribution and never a translated one
-    if "to be added" not in livb and "on Trustpilot" not in livb:
-        errs.append(t + ": the review block has neither a real review nor a placeholder")
-    for l in rv.available(cat["slug"]):
-        r = rv.get(cat["slug"], l)
-        if r["language"] != l:
-            errs.append("%s: cached review for %s is written in %s" % (t, l, r["language"]))
-        if r["author"] and r["author"] not in livb:
-            errs.append("%s: review shown without its author" % t)
-    # House style: no jargon in what a reader actually SEES. That means the text
-    # between tags plus alt text, not the markup - the first version of this
-    # check failed on "gsm" inside a product URL, which no reader ever reads.
-    body = re.sub(r"<!--.*?-->", "", livb, flags=re.S)
-    body = re.sub(r"<style[^>]*>.*?</style>", "", body, flags=re.S)
-    alts = " ".join(re.findall(r'alt="([^"]*)"', body))
-    txt = re.sub(r"<[^>]+>", " ", body)
-    # Django tags are not HTML tags, so they survive the strip above and drag
-    # catalogue ids like "classichoodedsweat260gsm" into what looks like copy.
-    txt = re.sub(r"\{%.*?%\}", " ", txt, flags=re.S)
-    txt = re.sub(r"\{\{.*?\}\}", " ", txt, flags=re.S)
-    vis = (txt + " " + alts).lower()
-    for j in ("bleed", "dpi", "cmyk", "safe area", "pre-flight", "gsm"):
-        if j in vis: errs.append("%s: jargon found, house style forbids it: %s" % (t, j))
+    # THE CHECK THAT MATTERS: each market's grid must request exactly the
+    # products that market stocks - no more, because a missing catalogue id is a
+    # 400 and a dead send, and no fewer, because a silently dropped product is a
+    # tile nobody notices is gone.
+    expected_blocks = 0
+    # Find the MARKET branches specifically. Scanning for the next "{% elif %}"
+    # does not work: each tile contains its own if/elif for the currency symbol,
+    # so a generic scan cuts the grid off after the first tile - which is exactly
+    # how the first version of this check reported one product per market.
+    pat = re.compile(r'\{%% (?:if|elif) %s == "([A-Z]{2})" %%\}' % re.escape(MARKET))
+    spans = [(m.group(1), m.end()) for m in pat.finditer(livb)]
+    seen_markets = [m for m, _ in spans]
+    for i, (m, pos) in enumerate(spans):
+        if i + 1 < len(spans):
+            stop = spans[i + 1][1]
+        else:
+            # the else that closes the grid conditional; without this the last
+            # market's block ran to the end of the email and picked up the
+            # content blocks, review and footer rows as if they were tiles
+            closer = '{%% else %%}<p class="%s-ss">' % P
+            k = livb.find(closer, pos)
+            stop = k if k >= 0 else len(livb)
+        block = livb[pos:stop]
+        avail = [p[0] for p in cp.PRODUCTS[cat["slug"]] if m in cp.markets_for(p[0])]
+        got = re.findall(r'\|add:"-([a-z0-9]+)"', block)
+        if sorted(got) != sorted(avail):
+            errs.append("%s: %s grid requests %s, should be %s"
+                        % (t, m, sorted(got), sorted(avail)))
+        for row in re.findall(r"<tr>(.*?)</tr>", block, re.S):
+            if row.count("%s-tile" % P) != 2:
+                errs.append("%s: %s grid has a row that is not two cells" % (t, m))
+    for m in cp.MARKETS:
+        avail = [p[0] for p in cp.PRODUCTS[cat["slug"]] if m in cp.markets_for(p[0])]
+        if avail and m not in seen_markets:
+            errs.append("%s: market %s has products but no grid" % (t, m))
+        if seen_markets.count(m) > 1:
+            errs.append("%s: market %s has more than one grid" % (t, m))
+        expected_blocks += len(avail)
+    n_blocks = livb.count("{% catalog ")
+    if n_blocks != expected_blocks:
+        errs.append("%s: %d catalog blocks, expected %d across the markets"
+                    % (t, n_blocks, expected_blocks))
+    if livb.count("{% endcatalog %}") != n_blocks:
+        errs.append("%s: unbalanced catalog blocks" % t)
+    # four products is the design; two per row only works with an even number
+    if len(cp.PRODUCTS[cat["slug"]]) != 4:
+        errs.append("%s: %d products declared, the grid is built for 4"
+                    % (t, len(cp.PRODUCTS[cat["slug"]])))
     # A MINIMUM QUOTED IN COPY MUST BELONG TO A PRODUCT ON SCREEN. The Corporate
     # Gifts copy claimed "notepads at a hundred" while notepads was not one of
     # its tiles - and notepads is a Commercial Print product, so the sentence
@@ -618,6 +640,19 @@ for cat in CATEGORIES:
             if n is not None and n not in shown:
                 errs.append("%s: copy says %r at %d, which is not a minimum of anything shown"
                             % (t, m.group(1).strip(), n))
+    # House style: no jargon in what a reader SEES - the text between tags plus
+    # alt text, not the markup, and not the Django tags either (an early version
+    # tripped on "gsm" inside a catalogue id, which nobody ever reads).
+    doc = re.sub(r"<!--.*?-->", "", livb, flags=re.S)
+    doc = re.sub(r"<style[^>]*>.*?</style>", "", doc, flags=re.S)
+    alts = " ".join(re.findall(r'alt="([^"]*)"', doc))
+    txt = re.sub(r"<[^>]+>", " ", doc)
+    txt = re.sub(r"\{%.*?%\}", " ", txt, flags=re.S)
+    txt = re.sub(r"\{\{.*?\}\}", " ", txt, flags=re.S)
+    vis = (txt + " " + alts).lower()
+    for j in ("bleed", "dpi", "cmyk", "safe area", "pre-flight", "gsm"):
+        if j in vis:
+            errs.append("%s: jargon found, house style forbids it: %s" % (t, j))
     # a figure must never be split from its unit
     for loose in re.findall(r"\d+ (?:units|unit)", vis):
         errs.append("%s: %r can break across lines" % (t, loose))

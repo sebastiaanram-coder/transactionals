@@ -74,6 +74,9 @@ MARKETS = ["IE", "GB", "NL", "BE", "FR", "ES"]
 ABSENT = {
     "booklets5":             ["FR"],
     "businesscardsstandard": ["ES"],
+    "panelsfoamex":          ["ES"],
+    "labelsonrollstandardownsize": ["ES"],
+    "luxurykraftbags":       ["GB"],
     "banners":               ["ES"],
     "stickers":              ["FR"],
     "stickersownsize":       ["ES"],
@@ -103,6 +106,7 @@ PRODUCTS = {
         ("standardflyers", "Flyers", 39.96, 1000, "units", "standardflyers"),
         ("businesscardsstandard", "Classic Business Cards", 25.82, 500, "units", "standardbusinesscards"),
         ("booklets5", "Stapled Booklets", 269.36, 500, "units", "booklets"),
+        ("posters", "Standard Posters", 55.34, 50, "units", "posters"),
     ],
     # banners 23.6% of category GP and the most ordered; feather flags 13.4% at
     # EUR45 per item; roll-ups 11.7%. Together just under half the category.
@@ -113,6 +117,7 @@ PRODUCTS = {
         ("banners", "Banners", 36.79, 1, "units", "banners"),
         ("featherflags", "Custom Feather Flags", 67.64, 1, "units", "featherflags"),
         ("rollupbannersv2", "Roller Banners", 60.87, 1, "units", "budgetrollupbanners"),
+        ("panelsfoamex", "Foamex Signs", 31.51, 1, "units", "foamexsigns"),
     ],
     # labels on roll 28.1% of category GP at the best margin in the category
     # (41.6%); stickers 19.0%; custom-size stickers 12.2%. Sticker sheets
@@ -121,6 +126,7 @@ PRODUCTS = {
         ("labelsonroll", "Labels on Roll", 59.64, 1000, "units", "labels"),
         ("stickers", "Individual Stickers", 75.02, 1000, "units", "stickers"),
         ("stickersownsize", "Custom Shape Stickers", 57.45, 1, "units", "customsizestickers"),
+        ("labelsonrollstandardownsize", "Custom Size Labels on Roll", 72.18, 1, "units", "labelsonrollstandardownsize"),
     ],
     # The smallest category by a wide margin - 879 order items and EUR77k gross
     # profit across the whole period - so these are the top three of a small
@@ -129,6 +135,7 @@ PRODUCTS = {
         ("budgetpaperbags", "Budget Paper Bags", 102.30, 100, "units", "budgetpaperbags"),
         ("kraftbagsnonrib", "Smooth Kraft Paper Bags", 116.19, 100, "units", "kraftbagsnonrib"),
         ("greaseproofpaper", "Greaseproof Paper", 243.47, 1000, "units", "greaseproofpaper"),
+        ("luxurykraftbags", "Luxury Paper Bags", 133.32, 100, "units", "luxurykraftbags"),
     ],
     # Top three by gross profit: 10.7%, 6.4% and 5.4%. Two of them are t-shirts
     # because that is what the category actually sells. Hoodies and caps dropped
@@ -137,6 +144,7 @@ PRODUCTS = {
         ("fullcutshirt140gsm", "Fruit of the Loom Original T", 184.19, 1, "units", "fullcutshirtgsm140"),
         ("tshirtsbasicsols", "Sol\u2019s Imperial T-shirt", 202.75, 1, "units", "tshirtbasicroundneck"),
         ("tableclothregular", "Tablecloth, Rectangle", 46.11, 1, "units", "tableclothregular"),
+        ("pillows", "Pillows", 110.69, 3, "units", "pillows"),
     ],
     # 1,293 products and a very long tail. The tote alone is 10.1% of category
     # gross profit and the most ordered; the notebook 2.8%; pens 2.0%. A tote, a
@@ -147,6 +155,7 @@ PRODUCTS = {
         ("madras140gmcottontotebag", "Premium Tote Bags", 82.40, 1, "units", "cottonbagslonghandles140gm"),
         ("spectruma5hardcovernotebook", "Spectrum A5 Notebook", 300.11, 100, "units", "spectruma5hardcovernotebook"),
         ("deluxepens", "Deluxe Pens", 323.51, 500, "units", "deluxepen"),
+        ("sky650mlrecycledplasticwaterbottle", "Sky Recycled Water Bottle", 250.91, 50, "units", "sky650mlrecycledplasticwaterbottle"),
     ],
 }
 
@@ -159,6 +168,10 @@ PRODUCTS = {
 # size, up to about 500 KB each. That is the feed problem written up in the
 # briefing; it is not fixable from here.
 IMAGES = {
+    "labelsonrollstandardownsize": "https://contentful.helloprint.com/wm1n7oady8a5/4s6XNlr7ibJQiMA2JeFkCz/31c9ed62a57d5741f7805dc625d2e24f/custom_size_labels_on_roll_PDP.png",
+    "luxurykraftbags":             "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-luxury-gloss-laminated-paper-bag-with-logo-multiple-sizes-packshot-4x5-0c3d489b.jpg",
+    "pillows":                     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-full-colour-printed-pillows-packshot-1x1-0b0942a4.png",
+    "sky650mlrecycledplasticwaterbottle": "https://images.ctfassets.net/wm1n7oady8a5/7uV6V8spACgEIzZTZvbouW/602fb08efa0c3634869937ffefe68c7d/10077790.jpg",
     "banners":                     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-banners-personalise-with-your-own-design-packshot-1x1-e9f09deb.jpg",
     "featherflags":                "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-feather-flags-packshot-1x1-3a042178.jpg",
     "stickersownsize":             "https://contentful.helloprint.com/wm1n7oady8a5/56TXhD9209PYhFt3BL9Ko7/b195d26bfe52100a9709a2b9c5733327/Custom__3_.png",
