@@ -264,3 +264,86 @@ train people to wait, which is the same risk flagged in §10.
 - **Alternative product recommendations.** We have the machinery from Browse Abandonment, but in
   a cart email a size ladder invites reconsidering a decision already made. Held back
   deliberately.
+
+---
+
+## 13. Email 2, high-value branch — the print expert
+
+Status: proposal. **+24 hours**, cart at or above 150, no order since entering. **No code.**
+
+**Job.** On a basket this size the blocker is confidence or sign-off, not price. Offer a person
+and hold the incentive back to email 3.
+
+### What is reused, and what is not
+
+Reused from Browse Abandonment email 3, which solves the same problem for a different audience:
+
+- the banner construction and the **same bespoke-team photograph**
+- the **John and Print Expert Team** card
+- the dark closing band
+
+New here:
+
+- **the basket block from email 1** — hairlines, count badge, unfilled total. Unlike the browse
+  flow we know exactly what they configured and what it is worth, so it is shown again as the
+  thing being decided.
+- the three rows become **three things an expert does for a configured order**, rather than three
+  ways to be blocked.
+
+**Not reused: the numbered timeline.** Browse email 3 uses it because a quote genuinely is a
+sequence, and the note there says it should be used nowhere else. This is not a quote — they have
+a configured basket and a price already — so it stays unused rather than borrowed for effect.
+
+### Structure
+
+1. Masthead.
+2. **Banner**, bespoke team, text over the photograph.
+   - eyebrow: BEFORE YOU PAY
+   - H1: *Want a print expert to look at it first?*
+   - sub: *On an order this size, ten minutes of someone else's time is usually worth having.*
+   - CTA: *Talk to a print expert*
+3. **The basket**, exactly as email 1.
+4. **Three things they will do**, all verifiable:
+   - **Check the spec suits the job.** Forty years in the graphic trade behind the desk, and
+     advisers who "think along with you". Not the artwork check — that is a separate paid tier —
+     but whether the paper, size and finish are right for what it is for.
+   - **Confirm the delivery date.** Most products go out for next-day delivery where possible,
+     and they will say plainly if a date cannot be met.
+   - **Tell you if the quantity is wrong.** The site offers volume discounts: "better prices as
+     your print needs grow." On a basket this size the next quantity break may cost less per
+     unit than what is in there now.
+5. **John and the Print Expert Team.**
+6. **Dark closing band** — *Or just finish it* with a green *Return to checkout*, plus "or reply
+   to this email".
+7. Footer.
+
+### The third row is the interesting one
+
+"Tell you if the quantity is wrong" gives the high-value branch a **price lever that is not a
+discount code**. On a £150 basket, moving to the next quantity break can beat 10% off, it costs
+us nothing in margin percentage, and it increases order value rather than reducing it. That is a
+better first move on this branch than any coupon, and it is why holding the code to email 3 costs
+less than it looks.
+
+### One claim I have left out, and why
+
+**Paying by invoice rather than by card.** For a £150+ B2B basket that is probably the single
+strongest unblocker there is. The help centre implies it exists — it has "What are our bank
+details?" and "Why did I receive a payment reminder?", neither of which makes sense for
+card-only — but the answers load client-side and I cannot confirm it is offered at a standard
+checkout rather than only to business accounts.
+
+If it is available to anyone, it should replace one of the three rows above. Worth checking,
+because it is a bigger lever than the other two.
+
+### Subject
+
+Primary: **"Want a print expert to look at it first?"**
+Preview: *On an order this size, ten minutes of someone else's time is usually worth having.*
+
+### One decision
+
+The hero CTA is *Talk to a print expert*, not *Return to checkout*. Email 1 already offered
+checkout twice and it did not land, so repeating it as the headline action is the weaker move;
+checkout is carried by the closing band instead. Say if you would rather lead with checkout
+throughout.
