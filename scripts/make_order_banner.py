@@ -65,3 +65,9 @@ print("  row 190  :", band(190), " where the live headline ends")
 assert band(0) == (25, 25, 25), "row 0 is not flat brand ink"
 os.remove(TMP)
 print("wrote", os.path.relpath(dst, ROOT), os.path.getsize(dst), "bytes")
+
+# The email previews inline their images as data URIs at build time, so a new
+# banner does not reach them until the builder runs again. Doing it here
+# removes the gap rather than relying on remembering.
+print("\nre-running the email builder so the previews pick this up:")
+subprocess.run([sys.executable, os.path.join(HERE, "build_order_01.py")], check=True)
