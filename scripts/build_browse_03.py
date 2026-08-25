@@ -92,9 +92,13 @@ CSS = """
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
 .%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
-/* same banner construction as email 2: HTML text over the photograph, with
-   140px of ink headroom and a 110px blend baked into the image so the text has
-   somewhere dark to sit and the masthead seam is invisible. */
+/* Same banner construction as email 2: HTML text over the photograph, with
+   ink headroom and a blend baked into the image so the text has somewhere dark
+   to sit and the masthead seam is invisible. Tuned per photo rather than
+   copied: this one carries 130px of headroom and only a 60px blend, because
+   the bespoke team's faces start about 79px into the photo and a deeper blend
+   darkened them. The source also had rounded corners baked in, cropped off
+   with a 12px inset so they do not show as white notches at full width. */
 .%(P)s-hero{background:#191919;text-align:center;}
 .%(P)s-heroov{position:relative;z-index:2;padding:28px 24px 0;min-height:150px;}
 .%(P)s-heroimg{display:block;width:100%%;height:auto;border:0;margin-top:-152px;}
@@ -230,7 +234,7 @@ BODY = """
         <p class="{P}-sub">An odd size, a tight deadline, or a number someone else approves. Our quote desk answers within 24 hours.</p>
         <a class="{P}-cta" href="{QUOTE_URL}">Request a quote</a>
       </div>
-      <img class="{P}-heroimg" src="{IMG_HERO}" alt="A Helloprint adviser working out a price at her desk" width="600">
+      <img class="{P}-heroimg" src="{IMG_HERO}" alt="The Helloprint team who price the unusual jobs" width="600">
     </div>
 
     <a class="{P}-anchor" href="{PROD_URL}">
@@ -263,7 +267,7 @@ BODY = """
       <img class="{P}-johnav" src="{AV_JOHN}" alt="" width="76" height="76">
       <span class="{P}-johnname">John</span>
       <span class="{P}-johnrole">PRINT EXPERT TEAM</span>
-      <p class="{P}-johntx">John has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.</p>
+      <p class="{P}-johntx">That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.</p>
     </div>
 
     {CATALOG_CLOSE}
@@ -367,6 +371,9 @@ if "within the hour" in vis.lower():
 if vis.count("24 hours") < 2:
     errs.append("the 24 hour promise should be stated in the hero and the close")
 if len(BLOCKED) != 3: errs.append("expected 3 blocked states")
+# the John line names where he stands in the banner, so the two are coupled
+if "pink polo" in live_body and "browse-03-hero-banner" not in str(_A.values()):
+    errs.append("the John copy references the banner photo but the banner changed")
 if len(STEPS) != 3: errs.append("expected 3 quote steps")
 if live_body.count('bgcolor="#008539"') != 3: errs.append("numbered dots must be table cells with bgcolor")
 if live_body.count('bgcolor="#cfe4d8"') != 2: errs.append("expected 2 spine segments between 3 steps")

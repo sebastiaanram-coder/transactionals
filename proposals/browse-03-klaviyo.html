@@ -29,9 +29,13 @@
 .hp-b3-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
 .hp-b3-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .hp-b3-logobar img{width:150px;max-width:50%;height:auto;display:inline-block;border:0;}
-/* same banner construction as email 2: HTML text over the photograph, with
-   140px of ink headroom and a 110px blend baked into the image so the text has
-   somewhere dark to sit and the masthead seam is invisible. */
+/* Same banner construction as email 2: HTML text over the photograph, with
+   ink headroom and a blend baked into the image so the text has somewhere dark
+   to sit and the masthead seam is invisible. Tuned per photo rather than
+   copied: this one carries 130px of headroom and only a 60px blend, because
+   the bespoke team's faces start about 79px into the photo and a deeper blend
+   darkened them. The source also had rounded corners baked in, cropped off
+   with a 12px inset so they do not show as white notches at full width. */
 .hp-b3-hero{background:#191919;text-align:center;}
 .hp-b3-heroov{position:relative;z-index:2;padding:28px 24px 0;min-height:150px;}
 .hp-b3-heroimg{display:block;width:100%;height:auto;border:0;margin-top:-152px;}
@@ -135,7 +139,7 @@
         <p class="hp-b3-sub">An odd size, a tight deadline, or a number someone else approves. Our quote desk answers within 24 hours.</p>
         <a class="hp-b3-cta" href="https://www.helloprint.com/en-ie/request-a-quote">Request a quote</a>
       </div>
-      <img class="hp-b3-heroimg" src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-03-hero-banner.jpg" alt="A Helloprint adviser working out a price at her desk" width="600">
+      <img class="hp-b3-heroimg" src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-03-hero-banner.jpg" alt="The Helloprint team who price the unusual jobs" width="600">
     </div>
 
     <a class="hp-b3-anchor" href="{{ catalog_item.url }}">
@@ -168,7 +172,7 @@
       <img class="hp-b3-johnav" src="https://REPLACE-WITH-KLAVIYO-ASSET/welcome-04-john-avatar.jpg" alt="" width="76" height="76">
       <span class="hp-b3-johnname">John</span>
       <span class="hp-b3-johnrole">PRINT EXPERT TEAM</span>
-      <p class="hp-b3-johntx">John has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.</p>
+      <p class="hp-b3-johntx">That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.</p>
     </div>
 
     {% endcatalog %}
