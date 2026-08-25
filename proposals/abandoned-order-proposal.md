@@ -387,3 +387,86 @@ Prompt delta on top of the bespoke-team image:
 
 Two words is well within what the model renders reliably, so this is a cheap regeneration if the
 first attempt puts the arrow somewhere unhelpful.
+
+---
+
+## 14. Email 2, low-value branch — the incentive
+
+Status: proposal. **+24 hours**, cart below 150, no order since entering. **10%, expiring in 72
+hours.**
+
+**Job.** Different buyer to the high branch. Median GB cart is £60, so this is a smaller job
+someone is running themselves: no procurement, no sign-off, price-sensitive, and wanting it done
+quickly. The lever is the incentive and the argument is speed.
+
+### Deliberately not the high-value email with a code bolted on
+
+| | High value | Low value |
+|---|---|---|
+| Hero | team photograph, expert-led | **no photograph**, light header |
+| Argument | four things an adviser does | three things that make finishing quick |
+| Offer | none until email 3 | **10%, 72 hours** |
+| Register | considered | fast |
+
+The light header is the point rather than a saving of effort: the high branch is a confidence
+play and earns a photograph of people, the low branch is a speed play and should feel like two
+clicks. It also differentiates the two branches for anyone who ever sees both.
+
+### Structure
+
+1. **Green promo bar.** *10% off your basket · ends in 72 hours.* The pattern already used in
+   Welcome, and the offer belongs above everything else on this branch.
+2. **Light hero**, no image.
+   - eyebrow: STILL IN YOUR BASKET
+   - H1: *10% off the basket you saved*
+   - sub: *The code comes off at checkout. It runs for 72 hours, then the price goes back.*
+   - CTA: *Finish the job*
+3. **The basket**, the shared block, with one line under the total: *your 10% comes off at
+   checkout.*
+4. **The code chip**, once, directly above the second CTA. Welcome taught this: RFB stated the
+   discount three times and it crowded out any actual argument.
+5. **Three things that make finishing quick**, all verified:
+   - *Change the quantity and the price moves with it.* The number on the page is a starting
+     point, not a minimum.
+   - *Send your file now or after you order.* The product page allows ordering before the artwork
+     exists, and almost nobody knows.
+   - *Nothing is charged until you confirm.*
+6. **One Trustpilot review.** Same as email 1. Klaviyo's own guidance rates reviews the strongest
+   lever on a first purchase, and most of this branch is early-stage.
+7. Help row, footer.
+
+No cross-sell and no expert block. A size ladder invites reconsidering a decision already made,
+and the expert is the other branch's argument.
+
+### The discounted total cannot be shown, and it is worth knowing why
+
+Showing "€64.50 becomes €58.05" would be materially more persuasive than "10% off". It is not
+possible in Klaviyo's template language:
+
+- `{% widthratio total 100 90 %}` returns **58** — integers only, so the cents are lost.
+- `{% widthratio total 1 90 %}` returns **5805**, which is the right number in cents, but there
+  is no way to insert the decimal point: that needs the output captured into a variable, and
+  `{% with %}` is not supported.
+- Rounding the *saving* instead — "about €6 off" — works arithmetically but `widthratio` rounds
+  to nearest, so a €68 basket would advertise "about €7" against a real £6.80. Small, but it is
+  a discount overstated in writing.
+
+So the email states the percentage and lets checkout do the arithmetic, exactly as Welcome does.
+**If showing the saving matters commercially, the clean fix is upstream**: have the Started
+Checkout event carry a discounted-total property, and the email can print it.
+
+### Three things to settle
+
+1. **Which code.** `HELLO10` is the Welcome code. Reusing it here means a Welcome recipient sees
+   the same code twice, the attribution is unusable, and if it is restricted to first orders it
+   will silently fail for returning customers. This branch needs its own, and email 3 a third.
+2. **Free delivery as the alternative.** Klaviyo's guidance cites 39% of abandoners leaving over
+   extra costs. On a £40 basket an £8 delivery is a 20% surcharge where 10% off the goods is £4,
+   so free delivery may convert better *and* cost less. This is the branch to test it on.
+3. **The 72-hour expiry has to actually expire**, or the deadline stops working across the whole
+   programme.
+
+### Subject
+
+Primary: **"10% off, for the next 72 hours"**
+Preview: *The basket is still saved. The code comes off at checkout.*
