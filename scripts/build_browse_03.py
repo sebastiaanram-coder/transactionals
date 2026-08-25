@@ -150,6 +150,8 @@ CSS = """
 .%(P)s-johntx{margin:0 auto;max-width:410px;font-size:15px;line-height:23px;color:#555555;}
 
 .%(P)s-close{background:#191919;padding:28px 24px 30px;text-align:center;margin-top:30px;}
+/* the closing band lives INSIDE the shell: out in the wrapper it stretches to
+   the full window width instead of the 600px column. */
 .%(P)s-closettl{display:block;font-size:22px;line-height:29px;font-weight:800;color:#ffffff;margin:0 0 8px;letter-spacing:-.01em;}
 .%(P)s-closetxt{display:block;font-size:15px;line-height:23px;color:#ffffff;opacity:.86;margin:0 auto 18px;max-width:430px;}
 .%(P)s-closealt{display:block;margin-top:14px;font-size:13px;line-height:20px;color:#ffffff;opacity:.7;}
@@ -270,15 +272,15 @@ BODY = """
       <p class="{P}-johntx">That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.</p>
     </div>
 
+    <div class="{P}-close">
+      <span class="{P}-closettl">Send them the awkward job</span>
+      <span class="{P}-closetxt">A standard run or something nobody has printed before. Either way you get a price within 24 hours and a straight answer on what is possible.</span>
+      <a class="{P}-cta-g" href="{QUOTE_URL}">Request a quote</a>
+      <span class="{P}-closealt">Or just reply to this email and a person will pick it up.</span>
+    </div>
+
     {CATALOG_CLOSE}
 
-  </div>
-
-  <div class="{P}-close">
-    <span class="{P}-closettl">Send them the awkward job</span>
-    <span class="{P}-closetxt">A standard run or something nobody has printed before. Either way you get a price within 24 hours and a straight answer on what is possible.</span>
-    <a class="{P}-cta-g" href="{QUOTE_URL}">Request a quote</a>
-    <span class="{P}-closealt">Or just reply to this email and a person will pick it up.</span>
   </div>
 
   <div class="{P}-foot">
@@ -371,6 +373,10 @@ if "within the hour" in vis.lower():
 if vis.count("24 hours") < 2:
     errs.append("the 24 hour promise should be stated in the hero and the close")
 if len(BLOCKED) != 3: errs.append("expected 3 blocked states")
+# the closing band must sit inside the 600px shell, not in the full-width wrapper
+_shell_close = live_body.index('<div class="%s-foot">' % P)
+if live_body.index('%s-close"' % P) > _shell_close:
+    errs.append("the closing band escaped the shell and will render full width")
 # the John line names where he stands in the banner, so the two are coupled
 if "pink polo" in live_body and "browse-03-hero-banner" not in str(_A.values()):
     errs.append("the John copy references the banner photo but the banner changed")
