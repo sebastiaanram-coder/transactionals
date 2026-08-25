@@ -176,3 +176,69 @@ The wall in attempt 2 is already close to flat and dark, so I can probably exten
 `#191919` and make it work as it stands rather than waiting for a perfect generation. That is the
 same technique used on every other banner in the programme. Send the PNG or JPEG rather than a
 screenshot and I will drop it into the email and show you whether it holds.
+
+---
+
+## Attempt 3: switch to a landscape card
+
+Better on three counts, and the third is the real one.
+
+1. **The aspect agrees with the frame.** A landscape A6 card is about 1.4:1, so it sits inside a
+   wide banner instead of fighting it. The portrait poster needed the frame to be taller than the
+   email wants to be.
+2. **One line fits without wrapping**, and a card with a single line is a finished object. A
+   poster with one line at the top and two thirds of empty paper below is a void that has to be
+   art-directed around.
+3. **A card is addressed to one person; a poster is addressed to a room.** This email goes to
+   someone who left a specific basket, and a small card left for them says that. A poster
+   announces. That is the argument that decides it, not the geometry.
+
+It also disposes of the rigidity problem for good: a small card leaning or lying on a surface is
+normal behaviour, where a large sheet doing the same thing reads as signage.
+
+## Full prompt — landscape card
+
+> Hyper-realistic close-up studio photograph of a single premium printed postcard lying on a
+> smooth matte charcoal-black surface, in a dark professional print studio.
+>
+> The card is **landscape A6, roughly 148 by 105 mm, printed on heavy 400 gsm uncoated soft-touch
+> stock**. Its thickness is clearly visible along the near edge — a clean, crisp, freshly guillotined
+> edge showing the pale core of the board against the dark printed surface. Fine paper grain is
+> visible across the face. The card is deep charcoal, hex `#191919`, very slightly lighter than the
+> surface it rests on so its shape reads clearly.
+>
+> Printed on the card, and nothing else: one line of confident, tightly-tracked sans-serif type in
+> warm off-white, **left-aligned**, sitting on the vertical centre line with a generous margin on
+> all four sides, reading exactly: **Left something behind?** No second line, no logo, no wordmark,
+> no watermark, no border, no rule, no address lines, no stamp box, no QR code, no decorative marks
+> of any kind.
+>
+> Composition: the camera is low and close, almost level with the surface and angled slightly down,
+> so the card is seen nearly face-on with just enough perspective to read the thickness of the stock
+> and the shadow it casts. The card occupies roughly **two thirds of the frame width** and sits in
+> the **lower half of the frame**, centred horizontally. A second identical card lies face-down and
+> partly out of frame behind it, softly out of focus, adding depth and showing the edge of the stock
+> again.
+>
+> The **upper half of the image is empty, flat, unlit charcoal darkness** — the surface and
+> background receding into shadow, with no objects, no texture detail, no vignette edges, no light
+> spill, no gradient banding and no visible horizon line. Clean dark negative space.
+>
+> Lighting: a single soft directional studio light from the upper left, raking low across the card so
+> the paper grain and the faint relief of the ink are both visible, catching the cut edge as a thin
+> bright line, and casting one soft natural shadow to the lower right. Freshly printed: no dust, no
+> fingerprints, no scuffs, no curl.
+>
+> Colour: neutral, very slightly cool. No orange-and-teal grade, no warm filter, no colour cast on
+> the off-white ink. Shallow depth of field, critically sharp on the type. Photographic and
+> physical — not a 3D render, not an illustration, no CGI sheen, no glow, no specular highlights on
+> the paper face.
+>
+> Aspect ratio 4:3, landscape. Highest resolution available.
+
+**Swapping the line** to "We noticed you left something." is a one-word edit to the prompt, but it
+is four words longer and text fidelity drops off quickly past about five. Generate the short line
+first and only lengthen it once the composition is right.
+
+**The upper half being genuinely flat is still the one thing that matters most.** The live headline
+and button sit over it, so texture or banding there shows up behind real type.
