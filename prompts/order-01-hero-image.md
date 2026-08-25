@@ -126,3 +126,53 @@ The current banner is 600 x 456 with 126 px of ink headroom baked on. If the wal
 poster comes back genuinely flat and dark, that headroom becomes unnecessary — I crop straight
 into the wall and the flat area is real photography rather than a painted-on band. If it comes
 back uneven, I bake the fade as before. Either way the seam with the masthead lands on `#191919`.
+
+---
+
+## Attempt 2: right material, wrong framing
+
+Paper now, portrait, pinned, no floor. The pins sell it and the curled corner sells the
+thinness. Four things to change, in order of how much they matter.
+
+1. **The curl clips the first letter.** The lifted corner sits on top of the "L" of "Left", so
+   the first character of the message is obscured. Either move the type down and right so it
+   clears the curl entirely, or move the curl to the **bottom** right where nothing is printed.
+   Bottom-right is better: it keeps the type clean and still shows the sheet is thin.
+2. **The poster is too small and too centred.** Roughly a third of the frame width, with large
+   empty wall either side. It should fill about **two thirds of the frame width**, still portrait,
+   still with both vertical edges visible.
+3. **It sits too high.** Its top edge is about a quarter of the way down; it needs to be nearer
+   **half**, because the wall above it is the area the live headline sits over. More wall above,
+   less wall to the sides.
+4. **The poster and the wall are the same value.** They read as one surface with pins in it. Give
+   the poster ground a touch more separation — either slightly lighter than the wall, or a faint
+   rim of light along one vertical edge so the sheet reads as an object sitting in front of
+   something.
+
+Keep: the pins, the curl (relocated), the left-aligned two-line type, the matte finish, the
+neutral grade, the absence of any floor.
+
+### Deltas to paste over the Option A prompt
+
+> The poster fills roughly two thirds of the frame width, portrait, both vertical edges visible,
+> centred horizontally. Its top edge sits **half way down the frame**, and the bottom of the
+> poster runs out of the bottom of the frame.
+>
+> The **upper half of the image is bare, empty, flat charcoal wall** with nothing in it.
+>
+> One corner of the sheet lifts a few millimetres away from the wall at the **bottom right**,
+> where nothing is printed. The type must not be overlapped or clipped by the lifted corner.
+>
+> The poster ground is very slightly lighter than the wall behind it, and a faint rim of light
+> runs down its left edge, so the sheet reads as a separate object in front of the wall rather
+> than part of it.
+>
+> The type is left-aligned in the upper third of the sheet, set over two lines, with clear margin
+> on all sides and no element touching it.
+
+## If you send me the file I can test-fit this one
+
+The wall in attempt 2 is already close to flat and dark, so I can probably extend the top with
+`#191919` and make it work as it stands rather than waiting for a perfect generation. That is the
+same technique used on every other banner in the programme. Send the PNG or JPEG rather than a
+screenshot and I will drop it into the email and show you whether it holds.
