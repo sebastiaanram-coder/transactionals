@@ -131,7 +131,7 @@ FLOWS = [
       goal="", who="", tpl="SvQkfX", flags=[], badge=None,
       final="order-02-low-proposed.html"),
     dict(step=4, when="72 hours \u00b7 high value", subject="Still happy to go through this with you",
-      preview="A print expert can still look at it, and there is 10% off if it helps.",
+      preview="John can still go through it with you, and he has put 10% off on your basket.",
       goal="", who="", tpl="VtF4Ei", flags=[], badge=None,
       final="order-03-high-proposed.html"),
     dict(step=5, when="72 hours \u00b7 low value", subject="25% off, for the next 24 hours",
@@ -309,7 +309,8 @@ EMAIL_DETAIL = {
    variant="A different email: 25% off with a 24-hour deadline. Below 150 the buyer is self-serving and price-sensitive, so the incentive is allowed to do the work.",
    elements=[
      ("One named person, not the team again.", "Email 2 used a group photograph and said \u201cwe have experts\u201d. This one is a signed note from John, because a single person is the only thing left to escalate to. It is also the cheapest thing in the flow \u2014 a reply costs an email, not a margin point."),
-     ("The offer is deliberately below the basket.", "A build check enforces the order and fails if a later edit promotes it. There is no green offer bar above the masthead on this branch, which is what distinguishes it at a glance from the low-value email."),
+     ("John hands the code over himself.", "It sits inside his note, after he offers to look at the job and before he signs off \u2014 so it arrives as a gesture from a person rather than a promotional panel. The first build parked it below the basket on the theory that price is not the blocker here. True, but it made the discount genuinely hard to find, and a discount nobody sees is not restrained, it is wasted."),
+     ("Still no offer bar above the masthead.", "That is what distinguishes this email from the low-value one at a glance: over 150 the reader is being offered a person, and the money is something that person adds."),
      ("The saving is stated, and the band range comes from real carts.", "A quarter of abandoned carts clear the split and the tail is long \u2014 the largest in a 150-cart sample was 6,088. Bands run to 10,000 so that cart is told \u201cat least \u20ac600\u201d rather than \u20ac300. Verified by rendering against live baskets."),
    ]),
  "YrvM4D": dict(

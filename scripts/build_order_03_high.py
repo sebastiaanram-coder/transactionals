@@ -2,8 +2,22 @@
 """
 Build Abandoned Order email 3, HIGH-VALUE branch - the last one.
 
-+72 hours on carts at or above 150. 10% off, expiring in 72 hours, with the
-expert offer still leading and the code underneath it.
++72 hours on carts at or above 150. 10% off, expiring in 72 hours, handed over
+by John inside his note rather than parked at the foot of the email.
+
+WHERE THE CODE SITS, AND WHY IT MOVED. The first build put the offer below the
+basket on the reasoning that price is not the blocker on a large configured
+order. That reasoning is still true, but it produced an email where the
+discount was genuinely hard to find, and a discount nobody sees is not a
+restrained discount - it is a wasted one. Product call: make it prominent.
+
+The resolution is not to move the block up. It is that JOHN GIVES IT. The code
+now sits inside his note, after he has offered to look at the job, as the last
+thing he says before signing. That keeps the person leading - which is the whole
+argument of this branch - while making the offer impossible to miss, because it
+arrives as a gesture from someone rather than as a promotional panel. A build
+check now enforces the code is inside the note and above the basket, which is
+the exact opposite of what it enforced before; the old rule is gone on purpose.
 
 WHY THE CODE DOES NOT LEAD. On a large configured order the thing in the way is
 usually confidence or sign-off, not price: somebody wants the spec checked, the
@@ -13,7 +27,7 @@ the escalation across the branch is in who is speaking, not how loud:
 
   email 1  the basket, restored, no code
   email 2  the team - what a print expert would actually do for you
-  email 3  one named person, directly, and a code underneath
+  email 3  one named person, directly, handing over a code himself
 
 That last step is the reason this email does not reuse email 2's team
 photograph. A group shot said "we have experts". A single portrait and a
@@ -80,11 +94,13 @@ def figure_live(cur):
     return BANDS.figure_live(cur)
 
 def clause_live(cur):
-    return BANDS.wrap_live(" It is worth at least " + figure_live(cur) + " on this basket.")
+    # a fragment, closed by the expiry in the gift panel. Empty below the split,
+    # which this branch never sees, but the sentence still reads if it happens.
+    return BANDS.wrap_live("Worth at least " + figure_live(cur) + " on this basket &middot; ")
 
 def clause_sample(total, cur):
     n = BANDS.figure_sample(total, cur)
-    return "" if n is None else " It is worth at least " + n + " on this basket."
+    return "" if n is None else "Worth at least " + n + " on this basket &middot; "
 
 CUR_LIVE = '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'
 
@@ -157,14 +173,17 @@ CSS = """
 .%(P)s-ntx:last-child{margin-bottom:0;}
 .%(P)s-nsig{margin:0;font-size:15px;line-height:23px;color:#555555;font-style:italic;}
 @@BASKET_CSS@@
-/* the offer, deliberately below the basket and below the person */
-.%(P)s-offer{margin:26px 24px 0;border-top:1px solid #e5e5e5;padding:24px 0 0;text-align:center;}
-.%(P)s-offttl{display:block;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;margin-bottom:7px;}
-.%(P)s-offtx{margin:0 auto 15px;max-width:430px;font-size:15px;line-height:23px;color:#555555;}
-.%(P)s-code{display:inline-block;border:2px dashed #9fdbb8;border-radius:8px;background:#f1f8f4;color:#191919;padding:9px 16px;font-size:13px;line-height:18px;font-weight:700;margin:0 0 8px;}
-.%(P)s-code strong{font-weight:800;letter-spacing:.06em;font-size:15px;}
-.%(P)s-exp{display:block;margin:0 auto 16px;max-width:420px;font-size:12px;line-height:18px;color:#767676;}
-.%(P)s-exp img{width:14px;height:14px;vertical-align:-2px;margin-right:5px;border:0;}
+/* THE CODE, HANDED OVER INSIDE JOHN'S NOTE. White on the note's grey so it
+   lifts off the panel, green edge so it reads as the offer, and full width so it
+   is the widest thing in the block. This is the loudest element in the email. */
+.%(P)s-gift{margin:4px 0 16px;background:#ffffff;border:2px dashed #9fdbb8;border-radius:12px;padding:16px 18px 15px;text-align:center;}
+.%(P)s-giftlbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.14em;color:#008539;margin-bottom:6px;}
+.%(P)s-code{display:block;font-size:15px;line-height:22px;font-weight:700;color:#191919;margin:0 0 3px;}
+.%(P)s-code strong{display:block;font-weight:800;letter-spacing:.08em;font-size:26px;line-height:34px;color:#008539;}
+.%(P)s-exp{display:block;margin:7px auto 0;max-width:420px;font-size:12px;line-height:18px;color:#767676;}
+.%(P)s-exp img{width:13px;height:13px;vertical-align:-2px;margin-right:5px;border:0;}
+/* the closing action, after the basket */
+.%(P)s-mid{margin:26px 24px 0;border-top:1px solid #e5e5e5;padding:24px 0 0;text-align:center;}
 .%(P)s-q{margin:28px 24px 0;padding:24px 0 0;border-top:1px solid #e5e5e5;}
 .%(P)s-qtbl{width:100%%;border-collapse:collapse;}
 .%(P)s-qtick{width:34px;vertical-align:top;padding:12px 12px 0 0;}
@@ -202,7 +221,9 @@ CSS = """
   .%(P)s-nav img{width:54px;height:54px;}
   .%(P)s-ntx{font-size:15px;line-height:24px;}
 @@BASKET_CSS_M@@
-  .%(P)s-offer,.%(P)s-q,.%(P)s-last,.%(P)s-help{margin-left:14px;margin-right:14px;}
+  .%(P)s-mid,.%(P)s-q,.%(P)s-last,.%(P)s-help{margin-left:14px;margin-right:14px;}
+  .%(P)s-gift{padding:14px 14px 13px;}
+  .%(P)s-code strong{font-size:23px;line-height:30px;}
   .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
 """
@@ -226,7 +247,7 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">A print expert can still go through this with you, and there is 10% off if it helps.</div>
+<div class="{P}-pre">John can still go through this with you, and he has put 10% off on your basket.</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -254,18 +275,22 @@ BODY = """
         </tr>
       </table>
       <p class="{P}-ntx">I have specced print for over twenty years, and on orders around this size there is nearly always one detail worth a second look &mdash; a quantity that costs less at the next step up, a finish that will not survive the job, a date that is tighter than it needs to be.</p>
-      <p class="{P}-ntx">If you want, send it over before you order and I will go through it. If it is already right, order it and we will get on with printing.</p>
+      <p class="{P}-ntx">Send it over before you order and I will go through it. And to make the decision a bit easier, here is 10% off from me:</p>
+
+      <div class="{P}-gift">
+        <span class="{P}-giftlbl">JOHN&rsquo;S CODE FOR YOU</span>
+        <span class="{P}-code">Use code <strong>{CODE}</strong></span>
+        <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="13" height="13">{SAVE_CLAUSE}expires {HOURS}&nbsp;hours after this email</span>
+      </div>
+
       <p class="{P}-nsig">&mdash; John, print expert team</p>
     </div>
 
     {BASKET}
 
-    <div class="{P}-offer">
-      <span class="{P}-offttl">And if it helps, 10% off</span>
-      <p class="{P}-offtx">Not the reason to order, but it is there.{SAVE_CLAUSE}</p>
-      <span class="{P}-code">Use code <strong>{CODE}</strong></span><br>
-      <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="14" height="14">Expires {HOURS}&nbsp;hours after this email. Your basket stays saved either way.</span>
+    <div class="{P}-mid">
       <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+      <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">or send it to John first</a></p>
     </div>
 
     <div class="{P}-q">{QUICK}</div>
@@ -396,14 +421,30 @@ for t in (150.0, 237.33, 1000.0):
     if n is None or n not in clause_sample(t, "E"):
         errs.append("no saving figure at %.2f" % t)
 
-# THE ORDERING IS THE ARGUMENT. The person and the basket both come before the
-# offer; if a future edit moves the offer up, the email stops being this email.
-i_note, i_basket, i_offer = (live_body.index('%s-note' % P),
-                             live_body.index('%s-bwrap' % P),
-                             live_body.index('%s-offer' % P))
-if not (i_note < i_basket < i_offer):
-    errs.append("the offer must stay below the personal note and the basket")
-if "%s-promo" % P in live_body:
+# THE CODE IS JOHN'S TO GIVE. It must sit inside his note - between his opening
+# and his signature - and above the basket. This deliberately reverses the rule
+# the first build enforced: the offer used to be pinned below the basket, which
+# made it prominent to nobody. If a later edit lifts the code out of the note it
+# stops being a gesture from a person and goes back to being a promo panel.
+# Measure the MARKUP, not the stylesheet. Every class name appears first inside
+# the inline <style>, so indexing the whole body sorts by CSS declaration order
+# and silently tests nothing - which is what the previous version of this check
+# was doing, and why it passed while asserting the opposite arrangement.
+markup = live_body.split("</style>", 1)[1]
+i_note, i_gift, i_sig, i_basket = (markup.index('%s-note' % P),
+                                   markup.index('%s-gift' % P),
+                                   markup.index('%s-nsig' % P),
+                                   markup.index('%s-bwrap' % P))
+if not (i_note < i_gift < i_sig):
+    errs.append("the code must sit inside John's note, above his signature")
+if not (i_gift < i_basket):
+    errs.append("the code must come before the basket, not after it")
+if markup.index(CODE) > i_basket:
+    errs.append("the first mention of the code is below the basket, so it is still buried")
+# and it has to read as his, not as a house promotion
+if "from me" not in live_body:
+    errs.append("the note must hand the code over in John's own voice")
+if "%s-promo" % P in markup:
     errs.append("this branch must not carry a green offer bar above the masthead")
 
 if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused")
