@@ -40,33 +40,56 @@ the same artwork. "Reorder, same spec, one click" should be the strongest email
 in this flow, and it needs `Items` on the presta event. That is a tracking
 change, not an email change, and it is the highest-value item on the list in §5.
 
-### 1.2 A third of these orders are not Helloprint
+### 1.2 Connect is a quarter of orders, and is out of scope
 
 `ShopName` on the 95 presta orders:
 
-| Storefront | Orders |
-|---|---|
-| helloprint.fr | 26 |
-| **drukzo.nl** | **23** |
-| connect.helloprint.nl | 14 |
-| **drukzo.be** | **8** |
-| connect.helloprint.es | 6 |
-| fr.helloprint.be | 6 |
-| helloprint.es | 4 |
-| connect.helloprint.co.uk | 3 |
+| Storefront | Orders | |
+|---|---|---|
+| helloprint.fr | 26 | retail |
+| drukzo.nl | 23 | retail |
+| connect.helloprint.nl | 14 | **Connect — excluded** |
+| drukzo.be | 8 | retail |
+| connect.helloprint.es | 6 | **Connect — excluded** |
+| fr.helloprint.be | 6 | retail |
+| helloprint.es | 4 | retail |
+| connect.helloprint.co.uk | 3 | **Connect — excluded** |
+| connect.fr.helloprint.be | 3 | **Connect — excluded** |
+| connect.helloprint.be | 2 | **Connect — excluded** |
 
-**31 of 95 orders — 33% — are on Drukzo domains.** A post-purchase flow
-triggered on `Placed Order` with no brand condition would send Helloprint-branded
-email, with the Helloprint wordmark and helloprint.com links, to a customer who
-bought from Drukzo and may never have heard of Helloprint.
+**Drukzo is Helloprint.** The label was migrated; the frontend is Helloprint and
+only the shop record still says Drukzo. Confirmed, and the event data agrees —
+Drukzo-backed orders all begin as `www.helloprint.com` checkouts. Treat them as
+Helloprint with no brand split.
 
-This needs a decision before anything is built (§5). `ShopName` is on 100% of
-presta orders, so whichever way it goes — exclude, separate flow, or
-brand-conditional blocks — it is implementable.
+**Connect is the reseller label and is excluded** from this flow and from the
+rest of the behavioural programme; it gets its own flows later. That is **28 of
+100 sampled orders**, so the post-purchase audience is roughly **72% of order
+volume** — about 320,000 orders a year at current rates.
 
-The `connect.*` storefronts are a third group again, and worth confirming
-whether they are the same audience or a B2B portal that should be handled
-differently.
+#### How to exclude it, per event
+
+This differs by event, and one of them is a problem:
+
+| Flow trigger | Signal available | Filter |
+|---|---|---|
+| `Placed Order` — post-purchase | `ShopName` on 95/95 presta orders | `ShopName` does not contain `connect.` |
+| `Started Checkout` — abandoned order, browse | **no `ShopName` at all** (0 of 150 events) | only the `CheckoutURL` host |
+
+For `Started Checkout` the recommended filter is an **allow-list, not a
+deny-list**: `CheckoutURL` contains `www.helloprint.com`. Every retail cart in
+the sample is on that host, every Connect cart is on a `connect.*` host, and it
+also removes the `pr-####.preview.v4.staging.helloprint.dev` traffic that is
+currently writing into production Klaviyo. One condition, three problems.
+
+The v4 orders carry no `ShopName` — they identify themselves with
+`store.key = helloprint-it` — so the presta filter passes them through, which is
+correct: they are retail.
+
+**This applies to work already finished.** The Abandoned Order flow is built and
+its trigger has no Connect exclusion, so **19% of its audience would be
+resellers**. Browse Abandonment is the same. Adding the filter is a trigger-level
+change, not an email change, but it has to happen before either flow goes live.
 
 ### 1.3 Categories is hierarchical, and the last item is the useful one
 
@@ -148,14 +171,28 @@ to a year of quiet.
    guard they get two review requests for what felt to them like one shopping
    trip.
 
-### 1.8 The programme is scoped to 3% of its own order volume
+### 1.8 French and Dutch dominate; English is a minority but not small
 
-Locales on the same 95 orders: **nl-NL 37, fr-FR 26, nl-BE 10, es-ES 10,
-fr-BE 9, en-GB 3.**
+Two independent samples disagree enough to be worth stating carefully. Retail
+only, Connect removed:
 
-Every RFB flow, and everything rebuilt so far, is scoped "Ireland + United
-Kingdom only". On this snapshot that is **3%** of orders; Dutch and French
-together are 63%. Out of scope for this flow, but it affects all of them.
+| Language | Started Checkout (150 carts) | Placed Order (100 orders) |
+|---|---|---|
+| fr-FR + fr-BE | 39% | 44% |
+| nl-NL + nl-BE | 32% | 43% |
+| en-GB | **19%** | **0%** |
+| es-ES | 5% | 6% |
+| it-IT | 3% | 7% |
+
+The English figures contradict each other. 100 orders is roughly ninety minutes
+of order volume, so the zero is almost certainly a thin-slice artifact rather
+than a dead market — but it means neither number should be quoted. What both
+samples agree on: **French and Dutch together are around three quarters of
+retail demand, and English is a minority.**
+
+That is enough to settle one design question in §2 — the print expert has to be
+able to reply in Dutch and French — and not enough to settle market scope, which
+needs a proper measurement over a longer window.
 
 ---
 
@@ -234,10 +271,10 @@ and short enough to matter. Three cautions:
 
 ## 3. The proposed flow
 
-**Trigger** `Placed Order`
+**Trigger** `Placed Order`, where `ShopName` does not contain `connect.` (§1.2)
 **Re-entry** 60 days — one burst produces one pass
-**Brand** resolved on `ShopName` before anything sends (§1.2)
 **Skip if** cancelled or refunded (`Order Cancelled`, `Refunded Order`)
+**Brand** one brand. Drukzo-backed orders are Helloprint (§1.2), so no split
 
 | # | When | Email | Goal | Gate |
 |---|---|---|---|---|
@@ -273,7 +310,6 @@ window, so nobody can hold two live codes from two passes.
 Every email must read correctly knowing only value, locale, brand and sometimes
 a category.
 
-- **Brand:** Helloprint / Drukzo / possibly `connect.*` — pending §5.
 - **Category (emails 4, 5, 6):** category-led where `Categories` exists,
   generic where it does not, and never describing a services-only order as a
   print job.
@@ -304,25 +340,23 @@ always true straight after an order, so it never branches — and email 1 says
 
 ## 5. Open questions and blockers
 
-Roughly in order of value.
+Roughly in order of value. Drukzo and Connect are now settled (§1.2).
 
-1. **Drukzo.** A third of orders. Exclude, separate flow, or brand-conditional
-   blocks? Nothing should be built until this is settled.
+1. **Add the Connect exclusion to the two finished flows.** Abandoned Order is
+   built and would send to 19% resellers; Browse Abandonment the same. Trigger
+   filter `CheckoutURL` contains `www.helloprint.com`. Must land before launch.
 2. **Get `Items` onto presta `Placed Order`.** Unlocks true reorder — the
    strongest post-purchase play a printer has. Tracking change, not email work.
-3. **Real delivery lead times** from the fulfilment side, by product group.
-   Day 18 is currently derived from five orders.
+3. **Real delivery lead times** from the fulfilment side, by product group. Day
+   18 currently rests on five orders.
 4. **`Fulfilled Order` fires 8 times in five months.** Wire it up, or retire the
    live `Order Shipped` flow so it stops looking like a working email.
 5. **Who signs email 3**, with a monitored inbox, able to reply in Dutch and
    French. Probably not John.
-6. **Which markets**, given IE+UK is 3% of orders.
-7. **One more coupon**, 10%, 14-day expiry — being resolved with the others in
-   one pass.
+6. **Market scope**, measured properly over a longer window (§1.8).
+7. **One more coupon**, 10%, 14-day expiry — resolved with the others in one pass.
 8. **A/B the lever in email 5:** 10% vs free delivery vs free design check.
-9. **After day 115**, a lapsed programme at 6–12 months matching the real burst
-   cycle. Separate work.
-10. **`connect.*` storefronts** — same audience or a B2B portal?
+9. **After day 115**, a lapsed programme at 6–12 months matching the burst cycle.
 
 ---
 
