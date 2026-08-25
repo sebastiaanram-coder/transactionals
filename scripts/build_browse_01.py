@@ -207,13 +207,18 @@ CSS = """
 .%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 /* product card : the hero of this email */
+/* Horizontal card: packshot left, the numbers right. The stacked version ran
+   to about 450px because the packshots are square, which pushed everything
+   below it down a whole screen. This is roughly a third of that height and
+   still carries name, price, quantity and basis. */
 .%(P)s-pcard{display:block;margin:24px 24px 0;border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;text-decoration:none;background:#ffffff;}
-.%(P)s-pimgwrap{display:block;background:#f8f8f8;text-align:center;padding:16px 0 12px;}
-.%(P)s-pimg{display:inline-block;width:300px;max-width:62%%;height:auto;border:0;}
-.%(P)s-pbody{display:block;padding:20px 22px 22px;text-align:center;}
-.%(P)s-pname{display:block;font-size:21px;line-height:27px;font-weight:800;color:#191919;margin:0 0 9px;letter-spacing:-.01em;}
-.%(P)s-pprice{display:block;font-size:22px;line-height:28px;font-weight:800;color:#008539;margin:0 0 3px;}
-.%(P)s-pqty{display:block;font-size:13px;line-height:19px;color:#555555;margin:0 0 14px;}
+.%(P)s-ptbl{width:100%%;border-collapse:collapse;}
+.%(P)s-pimgcell{width:150px;background:#f8f8f8;text-align:center;vertical-align:middle;padding:14px 10px;}
+.%(P)s-pimg{display:inline-block;width:126px;max-width:100%%;height:auto;border:0;}
+.%(P)s-pbody{vertical-align:middle;padding:16px 20px;}
+.%(P)s-pname{display:block;font-size:19px;line-height:25px;font-weight:800;color:#191919;margin:0 0 7px;letter-spacing:-.01em;}
+.%(P)s-pprice{display:block;font-size:21px;line-height:27px;font-weight:800;color:#008539;margin:0 0 2px;}
+.%(P)s-pqty{display:block;font-size:13px;line-height:19px;color:#555555;margin:0 0 9px;}
 .%(P)s-plink{display:block;font-size:14px;line-height:20px;font-weight:700;color:#008539;}
 
 /* the three things that actually hold a print order up */
@@ -277,11 +282,12 @@ CSS = """
   .%(P)s-sub{font-size:16px;line-height:25px;max-width:none;margin-bottom:20px;}
   .%(P)s-cta,.%(P)s-cta-g{padding:15px 26px;}
   .%(P)s-pcard{margin:18px 14px 0;}
-  .%(P)s-pimgwrap{padding:12px 0 8px;}
-  .%(P)s-pimg{width:210px;max-width:56%%;}
-  .%(P)s-pbody{padding:17px 16px 19px;}
-  .%(P)s-pname{font-size:19px;line-height:25px;}
-  .%(P)s-pprice{font-size:20px;line-height:26px;}
+  .%(P)s-pimgcell{width:104px;padding:11px 7px;}
+  .%(P)s-pimg{width:88px;}
+  .%(P)s-pbody{padding:13px 14px;}
+  .%(P)s-pname{font-size:17px;line-height:23px;margin:0 0 5px;}
+  .%(P)s-pprice{font-size:19px;line-height:25px;}
+  .%(P)s-pqty{font-size:12px;line-height:18px;margin:0 0 7px;}
   .%(P)s-sect{padding:26px 14px 0;}
   .%(P)s-secttl{font-size:21px;line-height:28px;}
   .%(P)s-qarow{padding:16px 14px;}
@@ -329,13 +335,15 @@ BODY = """
     <!-- product : title, price, preset quantity and packshot all come from the
          Klaviyo catalog feed, keyed on the ProductID of the Viewed Product event -->
     <a class="{P}-pcard" href="{PROD_URL}">
-      <span class="{P}-pimgwrap"><img class="{P}-pimg" src="{PROD_IMG}" alt="{PROD_TITLE}" width="300"></span>
-      <span class="{P}-pbody">
-        <span class="{P}-pname">{PROD_TITLE}</span>
-        <span class="{P}-pprice">From {CUR}{PROD_PRICE}</span>
-        <span class="{P}-pqty">{QTY_PHRASE}excl. VAT and delivery</span>
-        <span class="{P}-plink">View product &rarr;</span>
-      </span>
+      <table class="{P}-ptbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+        <td class="{P}-pimgcell" valign="middle"><img class="{P}-pimg" src="{PROD_IMG}" alt="{PROD_TITLE}" width="126"></td>
+        <td class="{P}-pbody" valign="middle">
+          <span class="{P}-pname">{PROD_TITLE}</span>
+          <span class="{P}-pprice">From {CUR}{PROD_PRICE}</span>
+          <span class="{P}-pqty">{QTY_PHRASE}excl. VAT and delivery</span>
+          <span class="{P}-plink">View product &rarr;</span>
+        </td>
+      </tr></table>
     </a>
 
     <!-- The three commonest reasons a print product view does not convert,
@@ -534,11 +542,13 @@ if len(_ans) != 3:
     errs.append("expected 3 doubt explanations, found %d" % len(_ans))
 elif max(map(len, _ans)) - min(map(len, _ans)) > 12:
     errs.append("doubt explanations are uneven: lengths %s" % [len(a) for a in _ans])
+if '%s-pimgcell' % P not in live_body:
+    errs.append("product card is no longer the horizontal two-cell layout")
 if live_body.count('class="%s-qaav"' % P) != 3:
     errs.append("a doubt row is missing its avatar")
 if live_body.count('alt="" width="56"') != 3:
     errs.append("avatars must be decorative (empty alt) and sized")
-if live_body.count('valign="middle"') != 3:
+if live_body.count('class="%s-qaav" valign="middle"' % P) != 3:
     errs.append("avatar cells need valign=middle for Outlook")
 if "min_order_quantity > 1" not in live_body:
     errs.append("quantity phrase is not conditional and will render 'for 1 units'")

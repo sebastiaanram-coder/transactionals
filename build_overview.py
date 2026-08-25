@@ -39,7 +39,7 @@ FLOWS = [
       who="Same audience, final email of the series, landing on the day the code dies.", tpl="XVPf5F", flags=[], badge=None,
       final="welcome-04-proposed.html"),
    ]),
- dict(slug="site-abandonment", name="Site Abandonment", stage="Convert", flow_id="UjN2Up",
+ dict(slug="site-abandonment", name="Site Abandonment", stage="Convert", retired=True, flow_id="UjN2Up",
    trigger="Active on Site",
    trigger_detail="Fires on the Active on Site event: an identified visitor browsed but never reached a product page.",
    audience=["Visitors who did NOT view a product, add to cart or start checkout after entering", "Ireland + United Kingdom only"],
@@ -106,12 +106,12 @@ FLOWS = [
       goal="Final low-pressure reminder; leaves the door open without urgency tricks.",
       who="Same audience, final email of the series.", tpl="UsXdTy", ref=True, flags=["Broken placeholder [[ viewed product name ]] in subject"], badge=None),
    ]),
- dict(slug="abandoned-cart", name="Abandoned Cart", stage="Convert", flow_id="VCVzm6",
+ dict(slug="abandoned-cart", name="Abandoned Order", stage="Convert", flow_id="VCVzm6",
    trigger="Added to Cart",
    trigger_detail="Fires on the Added to Cart event: a configured product was added to the basket but checkout never started.",
    audience=["Shoppers who did NOT start checkout or order after entering", "Ireland + United Kingdom only"],
    reentry="14 days", incentive="10% code in email 4, 24-hour expiry in email 5", cadence="30 minutes after the add-to-cart, then one email per day for 4 days",
-   flow_note="Copy is identical to the Abandoned Checkout flow; only trigger and exclusions differ. In the rebuild these two flows can share one set of universal blocks.",
+   flow_note="This is the merged flow. RFB ran four separate abandonment journeys — Site, Browse, Cart and Checkout — whose copy was largely interchangeable; Cart and Checkout were near-identical apart from the trigger. The rebuild runs two: Browse Abandonment for a product view, and this one for anything that reached a basket. Site Abandonment is dropped entirely, because a visit with no product view carries too little intent to say anything useful about. The five RFB emails below are the current state and have not been rebuilt yet.",
    emails=[
     dict(step=1, when="30 minutes after add-to-cart", subject="Your order is still here", preview="Your design and delivery date are saved, ready when you are.",
       goal="Recover the cart while it is warm: everything is saved (design, delivery date), one click to continue.",
@@ -129,7 +129,7 @@ FLOWS = [
       goal="Urgency close: the code expires in 24 hours, the saved order does not. Last email of the sequence.",
       who="Same audience, final email.", tpl="YrvM4D", flags=[], badge=None),
    ]),
- dict(slug="abandoned-checkout", name="Abandoned Checkout", stage="Convert", flow_id="TK2jXt",
+ dict(slug="abandoned-checkout", name="Abandoned Checkout", stage="Convert", retired=True, flow_id="TK2jXt",
    trigger="Started Checkout",
    trigger_detail="Fires on the Started Checkout event: the deepest-funnel abandonment moment.",
    audience=["Shoppers who did NOT place an order after entering", "Ireland + United Kingdom only"],
@@ -262,7 +262,7 @@ EMAIL_DETAIL = {
    variant="No discount in either direction, so there is no second copy to keep in step. The \u201chas this person ordered since\u201d check is done by the flow filters rather than in the HTML: anyone who adds to cart or places an order drops out before the next send, which is also what stops this flow colliding with the abandoned-order sequence.",
    elements=[
      ("Light header, black only in the masthead.", "Every other rebuilt email opens on photography. This one deliberately does not. The packshot below should be the only image competing for attention, and a second large photo pushes the product below the fold. Green carries the eyebrow and the button instead."),
-     ("Product card read live from the catalog feed.", "Title, packshot, from-price and preset quantity all come from the Klaviyo catalog, keyed on the ProductID of the Viewed Product event. The event\u2019s own fields cannot be used: ProductName is a slug (flyera5, not A5 Flyers) and Price is unrounded (55.8502). The feed is the only usable source and it arrives already localised per market, which is what makes this work in every language later."),
+     ("Product card read live from the catalog feed, laid out sideways.", "Title, packshot, from-price and preset quantity all come from the Klaviyo catalog, keyed on the ProductID of the Viewed Product event. The event\u2019s own fields cannot be used: ProductName is a slug (flyera5, not A5 Flyers) and Price is unrounded (55.8502). The feed is the only usable source and it arrives already localised per market, which is what makes this work in every language later. The card runs packshot-left, numbers-right: stacked it ran to about 450px, because catalog packshots are square, which pushed the rest of the email down a whole screen. Sideways it is 160px and still carries all four fields."),
      ("Prices marked excl. VAT and delivery.", "The product page defaults to Excl. VAT with delivery chosen separately, so the feed\u2019s from-price is neither the total nor the basis a buyer assumes. The email states the basis rather than claiming an all-inclusive price it cannot support."),
      ("Three doubts, each with a colleague\u2019s face.", "Artwork, spec-and-deadline, and sign-off. These are the three commonest reasons a print product view does not convert, read off the product page rather than guessed at, and each is answered by the team that handles it rather than by a feature. The circles and their green rings are baked into the image pixels because Outlook ignores border-radius."),
      ("Same-category cross-sell.", "Someone looking at A5 Flyers is shown A4, A6, DL and Folded leaflets: a size and price ladder rather than a generic bestseller row. The set is picked from the category on the event, and every product id is built from the recipient\u2019s own market prefix, so the block works unchanged in each new market as its feed comes online."),
@@ -344,9 +344,9 @@ ISSUES = [
 TRACKER = [
  ("Welcome (RXBWV9)", "4", "4 of 4", "EN live, IT to redo", "Rebuilt end to end. Assets need uploading to Klaviyo before build."),
  ("Browse Abandonment", "5 → 3", "2 of 3", "–", "Emails 1 and 2 built and render-verified. Feed needs a resized image variant."),
- ("Abandoned Cart", "5", "0", "–", "Can share universal blocks with Checkout"),
- ("Abandoned Checkout", "5", "0", "–", "Can share universal blocks with Cart"),
- ("Site Abandonment", "3", "0", "–", "Fix the Placed Order filter bug first"),
+ ("Abandoned Order (merged)", "5", "0", "–", "Absorbs the old Checkout flow; one set of blocks"),
+ ("Abandoned Checkout", "—", "—", "—", "Superseded, merged into Abandoned Order"),
+ ("Site Abandonment", "—", "—", "—", "Dropped: a visit with no product view carries too little intent"),
  ("Post-Purchase", "5", "0", "–", "Resolve transactional overlap first"),
  ("Customer Winback", "4", "0", "–", "Revisit timing"),
  ("VIP", "3", "0", "–", "Define the early-access mechanic"),
@@ -406,7 +406,7 @@ def flow_card(f):
 def lifecycle_bar():
     cols = []
     for st in STAGES:
-        chips = "".join(f'<a href="#{f["slug"]}" class="lc-chip">{esc(f["name"])}</a>' for f in FLOWS if f["stage"]==st)
+        chips = "".join(f'<a href="#{f["slug"]}" class="lc-chip">{esc(f["name"])}</a>' for f in FLOWS if f["stage"]==st and not f.get("retired"))
         cols.append(f'<div class="lc-col"><div class="lc-stage">{st}</div>{chips}</div>')
     sep = '<div class="lc-sep">' + ICON["arrow"] + '</div>'
     return '<div class="lifecycle">' + sep.join(cols) + '</div>'
@@ -550,12 +550,12 @@ tracker_rows = "".join(f'<tr><td>{esc(a)}</td><td>{b}</td><td>{esc(c)}</td><td>{
 
 home = f'''<section class="page" id="page-home">
   <div class="hero">
-    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.4 · 25 Aug 2026</div>
+    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.5 · 25 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Nine journeys, 36 emails, all in draft. The Welcome flow has been rebuilt in full, and Browse Abandonment is under way: six new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is under way: six new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
-    <div class="tile"><div class="tile-n">9</div><div class="tile-l">Journeys</div></div>
+    <div class="tile"><div class="tile-n">7</div><div class="tile-l">Journeys, down from 9</div></div>
     <div class="tile"><div class="tile-n">6 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
@@ -563,13 +563,18 @@ home = f'''<section class="page" id="page-home">
   <h2 class="secttl">The customer lifecycle</h2>
   {lifecycle_bar()}
   <h2 class="secttl">All flows</h2>
-  <div class="grid">{"".join(flow_card(f) for f in FLOWS)}</div>
+  <div class="grid">{"".join(flow_card(f) for f in FLOWS if not f.get("retired"))}</div>
   <h2 class="secttl">How the flows work together</h2>
   <div class="explain">
-    <p><strong>One journey at a time.</strong> The four conversion flows form a ladder: Site Abandonment excludes anyone who viewed a product, Browse excludes anyone who added to cart, Cart excludes anyone who started checkout. A visitor only ever receives the deepest-funnel sequence that applies to them.</p>
+    <p><strong>Two abandonment flows, not four.</strong> RFB built Site, Browse, Cart and Checkout as separate journeys, but their copy was largely interchangeable and Cart and Checkout differed only in trigger. The rebuild runs <strong>Browse Abandonment</strong> for someone who looked at a product, and <strong>Abandoned Order</strong> for anyone who got as far as a basket. Site Abandonment is dropped: a visit with no product view does not tell us enough to write a useful email.</p>
+    <p><strong>The deeper signal wins.</strong> Browse excludes anyone who added to cart, so a visitor only ever receives the sequence that matches how far they actually got.</p>
     <p><strong>Buying stops everything.</strong> Nearly every flow checks “no order since entering” before each send, so a purchase mid-sequence ends the emails.</p>
-    <p><strong>Value first, discount last.</strong> Every sequence leads with saved work, trust and help; a code only appears late (cart/checkout email 4, winback email 3) and always with an expiry follow-up.</p>
+    <p><strong>Value first, discount last.</strong> Every sequence leads with saved work, trust and help. Browse Abandonment carries no code at all; where one appears it comes late and always with an expiry follow-up.</p>
+    <p><strong>Fewer emails per journey.</strong> Browse Abandonment goes from five emails in four days to three, because it is the highest-volume flow in the programme and its send volume sets the sending reputation for every other one.</p>
   </div>
+  <h2 class="secttl">Superseded RFB flows</h2>
+  <p class="hero-sub">Kept for reference so the original work stays readable. These are not part of the rebuild.</p>
+  <div class="grid grid-retired">{"".join(flow_card(f) for f in FLOWS if f.get("retired"))}</div>
 </section>
 <section class="page" id="page-issues">
   <a class="backlink" href="#home">{icon("back")}Back to overview</a>
@@ -703,6 +708,8 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .pv-pair{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:2px}
 .pv-col{flex:0 0 392px;max-width:392px}
 .mail-row-final .pv-pair{gap:30px}
+.grid-retired{opacity:.72}
+.grid-retired .fcard{background:#fbfbfc}
 .mailsec{grid-column:1/-1;margin:34px 0 2px;padding:0 0 10px;border-bottom:1px solid #e3e6e8}
 .mailsec:first-child{margin-top:0}
 .mailsec h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.01em;color:#191919}

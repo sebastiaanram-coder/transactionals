@@ -34,13 +34,18 @@
 .hp-b1-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 /* product card : the hero of this email */
+/* Horizontal card: packshot left, the numbers right. The stacked version ran
+   to about 450px because the packshots are square, which pushed everything
+   below it down a whole screen. This is roughly a third of that height and
+   still carries name, price, quantity and basis. */
 .hp-b1-pcard{display:block;margin:24px 24px 0;border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;text-decoration:none;background:#ffffff;}
-.hp-b1-pimgwrap{display:block;background:#f8f8f8;text-align:center;padding:16px 0 12px;}
-.hp-b1-pimg{display:inline-block;width:300px;max-width:62%;height:auto;border:0;}
-.hp-b1-pbody{display:block;padding:20px 22px 22px;text-align:center;}
-.hp-b1-pname{display:block;font-size:21px;line-height:27px;font-weight:800;color:#191919;margin:0 0 9px;letter-spacing:-.01em;}
-.hp-b1-pprice{display:block;font-size:22px;line-height:28px;font-weight:800;color:#008539;margin:0 0 3px;}
-.hp-b1-pqty{display:block;font-size:13px;line-height:19px;color:#555555;margin:0 0 14px;}
+.hp-b1-ptbl{width:100%;border-collapse:collapse;}
+.hp-b1-pimgcell{width:150px;background:#f8f8f8;text-align:center;vertical-align:middle;padding:14px 10px;}
+.hp-b1-pimg{display:inline-block;width:126px;max-width:100%;height:auto;border:0;}
+.hp-b1-pbody{vertical-align:middle;padding:16px 20px;}
+.hp-b1-pname{display:block;font-size:19px;line-height:25px;font-weight:800;color:#191919;margin:0 0 7px;letter-spacing:-.01em;}
+.hp-b1-pprice{display:block;font-size:21px;line-height:27px;font-weight:800;color:#008539;margin:0 0 2px;}
+.hp-b1-pqty{display:block;font-size:13px;line-height:19px;color:#555555;margin:0 0 9px;}
 .hp-b1-plink{display:block;font-size:14px;line-height:20px;font-weight:700;color:#008539;}
 
 /* the three things that actually hold a print order up */
@@ -104,11 +109,12 @@
   .hp-b1-sub{font-size:16px;line-height:25px;max-width:none;margin-bottom:20px;}
   .hp-b1-cta,.hp-b1-cta-g{padding:15px 26px;}
   .hp-b1-pcard{margin:18px 14px 0;}
-  .hp-b1-pimgwrap{padding:12px 0 8px;}
-  .hp-b1-pimg{width:210px;max-width:56%;}
-  .hp-b1-pbody{padding:17px 16px 19px;}
-  .hp-b1-pname{font-size:19px;line-height:25px;}
-  .hp-b1-pprice{font-size:20px;line-height:26px;}
+  .hp-b1-pimgcell{width:104px;padding:11px 7px;}
+  .hp-b1-pimg{width:88px;}
+  .hp-b1-pbody{padding:13px 14px;}
+  .hp-b1-pname{font-size:17px;line-height:23px;margin:0 0 5px;}
+  .hp-b1-pprice{font-size:19px;line-height:25px;}
+  .hp-b1-pqty{font-size:12px;line-height:18px;margin:0 0 7px;}
   .hp-b1-sect{padding:26px 14px 0;}
   .hp-b1-secttl{font-size:21px;line-height:28px;}
   .hp-b1-qarow{padding:16px 14px;}
@@ -152,13 +158,15 @@
     <!-- product : title, price, preset quantity and packshot all come from the
          Klaviyo catalog feed, keyed on the ProductID of the Viewed Product event -->
     <a class="hp-b1-pcard" href="https://www.helloprint.com/en-ie/flyera5">
-      <span class="hp-b1-pimgwrap"><img class="hp-b1-pimg" src="https://contentful.helloprint.com/wm1n7oady8a5/1aW8MTed9cdjC0t9NWfMyk/ac8238ad30f1abf0e25f58b48896a492/flyers_a5.png" alt="A5 Flyers" width="300"></span>
-      <span class="hp-b1-pbody">
-        <span class="hp-b1-pname">A5 Flyers</span>
-        <span class="hp-b1-pprice">From &euro;39.96</span>
-        <span class="hp-b1-pqty">for 1000 units &middot; excl. VAT and delivery</span>
-        <span class="hp-b1-plink">View product &rarr;</span>
-      </span>
+      <table class="hp-b1-ptbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
+        <td class="hp-b1-pimgcell" valign="middle"><img class="hp-b1-pimg" src="https://contentful.helloprint.com/wm1n7oady8a5/1aW8MTed9cdjC0t9NWfMyk/ac8238ad30f1abf0e25f58b48896a492/flyers_a5.png" alt="A5 Flyers" width="126"></td>
+        <td class="hp-b1-pbody" valign="middle">
+          <span class="hp-b1-pname">A5 Flyers</span>
+          <span class="hp-b1-pprice">From &euro;39.96</span>
+          <span class="hp-b1-pqty">for 1000 units &middot; excl. VAT and delivery</span>
+          <span class="hp-b1-plink">View product &rarr;</span>
+        </td>
+      </tr></table>
     </a>
 
     <!-- The three commonest reasons a print product view does not convert,
