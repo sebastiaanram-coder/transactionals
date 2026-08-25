@@ -113,7 +113,7 @@ FLOWS = [
    reentry="14 days",
    incentive="Split by cart value. High value: no code until email 3, then 10% for 72 hours, with the print expert still the headline. Low value: 10% in email 2, then 25% capped at 25 off for the final 24 hours.",
    cadence="Proposed: 1 hour, 24 hours, 72 hours. Three emails on each branch, down from five in four days across two flows.",
-   mail_line="3 of 6 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
+   mail_line="4 of 6 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
    flow_note="This is the merged flow, and it splits by cart value at entry: at 150, in either currency, about a quarter of carts go to a high-value branch that leads with a print expert and discounts lightly, and the rest to a low-value branch that leads with the incentive and closes at 25% capped. The cap exists because a flat 25% would leave a 149 cart better off than a 151 one. RFB ran four separate abandonment journeys — Site, Browse, Cart and Checkout — whose copy was largely interchangeable; Cart and Checkout were near-identical apart from the trigger. The rebuild runs two: Browse Abandonment for a product view, and this one for anything that reached a basket. Site Abandonment is dropped entirely, because a visit with no product view carries too little intent to say anything useful about. The five RFB emails below are the current state and have not been rebuilt yet.",
    emails=[
     dict(step=1, when="1 hour after checkout was started", subject="Left something behind?",
@@ -127,9 +127,9 @@ FLOWS = [
       goal="", who="", tpl="UnTu7Q", flags=[], badge=None,
       final="order-02-high-proposed.html"),
     dict(step=3, when="24 hours \u00b7 low value", subject="10% off, for the next 72 hours",
-      preview="Change the quantity, watch the price move, order in three clicks.",
-      goal="Low-value branch. Self-service and price-sensitive, so the incentive leads: 10% with a 72 hour expiry.",
-      who="Carts below 150, one day on.", tpl="", flags=[], badge="Specified, not yet designed"),
+      preview="The basket is still saved. The code comes off at checkout.",
+      goal="", who="", tpl="SvQkfX", flags=[], badge=None,
+      final="order-02-low-proposed.html"),
     dict(step=4, when="72 hours \u00b7 high value", subject="Still here, and now with 10% off",
       preview="The expert offer stands. The code runs for 72 hours.",
       goal="High-value close. The expert stays the headline and the code sits underneath it.",
@@ -302,6 +302,16 @@ EMAIL_DETAIL = {
      ("Four things an adviser actually does.", "Spec, delivery date, pay on invoice, and whether the quantity is wrong. Each is checkable on the site rather than asserted."),
      ("Two of those are the whole argument.", "Invoicing removes a procurement blocker without a discount. Quantity is a price lever that is not a coupon \u2014 the next break can beat 10% off, and it raises order value instead of cutting it."),
    ]),
+ "SvQkfX": dict(
+   goal="Convert the smaller basket with the incentive, and make finishing feel like two clicks.",
+   why="Median cart on this branch is about 60, so this is a job someone is running themselves: no procurement, no sign-off, price-sensitive. The lever is the discount and the argument is speed.",
+   variant_label="On the high-value branch",
+   variant="A different email entirely, not a variant: over 150 the reader gets a print expert and no code at all, because on those carts the blocker is confidence rather than price.",
+   elements=[
+     ("No photograph, deliberately.", "The high branch is a confidence play and earns faces. This one should feel like two clicks, so the offer sits in a green bar above the masthead and the header stays light."),
+     ("A banded saving rather than a calculated one.", "The exact discounted total cannot be produced in Klaviyo\u2019s template language, so the email prints \u201cat least \u20ac5 off\u201d from a band. Every band floors the real saving, so the figure is always true and never overstated."),
+     ("Three things that make finishing quick.", "The quantity is a starting point not a minimum, the file can follow the order, and nothing is charged until they confirm. All three are true of the product page and none of them is obvious from it."),
+   ]),
  "TtjyZ4": dict(
    goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",
    why="Price alone did not work on day 0, and pushing product again would just repeat yesterday. Day 1 is the cheapest moment to shape what the brand means.",
@@ -378,13 +388,14 @@ ISSUES = [
  "Some feed titles are untranslated slugs, e.g. GB-gatefoldfoldedleaflets is titled “gatefoldfoldedleaflets”. Any email showing that product would print the slug as the product name. Sweep the feed for titles equal to their slug.",
  "Welcome email 1 claims “Every price includes delivery and VAT” directly above four feed prices that exclude both. The product page defaults to Excl. VAT with delivery chosen separately. Needs replacing, and “All-inclusive prices” in Welcome email 3 needs a ruling on what it is meant to mean.",
  "Connect, the B2B storefront, fires the same Viewed Product metric as the consumer site and is 14–21% of events. Every conversion flow needs a storefront filter or B2B buyers receive consumer lifecycle mail.",
+ "Welcome email 1's eight price figures are a dated snapshot, not live values. scripts/refresh_welcome_01.py rewrites them from _lib/welcome_prices.py and verifies the arithmetic, but the snapshot itself has to be refreshed by hand when the feed moves. A struck-through price that no longer matches the site reads as a fake discount rather than a stale email.",
  "The site contradicts itself on file checking. /always-a-perfect-design says “we check your files at no extra cost”, while the cart is explicit that the free Basic check is automated and “your file is not reviewed by a print expert” — a human review is the paid Premium tier. Marketing copy and the cart should agree, or customers arrive at checkout expecting something they have not bought.",
 ]
 
 TRACKER = [
  ("Welcome (RXBWV9)", "4", "4 of 4", "EN live, IT to redo", "Rebuilt end to end. Assets need uploading to Klaviyo before build."),
  ("Browse Abandonment", "5 → 3", "3 of 3", "–", "Complete and render-verified. Feed needs a resized image variant."),
- ("Abandoned Order (merged)", "5 → 3 x 2", "3 of 6", "–", "Both email 1 variants and high-value email 2 built."),
+ ("Abandoned Order (merged)", "5 → 3 x 2", "4 of 6", "–", "Both email 1 variants and both email 2 branches built."),
  ("Abandoned Checkout", "—", "—", "—", "Superseded, merged into Abandoned Order"),
  ("Site Abandonment", "—", "—", "—", "Dropped: a visit with no product view carries too little intent"),
  ("Post-Purchase", "5", "0", "–", "Resolve transactional overlap first"),
@@ -626,11 +637,11 @@ home = f'''<section class="page" id="page-home">
   <div class="hero">
     <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.6 · 25 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: nine new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: ten new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
     <div class="tile"><div class="tile-n">7</div><div class="tile-l">Journeys, down from 9</div></div>
-    <div class="tile"><div class="tile-n">9 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">10 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>

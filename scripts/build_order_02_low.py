@@ -1,0 +1,333 @@
+#!/usr/bin/env python3
+"""
+Build Abandoned Order email 2, LOW-VALUE branch - the incentive.
+
++24 hours on carts below 150. 10% off, expiring in 72 hours.
+
+Deliberately not the high-value email with a code bolted on. Median GB cart is
+about £60, so this is a smaller job someone is running themselves: no
+procurement, price-sensitive, wanting it done. Light header and no photograph
+against the high branch's team shot - that branch is a confidence play and earns
+faces, this one is a speed play.
+
+THE DISCOUNT FIGURE. The exact discounted total cannot be computed in Klaviyo's
+template language: widthratio is integer-only (90% of 64.50 returns 58),
+{% with %} is unsupported so widthratio's output cannot be captured and
+reformatted, and add will not subtract a float. What DOES work is a banded
+comparison on the total, and every band floors the real saving, so the figure
+is always true and never overstated. Verified by render.
+"""
+import base64, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import basket
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+ASSETS = os.path.join(ROOT, "assets")
+OUT = os.path.join(ROOT, "proposals")
+P = "hp-ao2l"
+
+# NOT YET CREATED. HELLO10 belongs to Welcome and cannot be reused here: a
+# Welcome recipient would meet one code twice, attribution would be unusable,
+# and a first-order restriction would fail silently for returning customers.
+CODE = "BASKET10"
+
+def datauri(name):
+    mime = "image/png" if name.endswith(".png") else "image/jpeg"
+    with open(os.path.join(ASSETS, name), "rb") as f:
+        return "data:%s;base64,%s" % (mime, base64.b64encode(f.read()).decode())
+
+_A = {
+    "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
+    "IMG_TICK":     "browse-02-tick.jpg",
+    "IMG_STARS":    "trustpilot-stars-4-5.png",
+    "IMG_AGENTS":   "cs-agents-ellipse.png",
+}
+SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
+LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+
+# every band floors 10% of the lower bound, so the stated saving is always less
+# than or equal to the real one
+BANDS = [(100, "10"), (75, "7"), (50, "5"), (25, "2")]
+
+def band_live(cur):
+    out = ""
+    for i, (floor, saving) in enumerate(BANDS):
+        kw = "if" if i == 0 else "elif"
+        out += ('{%% %s event|lookup:"$value" >= %d %%}That is at least %s%s off.'
+                % (kw, floor, cur, saving))
+    return out + '{% else %}Your 10% comes off at checkout.{% endif %}'
+
+def band_sample(total, cur):
+    for floor, saving in BANDS:
+        if total >= floor:
+            return "That is at least %s%s off." % (cur, saving)
+    return "Your 10%% comes off at checkout."
+
+SAMPLE_TOTAL = 70.77
+SAMPLE = {
+    "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
+    "CUR": "&euro;", "TOTAL": "70.77", "NUM": "3",
+    "BAND": band_sample(SAMPLE_TOTAL, "&euro;"),
+    "UNSUB": '<a href="#">Unsubscribe</a>',
+}
+LIVE = {
+    "CHECKOUT_URL": "{{ event.CheckoutURL }}",
+    "CUR": '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}',
+    "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
+    "NUM": "{{ event.Items|length }}",
+    "BAND": band_live('{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'),
+    "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
+}
+
+# a low-value basket: two of the Welcome products plus the Premium check, so it
+# exercises the service line too. 39.96 + 25.82 + 4.99 = 70.77, under the 150
+# split as this branch requires.
+SAMPLE_LINES = [
+    ("product", "Flyers", 1, "39.96",
+     "https://contentful.helloprint.com/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
+     "https://www.helloprint.com/en-ie/standardflyers"),
+    ("product", "Classic Business Cards", 1, "25.82",
+     "https://contentful.helloprint.com/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
+     "https://www.helloprint.com/en-ie/standardbusinesscards"),
+    ("service", "Premium Design Check", 1, "4.99", None, None),
+]
+
+QUICK = [
+    ("Change the quantity, watch the price move",
+     "The number on the page is where the product starts, not a minimum you are stuck with."),
+    ("Send your file now or after you order",
+     "You do not need finished artwork to place it. Order first and upload when you are ready."),
+    ("Nothing is charged until you confirm",
+     "The basket is saved either way, and the code applies at the last step."),
+]
+
+CSS = """
+.%(P)s-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.%(P)s-root *{box-sizing:border-box;}
+.%(P)s-wrap{width:100%%;background:#f8f8f8;padding:0 0 32px;}
+.%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
+/* the offer goes above everything else on this branch */
+.%(P)s-promo{background:#008539;color:#ffffff;text-align:center;padding:11px 20px;font-size:15px;line-height:21px;font-weight:700;letter-spacing:.01em;}
+.%(P)s-promo .%(P)s-ends{opacity:.85;font-weight:500;}
+.%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
+.%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
+/* no photograph, on purpose: the high branch is a confidence play and earns
+   faces, this one is a speed play and should feel like two clicks */
+.%(P)s-hero{background:#ffffff;text-align:center;padding:32px 24px 4px;}
+.%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
+.%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#191919;letter-spacing:-.015em;}
+.%(P)s-sub{margin:0 auto 20px;max-width:450px;font-size:17px;line-height:25px;color:#555555;}
+.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+@@BASKET_CSS@@
+/* the banded saving sits with the number it applies to */
+.%(P)s-band{margin:10px 24px 0;font-size:14px;line-height:21px;font-weight:700;color:#008539;text-align:right;}
+.%(P)s-mid{padding:22px 24px 0;text-align:center;}
+.%(P)s-code{display:inline-block;border:2px dashed #9fdbb8;border-radius:8px;background:#f1f8f4;color:#191919;padding:9px 16px;font-size:13px;line-height:18px;font-weight:700;margin:0 0 14px;}
+.%(P)s-code strong{font-weight:800;letter-spacing:.06em;font-size:15px;}
+.%(P)s-q{margin:28px 24px 0;padding:24px 0 0;border-top:1px solid #e5e5e5;}
+.%(P)s-qtbl{width:100%%;border-collapse:collapse;}
+.%(P)s-qtick{width:34px;vertical-align:top;padding:12px 12px 0 0;}
+.%(P)s-qtick img{width:22px;height:22px;display:block;border:0;}
+.%(P)s-qtx{vertical-align:top;padding:9px 0 15px;}
+.%(P)s-qttl{margin:0 0 4px;font-size:16px;line-height:22px;font-weight:800;color:#191919;}
+.%(P)s-qbody{margin:0;font-size:14px;line-height:21px;color:#555555;}
+.%(P)s-rev{margin:24px 24px 0;padding:22px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
+.%(P)s-revstars{display:block;margin:0 auto 11px;border:0;width:120px;height:25px;}
+.%(P)s-revq{margin:0 auto 9px;max-width:420px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
+.%(P)s-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
+.%(P)s-help{margin:22px 24px 0;padding:22px 0 30px;border-top:1px solid #e5e5e5;text-align:center;}
+.%(P)s-help img{display:block;margin:0 auto 11px;border:0;}
+.%(P)s-helpttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin-bottom:7px;}
+.%(P)s-helplinks{font-size:14px;line-height:21px;}
+.%(P)s-helplinks a{color:#008539;text-decoration:none;font-weight:700;}
+.%(P)s-helplinks span{color:#c3c9cd;padding:0 7px;}
+.%(P)s-foot{max-width:600px;margin:0 auto;padding:28px 24px 0;text-align:center;}
+.%(P)s-footlogo img{height:30px;width:auto;display:inline-block;border:0;}
+.%(P)s-soc{padding:18px 0 12px;}
+.%(P)s-soc a{display:inline-block;margin:0 5px;text-decoration:none;}
+.%(P)s-soc img{width:28px;height:28px;display:block;border:0;}
+.%(P)s-legal{font-size:11px;line-height:17px;color:#767676;padding:6px 0 0;}
+.%(P)s-unsub{padding:8px 0 26px;}
+.%(P)s-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
+.%(P)s-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
+@media only screen and (max-width:480px){
+  .%(P)s-promo{font-size:14px;line-height:20px;padding:10px 16px;}
+  .%(P)s-logobar{padding:11px 20px 9px;}
+  .%(P)s-logobar img{width:132px;}
+  .%(P)s-hero{padding:26px 18px 2px;}
+  .%(P)s-h1{font-size:26px;line-height:33px;}
+  .%(P)s-sub{font-size:16px;line-height:24px;max-width:none;}
+  .%(P)s-cta{padding:15px 26px;}
+  .%(P)s-band{margin:9px 14px 0;}
+@@BASKET_CSS_M@@
+  .%(P)s-mid{padding:20px 14px 0;}
+  .%(P)s-q,.%(P)s-rev,.%(P)s-help{margin-left:14px;margin-right:14px;}
+  .%(P)s-revq{font-size:16px;line-height:24px;}
+}
+""" % {"P": P}
+CSS = CSS.replace("@@BASKET_CSS@@", basket.css(P)).replace("@@BASKET_CSS_M@@", basket.css_mobile(P))
+
+def quick(a):
+    rows = ""
+    for t, b in QUICK:
+        rows += ('<tr><td class="%s-qtick" valign="top">'
+                 '<img src="%s" alt="" width="22" height="22"></td>'
+                 '<td class="%s-qtx" valign="top">'
+                 '<p class="%s-qttl">%s</p><p class="%s-qbody">%s</p></td></tr>'
+                 % (P, a["IMG_TICK"], P, P, t, P, b))
+    return ('<table class="%s-qtbl" role="presentation" cellpadding="0" cellspacing="0">'
+            '%s</table>' % (P, rows))
+
+BODY = """
+<div class="{P}-root">
+<style>{CSS}</style>
+
+<div class="{P}-pre">10% off the basket you saved. The code comes off at checkout.</div>
+
+<div class="{P}-wrap">
+  <div class="{P}-shell">
+
+    <div class="{P}-promo">10% off your basket <span class="{P}-ends">&middot; ends in 72 hours</span></div>
+
+    <div class="{P}-logobar">
+      <a href="{CHECKOUT_URL}"><img src="{IMG_WORDMARK}" alt="Helloprint" width="150"></a>
+    </div>
+
+    <div class="{P}-hero">
+      <span class="{P}-eyebrow">STILL IN YOUR BASKET</span>
+      <h1 class="{P}-h1">10% off the basket you saved</h1>
+      <p class="{P}-sub">Everything is still configured exactly as you left it. The code comes off at checkout and runs for 72 hours.</p>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+    </div>
+
+    {BASKET}
+    <p class="{P}-band">{BAND}</p>
+
+    <div class="{P}-mid">
+      <span class="{P}-code">Use code <strong>{CODE}</strong></span><br>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+    </div>
+
+    <div class="{P}-q">{QUICK}</div>
+
+    <div class="{P}-rev">
+      <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
+      <p class="{P}-revq">&ldquo;Good quality, super fast and they checked my work. Really lovely.&rdquo;</p>
+      <span class="{P}-revby">Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000</span>
+    </div>
+
+    <div class="{P}-help">
+      <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
+      <span class="{P}-helpttl">Stuck on something?</span>
+      <span class="{P}-helplinks">
+        <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+      </span>
+    </div>
+
+  </div>
+
+  <div class="{P}-foot">
+    <div class="{P}-footlogo">
+      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+    </div>
+    <div class="{P}-soc">
+      <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
+      <a href="https://x.com/helloprintuk"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/x_twitter_96.png" alt="X" width="28" height="28"></a>
+      <a href="https://www.instagram.com/helloprint/"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/instagram_96.png" alt="Instagram" width="28" height="28"></a>
+      <a href="https://www.youtube.com/channel/UC6YYBCdSDMFa9jYFJ3IpMsA"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/youtube_96.png" alt="YouTube" width="28" height="28"></a>
+      <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
+    </div>
+    <div class="{P}-legal">
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+    </div>
+    <div class="{P}-unsub">{UNSUB}</div>
+  </div>
+</div>
+</div>
+"""
+
+def build(bindings, assets, lines):
+    vals = {"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE,
+            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
+    vals.update(bindings); vals.update(assets)
+    return BODY.format(**vals)
+
+PREVIEW_DOC = """<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Abandoned order 02 low value</title></head>
+<body style="margin:0;padding:0;background:#f8f8f8;">
+<!-- HP - Abandoned Order - 02 - LOW VALUE - the incentive
+     Preview: a 70.77 IE basket, under the 150 split this branch requires.
+     Generated by scripts/build_order_02_low.py - do not hand-edit. -->
+%s
+</body></html>
+"""
+KLAVIYO_DOC = """<!--
+  HP - Abandoned Order - 02 - LOW VALUE - the incentive
+  Klaviyo build. Paste as ONE custom HTML / universal block.
+  Generated by scripts/build_order_02_low.py - do not hand-edit.
+
+  Trigger   Started Checkout (T3uGk6), 24 hours after, cart < 150
+  Branch    LOW VALUE only. 10%% off, expiring 72 hours from send.
+  Subject   10%% off, for the next 72 hours
+
+  *** THE CODE %s DOES NOT EXIST YET. *** It must be created before this
+  sends, and it must NOT be HELLO10: that belongs to Welcome, so a Welcome
+  recipient would meet one code twice, attribution would be unusable, and a
+  first-order restriction would fail silently for returning customers.
+
+  THE SAVING IS BANDED, NOT CALCULATED. The exact discounted total cannot be
+  produced in this template language - widthratio is integer-only, {%% with %%}
+  is unsupported so its output cannot be reformatted, and add will not subtract
+  a float. Each band floors 10%% of its lower bound, so the figure shown is
+  always less than or equal to the real saving. Never raise a band's figure
+  without redoing that arithmetic.
+
+  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, make the /en-ie/
+  links market-aware, and confirm the 72-hour expiry is real.
+
+  The basket block is shared with the other order emails via _lib/basket.py.
+-->
+%s
+"""
+
+prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]))
+live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]))
+open(os.path.join(OUT, "order-02-low-proposed.html"), "w", encoding="utf-8").write(PREVIEW_DOC % prev_body)
+open(os.path.join(OUT, "order-02-low-klaviyo.html"), "w", encoding="utf-8").write(KLAVIYO_DOC % (CODE, live_body))
+
+errs = []
+if "REPLACE-WITH-KLAVIYO-ASSET" in prev_body: errs.append("preview leaked a sentinel URL")
+if "data:image" in live_body: errs.append("Klaviyo build leaked a data URI")
+if "{%" in prev_body or "{{" in prev_body: errs.append("preview leaked an unrendered tag")
+if "unsubscribe" not in live_body: errs.append("no unsubscribe tag")
+for bad in ("intcomma", "{% with "):
+    if bad in live_body: errs.append("unsupported " + bad)
+basket.checks(live_body, P, "low", errs)
+ci, co = live_body.index("{% catalog "), live_body.index("{% endcatalog %}")
+for m in re.finditer(r"catalog_item\.", live_body):
+    if not (ci < m.start() < co): errs.append("catalog binding outside its block")
+if 'lookup:"$value"' not in live_body: errs.append("total must come from $value")
+# every band must floor 10% of its lower bound, or the email overstates a discount
+for floor, saving in BANDS:
+    if float(saving) > floor * 0.10 + 1e-9:
+        errs.append("band overstates the saving: >=%d claims %s, real minimum is %.2f"
+                    % (floor, saving, floor * 0.10))
+if len(BANDS) != 4: errs.append("expected 4 bands")
+if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused here")
+if CODE not in live_body: errs.append("the code is missing from the body")
+# this branch is defined by being under the split
+if SAMPLE_TOTAL >= 150: errs.append("the sample basket must sit below the 150 split")
+if float(SAMPLE["TOTAL"]) != SAMPLE_TOTAL: errs.append("sample total disagrees with the band input")
+if sum(float(l[3]) for l in SAMPLE_LINES) - SAMPLE_TOTAL > 0.005:
+    errs.append("sample rows do not sum to the sample total")
+
+print("preview: %6d bytes  ->  proposals/order-02-low-proposed.html" % len(PREVIEW_DOC % prev_body))
+print("klaviyo: %6d bytes  ->  proposals/order-02-low-klaviyo.html" % len(KLAVIYO_DOC % (CODE, live_body)))
+print("band shown for the %.2f sample: %s" % (SAMPLE_TOTAL, SAMPLE["BAND"]))
+if errs:
+    for e in dict.fromkeys(errs): print("  FAIL  " + e)
+    raise SystemExit(1)
+print("all self-checks passed")
