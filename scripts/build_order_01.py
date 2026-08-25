@@ -28,7 +28,9 @@ WHOLE render. The Premium Design Check is exactly that, and the cart says eight
 in ten customers add it, so every line is tested for a market prefix before any
 catalog lookup happens.
 """
-import base64, os, re
+import base64, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import basket
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -54,9 +56,9 @@ LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items
 
 SAMPLE = {
     "CATALOG_OPEN": "", "CATALOG_CLOSE": "",
-    "CHECKOUT_URL": "https://www.helloprint.com/en-gb/basket",
-    "CUR": "&pound;", "TOTAL": "116.04",
-    "NUM": "3",
+    "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
+    "CUR": "&euro;", "TOTAL": "237.33",
+    "NUM": "4",
     "UNSUB": '<a href="#">Unsubscribe</a>',
 }
 LIVE = {
@@ -69,15 +71,22 @@ LIVE = {
     "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
 }
 
-# a GB basket, since GB is where the volume actually is
+# the four products from the Welcome email, at their undiscounted prices, so the
+# example basket is one a reviewer already recognises. Replaced by live event
+# data in the Klaviyo build.
 SAMPLE_LINES = [
-    ("product", "Roller Banners", "1",
-     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/custom-printed-roll-up-banner-packshot-1x1-ae375736.jpg",
-     "https://www.helloprint.com/en-gb/budgetrollupbanners", "90.23"),
-    ("product", "Foamex Signs", "2",
-     "https://storage.googleapis.com/hp-marketing-automation/merchant-center/product-images/markets/ie_en/standard-posters-packshot-1x1-43ad3e79.png",
-     "https://www.helloprint.com/en-gb/foamexsigns", "20.81"),
-    ("service", "Premium Design Check", "1", None, None, "4.99"),
+    ("product", "Flyers", 1, "39.96",
+     "https://contentful.helloprint.com/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
+     "https://www.helloprint.com/en-ie/standardflyers"),
+    ("product", "Classic Business Cards", 1, "25.82",
+     "https://contentful.helloprint.com/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
+     "https://www.helloprint.com/en-ie/standardbusinesscards"),
+    ("product", "Standard Posters", 2, "110.68",
+     "https://contentful.helloprint.com/wm1n7oady8a5/2nY7LuhmSnZjFgcBTaIW49/ab602a96f1dc04cb4fd0929b330711ba/poster.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
+     "https://www.helloprint.com/en-ie/posters"),
+    ("product", "Roller Banners", 1, "60.87",
+     "https://contentful.helloprint.com/wm1n7oady8a5/41Y1y3jMop3QZACNSW5h7g/57b1c68acebbea0a04a384908da64759/banners_retractable_banners__1_.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
+     "https://www.helloprint.com/en-ie/budgetrollupbanners"),
 ]
 
 REASSURE = [
@@ -109,33 +118,7 @@ CSS = """
 .%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#f7f1e9;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
-/* Option A: hairlines rather than boxes. The outer card border and the grey
-   fill behind the total are both gone - they were what made this read as a
-   receipt. Every row carries a top border, including the first, so the rule
-   under the heading comes for free and no :first-child is needed, which
-   Outlook does not support anyway. */
-.%(P)s-bwrap{margin:26px 24px 0;}
-.%(P)s-bhd{width:100%%;border-collapse:collapse;margin:0 0 2px;}
-.%(P)s-bhdl{font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;vertical-align:middle;white-space:nowrap;}
-.%(P)s-bhdb{width:35px;vertical-align:middle;padding-left:9px;}
-.%(P)s-bhdr{text-align:right;vertical-align:middle;font-size:13px;line-height:19px;color:#8a9197;}
-/* notification-style count. bgcolor on a table cell survives Outlook, where
-   border-radius is dropped and it degrades to a square green chip. */
-.%(P)s-badge{border-radius:9999px;color:#ffffff;font-family:'Inter',Arial,sans-serif;font-size:13px;line-height:26px;font-weight:800;text-align:center;}
-.%(P)s-btbl{width:100%%;border-collapse:collapse;}
-.%(P)s-brow td{padding:16px 0;border-top:1px solid #ececec;vertical-align:middle;}
-.%(P)s-lim{width:96px;}
-.%(P)s-lim img{width:80px;height:auto;display:block;border:0;background:#f4f6f7;border-radius:10px;}
-.%(P)s-limsvc{width:96px;text-align:center;}
-.%(P)s-limsvc img{width:24px;height:24px;display:inline-block;border:0;}
-.%(P)s-litx a{text-decoration:none;}
-.%(P)s-liname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
-.%(P)s-liqty{display:block;font-size:13px;line-height:19px;color:#767676;margin-top:2px;}
-.%(P)s-lip{width:104px;text-align:right;font-size:17px;line-height:23px;font-weight:800;color:#191919;white-space:nowrap;}
-.%(P)s-trow td{border-top:2px solid #191919;padding:16px 0 0;}
-.%(P)s-tlbl{font-size:15px;line-height:21px;font-weight:800;color:#191919;}
-.%(P)s-tval{text-align:right;font-size:26px;line-height:32px;font-weight:800;color:#008539;letter-spacing:-.015em;white-space:nowrap;}
-.%(P)s-tnote{margin:10px 24px 0;font-size:12px;line-height:18px;color:#767676;text-align:right;}
+@@BASKET_CSS@@
 .%(P)s-mid{padding:24px 24px 0;text-align:center;}
 .%(P)s-rs{margin:26px 24px 0;padding:22px 0 0;border-top:1px solid #e5e5e5;}
 .%(P)s-rstbl{margin:0 auto;border-collapse:collapse;}
@@ -186,16 +169,7 @@ CSS = """
   .%(P)s-h1{font-size:26px;line-height:33px;}
   .%(P)s-sub{font-size:16px;line-height:24px;max-width:none;}
   .%(P)s-cta,.%(P)s-cta-g{padding:15px 26px;}
-  .%(P)s-bwrap{margin:20px 14px 0;}
-  .%(P)s-bhdl{font-size:17px;line-height:24px;}
-  .%(P)s-brow td{padding:13px 0;}
-  .%(P)s-lim,.%(P)s-limsvc{width:74px;}
-  .%(P)s-lim img{width:62px;}
-  .%(P)s-liname{font-size:15px;line-height:21px;}
-  .%(P)s-liqty{font-size:12px;line-height:18px;}
-  .%(P)s-lip{width:84px;font-size:15px;line-height:21px;}
-  .%(P)s-tval{font-size:22px;line-height:28px;}
-  .%(P)s-tnote{margin:9px 14px 0;}
+@@BASKET_CSS_M@@
   .%(P)s-mid{padding:22px 14px 0;}
   .%(P)s-rs,.%(P)s-rev,.%(P)s-help,.%(P)s-exp{margin-left:14px;margin-right:14px;}
   .%(P)s-exp{padding:17px 16px 19px;}
@@ -206,48 +180,7 @@ CSS = """
   .%(P)s-rstx{font-size:14px;line-height:21px;}
 }
 """ % {"P": P}
-
-def _row(thumb_cell, name, qty_line, price, href):
-    nm = ('<a href="%s"><span class="%s-liname">%s</span></a>' % (href, P, name)) if href \
-         else ('<span class="%s-liname">%s</span>' % (P, name))
-    return ('<tr class="%s-brow">%s<td class="%s-litx">%s'
-            '<span class="%s-liqty">%s</span></td>'
-            '<td class="%s-lip">%%(CUR)s%s</td></tr>'
-            % (P, thumb_cell, P, nm, P, qty_line, P, price))
-
-def sample_lines(a):
-    out = ""
-    for kind, name, qty, img, href, price in SAMPLE_LINES:
-        if kind == "product":
-            thumb = '<td class="%s-lim"><img src="%s" alt="" width="62"></td>' % (P, img)
-            qline = "Quantity %s" % qty
-        else:
-            thumb = ('<td class="%s-limsvc"><img src="%s" alt="" width="22" height="22"></td>'
-                     % (P, a["IMG_TICK"]))
-            qline = "Added at checkout"
-        out += _row(thumb, name, qline, price, href) % {"CUR": SAMPLE["CUR"]}
-    return out
-
-def live_lines(a):
-    """One loop over event.Items. Every line is tested for a market prefix
-    before any catalog lookup, because a lookup on a service line such as
-    artwork-check-premium fails the entire render."""
-    prod_thumb = ('<td class="%s-lim"><img src="{{ catalog_item.featured_image.full.src }}" '
-                  'alt="" width="62"></td>' % P)
-    svc_thumb = ('<td class="%s-limsvc"><img src="%s" alt="" width="22" height="22"></td>'
-                 % (P, a["IMG_TICK"]))
-    cur = LIVE["CUR"]
-    product = ('{% catalog it.ProductID %}'
-               + _row(prod_thumb, "{{ catalog_item.title }}",
-                      "Quantity {{ it.Quantity }}",
-                      "{{ it.RowTotal|floatformat:2 }}", "{{ it.ProductURL }}") % {"CUR": cur}
-               + '{% endcatalog %}')
-    service = _row(svc_thumb, "{{ it.ProductName }}", "Added at checkout",
-                   "{{ it.RowTotal|floatformat:2 }}", None) % {"CUR": cur}
-    return ('{% for it in event.Items %}'
-            '{% if it.ProductID|slice:"2:3" == "-" %}' + product +
-            '{% else %}' + service + '{% endif %}'
-            '{% endfor %}')
+CSS = CSS.replace("@@BASKET_CSS@@", basket.css(P)).replace("@@BASKET_CSS_M@@", basket.css_mobile(P))
 
 def reassure(a):
     rows = "".join(
@@ -298,29 +231,8 @@ BODY = """
     <!-- the real basket: one row per line, product titles from the catalog,
          service lines from the event, each product linking back to its own
          configured URL -->
-    <div class="{P}-bwrap">
-      <table class="{P}-bhd" role="presentation" cellpadding="0" cellspacing="0"><tr>
-        <td valign="middle">
-          <table role="presentation" cellpadding="0" cellspacing="0" align="left"><tr>
-            <td class="{P}-bhdl">Your basket</td>
-            <td class="{P}-bhdb">
-              <table role="presentation" cellpadding="0" cellspacing="0" width="26"><tr>
-                <td width="26" height="26" bgcolor="#008539" align="center" valign="middle" class="{P}-badge">{NUM}</td>
-              </tr></table>
-            </td>
-          </tr></table>
-        </td>
-        <td class="{P}-bhdr" valign="middle">Saved for you</td>
-      </tr></table>
-      <table class="{P}-btbl" role="presentation" cellpadding="0" cellspacing="0">
-        {LINES}
-        <tr class="{P}-trow">
-          <td class="{P}-tlbl" colspan="2">Total</td>
-          <td class="{P}-tval">{CUR}{TOTAL}</td>
-        </tr>
-      </table>
-    </div>
-    <p class="{P}-tnote">Delivery and VAT are confirmed at checkout.</p>
+    {BASKET}
+
 
     <div class="{P}-mid">
       <a class="{P}-cta-g" href="{CHECKOUT_URL}">Return to checkout</a>
@@ -339,7 +251,7 @@ BODY = """
       <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
       <span class="{P}-helpttl">Something not right in there?</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-gb/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-gb/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
     </div>
 
@@ -347,7 +259,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="https://www.helloprint.com/en-gb/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -366,7 +278,8 @@ BODY = """
 """
 
 def build(bindings, assets, lines, high):
-    vals = {"P": P, "CSS": CSS, "LINES": lines, "REASSURE": reassure(assets)}
+    vals = {"P": P, "CSS": CSS, "REASSURE": reassure(assets),
+            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
     vals.update(bindings); vals.update(assets)
     vals["EXPERT_BLOCK"] = EXPERT.format(**vals) if high else ""
     return BODY.format(**vals)
@@ -414,8 +327,8 @@ errs = []
 
 def emit(high):
     tag = "high" if high else "low"
-    pb = build(SAMPLE, SAMPLE_ASSETS, sample_lines(SAMPLE_ASSETS), high)
-    lb = build(LIVE, LIVE_ASSETS, live_lines(LIVE_ASSETS), high)
+    pb = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]), high)
+    lb = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]), high)
     open(os.path.join(OUT, "order-01-%s-proposed.html" % tag), "w", encoding="utf-8").write(
         PREVIEW_DOC % (tag, pb))
     open(os.path.join(OUT, "order-01-%s-klaviyo.html" % tag), "w", encoding="utf-8").write(
@@ -431,31 +344,18 @@ def check(live_body, prev_body, high, tag):
     if "image_full_url" in live_body: errs.append(tag+": image_full_url renders empty")
     for bad in ("intcomma", "{% with "):
         if bad in live_body: errs.append(tag+": unsupported "+bad)
-    if live_body.count('{% if it.ProductID|slice:"2:3" == "-" %}') != 1:
-        errs.append(tag+": every line must be prefix-tested before the catalog lookup")
+    basket.checks(live_body, P, tag, errs)
     ci = live_body.index("{% catalog "); co = live_body.index("{% endcatalog %}")
     for m in re.finditer(r"catalog_item\.", live_body):
         if not (ci < m.start() < co): errs.append(tag+": catalog binding outside its block")
-    if "event.Currency" in live_body:
-        errs.append(tag+": Currency is absent on 94% of these events")
     if 'lookup:"$value"' not in live_body: errs.append(tag+": total must come from $value")
     if "event.$value" in live_body: errs.append(tag+": event.$value is invalid django")
     # neither branch carries an offer in email 1
     low = re.sub(r"<!--.*?-->", "", live_body, flags=re.S).lower()
     for word in ("10%", "15%", "25%", "discount", "voucher", "off your"):
         if word in low: errs.append(tag+": email 1 carries no offer on either branch: "+word)
-    if live_body.count("{% for it in event.Items %}") != 1: errs.append(tag+": expected one line loop")
     for need in ("margin-top:-190px", "z-index:2", "%s-badge" % P, "%s-revq" % P):
         if need not in live_body: errs.append(tag+": missing "+need)
-    if "{{ event.Items|length }}" not in live_body:
-        errs.append(tag+": the badge must carry the live item count")
-    if 'bgcolor="#008539"' not in live_body:
-        errs.append(tag+": the count badge needs bgcolor, not just border-radius")
-    # option A removed both of these on purpose
-    if "%s-basket{" % P in live_body or "%s-bhead" % P in live_body:
-        errs.append(tag+": the outer basket box should be gone")
-    if "background:#f8f8f8" in live_body.split("%s-trow" % P)[-1][:200]:
-        errs.append(tag+": the total should have no fill")
     # banner and headline share a warm palette; pure white would read as a
     # separate piece of design sitting on top of the photograph
     if "color:#f4ece2" not in live_body:
