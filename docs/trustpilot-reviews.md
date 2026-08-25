@@ -38,6 +38,32 @@ which is what was asked for. Product reviews are a different endpoint
 (`/v1/product-reviews/...`); if the tags live there, the client needs a second
 method. Small change, but it changes the plan.
 
+## Key or key + secret?
+
+**The key alone, for now.** Confirmed against developers.trustpilot.com:
+
+| | Auth | What it covers |
+|---|---|---|
+| **Public APIs** | API key alone, sent as an `apikey` header | `business-units/search`, `business-units/{id}/reviews` — everything this client uses |
+| **Private APIs** | OAuth 2.0 bearer token | anything under `/v1/private/...` |
+
+The secret is only for OAuth, and OAuth is only for private endpoints. So put
+both in `.env` — the secret costs nothing sitting there and saves a round trip —
+but the fetcher will not touch it unless the tags turn out to be private:
+
+```
+TRUSTPILOT_API_KEY=...
+TRUSTPILOT_API_SECRET=...
+```
+
+One thing to know before assuming key + secret is enough for OAuth if we do need
+it: the token endpoint takes `Basic base64(key:secret)`, but the **initial**
+token depends on which grant type the app is configured for. Client Credentials
+works with key and secret alone; the **Password grant additionally needs a
+business user's username and password**. Access tokens last 100 hours, refresh
+tokens 30 days. So if we end up on a private endpoint, the first question is
+which grant type your app has enabled.
+
 ## If the first call 403s
 
 Tested with a deliberately fake key, the search endpoint returns **403 with a

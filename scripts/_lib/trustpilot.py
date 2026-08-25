@@ -35,6 +35,13 @@ appear inside review objects, so the inventory has to be discovered by fetching
 reviews and looking at what comes back. fetch_reviews.py does that and prints
 it, which is how the tag-to-category mapping gets filled in.
 
+KEY ALONE, NOT KEY PLUS SECRET. Both endpoints above are public APIs, which
+take the API key on its own as an "apikey" header. The secret is only used for
+OAuth, and OAuth is only needed for /v1/private/... endpoints. If the tag
+filtering turns out to live behind a private endpoint, the token exchange goes in
+_get - and note the initial token may need a business user username and password
+as well as the key and secret, depending on the app's grant type.
+
 SERVICE REVIEWS, NOT PRODUCT REVIEWS. Product reviews live on a different
 endpoint (/v1/product-reviews/...). Seb asked for service reviews for now.
 """
