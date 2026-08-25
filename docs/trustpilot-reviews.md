@@ -38,6 +38,26 @@ which is what was asked for. Product reviews are a different endpoint
 (`/v1/product-reviews/...`); if the tags live there, the client needs a second
 method. Small change, but it changes the plan.
 
+## If the first call 403s
+
+Tested with a deliberately fake key, the search endpoint returns **403 with a
+CloudFront HTML page**, not a JSON auth error. That is ambiguous — it could be
+the bad key being rejected at the edge, or the request being blocked before it
+reaches the API. A real key resolves it in one run.
+
+If a real key still gets an HTML 403, in order of likelihood:
+
+1. **The key is IP-restricted.** Trustpilot lets you scope keys; this machine
+   may not be on the list.
+2. **The endpoint needs OAuth, not just an API key.** Trustpilot's private and
+   Business endpoints take a bearer token obtained from client id + secret,
+   while the public business-unit endpoints take the key alone. If tags turn out
+   to live behind a private endpoint, the client needs a token exchange added —
+   it is a contained change, and the place to put it is `_get`.
+3. **The key is inactive or is a different product's key.**
+
+A JSON 401 instead would point straight at the key itself.
+
 ## The rule everything else follows
 
 **A review is never translated.**

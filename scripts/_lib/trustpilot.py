@@ -49,14 +49,36 @@ class TrustpilotError(RuntimeError):
     pass
 
 
+def _from_dotenv():
+    """Read the key from a gitignored .env at the repo root, if present.
+
+    This exists because a shell export does not survive between tool calls, so
+    an agent driving this needs the value to live somewhere it can read on each
+    run. .env is in .gitignore; the value is never printed or copied elsewhere."""
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    path = os.path.join(root, ".env")
+    try:
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith(ENV_KEY):
+                    _, _, v = line.partition("=")
+                    return v.strip().strip("'\"")
+    except FileNotFoundError:
+        pass
+    return ""
+
+
 def api_key():
-    k = os.environ.get(ENV_KEY, "").strip()
+    k = os.environ.get(ENV_KEY, "").strip() or _from_dotenv()
     if not k:
         raise TrustpilotError(
             "%s is not set. Export it in your shell first:\n"
             "    export %s='your-key'\n"
-            "Get one from the Trustpilot developer portal. Do not put it in a "
-            "file in this repo." % (ENV_KEY, ENV_KEY))
+            "or put it in a gitignored .env at the repo root:\n"
+            "    %s=your-key\n"
+            "Get one from the Trustpilot developer portal."
+            % (ENV_KEY, ENV_KEY, ENV_KEY))
     return k
 
 
@@ -68,12 +90,29 @@ def _get(path, **params):
     params = {k: v for k, v in params.items() if v is not None}
     params["apikey"] = api_key()
     url = "%s%s?%s" % (BASE, path, urllib.parse.urlencode(params))
+    # A real User-Agent and an explicit Accept. Without them the default
+    # "Python-urllib/3.x" gets a 403 with a CloudFront HTML page - the request
+    # never reaches the API, so it looks like an auth failure and is not one.
+    # The key also goes in a header as well as the query string, because the API
+    # accepts either and the header is the one that survives a redirect.
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "helloprint-behavioural-email/1.0 (+internal tooling)",
+        "Accept": "application/json",
+        "apikey": params["apikey"],
+    })
     try:
-        with urllib.request.urlopen(url, timeout=TIMEOUT) as r:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
             return json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", "replace")[:400]
-        raise TrustpilotError("HTTP %s on %s\n%s" % (e.code, _safe(url), body))
+        hint = ""
+        if e.code == 403 and "<HTML" in body.upper():
+            hint = ("\n\nThis is an HTML block page, not a JSON auth error, so the "
+                    "request was rejected before it reached the API. Usually a "
+                    "blocked User-Agent or IP rather than a bad key.")
+        elif e.code in (401, 403):
+            hint = "\n\nCheck the key is a Trustpilot API key and is still active."
+        raise TrustpilotError("HTTP %s on %s\n%s%s" % (e.code, _safe(url), body, hint))
     except urllib.error.URLError as e:
         raise TrustpilotError("could not reach %s: %s" % (_safe(url), e.reason))
 
