@@ -572,9 +572,13 @@ home = f'''<section class="page" id="page-home">
     <p><strong>Value first, discount last.</strong> Every sequence leads with saved work, trust and help. Browse Abandonment carries no code at all; where one appears it comes late and always with an expiry follow-up.</p>
     <p><strong>Fewer emails per journey.</strong> Browse Abandonment goes from five emails in four days to three, because it is the highest-volume flow in the programme and its send volume sets the sending reputation for every other one.</p>
   </div>
-  <h2 class="secttl">Superseded RFB flows</h2>
-  <p class="hero-sub">Kept for reference so the original work stays readable. These are not part of the rebuild.</p>
-  <div class="grid grid-retired">{"".join(flow_card(f) for f in FLOWS if f.get("retired"))}</div>
+  <details class="notes notes-flows">
+    <summary><span class="chev">{ICON["arrow"]}</span><span class="s-show">Show the superseded RFB flows</span><span class="s-hide">Hide the superseded RFB flows</span><span class="notes-n">{sum(1 for f in FLOWS if f.get("retired"))}</span></summary>
+    <div class="notes-body">
+      <p class="hero-sub">Kept for reference so the original work stays readable. Neither is part of the rebuild: Abandoned Checkout is merged into Abandoned Order, and Site Abandonment is dropped.</p>
+      <div class="grid grid-retired">{"".join(flow_card(f) for f in FLOWS if f.get("retired"))}</div>
+    </div>
+  </details>
 </section>
 <section class="page" id="page-issues">
   <a class="backlink" href="#home">{icon("back")}Back to overview</a>
@@ -708,6 +712,9 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .pv-pair{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:2px}
 .pv-col{flex:0 0 392px;max-width:392px}
 .mail-row-final .pv-pair{gap:30px}
+.notes-flows{margin-top:30px}
+.notes-body .grid{margin-top:16px}
+.notes-body .hero-sub{margin-top:10px}
 .grid-retired{opacity:.72}
 .grid-retired .fcard{background:#fbfbfc}
 .mailsec{grid-column:1/-1;margin:34px 0 2px;padding:0 0 10px;border-bottom:1px solid #e3e6e8}
