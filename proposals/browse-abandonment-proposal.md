@@ -490,3 +490,100 @@ question is answered.
 The design service is confirmed to exist but its **price and turnaround are not stated** on the
 page. If it is a paid service, "our designers can create it for you" needs a qualifier, or the
 email sends people toward a cost they are not expecting. Needs a number before build.
+
+---
+
+## 9. Email 3 brief — the quote email
+
+Status: brief for sign-off. Nothing built.
+
+**Position** +3 days after the product view, still no cart and no order.
+
+**Who it is for.** Not the undecided. Emails 1 and 2 have already served them. This one is for
+the reader who is **blocked**, and there are three ways to be blocked on a print job:
+
+1. **The spec is unusual** and the configurator cannot express it.
+2. **There is a date** and they cannot tell whether it can be met.
+3. **Someone else has to approve it** — they need a document, not a basket.
+
+One mechanic serves all three: a written quote from the quotation team. That is why this is a
+single email rather than three.
+
+### What the site actually promises
+
+From `/en-ie/request-a-quote`:
+
+- *"Tell us what you need and our team will get back to you with a tailored price."*
+- On submit: *"Our team will review your request and get back to you **within 24 hours**."*
+- The form takes **attachments** — JPEG, PNG, HEIC, PDF, DOCX or TXT, up to five files at 10 MB
+  each. So a sketch, a photo of an old print or a spec sheet is all it takes to start.
+- A company-name field, described as *"Helps us give you the best price"*.
+
+From `/en-ie/business-solutions`:
+
+- *"Complex print jobs? That's what we're made for. With more than 40 years of experience in the
+  graphic industry, our customer advisers and partners can take on even the most complex…"*
+- *"For most products, our print partners deliver next day where possible."*
+- *"Customer advisers who think along with you."*
+- Agreed business rates, and automated approval flows for organisations.
+
+Each of the three blocked states has a verifiable answer, which is what makes this email
+possible without inventing anything.
+
+### Storyline
+
+1. **Masthead.**
+2. **Banner hero**, same construction as email 2: real HTML text over the photograph, with ink
+   headroom and a blend baked in. A different crop of the adviser shoot so it is visibly not
+   the same picture — someone on a headset at a screen reads as "working out your price".
+   - H1: *Tell us the job. We will price it.*
+   - Sub: *An odd size, a tight deadline, or a number someone else has to sign off. Our
+     quotation team comes back within 24 hours.*
+   - CTA: *Request a quote*
+3. **Product anchor strip** — which job this is about, one line, as in email 2.
+4. **Three reasons people ask us instead** — the three blocked states, one short row each:
+   - *The spec is unusual.* Forty years in the graphic trade. Say what it has to do and we work
+     out how to make it.
+   - *You need it by a date.* Tell us the date. Most products go out for next-day delivery
+     where possible, and you get a straight answer if it cannot be done.
+   - *Someone has to approve it.* A written quote with the full total, so there is one number
+     to forward rather than a basket to describe.
+5. **How a quote works** — a three-step numbered path, reusing the Welcome 4 timeline component
+   (email-safe nested table with `bgcolor`, no CSS the clients strip):
+   1. Tell us what you need. Attach a sketch, a photo, a spec sheet or an old print.
+   2. Our quotation team comes back within 24 hours with a tailored price.
+   3. Order it, or forward the quote for sign-off.
+   The numbered path is used here and nowhere else in this flow because a quote genuinely is a
+   sequence, which is the only thing that device should ever be used for.
+6. **What you can send** — one line naming the formats, because "request a quote" reads like
+   paperwork until you learn a photo will do.
+7. **John and the Print Expert Team**, reusing the Welcome 4 card. E-mail and the quote form,
+   no phone number: it differs per market and this flow runs in two.
+8. **Closing CTA** — *Request a quote*. Plus *or just reply to this email*.
+9. **Footer.**
+
+**Not in it:** no discount, no cross-sell, no price. Same reasoning as email 2 — one job, and a
+quote is the answer to the price question rather than another place to state a number.
+
+### Subject line
+
+Primary: **"Need a price you can forward?"** — speaks straight to the reader blocked by
+approval, and is odd enough to catch the other two.
+Secondary: "Tell us the job, we will price it".
+Preview: *An odd spec, a tight deadline, or someone else's signature. Our quotation team comes
+back within 24 hours.*
+
+No product name, so like email 2 this does not depend on `{% catalog %}` resolving in a subject
+line.
+
+### This corrects Welcome 4
+
+Welcome email 4 currently promises **"A price back within the hour"** in its timeline and
+**"you get a price within the hour"** in its closing copy. The published promise on the quote
+page is **within 24 hours**. I had flagged that SLA as unverified when Welcome 4 was built;
+it is now verified, and it is wrong.
+
+Recommend changing Welcome 4 to "within 24 hours" — an overpromise on response time is the kind
+that generates complaints from exactly the customers who took us up on it. If the team really
+does answer within the hour in practice, the quote page should say so instead, and then both can
+claim it.

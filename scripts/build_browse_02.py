@@ -134,8 +134,10 @@ CSS = """
 .%(P)s-tplline{margin:14px 0 0;font-size:14px;line-height:21px;color:#555555;text-align:center;}
 .%(P)s-tplline a{color:#008539;text-decoration:none;font-weight:700;}
 
-/* what we look at, in plain words */
-.%(P)s-checks{border:1px solid #e5e5e5;border-radius:14px;padding:6px 18px;}
+/* what we look at, in plain words. No border, and the table is shrink-to-fit
+   and centred with align="center" so the whole group sits in the middle
+   instead of the rows starting at a left edge. */
+.%(P)s-ckc{margin:0 auto;border-collapse:collapse;}
 .%(P)s-ck{width:100%%;border-collapse:collapse;}
 .%(P)s-cktick{width:34px;vertical-align:top;padding:11px 10px 11px 0;}
 .%(P)s-cktick img{width:22px;height:22px;display:block;border:0;}
@@ -184,7 +186,6 @@ CSS = """
   .%(P)s-secttl{font-size:21px;line-height:28px;}
   .%(P)s-rtcell{display:block!important;width:100%%!important;padding:0 0 10px!important;}
   .%(P)s-card{min-height:0;}
-  .%(P)s-checks{padding:4px 14px;}
   .%(P)s-cktx{font-size:14px;line-height:21px;}
   .%(P)s-prem{margin:26px 14px 0;padding:20px 16px;}
   .%(P)s-premttl{font-size:19px;line-height:26px;}
@@ -212,9 +213,8 @@ def _ticklist(a, items, tick="IMG_TICK"):
         for c in items)
 
 def checks_html(a):
-    return ('<div class="%s-checks"><table class="%s-ck" role="presentation" '
-            'cellpadding="0" cellspacing="0">%s</table></div>'
-            % (P, P, _ticklist(a, CHECKS)))
+    return ('<table class="%s-ckc" role="presentation" cellpadding="0" '
+            'cellspacing="0" align="center">%s</table>' % (P, _ticklist(a, CHECKS)))
 
 def premium_html(a):
     return ('<table class="%s-ck" role="presentation" cellpadding="0" cellspacing="0">'
@@ -412,6 +412,10 @@ cl = [len(c) for c in CHECKS]
 if max(cl) - min(cl) > 8: errs.append("check lines uneven: %s" % cl)
 if len(ROUTES) != 3: errs.append("expected 3 routes")
 if live_body.count('class="%s-rtcell"' % P) != 3: errs.append("route cells missing")
+if '%s-checks' % P in live_body:
+    errs.append("the checks block should no longer carry a bordered wrapper")
+if '%s-ckc" role="presentation" cellpadding="0" cellspacing="0" align="center"' % P not in live_body:
+    errs.append("the checks table must be centred with align=center")
 # the cards must be levelled structurally, not by counting characters, because
 # translation changes the wrapping
 if "min-height:182px" not in live_body:

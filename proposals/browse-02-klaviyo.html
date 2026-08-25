@@ -69,8 +69,10 @@
 .hp-b2-tplline{margin:14px 0 0;font-size:14px;line-height:21px;color:#555555;text-align:center;}
 .hp-b2-tplline a{color:#008539;text-decoration:none;font-weight:700;}
 
-/* what we look at, in plain words */
-.hp-b2-checks{border:1px solid #e5e5e5;border-radius:14px;padding:6px 18px;}
+/* what we look at, in plain words. No border, and the table is shrink-to-fit
+   and centred with align="center" so the whole group sits in the middle
+   instead of the rows starting at a left edge. */
+.hp-b2-ckc{margin:0 auto;border-collapse:collapse;}
 .hp-b2-ck{width:100%;border-collapse:collapse;}
 .hp-b2-cktick{width:34px;vertical-align:top;padding:11px 10px 11px 0;}
 .hp-b2-cktick img{width:22px;height:22px;display:block;border:0;}
@@ -119,7 +121,6 @@
   .hp-b2-secttl{font-size:21px;line-height:28px;}
   .hp-b2-rtcell{display:block!important;width:100%!important;padding:0 0 10px!important;}
   .hp-b2-card{min-height:0;}
-  .hp-b2-checks{padding:4px 14px;}
   .hp-b2-cktx{font-size:14px;line-height:21px;}
   .hp-b2-prem{margin:26px 14px 0;padding:20px 16px;}
   .hp-b2-premttl{font-size:19px;line-height:26px;}
@@ -174,7 +175,7 @@
     <div class="hp-b2-sect">
       <h2 class="hp-b2-secttl">We look at every file before it prints</h2>
       <p class="hp-b2-sectsub">So the thing that arrives is the thing you pictured.</p>
-      <div class="hp-b2-checks"><table class="hp-b2-ck" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Nothing important gets cut off at the edges</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Photos and logos come out sharp, not fuzzy</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Colours print the way you expect them to</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">If something looks wrong, you hear from us first</td></tr></table></div>
+      <table class="hp-b2-ckc" role="presentation" cellpadding="0" cellspacing="0" align="center"><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Nothing important gets cut off at the edges</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Photos and logos come out sharp, not fuzzy</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Colours print the way you expect them to</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">If something looks wrong, you hear from us first</td></tr></table>
     </div>
 
     <!-- the assurance centrepiece. The free check is automated; a person is
