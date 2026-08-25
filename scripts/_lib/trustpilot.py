@@ -35,20 +35,37 @@ appear inside review objects, so the inventory has to be discovered by fetching
 reviews and looking at what comes back. fetch_reviews.py does that and prints
 it, which is how the tag-to-category mapping gets filled in.
 
-KEY ALONE, NOT KEY PLUS SECRET. Both endpoints above are public APIs, which
-take the API key on its own as an "apikey" header. The secret is only used for
-OAuth, and OAuth is only needed for /v1/private/... endpoints. If the tag
-filtering turns out to live behind a private endpoint, the token exchange goes in
-_get - and note the initial token may need a business user username and password
-as well as the key and secret, depending on the app's grant type.
+TAGS NEED OAUTH. Verified, not assumed: the PUBLIC review endpoint returns no
+tags field at all - 500 reviews scanned, zero tags, and "tags" is simply absent
+from the response. The PRIVATE endpoint returns them:
+
+  GET /v1/private/business-units/{id}/reviews    Bearer token
+      Same filters, plus a "tags" array on each review.
+
+The token comes from client_credentials, which needs only the key and the
+secret - no business user password, despite that being a possibility in the
+docs:
+
+  POST /v1/oauth/oauth-business-users-for-applications/accesstoken
+       Authorization: Basic base64(key:secret)
+       grant_type=client_credentials
+       -> access_token, expires_in 360000 (100 hours)
+
+WHAT THE TAGS ACTUALLY LOOK LIKE. One group, "generic", holding the whole
+category path and the product slug together, e.g. a flyers review carries
+"Commercial Print", "All Flyers", "Flyers" and "standardflyers". So matching on
+the top-level category name is exact, and matching on a product slug is possible
+if a finer cut is ever wanted. About 58% of reviews carry tags at all.
 
 SERVICE REVIEWS, NOT PRODUCT REVIEWS. Product reviews live on a different
 endpoint (/v1/product-reviews/...). Seb asked for service reviews for now.
 """
-import json, os, sys, urllib.error, urllib.parse, urllib.request
+import base64, json, os, sys, urllib.error, urllib.parse, urllib.request
 
 BASE = "https://api.trustpilot.com/v1"
 ENV_KEY = "TRUSTPILOT_API_KEY"
+ENV_SECRET = "TRUSTPILOT_API_SECRET"
+UA = "helloprint-behavioural-email/1.0 (+internal tooling)"
 TIMEOUT = 30
 
 
@@ -56,7 +73,11 @@ class TrustpilotError(RuntimeError):
     pass
 
 
-def _from_dotenv():
+def _secret():
+    return os.environ.get(ENV_SECRET, "").strip() or _from_dotenv(ENV_SECRET)
+
+
+def _from_dotenv(name=None):
     """Read the key from a gitignored .env at the repo root, if present.
 
     This exists because a shell export does not survive between tool calls, so
@@ -68,7 +89,7 @@ def _from_dotenv():
         with open(path, encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
-                if line.startswith(ENV_KEY):
+                if line.startswith(name or ENV_KEY):
                     _, _, v = line.partition("=")
                     return v.strip().strip("'\"")
     except FileNotFoundError:
@@ -77,7 +98,7 @@ def _from_dotenv():
 
 
 def api_key():
-    k = os.environ.get(ENV_KEY, "").strip() or _from_dotenv()
+    k = os.environ.get(ENV_KEY, "").strip() or _from_dotenv(ENV_KEY)
     if not k:
         raise TrustpilotError(
             "%s is not set. Export it in your shell first:\n"
@@ -103,7 +124,7 @@ def _get(path, **params):
     # The key also goes in a header as well as the query string, because the API
     # accepts either and the header is the one that survives a redirect.
     req = urllib.request.Request(url, headers={
-        "User-Agent": "helloprint-behavioural-email/1.0 (+internal tooling)",
+        "User-Agent": UA,
         "Accept": "application/json",
         "apikey": params["apikey"],
     })
@@ -130,6 +151,67 @@ def _safe(url):
     q = urllib.parse.parse_qsl(parts.query)
     q = [(k, "***" if k == "apikey" else v) for k, v in q]
     return urllib.parse.urlunsplit(parts._replace(query=urllib.parse.urlencode(q)))
+
+
+def access_token():
+    """A bearer token for the private endpoints, via client_credentials.
+
+    Fetched fresh each run rather than cached to disk - it is one cheap call, and
+    a token sitting in a file is one more secret to look after."""
+    sec = _secret()
+    if not sec:
+        raise TrustpilotError(
+            "%s is not set, and the private endpoints need it. Add it to .env "
+            "next to the key." % ENV_SECRET)
+    body = urllib.parse.urlencode({"grant_type": "client_credentials"}).encode()
+    auth = base64.b64encode(("%s:%s" % (api_key(), sec)).encode()).decode()
+    req = urllib.request.Request(
+        BASE + "/oauth/oauth-business-users-for-applications/accesstoken",
+        data=body,
+        headers={"Authorization": "Basic " + auth,
+                 "Content-Type": "application/x-www-form-urlencoded",
+                 "User-Agent": UA})
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            d = json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        raise TrustpilotError(
+            "token exchange failed: HTTP %s %s\nIf this is 400 or 401, the app may "
+            "not have the Client Credentials grant enabled - the Password grant "
+            "would additionally need a business user username and password."
+            % (e.code, e.read().decode("utf-8", "replace")[:200]))
+    t = d.get("access_token")
+    if not t:
+        raise TrustpilotError("token exchange returned no access_token")
+    return t
+
+
+def _bearer_get(token, path, **params):
+    params = {k: v for k, v in params.items() if v is not None}
+    url = "%s%s?%s" % (BASE, path, urllib.parse.urlencode(params))
+    req = urllib.request.Request(url, headers={
+        "Authorization": "Bearer " + token, "Accept": "application/json",
+        "User-Agent": UA})
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        raise TrustpilotError("HTTP %s on %s\n%s"
+                              % (e.code, url, e.read().decode("utf-8", "replace")[:300]))
+
+
+def private_reviews(token, business_unit_id, language=None, stars=None,
+                    pages=1, per_page=100, order="createdat.desc"):
+    """Service reviews WITH their tags. Newest first."""
+    for page in range(1, pages + 1):
+        d = _bearer_get(token, "/private/business-units/%s/reviews" % business_unit_id,
+                        language=language, stars=stars, page=page,
+                        perPage=per_page, orderBy=order)
+        batch = d.get("reviews") or []
+        for r in batch:
+            yield r
+        if len(batch) < per_page:
+            return
 
 
 def find_business_unit(domain):
@@ -200,9 +282,13 @@ if __name__ == "__main__":
     # a connectivity check that prints nothing sensitive
     try:
         bu, meta = find_business_unit(sys.argv[1] if len(sys.argv) > 1 else "helloprint.com")
-        print("business unit: %s  (%s, %s reviews, score %s)" % (
-            bu, meta.get("identifyingName"),
-            (meta.get("numberOfReviews") or {}).get("total"),
-            (meta.get("score") or {}).get("trustScore")))
+        # numberOfReviews is a plain int here, not the object the docs imply
+        n = meta.get("numberOfReviews")
+        if isinstance(n, dict):
+            n = n.get("total")
+        sc = meta.get("score")
+        sc = sc.get("trustScore") if isinstance(sc, dict) else sc
+        print("business unit: %s  (%s, %s reviews, score %s)"
+              % (bu, meta.get("identifyingName"), n, sc))
     except TrustpilotError as e:
         print("FAILED: %s" % e); raise SystemExit(1)

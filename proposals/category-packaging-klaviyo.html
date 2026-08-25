@@ -161,7 +161,7 @@
 
     <div class="hp-catpk-rev">
       <img class="hp-catpk-revstars" src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-4-5.png" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
-      <span class="hp-catpk-revph">Trustpilot quote to be added &mdash; pick a review about packaging, ideally mentioning colour or consistency.</span><span class="hp-catpk-revby">Verified Trustpilot review</span>
+      {% if event.Locale|slice:":2" == "en" %}<span class="hp-catpk-revq">&ldquo;I’ve been printing my custom gift wrap at Helloprint for years though. The quality never fails!&rdquo;</span><span class="hp-catpk-revby">TL &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "es" %}<span class="hp-catpk-revq">&ldquo;Muy bien los productos. Pero lo mejor es la asistencia. Muy amables e interesados por el cliente. Muy contento&rdquo;</span><span class="hp-catpk-revby">Javier &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "it" %}<span class="hp-catpk-revq">&ldquo;Sono stati velocissimi sia nella produzione che nella spedizione&rdquo;</span><span class="hp-catpk-revby">Claudia &middot; 5 out of 5 on Trustpilot</span>{% else %}<span class="hp-catpk-revph">Trustpilot quote to be added &mdash; pick a review about packaging, ideally mentioning colour or consistency.</span><span class="hp-catpk-revby">Verified Trustpilot review</span>{% endif %}
     </div>
 
     <div class="hp-catpk-help">

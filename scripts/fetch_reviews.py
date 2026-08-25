@@ -12,10 +12,14 @@ preview. So the reviews land in data/trustpilot-reviews.json, which is committed
 and dated, and the builders only ever read that. Refreshing is a deliberate act,
 the same shape as the Welcome price snapshot.
 
-RUN --inventory FIRST. The API has no endpoint listing tag groups or values, so
-the only way to learn how reviews are tagged is to fetch a broad sample and look.
-That prints the groups and values with counts; put the real ones into TAG_MAP
-below. Until that is done the mapping here is a GUESS and the file says so.
+TAGS LIVE ON THE PRIVATE ENDPOINT ONLY. Verified: the public review endpoint has
+no tags field whatsoever - 500 reviews scanned, none tagged, the key absent from
+the response. The private endpoint returns them, and reaching it needs an OAuth
+bearer token from client_credentials (key + secret, no business user password).
+
+--inventory prints the tag groups and values found, which is the only way to
+discover them - the API has no endpoint listing them. Already run: one group,
+"generic", holding the category path and the product slug together.
 
 SELECTION RULES, and why each exists:
 
@@ -47,24 +51,37 @@ LANGUAGES = ["en", "nl", "fr", "es", "it"]
 
 # our category slug -> the tag values that mean it
 #
-# *** THIS IS A GUESS UNTIL --inventory HAS BEEN RUN. *** The real tag values
-# come from the account. Replace the lists, keep the slugs.
+# Confirmed by --inventory against the private endpoint on 2026-08-25. Tags come
+# in one group, "generic", carrying the whole category path plus the product
+# slug - a flyers review holds "Commercial Print", "All Flyers", "Flyers" and
+# "standardflyers" together. So matching the top-level category name is exact,
+# and no fuzzy matching is needed.
 TAG_MAP = {
-    "commercial-print":  ["Commercial Print", "Flyers", "Business Cards", "Booklets"],
-    "signage-outdoor":   ["Signage & Outdoor", "Banners", "Flags", "Signs"],
-    "labels":            ["Labels", "Stickers"],
-    "packaging":         ["Packaging", "Paper Bags"],
-    "clothing-textiles": ["Clothing & Textiles", "T-shirts", "Textiles"],
-    "corporate-gifts":   ["Corporate Gifts", "Promotional", "Gifts"],
+    "commercial-print":  ["Commercial Print"],
+    "signage-outdoor":   ["Signage & Outdoor"],
+    "labels":            ["Labels"],
+    "packaging":         ["Packaging"],
+    "clothing-textiles": ["Clothing & Textiles"],
+    "corporate-gifts":   ["Corporate Gifts"],
 }
-TAG_GROUP = None   # set once --inventory shows which group holds these
+TAG_GROUP = "generic"
 
 MIN_LEN, MAX_LEN = 60, 190
 
 
+# Display names that are not names. "false" turned up as a literal author on a
+# real review - an anonymised or broken record - and a quote credited to "false"
+# reads as a bug, so these are skipped rather than shown.
+JUNK_AUTHORS = {"false", "true", "null", "none", "n/a", "na", "anonymous",
+                "anoniem", "anonyme", "anonimo", "anónimo", "-", "--", "."}
+
+
 def usable(r):
     if r["stars"] != 5:                      return False
-    if not r["author"]:                      return False
+    a = r["author"].strip()
+    if not a:                                return False
+    if a.lower() in JUNK_AUTHORS:            return False
+    if not any(c.isalpha() for c in a):      return False
     if not (MIN_LEN <= len(r["text"]) <= MAX_LEN): return False
     if "http" in r["text"].lower():          return False   # spam / link drops
     return True
@@ -87,15 +104,19 @@ def main():
                     help="pages of 100 per language (default 10)")
     a = ap.parse_args()
 
+    # TAGS ONLY EXIST ON THE PRIVATE ENDPOINT, so everything here goes through a
+    # bearer token. Verified: the public endpoint has no tags field at all.
     try:
         bu, meta = trustpilot.find_business_unit(DOMAIN)
+        token = trustpilot.access_token()
     except trustpilot.TrustpilotError as e:
         print("FAILED: %s" % e)
         return 1
-    print("business unit %s  (%s)" % (bu, meta.get("identifyingName")))
+    n = meta.get("numberOfReviews")
+    print("business unit %s  (%s reviews)" % (bu, n if not isinstance(n, dict) else n.get("total")))
 
     if a.inventory:
-        rs = list(trustpilot.reviews(bu, pages=a.pages))
+        rs = list(trustpilot.private_reviews(token, bu, pages=a.pages))
         inv = trustpilot.tag_inventory(rs)
         print("\n%d reviews scanned. tag groups and values found:\n" % len(rs))
         if not inv:
@@ -112,8 +133,8 @@ def main():
     # newest first per language, so the pick is recent as well as suitable
     picked, counts, seen = {}, collections.Counter(), 0
     for lang in LANGUAGES:
-        for raw in trustpilot.reviews(bu, language=lang, stars=5,
-                                      tag_group=TAG_GROUP, pages=a.pages):
+        for raw in trustpilot.private_reviews(token, bu, language=lang,
+                                              stars=5, pages=a.pages):
             seen += 1
             r = trustpilot.normalise(raw)
             if not usable(r):

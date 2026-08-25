@@ -1,0 +1,847 @@
+{
+ "business_unit": "581b27a10000ff000596fa72",
+ "domain": "helloprint.com",
+ "fetched": "2026-08-25",
+ "languages": [
+  "en",
+  "nl",
+  "fr",
+  "es",
+  "it"
+ ],
+ "reviews": {
+  "clothing-textiles|en": {
+   "author": "Xenia",
+   "author_location": "",
+   "created_at": "2026-06-10T13:31:15Z",
+   "id": "6a294b038e98906b3fbcb63e",
+   "language": "en",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "fruitoftheloomoriginalpolo630500u"
+    },
+    {
+     "group": "generic",
+     "value": "Clothing & Textiles"
+    },
+    {
+     "group": "generic",
+     "value": "All Polos"
+    },
+    {
+     "group": "generic",
+     "value": "Polos"
+    }
+   ],
+   "text": "T-shirts were made very fast and delivered on time. I also like the online Design interface on HelloPrint's website",
+   "title": "Everything perfect"
+  },
+  "clothing-textiles|es": {
+   "author": "Toni Abelló",
+   "author_location": "",
+   "created_at": "2023-12-12T22:31:18Z",
+   "id": "6578c315c83e809512ab808a",
+   "language": "es",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "hoodiesorganicbc"
+    },
+    {
+     "group": "generic",
+     "value": "Clothing & Textiles"
+    },
+    {
+     "group": "generic",
+     "value": "All Hoodies"
+    },
+    {
+     "group": "generic",
+     "value": "Hoodies"
+    }
+   ],
+   "text": "Rapidez. Buen producto. Facilidad de seguimiento del pedido y atención al cliente eficiente.",
+   "title": "Rapidez"
+  },
+  "clothing-textiles|fr": {
+   "author": "GIOVANNA CADEDDU",
+   "author_location": "",
+   "created_at": "2026-08-18T09:09:16Z",
+   "id": "6a84051c409049edb2c39f93",
+   "language": "fr",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "tshirtsolscrusader"
+    },
+    {
+     "group": "generic",
+     "value": "Clothing & Textiles"
+    },
+    {
+     "group": "generic",
+     "value": "All T-shirts"
+    },
+    {
+     "group": "generic",
+     "value": "T-shirts"
+    }
+   ],
+   "text": "Commande arrivée comme prévu au relais Bpost! T-shirts ok. Merci.",
+   "title": "Commande arrivée comme prévu au relais…"
+  },
+  "clothing-textiles|it": {
+   "author": "Sandro Flaim",
+   "author_location": "",
+   "created_at": "2026-06-16T08:03:10Z",
+   "id": "6a30e71efa329293ba280ed2",
+   "language": "it",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "tshirtsbasicsols"
+    },
+    {
+     "group": "generic",
+     "value": "Clothing & Textiles"
+    },
+    {
+     "group": "generic",
+     "value": "All T-shirts"
+    },
+    {
+     "group": "generic",
+     "value": "T-shirts"
+    }
+   ],
+   "text": "Ottimo sito, veramente intuitivo, spedizioni super veloci qualità prezzo Mella media👍",
+   "title": "Ottimo sito"
+  },
+  "clothing-textiles|nl": {
+   "author": "Stefanie Van der Veken",
+   "author_location": "",
+   "created_at": "2026-06-15T14:01:47Z",
+   "id": "6a2fe9ab1a9ff0f6c9ad25af",
+   "language": "nl",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "stanleystellathewomensboxytshirt"
+    },
+    {
+     "group": "generic",
+     "value": "Clothing & Textiles"
+    },
+    {
+     "group": "generic",
+     "value": "All T-shirts"
+    },
+    {
+     "group": "generic",
+     "value": "Female T-shirts"
+    }
+   ],
+   "text": "Het ontwerpen ging vlot, met een duidelijke goedkeuringsflow en aandacht voor de mogelijkheden van je ontwerp. De delivery verliep correct.",
+   "title": "Duidelijk, vlot en correct"
+  },
+  "commercial-print|en": {
+   "author": "Beth",
+   "author_location": "",
+   "created_at": "2026-08-24T19:58:33Z",
+   "id": "6a8c864951fce85b1f601657",
+   "language": "en",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "perfectboundbrochures2us"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Booklets"
+    },
+    {
+     "group": "generic",
+     "value": "Perfect Bound Booklets"
+    }
+   ],
+   "text": "The customer service was helpful and our media guides were delivered as promised. They turned out beautifully!!!",
+   "title": "Helpful and on time!"
+  },
+  "commercial-print|es": {
+   "author": "Lorchos Gaélicos",
+   "author_location": "",
+   "created_at": "2026-08-12T15:12:00Z",
+   "id": "6a7c7120906126ddb5dcf14a",
+   "language": "es",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "magazines"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Booklets"
+    },
+    {
+     "group": "generic",
+     "value": "Stapled Booklets"
+    }
+   ],
+   "text": "Excelente servicio y envío super rápido, llegó antes de lo previsto. Hicimos una tirada de 50 revistas en A5 y los resultados han sido muy buenos y de alta calidad.",
+   "title": "Excelente servicio"
+  },
+  "commercial-print|fr": {
+   "author": "Marie",
+   "author_location": "",
+   "created_at": "2026-08-24T16:16:03Z",
+   "id": "6a8c5223fc261a75f7e09b00",
+   "language": "fr",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "standardflyers"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Flyers"
+    },
+    {
+     "group": "generic",
+     "value": "Flyers"
+    }
+   ],
+   "text": "Excellent site web, facile à utiliser. Bon rapport qualité/prix et livraison dans les délais. Tout à fait satisfaite !",
+   "title": "Excellent site web"
+  },
+  "commercial-print|it": {
+   "author": "Marcello Dante",
+   "author_location": "",
+   "created_at": "2026-07-18T20:58:01Z",
+   "id": "6a5bccb9dd7ab795f1583b2c",
+   "language": "it",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "perfectboundbrochures2"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Booklets"
+    },
+    {
+     "group": "generic",
+     "value": "Perfect Bound Booklets"
+    }
+   ],
+   "text": "La qualità della stampa è quella attesa, i tempi sono stai rispettati e le copie dei libri sono arrivate perfettamente integre.",
+   "title": "La qualità della stampa è quella…"
+  },
+  "commercial-print|nl": {
+   "author": "Lieven",
+   "author_location": "",
+   "created_at": "2026-08-24T18:45:16Z",
+   "id": "6a8c751cd3312194f3ac5747",
+   "language": "nl",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "standardflyers"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Flyers"
+    },
+    {
+     "group": "generic",
+     "value": "Flyers"
+    }
+   ],
+   "text": "Eenvoudige werking. Goede printkwaliteit. Korte leveringstermijnen! Alles gaat \" very smoothly\"",
+   "title": "Eenvoudige werking"
+  },
+  "corporate-gifts|en": {
+   "author": "Paul",
+   "author_location": "",
+   "created_at": "2026-07-20T09:20:37Z",
+   "id": "6a5dcc450f3aa3e7767a9620",
+   "language": "en",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "yfke"
+    },
+    {
+     "group": "generic",
+     "value": "Corporate Gifts"
+    },
+    {
+     "group": "generic",
+     "value": "All Outdoor & Leisure"
+    },
+    {
+     "group": "generic",
+     "value": "Umbrellas"
+    }
+   ],
+   "text": "Very easy to upload design and position it on the golf umbrellas. Delivery was around a week which for a customised product is very good. Very happy and will use them again.",
+   "title": "Customised golf umbrellas, very good."
+  },
+  "corporate-gifts|es": {
+   "author": "Juan Canada",
+   "author_location": "",
+   "created_at": "2026-07-20T12:36:37Z",
+   "id": "6a5dfa35231d43eea2cb7912",
+   "language": "es",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "ebonybamboopens"
+    },
+    {
+     "group": "generic",
+     "value": "Corporate Gifts"
+    },
+    {
+     "group": "generic",
+     "value": "All Writing Instruments"
+    },
+    {
+     "group": "generic",
+     "value": "Eco pens"
+    }
+   ],
+   "text": "Sensacional, siempre HelloPrint trabaja de maravilla. Gracias",
+   "title": "Sensacional"
+  },
+  "corporate-gifts|fr": {
+   "author": "Laurence",
+   "author_location": "",
+   "created_at": "2026-06-15T09:49:07Z",
+   "id": "6a2fae73d8766b6e84bea074",
+   "language": "fr",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "clubkeyring"
+    },
+    {
+     "group": "generic",
+     "value": "Corporate Gifts"
+    },
+    {
+     "group": "generic",
+     "value": "All Giveaways"
+    },
+    {
+     "group": "generic",
+     "value": "Keychains"
+    }
+   ],
+   "text": "Accompagnée lors de la commande et produit conforme, parfait,merci",
+   "title": "Accompagnée lors de la commande et…"
+  },
+  "corporate-gifts|nl": {
+   "author": "Shalina Halma",
+   "author_location": "",
+   "created_at": "2026-08-03T09:21:36Z",
+   "id": "6a70418009937c07b1816c79",
+   "language": "nl",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "lighterbudget"
+    },
+    {
+     "group": "generic",
+     "value": "Corporate Gifts"
+    },
+    {
+     "group": "generic",
+     "value": "All Giveaways"
+    },
+    {
+     "group": "generic",
+     "value": "Lighters"
+    }
+   ],
+   "text": "Super!! Goed geholpen tijdens de feedback ronde, op tij afgeleverd en het zag er top uit.",
+   "title": "Super!"
+  },
+  "labels|en": {
+   "author": "Tony Pugh",
+   "author_location": "",
+   "created_at": "2026-07-13T16:09:56Z",
+   "id": "6a54f1b48661284911e19023",
+   "language": "en",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "stickersonsheet"
+    },
+    {
+     "group": "generic",
+     "value": "Labels"
+    },
+    {
+     "group": "generic",
+     "value": "All Labels on Sheet"
+    },
+    {
+     "group": "generic",
+     "value": "Stickers"
+    }
+   ],
+   "text": "Used Helloprint for pricelists and brochures fairly often, very competitively priced and excellent quality.",
+   "title": "pricelists and Brochures"
+  },
+  "labels|es": {
+   "author": "Croquis",
+   "author_location": "",
+   "created_at": "2026-08-03T16:43:23Z",
+   "id": "6a70a90af2d1202fb964f6cd",
+   "language": "es",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "stickersownsize"
+    },
+    {
+     "group": "generic",
+     "value": "Labels"
+    },
+    {
+     "group": "generic",
+     "value": "All Labels on Sheet"
+    },
+    {
+     "group": "generic",
+     "value": "Stickers"
+    }
+   ],
+   "text": "El servicio es muy práctico y ágil, con un buen serviciode entrega.",
+   "title": "El servicio es muy práctico y ágil"
+  },
+  "labels|fr": {
+   "author": "Karine",
+   "author_location": "",
+   "created_at": "2026-08-21T11:58:11Z",
+   "id": "6a8821339ce19d6fa6e724ef",
+   "language": "fr",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "stickers"
+    },
+    {
+     "group": "generic",
+     "value": "Labels"
+    },
+    {
+     "group": "generic",
+     "value": "All Labels on Sheet"
+    },
+    {
+     "group": "generic",
+     "value": "Stickers"
+    }
+   ],
+   "text": "Malgré un petit souci, j'ai eu une équipe réactive qui a su trouver une solution très rapidement. Merci beaucoup pour votre réactivité et votre professionnalisme. Je recommande.",
+   "title": "Très satisfaite"
+  },
+  "labels|it": {
+   "author": "Matteo",
+   "author_location": "",
+   "created_at": "2025-05-29T22:08:48Z",
+   "id": "6838bed02a548100e955688b",
+   "language": "it",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "paperstickers"
+    },
+    {
+     "group": "generic",
+     "value": "Labels"
+    },
+    {
+     "group": "generic",
+     "value": "All Labels on Sheet"
+    },
+    {
+     "group": "generic",
+     "value": "Stickers"
+    },
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    }
+   ],
+   "text": "I prodotti ordinati sono ottimi, la consegna standard è comunque veloce, l'esperienza di acquisto è veloce e senza stress.",
+   "title": "I prodotti ordinati sono ottimi"
+  },
+  "labels|nl": {
+   "author": "Feri",
+   "author_location": "",
+   "created_at": "2026-06-10T10:43:32Z",
+   "id": "6a2923b466058ec073a9dedd",
+   "language": "nl",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "largestickers"
+    },
+    {
+     "group": "generic",
+     "value": "Labels"
+    },
+    {
+     "group": "generic",
+     "value": "All Labels on Sheet"
+    },
+    {
+     "group": "generic",
+     "value": "Vinyl Stickers"
+    }
+   ],
+   "text": "Ik gebruik de diensten van HelloPrint al een geruime tijd voor professionele prints en heb altijd een goede service ondervonden. Snelle hulp wanneer nodig en perfect afgeleverde producten.",
+   "title": "Professionele prints"
+  },
+  "packaging|en": {
+   "author": "TL",
+   "author_location": "",
+   "created_at": "2026-03-02T10:18:21Z",
+   "id": "69a547cde80778f7abd52c36",
+   "language": "en",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "wrappingpaper"
+    },
+    {
+     "group": "generic",
+     "value": "Packaging"
+    },
+    {
+     "group": "generic",
+     "value": "All Supplies"
+    },
+    {
+     "group": "generic",
+     "value": "Supplies"
+    }
+   ],
+   "text": "I’ve been printing my custom gift wrap at Helloprint for years though. The quality never fails!",
+   "title": "Quality over the years"
+  },
+  "packaging|es": {
+   "author": "Javier",
+   "author_location": "",
+   "created_at": "2026-06-29T09:15:51Z",
+   "id": "6a421ba7109da0e026eae152",
+   "language": "es",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "budgetpaperbags"
+    },
+    {
+     "group": "generic",
+     "value": "Packaging"
+    },
+    {
+     "group": "generic",
+     "value": "All paper bags"
+    },
+    {
+     "group": "generic",
+     "value": "Paper bags"
+    }
+   ],
+   "text": "Muy bien los productos. Pero lo mejor es la asistencia. Muy amables e interesados por el cliente. Muy contento",
+   "title": "Gran asistencia"
+  },
+  "packaging|it": {
+   "author": "Claudia",
+   "author_location": "",
+   "created_at": "2022-11-21T10:15:06Z",
+   "id": "637b338a252cba2c02decad5",
+   "language": "it",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "wrappingpaper"
+    },
+    {
+     "group": "generic",
+     "value": "Packaging"
+    },
+    {
+     "group": "generic",
+     "value": "All Supplies"
+    },
+    {
+     "group": "generic",
+     "value": "Supplies"
+    }
+   ],
+   "text": "Sono stati velocissimi sia nella produzione che nella spedizione",
+   "title": "Efficienti e veloci"
+  },
+  "signage-outdoor|en": {
+   "author": "Douglas",
+   "author_location": "",
+   "created_at": "2026-08-21T08:21:53Z",
+   "id": "6a87ee814fdcef4c845289f4",
+   "language": "en",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "rollupbannersv2"
+    },
+    {
+     "group": "generic",
+     "value": "Signage & Outdoor"
+    },
+    {
+     "group": "generic",
+     "value": "All Banners"
+    },
+    {
+     "group": "generic",
+     "value": "Roll-up Banners"
+    }
+   ],
+   "text": "Needed a new pop up banner for work and HelloPrint was really easy to use, the end product looks amazing too.",
+   "title": "Needed a new pop up banner for work and…"
+  },
+  "signage-outdoor|es": {
+   "author": "Javier Sotomayor",
+   "author_location": "",
+   "created_at": "2026-07-08T09:25:28Z",
+   "id": "6a4dfb688eefe3890df46bc4",
+   "language": "es",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "rollupbannersv2"
+    },
+    {
+     "group": "generic",
+     "value": "Signage & Outdoor"
+    },
+    {
+     "group": "generic",
+     "value": "All Banners"
+    },
+    {
+     "group": "generic",
+     "value": "Roll-up Banners"
+    }
+   ],
+   "text": "muy buenos precios, buena calidad, entregas muy rapido, muy satisfecho con sus productos, volveré a comprar con ellos.",
+   "title": "muy buenos precios"
+  },
+  "signage-outdoor|fr": {
+   "author": "joanny Mermoz",
+   "author_location": "",
+   "created_at": "2026-08-24T16:44:02Z",
+   "id": "6a8c58b273fb7e8d229b1fcc",
+   "language": "fr",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "banners"
+    },
+    {
+     "group": "generic",
+     "value": "Signage & Outdoor"
+    },
+    {
+     "group": "generic",
+     "value": "All Banners"
+    },
+    {
+     "group": "generic",
+     "value": "Banners"
+    }
+   ],
+   "text": "Le rapport qualité prix et la rapidité de traitement m'ont comblé. Je recommande!",
+   "title": "Qualité, prix et rapidité! …"
+  },
+  "signage-outdoor|it": {
+   "author": "Eros",
+   "author_location": "",
+   "created_at": "2026-05-25T17:51:41Z",
+   "id": "6a14700d69f5ad4665b8c1c4",
+   "language": "it",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "featherflags"
+    },
+    {
+     "group": "generic",
+     "value": "Signage & Outdoor"
+    },
+    {
+     "group": "generic",
+     "value": "All Flags"
+    },
+    {
+     "group": "generic",
+     "value": "Beach Flags"
+    }
+   ],
+   "text": "Acquisto molto facile, personale molto disponibile prodotti al top mi sono trovato benissimo ho ordinato due Bandiere a goccia hanno saputo realizzarle in maniera eccezionale. Grazie.",
+   "title": "Acquisto molto facile"
+  },
+  "signage-outdoor|nl": {
+   "author": "Arno",
+   "author_location": "",
+   "created_at": "2026-08-10T13:55:45Z",
+   "id": "6a79bc418760bd43f85e7f50",
+   "language": "nl",
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "panelsaluminium"
+    },
+    {
+     "group": "generic",
+     "value": "Signage & Outdoor"
+    },
+    {
+     "group": "generic",
+     "value": "All Panels"
+    },
+    {
+     "group": "generic",
+     "value": "Panels"
+    }
+   ],
+   "text": "Goede service. Ik kreeg desgevraagd goede hulp bij de opmaak. De geprinte plaat ziet er prachtig uit",
+   "title": "Goede service"
+  }
+ },
+ "tag_group": "generic"
+}
