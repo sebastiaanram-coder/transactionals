@@ -29,14 +29,22 @@
 .hp-b2-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
 .hp-b2-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .hp-b2-logobar img{width:150px;max-width:50%;height:auto;display:inline-block;border:0;}
-/* the team checking work on screen. No fade needed: it sits between the black
-   masthead and the white hero, so both edges are clean. */
-.hp-b2-heroimg{display:block;width:100%;height:auto;border:0;}
-.hp-b2-hero{background:#ffffff;text-align:center;padding:28px 24px 4px;}
-.hp-b2-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
-.hp-b2-h1{margin:0 0 10px;font-size:29px;line-height:36px;font-weight:800;color:#191919;letter-spacing:-.015em;}
-.hp-b2-sub{margin:0 auto 20px;max-width:450px;font-size:17px;line-height:25px;color:#555555;}
-.hp-b2-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+/* Banner hero: real HTML text sitting over the photograph, not text baked
+   into a picture. The image carries 140px of solid #191919 headroom with a
+   110px blend into the photo, so the text has somewhere dark to sit and the
+   seam with the masthead is invisible. The image is pulled up under the text
+   with a negative margin and the text is lifted with z-index, because block
+   backgrounds paint before replaced content. Outlook ignores both, and
+   degrades to text-block-then-image, which still looks continuous because the
+   image's top row IS #191919. */
+.hp-b2-hero{background:#191919;text-align:center;}
+.hp-b2-heroov{position:relative;z-index:2;padding:30px 24px 0;min-height:196px;}
+.hp-b2-heroimg{display:block;width:100%;height:auto;border:0;margin-top:-200px;}
+.hp-b2-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#9fdbb8;margin:0 0 10px;}
+.hp-b2-h1{margin:0 0 10px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
+.hp-b2-sub{margin:0 auto 18px;max-width:430px;font-size:17px;line-height:25px;color:#ffffff;opacity:.9;}
+.hp-b2-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+.hp-b2-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 .hp-b2-anchor{margin:22px 24px 0;border:1px solid #e5e5e5;border-radius:12px;padding:11px 14px;text-decoration:none;display:block;}
 .hp-b2-antbl{width:100%;border-collapse:collapse;}
@@ -98,12 +106,15 @@
 @media only screen and (max-width:480px){
   .hp-b2-logobar{padding:11px 20px 9px;}
   .hp-b2-logobar img{width:132px;}
-  .hp-b2-hero{padding:24px 18px 2px;}
-  .hp-b2-h1{font-size:25px;line-height:32px;}
+  /* the photo scales with the viewport but the text does not, so the overlap
+     has to shrink or the headline slides off the dark area onto the faces */
+  .hp-b2-heroov{padding:24px 18px 0;min-height:150px;}
+  .hp-b2-heroimg{margin-top:-118px;}
+  .hp-b2-h1{font-size:26px;line-height:33px;}
   .hp-b2-sub{font-size:16px;line-height:24px;max-width:none;}
   .hp-b2-cta{padding:15px 26px;}
   .hp-b2-anchor{margin:18px 14px 0;}
-  .hp-b2-anlink{width:62px;font-size:12px;}
+  .hp-b2-anlink{width:92px;font-size:11px;line-height:16px;}
   .hp-b2-sect{padding:26px 14px 0;}
   .hp-b2-secttl{font-size:21px;line-height:28px;}
   .hp-b2-rtcell{display:block!important;width:100%!important;padding:0 0 10px!important;}
@@ -128,15 +139,16 @@
       <a href="{{ catalog_item.url }}"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="150"></a>
     </div>
 
-    <img class="hp-b2-heroimg" src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-hero-team-checking.jpg" alt="Helloprint colleagues checking customer print files on screen" width="600">
-
     <!-- The permission the product page buries inside its upload component.
-         Most people never find it, so it leads here. -->
+         Most people never find it, so it leads here, set over the photograph. -->
     <div class="hp-b2-hero">
-      <span class="hp-b2-eyebrow">ARTWORK</span>
-      <h1 class="hp-b2-h1">You do not need the finished artwork yet</h1>
-      <p class="hp-b2-sub">Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.</p>
-      <a class="hp-b2-cta" href="{{ catalog_item.url }}">Back to your product</a>
+      <div class="hp-b2-heroov">
+        <span class="hp-b2-eyebrow">ARTWORK</span>
+        <h1 class="hp-b2-h1">You do not need the finished artwork yet</h1>
+        <p class="hp-b2-sub">Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.</p>
+        <a class="hp-b2-cta" href="{{ catalog_item.url }}">Back to your product</a>
+      </div>
+      <img class="hp-b2-heroimg" src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-hero-banner.jpg" alt="Helloprint colleagues checking customer print files on screen" width="600">
     </div>
 
     <a class="hp-b2-anchor" href="{{ catalog_item.url }}">
@@ -155,7 +167,7 @@
       <h2 class="hp-b2-secttl">Three ways to get us your design</h2>
       <p class="hp-b2-sectsub">Pick whichever suits. All three end up in the same place.</p>
       <table class="hp-b2-rt" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-b2-rtcell" valign="top"><div class="hp-b2-card"><img class="hp-b2-rticon" src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-icon-later.jpg" alt="" width="48" height="48"><p class="hp-b2-rtttl">Upload later</p><p class="hp-b2-rttx">Add to cart now and send your files after checkout.</p></div></td><td class="hp-b2-rtcell" valign="top"><div class="hp-b2-card"><img class="hp-b2-rticon" src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-icon-design.jpg" alt="" width="48" height="48"><p class="hp-b2-rtttl">Design online</p><p class="hp-b2-rttx">Customise it in our editor, with a live preview.</p></div></td><td class="hp-b2-rtcell" valign="top"><div class="hp-b2-card"><img class="hp-b2-rticon" src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-icon-upload.jpg" alt="" width="48" height="48"><p class="hp-b2-rtttl">Upload your design</p><p class="hp-b2-rttx">You have print-ready files, or your own designer.</p></div></td></tr></table>
-      <p class="hp-b2-tplline">Every product has templates to download, already the right size. <a href="{{ catalog_item.url }}">Get the ones for {{ catalog_item.title }} &rarr;</a></p>
+      <p class="hp-b2-tplline">Every product has templates to download, already the right size.<br><a href="{{ catalog_item.url }}">Get the ones for {{ catalog_item.title }} &rarr;</a></p>
     </div>
 
     <!-- plain language on purpose: no bleed, no dpi, no CMYK -->
@@ -171,7 +183,7 @@
       <span class="hp-b2-premlbl">PREMIUM DESIGN CHECK</span>
       <h2 class="hp-b2-premttl">Want a person to check it as well?</h2>
       <p class="hp-b2-premtx">Every file gets an automatic check at no cost. For a little extra at checkout, one of our print experts goes through it by hand as well.</p>
-      <table class="hp-b2-ck" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">A print expert reviews it, not just software</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">We contact you before printing if anything looks off</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Backed by our 100% Satisfaction Guarantee</td></tr></table>
+      <table class="hp-b2-ck" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick-green.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">A print expert reviews it, not just software</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick-green.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">We contact you before printing if anything looks off</td></tr><tr><td class="hp-b2-cktick" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick-green.jpg" alt="" width="22" height="22"></td><td class="hp-b2-cktx" valign="top">Backed by our 100% Satisfaction Guarantee</td></tr></table>
       <p class="hp-b2-premnote">Eight out of ten customers add it. Reprinting a job costs many times more than the check does.</p>
     </div>
 
@@ -185,7 +197,7 @@
     </div>
 
     <div class="hp-b2-mid">
-      <a class="hp-b2-cta" href="{{ catalog_item.url }}">Back to your product</a>
+      <a class="hp-b2-cta-g" href="{{ catalog_item.url }}">Back to your product</a>
       <p class="hp-b2-midnote">Or just reply to this email and a person will pick it up.</p>
     </div>
 

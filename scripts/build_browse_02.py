@@ -49,11 +49,12 @@ LIVE = {
 }
 _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
-    "IMG_HERO":     "browse-02-hero-team-checking.jpg",
+    "IMG_HERO":     "browse-02-hero-banner.jpg",
     "IC_LATER":     "browse-02-icon-later.jpg",
     "IC_DESIGN":    "browse-02-icon-design.jpg",
     "IC_UPLOAD":    "browse-02-icon-upload.jpg",
     "IMG_TICK":     "browse-02-tick.jpg",
+    "IMG_TICK_G":   "browse-02-tick-green.jpg",
     "AV_DESIGNER":  "browse-01-avatar-designer.jpg",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
@@ -93,14 +94,22 @@ CSS = """
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
 .%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
-/* the team checking work on screen. No fade needed: it sits between the black
-   masthead and the white hero, so both edges are clean. */
-.%(P)s-heroimg{display:block;width:100%%;height:auto;border:0;}
-.%(P)s-hero{background:#ffffff;text-align:center;padding:28px 24px 4px;}
-.%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
-.%(P)s-h1{margin:0 0 10px;font-size:29px;line-height:36px;font-weight:800;color:#191919;letter-spacing:-.015em;}
-.%(P)s-sub{margin:0 auto 20px;max-width:450px;font-size:17px;line-height:25px;color:#555555;}
-.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+/* Banner hero: real HTML text sitting over the photograph, not text baked
+   into a picture. The image carries 140px of solid #191919 headroom with a
+   110px blend into the photo, so the text has somewhere dark to sit and the
+   seam with the masthead is invisible. The image is pulled up under the text
+   with a negative margin and the text is lifted with z-index, because block
+   backgrounds paint before replaced content. Outlook ignores both, and
+   degrades to text-block-then-image, which still looks continuous because the
+   image's top row IS #191919. */
+.%(P)s-hero{background:#191919;text-align:center;}
+.%(P)s-heroov{position:relative;z-index:2;padding:30px 24px 0;min-height:196px;}
+.%(P)s-heroimg{display:block;width:100%%;height:auto;border:0;margin-top:-200px;}
+.%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#9fdbb8;margin:0 0 10px;}
+.%(P)s-h1{margin:0 0 10px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
+.%(P)s-sub{margin:0 auto 18px;max-width:430px;font-size:17px;line-height:25px;color:#ffffff;opacity:.9;}
+.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+.%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 .%(P)s-anchor{margin:22px 24px 0;border:1px solid #e5e5e5;border-radius:12px;padding:11px 14px;text-decoration:none;display:block;}
 .%(P)s-antbl{width:100%%;border-collapse:collapse;}
@@ -162,12 +171,15 @@ CSS = """
 @media only screen and (max-width:480px){
   .%(P)s-logobar{padding:11px 20px 9px;}
   .%(P)s-logobar img{width:132px;}
-  .%(P)s-hero{padding:24px 18px 2px;}
-  .%(P)s-h1{font-size:25px;line-height:32px;}
+  /* the photo scales with the viewport but the text does not, so the overlap
+     has to shrink or the headline slides off the dark area onto the faces */
+  .%(P)s-heroov{padding:24px 18px 0;min-height:150px;}
+  .%(P)s-heroimg{margin-top:-118px;}
+  .%(P)s-h1{font-size:26px;line-height:33px;}
   .%(P)s-sub{font-size:16px;line-height:24px;max-width:none;}
   .%(P)s-cta{padding:15px 26px;}
   .%(P)s-anchor{margin:18px 14px 0;}
-  .%(P)s-anlink{width:62px;font-size:12px;}
+  .%(P)s-anlink{width:92px;font-size:11px;line-height:16px;}
   .%(P)s-sect{padding:26px 14px 0;}
   .%(P)s-secttl{font-size:21px;line-height:28px;}
   .%(P)s-rtcell{display:block!important;width:100%%!important;padding:0 0 10px!important;}
@@ -190,11 +202,13 @@ def routes_html(a):
     return ('<table class="%s-rt" role="presentation" cellpadding="0" cellspacing="0">'
             '<tr>%s</tr></table>' % (P, cells))
 
-def _ticklist(a, items):
+def _ticklist(a, items, tick="IMG_TICK"):
+    """tick is baked onto a solid background, so the green panel needs its own
+    variant or the ticks show as white squares on green."""
     return "".join(
         '<tr><td class="%s-cktick" valign="top">'
         '<img src="%s" alt="" width="22" height="22"></td>'
-        '<td class="%s-cktx" valign="top">%s</td></tr>' % (P, a["IMG_TICK"], P, c)
+        '<td class="%s-cktx" valign="top">%s</td></tr>' % (P, a[tick], P, c)
         for c in items)
 
 def checks_html(a):
@@ -204,7 +218,7 @@ def checks_html(a):
 
 def premium_html(a):
     return ('<table class="%s-ck" role="presentation" cellpadding="0" cellspacing="0">'
-            '%s</table>' % (P, _ticklist(a, PREMIUM)))
+            '%s</table>' % (P, _ticklist(a, PREMIUM, tick="IMG_TICK_G")))
 
 BODY = """
 <div class="{P}-root">
@@ -221,15 +235,16 @@ BODY = """
       <a href="{PROD_URL}"><img src="{IMG_WORDMARK}" alt="Helloprint" width="150"></a>
     </div>
 
-    <img class="{P}-heroimg" src="{IMG_HERO}" alt="Helloprint colleagues checking customer print files on screen" width="600">
-
     <!-- The permission the product page buries inside its upload component.
-         Most people never find it, so it leads here. -->
+         Most people never find it, so it leads here, set over the photograph. -->
     <div class="{P}-hero">
-      <span class="{P}-eyebrow">ARTWORK</span>
-      <h1 class="{P}-h1">You do not need the finished artwork yet</h1>
-      <p class="{P}-sub">Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.</p>
-      <a class="{P}-cta" href="{PROD_URL}">Back to your product</a>
+      <div class="{P}-heroov">
+        <span class="{P}-eyebrow">ARTWORK</span>
+        <h1 class="{P}-h1">You do not need the finished artwork yet</h1>
+        <p class="{P}-sub">Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.</p>
+        <a class="{P}-cta" href="{PROD_URL}">Back to your product</a>
+      </div>
+      <img class="{P}-heroimg" src="{IMG_HERO}" alt="Helloprint colleagues checking customer print files on screen" width="600">
     </div>
 
     <a class="{P}-anchor" href="{PROD_URL}">
@@ -248,7 +263,7 @@ BODY = """
       <h2 class="{P}-secttl">Three ways to get us your design</h2>
       <p class="{P}-sectsub">Pick whichever suits. All three end up in the same place.</p>
       {ROUTES}
-      <p class="{P}-tplline">Every product has templates to download, already the right size. <a href="{PROD_URL}">Get the ones for {PROD_TITLE} &rarr;</a></p>
+      <p class="{P}-tplline">Every product has templates to download, already the right size.<br><a href="{PROD_URL}">Get the ones for {PROD_TITLE} &rarr;</a></p>
     </div>
 
     <!-- plain language on purpose: no bleed, no dpi, no CMYK -->
@@ -278,7 +293,7 @@ BODY = """
     </div>
 
     <div class="{P}-mid">
-      <a class="{P}-cta" href="{PROD_URL}">Back to your product</a>
+      <a class="{P}-cta-g" href="{PROD_URL}">Back to your product</a>
       <p class="{P}-midnote">Or just reply to this email and a person will pick it up.</p>
     </div>
 
@@ -402,6 +417,15 @@ if live_body.count('class="%s-rtcell"' % P) != 3: errs.append("route cells missi
 if "min-height:182px" not in live_body:
     errs.append("route cards need a min-height to stay level across languages")
 if live_body.count('{IMG_TICK}') or live_body.count('{IC_'): errs.append("unresolved asset placeholder")
+# the premium panel's ticks must use the green-background variant
+if _A["IMG_TICK_G"] not in (live_body if "REPLACE" not in live_body else live_body):
+    pass
+if live_body.count("browse-02-tick-green") + prev_body.count("tick-green") == 0:
+    if "REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick-green.jpg" not in live_body:
+        errs.append("premium ticks are not using the green-background variant")
+# the banner needs the overlap and the z-index that makes it work
+for need in ("margin-top:-200px", "z-index:2", "min-height:196px"):
+    if need not in live_body: errs.append("banner hero missing " + need)
 
 print("preview: %6d bytes  ->  proposals/browse-02-proposed.html" % len(prev))
 print("klaviyo: %6d bytes  ->  proposals/browse-02-klaviyo.html" % len(live))
