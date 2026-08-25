@@ -352,6 +352,80 @@ data.
 *Optional v4 enhancement:* where `PromisedDeliveryDate` exists, wait until that
 date plus four days instead. A conditional split, so presta is unaffected.
 
+### Could Klaviyo time this per customer instead?
+
+Worth asking, because Klaviyo does expose the machinery: `Date Based` is a valid
+trigger type on this account, and profiles carry
+`predictive_analytics.expected_date_of_next_order`. So "wait until this customer
+is due" is mechanically possible.
+
+**It does not work for this flow.** Three reasons, all from the same 50-profile
+sample:
+
+**1. First-time buyers have no prediction.** Coverage tracks order count almost
+perfectly:
+
+| Lifetime orders | Have a predicted date |
+|---|---|
+| 1 | **2 of 13** |
+| 2 | 1 of 2 |
+| 3–5 | 3 of 4 |
+| 6–20 | 10 of 10 |
+| 20+ | 21 of 21 |
+
+A date-triggered flow would silently skip almost every first-time buyer — the
+people the "convert to a second order" goal is most about. Silently is the
+problem: they do not error, they just never enter.
+
+**2. The date is usually in the past.** Of the 37 that have one: median **4 days
+ago**, and **57% already lapsed**. You cannot "wait until" a date that has
+already gone. The flow would fire instantly for most of the audience.
+
+**3. It never points far enough forward.** Maximum in this sample: **+29 days**.
+Nothing beyond 60. So it cannot schedule the late nudge for the slow tail, which
+is the one place variable timing would genuinely earn its keep. For a customer
+with a 157-day average gap the predicted date sat 284 days in the *past* — the
+model has effectively written them off rather than scheduled them.
+
+Read correctly, `expected_date_of_next_order` is not a schedule. It is an
+**overdue flag**, and it is a good one.
+
+#### Where it earns its place
+
+- **As a suppression on email 5.** If a customer's predicted date is still in
+  the future, they are not due yet — do not spend 10% on an order their own
+  history says is coming anyway. This directly serves the incrementality
+  argument above.
+- **As the Winback trigger.** "Predicted date passed by 30 days" is a far better
+  entry condition than "90 days after an order", and it *is* variable per
+  customer — which is what the question is really after. It belongs in the
+  re-timed Winback (§3), not here.
+- **`churn_probability`** (median 0.4 in the sample) as a second gate on the same
+  decision.
+
+#### Variable timing that covers everyone
+
+If per-customer pacing is wanted inside this flow, the workable version uses
+`average_days_between_orders` — which 37 of 50 profiles have — as a
+**conditional split into buckets**, each with its own fixed wait. Klaviyo cannot
+compute a wait from a property, but it can branch on one:
+
+| Their own average gap | Category nudge | Discount |
+|---|---|---|
+| ≤ 30 days | day 25 | day 45 |
+| 31–90 days | day 40 | day 70 |
+| > 90 days | day 40 | none — hand to Winback |
+| no value (first-timer) | day 32 | day 60 |
+
+Same six emails, four timing profiles. It covers first-time buyers through the
+fallback row rather than dropping them, and it stops offering a discount to
+people whose own history says they were not due for months.
+
+**Recommendation: build the fixed version first**, on the numbers in §1.7, and
+add the split once there is send data to compare against. The fallback row is
+the fixed version, so the split is additive rather than a rebuild — and it is a
+lot of branching to commit to before anything has been measured.
+
 ### What happens to the slow quarter
 
 27% of repeat buyers have gaps past 60 days and 13% past 90, so a flow ending at
