@@ -317,33 +317,73 @@ a configured basket and a price already — so it stays unused rather than borro
    to this email".
 7. Footer.
 
-### The third row is the interesting one
+### The four rows
 
-"Tell you if the quantity is wrong" gives the high-value branch a **price lever that is not a
-discount code**. On a £150 basket, moving to the next quantity break can beat 10% off, it costs
-us nothing in margin percentage, and it increases order value rather than reducing it. That is a
-better first move on this branch than any coupon, and it is why holding the code to email 3 costs
-less than it looks.
+1. **Check the spec suits the job.** Forty years in the graphic trade behind the desk, and
+   advisers who "think along with you". Not the artwork check, which is a separate paid tier —
+   whether the paper, size and finish are right for what it is actually for.
+2. **Confirm the delivery date.** Most products go out for next-day delivery where possible, and
+   they will say plainly if a date cannot be met.
+3. **Pay on invoice, not by card.** *"Plenty of our business customers pay on invoice rather than
+   putting it on a card. If that is not switched on for your account yet, the team can look at
+   it for you."* Says what is available and gives the route, without explaining the mechanics or
+   promising anyone in particular that they qualify.
+4. **Tell you if the quantity is wrong.** The site offers volume discounts: "better prices as
+   your print needs grow." On a basket this size the next quantity break may cost less per unit
+   than what is in there now.
 
-### One claim I have left out, and why
+Rows 3 and 4 are the two that matter most, for opposite reasons.
 
-**Paying by invoice rather than by card.** For a £150+ B2B basket that is probably the single
-strongest unblocker there is. The help centre implies it exists — it has "What are our bank
-details?" and "Why did I receive a payment reminder?", neither of which makes sense for
-card-only — but the answers load client-side and I cannot confirm it is offered at a standard
-checkout rather than only to business accounts.
+**Invoice is the procurement unblock.** On a £150+ B2B basket, "someone has to put this on a
+card" is a real reason a configured order sits there. This removes it without a discount.
 
-If it is available to anyone, it should replace one of the three rows above. Worth checking,
-because it is a bigger lever than the other two.
+**Quantity is a price lever that is not a coupon.** Moving to the next quantity break can beat
+10% off, costs nothing in margin percentage, and raises order value rather than cutting it. That
+is a better first move on this branch than any code, and it is why holding the discount to email
+3 costs less than it looks.
 
-### Subject
+Four rows makes this the longest email in the flow. Justified on a branch that is a quarter of
+carts and well over half the value, but worth watching: if it needs trimming, row 1 is the one
+that overlaps most with what email 1 already says.
 
-Primary: **"Want a print expert to look at it first?"**
+### Subject and CTA
+
+Subject: **"Want a print expert to look at it first?"**
 Preview: *On an order this size, ten minutes of someone else's time is usually worth having.*
 
-### One decision
+Primary CTA: **"Finish the job"** → back to the basket. Print-native, and "job" is already the
+word this programme uses for a print order — YOUR PRINT JOB on the anchor strip, "send them the
+awkward job" in Browse 3. Alternatives if it is too blunt: *Pick up where you left off*, or
+*Put it on press*.
 
-The hero CTA is *Talk to a print expert*, not *Return to checkout*. Email 1 already offered
-checkout twice and it did not land, so repeating it as the headline action is the weaker move;
-checkout is carried by the closing band instead. Say if you would rather lead with checkout
-throughout.
+Secondary, directly beneath it: **"or speak to a print expert"**.
+
+That reverses the earlier note in this document, which argued for leading with the expert. The
+counter-argument is fair: the expert is what this email is *about*, but returning to the basket is
+what it is *for*, and burying the money action under a conversation costs conversions.
+
+### The joke on the photograph
+
+A handwritten arrow pointing at the team with the words **"the experts"**, as if someone had
+annotated the print. It undercuts the earnestness of a page about expertise, which is the right
+register for this brand.
+
+It has to be **baked into the image**, not set in HTML: handwriting needs a font, and custom fonts
+are stripped by most email clients, so an HTML version would fall back to Arial and lose the joke
+entirely.
+
+That means a **separate asset from Browse email 3**, which uses the same photograph clean. Sharing
+one annotated image would run the same gag twice in two different flows.
+
+Prompt delta on top of the bespoke-team image:
+
+> Add a hand-drawn annotation over the photograph, as if someone had written on a print with a
+> white paint marker: a single loose, slightly wobbly curved arrow starting in the empty dark area
+> at the upper left and curving down to point at the group of people, with the handwritten
+> lower-case words **the experts** beside the start of the arrow. The handwriting is casual and
+> confident, in warm off-white, clearly hand-drawn rather than typeset, and slightly uneven. It
+> must not overlap any face. Nothing else is added. The upper area of the frame stays flat dark
+> apart from the annotation.
+
+Two words is well within what the model renders reliably, so this is a cheap regeneration if the
+first attempt puts the arrow somewhere unhelpful.
