@@ -46,29 +46,63 @@ _A = {
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
-# every band floors 10% of the lower bound, so the stated saving is always less
-# than or equal to the real one
-BANDS = [(100, "10"), (75, "7"), (50, "5"), (25, "2")]
+# Klaviyo cannot compute the discounted total, so the saving is stated as a
+# floor: every band claims 10% of its LOWER bound, which is by definition less
+# than or equal to the real saving anywhere in that band.
+#
+# The band WIDTH is what decides how close the stated figure lands to the truth.
+# These started 25 wide, which understated badly: a 70.77 basket saves 7.08 but
+# fell in the 50-74 band and was told "at least 5 off". At 10 wide the same
+# basket is told 7, and the worst case anywhere is 99c short of the real number.
+BANDS = [(f, str(f // 10)) for f in range(140, 9, -10)]
 
-def band_live(cur):
+# Below the lowest band 10% is under a euro, so no figure is claimed at all.
+FLOOR = BANDS[-1][0]
+
+def save_num_live(cur):
+    """Just the figure, e.g. '&euro;7'. One source for both places it appears."""
+    # the currency symbol is itself a conditional, so it goes outside the chain:
+    # inside, it would be repeated once per band for no gain
     out = ""
     for i, (floor, saving) in enumerate(BANDS):
         kw = "if" if i == 0 else "elif"
-        out += ('{%% %s event|lookup:"$value" >= %d %%}That is at least %s%s off.'
-                % (kw, floor, cur, saving))
-    return out + '{% else %}Your 10% comes off at checkout.{% endif %}'
+        out += '{%% %s event|lookup:"$value" >= %d %%}%s' % (kw, floor, saving)
+    # unreachable: callers guard on >= FLOOR, which is the last band
+    return cur + out + "{%% else %%}%s{%% endif %%}" % BANDS[-1][1]
 
-def band_sample(total, cur):
+def save_num_sample(total, cur):
     for floor, saving in BANDS:
         if total >= floor:
-            return "That is at least %s%s off." % (cur, saving)
-    return "Your 10%% comes off at checkout."
+            return "%s%s" % (cur, saving)
+    return None
+
+def guard_live(inner):
+    return '{%% if event|lookup:"$value" >= %d %%}%s{%% endif %%}' % (FLOOR, inner)
+
+def clause_live(cur):
+    """The subtext clause. The phrase appears once, only the figure branches,
+    so translators see one string rather than one per band."""
+    return guard_live(" and save at least " + save_num_live(cur))
+
+def clause_sample(total, cur):
+    n = save_num_sample(total, cur)
+    return "" if n is None else " and save at least " + n
+
+def band_live(cur):
+    return ('{%% if event|lookup:"$value" >= %d %%}That is at least %s off.'
+            '{%% else %%}Your 10%% comes off at checkout.{%% endif %%}'
+            % (FLOOR, save_num_live(cur)))
+
+def band_sample(total, cur):
+    n = save_num_sample(total, cur)
+    return "Your 10% comes off at checkout." if n is None else "That is at least %s off." % n
 
 SAMPLE_TOTAL = 70.77
 SAMPLE = {
     "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
     "CUR": "&euro;", "TOTAL": "70.77", "NUM": "3",
     "BAND": band_sample(SAMPLE_TOTAL, "&euro;"),
+    "SAVE_CLAUSE": clause_sample(SAMPLE_TOTAL, "&euro;"),
     "UNSUB": '<a href="#">Unsubscribe</a>',
 }
 LIVE = {
@@ -77,6 +111,7 @@ LIVE = {
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
     "NUM": "{{ event.Items|length }}",
     "BAND": band_live('{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'),
+    "SAVE_CLAUSE": clause_live('{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'),
     "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
 }
 
@@ -197,7 +232,7 @@ BODY = """
     <div class="{P}-hero">
       <span class="{P}-eyebrow">STILL IN YOUR BASKET</span>
       <h1 class="{P}-h1">10% off the basket you saved</h1>
-      <p class="{P}-sub">Everything is still configured exactly as you left it. The code comes off at checkout and runs for 72 hours.</p>
+      <p class="{P}-sub">Use code <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. Everything is still configured exactly as you left it, and the code runs for 72 hours.</p>
       <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
     </div>
 
@@ -315,7 +350,36 @@ for floor, saving in BANDS:
     if float(saving) > floor * 0.10 + 1e-9:
         errs.append("band overstates the saving: >=%d claims %s, real minimum is %.2f"
                     % (floor, saving, floor * 0.10))
-if len(BANDS) != 4: errs.append("expected 4 bands")
+if len(BANDS) < 12: errs.append("bands got wider, the saving will understate")
+
+# the figure in the subtext and the figure under the basket must be the same
+# number, because the reader sees both. They share save_num_*, so this only
+# fails if someone splits them apart later.
+for t in (9.99, 10.0, 70.77, 74.99, 149.99):
+    n = save_num_sample(t, "E")
+    inside = (n is not None and n in clause_sample(t, "E") and n in band_sample(t, "E"))
+    if n is None:
+        if clause_sample(t, "E") != "" or "at least" in band_sample(t, "E"):
+            errs.append("no figure is safe at %.2f but one was printed" % t)
+    elif not inside:
+        errs.append("subtext and basket figures disagree at %.2f" % t)
+    # and the claim itself must hold for every cart in the band
+    if n is not None and float(n[1:]) > t * 0.10 + 1e-9:
+        errs.append("at %.2f the email claims %s but 10%% is only %.2f" % (t, n, t * 0.10))
+if save_num_sample(9.99, "E") is not None:
+    errs.append("a sub-10 basket should claim no figure at all")
+
+# the no-figure fallback is written twice, once for the preview and once for
+# the live template. A stray %-escape in either is invisible until it renders,
+# so compare the two literally. This caught "Your 10%% comes off".
+# the LAST else is the outer one: the band chain has its own else nested inside
+live_else = band_live("E").rsplit("{% else %}", 1)[1].split("{% endif %}")[0]
+if live_else != band_sample(0.0, "E"):
+    errs.append("fallback copy differs: live says %r, preview says %r"
+                % (live_else, band_sample(0.0, "E")))
+for frag in ("%%", "&&", "{{ {{"):
+    if frag in band_live("E") + clause_live("E"):
+        errs.append("double-escape leaked into the live template: " + frag)
 if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused here")
 if CODE not in live_body: errs.append("the code is missing from the body")
 # this branch is defined by being under the split

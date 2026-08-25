@@ -309,7 +309,8 @@ EMAIL_DETAIL = {
    variant="A different email entirely, not a variant: over 150 the reader gets a print expert and no code at all, because on those carts the blocker is confidence rather than price.",
    elements=[
      ("No photograph, deliberately.", "The high branch is a confidence play and earns faces. This one should feel like two clicks, so the offer sits in a green bar above the masthead and the header stays light."),
-     ("A banded saving rather than a calculated one.", "The exact discounted total cannot be produced in Klaviyo\u2019s template language, so the email prints \u201cat least \u20ac5 off\u201d from a band. Every band floors the real saving, so the figure is always true and never overstated."),
+     ("A banded saving rather than a calculated one.", "Klaviyo cannot do the arithmetic, so the email states a floor: a \u20ac70 basket is told \u201cat least \u20ac7 off\u201d. Bands are \u20ac10 wide, so the figure lands within a euro of the real saving and can only ever understate it. Verified against live carts in Klaviyo, in both currencies."),
+     ("The code and the saving appear under the headline.", "Both were previously below the basket, which meant the offer only landed if the reader scrolled. The figure quoted up top is generated from the same band as the one lower down, so the two cannot disagree."),
      ("Three things that make finishing quick.", "The quantity is a starting point not a minimum, the file can follow the order, and nothing is charged until they confirm. All three are true of the product page and none of them is obvious from it."),
    ]),
  "TtjyZ4": dict(
@@ -388,6 +389,7 @@ ISSUES = [
  "Some feed titles are untranslated slugs, e.g. GB-gatefoldfoldedleaflets is titled “gatefoldfoldedleaflets”. Any email showing that product would print the slug as the product name. Sweep the feed for titles equal to their slug.",
  "Welcome email 1 claims “Every price includes delivery and VAT” directly above four feed prices that exclude both. The product page defaults to Excl. VAT with delivery chosen separately. Needs replacing, and “All-inclusive prices” in Welcome email 3 needs a ruling on what it is meant to mean.",
  "Connect, the B2B storefront, fires the same Viewed Product metric as the consumer site and is 14–21% of events. Every conversion flow needs a storefront filter or B2B buyers receive consumer lifecycle mail.",
+ "Some Started Checkout line items carry no ProductID and no ProductName at all - a live fr-fr Mugs cart had neither. The basket block treats an item with no ID as a service line, so it would render a row with a blank name. Rare, but it is a visible defect when it happens.",
  "Welcome email 1's eight price figures are a dated snapshot, not live values. scripts/refresh_welcome_01.py rewrites them from _lib/welcome_prices.py and verifies the arithmetic, but the snapshot itself has to be refreshed by hand when the feed moves. A struck-through price that no longer matches the site reads as a fake discount rather than a stale email.",
  "The site contradicts itself on file checking. /always-a-perfect-design says “we check your files at no extra cost”, while the cart is explicit that the free Basic check is automated and “your file is not reviewed by a print expert” — a human review is the paid Premium tier. Marketing copy and the cart should agree, or customers arrive at checkout expecting something they have not bought.",
 ]
