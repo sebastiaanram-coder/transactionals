@@ -1,7 +1,8 @@
 # Post-Purchase / Retention — proposal
 
-Replaces RFB's Post-Purchase flow (`TZYvDF`, 5 emails, draft) and absorbs
-RFB's Customer Winback flow (`WsYFJR`, 4 emails, draft).
+Replaces RFB's Post-Purchase flow (`TZYvDF`, 5 emails, draft) and re-scopes
+RFB's Customer Winback flow (`WsYFJR`, 4 emails, draft) — see §3, that
+absorption was reversed once the reorder data came in.
 
 Goals, in the order they occur: **get a review**, **stay top of mind**,
 **convert to the next order**.
@@ -146,30 +147,60 @@ The "don't send too much in week one" instinct is right, but Klaviyo's frequency
 capping and smart sending **cannot protect you** here, because Klaviyo does not
 know those emails exist. Restraint has to be designed in, not configured.
 
-### 1.7 Orders arrive in bursts, not at a steady 2.4 per year
+### 1.7 The median customer entering this flow reorders in 30 days
 
-Three views of the same 443,857 orders over twelve months:
+This replaces an earlier, wrong version of this section. It matters enough to
+show the mistake.
 
-| Window | Orders per ordering customer |
+**What I had.** Same-day 1.25 orders per customer, same-month 1.96, and your 2.4
+a year. Those reconcile if the average customer is active in ~1.25 months a year
+with ~2 orders inside that month, so I concluded customers buy in one burst then
+go quiet for most of a year, and timed the flow to days 70 and 100.
+
+**Why that was wrong.** Two errors compounding.
+
+The arithmetic averages over customers who *never return*, whose gap is not long
+— it is undefined. Removing them changes the answer completely, and it says
+nothing about when returners return.
+
+The bigger error: **this flow is entered per order, not per customer.** A
+customer who orders 300 times a year enters it 300 times; a one-time buyer
+enters once. So the population that matters here is order-weighted, and the
+per-customer average of 2.4 is the wrong statistic to design against. I used it
+anyway.
+
+**What the data says.** Klaviyo's own `average_days_between_orders`, on 50 real
+retail customers sampled from recent orders (37 of them repeat buyers):
+
+| | days between orders |
 |---|---|
-| Same day | 1.25 |
-| Same month | 1.96 |
-| Same year (your figure) | 2.4 |
+| p25 | 15 |
+| **median** | **30** |
+| p75 | 68 |
+| p90 | 128 |
+| max | 413 |
 
-These reconcile one way: the average customer is active in about **1.25 distinct
-months per year** and places about **two orders inside that active month**.
-1.25 × 1.96 = 2.45, which lands on your 2.4.
+| Reorder gap | Share of repeat buyers |
+|---|---|
+| 0–30 days | **51%** |
+| 31–60 days | 22% |
+| 61–90 days | 14% |
+| 91+ days | 13% |
 
-So 2.4 a year is not someone ordering every five months. It is one burst — set
-up a business, order cards and flyers and a banner over a fortnight — then close
-to a year of quiet.
+**Half reorder inside a month. Three quarters inside two months.** Day 70 and
+day 100 are not conservative pacing, they are most of the way past the event.
 
-1. **The second order has usually already happened** by the time any nudge could
-   claim it. The flow's real target is the *next burst*, and the honest job of a
-   day-100 discount is to pull it forward, not to catch it.
-2. **The flow will fire about twice per customer per burst.** Without a re-entry
-   guard they get two review requests for what felt to them like one shopping
-   trip.
+Sampling note, because it cuts both ways: drawing customers from recent *orders*
+over-represents frequent buyers — a 384-order account is 384 times likelier to
+appear than a one-time buyer. That bias is real, and it is also **exactly the
+bias the flow has**, because the flow is triggered by orders. For this decision
+the order-weighted view is the correct one. For a question about customers
+rather than orders, 2.4 a year is still the right figure.
+
+**And this baseline is unmarketed.** Every behavioural flow is currently draft,
+so a 30-day median reorder happens today with no post-purchase email at all.
+That is the number any discount has to beat to be worth its margin — which is
+the whole argument for where the discount sits in §3.
 
 ### 1.8 French and Dutch dominate; English is a minority but not small
 
@@ -281,29 +312,54 @@ and short enough to matter. Three cautions:
 | — | day 0–17 | *nothing at all* | — | transactional owns this window |
 | 1 | **day 18** | Review request — Trustpilot service review | Review | not cancelled |
 | 2 | day 25 | Review reminder | Review | did not click email 1 |
-| 3 | day 40 | A print expert, personally. Plain text | Top of mind | — |
-| 4 | day 70 | Need more {category}? / what businesses like yours print | Top of mind | no order since |
-| 5 | day 100 | Next order, 10% off, expires in 14 days | Next order | no order since |
-| 6 | day 113 | Last day on the code | Next order | no order since, code unused |
+| 3 | **day 32** | Need more {category}? **No discount** | Next order | no order since |
+| 4 | **day 45** | A print expert, personally. Plain text | Top of mind | no order since |
+| 5 | **day 60** | 10% off, expires in 14 days | Next order | no order since |
+| 6 | **day 73** | Last day on the code | Next order | no order since, code unused |
 
-Six emails over sixteen weeks. Only two carry an ask beyond a click.
+Six emails over ten weeks, not sixteen.
 
-### Why the timings
+### Why these timings, and why the discount is not first
 
-**Day 18 for the review ask.** Past the only observed p90 (20 days) minus a
-margin, and deliberately later than RFB's day 12. This is the number most worth
-replacing with real fulfilment data before launch.
+The reorder curve (§1.7) has a median at 30 days and a p75 at 68. That creates a
+narrow, specific problem: **anything sent before day 30 is largely buying orders
+that were already coming.** Half of repeat customers reorder inside a month with
+no email at all. A discount there is margin spent on a decision already made.
+
+So the sequence spends the cheap levers inside the natural window and the
+expensive one only after it has closed:
+
+- **Day 32 — the category nudge, deliberately with no discount.** It lands right
+  at the median, where intent is genuinely live, and it costs nothing but a send.
+  If a reorder was coming anyway, this one helps it along for free rather than
+  paying for it.
+- **Day 45 — the print expert.** Still free, more personal, and positioned
+  before the money. If a human answer unlocks the next job, that is the cheapest
+  possible conversion.
+- **Day 60 — the discount.** Past the median and near p75, so the people
+  receiving it have demonstrably *not* reordered on their own schedule. This is
+  where 10% is plausibly incremental rather than a rebate on a sure thing.
+- **Day 73 — the deadline**, closing a 14-day window that opened on day 60.
+
+Every email from 3 onward is gated on no order since flow entry, so the 51% who
+reorder inside a month drop out before the discount is ever offered. That gate is
+doing most of the work of protecting margin.
+
+**Day 18 for the review ask** stays as it was — it is set by delivery, not by
+the reorder cycle, and is the number most worth replacing with real fulfilment
+data.
 
 *Optional v4 enhancement:* where `PromisedDeliveryDate` exists, wait until that
-date plus four days instead. A conditional split, so presta is unaffected and v4
-gets more accurate as it rolls out. Needs verifying that Klaviyo's date-property
-wait accepts this property — if not, everyone gets day 18 and nothing is lost.
+date plus four days instead. A conditional split, so presta is unaffected.
 
-**Day 40 for the personal note**, after the review moment has closed, so a human
-note is not competing with an ask.
+### What happens to the slow quarter
 
-**Day 100 and 113** put the deadline at day 114, inside the 60-day re-entry
-window, so nobody can hold two live codes from two passes.
+27% of repeat buyers have gaps past 60 days and 13% past 90, so a flow ending at
+day 73 will not reach them. **This is a revision to §4: Winback should not be
+absorbed after all.** Ending here and handing to a re-timed Winback around day
+120 serves that tail better than stretching this flow thin across both. Winback's
+own pacing — four emails in four days — is still wrong and still needs fixing,
+but its existence is now justified rather than redundant.
 
 ### Variants each email needs
 
@@ -362,6 +418,9 @@ Roughly in order of value. Drukzo and Connect are now settled (§1.2).
 
 ## 6. Method
 
+- Reorder gaps: `predictive_analytics.average_days_between_orders` on 50 retail
+  customers drawn from recent orders, 37 of whom are repeat buyers. Klaviyo's own
+  computed figure. Order-weighted by construction — see the note in §1.7.
 - Frequency: `query_metric_aggregates` on `Placed Order` (`TuC7Z7`), 443,857
   orders, 2025-09-01 to 2026-08-25, month and day intervals. Same-day and
   same-month ratios are count ÷ unique profiles.
