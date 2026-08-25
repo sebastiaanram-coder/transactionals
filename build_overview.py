@@ -285,9 +285,10 @@ EMAIL_DETAIL = {
    why="An hour after checkout was started, the configuration is done and the only thing missing is the last click. Shared by both value branches, so it carries no offer: there is nothing to discount yet, and spending the incentive here would waste it on people who were coming back anyway.",
    variant="This is the shared email, so there is no variant. The value split changes what arrives at 24 and 72 hours, not this.",
    elements=[
+     ("A banner of print worth wanting.", "A basket list on its own reads like a receipt, so the email opens on foil business cards with the headline set over them in HTML. The ink headroom and blend are baked into the image, as everywhere else."),
      ("The actual basket, line by line.", "Product titles come from the catalog and service lines from the event, because Started Checkout carries the whole basket rather than one item. Each product links back to its own configured URL."),
      ("A total taken from the event, not added up.", "$value disagrees with the sum of the rows on 6% of events, so the rows are shown and the total is printed as sent."),
-     ("Three reassurances and no offer.", "The configuration is saved, files get checked, nothing is charged until they confirm. That is what an hour-old basket needs."),
+     ("Three reassurances, a real review, and no offer.", "The configuration is saved, files get checked, nothing is charged until they confirm. The review is there because Klaviyo's own guidance rates reviews the strongest lever on a first purchase, and this email had none."),
    ]),
  "TtjyZ4": dict(
    goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",

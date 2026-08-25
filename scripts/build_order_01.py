@@ -45,6 +45,8 @@ _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
     "IMG_TICK":     "browse-02-tick.jpg",
     "IMG_AGENTS":   "cs-agents-ellipse.png",
+    "IMG_HERO":     "order-01-hero-banner.jpg",
+    "IMG_STARS":    "trustpilot-stars-4-5.png",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
@@ -53,6 +55,7 @@ SAMPLE = {
     "CATALOG_OPEN": "", "CATALOG_CLOSE": "",
     "CHECKOUT_URL": "https://www.helloprint.com/en-gb/basket",
     "CUR": "&pound;", "TOTAL": "116.04",
+    "COUNT": "3 items",
     "UNSUB": '<a href="#">Unsubscribe</a>',
 }
 LIVE = {
@@ -61,6 +64,8 @@ LIVE = {
     # only IE and GB are in scope, so the first line's prefix decides the symbol
     "CUR": '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}',
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
+    "COUNT": ('{{ event.Items|length }} item'
+              '{% if event.Items|length != 1 %}s{% endif %}'),
     "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
 }
 
@@ -88,14 +93,22 @@ CSS = """
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;}
 .%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
-/* No photograph: the basket is the hero of this email, and a team shot would
-   push it below the fold. */
-.%(P)s-hero{background:#ffffff;text-align:center;padding:32px 24px 4px;}
-.%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
-.%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#191919;letter-spacing:-.015em;}
-.%(P)s-sub{margin:0 auto 20px;max-width:450px;font-size:17px;line-height:25px;color:#555555;}
-.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+/* Banner hero. A basket list on its own reads like a receipt, so the email
+   opens on print worth wanting - foil business cards - with the headline set
+   over it in HTML. 126px of ink headroom and a 125px blend are baked in; the
+   blend runs longer than the team-photo banners because this photo's top is
+   mid-grey rather than dark. */
+.%(P)s-hero{background:#191919;text-align:center;}
+.%(P)s-heroov{position:relative;z-index:2;padding:30px 24px 0;min-height:186px;}
+.%(P)s-heroimg{display:block;width:100%%;height:auto;border:0;margin-top:-190px;}
+.%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#9fdbb8;margin:0 0 10px;}
+.%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
+.%(P)s-sub{margin:0 auto 18px;max-width:440px;font-size:17px;line-height:25px;color:#ffffff;opacity:.9;}
+.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+.%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
+/* a label on the card stops the list reading as a receipt */
+.%(P)s-bhead{background:#f1f8f4;border-bottom:1px solid #e5e5e5;padding:10px 16px;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.11em;color:#008539;}
 .%(P)s-basket{margin:24px 24px 0;border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;}
 .%(P)s-btbl{width:100%%;border-collapse:collapse;}
 .%(P)s-brow td{border-top:1px solid #e5e5e5;padding:14px 16px;vertical-align:middle;}
@@ -120,6 +133,12 @@ CSS = """
 .%(P)s-rstick img{width:20px;height:20px;display:block;border:0;}
 .%(P)s-rstx{vertical-align:top;padding:8px 0;font-size:15px;line-height:22px;color:#191919;}
 
+/* social proof: the article's point is that reviews are the strongest lever on
+   a first purchase, and email 1 had none */
+.%(P)s-rev{margin:26px 24px 0;padding:22px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
+.%(P)s-revstars{display:block;margin:0 auto 11px;border:0;width:120px;height:25px;}
+.%(P)s-revq{margin:0 auto 9px;max-width:420px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
+.%(P)s-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
 .%(P)s-help{margin:22px 24px 0;padding:22px 0 30px;border-top:1px solid #e5e5e5;text-align:center;}
 .%(P)s-help img{display:block;margin:0 auto 11px;border:0;}
 .%(P)s-helpttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin-bottom:7px;}
@@ -138,10 +157,11 @@ CSS = """
 @media only screen and (max-width:480px){
   .%(P)s-logobar{padding:11px 20px 9px;}
   .%(P)s-logobar img{width:132px;}
-  .%(P)s-hero{padding:26px 18px 2px;}
+  .%(P)s-heroov{padding:24px 18px 0;min-height:144px;}
+  .%(P)s-heroimg{margin-top:-112px;}
   .%(P)s-h1{font-size:26px;line-height:33px;}
   .%(P)s-sub{font-size:16px;line-height:24px;max-width:none;}
-  .%(P)s-cta{padding:15px 26px;}
+  .%(P)s-cta,.%(P)s-cta-g{padding:15px 26px;}
   .%(P)s-basket{margin:18px 14px 0;}
   .%(P)s-brow td{padding:12px 12px;}
   .%(P)s-lim,.%(P)s-limsvc{width:60px;}
@@ -151,7 +171,8 @@ CSS = """
   .%(P)s-tval{font-size:18px;line-height:24px;}
   .%(P)s-tnote{margin:9px 14px 0;}
   .%(P)s-mid{padding:22px 14px 0;}
-  .%(P)s-rs,.%(P)s-help{margin-left:14px;margin-right:14px;}
+  .%(P)s-rs,.%(P)s-rev,.%(P)s-help{margin-left:14px;margin-right:14px;}
+  .%(P)s-revq{font-size:16px;line-height:24px;}
   .%(P)s-rstx{font-size:14px;line-height:21px;}
 }
 """ % {"P": P}
@@ -220,16 +241,20 @@ BODY = """
     </div>
 
     <div class="{P}-hero">
-      <span class="{P}-eyebrow">YOUR BASKET</span>
-      <h1 class="{P}-h1">Your basket is still here</h1>
-      <p class="{P}-sub">Nothing has been lost. Every option you picked is saved exactly as you left it.</p>
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Return to checkout</a>
+      <div class="{P}-heroov">
+        <span class="{P}-eyebrow">YOUR BASKET</span>
+        <h1 class="{P}-h1">Your basket is still here</h1>
+        <p class="{P}-sub">Nothing has been lost. Every option you picked is saved exactly as you left it.</p>
+        <a class="{P}-cta" href="{CHECKOUT_URL}">Return to checkout</a>
+      </div>
+      <img class="{P}-heroimg" src="{IMG_HERO}" alt="" width="600">
     </div>
 
     <!-- the real basket: one row per line, product titles from the catalog,
          service lines from the event, each product linking back to its own
          configured URL -->
     <div class="{P}-basket">
+      <div class="{P}-bhead">SAVED FOR YOU &middot; {COUNT}</div>
       <table class="{P}-btbl" role="presentation" cellpadding="0" cellspacing="0">
         {LINES}
         <tr class="{P}-trow">
@@ -241,10 +266,16 @@ BODY = """
     <p class="{P}-tnote">Delivery and VAT are confirmed at checkout.</p>
 
     <div class="{P}-mid">
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Return to checkout</a>
+      <a class="{P}-cta-g" href="{CHECKOUT_URL}">Return to checkout</a>
     </div>
 
     <div class="{P}-rs">{REASSURE}</div>
+
+    <div class="{P}-rev">
+      <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
+      <p class="{P}-revq">&ldquo;Good quality, super fast and they checked my work. Really lovely.&rdquo;</p>
+      <span class="{P}-revby">Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000</span>
+    </div>
 
     <div class="{P}-help">
       <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
@@ -355,6 +386,10 @@ for word in ("10%", "15%", "25%", "discount", "code", "voucher", "off your"):
     if word in low: errs.append("email 1 is shared by both branches and must carry no offer: " + word)
 if live_body.count("{% for it in event.Items %}") != 1: errs.append("expected one line loop")
 if len(REASSURE) != 3: errs.append("expected 3 reassurance lines")
+for need in ("margin-top:-190px", "z-index:2", "%s-bhead" % P, "%s-revq" % P):
+    if need not in live_body: errs.append("missing " + need)
+if "item{% if event.Items|length != 1 %}s{% endif %}" not in live_body:
+    errs.append("the item count must be pluralised or a one-line basket reads '1 items'")
 
 print("preview: %6d bytes  ->  proposals/order-01-proposed.html" % len(prev))
 print("klaviyo: %6d bytes  ->  proposals/order-01-klaviyo.html" % len(live))

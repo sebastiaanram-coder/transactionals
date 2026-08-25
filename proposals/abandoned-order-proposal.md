@@ -228,3 +228,39 @@ and £150, which is about **13% of the low branch**. Talon.one can express a cap
 3. **The expiries have to be real** — 72 hours on email 2's code, 24 on email 3's.
 4. **Non-catalog line items** still need the §4.1 guard; the Premium Design Check would otherwise
    fail the whole render.
+
+---
+
+## 12. Checked against Klaviyo's own abandoned-cart guidance
+
+Read `klaviyo.com/blog/abandoned-cart-email`. Most of what it recommends the flow already does
+— multiple emails rather than one ("69% more orders than a single abandoned cart email"),
+segmenting high-value carts to decide the discount, personalising the incentive by cart value,
+conditional splits, action-oriented CTAs, and its warning that discounts for repeat abandoners
+train people to wait, which is the same risk flagged in §10.
+
+**Three things it surfaced that we were missing.**
+
+1. **Social proof was absent from email 1.** The article calls customer reviews "the most
+   influential factor when someone is making an initial purchase with a brand". Email 1 now
+   carries a real Trustpilot review and the 4.5 rating. This is also what stops the email reading
+   as a receipt.
+2. **Exclude anyone with an open support ticket.** Their recommendation, and it is directly
+   implementable: there is a `Ticket Created` metric in the account (`SyMxGj`). Someone mid-
+   conversation with support should not be receiving "you left something behind". Worth adding
+   to the flow filters.
+3. **Free delivery may beat a percentage.** The article cites "39% of cart abandoners" leaving
+   over extra costs such as shipping. On this site delivery is a separately chosen cost at
+   checkout, so on a low-value cart it can be a large share of the total — a £40 basket with £8
+   delivery is a 20% surcharge, where 10% off the goods is £4. Free delivery may convert better
+   than the 10% in email 2 and cost less than the capped 25% in email 3. Worth testing rather
+   than assuming.
+
+**Two things it recommends that we are deliberately not doing.**
+
+- **First email at 2–4 hours.** Ours is at 1 hour. Print is configured rather than picked off a
+  shelf, so the spec is still in mind and the tab may still be open; 1 hour is a defensible
+  difference, but it is a difference and worth watching in the numbers.
+- **Alternative product recommendations.** We have the machinery from Browse Abandonment, but in
+  a cart email a size ladder invites reconsidering a decision already made. Held back
+  deliberately.
