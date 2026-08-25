@@ -243,90 +243,67 @@ FLOWS = [
 # ---------------------------------------------------------------------------
 EMAIL_DETAIL = {
  "Vb23CK": dict(
-   goal="Turn a fresh subscriber into a first configured order while intent is at its highest, and set the price expectation before anyone else does.",
-   why="Day 0 is the only moment we have undivided attention. They have just raised a hand, and the thing we promised has to arrive now or the consent goes cold. Nothing has been established yet, so this email has to introduce and sell at the same time.",
-   variant="Barely affected in practice: this fires within minutes of sign-up, so almost nobody will have ordered yet. If they have, the promo bar, the code chip, the \u201cyour 10% comes off at checkout\u201d line the second figure beside every tile price and the expiry line under it all come out, the strike-through goes with them and the price returns to brand green, and the CTA changes from \u201cStart your first order\u201d to a plain browse. Both files exist in the repo \u2014 proposals/welcome-01-proposed.html and proposals/welcome-01-proposed-nodiscount.html \u2014 and the second is generated from the first by scripts/make-nodiscount.py, so the two can never drift apart by hand.",
+   goal="Turn a fresh subscriber into a first order while intent is highest, and set the price expectation before anyone else does.",
+   why="Day 0 is the only moment with undivided attention, and the discount they signed up for has to arrive now or the consent goes cold.",
+   variant="Almost nobody will have ordered this early. If they have, the code and the discounted prices come out. Both versions are generated from one source so they cannot drift.",
    elements=[
-     ("Promo bar with the code and the clock.", "Delivers what they signed up for inside the first 40 pixels, and states the window in the same breath: valid only 5 days. Relative wording rather than a date, so it stays true whenever they sign up and needs no per-locale date formatting in Smart Translations."),
-     ("Black masthead into a faded hero.", "The series signature. The fade is baked into the image pixels because the Klaviyo editor strips CSS gradients."),
-     ("One code chip, one CTA.", "RFB stated the discount three times in this email. Saying it once leaves room for an actual argument."),
-     ("All-inclusive price strip.", "Establishes the differentiator before a single price appears, rotating three of our own stated promises."),
-     ("Product grid: image, title, quantity, was/now price.", "Removes the navigation step at peak intent and puts real prices in front of someone who has never seen one. The catalogue price is struck through in black and the price with the code sits beside it in green, both at the same size on one line, so the saving is legible at a glance rather than read as a footnote. Expires in 5 days sits directly under each price, so the deadline travels with the number it applies to instead of living only in the bar at the top. Each tile click is also a category signal, which is the only thing that can make Browse Abandonment relevant later."),
-     ("Artwork reassurance.", "Artwork doubt is the number one blocker on a first print order, so it gets answered before it is asked."),
-     ("Trustpilot, agents, footer.", "Third-party proof, and the compliance furniture RFB left out entirely."),
-   ]),
- "X2GaSL": dict(
-   goal="Bring back the exact product they looked at with numbers that are true, and answer the three things that actually stop a print order.",
-   why="One hour after a product view is the only moment when the job is still on the desk and the spec is still in their head. But a product view is a weak signal: nothing was added to a basket, so nothing was forgotten. This email cannot say \u201cyou left something behind\u201d, which is what RFB\u2019s version said three times. It has to answer why they stopped instead.",
-   variant="No discount in either direction, so there is no second copy to keep in step. The \u201chas this person ordered since\u201d check is done by the flow filters rather than in the HTML: anyone who adds to cart or places an order drops out before the next send, which is also what stops this flow colliding with the abandoned-order sequence.",
-   elements=[
-     ("Light header, black only in the masthead.", "Every other rebuilt email opens on photography. This one deliberately does not. The packshot below should be the only image competing for attention, and a second large photo pushes the product below the fold. Green carries the eyebrow and the button instead."),
-     ("Product card read live from the catalog feed, laid out sideways.", "Title, packshot, from-price and preset quantity all come from the Klaviyo catalog, keyed on the ProductID of the Viewed Product event. The event\u2019s own fields cannot be used: ProductName is a slug (flyera5, not A5 Flyers) and Price is unrounded (55.8502). The feed is the only usable source and it arrives already localised per market, which is what makes this work in every language later. The card runs packshot-left, numbers-right: stacked it ran to about 450px, because catalog packshots are square, which pushed the rest of the email down a whole screen. Sideways it is 160px and still carries all four fields."),
-     ("Prices marked excl. VAT and delivery.", "The product page defaults to Excl. VAT with delivery chosen separately, so the feed\u2019s from-price is neither the total nor the basis a buyer assumes. The email states the basis rather than claiming an all-inclusive price it cannot support."),
-     ("Three doubts, each with a colleague\u2019s face.", "Artwork, spec-and-deadline, and sign-off. These are the three commonest reasons a print product view does not convert, read off the product page rather than guessed at, and each is answered by the team that handles it rather than by a feature. The circles and their green rings are baked into the image pixels because Outlook ignores border-radius."),
-     ("Same-category cross-sell.", "Someone looking at A5 Flyers is shown A4, A6, DL and Folded leaflets: a size and price ladder rather than a generic bestseller row. The set is picked from the category on the event, and every product id is built from the recipient\u2019s own market prefix, so the block works unchanged in each new market as its feed comes online."),
-     ("Trustpilot, agents, footer.", "Third-party proof and the compliance furniture, identical to the Welcome flow so the two read as one system."),
-   ]),
- "SJV6Kx": dict(
-   goal="Remove the artwork blocker outright, because it is the biggest single gate on a first print order and the product page makes it look larger than it is. The whole email is one argument: whatever state your file is in, we have got your back.",
-   why="Day 1. They looked, they did not add to cart, and email 1 has already offered help on three fronts. Only one of those blockers is big enough to deserve a whole email. The product page is built around supplying a file and never says the quiet part out loud, which is that the order can start before the file exists. This email says it in the subject line.",
-   variant="No discount in either direction, so there is no second version. Anyone who orders drops out on the flow filter before this send.",
-   elements=[
-     ("Banner hero with real text over the photograph.", "Colleagues at screens going through customer work, with the headline and button set in HTML on top of it rather than baked into the picture. The image carries 140px of solid #191919 headroom and a 110px blend into the photo, so the text has somewhere dark to sit and the seam with the masthead is invisible. The image is pulled up under the text with a negative margin and the text lifted with z-index; Outlook ignores both and degrades to text-then-image, which still reads as one banner because the image\u2019s top row is exactly the masthead colour. The overlap shrinks on mobile, where the photo scales but the type does not."),
-     ("Permission in the headline, not the footnotes.", "The product page hides \u201cUpload later \u2014 add to cart now, send your files after checkout\u201d inside its artwork step, where almost nobody finds it. It is the most conversion-relevant fact we hold, so it becomes both the subject line and the H1."),
-     ("A small product anchor rather than a product card.", "Artwork is the subject here, so the job is named in a single line instead of getting the hero treatment it has in email 1."),
-     ("The product page\u2019s own three routes.", "Upload later, Design online, Upload your design \u2014 same labels, same order, same short descriptions as the live artwork step, each with an icon tile in the same style. Matching the page means the email is a preview of the decision rather than a different set of words for it. The three cards are levelled with a min-height rather than by tuning the copy to wrap evenly, because Smart Translations will change the wrapping in every other language."),
-     ("What we check, in plain words.", "Nothing important gets cut off, photos come out sharp, colours print as expected, and you hear from us first if something looks wrong. An earlier draft of this block used bleed, safe area, 300 dpi and CMYK. That is against house style, and it also spoke to the one reader who did not need the reassurance."),
-     ("The Premium Design Check, argued without a price.", "Presented as the assurance centrepiece: a print expert reviews it by hand, we make contact before printing if anything looks off, and it is backed by the 100% Satisfaction Guarantee. Eight in ten customers add it, and a reprint costs many times more than the check. No figure is quoted because Design Check is not a catalog item, so there is no per-market price to bind and the Irish 4.99 would be wrong in the UK."),
-     ("The free tier is described as automatic, on purpose.", "The marketing page says only that we check files at no extra cost, but the cart is explicit that the free check is automated and \u201cyour file is not reviewed by a print expert\u201d. Saying a person checks every file for free would be untrue, so a build check fails if the copy ever drifts that way."),
-     ("A designer, by e-mail.", "Same face as email 1, so the cast stays consistent. E-mail rather than chat, because chat is Anna, the AI. No phone number, because it differs per market and this flow runs in two."),
-     ("No price, and no cross-sell.", "Both deliberate. A price would drag the excl-VAT basis question into an email that does not need it, and a size ladder would pull against the one job this email has."),
-   ]),
- "UtrHWs": dict(
-   goal="Serve the reader who is blocked rather than undecided, by handing them a written quote they can act on or pass on.",
-   why="Day 3. Emails 1 and 2 have already served anyone who was simply hesitating, so whoever is still here is stuck on something the product page cannot fix. There are only three ways to be stuck on a print job \u2014 the spec will not go into the configurator, there is a date to hit, or someone else has to sign it off \u2014 and a quote answers all three at once, which is why this is one email rather than three.",
-   variant="No discount either way, so no second version. Anyone who orders drops out on the flow filter before this send.",
-   elements=[
-     ("Banner hero: the bespoke team, faces to camera.", "Built the same way as email 2 \u2014 HTML text over the photograph with ink headroom and a blend baked in \u2014 but on the bespoke team shot rather than a crop of the adviser desks, so it is a different picture and a warmer one. Tuned to the photo rather than copied: 130px of headroom and only a 60px blend, because the faces start about 79px into the frame and a deeper blend darkened them. The source had rounded corners baked in, removed with a 12px inset so they do not show as white notches at full width. John is in the photo, which is why the card below now points at him rather than introducing a face the reader has not seen."),
-     ("Three reasons people ask us instead.", "The three blocked states, each with an answer that exists on the site rather than one we invented: unusual specs against \u201cmore than 40 years of experience in the graphic industry\u201d, deadlines against \u201cnext day where possible\u201d, and sign-off against the quote itself."),
-     ("A numbered path for how a quote works.", "Reuses the Welcome 4 timeline: a nested table with bgcolor and an explicit height, because clients strip border-radius and background CSS on small elements but honour a table cell with a bgcolor attribute. Used here and nowhere else in this flow, because a quote genuinely is a sequence and that is the only thing the device should ever be used for."),
-     ("What you can send.", "Step one names the formats: a sketch, a photo of an old print, a spec sheet, or a sentence, up to five files. \u201cRequest a quote\u201d reads like paperwork until you learn a snapshot will do, and that is exactly the reader who is stuck."),
-     ("The 24 hour promise, stated twice.", "It is the published figure on the quote page. Welcome 4 previously said \u201cwithin the hour\u201d, which was an overpromise on response time, and has been corrected to match. A build check fails if the hour claim ever appears in this email."),
-     ("John and the Print Expert Team.", "The same face as Welcome 4, so the cast is consistent across the programme. E-mail and the quote form only \u2014 no phone number, because it differs per market and this flow runs in two."),
-     ("No price, and no cross-sell.", "A quote is the answer to the price question, not another place to state a number. Enforced by a build check, as in email 2."),
+     ("Promo bar with the code and the window.", "Delivers what they signed up for inside the first 40 pixels."),
+     ("Product grid with real prices.", "Removes the navigation step at peak intent, and each click is a category signal Browse Abandonment can use later."),
+     ("Artwork reassurance.", "The number one blocker on a first print order, answered before it is asked."),
    ]),
  "TtjyZ4": dict(
    goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",
-   why="They did not buy on day 0, so price alone was not the answer. Pushing product again would just repeat yesterday. Day 1 is early enough that the brand is still unformed in their mind, which makes it cheap to shape, and it is the right moment to say who is behind the transaction.",
-   variant="Only the promo bar changes, from \u201cYour 10% is still waiting\u201d to a neutral welcome line. Everything else is brand and proof content that reads the same to a buyer.",
+   why="Price alone did not work on day 0, and pushing product again would just repeat yesterday. Day 1 is the cheapest moment to shape what the brand means.",
+   variant="Only the promo bar changes. The rest is brand and proof, which reads the same to a buyer.",
    elements=[
-     ("Softened promo bar, sharper clock.", "The offer becomes a reminder rather than the headline, which frees the email to do its actual job — but the countdown advances to expires in 4 days, so the only thing gaining volume across the series is the deadline."),
-     ("Hero with the CTA above the photo.", "Same masthead and baked fade as email 1, so the series reads as one system rather than four designs."),
-     ("Speech balloon over the photo.", "Puts the claims in the mouths of the people pictured, which carries more weight than the same words set as a banner."),
-     ("Three alternating proof rows.", "Local production, sustainability and catalogue depth. Each is checkable and each links to a page that exists, so a sceptic can verify them."),
-     ("No reviews.", "Deliberately withheld. Third-party proof is email 3's entire job, and spending it here would leave that email with nothing to say."),
+     ("Speech balloon over the team photo.", "Puts the claims in the mouths of the people pictured."),
+     ("Three proof rows: local, sustainable, catalogue depth.", "Each one is checkable and links to a page that exists."),
+     ("No reviews.", "Deliberately withheld. Third-party proof is email 3's entire job."),
    ]),
  "RpQvJH": dict(
    goal="Replace our own claims with other people's, then remove the remaining risk of a first order.",
-   why="By day 3 they have heard our offer and our story. The one thing they have not heard is anybody other than us. Third-party proof is the strongest lever left, and day 3 is the last point where it still has room to work: the bar reads 2 days left, so there is time to act on being convinced.",
-   variant="Only the promo bar changes. Reviews and the guarantees band are, if anything, more relevant to someone who has just ordered and is waiting on delivery.",
+   why="By day 3 they have heard our offer and our story. The one thing they have not heard is anybody other than us.",
+   variant="Only the promo bar changes. Reviews are, if anything, more relevant to someone waiting on a delivery.",
    elements=[
-     ("Rated Excellent, with the star baseline.", "The headline number carries more weight than any sentence we could write. Read live from Trustpilot rather than copied off a slide."),
-     ("Premium foil-card hero.", "A review email implicitly promises quality, so the hero shows the product looking expensive instead of showing the office a third time."),
-     ("Three reviews as a conversation.", "Real, verified, five star. The chat framing makes them read as overheard opinion rather than curated marketing, and the alternating tails stop it looking like a testimonial wall."),
-     ("Guarantees band.", "Converts the trust into an order by removing what is still in the way. All four promises, linked to the page that defines them."),
-     ("No product grid.", "Emails 1 and 2 have already done that twice."),
+     ("Rated Excellent, read live from Trustpilot.", "The number carries more weight than any sentence we could write."),
+     ("Three real reviews as conversation bubbles.", "Short and specific, rather than a wall of stars."),
+     ("Guarantees band.", "Removes the last risk at the point they are convinced."),
    ]),
  "XVPf5F": dict(
-   goal="Give everyone still on the list an action that is not \u201cplace an order\u201d, and catch the buyers whose job the catalogue cannot answer.",
-   why="Day 5, sent at 09:00 local so the last day is a working day rather than whatever hour they happened to sign up. The code dies tonight and the bar says so. Everyone reading it has seen the offer, the brand and the proof and still not bought, which means self-serve did not work for them. A third catalogue push would add nothing. The lowest-friction action left is a conversation, and a reply is a lead we can work where a non-open is nothing at all.",
-   variant="Promo bar goes neutral and the countdown comes out entirely \u2014 a customer who has already ordered has no code, so last day would be nonsense. The first-order framing softens too: the adviser introduction still works for a second order, but \u201clast chance\u201d and \u201cyour first order\u201d do not.",
+   goal="Give the still-undecided a person to talk to, on the day the code expires.",
+   why="Five days in, neither price nor proof has worked. What is left is the thing a website cannot offer: someone who will spec the job for you.",
+   variant="The expiry line goes. The offer of help reads the same to someone who has just ordered.",
    elements=[
-     ("A hero covering both entry points.", "\u201cSend it over\u201d works for a finished file and for a rough brief, so neither type of buyer self-selects out."),
-     ("Contact our experts.", "The ask changes from a purchase decision to a question, which is the right size of ask for a last chance."),
-     ("John and the Print Expert Team.", "A named human is the one thing a marketplace cannot copy cheaply, and the advisory layer is what Helloprint actually does, since production belongs to the print partners."),
-     ("Numbered how-it-works.", "Answers the question that actually stops people getting in touch: what happens after I send this?"),
-     ("Tell John what you need.", "Names the action, states the turnaround, and offers reply-to-this-email as a route with no friction at all."),
+     ("John and the Print Expert Team.", "A named person with a real photograph, not a support address."),
+     ("Numbered path from question to price.", "Three steps rather than a phone tree, with the real 24 hour turnaround stated."),
+     ("Phone and e-mail, not chat.", "Chat is Anna, the AI. This email is about reaching a human."),
+   ]),
+ "X2GaSL": dict(
+   goal="Bring back the exact product they looked at, with numbers that are true, and answer the three things that actually stop a print order.",
+   why="An hour after the view the job is still on the desk. But nothing was added to a basket, so the email cannot say they forgot something. It has to answer why they stopped.",
+   variant="No discount either way, so there is no second copy. The flow filters drop anyone who orders.",
+   elements=[
+     ("Product card from the catalog feed, laid out sideways.", "The event gives only a slug and an unrounded price, so the feed supplies everything. Sideways keeps the card to 160px instead of 450px."),
+     ("Three doubts, each with a colleague's face.", "Artwork, spec-and-deadline and sign-off, each answered by the team that handles it."),
+     ("Same-category cross-sell.", "A5 Flyers gets A4, A6, DL and folded leaflets: a size and price ladder, not a bestseller row."),
+   ]),
+ "SJV6Kx": dict(
+   goal="Remove the artwork blocker outright, because it is the biggest single gate on a first print order.",
+   why="The product page is built around supplying a file and never says the quiet part out loud, which is that the order can start before the file exists. This email says it in the subject line.",
+   variant="No discount either way, so there is no second copy.",
+   elements=[
+     ("The product page's own three routes.", "Upload later, design online, upload your design. Same labels and order, so the email previews the real decision."),
+     ("What we check, in plain words.", "Nothing cut off, photos sharp, colours as expected. The technical version was against house style."),
+     ("The Premium check, argued without a price.", "A person reviews it by hand. The free check is automated only, and the copy keeps that straight."),
+   ]),
+ "UtrHWs": dict(
+   goal="Serve the reader who is blocked rather than undecided, by handing them a quote they can act on or pass on.",
+   why="By day 3 anyone still here is stuck on something the page cannot fix, and there are only three ways to be stuck: the spec, the date, or someone else's signature.",
+   variant="No discount either way, so there is no second copy.",
+   elements=[
+     ("Bespoke team banner, text set over the photo in HTML.", "John is in the shot, so the card below points at him rather than introducing a stranger."),
+     ("Three reasons people ask us instead.", "Each answered from the site: 40 years in the trade, next day where possible, and the quote itself."),
+     ("Numbered path for how a quote works.", "Used here and nowhere else in the flow, because a quote genuinely is a sequence."),
    ]),
 }
 
@@ -545,16 +522,37 @@ def flow_page(f):
         fflags = ""
     tl_items = "".join(f'<div class="tl-item"><span class="tl-dot"></span><span class="tl-lab">{esc(e["when"].split("·")[0].strip())}</span></div>'
                        for e in f["emails"] if not e.get("ref"))
-    mails = ""
-    cur_sec = None
+    # group the emails by section so a superseded group can be collapsed whole
+    groups, cur = [], None
     for e in f["emails"]:
-        if e.get("section") and e["section"] != cur_sec:
-            cur_sec = e["section"]
-            sub = e.get("section_sub", "")
-            mails += (f'<div class="mailsec{" mailsec-ref" if e.get("ref") else ""}">'
-                      f'<h2>{esc(cur_sec)}</h2>'
-                      + (f'<p>{esc(sub)}</p>' if sub else "") + '</div>')
-        mails += email_block(f, e)
+        if e.get("section") and e["section"] != cur:
+            cur = e["section"]
+            groups.append({"title": cur, "sub": e.get("section_sub", ""),
+                           "ref": bool(e.get("ref")), "emails": []})
+        if not groups:
+            groups.append({"title": None, "sub": "", "ref": False, "emails": []})
+        groups[-1]["emails"].append(e)
+
+    mails = ""
+    for g in groups:
+        blocks = "".join(email_block(f, e) for e in g["emails"])
+        if g["ref"]:
+            # RFB originals: kept for reference, but behind a link so the page
+            # opens on the rebuild
+            n = len(g["emails"])
+            mails += (f'<details class="notes notes-mails">'
+                      f'<summary><span class="chev">{ICON["arrow"]}</span>'
+                      f'<span class="s-show">Show the {n} original RFB emails</span>'
+                      f'<span class="s-hide">Hide the original RFB emails</span>'
+                      f'<span class="notes-n">{n}</span></summary>'
+                      f'<div class="notes-body">'
+                      + (f'<p class="mailsec-sub">{esc(g["sub"])}</p>' if g["sub"] else "")
+                      + f'<div class="mails mails-ref">{blocks}</div></div></details>')
+        else:
+            if g["title"]:
+                mails += (f'<div class="mailsec"><h2>{esc(g["title"])}</h2>'
+                          + (f'<p>{esc(g["sub"])}</p>' if g["sub"] else "") + '</div>')
+            mails += blocks
     n_mail = sum(1 for e in f["emails"] if e["tpl"] and not e.get("ref"))
     return f'''<section class="page" id="page-{f["slug"]}">
       <a class="backlink" href="#home">{icon("back")}Back to overview</a>
@@ -746,6 +744,10 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .mailsec h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.01em;color:#191919}
 .mailsec p{margin:5px 0 0;font-size:13.5px;line-height:20px;color:#6b7378}
 .mailsec-ref h2{color:#8a9197}
+.notes-mails{margin-top:30px}
+.notes-mails .notes-body{margin-top:0}
+.mailsec-sub{margin:12px 0 0;font-size:13.5px;line-height:20px;color:#6b7378}
+.mails-ref{margin-top:18px;opacity:.85}
 .mail-row-spec{opacity:.9}
 .step-dot-open{background:#fff!important;color:#8a9197!important;border:1.5px dashed #c3c9cd}
 .badge-open{background:#f2f4f5;color:#6b7378;border:1px solid #dfe3e6}
