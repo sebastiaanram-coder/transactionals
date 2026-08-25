@@ -38,6 +38,25 @@ P = "hp-ao3l"
 # reporting. HELLO10 belongs to Welcome and must never appear here.
 CODE = "BASKET25"
 
+# The deadline panel title. Kept short on purpose: it is 15px bold in a box that
+# is only about 277px wide once the icon and padding are taken out on a phone, so
+# roughly 32 characters is the point at which it wraps and orphans a word. The
+# precision that used to live here ("after this email") is not lost - the promo
+# bar above states the same window, and a reader takes "in 24 hours" to mean from
+# now anyway. Translation can still push it to two lines, which the panel handles;
+# it just looks unbalanced, so leave headroom.
+DEADLINE_TITLE = "The code runs out in 24 hours"
+MOBILE_TITLE_LIMIT = 32
+
+def nb(text):
+    """Glue a figure to its unit with a non-breaking space.
+
+    Without this the mobile headline broke as "25% off, for the next 24" /
+    "hours", splitting the number from what it counts - which is the one place a
+    line break actually costs the reader something. Applied to visible copy only;
+    the constants stay plain text so build checks can measure real length."""
+    return re.sub(r"(\d+)\s+(hours|hour)\b", r"\1&nbsp;\2", text)
+
 RATE = 0.25
 CAP = 25            # set to None to run it uncapped; read the docstring first
 SPLIT = 150         # the flow's value split, so no cart above this reaches here
@@ -228,7 +247,7 @@ BODY = """
 <div class="{P}-wrap">
   <div class="{P}-shell">
 
-    <div class="{P}-promo">25% off your basket <span class="{P}-ends">&middot; ends in {HOURS} hours</span></div>
+    <div class="{P}-promo">25% off your basket <span class="{P}-ends">&middot; ends in {HOURS}&nbsp;hours</span></div>
 
     <div class="{P}-logobar">
       <a href="{CHECKOUT_URL}"><img src="{IMG_WORDMARK}" alt="Helloprint" width="150"></a>
@@ -236,7 +255,7 @@ BODY = """
 
     <div class="{P}-hero">
       <span class="{P}-eyebrow">LAST CALL</span>
-      <h1 class="{P}-h1">25% off, for the next {HOURS} hours</h1>
+      <h1 class="{P}-h1">25% off, for the next {HOURS}&nbsp;hours</h1>
       <p class="{P}-sub">Use code <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. This is the last email we will send about this basket.</p>
       <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
     </div>
@@ -246,7 +265,7 @@ BODY = """
         <tr>
           <td class="{P}-dlic" valign="middle"><img src="{IMG_CLOCK}" alt="" width="26" height="26"></td>
           <td class="{P}-dltx" valign="middle">
-            <p class="{P}-dlttl">The code runs out {HOURS} hours after this email</p>
+            <p class="{P}-dlttl">{DEADLINE_TITLE_HTML}</p>
             <p class="{P}-dlsub">Your basket stays saved either way. It is the discount that expires, not the order.</p>
           </td>
         </tr>
@@ -307,6 +326,7 @@ BODY = """
 
 def build(bindings, assets, lines):
     vals = {"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE, "HOURS": HOURS,
+            "DEADLINE_TITLE_HTML": nb(DEADLINE_TITLE),
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
@@ -409,8 +429,17 @@ if CAP is not None and max(s for _, s in BANDS.table) > CAP:
     errs.append("a band claims more than the cap")
 
 # the deadline appears in the promo bar and again in the panel; both from HOURS
-if live_body.count("%d hours" % HOURS) < 3:
-    errs.append("the %d-hour deadline is not stated in all three places" % HOURS)
+if str(HOURS) not in DEADLINE_TITLE:
+    errs.append("the deadline panel title no longer states the %d hours" % HOURS)
+if live_body.count(str(HOURS)) < 3:
+    errs.append("the %d-hour deadline should appear in the bar, the headline and the panel" % HOURS)
+for body, where in ((prev_body, "preview"), (live_body, "live")):
+    loose = re.findall(r"\d+ (?:hours?|days?)", re.sub(r"<!--.*?-->", "", body, flags=re.S))
+    if loose:
+        errs.append("%s: %r can break across lines, glue it with &nbsp;" % (where, loose[0]))
+if len(DEADLINE_TITLE) > MOBILE_TITLE_LIMIT:
+    errs.append("the deadline title is %d characters, over the %d that fit one mobile line"
+                % (len(DEADLINE_TITLE), MOBILE_TITLE_LIMIT))
 if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused")
 if "BASKET10" in live_body: errs.append("BASKET10 is email 2's offer, not this one")
 if CODE not in live_body: errs.append("the code is missing from the body")

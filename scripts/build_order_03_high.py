@@ -264,7 +264,7 @@ BODY = """
       <span class="{P}-offttl">And if it helps, 10% off</span>
       <p class="{P}-offtx">Not the reason to order, but it is there.{SAVE_CLAUSE}</p>
       <span class="{P}-code">Use code <strong>{CODE}</strong></span><br>
-      <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="14" height="14">Expires {HOURS} hours after this email. Your basket stays saved either way.</span>
+      <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="14" height="14">Expires {HOURS}&nbsp;hours after this email. Your basket stays saved either way.</span>
       <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
     </div>
 
@@ -409,7 +409,12 @@ if "%s-promo" % P in live_body:
 if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused")
 if "BASKET25" in live_body: errs.append("BASKET25 is the low branch's deep offer, not this one")
 if CODE not in live_body: errs.append("the code is missing from the body")
-if "%d hours" % HOURS not in live_body: errs.append("the expiry is not stated in the body")
+if "%d&nbsp;hours" % HOURS not in live_body:
+    errs.append("the expiry is not stated in the body")
+for body, where in ((prev_body, "preview"), (live_body, "live")):
+    loose = re.findall(r"\d+ (?:hours?|days?)", re.sub(r"<!--.*?-->", "", body, flags=re.S))
+    if loose:
+        errs.append("%s: %r can break across lines, glue it with &nbsp;" % (where, loose[0]))
 if SAMPLE_TOTAL < SPLIT: errs.append("the sample basket must clear the %d split" % SPLIT)
 if float(SAMPLE["TOTAL"]) != SAMPLE_TOTAL: errs.append("sample total disagrees with the band input")
 if abs(sum(float(l[3]) for l in SAMPLE_LINES) - SAMPLE_TOTAL) > 0.005:
