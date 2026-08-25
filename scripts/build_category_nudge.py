@@ -21,14 +21,28 @@ fr-BE into BE, which is exactly the catalogue's market prefix - so a single
 catalog expression serves every market with no per-market duplication. See
 _lib/category_products.py.
 
-REVIEWS ARE PLACEHOLDERS ON PURPOSE. There are no reviews in Klaviyo to read
-(the reviews API returns an empty set), and inventing a customer quote and
-labelling it "Verified Trustpilot review" would be fabricating a record. The
-block is designed and sized, the quote is visibly marked for replacement.
+REVIEWS COME FROM TRUSTPILOT, PER LANGUAGE, OR NOT AT ALL. scripts/
+fetch_reviews.py pulls tagged service reviews into data/trustpilot-reviews.json
+and the review block is built from that. A language with no suitable cached
+review shows the visible placeholder - never a translated review, because
+running one customer's words through a translator and attributing them to that
+customer in another language invents a quote they never gave. See _lib/reviews.py.
+
+*** THE REVIEW BLOCK MUST BE EXCLUDED FROM SMART TRANSLATIONS. *** Everything
+else in these emails is meant to be translated; the reviews are the exception.
+If a translation pass rewrites them, every non-source language ends up with a
+fabricated quote carrying a real person's name. Not yet verified how Klaviyo
+lets a region opt out - the highest-priority open question on this flow.
 """
-import base64, os, re, sys
+import base64, html, os, re, sys
+
+def esc(t):
+    # customer-written text goes into HTML, so it is escaped. A review
+    # containing < or & is not a licence to break the email.
+    return html.escape(t, quote=False)
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import category_products as cp
+import reviews as rv
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -294,8 +308,7 @@ BODY = """
 
     <div class="{P}-rev">
       <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
-      <span class="{P}-revph">Trustpilot quote to be added &mdash; {REVIEW_HINT}.</span>
-      <span class="{P}-revby">Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000</span>
+      {REVIEW}
     </div>
 
     <div class="{P}-help">
@@ -332,6 +345,37 @@ BODY = """
 </div>
 </div>
 """
+
+def review_block(P, cat, live):
+    """A real review per language, or a visible placeholder.
+
+    Never a translated one. The quote is stored and rendered verbatim - a review
+    too long for the block is skipped at fetch time rather than trimmed here,
+    because editing a customer's words misrepresents them."""
+    def quote(r):
+        return ('<span class="%s-revq">&ldquo;%s&rdquo;</span>'
+                '<span class="%s-revby">%s</span>'
+                % (P, esc(r["text"]), P, rv.attribution(r)))
+
+    def placeholder():
+        return ('<span class="%s-revph">Trustpilot quote to be added &mdash; %s.</span>'
+                '<span class="%s-revby">Verified Trustpilot review</span>'
+                % (P, cat["review_hint"], P))
+
+    langs = rv.available(cat["slug"])
+    if not live:
+        # the preview shows the source-language review if we have one
+        r = rv.get(cat["slug"], "en") or (rv.get(cat["slug"], langs[0]) if langs else None)
+        return quote(r) if r else placeholder()
+    if not langs:
+        return placeholder()
+    out = ""
+    for i, l in enumerate(langs):
+        kw = "if" if i == 0 else "elif"
+        out += '{%% %s %s == "%s" %%}%s' % (kw, rv.LANG_EXPR, l,
+                                            quote(rv.get(cat["slug"], l)))
+    return out + "{%% else %%}%s{%% endif %%}" % placeholder()
+
 
 def tile_sample(P, base, name, price, moq, unit, path):
     return (
@@ -405,7 +449,7 @@ def build(cat, live):
         TILES=tiles(P, cat, live),
         B1_ICON=assets[cat["blocks"][0][0]], B1_TITLE=cat["blocks"][0][1], B1_BODY=cat["blocks"][0][2],
         B2_ICON=assets[cat["blocks"][1][0]], B2_TITLE=cat["blocks"][1][1], B2_BODY=cat["blocks"][1][2],
-        IMG_NOTE=cat["img_note"], REVIEW_HINT=cat["review_hint"],
+        IMG_NOTE=cat["img_note"], REVIEW=review_block(P, cat, live),
         CTA_LABEL="See the range",
         # TODO the real category landing page. Until someone confirms the URL
         # pattern this points at the leading product, which is a real page.
@@ -529,8 +573,18 @@ for cat in CATEGORIES:
     if "%s-dark" % P not in livb: errs.append(t + ": the dark header is gone")
     if "#191919" not in livb: errs.append(t + ": the dark header lost its ink colour")
     # placeholders must be visible, not silently empty
-    if "to be added" not in livb or "TO BE SUPPLIED" not in livb:
-        errs.append(t + ": a placeholder is not visibly marked")
+    if "TO BE SUPPLIED" not in livb:
+        errs.append(t + ": the image placeholder is not visibly marked")
+    # either a real review or a marked placeholder, never a bare quote with no
+    # attribution and never a translated one
+    if "to be added" not in livb and "on Trustpilot" not in livb:
+        errs.append(t + ": the review block has neither a real review nor a placeholder")
+    for l in rv.available(cat["slug"]):
+        r = rv.get(cat["slug"], l)
+        if r["language"] != l:
+            errs.append("%s: cached review for %s is written in %s" % (t, l, r["language"]))
+        if r["author"] and r["author"] not in livb:
+            errs.append("%s: review shown without its author" % t)
     # House style: no jargon in what a reader actually SEES. That means the text
     # between tags plus alt text, not the markup - the first version of this
     # check failed on "gsm" inside a product URL, which no reader ever reads.
@@ -585,7 +639,9 @@ if len(cp.PRODUCTS) != len(CATEGORIES):
 
 for label, a, b in written:
     print("  %-20s preview %6d   klaviyo %6d" % (label, a, b))
-print("\n%d emails, snapshot refreshed %s" % (len(written), cp.REFRESHED))
+print("\n%d emails, product snapshot %s" % (len(written), cp.REFRESHED))
+print("trustpilot cache: %s, %d category+language reviews"
+      % (rv.fetched() or "NOT FETCHED YET - run scripts/fetch_reviews.py", rv.count()))
 total = len(cp.MARKETS) * sum(len(v) for v in cp.PRODUCTS.values())
 print("catalogue ids requested: %d of %d possible; %d verified missing from the feed"
       % (len(cp.all_ids()), total, total - len(cp.all_ids())))

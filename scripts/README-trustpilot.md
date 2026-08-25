@@ -1,4 +1,14 @@
-# Pulling Trustpilot reviews for the behavioural emails
+# Pulling Trustpilot reviews — the manual browser route
+
+**This is now the fallback.** The primary path is the API client added later:
+`scripts/fetch_reviews.py`, documented in `docs/trustpilot-reviews.md`. It does
+what the last section of this file recommended — `/v1/business-units/{id}/reviews`
+with language and stars filters, key in `TRUSTPILOT_API_KEY` — and adds tag
+filtering, which is what makes per-category reviews possible.
+
+Keep this page for the case where the key is unavailable, or to eyeball what a
+locale's reviews look like before trusting a fetch.
+
 
 `curl` and `fetch` get **HTTP 403** from Trustpilot. A real browser engine loads
 the page fine, so use the Claude Code browser tool (or a normal browser console).
@@ -34,9 +44,9 @@ Score **4.5**, **34,288** reviews — account-wide, not per locale.
 Note `helloprint.com/en-ie/about-us` says 4.4 / 31,000+, which is **stale**.
 Trustpilot renders 4.5 as four-and-a-half stars.
 
-## For automation
+## For automation — done, see the API client
 
-Browser extraction needs a session. To script this per locale on a schedule,
-use the **Trustpilot Business API** (`/v1/business-units/{id}/reviews`), which
-supports language and stars filters and returns full text. It needs an API key,
-so keep it in an env var (`TRUSTPILOT_API_KEY`) and never in the repo.
+This section called it correctly: the API supports language and stars filters
+and returns full text. `scripts/_lib/trustpilot.py` implements it, plus
+`tagGroup` / `tagValue` for the category tagging, and reads the key from
+`TRUSTPILOT_API_KEY` exactly as recommended here.

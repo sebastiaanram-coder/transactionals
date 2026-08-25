@@ -1,2 +1,6 @@
 scripts/_lib/_*.jpg
 scripts/_lib/_*.png
+
+# Trustpilot: the cache is committed, but never a key or a scratch dump
+data/*.tmp
+.env
