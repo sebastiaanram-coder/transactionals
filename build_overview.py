@@ -286,7 +286,7 @@ EMAIL_DETAIL = {
    variant_label="On the low-value branch",
    variant="Identical, minus the print expert block. Everything else \u2014 banner, basket, total, reassurances, review \u2014 is the same, so the two are generated from one source and cannot drift.",
    elements=[
-     ("A banner of print worth wanting.", "A basket list on its own reads like a receipt, so the email opens on foil business cards with the headline set over them in HTML. The ink headroom and blend are baked into the image, as everywhere else."),
+     ("A printed card that says what the email says.", "A basket list on its own reads like a receipt, so the email opens on a card carrying the line \u201cLeft something behind?\u201d, with the live headline set over it in HTML. Unlike the foil-cards shot it replaced, this one is about the message rather than about business cards. The headline is warmed to #f4ece2 to match the card\u2019s ink, because pure white read as a separate piece of design sitting on the photograph."),
      ("The actual basket, line by line.", "Product titles come from the catalog and service lines from the event, because Started Checkout carries the whole basket rather than one item. Each product links back to its own configured URL."),
      ("A total taken from the event, not added up.", "$value disagrees with the sum of the rows on 6% of events, so the rows are shown and the total is printed as sent."),
      ("A print expert, on the high-value branch only.", "Over 150 the blocker is usually confidence rather than price, so a second opinion is offered before the money is: John\u2019s team will check the spec and confirm the date before it is paid for. Kept below the checkout button so it supports the primary action instead of competing with it."),

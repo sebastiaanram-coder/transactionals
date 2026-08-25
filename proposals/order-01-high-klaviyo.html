@@ -32,17 +32,19 @@
 .hp-ao1-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .hp-ao1-logobar img{width:150px;max-width:50%;height:auto;display:inline-block;border:0;}
 /* Banner hero. A basket list on its own reads like a receipt, so the email
-   opens on print worth wanting - foil business cards - with the headline set
-   over it in HTML. 126px of ink headroom and a 125px blend are baked in; the
-   blend runs longer than the team-photo banners because this photo's top is
-   mid-grey rather than dark. */
+   opens on a printed card that says the thing the email is saying, with the
+   headline set over it in live HTML rather than baked into the picture.
+   96px of ink headroom plus a 70px blend. Note the blend LIFTS the photo's
+   first rows toward #191919 rather than darkening them: this image's own top
+   is (6,6,6), darker than the brand ink, so butting it against the masthead
+   would show as a step. */
 .hp-ao1-hero{background:#191919;text-align:center;}
 .hp-ao1-heroov{position:relative;z-index:2;padding:30px 24px 0;min-height:186px;}
 .hp-ao1-heroimg{display:block;width:100%;height:auto;border:0;margin-top:-190px;}
 .hp-ao1-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#9fdbb8;margin:0 0 10px;}
-.hp-ao1-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
-.hp-ao1-sub{margin:0 auto 18px;max-width:440px;font-size:17px;line-height:25px;color:#ffffff;opacity:.9;}
-.hp-ao1-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+.hp-ao1-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#f4ece2;letter-spacing:-.015em;}
+.hp-ao1-sub{margin:0 auto 18px;max-width:440px;font-size:17px;line-height:25px;color:#f4ece2;opacity:.88;}
+.hp-ao1-cta{position:relative;z-index:2;display:inline-block;background:#f7f1e9;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .hp-ao1-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 /* a label on the card stops the list reading as a receipt */
@@ -149,7 +151,7 @@
         <p class="hp-ao1-sub">Nothing has been lost. Every option you picked is saved exactly as you left it.</p>
         <a class="hp-ao1-cta" href="{{ event.CheckoutURL }}">Return to checkout</a>
       </div>
-      <img class="hp-ao1-heroimg" src="https://REPLACE-WITH-KLAVIYO-ASSET/order-01-hero-banner.jpg" alt="" width="600">
+      <img class="hp-ao1-heroimg" src="https://REPLACE-WITH-KLAVIYO-ASSET/order-01-hero-card.jpg" alt="" width="600">
     </div>
 
     <!-- the real basket: one row per line, product titles from the catalog,

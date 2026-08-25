@@ -45,7 +45,7 @@ _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
     "IMG_TICK":     "browse-02-tick.jpg",
     "IMG_AGENTS":   "cs-agents-ellipse.png",
-    "IMG_HERO":     "order-01-hero-banner.jpg",
+    "IMG_HERO":     "order-01-hero-card.jpg",
     "IMG_STARS":    "trustpilot-stars-4-5.png",
     "AV_JOHN":      "welcome-04-john-avatar.jpg",
 }
@@ -95,17 +95,19 @@ CSS = """
 .%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
 /* Banner hero. A basket list on its own reads like a receipt, so the email
-   opens on print worth wanting - foil business cards - with the headline set
-   over it in HTML. 126px of ink headroom and a 125px blend are baked in; the
-   blend runs longer than the team-photo banners because this photo's top is
-   mid-grey rather than dark. */
+   opens on a printed card that says the thing the email is saying, with the
+   headline set over it in live HTML rather than baked into the picture.
+   96px of ink headroom plus a 70px blend. Note the blend LIFTS the photo's
+   first rows toward #191919 rather than darkening them: this image's own top
+   is (6,6,6), darker than the brand ink, so butting it against the masthead
+   would show as a step. */
 .%(P)s-hero{background:#191919;text-align:center;}
 .%(P)s-heroov{position:relative;z-index:2;padding:30px 24px 0;min-height:186px;}
 .%(P)s-heroimg{display:block;width:100%%;height:auto;border:0;margin-top:-190px;}
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#9fdbb8;margin:0 0 10px;}
-.%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
-.%(P)s-sub{margin:0 auto 18px;max-width:440px;font-size:17px;line-height:25px;color:#ffffff;opacity:.9;}
-.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+.%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#f4ece2;letter-spacing:-.015em;}
+.%(P)s-sub{margin:0 auto 18px;max-width:440px;font-size:17px;line-height:25px;color:#f4ece2;opacity:.88;}
+.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#f7f1e9;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 /* a label on the card stops the list reading as a receipt */
@@ -426,6 +428,10 @@ def check(live_body, prev_body, high, tag):
         if need not in live_body: errs.append(tag+": missing "+need)
     if "item{% if event.Items|length != 1 %}s{% endif %}" not in live_body:
         errs.append(tag+": item count must be pluralised")
+    # banner and headline share a warm palette; pure white would read as a
+    # separate piece of design sitting on top of the photograph
+    if "color:#f4ece2" not in live_body:
+        errs.append(tag+": the headline should match the card's warm ink, not pure white")
     # the expert block is the only difference between the branches
     has = ('%s-exp"' % P) in live_body
     if high and not has: errs.append("high build is missing the print expert block")
