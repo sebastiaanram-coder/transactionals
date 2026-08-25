@@ -122,72 +122,80 @@ discount applies to a basket we can already see the value of.
 
 ---
 
-## 6. Cart value distribution, 300 most recent Added to Cart events
+## 6. Which event to trigger on
 
-| | GBP (n=78) | EUR (n=222) |
+Added to Cart carries only the item just added — all 300 sampled events had exactly one item.
+**Started Checkout carries the whole basket**, and is the better trigger for this flow.
+
+| | Added to Cart | Started Checkout |
 |---|---|---|
-| median | £36.48 | €65.84 |
-| p75 | £79.04 | €123.86 |
-| p90 | £138.93 | €262.46 |
-| max | £358 | €1,242 |
+| Profiles / month | 12,102 | 10,267 |
+| Basket | the added item only | the full basket, 18% multi-line, up to 11 lines |
+| Resume link | configured `ProductURL` per line | `ProductURL` per line **plus a `CheckoutURL` on every event** |
+| `Currency` present | always | **only 6% of events** |
+| `$value` | equals the one row | the basket total, matches the sum of rows on 94% of events |
 
-Where a threshold lands:
+The 15% fewer profiles buys a real basket, a true total to split on, and a link that resumes
+checkout rather than a product page. For a flow called Abandoned Order that is the right trade.
+The gap — added to cart but never reached checkout — is a thinner, separate opportunity and can
+be a later flow rather than a compromise in this one.
 
-| Threshold | GBP carts above | share of GBP value | EUR carts above | share of EUR value |
+## 7. Value distribution, production consumer Started Checkout events
+
+Staging and Connect excluded, so this is the population the flow would actually see.
+
+| | GB (n=59) | EUR markets (n=152) |
+|---|---|---|
+| median | £59.99 | €66.98 |
+| p75 | £135.23 | €149.93 |
+| p90 | £226.98 | €245.09 |
+| max | £411.71 | €2,049.43 |
+
+| Threshold | GB carts above | share of GB value | EUR carts above | share of EUR value |
 |---|---|---|---|---|
-| 75 | 27% | **62%** | 40% | 78% |
-| 100 | 15% | 44% | 32% | 72% |
-| 150 | 9% | 31% | 20% | 58% |
+| 100 | 34% | 69% | 36% | 78% |
+| **150** | **24%** | **56%** | **24%** | **68%** |
+| 200 | 12% | 35% | 15% | 56% |
 
-**Proposed split: £75 / €90.** In GBP that is roughly the 73rd percentile — about a quarter of
-carts carrying nearly two thirds of the value, which is the shape you want for a
-high-touch branch. €90 is the currency equivalent rather than an independently calibrated
-figure: every GBP cart in the sample was GB, and **not one was IE**, so Ireland has too little
-volume to calibrate and inherits the EUR shape until it does. Review after a month of sending.
+**Proposed split: 150, the same number in both currencies.** Both distributions independently
+put 24% of carts above it, carrying 56% and 68% of the value — the quarter-of-carts,
+most-of-the-money shape a high-touch branch wants. It is not a currency conversion (£150 is
+about €176) and it does not need to be: the point is the percentile, and both land on the same
+figure, which makes it simpler to run and to explain.
 
-Three things the sample also settled:
+Still no IE events in the sample, so Ireland inherits the EUR figure and should be reviewed once
+it has volume.
 
-- **Every Added to Cart carries exactly one item.** All 300. The event describes the item just
-  added, not the basket — `Items` has one entry and `$value` equals its row total. Started
-  Checkout is different: one sampled event carried three lines plus a `CheckoutURL`. So this
-  flow can say "the roller banner you configured" but must not say "your cart" as though it
-  knows the whole basket. If we ever want the full basket, that means triggering on Started
-  Checkout instead, and trading 12,102 monthly profiles for 10,267.
-- **Connect is 29% of Added to Cart**, higher than its share of product views.
-- **Staging is 1.7% of events**, so §4.2 is ongoing rather than a one-off.
+## 8. Proposed flow
 
-## 7. Proposed flow
-
-**Trigger** Added to Cart. **Filters** production host only (excludes Connect and staging),
-`ProductID` prefix `IE-` or `GB-`, no order since entering, Smart Sending on.
-**Split at entry** on trigger-event value: `$value >= 75` GBP / `>= 90` EUR.
+**Trigger** Started Checkout. **Filters** production host only, excluding Connect (21% of
+events) and staging (4%); `ProductID` prefix `IE-` or `GB-`; no order since entering; Smart
+Sending on. **Split at entry** on `$value >= 150`.
 
 | | +1 hour | +24 hours | +72 hours |
 |---|---|---|---|
-| **High value**<br>~25% of carts<br>~62% of value | **The item, restored.**<br>Configured spec, price, link straight back into it. No code. | **Finish it with a print expert.**<br>Someone checks the spec, confirms the delivery date, and can invoice rather than take a card. No code. | **10% code, expires in 72 hours.**<br>Plus the expert offer repeated. |
-| **Low value**<br>~75% of carts | **The item, restored.**<br>Same email, shared template. | **10% code, expires in 72 hours.**<br>Self-service: change the quantity, see the price move, order in three clicks. | **15%, expires in 24 hours.**<br>Final email, deadline is the message. |
+| **High value**<br>~24% of carts<br>~56–68% of value | **The basket, restored.**<br>Every line with its configured spec, the real total, and the checkout link. No code. | **Finish it with a print expert.**<br>Someone checks the spec, confirms the delivery date, and can invoice rather than take a card. No code. | **10% code, expires in 72 hours.**<br>Plus the expert offer repeated. |
+| **Low value**<br>~76% of carts | **The basket, restored.**<br>Same email, shared template. | **10% code, expires in 72 hours.**<br>Self-service: change the quantity, see the price move, order in three clicks. | **15%, expires in 24 hours.**<br>Final email, deadline is the message. |
 
-Email 1 is one template used by both branches, so this is **five templates, six message nodes**,
-not six templates.
+Email 1 is one template used by both branches: **five templates, six message nodes**.
 
-**Why the branches differ this way.** On a high-value cart a blanket 10% is expensive — a
-quarter of carts carry 62% of the value, so that is where the margin is — and the blocker is
-usually confidence or sign-off rather than price. Leading with a person and holding the code as
-the closer costs less and answers the actual objection. On a low-value cart the buyer is
-self-serving and price-sensitive, so the incentive does the work and can escalate.
+**Why the branches differ this way.** A quarter of carts carry well over half the value, so a
+blanket 10% there is where the margin leaks — and on those carts the blocker is usually
+confidence or sign-off rather than price. A person answers that more cheaply than a discount
+does. On a low-value cart the buyer is self-serving and price-sensitive, so the incentive does
+the work and can escalate.
 
-## 8. Things to settle
+## 9. Things to settle
 
-1. **Escalating from 10% to 15% teaches people to wait.** It is the right lever for a £30 cart
-   and it will lift this flow, but it is visible across flows: Welcome offers 10% and Winback
-   15%, so a low-value abandoner now has a route to 15% within three days of a first visit. Fine
-   as a deliberate choice, worth not being an accident.
-2. **Two coupon codes needed**, 10% and 15%, on top of the Welcome code. Talon.one is
-   operational; whether these are static codes or per-customer codes issued through Klaviyo is
-   still open from the Welcome discussion.
-3. **The split reads the value at the moment of the triggering add.** Someone who adds a £20
-   item and then a £400 one enters on the low-value branch and stays there. Acceptable at
-   launch; if it matters, the alternative is triggering on Started Checkout, which knows the
-   whole basket.
-4. **The 72-hour expiry needs to be real.** If the code still works on day four the deadline
-   stops working for everyone, and this is the second flow to use that mechanic.
+1. **Currency cannot come from the event.** `Currency` is present on only 6% of Started Checkout
+   events. Derive the symbol from the `ProductID` market prefix, or from
+   `catalog_item.metadata.currency` inside the line loop, which is already proven.
+2. **Do not recompute the total.** `$value` disagrees with the sum of `RowTotal` on 6% of events,
+   presumably shipping or a service line. Print `$value` via `{{ event|lookup:"$value" }}`.
+3. **Escalating 10% to 15% teaches people to wait.** Right lever for a small cart, but note it is
+   now reachable within three days of a first visit, and Winback also offers 15%.
+4. **Two coupon codes needed**, 10% and 15%, and the static-versus-per-customer question from the
+   Welcome discussion is still open.
+5. **The 72-hour expiry has to actually expire.** Second flow to use that mechanic.
+6. **Non-catalog and unprefixed line items** still need the §4.1 guard: the Premium Design Check
+   appears as a line item and would otherwise fail the whole render.
