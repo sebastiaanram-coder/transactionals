@@ -414,3 +414,79 @@ others into email 2 where the expert help is the subject anyway.
 On the evidence, 1, 3 and 5 are the strongest: they are concrete, they are all things the page
 genuinely fails to answer up front, and none of them is a competitive claim. Reason 2 suits
 email 2. Reason 4 arguably deserves its own treatment later.
+
+---
+
+## 8. Email 2 brief — the artwork email
+
+Status: brief for sign-off. Nothing built.
+
+**Position** +24 hours after the product view, still no cart and no order.
+
+**Why artwork earns a whole email.** It is the biggest single gate on a print order and the
+product page makes it feel bigger than it is. The page is built around file supply — a dropzone
+taking seven formats up to 500MB, submission guidelines, a Canva path, brand asset controls —
+and it carries discouraging failure states, including
+"Your product configuration changed — re-edit your design so it matches". Someone without a
+print-ready PDF reasonably concludes the order is not yet possible. It is.
+
+### What the site actually promises
+
+Confirmed on `/en-ie/always-a-perfect-design`, which settles a question that was open until now:
+
+- **A design service that creates, not just fixes.** *"Our design service can edit or create
+  custom artwork for you."* Email 2 can therefore lead on "we will make it" rather than the
+  weaker "we will check what you send".
+- **File checking is free.** *"We check your files at no extra cost, so they print perfectly.
+  Spot something? We let you know and help you fix it before printing."* The Premium and Deluxe
+  checks sold at cart are upgrades on top of a free baseline — worth stating precisely so the
+  free check does not read as a paid one.
+- **What is actually checked**, and these are specific enough to be credible: bleed 3 mm beyond
+  the trim, safe area 3 mm inside it, minimum 300 dpi, CMYK colour, and files as
+  PDF, AI, EPS, JPEG or PNG.
+- **Free online design tools with 3D preview**, plus templates and guidelines per product
+  (A5 ships A5 Portrait 148×210 and A5 Landscape 210×148, as PDF and InDesign).
+- **Advisers on chat, email or phone.** Note that chat is Anna, the AI, so phone and email are
+  the human routes.
+
+### Storyline
+
+The page itself names the two readers: *"whether you upload a ready-made file or are starting
+from scratch"*. So the email forks, and opens with the permission that unblocks the order today.
+
+1. **Masthead**, same as email 1.
+2. **Hero — the permission, first.** *"You do not need the finished artwork yet."* The product
+   page hides "Continue to checkout, upload later" inside the upload component, so most people
+   never learn this. It is the single most conversion-relevant fact we hold, so it leads.
+3. **The fork, two paths.** *You have a file* → we check it free before it prints.
+   *You have nothing yet* → our designers can create it, or you can build it in the browser.
+   Two columns on desktop, stacked on mobile.
+4. **What we check, concretely.** Bleed 3 mm · safe area 3 mm · 300 dpi · CMYK. Set as data,
+   not prose. This is the credibility block: it turns "we check your files" from a slogan into
+   something a designer would recognise as real.
+5. **Templates for this product**, linked back to the product page's own templates and FAQs.
+6. **A face and the human routes.** Reuses the designer avatar from email 1. Phone and email,
+   not chat.
+7. **CTA** back to the product, with "or send us what you have" as the secondary.
+8. **Footer**, with the product named in a small strip so it is clear which job this is about.
+
+**Deliberately not in it:** the cross-sell grid. Email 2 has one job, and a size ladder pulls
+against it. It also keeps the email shorter than email 1.
+
+**Left for email 3:** odd specs, deadlines, and the forwardable quote.
+
+### Subject line
+
+Primary: **"You do not need the finished artwork yet"** — states the surprising permission
+rather than describing the email. Secondary: "Send us what you have".
+Preview: "We check every file for free before it prints. Or our designers can make it for you."
+
+Worth noting: this subject carries no product name, so it sidesteps the one thing I could not
+test — whether `{% catalog %}` resolves in a Klaviyo subject line. Email 2 can ship before that
+question is answered.
+
+### Open point
+
+The design service is confirmed to exist but its **price and turnaround are not stated** on the
+page. If it is a paid service, "our designers can create it for you" needs a qualifier, or the
+email sends people toward a cost they are not expecting. Needs a number before build.
