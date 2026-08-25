@@ -65,7 +65,7 @@ FLOWS = [
              "Excludes the Connect B2B storefront, which is 14–21% of all Viewed Product events"],
    reentry="14 days", incentive="None, in the rebuild as in the original. Help and proof instead of a code.",
    cadence="Rebuilt: 1 hour after the view, then 24 hours, then 3 days. Three emails, down from five in four days.",
-   mail_line="2 of 3 rebuilt · 5 RFB emails kept below for reference",
+   mail_line="3 of 3 rebuilt · 5 RFB emails kept below for reference",
    flow_note="The facts above describe the rebuilt flow. RFB's five original emails are kept further down this page for reference until the rebuild is signed off. Cut from five emails to three: a product view is a weak signal, and this is the highest-volume flow in the programme (15,307 unique product viewers in August), so its send volume dominates the sending reputation of every other flow.",
    flow_flags=["Emails 4 and 5 of the RFB flow contain the literal text [[ viewed product name ]] in the subject line. These are RFB placeholders, not Klaviyo variables, and would be sent verbatim.",
                "RFB email 4 tells the reader to “use your code” in a flow that has no discount.",
@@ -84,9 +84,8 @@ FLOWS = [
       final="browse-02-proposed.html"),
     dict(step=3, when="3 days after the product view", subject="Need a price you can forward?",
       preview="An odd spec, a tight deadline, or someone else's signature. Our quotation team comes back within 24 hours.",
-      goal="Serve the reader who is blocked rather than undecided. There are three ways to be blocked on a print job \u2014 the spec will not fit the configurator, there is a date to hit, or someone else has to sign it off \u2014 and one mechanic answers all three: a written quote from the quotation team, back within 24 hours, with a full total that can be forwarded instead of a basket that has to be described.",
-      who="Same audience, three days in.", tpl="", flags=[],
-      badge="Specified, not yet designed"),
+      goal="", who="", tpl="UtrHWs", flags=[], badge=None,
+      final="browse-03-proposed.html"),
     dict(step=1, when="40 minutes after the product view", subject="Still thinking it over", preview="The product you looked at, and why people trust us with it.",
       section="Current RFB flow — for reference",
       section_sub="The five original emails, all draft, every element a flat image. Kept visible until the rebuild is approved.",
@@ -283,6 +282,19 @@ EMAIL_DETAIL = {
      ("A designer, by e-mail.", "Same face as email 1, so the cast stays consistent. E-mail rather than chat, because chat is Anna, the AI. No phone number, because it differs per market and this flow runs in two."),
      ("No price, and no cross-sell.", "Both deliberate. A price would drag the excl-VAT basis question into an email that does not need it, and a size ladder would pull against the one job this email has."),
    ]),
+ "UtrHWs": dict(
+   goal="Serve the reader who is blocked rather than undecided, by handing them a written quote they can act on or pass on.",
+   why="Day 3. Emails 1 and 2 have already served anyone who was simply hesitating, so whoever is still here is stuck on something the product page cannot fix. There are only three ways to be stuck on a print job \u2014 the spec will not go into the configurator, there is a date to hit, or someone else has to sign it off \u2014 and a quote answers all three at once, which is why this is one email rather than three.",
+   variant="No discount either way, so no second version. Anyone who orders drops out on the flow filter before this send.",
+   elements=[
+     ("Banner hero, a different crop of the same shoot.", "Built the same way as email 2 \u2014 HTML text over the photograph with ink headroom and a blend baked in \u2014 but framed on an adviser at her screen rather than the foreground desk, so it is visibly a different picture. The headroom is shallower here (120px against 140) because the adviser sits high in frame and a deeper blend darkened her away."),
+     ("Three reasons people ask us instead.", "The three blocked states, each with an answer that exists on the site rather than one we invented: unusual specs against \u201cmore than 40 years of experience in the graphic industry\u201d, deadlines against \u201cnext day where possible\u201d, and sign-off against the quote itself."),
+     ("A numbered path for how a quote works.", "Reuses the Welcome 4 timeline: a nested table with bgcolor and an explicit height, because clients strip border-radius and background CSS on small elements but honour a table cell with a bgcolor attribute. Used here and nowhere else in this flow, because a quote genuinely is a sequence and that is the only thing the device should ever be used for."),
+     ("What you can send.", "Step one names the formats: a sketch, a photo of an old print, a spec sheet, or a sentence, up to five files. \u201cRequest a quote\u201d reads like paperwork until you learn a snapshot will do, and that is exactly the reader who is stuck."),
+     ("The 24 hour promise, stated twice.", "It is the published figure on the quote page. Welcome 4 previously said \u201cwithin the hour\u201d, which was an overpromise on response time, and has been corrected to match. A build check fails if the hour claim ever appears in this email."),
+     ("John and the Print Expert Team.", "The same face as Welcome 4, so the cast is consistent across the programme. E-mail and the quote form only \u2014 no phone number, because it differs per market and this flow runs in two."),
+     ("No price, and no cross-sell.", "A quote is the answer to the price question, not another place to state a number. Enforced by a build check, as in email 2."),
+   ]),
  "TtjyZ4": dict(
    goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",
    why="They did not buy on day 0, so price alone was not the answer. Pushing product again would just repeat yesterday. Day 1 is early enough that the brand is still unformed in their mind, which makes it cheap to shape, and it is the right moment to say who is behind the transaction.",
@@ -343,7 +355,7 @@ ISSUES = [
 
 TRACKER = [
  ("Welcome (RXBWV9)", "4", "4 of 4", "EN live, IT to redo", "Rebuilt end to end. Assets need uploading to Klaviyo before build."),
- ("Browse Abandonment", "5 → 3", "2 of 3", "–", "Emails 1 and 2 built and render-verified. Feed needs a resized image variant."),
+ ("Browse Abandonment", "5 → 3", "3 of 3", "–", "Complete and render-verified. Feed needs a resized image variant."),
  ("Abandoned Order (merged)", "5", "0", "–", "Absorbs the old Checkout flow; one set of blocks"),
  ("Abandoned Checkout", "—", "—", "—", "Superseded, merged into Abandoned Order"),
  ("Site Abandonment", "—", "—", "—", "Dropped: a visit with no product view carries too little intent"),
@@ -550,13 +562,13 @@ tracker_rows = "".join(f'<tr><td>{esc(a)}</td><td>{b}</td><td>{esc(c)}</td><td>{
 
 home = f'''<section class="page" id="page-home">
   <div class="hero">
-    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.5 · 25 Aug 2026</div>
+    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.6 · 25 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is under way: six new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: seven new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
     <div class="tile"><div class="tile-n">7</div><div class="tile-l">Journeys, down from 9</div></div>
-    <div class="tile"><div class="tile-n">6 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">7 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>
