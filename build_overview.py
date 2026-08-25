@@ -113,15 +113,15 @@ FLOWS = [
    reentry="14 days",
    incentive="Split by cart value. High value: no code until email 3, then 10% for 72 hours, with the print expert still the headline. Low value: 10% in email 2, then 25% capped at 25 off for the final 24 hours.",
    cadence="Proposed: 1 hour, 24 hours, 72 hours. Three emails on each branch, down from five in four days across two flows.",
-   mail_line="1 of 5 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
+   mail_line="2 of 6 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
    flow_note="This is the merged flow, and it splits by cart value at entry: at 150, in either currency, about a quarter of carts go to a high-value branch that leads with a print expert and discounts lightly, and the rest to a low-value branch that leads with the incentive and closes at 25% capped. The cap exists because a flat 25% would leave a 149 cart better off than a 151 one. RFB ran four separate abandonment journeys — Site, Browse, Cart and Checkout — whose copy was largely interchangeable; Cart and Checkout were near-identical apart from the trigger. The rebuild runs two: Browse Abandonment for a product view, and this one for anything that reached a basket. Site Abandonment is dropped entirely, because a visit with no product view carries too little intent to say anything useful about. The five RFB emails below are the current state and have not been rebuilt yet.",
    emails=[
     dict(step=1, when="1 hour after checkout was started", subject="Your basket is still here",
       preview="Everything you configured is saved. Pick up where you left off.",
       goal="", who="", tpl="TduDdY", flags=[], badge=None,
       section="Rebuilt flow \u2014 proposed",
-      section_sub="Three emails on each of two value branches, replacing five across two flows. This first one is shared by both branches and carries no offer.",
-      final="order-01-proposed.html"),
+      section_sub="Three emails on each of two value branches, replacing five across two flows. No email carries an offer before the 24 hour mark.",
+      final="order-01-high-proposed.html"),
     dict(step=2, when="24 hours \u00b7 high value", subject="Finish it with a print expert",
       preview="Someone can check the spec and confirm the date before you pay.",
       goal="High-value branch. A quarter of carts carry over half the value, and on those the blocker is usually confidence or sign-off rather than price, so this leads with a person and no code at all.",
@@ -282,12 +282,14 @@ EMAIL_DETAIL = {
    ]),
  "TduDdY": dict(
    goal="Put the real basket back in front of them while it is still warm, with nothing to reconstruct.",
-   why="An hour after checkout was started, the configuration is done and the only thing missing is the last click. Shared by both value branches, so it carries no offer: there is nothing to discount yet, and spending the incentive here would waste it on people who were coming back anyway.",
-   variant="This is the shared email, so there is no variant. The value split changes what arrives at 24 and 72 hours, not this.",
+   why="An hour after checkout was started, the configuration is done and the only thing missing is the last click. Neither branch carries an offer here: there is nothing to discount yet, and spending the incentive at one hour would waste it on people who were coming back anyway.",
+   variant_label="On the low-value branch",
+   variant="Identical, minus the print expert block. Everything else \u2014 banner, basket, total, reassurances, review \u2014 is the same, so the two are generated from one source and cannot drift.",
    elements=[
      ("A banner of print worth wanting.", "A basket list on its own reads like a receipt, so the email opens on foil business cards with the headline set over them in HTML. The ink headroom and blend are baked into the image, as everywhere else."),
      ("The actual basket, line by line.", "Product titles come from the catalog and service lines from the event, because Started Checkout carries the whole basket rather than one item. Each product links back to its own configured URL."),
      ("A total taken from the event, not added up.", "$value disagrees with the sum of the rows on 6% of events, so the rows are shown and the total is printed as sent."),
+     ("A print expert, on the high-value branch only.", "Over 150 the blocker is usually confidence rather than price, so a second opinion is offered before the money is: John\u2019s team will check the spec and confirm the date before it is paid for. Kept below the checkout button so it supports the primary action instead of competing with it."),
      ("Three reassurances, a real review, and no offer.", "The configuration is saved, files get checked, nothing is charged until they confirm. The review is there because Klaviyo's own guidance rates reviews the strongest lever on a first purchase, and this email had none."),
    ]),
  "TtjyZ4": dict(
@@ -372,7 +374,7 @@ ISSUES = [
 TRACKER = [
  ("Welcome (RXBWV9)", "4", "4 of 4", "EN live, IT to redo", "Rebuilt end to end. Assets need uploading to Klaviyo before build."),
  ("Browse Abandonment", "5 → 3", "3 of 3", "–", "Complete and render-verified. Feed needs a resized image variant."),
- ("Abandoned Order (merged)", "5 → 3 x 2", "1 of 5", "–", "Shared email 1 built. Absorbs the old Checkout flow."),
+ ("Abandoned Order (merged)", "5 → 3 x 2", "2 of 6", "–", "Both email 1 variants built. Absorbs the old Checkout flow."),
  ("Abandoned Checkout", "—", "—", "—", "Superseded, merged into Abandoned Order"),
  ("Site Abandonment", "—", "—", "—", "Dropped: a visit with no product view carries too little intent"),
  ("Post-Purchase", "5", "0", "–", "Resolve transactional overlap first"),
@@ -497,7 +499,8 @@ def email_block(f, e):
         if els:
             notes += f'<div class="changehead">What is in it, and why</div><ul class="ellist">{els}</ul>'
         if d.get("variant"):
-            notes += f'<div class="varbox"><div class="lbl">{icon("alert")}If they have already ordered</div><p>{esc(d["variant"])}</p></div>'
+            vl = d.get("variant_label", "If they have already ordered")
+            notes += f'<div class="varbox"><div class="lbl">{icon("alert")}{esc(vl)}</div><p>{esc(d["variant"])}</p></div>'
         return f'''<div class="mail-row mail-row-ba mail-row-final">
       <div class="mail-meta">
         <div class="step-line"><span class="step-dot">{e["step"]}</span><span class="when">{esc(e["when"])}</span></div>
