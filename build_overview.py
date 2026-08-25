@@ -113,7 +113,7 @@ FLOWS = [
    reentry="14 days",
    incentive="Split by cart value. High value: no code until email 3, then 10% for 72 hours, with the print expert still the headline. Low value: 10% in email 2, then 25% capped at 25 off for the final 24 hours.",
    cadence="Proposed: 1 hour, 24 hours, 72 hours. Three emails on each branch, down from five in four days across two flows.",
-   mail_line="4 of 6 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
+   mail_line="6 of 6 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
    flow_note="This is the merged flow, and it splits by cart value at entry: at 150, in either currency, about a quarter of carts go to a high-value branch that leads with a print expert and discounts lightly, and the rest to a low-value branch that leads with the incentive and closes at 25% capped. The cap exists because a flat 25% would leave a 149 cart better off than a 151 one. RFB ran four separate abandonment journeys — Site, Browse, Cart and Checkout — whose copy was largely interchangeable; Cart and Checkout were near-identical apart from the trigger. The rebuild runs two: Browse Abandonment for a product view, and this one for anything that reached a basket. Site Abandonment is dropped entirely, because a visit with no product view carries too little intent to say anything useful about. The five RFB emails below are the current state and have not been rebuilt yet.",
    emails=[
     dict(step=1, when="1 hour after checkout was started", subject="Left something behind?",
@@ -130,14 +130,14 @@ FLOWS = [
       preview="The basket is still saved. The code comes off at checkout.",
       goal="", who="", tpl="SvQkfX", flags=[], badge=None,
       final="order-02-low-proposed.html"),
-    dict(step=4, when="72 hours \u00b7 high value", subject="Still here, and now with 10% off",
-      preview="The expert offer stands. The code runs for 72 hours.",
-      goal="High-value close. The expert stays the headline and the code sits underneath it.",
-      who="Carts at or above 150, three days on.", tpl="", flags=[], badge="Specified, not yet designed"),
-    dict(step=5, when="72 hours \u00b7 low value", subject="25% off, 24 hours only",
+    dict(step=4, when="72 hours \u00b7 high value", subject="Still happy to go through this with you",
+      preview="A print expert can still look at it, and there is 10% off if it helps.",
+      goal="", who="", tpl="VtF4Ei", flags=[], badge=None,
+      final="order-03-high-proposed.html"),
+    dict(step=5, when="72 hours \u00b7 low value", subject="25% off, for the next 24 hours",
       preview="Last call on the basket you saved.",
-      goal="Low-value close. 25% capped at 25 off, expiring in 24 hours. The cap exists because a flat 25% would leave a 149 cart paying less than a 151 one.",
-      who="Carts below 150, three days on.", tpl="", flags=[], badge="Specified, not yet designed"),
+      goal="", who="", tpl="YrvM4D", flags=[], badge=None,
+      final="order-03-low-proposed.html"),
     dict(step=1, when="30 minutes after add-to-cart",
       section="Current RFB flow \u2014 for reference",
       section_sub="The five originals from the Abandoned Cart flow, all draft. The Abandoned Checkout flow ran nearly the same five again.",
@@ -302,6 +302,26 @@ EMAIL_DETAIL = {
      ("Four things an adviser actually does.", "Spec, delivery date, pay on invoice, and whether the quantity is wrong. Each is checkable on the site rather than asserted."),
      ("Two of those are the whole argument.", "Invoicing removes a procurement blocker without a discount. Quantity is a price lever that is not a coupon \u2014 the next break can beat 10% off, and it raises order value instead of cutting it."),
    ]),
+ "VtF4Ei": dict(
+   goal="Close the large basket without letting the discount become the argument.",
+   why="On a configured order this size the blocker is usually confidence or sign-off rather than price, and a person answers that more cheaply than a discount does. So 10% is real but secondary: it sits below the basket and below the note, and the escalation across the branch is in who is speaking rather than how loud.",
+   variant_label="On the low-value branch",
+   variant="A different email: 25% off with a 24-hour deadline. Below 150 the buyer is self-serving and price-sensitive, so the incentive is allowed to do the work.",
+   elements=[
+     ("One named person, not the team again.", "Email 2 used a group photograph and said \u201cwe have experts\u201d. This one is a signed note from John, because a single person is the only thing left to escalate to. It is also the cheapest thing in the flow \u2014 a reply costs an email, not a margin point."),
+     ("The offer is deliberately below the basket.", "A build check enforces the order and fails if a later edit promotes it. There is no green offer bar above the masthead on this branch, which is what distinguishes it at a glance from the low-value email."),
+     ("The saving is stated, and the band range comes from real carts.", "A quarter of abandoned carts clear the split and the tail is long \u2014 the largest in a 150-cart sample was 6,088. Bands run to 10,000 so that cart is told \u201cat least \u20ac600\u201d rather than \u20ac300. Verified by rendering against live baskets."),
+   ]),
+ "YrvM4D": dict(
+   goal="Last email on the smaller basket. The deadline is the message, not the argument.",
+   why="Email 2 already made the case and offered 10%. Saying it again louder achieves nothing, so this one is short: the number, the clock, the basket, and a plain statement that nothing follows it.",
+   variant_label="On the high-value branch",
+   variant="A different email: the print expert keeps the headline and 10% sits underneath. Over 150 the blocker is confidence, not price.",
+   elements=[
+     ("25%, capped at 25 off, and the cap is disclosed.", "A flat 25% inverts the split \u2014 a 149 cart would pay 111.75 while a 151 cart pays 135.90, so spending 2 more costs 24 at the till. The cap removes that. It only binds between 100 and 150, and the median cart here is about 60, so almost nobody meets it."),
+     ("It says outright that this is the last one.", "\u201cIf the timing is wrong, no harm done, and we will stop emailing you about it.\u201d Cheaper than an unsubscribe, and it makes the deadline credible rather than a threat."),
+     ("The deadline is stated, never counted down.", "No rendered clock time. A countdown is wrong the moment the mail sits unread, and the expiry has to be real in the coupon or the next deadline is not believed."),
+   ]),
  "SvQkfX": dict(
    goal="Convert the smaller basket with the incentive, and make finishing feel like two clicks.",
    why="Median cart on this branch is about 60, so this is a job someone is running themselves: no procurement, no sign-off, price-sensitive. The lever is the discount and the argument is speed.",
@@ -389,6 +409,8 @@ ISSUES = [
  "Some feed titles are untranslated slugs, e.g. GB-gatefoldfoldedleaflets is titled “gatefoldfoldedleaflets”. Any email showing that product would print the slug as the product name. Sweep the feed for titles equal to their slug.",
  "Welcome email 1 claims “Every price includes delivery and VAT” directly above four feed prices that exclude both. The product page defaults to Excl. VAT with delivery chosen separately. Needs replacing, and “All-inclusive prices” in Welcome email 3 needs a ruling on what it is meant to mean.",
  "Connect, the B2B storefront, fires the same Viewed Product metric as the consumer site and is 14–21% of events. Every conversion flow needs a storefront filter or B2B buyers receive consumer lifecycle mail.",
+ "The Abandoned Order flow needs two coupons that do not exist yet: BASKET10 (10%, 72 hours, shared by the low branch's email 2 and the high branch's email 3) and BASKET25 (25% capped at 25 off, 24 hours). BASKET25 must be a capped percentage, which Talon.one can express. Neither may be HELLO10 \u2014 that belongs to Welcome and carries a first-order restriction that would fail silently for returning customers.",
+ "25% becomes the deepest discount in the programme and is reachable within 72 hours of a first visit, which is a discoverable pattern: add something cheap, abandon, wait. Entry into this flow should be rate-limited per profile before it goes live.",
  "Some Started Checkout line items carry no ProductID and no ProductName at all - a live fr-fr Mugs cart had neither. The basket block treats an item with no ID as a service line, so it would render a row with a blank name. Rare, but it is a visible defect when it happens.",
  "Welcome email 1's eight price figures are a dated snapshot, not live values. scripts/refresh_welcome_01.py rewrites them from _lib/welcome_prices.py and verifies the arithmetic, but the snapshot itself has to be refreshed by hand when the feed moves. A struck-through price that no longer matches the site reads as a fake discount rather than a stale email.",
  "The site contradicts itself on file checking. /always-a-perfect-design says “we check your files at no extra cost”, while the cart is explicit that the free Basic check is automated and “your file is not reviewed by a print expert” — a human review is the paid Premium tier. Marketing copy and the cart should agree, or customers arrive at checkout expecting something they have not bought.",
@@ -639,11 +661,11 @@ home = f'''<section class="page" id="page-home">
   <div class="hero">
     <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.6 · 25 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: ten new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: twelve new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
     <div class="tile"><div class="tile-n">7</div><div class="tile-l">Journeys, down from 9</div></div>
-    <div class="tile"><div class="tile-n">10 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">12 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>

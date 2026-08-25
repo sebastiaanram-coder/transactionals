@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 """
-Build Abandoned Order email 2, LOW-VALUE branch - the incentive.
+Build Abandoned Order email 3, LOW-VALUE branch - the last one.
 
-+24 hours on carts below 150. 10% off, expiring in 72 hours.
++72 hours on carts below 150. 25% off, capped, expiring in 24 hours.
 
-Deliberately not the high-value email with a code bolted on. Median GB cart is
-about £60, so this is a smaller job someone is running themselves: no
-procurement, price-sensitive, wanting it done. Light header and no photograph
-against the high branch's team shot - that branch is a confidence play and earns
-faces, this one is a speed play.
+THE DEADLINE IS THE MESSAGE. Email 2 already made the argument and offered 10%.
+Repeating the argument louder does nothing, so this email is short: the number,
+the clock, the basket, and an honest statement that it is the last one.
 
-THE DISCOUNT FIGURE. The exact discounted total cannot be computed in Klaviyo's
-template language: widthratio is integer-only (90% of 64.50 returns 58),
-{% with %} is unsupported so widthratio's output cannot be captured and
-reformatted, and add will not subtract a float. What DOES work is a banded
-comparison on the total, and every band floors the real saving, so the figure
-is always true and never overstated. Verified by render.
+WHY THE CAP. At a flat 25% the value split inverts, and a reseller will find it:
+a 149 cart pays 111.75 while a 151 cart pays 135.90, so spending 2 more costs 24
+at the till. Capping the saving at 25 removes the inversion without touching the
+headline - the median low-value cart is about 60, where the cap never binds. It
+only engages between 100 and 150, roughly 13% of this branch.
+
+The cap is disclosed in the email. A "25% off" that quietly stops at 25 is the
+kind of thing that arrives as a complaint rather than a bug report.
+
+STILL OPEN, COMMERCIALLY. 25% becomes the deepest discount in the programme
+(Welcome 10%, Winback 15%), and it is reachable within 72 hours of a first
+visit. That is a discoverable pattern - add something cheap, abandon, wait - so
+entry into this flow should be rate-limited per profile before it goes live.
+Flip CAP to None here if the decision is to run it uncapped.
 """
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
@@ -25,12 +31,17 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 ASSETS = os.path.join(ROOT, "assets")
 OUT = os.path.join(ROOT, "proposals")
-P = "hp-ao2l"
+P = "hp-ao3l"
 
-# NOT YET CREATED. HELLO10 belongs to Welcome and cannot be reused here: a
-# Welcome recipient would meet one code twice, attribution would be unusable,
-# and a first-order restriction would fail silently for returning customers.
-CODE = "BASKET10"
+# NOT YET CREATED, and deliberately not BASKET10: this is a different offer at a
+# different depth, and sharing one code would make the two indistinguishable in
+# reporting. HELLO10 belongs to Welcome and must never appear here.
+CODE = "BASKET25"
+
+RATE = 0.25
+CAP = 25            # set to None to run it uncapped; read the docstring first
+SPLIT = 150         # the flow's value split, so no cart above this reaches here
+HOURS = 24
 
 def datauri(name):
     mime = "image/png" if name.endswith(".png") else "image/jpeg"
@@ -39,6 +50,7 @@ def datauri(name):
 
 _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
+    "IMG_CLOCK":    "icon-clock.png",
     "IMG_TICK":     "browse-02-tick.jpg",
     "IMG_STARS":    "trustpilot-stars-4-5.png",
     "IMG_AGENTS":   "cs-agents-ellipse.png",
@@ -46,34 +58,32 @@ _A = {
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
-# 10% off, in bands 10 wide. The arithmetic and its guarantee live in
-# _lib/discount.py, because three emails now state a banded saving and the
-# first two were about to keep separate copies of it.
-BANDS = discount.Bands(0.10, discount.every(10, 10, 140))
+# Bands 5 wide. Above 100 the cap binds, so one band covers 100 upward: every
+# cart there saves exactly 25 and the figure is exact rather than a floor.
+BANDS = discount.Bands(RATE, discount.every(5, 10, 100), cap=CAP)
 
-def save_num_live(cur):
+def figure_live(cur):
     return BANDS.figure_live(cur)
 
-def save_num_sample(total, cur):
-    return BANDS.figure_sample(total, cur)
-
 def clause_live(cur):
-    """The phrase appears once and only the figure branches, so translators see
-    one string rather than one per band."""
-    return BANDS.wrap_live(" and save at least " + save_num_live(cur))
+    """The phrase is written once and only the figure branches, so a translator
+    sees one string instead of one per band."""
+    return BANDS.wrap_live(" and save at least " + figure_live(cur))
 
 def clause_sample(total, cur):
-    n = save_num_sample(total, cur)
+    n = BANDS.figure_sample(total, cur)
     return "" if n is None else " and save at least " + n
 
 def band_live(cur):
     return ('{%% if %s >= %d %%}That is at least %s off.'
-            '{%% else %%}Your 10%% comes off at checkout.{%% endif %%}'
-            % (discount.VALUE, BANDS.min_floor, save_num_live(cur)))
+            '{%% else %%}Your 25%% comes off at checkout.{%% endif %%}'
+            % (discount.VALUE, BANDS.min_floor, figure_live(cur)))
 
 def band_sample(total, cur):
-    n = save_num_sample(total, cur)
-    return "Your 10% comes off at checkout." if n is None else "That is at least %s off." % n
+    n = BANDS.figure_sample(total, cur)
+    return "Your 25% comes off at checkout." if n is None else "That is at least %s off." % n
+
+CUR_LIVE = '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'
 
 SAMPLE_TOTAL = 70.77
 SAMPLE = {
@@ -85,17 +95,16 @@ SAMPLE = {
 }
 LIVE = {
     "CHECKOUT_URL": "{{ event.CheckoutURL }}",
-    "CUR": '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}',
+    "CUR": CUR_LIVE,
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
     "NUM": "{{ event.Items|length }}",
-    "BAND": band_live('{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'),
-    "SAVE_CLAUSE": clause_live('{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'),
+    "BAND": band_live(CUR_LIVE),
+    "SAVE_CLAUSE": clause_live(CUR_LIVE),
     "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
 }
 
-# a low-value basket: two of the Welcome products plus the Premium check, so it
-# exercises the service line too. 39.96 + 25.82 + 4.99 = 70.77, under the 150
-# split as this branch requires.
+# the same basket the rest of the flow shows, so a reviewer comparing the three
+# emails side by side is looking at one order throughout
 SAMPLE_LINES = [
     ("product", "Flyers", 1, "39.96",
      "https://contentful.helloprint.com/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
@@ -106,13 +115,12 @@ SAMPLE_LINES = [
     ("service", "Premium Design Check", 1, "4.99", None, None),
 ]
 
+# two, not three. Email 2 already made the case; this one should feel short.
 QUICK = [
-    ("Change the quantity, watch the price move",
-     "The number on the page is where the product starts, not a minimum you are stuck with."),
-    ("Send your file now or after you order",
-     "You do not need finished artwork to place it. Order first and upload when you are ready."),
     ("Nothing is charged until you confirm",
-     "The basket is saved either way, and the code applies at the last step."),
+     "The code comes off at the last step, so you can look at the final number before you commit to it."),
+    ("Anything in the order can still change",
+     "Quantity, delivery date, artwork. Placing it now does not lock the details."),
 ]
 
 CSS = """
@@ -120,24 +128,33 @@ CSS = """
 .%(P)s-root *{box-sizing:border-box;}
 .%(P)s-wrap{width:100%%;background:#f8f8f8;padding:0 0 32px;}
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
-/* the offer goes above everything else on this branch */
+/* the offer leads, as it did on email 2, but the clock is the new information */
 .%(P)s-promo{background:#008539;color:#ffffff;text-align:center;padding:11px 20px;font-size:15px;line-height:21px;font-weight:700;letter-spacing:.01em;}
 .%(P)s-promo .%(P)s-ends{opacity:.85;font-weight:500;}
 .%(P)s-logobar{background:#191919;padding:12px 24px 10px;text-align:center;}
 .%(P)s-logobar img{width:150px;max-width:50%%;height:auto;display:inline-block;border:0;}
-/* no photograph, on purpose: the high branch is a confidence play and earns
-   faces, this one is a speed play and should feel like two clicks */
 .%(P)s-hero{background:#ffffff;text-align:center;padding:32px 24px 4px;}
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#008539;margin:0 0 10px;}
-.%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#191919;letter-spacing:-.015em;}
+/* the number is the headline on the last email, so it gets to be big */
+.%(P)s-h1{margin:0 0 10px;font-size:34px;line-height:40px;font-weight:800;color:#191919;letter-spacing:-.02em;}
 .%(P)s-sub{margin:0 auto 20px;max-width:450px;font-size:17px;line-height:25px;color:#555555;}
 .%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+/* the deadline, stated once and plainly. No fake countdown: a rendered clock
+   time would be wrong the moment the mail sits unread. */
+.%(P)s-dl{margin:24px 24px 0;background:#f1f8f4;border:1px solid #cfe8db;border-radius:12px;padding:14px 18px;}
+.%(P)s-dltbl{width:100%%;border-collapse:collapse;}
+.%(P)s-dlic{width:40px;vertical-align:middle;padding:0 12px 0 0;}
+.%(P)s-dlic img{width:26px;height:26px;display:block;border:0;}
+.%(P)s-dltx{vertical-align:middle;}
+.%(P)s-dlttl{margin:0 0 2px;font-size:15px;line-height:21px;font-weight:800;color:#191919;}
+.%(P)s-dlsub{margin:0;font-size:13px;line-height:19px;color:#4c6659;}
 @@BASKET_CSS@@
-/* the banded saving sits with the number it applies to */
 .%(P)s-band{margin:10px 24px 0;font-size:14px;line-height:21px;font-weight:700;color:#008539;text-align:right;}
 .%(P)s-mid{padding:22px 24px 0;text-align:center;}
-.%(P)s-code{display:inline-block;border:2px dashed #9fdbb8;border-radius:8px;background:#f1f8f4;color:#191919;padding:9px 16px;font-size:13px;line-height:18px;font-weight:700;margin:0 0 14px;}
+.%(P)s-code{display:inline-block;border:2px dashed #9fdbb8;border-radius:8px;background:#f1f8f4;color:#191919;padding:9px 16px;font-size:13px;line-height:18px;font-weight:700;margin:0 0 8px;}
 .%(P)s-code strong{font-weight:800;letter-spacing:.06em;font-size:15px;}
+/* the cap, disclosed. Small, but present and not in a footer. */
+.%(P)s-terms{display:block;margin:0 auto 14px;max-width:420px;font-size:12px;line-height:18px;color:#767676;}
 .%(P)s-q{margin:28px 24px 0;padding:24px 0 0;border-top:1px solid #e5e5e5;}
 .%(P)s-qtbl{width:100%%;border-collapse:collapse;}
 .%(P)s-qtick{width:34px;vertical-align:top;padding:12px 12px 0 0;}
@@ -149,6 +166,10 @@ CSS = """
 .%(P)s-revstars{display:block;margin:0 auto 11px;border:0;width:120px;height:25px;}
 .%(P)s-revq{margin:0 auto 9px;max-width:420px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
 .%(P)s-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
+/* saying plainly that this is the last one. Cheaper than an unsubscribe. */
+.%(P)s-last{margin:24px 24px 0;padding:22px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
+.%(P)s-lastttl{display:block;font-size:16px;line-height:22px;font-weight:800;color:#191919;margin-bottom:6px;}
+.%(P)s-lasttx{margin:0 auto;max-width:430px;font-size:14px;line-height:21px;color:#555555;}
 .%(P)s-help{margin:22px 24px 0;padding:22px 0 30px;border-top:1px solid #e5e5e5;text-align:center;}
 .%(P)s-help img{display:block;margin:0 auto 11px;border:0;}
 .%(P)s-helpttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin-bottom:7px;}
@@ -169,23 +190,29 @@ CSS = """
   .%(P)s-logobar{padding:11px 20px 9px;}
   .%(P)s-logobar img{width:132px;}
   .%(P)s-hero{padding:26px 18px 2px;}
-  .%(P)s-h1{font-size:26px;line-height:33px;}
+  .%(P)s-h1{font-size:29px;line-height:35px;}
   .%(P)s-sub{font-size:16px;line-height:24px;max-width:none;}
   .%(P)s-cta{padding:15px 26px;}
+  .%(P)s-dl{margin:20px 14px 0;padding:13px 15px;}
   .%(P)s-band{margin:9px 14px 0;}
 @@BASKET_CSS_M@@
   .%(P)s-mid{padding:20px 14px 0;}
-  .%(P)s-q,.%(P)s-rev,.%(P)s-help{margin-left:14px;margin-right:14px;}
-  .%(P)s-revq{font-size:16px;line-height:24px;}
+  .%(P)s-q,.%(P)s-rev,.%(P)s-last,.%(P)s-help{margin-left:14px;margin-right:14px;}
+  .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
-""" % {"P": P}
-CSS = CSS.replace("@@BASKET_CSS@@", basket.css(P)).replace("@@BASKET_CSS_M@@", basket.css_mobile(P))
+"""
+CSS = CSS % {"P": P}
+_lines = CSS.split("\n")
+_i = _lines.index("@@BASKET_CSS@@")
+_lines[_i] = basket.css(P)
+_j = _lines.index("@@BASKET_CSS_M@@")
+_lines[_j] = basket.css_mobile(P)
+CSS = "\n".join(_lines)
 
 def quick(a):
     rows = ""
     for t, b in QUICK:
-        rows += ('<tr><td class="%s-qtick" valign="top">'
-                 '<img src="%s" alt="" width="22" height="22"></td>'
+        rows += ('<tr><td class="%s-qtick" valign="top"><img src="%s" alt="" width="22" height="22"></td>'
                  '<td class="%s-qtx" valign="top">'
                  '<p class="%s-qttl">%s</p><p class="%s-qbody">%s</p></td></tr>'
                  % (P, a["IMG_TICK"], P, P, t, P, b))
@@ -196,22 +223,34 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">10% off the basket you saved. The code comes off at checkout.</div>
+<div class="{P}-pre">25% off, and then we will leave your basket alone.</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
 
-    <div class="{P}-promo">10% off your basket <span class="{P}-ends">&middot; ends in 72 hours</span></div>
+    <div class="{P}-promo">25% off your basket <span class="{P}-ends">&middot; ends in {HOURS} hours</span></div>
 
     <div class="{P}-logobar">
       <a href="{CHECKOUT_URL}"><img src="{IMG_WORDMARK}" alt="Helloprint" width="150"></a>
     </div>
 
     <div class="{P}-hero">
-      <span class="{P}-eyebrow">STILL IN YOUR BASKET</span>
-      <h1 class="{P}-h1">10% off the basket you saved</h1>
-      <p class="{P}-sub">Use code <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. Everything is still configured exactly as you left it, and the code runs for 72 hours.</p>
+      <span class="{P}-eyebrow">LAST CALL</span>
+      <h1 class="{P}-h1">25% off, for the next {HOURS} hours</h1>
+      <p class="{P}-sub">Use code <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. This is the last email we will send about this basket.</p>
       <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+    </div>
+
+    <div class="{P}-dl">
+      <table class="{P}-dltbl" role="presentation" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="{P}-dlic" valign="middle"><img src="{IMG_CLOCK}" alt="" width="26" height="26"></td>
+          <td class="{P}-dltx" valign="middle">
+            <p class="{P}-dlttl">The code runs out {HOURS} hours after this email</p>
+            <p class="{P}-dlsub">Your basket stays saved either way. It is the discount that expires, not the order.</p>
+          </td>
+        </tr>
+      </table>
     </div>
 
     {BASKET}
@@ -219,6 +258,7 @@ BODY = """
 
     <div class="{P}-mid">
       <span class="{P}-code">Use code <strong>{CODE}</strong></span><br>
+      <span class="{P}-terms">25% off your basket, up to {CUR}25 off. One use per customer, and it cannot be combined with another code.</span>
       <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
     </div>
 
@@ -226,8 +266,13 @@ BODY = """
 
     <div class="{P}-rev">
       <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
-      <p class="{P}-revq">&ldquo;Good quality, super fast and they checked my work. Really lovely.&rdquo;</p>
+      <p class="{P}-revq">&ldquo;Ordered late, arrived early, and the print was better than the proof.&rdquo;</p>
       <span class="{P}-revby">Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000</span>
+    </div>
+
+    <div class="{P}-last">
+      <span class="{P}-lastttl">And that is us done</span>
+      <p class="{P}-lasttx">If the timing is wrong, no harm done, and we will stop emailing you about it. Your basket stays where it is for whenever the job comes back around.</p>
     </div>
 
     <div class="{P}-help">
@@ -261,7 +306,7 @@ BODY = """
 """
 
 def build(bindings, assets, lines):
-    vals = {"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE,
+    vals = {"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE, "HOURS": HOURS,
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
@@ -269,47 +314,56 @@ def build(bindings, assets, lines):
 PREVIEW_DOC = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Abandoned order 02 low value</title></head>
+<title>Abandoned order 03 low value</title></head>
 <body style="margin:0;padding:0;background:#f8f8f8;">
-<!-- HP - Abandoned Order - 02 - LOW VALUE - the incentive
-     Preview: a 70.77 IE basket, under the 150 split this branch requires.
-     Generated by scripts/build_order_02_low.py - do not hand-edit. -->
+<!-- HP - Abandoned Order - 03 - LOW VALUE - the last one
+     Preview: a 70.77 IE basket, the same order shown throughout this flow.
+     Generated by scripts/build_order_03_low.py - do not hand-edit. -->
 %s
 </body></html>
 """
 KLAVIYO_DOC = """<!--
-  HP - Abandoned Order - 02 - LOW VALUE - the incentive
+  HP - Abandoned Order - 03 - LOW VALUE - the last one
   Klaviyo build. Paste as ONE custom HTML / universal block.
-  Generated by scripts/build_order_02_low.py - do not hand-edit.
+  Generated by scripts/build_order_03_low.py - do not hand-edit.
 
-  Trigger   Started Checkout (T3uGk6), 24 hours after, cart < 150
-  Branch    LOW VALUE only. 10%% off, expiring 72 hours from send.
-  Subject   10%% off, for the next 72 hours
+  Trigger   Started Checkout (T3uGk6), 72 hours after, cart < %(split)d
+  Branch    LOW VALUE only. 25%%%% off capped at %(cap)d, expiring %(hours)d hours from send.
+  Subject   25%%%% off, for the next %(hours)d hours
+  Last mail in this branch. Nothing follows it.
 
-  *** THE CODE %s DOES NOT EXIST YET. *** It must be created before this
-  sends, and it must NOT be HELLO10: that belongs to Welcome, so a Welcome
-  recipient would meet one code twice, attribution would be unusable, and a
-  first-order restriction would fail silently for returning customers.
+  *** THE CODE %(code)s DOES NOT EXIST YET. *** It must be a capped percentage:
+  25%%%% off up to %(cap)d off. Talon.one can express that. It must NOT be
+  BASKET10 (a different offer, and reporting could not tell them apart) and must
+  never be HELLO10, which belongs to Welcome.
 
-  THE SAVING IS BANDED, NOT CALCULATED. The exact discounted total cannot be
-  produced in this template language - widthratio is integer-only, {%% with %%}
-  is unsupported so its output cannot be reformatted, and add will not subtract
-  a float. Each band floors 10%% of its lower bound, so the figure shown is
-  always less than or equal to the real saving. Never raise a band's figure
-  without redoing that arithmetic.
+  *** THE %(hours)d-HOUR EXPIRY MUST BE REAL. *** The email states it twice. If
+  the code outlives the sentence, the next one is not believed.
+
+  THE CAP IS DISCLOSED IN THE BODY and must stay disclosed. A "25%%%% off" that
+  quietly stops at %(cap)d arrives as a complaint, not a bug report.
+
+  THE SAVING IS BANDED, NOT CALCULATED. This template language cannot compute a
+  discounted total - widthratio is integer-only, {%%%% with %%%%} is unsupported,
+  and add will not subtract a float. Each band claims the discount on its lower
+  bound, so the figure is always less than or equal to the real saving. Above
+  100 the cap binds and the figure is exact. See _lib/discount.py.
 
   BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, make the /en-ie/
-  links market-aware, and confirm the 72-hour expiry is real.
+  links market-aware, and rate-limit entry into this flow per profile - 25%%%%
+  reachable in 72 hours is a discoverable pattern.
 
   The basket block is shared with the other order emails via _lib/basket.py.
 -->
-%s
+%(body)s
 """
 
 prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]))
 live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]))
-open(os.path.join(OUT, "order-02-low-proposed.html"), "w", encoding="utf-8").write(PREVIEW_DOC % prev_body)
-open(os.path.join(OUT, "order-02-low-klaviyo.html"), "w", encoding="utf-8").write(KLAVIYO_DOC % (CODE, live_body))
+prev_doc = PREVIEW_DOC % prev_body
+live_doc = KLAVIYO_DOC % {"split": SPLIT, "cap": CAP, "hours": HOURS, "code": CODE, "body": live_body}
+open(os.path.join(OUT, "order-03-low-proposed.html"), "w", encoding="utf-8").write(prev_doc)
+open(os.path.join(OUT, "order-03-low-klaviyo.html"), "w", encoding="utf-8").write(live_doc)
 
 errs = []
 if "REPLACE-WITH-KLAVIYO-ASSET" in prev_body: errs.append("preview leaked a sentinel URL")
@@ -323,47 +377,53 @@ ci, co = live_body.index("{% catalog "), live_body.index("{% endcatalog %}")
 for m in re.finditer(r"catalog_item\.", live_body):
     if not (ci < m.start() < co): errs.append("catalog binding outside its block")
 if 'lookup:"$value"' not in live_body: errs.append("total must come from $value")
-BANDS.checks(errs, "10% low", probes=(10.0, 70.77, 74.99, 149.99))
-if len(BANDS.table) < 12: errs.append("bands got wider, the saving will understate")
 
-# the figure in the subtext and the figure under the basket must be the same
-# number, because the reader sees both. They share save_num_*, so this only
-# fails if someone splits them apart later.
-for t in (9.99, 10.0, 70.77, 74.99, 149.99):
-    n = save_num_sample(t, "E")
-    inside = (n is not None and n in clause_sample(t, "E") and n in band_sample(t, "E"))
+BANDS.checks(errs, "25% capped low", probes=(10.0, 70.77, 99.99, 100.0, 149.99))
+
+# the figure in the subtext and the figure under the basket are the same number,
+# because the reader sees both on one screen
+for t in (9.99, 10.0, 70.77, 99.99, 100.0, 149.99):
+    n = BANDS.figure_sample(t, "E")
     if n is None:
         if clause_sample(t, "E") != "" or "at least" in band_sample(t, "E"):
             errs.append("no figure is safe at %.2f but one was printed" % t)
-    elif not inside:
+    elif not (n in clause_sample(t, "E") and n in band_sample(t, "E")):
         errs.append("subtext and basket figures disagree at %.2f" % t)
-if save_num_sample(9.99, "E") is not None:
-    errs.append("a sub-10 basket should claim no figure at all")
 
-# the no-figure fallback is written twice, once for the preview and once for
-# the live template. A stray %-escape in either is invisible until it renders,
-# so compare the two literally. This caught "Your 10%% comes off".
-# the LAST else is the outer one: the band chain has its own else nested inside
+# the no-figure fallback is written twice, live and preview. A stray %-escape in
+# either is invisible until it renders, so compare them literally.
 live_else = band_live("E").rsplit("{% else %}", 1)[1].split("{% endif %}")[0]
 if live_else != band_sample(0.0, "E"):
-    errs.append("fallback copy differs: live says %r, preview says %r"
-                % (live_else, band_sample(0.0, "E")))
+    errs.append("fallback copy differs: live %r, preview %r" % (live_else, band_sample(0.0, "E")))
 for frag in ("%%", "&&", "{{ {{"):
     if frag in band_live("E") + clause_live("E"):
         errs.append("double-escape leaked into the live template: " + frag)
-if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused here")
+
+# the cap has to be stated where a reader will see it, not only in a comment
+if CAP is not None:
+    for body, where in ((prev_body, "preview"), (live_body, "live")):
+        if "up to" not in body or str(CAP) not in body:
+            errs.append("the %s body does not disclose the %s cap" % (where, CAP))
+# and the deepest possible saving must not exceed the cap
+if CAP is not None and max(s for _, s in BANDS.table) > CAP:
+    errs.append("a band claims more than the cap")
+
+# the deadline appears in the promo bar and again in the panel; both from HOURS
+if live_body.count("%d hours" % HOURS) < 3:
+    errs.append("the %d-hour deadline is not stated in all three places" % HOURS)
+if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused")
+if "BASKET10" in live_body: errs.append("BASKET10 is email 2's offer, not this one")
 if CODE not in live_body: errs.append("the code is missing from the body")
-# this branch is defined by being under the split
-if SAMPLE_TOTAL >= 150: errs.append("the sample basket must sit below the 150 split")
+if SAMPLE_TOTAL >= SPLIT: errs.append("the sample basket must sit below the %d split" % SPLIT)
 if float(SAMPLE["TOTAL"]) != SAMPLE_TOTAL: errs.append("sample total disagrees with the band input")
-if sum(float(l[3]) for l in SAMPLE_LINES) - SAMPLE_TOTAL > 0.005:
+if abs(sum(float(l[3]) for l in SAMPLE_LINES) - SAMPLE_TOTAL) > 0.005:
     errs.append("sample rows do not sum to the sample total")
 
-print("preview: %6d bytes  ->  proposals/order-02-low-proposed.html" % len(PREVIEW_DOC % prev_body))
-print("klaviyo: %6d bytes  ->  proposals/order-02-low-klaviyo.html" % len(KLAVIYO_DOC % (CODE, live_body)))
+print("preview: %6d bytes  ->  proposals/order-03-low-proposed.html" % len(prev_doc))
+print("klaviyo: %6d bytes  ->  proposals/order-03-low-klaviyo.html" % len(live_doc))
 print("band shown for the %.2f sample: %s" % (SAMPLE_TOTAL, SAMPLE["BAND"]))
-# 150 is the flow split, so no cart above it reaches this branch
-print("worst the figure undershoots, for carts up to 150: %.2f" % BANDS.worst_undershoot(150))
+print("worst the figure undershoots, for carts up to %d: %.2f" % (SPLIT, BANDS.worst_undershoot(SPLIT)))
+print("deepest saving this email can give: %d (cap %s)" % (max(s for _, s in BANDS.table), CAP))
 if errs:
     for e in dict.fromkeys(errs): print("  FAIL  " + e)
     raise SystemExit(1)
