@@ -236,3 +236,116 @@ the contact block all stay.
   name against Contentful `slug`, 96% matched.
 - Names, URLs and images read per locale across the eight locales the emails
   need, so Contentful's fallback chain resolves each.
+
+---
+
+# Addendum: the editorial slot, and five emails instead of six
+
+Two decisions from review.
+
+## A. Greeting cards — the rule orphaned it, it is not too small
+
+Greeting cards live in a PLP called **Cards & Invitations**: **€261k gross profit
+on 17,265 items**. That would rank **6th in Commercial Print**, above Folders
+(117k) and Notepads (115k). It never appeared because of my assignment rule, not
+because of its size.
+
+The rule assigns each PLP to the email whose feed category contributes most of
+its gross profit. Cards & Invitations is dominated by **Photo products** — a
+category with no email — because postcards, greeting cards and birth
+announcements are filed there. Only €35k of its gross profit sits in one of the
+six. So the rule dropped it.
+
+**That is a systematic gap, and it is small but real.** 19 PLPs are orphaned this
+way, €1.48M of gross profit in total — but €1.18M of that is *Request a Quote*,
+which is the bespoke funnel and correctly excluded. Strip that and Cards &
+Invitations is the only orphan that matters; the rest are Photo on Canvas at €17k
+and smaller.
+
+### The reframe that resolves it
+
+The tile does not have to belong to the feed category. **The email is a browse
+invitation, not a report.** Greeting cards are relevant to someone who bought
+flyers in November whether or not the taxonomy agrees. The constraint that
+matters is editorial relevance, not category membership.
+
+So the fix is not to bend the rule. It is to stop pretending all four tiles are
+chosen by the rule.
+
+### Recommendation: three earned, one editorial, with an expiry
+
+**Slot 4 becomes an editorial slot.** Three tiles ranked by gross profit, one
+chosen by a person — seasonal, campaign-led, or a range being pushed. That makes
+seasonality a permanent feature of the design rather than a one-off override, and
+it is the slot Greeting cards takes for Q4.
+
+**The editorial pick carries an expiry the build enforces:**
+
+```python
+EDITORIAL = {
+    "commercial-print": ("cards-and-invitations", "2027-01-15"),
+}
+```
+
+Past the date the build **fails** rather than warns. Everything unenforced in
+this repo has been forgotten at least once — the reason the price snapshot and
+the review cache are both dated. A Christmas tile still live in March is exactly
+that failure mode, and it is cheap to prevent.
+
+During a season the editorial tile can take the **top-left cell**, which is the
+most-seen position in a 2×2.
+
+**The heading has to change, and this is the part worth agreeing.** "Popular in
+Commercial Print / Among the most ordered in this category" stops being true for
+a seasonal pick. Replace it with something honest about both kinds of tile:
+
+> **Where to start**
+> Four ranges worth a look — picked on what sells and what is timely.
+
+That is accurate whether a tile was earned by data or chosen by a person, and it
+needs no per-tile caveat.
+
+Cards & Invitations is complete in all eight locales:
+
+| en-GB | nl | fr-FR | es-ES | it |
+|---|---|---|---|---|
+| Cards & Invitations | Kaarten & uitnodigingen | Cartes & invitations | Tarjetas e invitaciones | Biglietti e Inviti |
+
+## B. Packaging folds into Labels — five emails
+
+Decided. Packaging was 77k of gross profit and could not justify a send of its
+own; Labels could not fill four tiles. Together they can do both.
+
+**Combined: €548k of gross profit.** The four tiles by rank:
+
+| Subcategory | GP | Items |
+|---|---|---|
+| Labels & Stickers | 406k | 19,650 |
+| Labels On Roll | 64k | 2,417 |
+| Paper Bags | 32k | 312 |
+| Printed Food Packaging | 10k | 136 |
+
+All four complete in all eight locales.
+
+**One wrinkle, and I think it is acceptable.** Labels & Stickers is the *parent*
+of Labels On Roll. As tiles they read "Stickers" and "Stickers op rol" — an
+all-of-them page beside a specific one, which is a normal browse pair. The
+alternative is dropping Labels On Roll for Packaging Accessories, but that trades
+64k of gross profit for 9k to avoid a cosmetic overlap. Not worth it.
+
+**What this changes beyond the tiles:**
+
+- The flow condition becomes `Categories[0]` in (`Labels`, `Packaging`) rather
+  than one value.
+- The copy needs rewriting for the wider scope. "Running low on labels?" no
+  longer covers it — something closer to *"Labels, stickers and packaging"* with
+  a headline that works for both a sticker reorder and a bag order.
+- Both content blocks need revisiting: the roll-versus-shape block still works,
+  the second should probably cover the packaging half.
+- Six emails become **five**: Commercial Print, Signage & Outdoor,
+  Labels & Packaging, Clothing & Textiles, Corporate Gifts.
+
+Worth noting the same question now applies to **Clothing & Textiles at €239k** —
+it clears the bar Packaging failed, but not by much, and its four tiles fall away
+steeply after T-shirts (102k, then 22k, 18k, 14k). Not a recommendation to fold
+it, just a flag that it is the next-weakest.
