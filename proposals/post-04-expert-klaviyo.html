@@ -55,18 +55,34 @@
    no photograph and no dark block anywhere in this email */
 .hp-pex-head{padding:30px 40px 0;text-align:left;}
 .hp-pex-head img{width:112px;max-width:38%;height:auto;display:block;border:0;}
-.hp-pex-body{padding:26px 40px 4px;text-align:left;}
+.hp-pex-body{padding:26px 40px 30px;text-align:left;}
 .hp-pex-greet{margin:0 0 18px;font-size:17px;line-height:26px;color:#191919;font-weight:600;}
 .hp-pex-p{margin:0 0 18px;font-size:16px;line-height:27px;color:#333333;}
-/* the four offers: bold question, answer after it, one per line. Scannable
-   without becoming a set of cards - this is still a letter */
-.hp-pex-offers{margin:0 0 18px;}
-.hp-pex-offer{margin:0 0 11px;font-size:16px;line-height:26px;color:#333333;padding:0 0 0 14px;border-left:2px solid #e3efe7;}
-.hp-pex-offer b{color:#191919;font-weight:700;}
-.hp-pex-sign{margin:26px 0 0;font-size:16px;line-height:26px;color:#191919;font-weight:700;}
+/* THE FOUR OFFERS. The question gets its own line - it ran straight into the
+   answer before and the two read as one sentence. The hairline stays: without it
+   the four items sit in the same space as the paragraphs either side and stop
+   reading as a group. That is the whole of the design here, and deliberately so.
+   Two alternatives were built and compared: no rule at all, which is plainer but
+   loses the grouping, and the questions set as small green capitals, which reads
+   as a spec sheet and makes four green labels compete with the one green link. */
+.hp-pex-offers{margin:0 0 20px;}
+.hp-pex-offer{margin:0 0 15px;font-size:16px;line-height:26px;color:#333333;padding:0 0 0 15px;border-left:2px solid #e3efe7;}
+.hp-pex-offer b{display:block;color:#191919;font-weight:700;}
+/* JOHN'S BLOCK, REFORMATTED AS A SIGNATURE. Same avatar, name and role as the
+   note in the high-value Abandoned Order email, so it is recognisably the same
+   person, but laid out the way a signature is rather than as a card heading. The
+   hairline above it is what makes it read as a sign-off rather than another
+   section. Outlook squares the avatar; that is already true wherever this block
+   appears. */
+.hp-pex-sigrule{border-top:1px solid #ececec;margin:24px 0 18px;}
+.hp-pex-sav{width:76px;vertical-align:middle;padding:0 14px 0 0;}
+.hp-pex-sav img{width:62px;height:62px;border-radius:9999px;display:block;border:0;}
+.hp-pex-smeta{vertical-align:middle;}
+.hp-pex-sname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
+.hp-pex-srole{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.12em;color:#767676;margin-top:3px;}
+.hp-pex-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 /* a text link, not a pill. A personal note with a green button on it is a campaign */
-.hp-pex-more{padding:24px 40px 34px;text-align:left;}
-.hp-pex-more a{font-size:15px;line-height:23px;font-weight:700;color:#008539;text-decoration:none;}
+.hp-pex-catlink{font-size:16px;line-height:26px;font-weight:700;color:#008539;text-decoration:none;}
 .hp-pex-rule{border-top:1px solid #ececec;margin:0 40px;}
 .hp-pex-foot{max-width:600px;margin:0 auto;padding:22px 24px 0;text-align:center;}
 .hp-pex-footlinks{font-size:13px;line-height:20px;}
@@ -77,8 +93,7 @@
 .hp-pex-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
   .hp-pex-head{padding:24px 22px 0;}
-  .hp-pex-body{padding:22px 22px 4px;}
-  .hp-pex-more{padding:20px 22px 28px;}
+  .hp-pex-body{padding:22px 22px 26px;}
   .hp-pex-rule{margin:0 22px;}
   .hp-pex-p,.hp-pex-offer{font-size:15px;line-height:25px;}
 }
@@ -98,18 +113,25 @@
       <p class="hp-pex-p">I am John, one of the print experts here. I am not selling you anything. I wanted to introduce myself properly, because it is a great deal easier to help before an order than after one.</p><p class="hp-pex-p">How did the last job turn out? If something was not right, tell me and I will sort it out.</p><p class="hp-pex-p">And if you have anything coming up, I would rather hear about it early. Some of what I can take off your hands:</p>
       <div class="hp-pex-offers"><p class="hp-pex-offer"><b>Not sure about a file?</b> Send it over and I will look at it before it goes anywhere.</p><p class="hp-pex-offer"><b>Need something we do not sell?</b> Tell me what it is and I will find out who makes it.</p><p class="hp-pex-offer"><b>Not sure how many to order?</b> I will price it at a few quantities. The step up is usually smaller than people expect.</p><p class="hp-pex-offer"><b>Not sure it will last?</b> Tell me where it is going and I will tell you what to print it on.</p></div>
       <p class="hp-pex-p">Just reply to this email. It comes to me.</p>
-      <p class="hp-pex-sign">&mdash; John, print expert team</p>
-    </div>
+      <p class="hp-pex-p"><a class="hp-pex-catlink" href="{% if event.Locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif event.Locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif event.Locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif event.Locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif event.Locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif event.Locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif event.Locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif event.Locale == 'it-IT' %}https://www.helloprint.com/it-it/{% else %}https://www.helloprint.com/en-gb/{% endif %}">Or start from the catalogue &rarr;</a></p>
 
-    <div class="hp-pex-more">
-      <a href="{% if event.Locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif event.Locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif event.Locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif event.Locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif event.Locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif event.Locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif event.Locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif event.Locale == 'it-IT' %}https://www.helloprint.com/it-it/{% else %}https://www.helloprint.com/en-gb/{% endif %}">Or start from the catalogue &rarr;</a>
+      <div class="hp-pex-sigrule"></div>
+      <table class="hp-pex-sigtbl" role="presentation" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="hp-pex-sav" valign="middle"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/welcome-04-john-avatar.jpg" alt="John" width="62" height="62"></td>
+          <td class="hp-pex-smeta" valign="middle">
+            <span class="hp-pex-sname">John</span>
+            <span class="hp-pex-srole">PRINT EXPERT TEAM</span>
+            <a class="hp-pex-smail" href="mailto:hello@helloprint.com">hello@helloprint.com</a>
+          </td>
+        </tr>
+      </table>
     </div>
 
     <div class="hp-pex-rule"></div>
 
     <div class="hp-pex-foot" style="padding-top:18px">
       <span class="hp-pex-footlinks">
-        <a href="mailto:hello@helloprint.com">hello@helloprint.com</a> &middot;
         <a href="{% if event.Locale == 'en-IE' %}https://www.helloprint.com/en-ie/cs{% elif event.Locale == 'en-GB' %}https://www.helloprint.com/en-gb/cs{% elif event.Locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/cs{% elif event.Locale == 'nl-BE' %}https://www.helloprint.com/nl-be/cs{% elif event.Locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/cs{% elif event.Locale == 'fr-BE' %}https://www.helloprint.com/fr-be/cs{% elif event.Locale == 'es-ES' %}https://www.helloprint.com/es-es/cs{% elif event.Locale == 'it-IT' %}https://www.helloprint.com/it-it/cs{% else %}https://www.helloprint.com/en-gb/cs{% endif %}">Help Centre</a>
       </span>
       <div class="hp-pex-legal">

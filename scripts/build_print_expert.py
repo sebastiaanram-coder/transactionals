@@ -53,7 +53,12 @@ ASSETS = os.path.join(ROOT, "assets")
 OUT = os.path.join(ROOT, "proposals")
 P = "hp-pex"
 
-_A = {"IMG_WORDMARK": "helloprint-logo-dark.svg"}
+_A = {
+    "IMG_WORDMARK": "helloprint-logo-dark.svg",
+    # John's avatar, the same file the high-value Abandoned Order note uses, so
+    # this is recognisably the same person across the programme
+    "AV_JOHN": "welcome-04-john-avatar.jpg",
+}
 
 
 def datauri(name):
@@ -103,7 +108,6 @@ COPY = dict(
          "Tell me where it is going and I will tell you what to print it on."),
     ],
     closing="Just reply to this email. It comes to me.",
-    sign="&mdash; John, print expert team",
     link="Or start from the catalogue",
     foot_help="Help Centre",
 )
@@ -117,18 +121,34 @@ CSS = """
    no photograph and no dark block anywhere in this email */
 .%(P)s-head{padding:30px 40px 0;text-align:left;}
 .%(P)s-head img{width:112px;max-width:38%%;height:auto;display:block;border:0;}
-.%(P)s-body{padding:26px 40px 4px;text-align:left;}
+.%(P)s-body{padding:26px 40px 30px;text-align:left;}
 .%(P)s-greet{margin:0 0 18px;font-size:17px;line-height:26px;color:#191919;font-weight:600;}
 .%(P)s-p{margin:0 0 18px;font-size:16px;line-height:27px;color:#333333;}
-/* the four offers: bold question, answer after it, one per line. Scannable
-   without becoming a set of cards - this is still a letter */
-.%(P)s-offers{margin:0 0 18px;}
-.%(P)s-offer{margin:0 0 11px;font-size:16px;line-height:26px;color:#333333;padding:0 0 0 14px;border-left:2px solid #e3efe7;}
-.%(P)s-offer b{color:#191919;font-weight:700;}
-.%(P)s-sign{margin:26px 0 0;font-size:16px;line-height:26px;color:#191919;font-weight:700;}
+/* THE FOUR OFFERS. The question gets its own line - it ran straight into the
+   answer before and the two read as one sentence. The hairline stays: without it
+   the four items sit in the same space as the paragraphs either side and stop
+   reading as a group. That is the whole of the design here, and deliberately so.
+   Two alternatives were built and compared: no rule at all, which is plainer but
+   loses the grouping, and the questions set as small green capitals, which reads
+   as a spec sheet and makes four green labels compete with the one green link. */
+.%(P)s-offers{margin:0 0 20px;}
+.%(P)s-offer{margin:0 0 15px;font-size:16px;line-height:26px;color:#333333;padding:0 0 0 15px;border-left:2px solid #e3efe7;}
+.%(P)s-offer b{display:block;color:#191919;font-weight:700;}
+/* JOHN'S BLOCK, REFORMATTED AS A SIGNATURE. Same avatar, name and role as the
+   note in the high-value Abandoned Order email, so it is recognisably the same
+   person, but laid out the way a signature is rather than as a card heading. The
+   hairline above it is what makes it read as a sign-off rather than another
+   section. Outlook squares the avatar; that is already true wherever this block
+   appears. */
+.%(P)s-sigrule{border-top:1px solid #ececec;margin:24px 0 18px;}
+.%(P)s-sav{width:76px;vertical-align:middle;padding:0 14px 0 0;}
+.%(P)s-sav img{width:62px;height:62px;border-radius:9999px;display:block;border:0;}
+.%(P)s-smeta{vertical-align:middle;}
+.%(P)s-sname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
+.%(P)s-srole{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.12em;color:#767676;margin-top:3px;}
+.%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 /* a text link, not a pill. A personal note with a green button on it is a campaign */
-.%(P)s-more{padding:24px 40px 34px;text-align:left;}
-.%(P)s-more a{font-size:15px;line-height:23px;font-weight:700;color:#008539;text-decoration:none;}
+.%(P)s-catlink{font-size:16px;line-height:26px;font-weight:700;color:#008539;text-decoration:none;}
 .%(P)s-rule{border-top:1px solid #ececec;margin:0 40px;}
 .%(P)s-foot{max-width:600px;margin:0 auto;padding:22px 24px 0;text-align:center;}
 .%(P)s-footlinks{font-size:13px;line-height:20px;}
@@ -139,8 +159,7 @@ CSS = """
 .%(P)s-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
   .%(P)s-head{padding:24px 22px 0;}
-  .%(P)s-body{padding:22px 22px 4px;}
-  .%(P)s-more{padding:20px 22px 28px;}
+  .%(P)s-body{padding:22px 22px 26px;}
   .%(P)s-rule{margin:0 22px;}
   .%(P)s-p,.%(P)s-offer{font-size:15px;line-height:25px;}
 }
@@ -164,18 +183,25 @@ BODY = """
       {OPENING}
       <div class="{P}-offers">{OFFERS}</div>
       <p class="{P}-p">{CLOSING}</p>
-      <p class="{P}-sign">{SIGN}</p>
-    </div>
+      <p class="{P}-p"><a class="{P}-catlink" href="{HOME}">{LINK} &rarr;</a></p>
 
-    <div class="{P}-more">
-      <a href="{HOME}">{LINK} &rarr;</a>
+      <div class="{P}-sigrule"></div>
+      <table class="{P}-sigtbl" role="presentation" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="{P}-sav" valign="middle"><img src="{AV_JOHN}" alt="John" width="62" height="62"></td>
+          <td class="{P}-smeta" valign="middle">
+            <span class="{P}-sname">John</span>
+            <span class="{P}-srole">PRINT EXPERT TEAM</span>
+            <a class="{P}-smail" href="mailto:hello@helloprint.com">hello@helloprint.com</a>
+          </td>
+        </tr>
+      </table>
     </div>
 
     <div class="{P}-rule"></div>
 
     <div class="{P}-foot" style="padding-top:18px">
       <span class="{P}-footlinks">
-        <a href="mailto:hello@helloprint.com">hello@helloprint.com</a> &middot;
         <a href="{CS}">{FOOT_HELP}</a>
       </span>
       <div class="{P}-legal">
@@ -210,7 +236,7 @@ def build(live):
     vals = dict(
         P=P, CSS=CSS % {"P": P}, PRE=COPY["pre"],
         GREET=greeting(live), OPENING=opening, OFFERS=offers,
-        CLOSING=COPY["closing"], SIGN=COPY["sign"],
+        CLOSING=COPY["closing"],
         LINK=COPY["link"], FOOT_HELP=COPY["foot_help"],
         HOME=sc.market_url("", live), CS=sc.market_url("cs", live),
         UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
@@ -317,16 +343,19 @@ for money in (r"\bdiscount\b", r"\d+\s*%", r"\bcode\b", r"\bvoucher\b",
 for showy in ("-hero", "-dark", "-cta", "-stars", "-band"):
     if P + showy in livb:
         errs.append("has a %s block; this email is meant to look like a letter" % showy)
-if "data:image/jpeg" in prev:
-    errs.append("a photograph crept in; this email has no imagery but the wordmark")
+# the only two images in this email are the wordmark and John's face
+if prev.count("data:image/jpeg") != 1:
+    errs.append("expected exactly one photograph (John), found %d"
+                % prev.count("data:image/jpeg"))
 
 # the greeting must survive a missing first name
 if "{% if first_name %}" not in livb: errs.append("the greeting is not guarded")
 if "Hi there" not in livb: errs.append("no fallback greeting")
 # and the signature has to be there, in both builds
 for name, doc in (("preview", prev), ("klaviyo", livb)):
-    if "John, print expert team" not in doc:
-        errs.append("%s: no signature" % name)
+    for part in ("%s-sigrule" % P, "%s-sname" % P, ">John<", "PRINT EXPERT TEAM"):
+        if part not in doc:
+            errs.append("%s: signature is missing %s" % (name, part))
 
 # links, per market, and no /en-ie/ left hardcoded
 for email_loc, cf_loc in sc.LOCALE_MAP.items():
