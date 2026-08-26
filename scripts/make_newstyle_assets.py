@@ -56,31 +56,43 @@ FADE_BOTTOM = 0.33
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
 # proposals/category-header-proposal.md.
-# The photograph runs to the very top of the email, so its top edge is fully
-# visible and there is no fade to hide what the crop cuts through. Offset 0 keeps
-# the whole flyer stack in frame with velvet around it; pushing the window down
-# sliced the headline off the flyer behind.
+# PER HEADER, because the subject sits in a different place in each source and the
+# bottom third of every header is eaten by the fade into the ink.
+#
+#   commercial-print  offset 0. The flyer stack fills the frame, and moving the
+#                     window down sliced the headline off the flyer behind.
+#   review-request    offset 150. At 0 the booklet sat squarely inside the bottom
+#                     fade and dissolved; lifting the window pushes it clear.
 #
 # There was a second header shape that faded into ink at the top as well, which
 # wanted its own crop pushed 210px down. It was built, compared and rejected.
-HERO_OFFSET_Y = 0
+HERO_OFFSET_Y = {"hero-commercial-print": 0, "hero-review-request": 150}
 
+# (source, output name, shape, which email loads it). The email key is what makes
+# the weight budget mean anything now that more than one email has a header: the
+# budget is per email, and a second hero for a second email is not the first email
+# getting heavier.
 JOBS = [
-    # (source, output name, shape)
-    ("standardflyers/standardflyers_setting1.webp", "hero-commercial-print", "hero"),
+    # (source, output name, shape, email)
+    ("standardflyers/standardflyers_setting1.webp", "hero-commercial-print", "hero", "commercial-print"),
+    # The review request needed its own. Booklets on a dark navy sofa: it was
+    # rejected as a 252px feature image because it turned to mud at that size,
+    # which was a scale problem rather than a bad photograph. Full width it is
+    # calm, warm and already nearly ink at the bottom edge.
+    ("booklets/booklets_setting1.webp", "hero-review-request", "hero", "review-request"),
     # Both feature shots were changed after seeing them at 252px beside prose.
     # booklets_setting1 is a dark navy interior that turns to mud at that size,
     # and standardflyers_setting2 is a tight overhead that reads as texture
     # rather than as a flyer once it is cropped to landscape. These two are the
     # brightest and most legible small.
-    ("booklets/booklets_setting2.webp",             "feature-booklets",      "feature"),
-    ("halffoldleaflets/halffoldleaflets_setting1.webp", "feature-leaflets",   "feature"),
-    ("trifoldleaflets/trifoldleaflets_setting1.webp", "tile-folded-leaflets", "tile"),
-    ("posters/posters_setting1.webp",               "tile-posters",          "tile"),
-    ("standardbusinesscards/standardbusinesscards_setting1.webp", "tile-business-cards", "tile"),
+    ("booklets/booklets_setting2.webp",             "feature-booklets",      "feature", "commercial-print"),
+    ("halffoldleaflets/halffoldleaflets_setting1.webp", "feature-leaflets",   "feature", "commercial-print"),
+    ("trifoldleaflets/trifoldleaflets_setting1.webp", "tile-folded-leaflets", "tile", "commercial-print"),
+    ("posters/posters_setting1.webp",               "tile-posters",          "tile", "commercial-print"),
+    ("standardbusinesscards/standardbusinesscards_setting1.webp", "tile-business-cards", "tile", "commercial-print"),
     # stands in for Cards & Invitations, which has no shot - see
     # scripts/fetch_subcategories.py for why that swap was made
-    ("budgetrollupbanners/budgetrollupbanners_setting2.webp", "tile-rollup", "tile"),
+    ("budgetrollupbanners/budgetrollupbanners_setting2.webp", "tile-rollup", "tile", "commercial-print"),
 ]
 
 
@@ -89,7 +101,7 @@ def derive(src, name, shape):
         w, h = HERO
         # crop the square to 10:7 before resizing, or the resize squashes it
         img = ri.read(src, crop=(int(1000 * h / float(w)), 1000),
-                      offset_y=HERO_OFFSET_Y, resize=(w, h))
+                      offset_y=HERO_OFFSET_Y[name], resize=(w, h))
         # bottom only: the top of this image is the top of the email
         rows = ri.fade(img[0], img[1], img[2], bottom=FADE_BOTTOM)
         # Same quality as the tiles. The saving on the header came off its
@@ -141,12 +153,12 @@ def main():
 
     os.makedirs(OUT, exist_ok=True)
     sizes = {}
-    for src, name, shape in JOBS:
+    for src, name, shape, email in JOBS:
         p = os.path.join(a.src, src)
         if not os.path.exists(p):
             print("FAILED: missing source %s" % src)
             return 1
-        sizes[name] = (shape, derive(p, name, shape))
+        sizes[name] = (shape, derive(p, name, shape), email)
         print("  %-30s %-9s %6.1f KB" % (name, shape, sizes[name][1] / 1024.0))
 
     st = derive_stars()
@@ -155,14 +167,24 @@ def main():
     print("  %-30s %-9s %6.1f KB  (%.0f%% of it repainted to ink)"
           % (STARS_OUT[:-4], "graphic", st[0] / 1024.0, st[1] * 100))
 
-    heroes = [n for n, (sh, _) in sizes.items() if sh == "hero"]
-    rest = sum(sz for n, (_, sz) in sizes.items() if n not in heroes)
-    one_email = rest + (max(sizes[n][1] for n in heroes) if heroes else 0)
-    print("\n%d files, %.0f KB, all of which one email loads."
-          % (len(sizes), one_email / 1024.0))
-    if one_email / 1024.0 > BUDGET_KB:
-        print("FAILED: %.0f KB is over the %d KB budget for one email"
-              % (one_email / 1024.0, BUDGET_KB))
+    heroes = [n for n, v in sizes.items() if v[0] == "hero"]
+    per_email = {}
+    for n, (sh, sz, em) in sizes.items():
+        per_email.setdefault(em, 0)
+        per_email[em] += sz
+    shared = per_email.pop("shared", 0) + st[0]   # the stars are on every email
+    print()
+    over = []
+    for em in sorted(per_email):
+        tot = (per_email[em] + shared) / 1024.0
+        print("  %-20s %6.0f KB" % (em, tot))
+        if tot > BUDGET_KB:
+            over.append((em, tot))
+    print("  %-20s %6.0f KB on disk, %d files" %
+          ("", sum(v[1] for v in sizes.values()) / 1024.0, len(sizes)))
+    if over:
+        for em, tot in over:
+            print("FAILED: %s loads %.0f KB, over the %d KB budget" % (em, tot, BUDGET_KB))
         return 1
 
     # The hero has to end in the same ink as the block beneath it, or the join

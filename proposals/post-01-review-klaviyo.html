@@ -45,17 +45,32 @@
 .hp-rev1-root *{box-sizing:border-box;}
 .hp-rev1-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
 .hp-rev1-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
+/* the photograph runs to the top of the card and fades into the ink at the bottom,
+   the same header shape as the category nudge. The fade is in the pixels because
+   Outlook ignores CSS gradients - see scripts/make_newstyle_assets.py */
+.hp-rev1-hero{background:#191919;font-size:0;line-height:0;}
+.hp-rev1-hero img{width:100%;max-width:600px;height:auto;display:block;border:0;
+  border-radius:18px 18px 0 0;color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
 .hp-rev1-dark{background:#191919;padding:26px 32px 34px;text-align:center;}
-.hp-rev1-dark img.hp-rev1-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 26px;}
+.hp-rev1-dark img.hp-rev1-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 22px;}
 .hp-rev1-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .hp-rev1-h1{margin:0 auto 12px;max-width:430px;font-size:30px;line-height:37px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .hp-rev1-sub{margin:0 auto 24px;max-width:410px;font-size:16px;line-height:25px;color:#b4b4b4;}
 .hp-rev1-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
-/* the aggregate score, on white, directly under the ask: it says where the review
-   goes rather than suggesting what it should say */
-.hp-rev1-score{margin:26px 24px 0;text-align:center;}
-.hp-rev1-score img{display:block;margin:0 auto 11px;border:0;width:132px;height:28px;}
-.hp-rev1-scoretx{margin:0;font-size:14px;line-height:21px;color:#767676;}
+/* THE STARS, DRAWN. Five cells with a bgcolor and a glyph rather than a bitmap:
+   crisp at any size, no image to fail to load, and bgcolor on a td is about the
+   only background Outlook has never argued with. Trustpilot green, not ours. */
+.hp-rev1-stars{margin:0 auto 26px;border-collapse:separate;}
+.hp-rev1-stars td.hp-rev1-star{width:54px;height:54px;background:#00b67a;text-align:center;vertical-align:middle;}
+.hp-rev1-starlink{display:block;text-decoration:none;}
+.hp-rev1-stars td.hp-rev1-star span{display:block;width:54px;height:54px;font-size:33px;line-height:54px;
+  color:#ffffff;text-decoration:none;font-family:'Segoe UI Symbol','Apple Symbols',Arial,sans-serif;}
+.hp-rev1-stars td.hp-rev1-gap{width:7px;font-size:0;line-height:0;}
+/* what the ask covers, and where it lands. On white so the email breathes between
+   two blocks of ink */
+.hp-rev1-about{margin:0;padding:30px 34px 28px;text-align:center;}
+.hp-rev1-abouttx{margin:0 auto 10px;max-width:430px;font-size:16px;line-height:25px;color:#333333;}
+.hp-rev1-scoretx{margin:0;font-size:13px;line-height:20px;color:#767676;}
 /* the band: prominent on purpose. Day 18 clears the median lead time and not the
    tail, so the reader who is still waiting needs somewhere to go that is not a
    one-star review */
@@ -84,7 +99,11 @@
   .hp-rev1-cta,.hp-rev1-cta2{padding:15px 26px;}
   .hp-rev1-band{padding:26px 22px;margin-top:26px;}
   .hp-rev1-bandh{font-size:18px;line-height:25px;}
-  .hp-rev1-score,.hp-rev1-tail{margin-left:14px;margin-right:14px;}
+  .hp-rev1-about{padding:26px 22px 24px;}
+  .hp-rev1-tail{margin-left:14px;margin-right:14px;}
+  .hp-rev1-stars td.hp-rev1-star,.hp-rev1-stars td.hp-rev1-star span{width:46px;height:46px;}
+  .hp-rev1-stars td.hp-rev1-star span{font-size:28px;line-height:46px;}
+  .hp-rev1-stars td.hp-rev1-gap{width:6px;}
   .hp-rev1-foot{padding-left:18px;padding-right:18px;}
 }
 </style>
@@ -94,16 +113,19 @@
 <div class="hp-rev1-wrap">
   <div class="hp-rev1-shell">
 
+    <div class="hp-rev1-hero"><img src="https://sebastiaanram-coder.github.io/transactionals/assets/newstyle/hero-review-request.jpg" alt="A printed booklet resting on a dark blue sofa" width="600"></div>
+
     <div class="hp-rev1-dark">
       <a href="https://www.helloprint.com/en-ie/"><img class="hp-rev1-mark" src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="142"></a>
       <span class="hp-rev1-eyebrow">ABOUT A MINUTE</span>
       <h1 class="hp-rev1-h1">Would you tell other businesses how it went?</h1>
       <p class="hp-rev1-sub">A few words about ordering with us helps the next business work out who to print with. It goes on Trustpilot, where anyone can read it.</p>
+      <a class="hp-rev1-starlink" href="{% if event.Locale == 'en-IE' %}https://ie.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'en-GB' %}https://uk.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'nl-NL' %}https://nl.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'nl-BE' %}https://nl.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'fr-FR' %}https://fr.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'fr-BE' %}https://fr.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'es-ES' %}https://es.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'it-IT' %}https://it.trustpilot.com/evaluate/helloprint.com{% else %}https://uk.trustpilot.com/evaluate/helloprint.com{% endif %}" aria-label="Rate your experience on Trustpilot"><table class="hp-rev1-stars" role="presentation" cellpadding="0" cellspacing="0" align="center"><tr><td class="hp-rev1-star" bgcolor="#00b67a" align="center" valign="middle" width="54" height="54"><span>&#9733;</span></td><td class="hp-rev1-gap">&nbsp;</td><td class="hp-rev1-star" bgcolor="#00b67a" align="center" valign="middle" width="54" height="54"><span>&#9733;</span></td><td class="hp-rev1-gap">&nbsp;</td><td class="hp-rev1-star" bgcolor="#00b67a" align="center" valign="middle" width="54" height="54"><span>&#9733;</span></td><td class="hp-rev1-gap">&nbsp;</td><td class="hp-rev1-star" bgcolor="#00b67a" align="center" valign="middle" width="54" height="54"><span>&#9733;</span></td><td class="hp-rev1-gap">&nbsp;</td><td class="hp-rev1-star" bgcolor="#00b67a" align="center" valign="middle" width="54" height="54"><span>&#9733;</span></td></tr></table></a>
       <a class="hp-rev1-cta" href="{% if event.Locale == 'en-IE' %}https://ie.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'en-GB' %}https://uk.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'nl-NL' %}https://nl.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'nl-BE' %}https://nl.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'fr-FR' %}https://fr.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'fr-BE' %}https://fr.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'es-ES' %}https://es.trustpilot.com/evaluate/helloprint.com{% elif event.Locale == 'it-IT' %}https://it.trustpilot.com/evaluate/helloprint.com{% else %}https://uk.trustpilot.com/evaluate/helloprint.com{% endif %}">Rate your experience</a>
     </div>
 
-    <div class="hp-rev1-score">
-      <img src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-5-on-ink.png" alt="Rated 4.5 out of 5 on Trustpilot" width="132" height="28">
+    <div class="hp-rev1-about">
+      <p class="hp-rev1-abouttx">A service review: how ordering went, how it turned up, and what we were like to deal with.</p>
       <p class="hp-rev1-scoretx">Helloprint is rated 4.5 out of 5 from more than 34,000 reviews.</p>
     </div>
 

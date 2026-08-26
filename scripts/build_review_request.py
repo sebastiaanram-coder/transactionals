@@ -16,10 +16,18 @@ review. That block is not fine print - it is on ink, as prominent as the ask,
 because a mis-timed request that finds a route to support is recovered and one
 that does not is a public one-star.
 
-ONE BUTTON, NOT FIVE STARS. The obvious design is a row of stars each deep-linking
-to ?stars=N. Trustpilot does not honour that parameter on a plain evaluate link -
-loading it leaves every radio unchecked - so a reader clicking four stars would
-land on a blank form. See _lib/reviews.py.
+THE STARS ARE DRAWN, NOT A PICTURE. The first version showed Trustpilot's 132px
+star strip, which is a 290px asset at half size: small, soft on a retina screen,
+and the least interesting thing on a screen it was supposed to anchor. They are
+now five table cells with a bgcolor and a white glyph, so they are crisp at any
+size and at any zoom, and there is no image to fail to load. bgcolor on a td is
+about the only background Outlook has never argued with.
+
+EVERY STAR GOES TO THE SAME PLACE, and that is deliberate rather than lazy.
+Trustpilot ignores ?stars=N on a public review link - loading
+/evaluate/helloprint.com?stars=4 leaves all five radios unchecked - so a row where
+each star carried a rating would be a promise the form does not keep. The row
+means "go and rate us"; the rating is chosen on the form. See _lib/reviews.py.
 
 NO CUSTOMER QUOTE IN THIS ONE, deliberately. Every other email in the programme
 carries a real review, and here it would be steering: showing somebody a five-star
@@ -57,13 +65,27 @@ def datauri(name):
 
 _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
-    "IMG_STARS":    "trustpilot-stars-5-on-ink.png",
 }
+HERO = "hero-review-request"
+PHOTO_BASE = "https://sebastiaanram-coder.github.io/transactionals/assets/newstyle/"
+PHOTO_DIR = os.path.join(ASSETS, "newstyle")
+
+
+def photo(name, live):
+    """Inlined in the preview, a URL in the Klaviyo build - the same rule as the
+    category emails. The URL is the published copy of this repo, which is a review
+    host and not a production one."""
+    if live:
+        return PHOTO_BASE + name + ".jpg"
+    with open(os.path.join(PHOTO_DIR, name + ".jpg"), "rb") as f:
+        return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
 COPY = dict(
+    hero_alt="A printed booklet resting on a dark blue sofa",
     eyebrow="ABOUT A MINUTE",
+    stars_label="Rate your experience on Trustpilot",
     h1="Would you tell other businesses how it went?",
     sub="A few words about ordering with us helps the next business work out who to "
         "print with. It goes on Trustpilot, where anyone can read it.",
@@ -77,6 +99,10 @@ COPY = dict(
     band_b="Tell us before you rate us. Reply to this email and it reaches a print "
            "expert who can chase the order or put it right.",
     band_link="Help Centre",
+    # what the reader is actually being asked about, since "review" on its own
+    # invites a review of the print rather than of us
+    about="A service review: how ordering went, how it turned up, and what we were "
+          "like to deal with.",
 )
 
 CSS = """
@@ -84,17 +110,32 @@ CSS = """
 .%(P)s-root *{box-sizing:border-box;}
 .%(P)s-wrap{width:100%%;background:#f8f8f8;padding:0 0 32px;}
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
+/* the photograph runs to the top of the card and fades into the ink at the bottom,
+   the same header shape as the category nudge. The fade is in the pixels because
+   Outlook ignores CSS gradients - see scripts/make_newstyle_assets.py */
+.%(P)s-hero{background:#191919;font-size:0;line-height:0;}
+.%(P)s-hero img{width:100%%;max-width:600px;height:auto;display:block;border:0;
+  border-radius:18px 18px 0 0;color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
 .%(P)s-dark{background:#191919;padding:26px 32px 34px;text-align:center;}
-.%(P)s-dark img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0 0 26px;}
+.%(P)s-dark img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0 0 22px;}
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .%(P)s-h1{margin:0 auto 12px;max-width:430px;font-size:30px;line-height:37px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .%(P)s-sub{margin:0 auto 24px;max-width:410px;font-size:16px;line-height:25px;color:#b4b4b4;}
 .%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
-/* the aggregate score, on white, directly under the ask: it says where the review
-   goes rather than suggesting what it should say */
-.%(P)s-score{margin:26px 24px 0;text-align:center;}
-.%(P)s-score img{display:block;margin:0 auto 11px;border:0;width:132px;height:28px;}
-.%(P)s-scoretx{margin:0;font-size:14px;line-height:21px;color:#767676;}
+/* THE STARS, DRAWN. Five cells with a bgcolor and a glyph rather than a bitmap:
+   crisp at any size, no image to fail to load, and bgcolor on a td is about the
+   only background Outlook has never argued with. Trustpilot green, not ours. */
+.%(P)s-stars{margin:0 auto 26px;border-collapse:separate;}
+.%(P)s-stars td.%(P)s-star{width:54px;height:54px;background:#00b67a;text-align:center;vertical-align:middle;}
+.%(P)s-starlink{display:block;text-decoration:none;}
+.%(P)s-stars td.%(P)s-star span{display:block;width:54px;height:54px;font-size:33px;line-height:54px;
+  color:#ffffff;text-decoration:none;font-family:'Segoe UI Symbol','Apple Symbols',Arial,sans-serif;}
+.%(P)s-stars td.%(P)s-gap{width:7px;font-size:0;line-height:0;}
+/* what the ask covers, and where it lands. On white so the email breathes between
+   two blocks of ink */
+.%(P)s-about{margin:0;padding:30px 34px 28px;text-align:center;}
+.%(P)s-abouttx{margin:0 auto 10px;max-width:430px;font-size:16px;line-height:25px;color:#333333;}
+.%(P)s-scoretx{margin:0;font-size:13px;line-height:20px;color:#767676;}
 /* the band: prominent on purpose. Day 18 clears the median lead time and not the
    tail, so the reader who is still waiting needs somewhere to go that is not a
    one-star review */
@@ -123,7 +164,11 @@ CSS = """
   .%(P)s-cta,.%(P)s-cta2{padding:15px 26px;}
   .%(P)s-band{padding:26px 22px;margin-top:26px;}
   .%(P)s-bandh{font-size:18px;line-height:25px;}
-  .%(P)s-score,.%(P)s-tail{margin-left:14px;margin-right:14px;}
+  .%(P)s-about{padding:26px 22px 24px;}
+  .%(P)s-tail{margin-left:14px;margin-right:14px;}
+  .%(P)s-stars td.%(P)s-star,.%(P)s-stars td.%(P)s-star span{width:46px;height:46px;}
+  .%(P)s-stars td.%(P)s-star span{font-size:28px;line-height:46px;}
+  .%(P)s-stars td.%(P)s-gap{width:6px;}
   .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
 """
@@ -137,16 +182,19 @@ BODY = """
 <div class="{P}-wrap">
   <div class="{P}-shell">
 
+    <div class="{P}-hero"><img src="{HERO_IMG}" alt="{HERO_ALT}" width="600"></div>
+
     <div class="{P}-dark">
       <a href="{HOME}"><img class="{P}-mark" src="{IMG_WORDMARK}" alt="Helloprint" width="142"></a>
       <span class="{P}-eyebrow">{EYEBROW}</span>
       <h1 class="{P}-h1">{H1}</h1>
       <p class="{P}-sub">{SUB}</p>
+      {STARS}
       <a class="{P}-cta" href="{TP_URL}">{CTA}</a>
     </div>
 
-    <div class="{P}-score">
-      <img src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="132" height="28">
+    <div class="{P}-about">
+      <p class="{P}-abouttx">{ABOUT}</p>
       <p class="{P}-scoretx">{SCORE}</p>
     </div>
 
@@ -196,12 +244,34 @@ def tp_switch(live):
     return out + "{%% else %%}%s{%% endif %%}" % rv.write_url("en-GB")
 
 
+def star_row(url, label):
+    """Five drawn stars behind ONE link.
+
+    Not five links. Each would have carried its own copy of an eight-branch locale
+    conditional, five times over, for five destinations that are all the same
+    place - see the module docstring on why they have to be. One anchor around the
+    row is one target, one label a screen reader can read, and a quarter of the
+    markup.
+    """
+    cells = ""
+    for i in range(5):
+        if i:
+            cells += '<td class="%s-gap">&nbsp;</td>' % P
+        cells += ('<td class="%s-star" bgcolor="#00b67a" align="center" valign="middle"'
+                  ' width="54" height="54"><span>&#9733;</span></td>' % P)
+    return ('<a class="%s-starlink" href="%s" aria-label="%s">'
+            '<table class="%s-stars" role="presentation" cellpadding="0" cellspacing="0"'
+            ' align="center"><tr>%s</tr></table></a>' % (P, url, esc(label), P, cells))
+
+
 def build(live):
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
     vals = dict(
         P=P, CSS=CSS % {"P": P},
         EYEBROW=COPY["eyebrow"], H1=COPY["h1"], SUB=COPY["sub"],
-        CTA=COPY["cta"], PRE=COPY["pre"],
+        CTA=COPY["cta"], PRE=COPY["pre"], ABOUT=COPY["about"],
+        HERO_IMG=photo(HERO, live), HERO_ALT=esc(COPY["hero_alt"]),
+        STARS=star_row(tp_switch(live), COPY["stars_label"]),
         SCORE=COPY["score"] % (rv.score(), format(rv.review_total() // 1000 * 1000, ",")),
         BAND_H=COPY["band_h"], BAND_B=COPY["band_b"], BAND_LINK=COPY["band_link"],
         TP_URL=tp_switch(live),
@@ -301,9 +371,11 @@ for email_loc, cf_loc in sc.LOCALE_MAP.items():
 # one fallback per switch, and the switch is used twice - both buttons. Counting
 # to one was wrong: it would have failed a correct email and passed one whose
 # second button had lost its {% else %}.
+# three places carry the review link: the star row and both buttons
 n_switch = livb.count("{%% if event.Locale == '%s'" % list(sc.LOCALE_MAP)[0])
-if n_switch != 2:
-    errs.append("expected the review link twice, found %d" % n_switch)
+if n_switch != 3:
+    errs.append("expected the review link three times (stars, both buttons), "
+                "found %d" % n_switch)
 if livb.count("{% else %}") != n_switch or livb.count("{% endif %}") != n_switch:
     errs.append("a review link is missing its fallback")
 
