@@ -164,6 +164,86 @@ email in exactly the two markets that were not fixed.
 
 ---
 
+## 4a. The promises, and where they belong
+
+A proposal. The stamps are extracted and committed so they can be looked at;
+nothing is wired into an email yet.
+
+### The idea: the four promises are the four reasons somebody lapses
+
+A lapsed customer is not a stranger — they bought before, so "let me introduce
+ourselves" is wasted on them. What they have is an objection, and there are only
+really four:
+
+| Why they stopped | The promise that answers it |
+|---|---|
+| Found it cheaper somewhere | **Best Price Guarantee** — "found it cheaper elsewhere? We'll beat it" |
+| Something went wrong last time | **100% Satisfaction** — free reprint, full refund, or keep it and take 10% back |
+| The artwork was a hassle | **Design** — free design tools, and an artwork check |
+| Nobody to ask | **Customer Success** — real people on chat, email or phone |
+
+So rather than bolting a trust bar onto every email, **one promise per email,
+matched to the objection at that point in the flow.**
+
+| Email | Promise | Why there |
+|---|---|---|
+| High, day 90 — John's letter | **100% Satisfaction** | John already says "if something was not right, tell me". The promise is what makes that sentence cost us something. |
+| High, day 111 — products, no offer | **Design** | The objection at the browse stage is "I would have to make the artwork". |
+| High, day 140 — the offer | **Best Price** | Sits with the code and answers "I found it cheaper" rather than just undercutting. |
+| Low, day 90 — products and the code | **Best Price** | Same reason. |
+| Low, day 120 — last call | none | It is thirty words long. Leave it. |
+
+### The component
+
+**A promise block on ink**: the stamp at 90px on the left, a headline and one line
+on the right, and a link to /our-promises. It reuses the dark band the flow already
+has, and it is the only place the stamps can go — they are white line art, so on
+white they disappear.
+
+Two of the four have stamps. Design and Customer Success do not, so those two get
+the same block with the promise as a heading and no seal, or design supplies two
+more.
+
+### About the stamps
+
+There is no standalone asset. The seals are composited into photographs on
+/our-promises, and the only files on the CDN are those photographs — so these are
+**cut out of the photos and thresholded to white line art**. It works, and it is not
+as good as the real thing: the "OUR PROMISES" ring text is set small and loses a
+little crispness at 90px.
+
+**Worth one request to design for the original vector.** `assets/promises/` holds
+what I extracted and `scripts/make_promise_stamps.py` regenerates it, with a check
+on how much of the square is white — which is what caught the two stamps not
+matching in size when the crop was looser.
+
+---
+
+## 4b. Two things on that page worth someone knowing
+
+Neither is about winback, and both are the kind of thing that only shows up when
+somebody reads the page closely.
+
+**It resolves a contradiction I refused to write around.** John's day-45 email
+deliberately avoids claiming we check files, because
+`/always-a-perfect-design` says checking is included and the cart says it is not.
+The promises page now states it plainly: *"Artwork Check: We'll review your files to
+make sure they're print-perfect."* So the promise exists at company level and **the
+cart wording is the outlier** — worth fixing the cart rather than writing around it,
+and it would let John offer it properly.
+
+**The page contradicts itself on reviews, three ways.** "32 000+ Reviews" near the
+top, "4.4 Based on 31 000+ reviews" in the footer, and Trustpilot's own API returns
+**4.5 from 34,374**. The emails in this programme use the live API figure via
+`fetch_reviews.py --score-only`, which is the only one of the three that is right.
+
+**And a third 10%.** The satisfaction guarantee offers "keep your product and
+receive a refund or discount of 10%". Not a problem, but the discount ladder now has
+10% in Welcome, 10% in Post-Purchase, 10% as a service remedy, 15% in Winback and
+25% capped in Abandoned Order. Worth knowing before anyone adds another.
+
+---
+
 ## 5. What has to be true before this can be built
 
 1. **One test render of the recommendation block**, to confirm `{% catalog person %}`
