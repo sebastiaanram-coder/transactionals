@@ -21,27 +21,18 @@
 .hp-wb1h-h1{margin:0 auto 12px;max-width:430px;font-size:29px;line-height:36px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .hp-wb1h-sub{margin:0 auto 24px;max-width:415px;font-size:16px;line-height:25px;color:#b4b4b4;}
 .hp-wb1h-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
-/* THE THEN-AND-NOW STRIP. The only layout in the programme that carries a
-   comparison, which is the whole reason it exists: a comparison reads as news and a
-   list reads as marketing. Two columns on desktop; on a phone each row stacks into
-   a before/after pair, which is why the arrow is a row of its own rather than a
-   glyph between the cells - a rotated arrow cannot be relied on in email. */
+/* THE PRODUCT GRID. Two per row on every screen - no stacking, because two-up is
+   the point of it - and no prices, following the category nudge: a browse
+   invitation reading "from EUR300.11 for 100 units" argues against itself. */
 .hp-wb1h-news{margin:30px 24px 0;}
 .hp-wb1h-newsh{margin:0 0 4px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;text-align:center;}
-.hp-wb1h-newss{margin:0 auto 22px;max-width:400px;font-size:14px;line-height:21px;color:#767676;text-align:center;}
-.hp-wb1h-row{width:100%;border-collapse:collapse;margin:0 0 14px;}
-.hp-wb1h-was,.hp-wb1h-now{width:47%;vertical-align:top;padding:14px 16px;border-radius:11px;}
-.hp-wb1h-was{background:#f4f4f4;}
-.hp-wb1h-now{background:#f1f8f4;}
-.hp-wb1h-arrow{width:6%;vertical-align:middle;text-align:center;font-size:16px;line-height:20px;color:#b9cfc2;font-weight:800;}
-.hp-wb1h-lbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.14em;margin:0 0 6px;}
-.hp-wb1h-was .hp-wb1h-lbl{color:#8f8f8f;}
-.hp-wb1h-now .hp-wb1h-lbl{color:#008539;}
-.hp-wb1h-txt{display:block;font-size:14px;line-height:21px;color:#333333;}
-/* the placeholder treatment, same as the Trustpilot one: an obvious gap rather
-   than an invented claim */
-.hp-wb1h-ph{display:block;border:2px dashed #d4d4d4;border-radius:9px;padding:12px 13px;background:#fafafa;font-size:13px;line-height:19px;color:#767676;}
-.hp-wb1h-phw{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.12em;color:#a0a0a0;margin:5px 0 0;}
+.hp-wb1h-newss{margin:0 auto 20px;max-width:400px;font-size:14px;line-height:21px;color:#767676;text-align:center;}
+.hp-wb1h-tiles{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;}
+.hp-wb1h-tile{width:50%;vertical-align:top;padding:0 6px 14px;}
+.hp-wb1h-card{display:block;text-decoration:none;}
+.hp-wb1h-card img{width:100%;max-width:100%;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+.hp-wb1h-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
+.hp-wb1h-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
 /* code block, same treatment as the post-purchase offer so it reads as one ladder */
 .hp-wb1h-code{margin:0 auto 22px;max-width:400px;border:2px dashed #9fdbb8;border-radius:12px;padding:18px 20px 16px;background:#212121;}
 .hp-wb1h-codelbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.18em;color:#9fdbb8;margin:0 0 8px;}
@@ -77,10 +68,8 @@
   .hp-wb1h-sub{font-size:15px;line-height:23px;max-width:none;}
   .hp-wb1h-cta{padding:15px 26px;}
   .hp-wb1h-news{margin-left:14px;margin-right:14px;}
-  /* the row becomes a stacked before/after pair */
-  .hp-wb1h-was,.hp-wb1h-now,.hp-wb1h-arrow{display:block!important;width:100%!important;}
-  .hp-wb1h-arrow{padding:5px 0;font-size:15px;}
-  .hp-wb1h-was{margin-bottom:0;}
+  .hp-wb1h-tile{padding:0 4px 12px;}
+  .hp-wb1h-tname{font-size:14px;line-height:19px;min-height:38px;}
   .hp-wb1h-lhead{padding:24px 22px 0;}
   .hp-wb1h-lbody{padding:22px 22px 26px;}
   .hp-wb1h-code{padding:16px 16px 14px;}

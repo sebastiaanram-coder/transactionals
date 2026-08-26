@@ -15,17 +15,36 @@ months of history.
   high value, AOV >= 150   day 90 a person, 111 the news, 140 the offer
   low value                day 90 the news and the code, 120 last call
 
-THE NEW TEMPLATE IS THE THEN-AND-NOW STRIP, and it is the only layout in the
-programme that carries a comparison. That is the point of it: a comparison reads as
-news, and a list reads as marketing. Two columns on desktop, stacked into
-before/after pairs on a phone.
+PRODUCTS, NOT A CHANGELOG. The first version of this flow led on "what changed
+since you last printed", laid out as a then-and-now comparison strip. It was the
+wrong instinct: that is how software announces itself, and this is a print business
+selling products. Replaced with a recommended-product grid.
 
-*** ITS CONTENT IS NOT WRITTEN, AND MUST NOT BE INVENTED. *** The strip needs three
-concrete, checkable changes since the customer last ordered - a format that is new,
-a lead time that is shorter, a price that moved. Nobody has supplied them, so the
-rows render as visible placeholders in the same style as the Trustpilot review
-placeholder, and the build fails if anything that looks like a real claim appears
-there. A fabricated "now 30% faster" is worse than an obvious gap.
+*** THE LIVE BUILD USES KLAVIYO'S RECOMMENDATION ENGINE, AND THE SYNTAX IS NOT
+VERIFIED. *** It emits {% catalog person %} with the rows sliced out of
+catalog_items. Two things about that are deliberate and one is a risk:
+
+  |slice is used to break the 2x2 grid rather than divisibleby, because slice is
+  verified to work in this account and divisibleby is not.
+
+  It names no product ids, which is what makes it safer than the product tiles this
+  programme removed from the category nudge. That failure was a lookup on a
+  specific id: a missing item returns HTTP 400 and the WHOLE email fails to send,
+  and 10 of 144 market-product pairs were missing. A recommendation block asks for
+  n items and gets whatever exists, so there is no id to miss - but that reasoning
+  needs one test render to confirm before this is switched on.
+
+  Category-scoped recommendations are NOT available. Every catalogue category
+  returns an empty external_id, so they all share one compound id; "more of what
+  they bought" cannot be expressed. Whatever the engine returns is what it returns.
+
+The preview shows real Contentful subcategory tiles instead, so the layout can be
+judged. Same split as everywhere else here: a realistic example in the preview, the
+live mechanism in the build.
+
+NO PRICES ON THE TILES, following the category nudge. A browse invitation reading
+"from EUR300.11 for 100 units" argues against itself, and the whole bug class behind
+"for 500.0 unites" disappears when there is no number to format.
 
 WHAT THE COPY LEANS ON INSTEAD, and it needs nothing from anybody: the customer's
 own rhythm. "It has been three months" is true by construction - the flow only
@@ -85,16 +104,10 @@ EXPIRY_DAYS = 14
 # invisible, and the comparison is the entire reason this layout exists - a design
 # cannot be judged on two empty dashed rectangles. Same split as the code: a
 # realistic example in the preview, a sentinel in the build.
-NEWS_BRIEF = [
-    ("A format we did not offer last time", "product or category"),
-    ("A lead time that is genuinely shorter", "fulfilment, with the real before and after"),
-    ("A price or a quantity break that moved", "pricing, and it must survive being checked"),
-]
-NEWS_SAMPLE = [
-    ("Roller banners, three working days", "Same banner, next working day"),
-    ("Flyers from 1,000", "Flyers from 250"),
-    ("Foamex indoors only", "Foamex rated for outdoors"),
-]
+# What the preview grid shows: real Contentful subcategories, with images that
+# resize properly. The live build asks Klaviyo for recommendations instead.
+PREVIEW_TILES = ["Leaflet Printing & Flyers", "Roller Banners",
+                 "Business Cards", "Labels & Stickers"]
 
 
 def photo(name, live):
@@ -125,13 +138,13 @@ EMAILS = [
          ],
          closing="Just reply to this email. It comes to me."),
     dict(slug="winback-02-high", code="wb2h", branch="high", day=111, kind="news",
-         label="what changed", hero="hero-winback-news",
+         label="worth another look", hero="hero-winback-news",
          hero_alt="A printed banner on a fence beside a tennis court",
-         eyebrow="SINCE YOU LAST PRINTED",
-         h1="A few things have moved since your last order",
-         sub="Not a sales pitch — three things that are actually different now, "
-             "and worth knowing before your next job.",
-         cta="See what is new", offer=False),
+         eyebrow="WORTH ANOTHER LOOK",
+         h1="A few things worth another look",
+         sub="No offer attached. Just the print businesses come back for most, in "
+             "case one of them is your next job.",
+         cta="See the range", offer=False, tiles=4),
     dict(slug="winback-03-high", code="wb3h", branch="high", day=140, kind="offer",
          label="the offer", hero="hero-winback-offer",
          hero_alt="A folded leaflet standing on a wooden sideboard",
@@ -139,22 +152,22 @@ EMAILS = [
          h1="A reason to come back, if you needed one",
          sub="It has been a few months. The code below takes %d%% off whatever you "
              "print next." % PERCENT,
-         cta="Start your next order", offer=True),
+         cta="Start your next order", offer=True, tiles=4),
     dict(slug="winback-01-low", code="wb1l", branch="low", day=90, kind="news",
-         label="what changed and the code", hero="hero-winback-news",
+         label="pick up where you left off", hero="hero-winback-news",
          hero_alt="A printed banner on a fence beside a tennis court",
-         eyebrow="SINCE YOU LAST PRINTED",
-         h1="Three things that changed, and %d%% off" % PERCENT,
-         sub="It has been about three months. Here is what is different now, and a "
-             "code to make coming back easier.",
-         cta="Start your next order", offer=True),
+         eyebrow="%d%% OFF YOUR NEXT ORDER" % PERCENT,
+         h1="Pick up where you left off",
+         sub="It has been about three months. A few things to start from, and a "
+             "code to make it easier.",
+         cta="Start your next order", offer=True, tiles=4),
     dict(slug="winback-02-low", code="wb2l", branch="low", day=120, kind="offer",
          label="last call", hero=None,
          eyebrow="LAST CALL",
          h1="Your %d%% is about to go" % PERCENT,
          sub="Whatever you were thinking of printing, this is the cheapest moment "
              "to do it.",
-         cta="Use it before it goes", offer=True),
+         cta="Use it before it goes", offer=True, tiles=2),
 ]
 
 CSS = """
@@ -171,27 +184,18 @@ CSS = """
 .%(P)s-h1{margin:0 auto 12px;max-width:430px;font-size:29px;line-height:36px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .%(P)s-sub{margin:0 auto 24px;max-width:415px;font-size:16px;line-height:25px;color:#b4b4b4;}
 .%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
-/* THE THEN-AND-NOW STRIP. The only layout in the programme that carries a
-   comparison, which is the whole reason it exists: a comparison reads as news and a
-   list reads as marketing. Two columns on desktop; on a phone each row stacks into
-   a before/after pair, which is why the arrow is a row of its own rather than a
-   glyph between the cells - a rotated arrow cannot be relied on in email. */
+/* THE PRODUCT GRID. Two per row on every screen - no stacking, because two-up is
+   the point of it - and no prices, following the category nudge: a browse
+   invitation reading "from EUR300.11 for 100 units" argues against itself. */
 .%(P)s-news{margin:30px 24px 0;}
 .%(P)s-newsh{margin:0 0 4px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;text-align:center;}
-.%(P)s-newss{margin:0 auto 22px;max-width:400px;font-size:14px;line-height:21px;color:#767676;text-align:center;}
-.%(P)s-row{width:100%%;border-collapse:collapse;margin:0 0 14px;}
-.%(P)s-was,.%(P)s-now{width:47%%;vertical-align:top;padding:14px 16px;border-radius:11px;}
-.%(P)s-was{background:#f4f4f4;}
-.%(P)s-now{background:#f1f8f4;}
-.%(P)s-arrow{width:6%%;vertical-align:middle;text-align:center;font-size:16px;line-height:20px;color:#b9cfc2;font-weight:800;}
-.%(P)s-lbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.14em;margin:0 0 6px;}
-.%(P)s-was .%(P)s-lbl{color:#8f8f8f;}
-.%(P)s-now .%(P)s-lbl{color:#008539;}
-.%(P)s-txt{display:block;font-size:14px;line-height:21px;color:#333333;}
-/* the placeholder treatment, same as the Trustpilot one: an obvious gap rather
-   than an invented claim */
-.%(P)s-ph{display:block;border:2px dashed #d4d4d4;border-radius:9px;padding:12px 13px;background:#fafafa;font-size:13px;line-height:19px;color:#767676;}
-.%(P)s-phw{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.12em;color:#a0a0a0;margin:5px 0 0;}
+.%(P)s-newss{margin:0 auto 20px;max-width:400px;font-size:14px;line-height:21px;color:#767676;text-align:center;}
+.%(P)s-tiles{width:100%%;border-collapse:separate;border-spacing:0;table-layout:fixed;}
+.%(P)s-tile{width:50%%;vertical-align:top;padding:0 6px 14px;}
+.%(P)s-card{display:block;text-decoration:none;}
+.%(P)s-card img{width:100%%;max-width:100%%;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+.%(P)s-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
+.%(P)s-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
 /* code block, same treatment as the post-purchase offer so it reads as one ladder */
 .%(P)s-code{margin:0 auto 22px;max-width:400px;border:2px dashed #9fdbb8;border-radius:12px;padding:18px 20px 16px;background:#212121;}
 .%(P)s-codelbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.18em;color:#9fdbb8;margin:0 0 8px;}
@@ -227,10 +231,8 @@ CSS = """
   .%(P)s-sub{font-size:15px;line-height:23px;max-width:none;}
   .%(P)s-cta{padding:15px 26px;}
   .%(P)s-news{margin-left:14px;margin-right:14px;}
-  /* the row becomes a stacked before/after pair */
-  .%(P)s-was,.%(P)s-now,.%(P)s-arrow{display:block!important;width:100%%!important;}
-  .%(P)s-arrow{padding:5px 0;font-size:15px;}
-  .%(P)s-was{margin-bottom:0;}
+  .%(P)s-tile{padding:0 4px 12px;}
+  .%(P)s-tname{font-size:14px;line-height:19px;min-height:38px;}
   .%(P)s-lhead{padding:24px 22px 0;}
   .%(P)s-lbody{padding:22px 22px 26px;}
   .%(P)s-code{padding:16px 16px 14px;}
@@ -253,34 +255,45 @@ FOOT = """
 """
 
 
-def strip(P, live):
-    """The then-and-now rows.
+def products(P, live, n=4):
+    """A grid of things to come back to.
 
-    Live: three marked placeholders. Preview: illustrative examples with the word
-    EXAMPLE on them, so the layout can be judged without anybody mistaking the
-    content for a claim we have checked."""
-    head = ('<div class="%s-news"><p class="%s-newsh">What is different now</p>'
+    Live: Klaviyo's recommendation engine. Preview: real Contentful subcategories,
+    so the layout is judgeable. Rows are cut with |slice because that filter is
+    verified in this account; divisibleby is not."""
+    head = ('<div class="%s-news"><p class="%s-newsh">%s</p>'
             '<p class="%s-newss">%s</p>'
-            % (P, P, P, "Three changes since your last order, each one checkable."
-               if live else
-               "Three changes since your last order. The rows below are EXAMPLES of "
-               "the shape only \u2014 the real ones are not written yet."))
-    out = head
-    rows = NEWS_BRIEF if live else NEWS_SAMPLE
-    for a, b in rows:
-        if live:
-            then = ('<span class="%s-ph">%s<span class="%s-phw">TO BE SUPPLIED BY %s'
-                    '</span></span>' % (P, esc(a), P, esc(b.upper())))
-            now = '<span class="%s-ph">&nbsp;</span>' % P
-        else:
-            then = '<span class="%s-txt">%s</span>' % (P, esc(a))
-            now = '<span class="%s-txt"><strong>%s</strong></span>' % (P, esc(b))
-        out += ('<table class="%s-row" role="presentation" cellpadding="0" cellspacing="0">'
-                '<tr><td class="%s-was" valign="top"><span class="%s-lbl">THEN</span>%s</td>'
-                '<td class="%s-arrow">&rarr;</td>'
-                '<td class="%s-now" valign="top"><span class="%s-lbl">NOW</span>%s</td>'
-                '</tr></table>' % (P, P, P, then, P, P, P, now))
-    return out + "</div>"
+            % (P, P, "Where to pick up",
+               P, "No prices here on purpose \u2014 a starting point, not a shelf."))
+    if live:
+        cell = ('<td class="{P}-tile" valign="top"><a class="{P}-card" href="{{{{ item.url }}}}">'
+                '<img src="{{{{ item.featured_image.full.url }}}}" alt="{{{{ item.title }}}}">'
+                '<span class="{P}-tname">{{{{ item.title }}}}</span>'
+                '<span class="{P}-tlink">See the range &rarr;</span></a></td>').format(P=P)
+        rows = ""
+        for lo in range(0, n, 2):
+            rows += ('<tr>{%% for item in catalog_items|slice:"%d:%d" %%}%s{%% endfor %%}</tr>'
+                     % (lo, lo + 2, cell))
+        grid = ('{%% catalog person %%}<table class="%s-tiles" role="presentation" '
+                'width="100%%" cellpadding="0" cellspacing="0">%s</table>{%% endcatalog %%}'
+                % (P, rows))
+        return head + grid + "</div>"
+
+    cells = ""
+    for name in PREVIEW_TILES[:n]:
+        cells += ('<td class="%s-tile" valign="top"><a class="%s-card" href="%s">'
+                  '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
+                  '<span class="%s-tlink">See the range &rarr;</span></a></td>'
+                  % (P, P, sc.preview_field(name, "url"), sc.image(name, 400, 400),
+                     esc(sc.preview_field(name, "name")), P,
+                     esc(sc.preview_field(name, "name")), P))
+    rows = ""
+    cl = [c for c in cells.split("</td>") if c.strip()]
+    cl = [c + "</td>" for c in cl]
+    for i in range(0, len(cl), 2):
+        rows += "<tr>%s</tr>" % "".join(cl[i:i + 2])
+    return (head + '<table class="%s-tiles" role="presentation" width="100%%" '
+            'cellpadding="0" cellspacing="0">%s</table>' % (P, rows)) + "</div>"
 
 
 def code_block(P, live):
@@ -345,7 +358,7 @@ def build(e, live):
         TERMS=('<span class="%s-terms">One use per customer.</span>' % P
                if e.get("offer") else ""),
         **A)
-    news = strip(P, live) if e["kind"] == "news" else ""
+    news = products(P, live, e.get("tiles", 4)) if e.get("tiles") else ""
     return ('<div class="{P}-root"><style>{CSS}</style><div class="{P}-pre">{PRE}</div>'
             '<div class="{P}-wrap"><div class="{P}-shell">{HERO}{DARK}{NEWS}'
             '<div class="{P}-tail"></div></div>{FOOT}</div></div>').format(
@@ -381,6 +394,14 @@ for e in EMAILS:
     if "data:image" in livb: errs.append(t + ": Klaviyo build leaked a data URI")
     if "{%" in prev or "{{" in prev: errs.append(t + ": preview leaked a tag")
     if "{% unsubscribe" not in livb: errs.append(t + ": no unsubscribe tag")
+    # A LITERAL %% IN THE OUTPUT. Every builder here composes with %-formatting over
+    # strings that already contain percent signs, and this is the third time a
+    # doubled one has reached the markup - once as "Your 10%% comes off at
+    # checkout", once as width="100%%". Cheap to check, invisible to review.
+    for doc_name, doc in (("preview", prev), ("klaviyo", livb)):
+        body = doc.split("</style>", 1)[1] if "</style>" in doc else doc
+        if "%%" in body:
+            errs.append("%s: literal %%%% in the %s markup" % (t, doc_name))
 
     vis = re.sub(r"\{%.*?%\}", " ", re.sub(r"<[^>]+>", " ",
                  livb.split("</style>", 1)[1]), flags=re.S)
@@ -389,22 +410,32 @@ for e in EMAILS:
     # THE STRIP MUST NOT CARRY AN INVENTED CLAIM. A fabricated "now 30% faster" is
     # worse than an obvious gap, so every row stays a marked placeholder until
     # somebody supplies a checkable change.
-    if e["kind"] == "news":
-        if "to be supplied by" not in vis:
-            errs.append(t + ": the live strip is no longer marked as pending")
-        for invented in ("faster", "quicker", "cheaper than", "now only", "days sooner",
-                         "reduced from", "down from", "% more"):
-            if invented in vis:
-                errs.append("%s: the live strip states a change nobody supplied (%r)"
-                            % (t, invented))
-        # the preview shows examples, and has to say so on its face
-        pvis = re.sub(r"<[^>]+>", " ", prev.split("</style>", 1)[1]).lower()
-        if "example" not in pvis:
-            errs.append(t + ": the preview shows sample rows without saying they are examples")
-        for a, b in NEWS_SAMPLE:
-            if a.lower() in vis or b.lower() in vis:
-                errs.append("%s: an illustrative row leaked into the live build (%r)"
-                            % (t, a))
+    if e.get("tiles"):
+        # THE LIVE GRID MUST ASK THE ENGINE, AND THE PREVIEW MUST NOT PRETEND TO.
+        if "{% catalog person %}" not in livb:
+            errs.append(t + ": the live grid does not use the recommendation engine")
+        if "catalog" in prev:
+            errs.append(t + ": the preview leaked a catalog tag")
+        # rows are cut with slice because that filter is verified here
+        if "divisibleby" in livb:
+            errs.append(t + ": uses divisibleby, which is not verified in this account")
+        if livb.count("catalog_items|slice") != (e["tiles"] + 1) // 2:
+            errs.append(t + ": expected %d sliced rows for %d tiles"
+                        % ((e["tiles"] + 1) // 2, e["tiles"]))
+        # no id is named anywhere, which is what keeps a missing item from killing
+        # the whole render the way the old product tiles did
+        if re.search(r"catalog\s+[\"']?[A-Z]{2}-", livb):
+            errs.append(t + ": names a catalogue id; a missing one 400s the whole email")
+        # and no prices, following the category nudge
+        for money in ("from &euro;", "from &pound;", "min_order_quantity", "from_price"):
+            if money in livb:
+                errs.append("%s: a price leaked into the grid (%s)" % (t, money))
+        # the changelog angle is gone and should stay gone
+        for gone in ("what changed", "since you last printed", "what is different now",
+                     "then and now"):
+            if gone in vis:
+                errs.append("%s: still leads on what changed (%r) rather than on "
+                            "products" % (t, gone))
     # the offer branch rules: no money before day 140 on the high branch
     if e["branch"] == "high" and e.get("offer") and e["day"] < 140:
         errs.append("%s: high-value branch offers money on day %d; day 60 of "

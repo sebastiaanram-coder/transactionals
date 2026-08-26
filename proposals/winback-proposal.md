@@ -114,55 +114,61 @@ opposite. Total span is 50 to 70 days rather than four.
 
 ## 3. The commercial idea, and the storyline
 
-Not "we miss you". That is a sentence about us.
+**Products, not a changelog.** The first version of this led on "what changed since
+you last printed", laid out as a then-and-now comparison. That was the wrong
+instinct — it is how software announces itself, and this is a print business selling
+products. It also depended on somebody supplying three checkable changes, which
+nobody had.
 
-**"Here is what changed since you last printed."** It is the only story in this
-programme that gets better the longer someone has been away, and at 90 to 180 days
-it is genuinely true: the range has moved, lead times have moved, prices have
-moved. It gives the email a reason to exist that is not an apology or a discount.
+**What replaces it: things to come back to.** A grid of four recommended products,
+image and name, no prices. It says nothing that has to be verified and it puts the
+range in front of somebody who has stopped looking at it.
 
-- **High value** gets it as a person: *what you spent last time, and what I would
-  do differently now.* An expert reading their own history back to them is worth
-  more than 15% to somebody whose jobs are €150 and up.
-- **Low value** gets it as a page: three things that are new, and a code.
+- **High value** still opens with a person at day 90 — that part worked. The grid
+  arrives at day 111 with no offer attached, and again at day 140 with the code.
+- **Low value** gets the grid and the code together at day 90, and a two-tile
+  version on the day-120 last call so the code has something to be spent on.
 
-### One conflict to design around
-
-**Post-Purchase ends at day 73 with a 10% offer.** A winback discount at day 90 is
-17 days behind a discount that just failed. So:
-
-- the high branch leads with a person and holds money back to day 140, by which
-  point the earlier offer is 67 days old
-- the low branch's code is **15%, not 10%** — a repeat of the same number three
-  weeks later reads as a resend, and 15% at 90+ days is a defensible step on the
-  ladder: welcome 10, post-purchase 10, winback 15, abandoned order 25 capped
+**No prices on the tiles**, following the category nudge. A browse invitation
+reading "from €300.11 for 100 units" argues against itself, and the whole bug class
+behind "for 500.0 unités" disappears when there is no number to format.
 
 ---
 
-## 4. The design template
+## 4. Where the products come from, and what needs checking
 
-New, and deliberately unlike the four templates already in the programme.
+**Klaviyo's recommendation engine**, via `{% catalog person %}` in the custom HTML
+block. Three things about that, and the first is the one that matters.
 
-**A "then and now" strip.** Two or three rows, each one line of what has changed
-since they last ordered, with the change stated as a fact rather than a boast — a
-format that is new, a lead time that is shorter, a price that came down. Left
-column what it was, right column what it is now.
+**It names no product ids, which is what makes it safer than the tiles this
+programme removed.** The category nudge was deliberately rebuilt without
+`{% catalog %}` because a lookup on a missing id returns HTTP 400 and *the whole
+email fails to send* — and 10 of 144 market-product pairs were missing. A
+recommendation block asks for n items and gets whatever exists, so there is no id to
+miss. **That reasoning needs one test render to confirm before this is switched on.**
+I could not run it: the template-create endpoint rejects the nested payload through
+this tooling.
 
-It is the only layout in the programme that carries a comparison, which is what
-makes it feel like news rather than marketing. On mobile the two columns stack into
-before/after pairs.
+**Rows are cut with `|slice`, not `divisibleby`.** `|slice` is verified to work in
+this account; `divisibleby` is not. The build fails if `divisibleby` appears.
 
-The high-value email 1 does not use it at all: that one is John's letter template
-from day 45, which already exists and is the right shape for a person writing.
+**Category-scoped recommendations are not available.** Every catalogue category
+returns an empty `external_id`, so they all share one compound id — "more of what
+they bought" cannot be expressed. Whatever the engine returns is what it returns,
+and if that turns out to be poorly targeted, the fallback is the same Contentful
+subcategory tiles the category nudge uses, which are already verified.
+
+**And the recommended images inherit a known problem.** The feed's images are still
+1200px PNGs on IE and NL, up to 1.65 MB each. A four-tile grid of those is a heavy
+email in exactly the two markets that were not fixed.
 
 ---
 
 ## 5. What has to be true before this can be built
 
-1. **The "then and now" content has to be real.** Three concrete changes, checkable.
-   If nothing has changed in the last six months the template is a lie and the
-   storyline collapses. This needs someone from product or category to supply them,
-   and they will need refreshing quarterly.
+1. **One test render of the recommendation block**, to confirm `{% catalog person %}`
+   works in a custom HTML block and that it degrades safely when the engine has
+   nothing to recommend. This is the only unverified thing in the flow.
 2. **15% needs a coupon**, and the same expiry problem as everything else: presta
    v3 cannot expire per customer, Talon.one can.
 3. **The high-value email needs a named sender with a monitored inbox**, same

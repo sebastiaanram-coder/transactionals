@@ -197,7 +197,7 @@ FLOWS = [
       preview="It has been three months. Worth a look at what you print?",
       goal="", who="", tpl="WB1H", new=True, flags=[], badge=None,
       section="Rebuilt flow \u2014 proposed",
-      section_sub="Two branches, split on order value at \u20ac150 AOV \u2014 24% of customers, 49% of value. Before that, a split on the customer\u2019s own rhythm: at day 90 the occasional buyer, whose median gap is 180 days, is not lapsed at all and is held to day 180. Proposed in proposals/winback-proposal.md.",
+      section_sub="Two branches, split on order value at \u20ac150 AOV \u2014 24% of customers, 49% of value. Before that, a split on the customer\u2019s own rhythm: at day 90 the occasional buyer, whose median gap is 180 days, is not lapsed at all and is held to day 180. The product grids come from Klaviyo\u2019s recommendation engine, which needs one test render before go-live. Proposed in proposals/winback-proposal.md.",
       final="winback-01-high-proposed.html"),
     dict(step=2, when="Day 111 \u00b7 high value", subject="A few things have moved since your last order",
       preview="Three things that are actually different now.",
@@ -281,11 +281,11 @@ EMAIL_DETAIL = {
  "WB2H": dict(
    goal="Give a lapsed high-value customer a reason to look again that is not a discount.",
    why="Day 111, twenty-one days after the letter. Intervals widen through the flow because the longer somebody has been gone, the less a fast follow-up helps.",
-   variant_label="The new template",
-   variant="A then-and-now strip: two columns on desktop, stacked before/after pairs on a phone. The only layout in the programme that carries a comparison, which is what makes it read as news rather than marketing.",
+   variant_label="Products, not a changelog",
+   variant="An earlier version led on \u201cwhat changed since you last printed\u201d as a then-and-now comparison. Wrong instinct: that is how software announces itself, and this is a print business. Replaced with a grid of four recommended products.",
    elements=[
-     ("Its content is not written, and must not be invented.", "The live build ships three marked placeholders naming who has to supply each change. A fabricated \u201cnow 30% faster\u201d is worse than an obvious gap, and there is a check that fails on it."),
-     ("The preview shows examples, labelled as examples.", "Two empty dashed rectangles cannot be judged as a design, so the preview fills them and says on its face that they are illustrative. Same split as the code sentinel."),
+     ("Klaviyo\u2019s recommendation engine, and it names no ids.", "That is what makes it safer than the tiles this programme removed from the category nudge \u2014 a lookup on a missing id 400s the whole send, and a recommendation block has no id to miss. Needs one test render to confirm."),
+     ("No prices on the tiles.", "Following the category nudge: a browse invitation reading \u201cfrom \u20ac300.11 for 100 units\u201d argues against itself."),
    ]),
  "WB3H": dict(
    goal="Convert the high-value customer who did not respond to a person or to news.",
@@ -301,8 +301,7 @@ EMAIL_DETAIL = {
    variant_label="Two emails, not three",
    variant="Fewer emails to the people worth less. The top 24% of customers hold 49% of the value; the split exists so attention follows it.",
    elements=[
-     ("Same strip, same placeholders.", "The then-and-now rows are pending here too, and the same check guards them."),
-     ("15% straight away.", "There is no cheaper lever to try first on this branch."),
+     ("The product grid and the code together.", "Four recommended products, no prices, and 15% \u2014 there is no cheaper lever to try first on this branch."),
    ]),
  "WB2L": dict(
    goal="Close the low-value branch on the code.",
