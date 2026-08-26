@@ -637,58 +637,93 @@ email, no new artwork.
 |---|---|
 | Job | Convert to the next order |
 | Gate | No order since entering the flow |
-| Offer | 10%, expiring 14 days after the send |
+| Offer | 10%, one use per customer, no stated expiry (see below) |
+| Split | Which code they have already been sent — A, B, C, then nothing |
 | Shape | Photographic header like the category nudge, a different photograph, and the code as the hero — the first email in this flow where the offer leads |
 
 Every email before this one has deliberately not sold. This one should look like it
 is selling, because it is, and pretending otherwise after three emails of restraint
-would read as a bait. The copy says what it is: they have not ordered in two
-months, here is 10% for a fortnight.
+would read as a bait. The copy says what it is: they have not ordered in two months,
+and here is 10% off the next one.
 
 ### Email 6 — day 73
 
 | | |
 |---|---|
-| Job | Close the window email 5 opened |
-| Gate | No order since, **and the code unused** |
-| Shape | Short. The deadline is the whole email |
+| Job | Last word on the offer |
+| Gate | No order since entering the flow |
+| Shape | Short. One thought, one link |
 
-The second gate is the one worth getting right: *code unused*, not just *no order*.
-Without it we chase somebody who already redeemed. There is precedent to follow —
-the Abandoned Order low branch closes the same way, and its title had to be
-rewritten to fit a phone, which is checked in that builder.
+The gate is simply *no order since* — with one use per customer, redeeming the code
+means placing an order, which drops them out anyway. There is no second condition to
+write.
 
-### The coupon is the blocker, and there is a real decision in it
+What it cannot be is "your code expires tomorrow", because it does not. It is the
+last time we mention it, which is true and is its own mild pressure. The Abandoned
+Order low branch closes on a real 24-hour deadline and this one cannot borrow that
+copy — the difference is the mechanic, not the writing.
 
-**No coupons exist in Klaviyo — verified, the account has zero.** So this is a
-decision rather than a lookup, and it affects the Abandoned Order flow too.
+### The coupon: one use per customer, and no expiry
 
-- **Klaviyo native coupons** issue a *unique code per profile* and carry
-  `expires_at` **per code**. That is exactly what "expires in 14 days" needs in an
-  evergreen flow: the clock starts when the customer receives it.
-- **A static code** (`HELLO10`, `BASKET10`) cannot do that. Its expiry is a fixed
-  date, so "14 days" is only true for whoever receives it on day one. Everybody
-  else is told something false, or the code never really expires.
+**This supersedes what I first proposed here.** I recommended Klaviyo's native
+coupons, on the grounds that they issue a unique code per profile with an expiry
+per code. That was wrong for a reason that has nothing to do with Klaviyo: the code
+has to be redeemable on **presta**, and presta v3 cannot do per-customer expiry.
+Klaviyo can mint whatever it likes; if the shop cannot validate it, it is a string.
 
-`BASKET10` and `BASKET25` have the same problem and it is still open — they promise
-72 hours from a static code. **Recommendation: Klaviyo coupons, and fix both flows
-with the same mechanism.** It needs codes pre-generated in bulk, which is a job
-rather than a setting.
+What presta v3 *can* do is **one use per customer**. So that is the mechanic, and
+two things follow from it.
 
-### Four things to decide before these can be written
+**The email cannot promise a window.** "Expires in 14 days" is unenforceable, and
+this programme has refused claims like that everywhere else — the discount figures
+are banded so they can understate and never overstate, and John is not allowed to
+promise a service the site contradicts. A stated deadline we cannot enforce is the
+same failure with a bigger audience.
 
-1. **The code name.** Not `HELLO10` (welcome) and not `BASKET10` (abandoned
-   order). If we go with Klaviyo coupons the customer never sees a shared name
-   anyway, only their own code.
-2. **Does 10% apply before or after delivery and VAT?** The Welcome flow already
-   has a live contradiction here — it claims prices include delivery and VAT above
-   four figures that exclude both. Whatever the answer, the email has to state it.
-3. **Is there a minimum order value?** 10% of a €20 order costs more to serve than
+**So the deadline moves from the code to us.** Day 73 stops being "your code
+expires" and becomes "this is the last we will say about it", which is true,
+checkable, and still closes. The code stays open; one use per customer caps the
+exposure at a single order per person, and those people had not ordered for two
+months.
+
+### The code has to rotate, and the flow already knows how
+
+One use per customer means a customer who *spent* the code and comes back for
+another 60-day gap would be shown a dead one. So day 60 needs the same treatment as
+the category nudge: **a split on which discount email they have already been sent,
+and a different code each time.**
+
+```
+day 60, first pass    →  code A
+day 60, second pass   →  code B      (has been sent A)
+day 60, third pass    →  code C      (has been sent A and B)
+after that            →  no discount email at all
+```
+
+Three codes, and then nothing — the same frequency cap the category ring ends on,
+and for the same reason. A customer on a fourth separate 60-day gap is not somebody
+a fourth discount will fix.
+
+Day 73 follows whichever code day 60 sent, so it is one email with a three-way
+split on the code rather than three emails.
+
+### What this costs, honestly
+
+Less urgency than a real deadline, and that will cost some conversion. If a hard
+expiry matters more than an honest one, it needs per-customer expiry in the shop —
+a platform change on presta, not a copy change, and worth pricing separately rather
+than working around.
+
+### Three things still to decide
+
+1. **Does 10% apply before or after delivery and VAT?** The Welcome flow already
+   contradicts itself here, claiming prices include both above four figures that
+   exclude them. Whatever the answer, the email has to state it.
+2. **Is there a minimum order value?** 10% of a €20 order costs more to serve than
    it earns.
-4. **Capped or not?** `BASKET25` is capped at 25 because a flat percentage let a
+3. **Capped or not?** `BASKET25` is capped at 25 because a flat percentage let a
    €149 basket beat a €151 one. Day 60 has no basket at send time, so there is
-   nothing to cap *against* — but equally no ceiling on what a single order can
-   cost us.
+   nothing to cap *against* — but equally no ceiling on what one order can cost.
 
 ---
 
