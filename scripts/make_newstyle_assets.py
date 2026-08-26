@@ -67,7 +67,8 @@ BUDGET_KB = 420
 # frame the subject fills: the flyer on the car windscreen is nearly 70% of its
 # source height, so a third of the frame given to the fade would dissolve the
 # bottom of the flyer itself.
-FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24}
+FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
+               "hero-review-reminder": 0.30}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -86,6 +87,8 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24}
 #                     cannot start low enough to clear a deep fade. 0.85 puts the
 #                     window as low as it goes - the least headroom available -
 #                     and a 24% fade then leaves the whole flyer above it.
+#   review-reminder   cards, subject occupies only 0.33-0.68, so there is room for
+#                     both: 0.80 and a deep 30% fade.
 #
 # There was a second header shape that faded into ink at the top as well, which
 # wanted its own crop pushed 210px down. It was built, compared and rejected.
@@ -94,7 +97,8 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24}
 # window measured in pixels means something different in each. Expressed in pixels
 # this silently cut a 1000x700 window out of a 2048px image and produced a
 # featureless grey rectangle.
-HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85}
+HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
+                 "hero-review-reminder": 0.80}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -107,6 +111,12 @@ JOBS = [
     # where a tight crop read as texture rather than as a flyer; at 600px wide it
     # is the most distinctive shot in the set.
     ("standardflyers/standardflyers_setting2.png", "hero-review-request", "hero", "review-request"),
+    # The reminder needs its own picture, and the measurements pick it: the cards
+    # take up only a third of the frame, so the crop has room, and the bottom
+    # eighth is already down at 42 of 255 - it is nearly ink before the fade
+    # starts. posters_setting2 was the other candidate and its bottom eighth is at
+    # 150, where a fade reads as a vignette rather than a blend.
+    ("standardbusinesscards/standardbusinesscards_setting2.webp", "hero-review-reminder", "hero", "review-reminder"),
     # Both feature shots were changed after seeing them at 252px beside prose.
     # booklets_setting1 is a dark navy interior that turns to mud at that size,
     # and standardflyers_setting2 is a tight overhead that reads as texture
