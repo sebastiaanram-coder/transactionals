@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Builds behavioural-email-overview.html (single self-contained file)
-import json, os, re, html
+import base64, json, os, re, html
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PV_DIR = os.path.join(HERE, "previews")
@@ -16,8 +16,8 @@ FLOWS = [
    audience=["New subscribers who have never purchased (Placed Order = 0 when each email sends)", "Ireland + United Kingdom only (pilot market)"],
    reentry="Not set", incentive="10% off first order · code HELLO10 · expires at the end of day 5, when the flow ends",
    cadence="Day 0, day 1, day 3, day 5",
-   flow_note="Rebuilt end to end. All four emails are now single translatable HTML blocks with real text, replacing the RFB originals where every element was a 600px image. Discount moved from 15% to 10% to match the on-site newsletter promise and the rest of the discount ladder. Not yet built in Klaviyo: assets still need uploading and the unsubscribe tag wiring.",
-   flow_flags=["The code expires at the end of day 5, the same moment the flow ends, and every email states how much time is left: valid only 5 days, expires in 4 days, 2 days left, last day. Because that copy is fixed text rather than a computed date, the delays have to stay exact hour offsets. Do not enable weekday-only sending or Smart Send Time on this flow: skipping weekends would stretch a five-day window across nine calendar days and make every countdown false. This also replaces the hardcoded “ends 3 September” that sat in all four RFB-era promo bars, which was a fixed date inside an evergreen flow.",
+   flow_note="Rebuilt end to end. All four emails are now single translatable HTML blocks with real text, replacing originals where every element was a 600px image. Discount moved from 15% to 10% to match the on-site newsletter promise and the rest of the discount ladder. Not yet built in Klaviyo: assets still need uploading and the unsubscribe tag wiring.",
+   flow_flags=["The code expires at the end of day 5, the same moment the flow ends, and every email states how much time is left: valid only 5 days, expires in 4 days, 2 days left, last day. Because that copy is fixed text rather than a computed date, the delays have to stay exact hour offsets. Do not enable weekday-only sending or Smart Send Time on this flow: skipping weekends would stretch a five-day window across nine calendar days and make every countdown false. This also replaces a hardcoded “ends 3 September” that sat in all four promo bars, which was a fixed date inside an evergreen flow.",
     "Talon.one has to expire the code on day 5 to match. If it does not, a lead who tries it on day 8 learns our deadlines are theatre, and that is not recoverable.",
     "Two variants per email, chosen by a conditional split. Every email is preceded by a check on Placed Order since starting this flow. Zero orders gets the discount version; one or more gets a version with the offer stripped, so a customer who buys mid-series finishes onboarding instead of being dropped. This replaces the current message-level filter, which suppresses the send entirely and would make the second branch unreachable.",
     "Overlap to resolve: Post-Purchase (TZYvDF) already fires on Placed Order and covers expectation-setting and delivery. A buyer mid-Welcome would receive both, so the no-discount branch should stay on brand and trust content and stop short of repeating what Post-Purchase says."],
@@ -39,24 +39,6 @@ FLOWS = [
       who="Same audience, final email of the series, landing on the day the code dies.", tpl="XVPf5F", flags=[], badge=None,
       final="welcome-04-proposed.html"),
    ]),
- dict(slug="site-abandonment", name="Site Abandonment", stage="Convert", retired=True, flow_id="UjN2Up",
-   trigger="Active on Site",
-   trigger_detail="Fires on the Active on Site event: an identified visitor browsed but never reached a product page.",
-   audience=["Visitors who did NOT view a product, add to cart or start checkout after entering", "Ireland + United Kingdom only"],
-   reentry="30 days", incentive="None", cadence="40 minutes after the visit, then day 1 and day 2",
-   flow_note="Top of the abandonment ladder: anyone who progresses to a product view, cart or checkout is excluded and handled by a deeper flow.",
-   flow_flags=["Filter bug: the flow requires Placed Order GREATER THAN 0 since flow start, which would block almost every recipient. Almost certainly meant “= 0”. Fix before go-live."],
-   emails=[
-    dict(step=1, when="40 minutes after the visit", subject="Not sure where to start", preview="The products most businesses begin with.",
-      goal="Orient a lost visitor: show the bestsellers most businesses start with and give them an easy way back in.",
-      who="Identified visitors who browsed the site but never opened a product page.", tpl="TcLcbX", flags=[], badge=None),
-    dict(step=2, when="Day 1", subject="33,000+ reasons to trust your print to us", preview="Real reviews and the people behind them.",
-      goal="Add social proof: 33,000+ reviews and the team behind them, for visitors who were not yet convinced.",
-      who="Same audience, one day later, still no product view or order.", tpl="Ra6MzS", flags=[], badge=None),
-    dict(step=3, when="Day 2", subject="Your questions about print, answered", preview="Artwork, pricing and what happens if it is not right.",
-      goal="Handle the classic first-order objections: artwork requirements, pricing and what happens when something goes wrong.",
-      who="Same audience, final email of the series.", tpl="QYX2Sy", flags=[], badge=None),
-   ]),
  dict(slug="browse-abandonment", name="Browse Abandonment", stage="Convert", flow_id="Wzhp2m",
    trigger="Viewed Product",
    trigger_detail="Fires on the Viewed Product event: an identified visitor opened a product page but went no further. Filtered to the consumer storefront and to markets whose product feed is live.",
@@ -65,11 +47,9 @@ FLOWS = [
              "Excludes the Connect B2B storefront, which is 14–21% of all Viewed Product events"],
    reentry="14 days", incentive="None, in the rebuild as in the original. Help and proof instead of a code.",
    cadence="Rebuilt: 1 hour after the view, then 24 hours, then 3 days. Three emails, down from five in four days.",
-   mail_line="3 of 3 rebuilt · 5 RFB emails kept below for reference",
-   flow_note="The facts above describe the rebuilt flow. RFB's five original emails are kept further down this page for reference until the rebuild is signed off. Cut from five emails to three: a product view is a weak signal, and this is the highest-volume flow in the programme (15,307 unique product viewers in August), so its send volume dominates the sending reputation of every other flow.",
-   flow_flags=["Emails 4 and 5 of the RFB flow contain the literal text [[ viewed product name ]] in the subject line. These are RFB placeholders, not Klaviyo variables, and would be sent verbatim.",
-               "RFB email 4 tells the reader to “use your code” in a flow that has no discount.",
-               "The tracked funnel cannot be read as a funnel: in August, Placed Order (11,321 profiles) came out ABOVE Started Checkout (10,267). Frontend events are consent-gated and the backend order event is not, so no view-to-order rate can be computed from these.",
+   mail_line="3 emails",
+   flow_note="Cut from five emails to three: a product view is a weak signal, and this is the highest-volume flow in the programme (15,307 unique product viewers in August), so its send volume dominates the sending reputation of every other flow.",
+   flow_flags=["The tracked funnel cannot be read as a funnel: in August, Placed Order (11,321 profiles) came out ABOVE Started Checkout (10,267). Frontend events are consent-gated and the backend order event is not, so no view-to-order rate can be computed from these.",
                "Product feed images are 300 KB to 6.5 MB and cannot be resized by URL, so the packshot may not load on mobile data. Needs a ~600px variant in the feed."],
    emails=[
     dict(step=1, when="1 hour after the product view", subject="A5 Flyers — from €39.96 for 1000",
@@ -86,24 +66,6 @@ FLOWS = [
       preview="An odd spec, a tight deadline, or someone else's signature. Our quotation team comes back within 24 hours.",
       goal="", who="", tpl="UtrHWs", flags=[], badge=None,
       final="browse-03-proposed.html"),
-    dict(step=1, when="40 minutes after the product view", subject="Still thinking it over", preview="The product you looked at, and why people trust us with it.",
-      section="Current RFB flow — for reference",
-      section_sub="The five original emails, all draft, every element a flat image. Kept visible until the rebuild is approved.",
-      ref=True,
-      goal="Bring the visitor back to the product they viewed and reassure them with the core trust points.",
-      who="Identified visitors who viewed a product but did not add to cart, checkout or buy.", tpl="X2GaSL", flags=[], badge=None),
-    dict(step=2, when="Day 1", subject="What people say after they order", preview="Real reviews, real Hello Printers, real delivery dates met.",
-      goal="Social proof from customers who completed the same journey: reviews, faces and delivery dates met.",
-      who="Same audience, one day later, still no cart or order.", tpl="UP8Ztf", ref=True, flags=[], badge=None),
-    dict(step=3, when="Day 2", subject="Print does not have to be complicated", preview="A few honest answers, in case you were unsure.",
-      goal="Remove friction: answer the questions that stop people from ordering print (files, formats, help).",
-      who="Same audience, two days in.", tpl="SJV6Kx", ref=True, flags=[], badge=None),
-    dict(step=4, when="Day 3", subject="Still thinking about [[ viewed product name ]]?", preview="The price is already fair, so here is some help instead.",
-      goal="Direct nudge back to the exact product; explicitly offers help instead of a discount.",
-      who="Same audience, three days in.", tpl="UtrHWs", ref=True, flags=["Broken placeholder [[ viewed product name ]] in subject"], badge=None),
-    dict(step=5, when="Day 4", subject="Your [[ viewed product name ]] is still here", preview="No deadline, no pressure. Just the product and a bit of help.",
-      goal="Final low-pressure reminder; leaves the door open without urgency tricks.",
-      who="Same audience, final email of the series.", tpl="UsXdTy", ref=True, flags=["Broken placeholder [[ viewed product name ]] in subject"], badge=None),
    ]),
  dict(slug="abandoned-cart", name="Abandoned Order", stage="Convert", flow_id="VCVzm6",
    trigger="Started Checkout",
@@ -113,8 +75,8 @@ FLOWS = [
    reentry="14 days",
    incentive="Split by cart value. High value: no code until email 3, then 10% for 72 hours, with the print expert still the headline. Low value: 10% in email 2, then 25% capped at 25 off for the final 24 hours.",
    cadence="Proposed: 1 hour, 24 hours, 72 hours. Three emails on each branch, down from five in four days across two flows.",
-   mail_line="6 of 6 rebuilt \u00b7 split by cart value \u00b7 5 RFB emails kept below",
-   flow_note="This is the merged flow, and it splits by cart value at entry: at 150, in either currency, about a quarter of carts go to a high-value branch that leads with a print expert and discounts lightly, and the rest to a low-value branch that leads with the incentive and closes at 25% capped. The cap exists because a flat 25% would leave a 149 cart better off than a 151 one. RFB ran four separate abandonment journeys — Site, Browse, Cart and Checkout — whose copy was largely interchangeable; Cart and Checkout were near-identical apart from the trigger. The rebuild runs two: Browse Abandonment for a product view, and this one for anything that reached a basket. Site Abandonment is dropped entirely, because a visit with no product view carries too little intent to say anything useful about. The five RFB emails below are the current state and have not been rebuilt yet.",
+   mail_line="6 emails \u00b7 split by cart value",
+   flow_note="This is the merged flow, and it splits by cart value at entry: at 150, in either currency, about a quarter of carts go to a high-value branch that leads with a print expert and discounts lightly, and the rest to a low-value branch that leads with the incentive and closes at 25% capped. The cap exists because a flat 25% would leave a 149 cart better off than a 151 one. There were four separate abandonment journeys — Site, Browse, Cart and Checkout — whose copy was largely interchangeable; Cart and Checkout were near-identical apart from the trigger. The rebuild runs two: Browse Abandonment for a product view, and this one for anything that reached a basket. Site Abandonment is dropped entirely, because a visit with no product view carries too little intent to say anything useful about. The five RFB emails below are the current state and have not been rebuilt yet.",
    emails=[
     dict(step=1, when="1 hour after checkout was started", subject="Left something behind?",
       preview="Everything you configured is saved. Pick up where you left off.",
@@ -138,55 +100,14 @@ FLOWS = [
       preview="Last call on the basket you saved.",
       goal="", who="", tpl="YrvM4D", flags=[], badge=None,
       final="order-03-low-proposed.html"),
-    dict(step=1, when="30 minutes after add-to-cart",
-      section="Current RFB flow \u2014 for reference",
-      section_sub="The five originals from the Abandoned Cart flow, all draft. The Abandoned Checkout flow ran nearly the same five again.",
-      ref=True, subject="Your order is still here", preview="Your design and delivery date are saved, ready when you are.",
-      goal="Recover the cart while it is warm: everything is saved (design, delivery date), one click to continue.",
-      who="Shoppers with an abandoned cart who did not start checkout.", tpl="TduDdY", flags=[], badge=None),
-    dict(step=2, when="Day 1", subject="Thousands of businesses have been here too", preview="See why they finished their order.",
-      goal="Normalise the hesitation and add peer proof from businesses that completed the same order.",
-      who="Same audience, one day later, still no checkout or order.", tpl="UnTu7Q", ref=True, flags=[], badge=None),
-    dict(step=3, when="Day 2", subject="A quick word about your order", preview="In case something gave you pause.",
-      goal="Objection handling: address whatever caused the pause (price, files, uncertainty) in a personal tone.",
-      who="Same audience, two days in.", tpl="SvQkfX", ref=True, flags=[], badge=None),
-    dict(step=4, when="Day 3", subject="10% off the order you saved", preview="A genuine extra to help you finish.",
-      goal="First incentive of the sequence: 10% off the saved order to tip the decision.",
-      who="Same audience, three days in, still not converted.", tpl="VtF4Ei", ref=True, flags=[], badge=None),
-    dict(step=5, when="Day 4", subject="Your 10% ends in 24 hours", preview="After that, your saved order stays, the code does not.",
-      goal="Urgency close: the code expires in 24 hours, the saved order does not. Last email of the sequence.",
-      who="Same audience, final email.", tpl="YrvM4D", ref=True, flags=[], badge=None),
-   ]),
- dict(slug="abandoned-checkout", name="Abandoned Checkout", stage="Convert", retired=True, flow_id="TK2jXt",
-   trigger="Started Checkout",
-   trigger_detail="Fires on the Started Checkout event: the deepest-funnel abandonment moment.",
-   audience=["Shoppers who did NOT place an order after entering", "Ireland + United Kingdom only"],
-   reentry="14 days", incentive="10% code in email 4, 24-hour expiry in email 5", cadence="30 minutes after checkout start, then one email per day for 4 days",
-   flow_note="Identical copy to Abandoned Cart (deliberate); the deepest-intent audience of the abandonment ladder.",
-   emails=[
-    dict(step=1, when="30 minutes after checkout start", subject="Your order is still here", preview="Your design and delivery date are saved, ready when you are.",
-      goal="Immediate recovery of a nearly-completed order; reassure that nothing is lost.",
-      who="Shoppers who started checkout and stopped before paying.", tpl="S9wdeR", flags=[], badge=None),
-    dict(step=2, when="Day 1", subject="Thousands of businesses have been here too", preview="See why they finished their order.",
-      goal="Peer proof from businesses that finished the same journey.",
-      who="Same audience, one day later, still no order.", tpl="VgfWe3", flags=[], badge=None),
-    dict(step=3, when="Day 2", subject="A quick word about your order", preview="In case something gave you pause.",
-      goal="Objection handling in a personal, low-pressure tone.",
-      who="Same audience, two days in.", tpl="T4NwY4", flags=[], badge=None),
-    dict(step=4, when="Day 3", subject="10% off the order you saved", preview="A genuine extra to help you finish.",
-      goal="10% incentive on the saved order.",
-      who="Same audience, three days in, still not converted.", tpl="XvRmzu", flags=[], badge=None),
-    dict(step=5, when="Day 4", subject="Your 10% ends in 24 hours", preview="After that, your saved order stays, the code does not.",
-      goal="Urgency close on the expiring code; final email.",
-      who="Same audience, final email.", tpl="XQJnXX", flags=[], badge=None),
    ]),
  dict(slug="post-purchase", name="Post-Purchase", stage="Onboard", flow_id="TZYvDF",
    trigger="Placed Order",
    trigger_detail="Fires on the Placed Order event; a conditional split then checks purchase history (see flag).",
    audience=["Fresh buyers, intended for FIRST-time buyers (see flag)", "Stops if a new order is placed mid-sequence", "Ireland + United Kingdom only"],
    reentry="Every order (see the rotation below)", incentive="None",
-   cadence="40 minutes after the order, then day 1, day 5, day 12 and day 32",
-   flow_note="Being rebuilt. The Day 32 category nudge below is built and render-verified for Commercial Print; the other four categories are specified but not designed, and the rest of the proposed flow (review request day 18, reminder day 25, print expert day 45, discount day 60 and 73) is in proposals/post-purchase-proposal.md. The five RFB emails after it are the originals, all draft.",
+   cadence="Day 18, day 25, day 32, day 45, day 60 and day 73",
+   flow_note="Being rebuilt. The Day 32 category nudge below is built and render-verified for Commercial Print; the other four categories are specified but not designed, and the rest of the proposed flow (review request day 18, reminder day 25, print expert day 45, discount day 60 and 73) is in proposals/post-purchase-proposal.md.",
    logic=dict(
      title="How the category nudge rotates",
      intro="The flow runs again on every order, and the nudge is the one step that must not repeat itself. So the choice of which category to send is made at send time, from what the customer has already been sent.",
@@ -251,82 +172,35 @@ FLOWS = [
       preview="Ask me before you order, not after.",
       goal="", who="", tpl="POST04", new=True, flags=[], badge=None,
       final="post-04-expert-proposed.html"),
-    dict(step=1, when="40 minutes after the order", subject="Thank you for your first order",
-      section="Original RFB flow",
-      section_sub="The five original emails, all draft. Kept visible until the rebuild is approved.", preview="A quick note from the team printing it.",
-      goal="Human thank-you from the team, reinforcing the buy decision right after purchase.",
-      who="Buyers, ~40 minutes after ordering.", tpl="V5VA8k", ref=True, flags=["Partly duplicates the transactional order confirmation"], badge=None),
-    dict(step=2, when="Day 1", subject="Here is what happens next", preview="From file check to your doorstep.",
-      goal="Set expectations: the production journey from file check to delivery, reducing support contacts.",
-      who="Same buyers, one day after the order.", tpl="YdJPfh", ref=True, flags=["Overlaps with transactional status emails"], badge=None),
-    dict(step=3, when="Day 5", subject="Getting the most from your print", preview="Simple tips, no jargon.",
-      goal="Usage tips that add value beyond the order and keep the brand warm during production/delivery.",
-      who="Same buyers, five days in.", tpl="YkK5L7", ref=True, flags=[], badge=None),
-    dict(step=4, when="Day 12", subject="Real reviews and the people behind your print", preview="Simple tips, no jargon.",
-      goal="Community and social proof after delivery; primes the customer for the review ask.",
-      who="Same buyers, day 12, no new order since.", tpl="Wc9aJs", ref=True, flags=["Preview text duplicates email 3 (copy bug)"], badge=None),
-    dict(step=5, when="Day 32", subject="How did your order turn out", preview="A quick reply helps us more than you think.",
-      goal="Feedback and review request, one month after the order.",
-      who="Same buyers, final email of the series.", tpl="Y8ayN7", ref=True, flags=["Overlaps with the transactional review request"], badge=None),
    ]),
  dict(slug="winback", name="Customer Winback", stage="Retain", flow_id="WsYFJR",
    trigger="Placed Order + 90-day wait",
    trigger_detail="Fires on Placed Order, then waits 90 days. Emails only send if no repeat order happened in those 90 days.",
    audience=["Customers with no repeat purchase 90 days after their order", "Ireland + United Kingdom only"],
-   reentry="Not set", incentive="15% code in email 3, next-day expiry in email 4", cadence="Day 90, 91, 92 and 93 after the order",
+   reentry="Not set", incentive="15% code in email 3, next-day expiry in email 4", cadence="Today: Day 90, 91, 92 and 93 after the order",
    flow_note=None,
    flow_flags=["All four emails land within four days after the 90-day silence. Consider spreading (e.g. 90 / 93 / 97 / 98) in the rebuild."],
-   emails=[
-    dict(step=1, when="Day 90 after the order", subject="It has been a while", preview="Here is what businesses are ordering now.",
-      goal="Re-open the relationship with what is new and popular; no ask beyond a browse.",
-      who="Customers who have not ordered again for 90 days.", tpl="WNwsys", flags=[], badge=None),
-    dict(step=2, when="Day 91", subject="What you have been missing", preview="Reviews, results and real faces.",
-      goal="Remind them why they chose Helloprint: reviews, results and the team.",
-      who="Same audience, one day later.", tpl="V9sPzG", flags=[], badge=None),
-    dict(step=3, when="Day 92", subject="15% off to bring you back", preview="A genuine extra on your next order.",
-      goal="Winback incentive: 15% off the next order.",
-      who="Same audience, still no new order.", tpl="Y8WN58", flags=[], badge=None),
-    dict(step=4, when="Day 93", subject="Your 15% ends tomorrow", preview="The code goes, the products stay.",
-      goal="Urgency close on the winback code; final email.",
-      who="Same audience, final email.", tpl="XRq2Tk", flags=[], badge=None),
-   ]),
+   planned="Four emails in four days after a 90-day silence, which is the pacing to fix first. The revised proposal re-times this to around day 120 and hands over from Post-Purchase, which ends at day 73.",
+   emails=[]),
  dict(slug="vip", name="VIP", stage="Retain", flow_id="TWxJby",
-   trigger="Added to segment “RFB | VIP | 3X Purchasers”",
+   trigger="Added to segment “VIP | 3X Purchasers”",
    trigger_detail="Fires when a profile enters the VIP segment (3 or more orders).",
    audience=["Repeat customers reaching 3+ orders", "Ireland + United Kingdom only"],
-   reentry="Stored as 0 / alltime", incentive="“Early access” positioning, no code", cadence="40 minutes after entering the segment, then day 10 and day 15",
+   reentry="Stored as 0 / alltime", incentive="“Early access” positioning, no code", cadence="Today: 40 minutes after entering the segment, then day 10 and day 15",
    flow_note=None,
    flow_flags=["“Early access” has no backing mechanic yet (no linked campaign, code or gated page). Define it before go-live.",
     "The standard “stop when they order” filter also applies here, so a VIP who orders in the first days never sees emails 2 and 3. Probably unintended for a loyalty flow."],
-   emails=[
-    dict(step=1, when="40 minutes after reaching VIP", subject="You are officially a VIP", preview="A thank you for ordering with us so often.",
-      goal="Recognise loyalty: name the status and thank the customer for their repeat business.",
-      who="Customers the moment they hit 3+ orders.", tpl="Xt8eS3", flags=[], badge=None),
-    dict(step=2, when="Day 10", subject="Your VIP early access is open", preview="First look, before everyone else.",
-      goal="Deliver a tangible VIP perk: early access before everyone else.",
-      who="Same VIPs, ten days later, if no new order since entering.", tpl="UuzLpm", flags=["Perk mechanic undefined"], badge=None),
-    dict(step=3, when="Day 15", subject="Your VIP early access is closing", preview="A last look before it wraps.",
-      goal="Close the early-access window with gentle urgency.",
-      who="Same VIPs, five days after email 2.", tpl="VQMC5C", flags=["Perk mechanic undefined"], badge=None),
-   ]),
+   planned="Three emails triggered by a 3x-purchaser segment. Not designable yet: \u201cearly access\u201d has no backing mechanic, and the filter that stops the sequence when somebody orders is the wrong filter for a loyalty flow.",
+   emails=[]),
  dict(slug="sunset", name="Sunset", stage="Hygiene", flow_id="WDvVKy",
-   trigger="Added to segment “RFB | Highly Unengaged | 120 Days”",
+   trigger="Added to segment “Highly Unengaged | 120 Days”",
    trigger_detail="Fires when a profile enters the highly-unengaged segment (120 days without engagement).",
    audience=["Subscribers with no email open AND no click in the last 10 days (checked at send time)", "Ireland + United Kingdom only"],
-   reentry="Stored as 0 / alltime", incentive="None", cadence="40 minutes after entering the segment, then day 5; property set on day 10",
+   reentry="Stored as 0 / alltime", incentive="None", cadence="Today: 40 minutes after entering the segment, then day 5; property set on day 10",
    flow_note="Protects deliverability: two re-permission attempts, then the profile is flagged for suppression.",
    flow_flags=["Nothing consumes the “Sunset Unengaged” property yet. Campaign audiences and segments must exclude it, otherwise this flow changes nothing."],
-   emails=[
-    dict(step=1, when="40 minutes after entering the segment", subject="This may be the last email we send", preview="Tell us you want to stay.",
-      goal="Re-permission ask: an honest “tell us you want to stay” to separate sleepers from dead addresses.",
-      who="Highly unengaged subscribers (120 days), still inactive in the last 10 days.", tpl="WBfFzA", flags=[], badge=None),
-    dict(step=2, when="Day 5", subject="Last chance to stay subscribed", preview="After this, we will let you go.",
-      goal="Final warning before suppression; one last chance to click and stay.",
-      who="Same audience, five days later, still inactive.", tpl="XM2wum", flags=[], badge=None),
-    dict(step=3, when="Day 10", subject=None, preview=None,
-      goal="No email: the flow sets the profile property Sunset Unengaged = true so the profile can be excluded from future sends.",
-      who="Everyone who reached the end without re-engaging.", tpl=None, flags=["Property is not used anywhere yet"], badge="Profile update step · no email"),
-   ]),
+   planned="Two re-permission attempts, then the profile is flagged for suppression. The mechanic has to exist before the emails do: nothing currently excludes a flagged profile from anything.",
+   emails=[]),
 ]
 
 # ---------------------------------------------------------------------------
@@ -334,190 +208,156 @@ FLOWS = [
 # reads: what the email is for, why it sits here in the journey, and why
 # each block is in it.
 # ---------------------------------------------------------------------------
+# WHAT IS IN EACH EMAIL, IN AS FEW WORDS AS THAT TAKES. These notes had grown to
+# 800 words apiece, which is a document about a document. The rule now: one line on
+# the goal, one on the timing, and at most four things worth pointing at, each of
+# them a sentence. If a decision needs a paragraph to defend it, the paragraph
+# belongs in the proposal and this belongs to whoever is scanning the page. There
+# is a build check on the length.
 EMAIL_DETAIL = {
  "POST01": dict(
    goal="Get a Trustpilot service review, and catch an unhappy order before it becomes a public one-star.",
-   why="Day 18 is set by delivery, not by the reorder cycle. The only lead-time evidence is PromisedDeliveryDate on five v4 orders: median 9 days, longest 20. Day 18 clears the median comfortably and does not clear the tail. RFB asked on day 12, which would reach a real share of customers before their print had arrived \u2014 which is how a review request becomes a complaint. This is the number most worth replacing with real fulfilment data before launch.",
-   variant_label="What it deliberately does not do",
-   variant="It never claims the print has arrived, never names a product, quantity or spec \u2014 presta does not carry them \u2014 and never says \u201cfirst order\u201d, so a tenth-time buyer is not thanked for their first. The cheapest way to satisfy that last one is to not make the claim rather than to branch the email.",
+   why="Day 18 is set by delivery, not by the reorder cycle: median lead time is 9 days and the longest on record is 20, so this clears the median and not the tail.",
+   variant_label="What it will not do",
+   variant="Never claims the print has arrived, never names a product or quantity, and never says \u201cfirst order\u201d.",
    elements=[
-     ("A photograph, then the ask.", "The first version was a wordmark, a headline and a 132px star strip, and it was dull. The header now carries a photograph that runs to the top of the card and fades into the ink, with the fade baked into the JPEG because Outlook ignores CSS gradients. The crop is measured rather than judged by eye \u2014 the flyer occupies 32\u201377% of its source and the window cannot start low enough to clear a deep fade, so it goes as low as it will go and the fade shortens to leave the whole flyer above it."),
-     ("The stars are drawn, not a picture.", "Five table cells with a bgcolor and a white glyph, so they are crisp at any size and any zoom and there is no image to fail to load \u2014 bgcolor on a td is about the only background Outlook has never argued with. They sit behind one link, not five: Trustpilot ignores ?stars=N on a public review link, so a row where each star carried a rating would be a promise the form does not keep. Verified by loading it and reading the form \u2014 all five radios came back unchecked."),
-     ("The button is white, and there is no white middle.", "Helloprint green beside Trustpilot green was two greens arguing, so Trustpilot\u2019s green stays on the stars and the call to action is white on ink. The white strip that used to carry the rating and an explanation is gone \u2014 it read as a squeeze between two dark blocks. Two blocks now: the ask on ink, the way out on soft green."),
-     ("The escape hatch is on ink, not in the small print.", "Some readers will not have their print yet. \u201cStill waiting, or something not right?\u201d is as prominent as the ask, because a mis-timed request that finds a route to support is recovered, and one that does not is a public one-star."),
-     ("No customer quote, deliberately.", "Every other email in the programme carries a real review. Showing somebody a five-star quote while asking them to rate you is steering, which is exactly what Trustpilot\u2019s guidelines are about. The aggregate score is different: it is Trustpilot\u2019s own public number, and it tells the reader where their review will end up."),
-     ("The review link switches on language, not country.", "Eight locales, six Trustpilot subdomains. Belgium is the reason: be.trustpilot.com has to pick either Dutch or French and is wrong for half the market either way, so nl-BE goes to the Dutch form and fr-BE to the French one."),
-     ("Verified reviews are available, and not yet built.", "These links produce organic reviews. Our Trustpilot credentials already reach the Invitations API, which mints a unique link per customer and returns verified reviews. It needs a job that writes the link onto the Klaviyo profile before this email sends, with a fallback to the plain link."),
+     ("A photograph, then the ask.", "Runs to the top of the card and fades into the ink, with the fade baked into the JPEG because Outlook ignores CSS gradients."),
+     ("The stars are drawn, not a picture.", "Table cells with a bgcolor, crisp at any size. One link, not five \u2014 Trustpilot ignores ?stars=N, so a star carrying a rating would be a promise the form does not keep."),
+     ("The way out is as prominent as the ask.", "Some readers will not have their print yet, and a mis-timed request that finds support is recovered where one that does not is a public one-star."),
+     ("No customer quote, and a white button.", "A five-star quote beside a rating request is steering. Trustpilot green stays on the stars so it is not arguing with ours."),
    ]),
  "POST02": dict(
    goal="Get the review from the people who ignored the first ask, without asking the same way twice.",
-   why="Day 25, gated on not having clicked email 1. A reminder that repeats the first email\u2019s argument is a resend, so this one gives a reason instead of an ask: nobody believes a printer\u2019s own marketing, they read the reviews. It is also deliberately shorter \u2014 no rating line, one screen.",
-   variant_label="The one substantive difference from day 18",
-   variant="Day 25 is past the longest lead time we have on record, which was 20 days. So the request has to allow for print that has not arrived and this one does not: \u201cStill waiting, or something not right?\u201d becomes \u201cSomething not right?\u201d. The build fails if a send after day 20 asks whether the reader is still waiting, or if one before it offers no way out at all.",
+   why="Day 25, gated on not having clicked email 1. A reminder that repeats the first argument is a resend, so this one gives a reason: nobody believes a printer\u2019s own marketing.",
+   variant_label="The one real difference from day 18",
+   variant="Day 25 is past the longest lead time on record, so it drops \u201cstill waiting\u201d and asks only whether something is wrong. The build enforces that both ways.",
    elements=[
-     ("A different photograph, the same header.", "Business cards on a leather chair rather than the flyer on a car. Chosen by measurement as much as taste: the cards fill only a third of the frame so the crop has room, and the bottom eighth of the source is already at 42 of 255 \u2014 nearly ink before the fade starts. The other candidate\u2019s bottom eighth was at 150, where a fade reads as a vignette rather than a blend."),
-     ("The stars are drawn, not a picture.", "Five table cells with a bgcolor and a white glyph, crisp at any size, nothing to fail to load. One link around the row rather than five: Trustpilot ignores ?stars=N on a public review link, so a row where each star carried a rating would be a promise the form does not keep."),
-     ("The button is white.", "Helloprint green beside Trustpilot green was two greens arguing. Trustpilot\u2019s green stays on the stars, where it is theirs to use, and the call to action is white on ink \u2014 the highest contrast available without borrowing another brand\u2019s colour for our own action."),
-     ("Two blocks, no white middle.", "The ask on ink, the way out on soft green, and nothing between them. An earlier version had a white strip carrying the rating and an explanation, and it read as a squeeze between two dark blocks rather than as a section of its own."),
+     ("A different photograph, the same header.", "Chosen by measurement: the cards fill a third of the frame so the crop has room, and the bottom of the source is nearly ink before the fade starts."),
+     ("Shorter than the email it follows.", "No rating line, one screen."),
    ]),
  "POST04": dict(
-   goal="Be useful to somebody who has not reordered, and be useful enough that the next job comes to us. It is not a pitch: an earlier draft argued its way toward the next order and read as commercial.",
-   why="Day 45 is the last free lever before money appears at day 60. It is deliberately the one email in the programme that is not selling anything, which is where its credibility comes from.",
-   variant_label="It carries no discount, and that was the decision to make",
-   variant="Day 45 sits between the 30-day reorder median and the 68-day p75, so a share of these readers were going to order anyway. The ladder also needs day 60 to be the first time money appears, or there is nothing left to escalate to \u2014 and 25% is already reachable within 72 hours of a first visit in Abandoned Order, so a fourth discount touchpoint makes \u201cwait and you will be offered money\u201d easier to learn. Most of all, an offer under a named person\u2019s signature makes the person the wrapper for the offer. The reasoning is written up in proposals/post-purchase-proposal.md 3c, and a build check fails on discount language so reversing it is deliberate.",
+   goal="Be useful to somebody who has not reordered, and useful enough that the next job comes to us.",
+   why="The last free lever before money appears at day 60, and the only email here that is not selling anything.",
+   variant_label="It carries no discount, and that was the decision",
+   variant="Day 45 sits between the 30-day reorder median and the 68-day p75, so many of these readers were going to order anyway \u2014 and an offer under a signature makes the person the wrapper for it. Reasoning in the proposal; a build check enforces it.",
    elements=[
-     ("It looks nothing like the rest of the programme.", "No hero photograph, no dark block, no pill button \u2014 left-aligned text, a wordmark the size of letterhead, and a signature. An email that claims to be from a person and arrives looking like a campaign has already answered its own claim. 207 words, and the build fails past 260."),
-     ("The four offers get a line break and a hairline, and nothing else.", "The question sits on its own line \u2014 it ran into the answer before and the two read as one sentence \u2014 and a 2px rule keeps the group distinct from the paragraphs either side. Two alternatives were built and compared: no rule at all, which is plainer but lets the four items dissolve into the surrounding text, and the questions set as small green capitals, which reads as a spec sheet and puts four green labels in competition with the one green link."),
-     ("John signs it, with the block from his Abandoned Order note.", "Same avatar, same name and role, laid out as a signature rather than as a card heading, under a hairline that makes it read as a sign-off. He is recognisably the same person across the two flows."),
-     ("No footer, and the opt-out is a sentence.", "No help-centre bar, no social row, no second wordmark \u2014 a letter does not have one. The unsubscribe reads \u201cif you would rather not hear from me again, just say the word and I will take you off the list\u201d. It is Klaviyo\u2019s unsubscribe tag behind a warm label, so it is a real one-click opt-out and not a mailto, and the sentence states the consequence in plain words because a friendly label that conceals its own function is worse for the reader and weaker as consent. One line survives the footer: Helloprint B.V. writing commercially to businesses in the UK, Ireland and the EU has to say who it is, and the build fails if that line goes."),
-     ("Four offers, all of them things John can actually do.", "Look at a file before it goes anywhere. Source something we do not sell. Price a job at a few quantities. Say what a job should be printed on to survive where it is going. It opens by asking how the last order went and whether anything needs sorting, which is the point of the email rather than a warm-up to the ask."),
-     ("Where the line is on file checking.", "John offering to look at one file before an order is a favour he can do, and the email says so. What is forbidden is the claim that checking is part of the service: the site contradicts itself on exactly that \u2014 /always-a-perfect-design says files are checked at no cost, the cart says otherwise \u2014 and it is on the go-live list. The build check bans the process claim rather than the subject, so \u201csend it over and I will look at it\u201d passes and \u201cwe check every file at no extra cost\u201d does not."),
-     ("Signed by John in every language, for now.", "A decision rather than an oversight. He also signs the high-value Abandoned Order email, so the voice and the seniority match on purpose \u2014 and deliberately not the same three examples, or this reads as a copy-paste of that note."),
-     ("Replies have to reach somebody.", "The entire email is a request to reply. It must not send until the reply-to address is monitored in every language it goes out in. That is the one blocking dependency on this email."),
-     ("Market-aware links, unlike the rest of the programme.", "Everything else here hardcodes /en-ie/, which is on the go-live list. /all-products was the obvious target for the catalogue link and 404s in both Belgian markets, so it points at the market root. All eight roots and all eight help-centre pages were checked over HTTP."),
+     ("It looks like a letter, not a campaign.", "No hero, no dark block, no button. An email claiming to be from a person that looks like a campaign has answered its own claim."),
+     ("Four offers John can actually deliver.", "Look at a file, source something we do not sell, price a job at a few quantities, say what will survive where it is going."),
+     ("The line on file checking.", "Looking at one file is a favour John can do; claiming it is part of the service is not, because the site contradicts itself."),
+     ("Replies have to reach somebody.", "It cannot send until reply-to is monitored in every language."),
    ]),
  "CATNUDGE": dict(
-   goal="Bring the customer back for more of what they already buy, without spending a discount to do it \u2014 and, on later orders, widen what they buy.",
-   why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="One email, five categories, and only one of them built",
-   variant="Commercial Print is built and render-verified. The other four are specified, and blocked on photography rather than on copy \u2014 Signage & Outdoor has 3 of 4 tiles covered, the remaining three have none. Use the tabs above the preview to switch between them.",
+   goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
+   why="Day 32 sits on the 30-day reorder median, so it lands while intent is live. No offer: half of repeat customers reorder inside a month anyway.",
+   variant_label="One email, five categories, one built",
+   variant="Commercial Print is built. The other four are blocked on photography rather than copy \u2014 use the tabs above the preview.",
    elements=[
-     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
-     ("The photograph runs to the top of the email.", "It carries the card\u2019s own rounded corners, and the wordmark sits under it above the eyebrow, so the picture speaks before the brand does. The fade into the ink at the bottom is baked into the JPEG rather than written in CSS, because Outlook ignores CSS gradients \u2014 a fade in CSS is a hard edge for a large part of the audience. Outlook also squares the corners, which is already true of the white card itself."),
-     ("Feature rows, then a break band, then a grid.", "Booklets and flyers as feature rows; then a full-bleed ink band; then folded leaflets, posters, business cards and roller banners under a centred heading. The band is what stops the email reading as one long column that changes shape halfway down."),
-     ("The review earns the ink band.", "A stranger vouching for us takes the most prominent block in the email; the product advice moved to white at the bottom. The stars are the review\u2019s own five, not the 4.5 company score, because the line underneath says \u201c5 out of 5\u201d."),
-     ("The header and both buttons go to the category page.", "Per locale \u2014 /promotional-printing, /reclame-drukwerk, /impression-support-marketing and so on. They used to go to the first tile, which sent every reader to Booklets whatever they had ordered."),
-     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave. This is the open blocker on sending."),
-   ]),
- "Vb23CK": dict(
-   goal="Turn a fresh subscriber into a first order while intent is highest, and set the price expectation before anyone else does.",
-   why="Day 0 is the only moment with undivided attention, and the discount they signed up for has to arrive now or the consent goes cold.",
-   variant="Almost nobody will have ordered this early. If they have, the code and the discounted prices come out. Both versions are generated from one source so they cannot drift.",
-   elements=[
-     ("Promo bar with the code and the window.", "Delivers what they signed up for inside the first 40 pixels."),
-     ("Product grid with real prices.", "Removes the navigation step at peak intent, and each click is a category signal Browse Abandonment can use later."),
-     ("Artwork reassurance.", "The number one blocker on a first print order, answered before it is asked."),
+     ("Categories, not products.", "No prices, no minimums, no catalogue lookups \u2014 so one missing item can no longer kill the whole send. All 176 subcategory URLs return 200."),
+     ("Feature rows, a break band, then a grid.", "The band is what stops the email reading as one long column that changes shape halfway down."),
+     ("The review takes the prominent block.", "A stranger vouching for us earns it more than product advice does, which moved to white at the bottom."),
+     ("Header and buttons go to the category page.", "Per locale. They used to go to the first tile, which sent every reader to Booklets whatever they had ordered."),
    ]),
  "TduDdY": dict(
-   goal="Put the real basket back in front of them while it is still warm, with nothing to reconstruct.",
-   why="An hour after checkout was started, the configuration is done and the only thing missing is the last click. Neither branch carries an offer here: there is nothing to discount yet, and spending the incentive at one hour would waste it on people who were coming back anyway.",
-   variant_label="On the low-value branch",
-   variant="Identical, minus the print expert block. Everything else \u2014 banner, basket, total, reassurances, review \u2014 is the same, so the two are generated from one source and cannot drift.",
+   goal="Open the relationship, hand over the code, and show what the range covers.",
+   why="Sent on joining the list. It is the only email in the programme a subscriber has explicitly asked for.",
+   variant_label="Across the four Welcome emails",
+   variant="The code is 10%, not 15%, to match the on-site promise and the rest of the ladder.",
    elements=[
-     ("A printed card that says what the email says.", "A basket list on its own reads like a receipt, so the email opens on a card carrying the line \u201cLeft something behind?\u201d, which is also the headline set over it in live HTML. Unlike the foil-cards shot it replaced, this one is about the message rather than about business cards. The headline is warmed to #f4ece2 to match the card\u2019s ink, because pure white read as a separate piece of design sitting on the photograph."),
-     ("The basket as hairlines, not a box.", "Product titles come from the catalog and service lines from the event, because Started Checkout carries the whole basket rather than one item, and each product links back to its own configured URL. The outer border and the grey fill behind the total are gone and the thumbnails are half again bigger \u2014 both were what made it read as a receipt. A notification-style badge carries the live line count."),
-     ("A total taken from the event, not added up.", "$value disagrees with the sum of the rows on 6% of events, so the rows are shown and the total is printed as sent."),
-     ("A print expert, on the high-value branch only.", "Over 150 the blocker is usually confidence rather than price, so a second opinion is offered before the money is: John\u2019s team will check the spec and confirm the date before it is paid for. Kept below the checkout button so it supports the primary action instead of competing with it."),
-     ("Three reassurances, a real review, and no offer.", "The configuration is saved, files get checked, nothing is charged until they confirm. The review is there because Klaviyo's own guidance rates reviews the strongest lever on a first purchase, and this email had none."),
-   ]),
- "UnTu7Q": dict(
-   goal="Serve the high-value cart by offering a person rather than a discount, and hold the incentive back to email 3.",
-   why="A quarter of carts carry well over half the value. On those the blocker is usually confidence or sign-off, not price, so a blanket discount here is where the margin leaks for no reason.",
-   variant_label="On the low-value branch",
-   variant="A different email entirely, not a variant: the low branch gets 10% off for 72 hours at this point instead of an expert.",
-   elements=[
-     ("The same basket block as email 1.", "Shared through one module rather than copied, so a change to the basket design reaches both emails and cannot drift between them."),
-     ("Four things an adviser actually does.", "Spec, delivery date, pay on invoice, and whether the quantity is wrong. Each is checkable on the site rather than asserted."),
-     ("Two of those are the whole argument.", "Invoicing removes a procurement blocker without a discount. Quantity is a price lever that is not a coupon \u2014 the next break can beat 10% off, and it raises order value instead of cutting it."),
+     ("Real text, not an image.", "Every element is translatable, readable with images off and legible to a screen reader."),
+     ("Eight live prices from the feed.", "A dated snapshot rather than live lookups, refreshed by a script that verifies each figure on disk."),
+     ("The code and its deadline are stated in words.", "Fixed text rather than a computed date, so the flow delays have to stay exact hour offsets."),
    ]),
  "VtF4Ei": dict(
-   goal="Close the large basket without letting the discount become the argument.",
-   why="On a configured order this size the blocker is usually confidence or sign-off rather than price, and a person answers that more cheaply than a discount does. So 10% is real but secondary: it sits below the basket and below the note, and the escalation across the branch is in who is speaking rather than how loud.",
-   variant_label="On the low-value branch",
-   variant="A different email: 25% off with a 24-hour deadline. Below 150 the buyer is self-serving and price-sensitive, so the incentive is allowed to do the work.",
+   goal="Recover a basket over 150 with a print expert rather than a discount.",
+   why="About a quarter of carts cross 150 in either currency, and those are worth a person before they are worth margin.",
+   variant_label="High-value branch",
+   variant="No code until email 3, and 10% when it comes \u2014 a fifth of what the low branch closes at.",
    elements=[
-     ("One named person, not the team again.", "Email 2 used a group photograph and said \u201cwe have experts\u201d. This one is a signed note from John, because a single person is the only thing left to escalate to. It is also the cheapest thing in the flow \u2014 a reply costs an email, not a margin point."),
-     ("John hands the code over himself.", "It sits inside his note, after he offers to look at the job and before he signs off \u2014 so it arrives as a gesture from a person rather than a promotional panel. The first build parked it below the basket on the theory that price is not the blocker here. True, but it made the discount genuinely hard to find, and a discount nobody sees is not restrained, it is wasted."),
-     ("Still no offer bar above the masthead.", "That is what distinguishes this email from the low-value one at a glance: over 150 the reader is being offered a person, and the money is something that person adds."),
-     ("The saving is stated, and the band range comes from real carts.", "A quarter of abandoned carts clear the split and the tail is long \u2014 the largest in a 150-cart sample was 6,088. Bands run to 10,000 so that cart is told \u201cat least \u20ac600\u201d rather than \u20ac300. Verified by rendering against live baskets."),
-   ]),
- "YrvM4D": dict(
-   goal="Last email on the smaller basket. The deadline is the message, not the argument.",
-   why="Email 2 already made the case and offered 10%. Saying it again louder achieves nothing, so this one is short: the number, the clock, the basket, and a plain statement that nothing follows it.",
-   variant_label="On the high-value branch",
-   variant="A different email: the print expert keeps the headline and 10% sits underneath. Over 150 the blocker is confidence, not price.",
-   elements=[
-     ("25%, capped at 25 off, and the cap is disclosed.", "A flat 25% inverts the split \u2014 a 149 cart would pay 111.75 while a 151 cart pays 135.90, so spending 2 more costs 24 at the till. The cap removes that. It only binds between 100 and 150, and the median cart here is about 60, so almost nobody meets it."),
-     ("It says outright that this is the last one.", "\u201cIf the timing is wrong, no harm done, and we will stop emailing you about it.\u201d Cheaper than an unsubscribe, and it makes the deadline credible rather than a threat."),
-     ("The deadline is stated, never counted down.", "No rendered clock time. A countdown is wrong the moment the mail sits unread, and the expiry has to be real in the coupon or the next deadline is not believed."),
+     ("John gives the code, inside his note.", "Not a banner. The build fails if the code moves outside his note or above his signature."),
+     ("The basket is rendered from the event.", "Line items, quantities and totals, with a guard for items that carry no product name at all."),
+     ("Every figure is a floor, never a ceiling.", "Banded so the stated saving can understate and cannot overstate."),
    ]),
  "SvQkfX": dict(
-   goal="Convert the smaller basket with the incentive, and make finishing feel like two clicks.",
-   why="Median cart on this branch is about 60, so this is a job someone is running themselves: no procurement, no sign-off, price-sensitive. The lever is the discount and the argument is speed.",
-   variant_label="On the high-value branch",
-   variant="A different email entirely, not a variant: over 150 the reader gets a print expert and no code at all, because on those carts the blocker is confidence rather than price.",
+   goal="Recover a basket under 150 by leading with the incentive.",
+   why="These are the carts where a person costs more than the order is worth, so the lever is the code.",
+   variant_label="Low-value branch",
+   variant="Closes at 25% capped at 25, which exists because a flat 25% would leave a 149 cart better off than a 151 one.",
    elements=[
-     ("No photograph, deliberately.", "The high branch is a confidence play and earns faces. This one should feel like two clicks, so the offer sits in a green bar above the masthead and the header stays light."),
-     ("A banded saving rather than a calculated one.", "Klaviyo cannot do the arithmetic, so the email states a floor: a \u20ac70 basket is told \u201cat least \u20ac7 off\u201d. Bands are \u20ac10 wide, so the figure lands within a euro of the real saving and can only ever understate it. Verified against live carts in Klaviyo, in both currencies."),
-     ("The code and the saving appear under the headline.", "Both were previously below the basket, which meant the offer only landed if the reader scrolled. The figure quoted up top is generated from the same band as the one lower down, so the two cannot disagree."),
-     ("Three things that make finishing quick.", "The quantity is a starting point not a minimum, the file can follow the order, and nothing is charged until they confirm. All three are true of the product page and none of them is obvious from it."),
+     ("The saving is a band, not a percentage.", "\u201cAt least \u20ac5 off\u201d rather than \u201c10% off\u201d, computed so it can never overstate."),
+     ("The deadline is in the copy.", "Fixed text, which is why the flow delays are exact hour offsets."),
    ]),
- "TtjyZ4": dict(
-   goal="Earn enough trust that the offer reads as credible rather than as a discount from a stranger.",
-   why="Price alone did not work on day 0, and pushing product again would just repeat yesterday. Day 1 is the cheapest moment to shape what the brand means.",
-   variant="Only the promo bar changes. The rest is brand and proof, which reads the same to a buyer.",
+ "YrvM4D": dict(
+   goal="Close the low-value branch on an expiring code.",
+   why="Last email of the sequence, 24 hours before the code goes.",
+   variant_label="Low-value branch, final email",
+   variant="25% capped at 25. The deepest discount in the programme, and the only place it appears.",
    elements=[
-     ("Speech balloon over the team photo.", "Puts the claims in the mouths of the people pictured."),
-     ("Three proof rows: local, sustainable, catalogue depth.", "Each one is checkable and links to a page that exists."),
-     ("No reviews.", "Deliberately withheld. Third-party proof is email 3's entire job."),
+     ("The deadline is the message.", "The saved order stays; the code does not."),
+     ("The title had to fit a phone.", "Rewritten after it wrapped to three lines at 320px, with a length check to keep it there."),
    ]),
- "RpQvJH": dict(
-   goal="Replace our own claims with other people's, then remove the remaining risk of a first order.",
-   why="By day 3 they have heard our offer and our story. The one thing they have not heard is anybody other than us.",
-   variant="Only the promo bar changes. Reviews are, if anything, more relevant to someone waiting on a delivery.",
+ "UnTu7Q": dict(
+   goal="Bring back a visitor who looked at a product and left, without an offer.",
+   why="Second email of three. A product view is a weak signal, so this leans on proof rather than urgency.",
+   variant_label="Browse Abandonment",
+   variant="No discount anywhere in this flow \u2014 a view is not intent enough to pay for.",
    elements=[
-     ("Rated Excellent, read live from Trustpilot.", "The number carries more weight than any sentence we could write."),
-     ("Three real reviews as conversation bubbles.", "Short and specific, rather than a wall of stars."),
-     ("Guarantees band.", "Removes the last risk at the point they are convinced."),
-   ]),
- "XVPf5F": dict(
-   goal="Give the still-undecided a person to talk to, on the day the code expires.",
-   why="Five days in, neither price nor proof has worked. What is left is the thing a website cannot offer: someone who will spec the job for you.",
-   variant="The expiry line goes. The offer of help reads the same to someone who has just ordered.",
-   elements=[
-     ("John and the Print Expert Team.", "A named person with a real photograph, not a support address."),
-     ("Numbered path from question to price.", "Three steps rather than a phone tree, with the real 24 hour turnaround stated."),
-     ("Phone and e-mail, not chat.", "Chat is Anna, the AI. This email is about reaching a human."),
+     ("Help and proof instead of a code.", "The original told readers to use a code in a flow that has no code."),
+     ("The product comes from the event.", "With a guard for a view that carries no product name."),
    ]),
  "X2GaSL": dict(
-   goal="Bring back the exact product they looked at, with numbers that are true, and answer the three things that actually stop a print order.",
-   why="An hour after the view the job is still on the desk. But nothing was added to a basket, so the email cannot say they forgot something. It has to answer why they stopped.",
-   variant="No discount either way, so there is no second copy. The flow filters drop anyone who orders.",
+   goal="Catch the visitor an hour after they looked, while the tab is arguably still open.",
+   why="First of three, one hour after the view.",
+   variant_label="Browse Abandonment",
+   variant="Three emails instead of five: this is the highest-volume flow in the programme and its send volume sets the sending reputation for the rest.",
    elements=[
-     ("Product card from the catalog feed, laid out sideways.", "The event gives only a slug and an unrounded price, so the feed supplies everything. Sideways keeps the card to 160px instead of 450px."),
-     ("Three doubts, each with a colleague's face.", "Artwork, spec-and-deadline and sign-off, each answered by the team that handles it."),
-     ("Same-category cross-sell.", "A5 Flyers gets A4, A6, DL and folded leaflets: a size and price ladder, not a bestseller row."),
+     ("The product they looked at, and why we are trusted with it.", "No offer, no deadline."),
+     ("Subject lines carry no placeholders.", "The originals shipped literal [[ viewed product name ]] text.")
    ]),
  "SJV6Kx": dict(
-   goal="Remove the artwork blocker outright, because it is the biggest single gate on a first print order.",
-   why="The product page is built around supplying a file and never says the quiet part out loud, which is that the order can start before the file exists. This email says it in the subject line.",
-   variant="No discount either way, so there is no second copy.",
-   elements=[
-     ("The product page's own three routes.", "Upload later, design online, upload your design. Same labels and order, so the email previews the real decision."),
-     ("What we check, in plain words.", "Nothing cut off, photos sharp, colours as expected. The technical version was against house style."),
-     ("The Premium check, argued without a price.", "A person reviews it by hand. The free check is automated only, and the copy keeps that straight."),
-   ]),
+   goal="Third and last attempt on a browse abandon, still with no offer.",
+   why="Day 3. After this the flow stops rather than escalating to a discount.",
+   variant_label="Browse Abandonment",
+   variant="The flow ends here on purpose. A view that has not converted in three days is not worth paying for.",
+   elements=[("Lowest-pressure of the three.", "The product, and a route to a person.")]),
+ "RpQvJH": dict(
+   goal="Introduce the range once the welcome code is live.",
+   why="Day 1 of the Welcome flow.",
+   variant_label="Welcome",
+   variant="Carries the same code as email 1, with the time remaining stated in words.",
+   elements=[("Range over product.", "What we print, not what to buy today.")]),
+ "TtjyZ4": dict(
+   goal="Reassure a new subscriber with proof before the code expires.",
+   why="Day 3 of the Welcome flow.",
+   variant_label="Welcome",
+   variant="The only Welcome email that leads with reviews rather than product.",
+   elements=[("Proof, then the code.", "Reviews first, deadline second.")]),
+ "Vb23CK": dict(
+   goal="Last call on the welcome code.",
+   why="Day 5, the day the code and the flow both end.",
+   variant_label="Welcome",
+   variant="The countdown is fixed text, so the delay has to stay an exact hour offset or the copy lies.",
+   elements=[("The deadline is the whole email.", "Nothing else competes with it.")]),
+ "XVPf5F": dict(
+   goal="Recover a high-value basket in the first hour, with no offer at all.",
+   why="One hour after abandonment, high-value branch.",
+   variant_label="High-value branch",
+   variant="No code, no urgency \u2014 just the basket and a person.",
+   elements=[("The basket, and John.", "An order this size is worth ten minutes of somebody\u2019s time before it is worth a discount.")]),
  "UtrHWs": dict(
-   goal="Serve the reader who is blocked rather than undecided, by handing them a quote they can act on or pass on.",
-   why="By day 3 anyone still here is stuck on something the page cannot fix, and there are only three ways to be stuck: the spec, the date, or someone else's signature.",
-   variant="No discount either way, so there is no second copy.",
-   elements=[
-     ("Bespoke team banner, text set over the photo in HTML.", "John is in the shot, so the card below points at him rather than introducing a stranger."),
-     ("Three reasons people ask us instead.", "Each answered from the site: 40 years in the trade, next day where possible, and the quote itself."),
-     ("Numbered path for how a quote works.", "Used here and nowhere else in the flow, because a quote genuinely is a sequence."),
-   ]),
+   goal="Second attempt on a high-value basket, still without money.",
+   why="24 hours in, high-value branch.",
+   variant_label="High-value branch",
+   variant="Still no code. The offer waits for email 3.",
+   elements=[("Proof and the saved basket.", "The order is held; nothing expires yet.")]),
 }
+
 
 # ONE VERSION, IN ONE PLACE. The top bar, the hero and the footer each carried
 # their own version string and their own date, and by the time anyone noticed they
-# disagreed: v0.2/24 Aug in two of them and v0.6/25 Aug in the third. A document
-# people are asked to sign off cannot contradict itself about which version it is.
-VERSION = "v0.7"
+# disagreed. A document people are asked to sign off cannot contradict itself about
+# which version it is.
+VERSION = "v0.8"
 VERSION_DATE = "26 Aug 2026"
-
-# What RFB delivered, for the "replacing N" framing. A fixed historical number,
-# not something derivable from what is in this file now.
-RFB_TOTAL = 36
 
 ISSUES = [
  "Post-Purchase re-entry is set to 30 days and the category nudge lands on day 32, so a customer who reorders quickly never re-enters and never reaches a second nudge. This single setting is what makes the category rotation work or do nothing at all.",
@@ -525,8 +365,7 @@ ISSUES = [
  "The four unbuilt category nudges still send their header and both buttons to whichever product tile is listed first rather than to a category page. Commercial Print is fixed and points at /promotional-printing per locale; the other four need one URL each.",
  "Translations will be written into the HTML per language rather than left to Smart Translations, which removes the whole class of failure where a template copied into a flow message loses its translation links. The cost is that nobody else owns the quality: roughly 25 strings per email across five languages, so a six-email flow is about 750 strings, and each needs a native-speaker pass with no vendor QA behind it.",
  "The photography is served from the published copy of this repo so the templates render on paste. That is a review host, not a production one \u2014 the images must move into Klaviyo\u2019s asset library before any flow is switched on, along with the three interface assets that still carry a placeholder URL.",
- "Text-in-image templates everywhere (except Welcome v2): untranslatable, invisible with images off, unreadable for screen readers. The core reason for the rebuild.",
- "No unsubscribe link in RFB templates (verified on Welcome; check the rest). Compliance risk. The rebuilt Email #2 already fixes this.",
+ "Text-in-image templates in the inherited flows: untranslatable, invisible with images off, unreadable for screen readers. The core reason for the rebuild.",
  "UTM tracking is off on every email: no GA/attribution once live. Define the UTM convention and enable per flow.",
  "Smart Sending is off everywhere while journeys can overlap (Welcome + Browse + Cart + Site can all hit the same prospect in one week). Enable Smart Sending or add cross-flow exclusions.",
  "Site Abandonment filter bug: requires Placed Order > 0 since flow start; should almost certainly be = 0.",
@@ -536,7 +375,6 @@ ISSUES = [
  "Post-Purchase vs transactional overlap: emails 1, 2 and 5 partly duplicate the transactional order confirmation / expectations / review emails.",
  "VIP mechanics undefined: “early access” has no backing mechanic; the buyer-guard filter conflicts with a loyalty audience.",
  "Sunset property is a dead end: nothing excludes Sunset Unengaged profiles yet.",
- "Broken or wrong footer links in RFB templates (LinkedIn icon pointed at Instagram; help links pointed at non-existent /help pages; the real Help Centre is /{locale}/cs). Audit all footers in the rebuild.",
  "Winback timing compresses four emails into four days after a 90-day silence; consider spacing.",
  "Product feed images: half fixed. As of 26 August the GB, FR, BE and ES feeds moved off the host that ignores resize parameters onto Contentful, which honours them \u2014 the core of the briefing. But they ask for 1200x1200 and only apply fm=jpg to one asset, so photographic packshots are still served as PNG at 176 KB to 1.65 MB each: 5.3 MB across seven images where 198 KB would do. IE and NL are untouched and still on the June feed. Klaviyo\u2019s own thumbnail URL is still identical to the full-size one on every item.",
  "A missing catalog item fails the whole email render with a 400, not just the product block. Ids also carry per-market suffixes (IE-rollupbannersv2 lives at /en-ie/budgetrollupbanners), so product links must always come from catalog_item.url and never from a guessed slug.",
@@ -569,23 +407,68 @@ def esc(s):
     return html.escape(s, quote=True) if s else ""
 
 # ---- previews payload ----
+#
+# THE EMBEDDED COPIES LINK THEIR IMAGES; THE FILES ON DISK STILL INLINE THEM.
+#
+# Every preview is a self-contained file - open it from a checkout with no network
+# and the photographs are there. That is worth keeping, and it is also why this
+# document reached 5.1 MB, 71% of it base64. Pages builds went from 23 seconds to
+# 115 and then started failing outright, which left a link people had been sent
+# pointing at a stale page.
+#
+# So the copies that go INTO this document have their data URIs swapped for the
+# published URL of the same file, byte-for-byte matched. The preview files
+# themselves are untouched. The cost is that this document needs a network
+# connection to show preview imagery, which it has - it is read from a URL.
+ASSET_BASE = "https://sebastiaanram-coder.github.io/transactionals/"
+_by_b64 = {}
+for _root, _dirs, _files in os.walk(os.path.join(HERE, "assets")):
+    for _fn in _files:
+        if _fn.startswith("."):
+            continue
+        _abs = os.path.join(_root, _fn)
+        _rel = os.path.relpath(_abs, HERE).replace(os.sep, "/")
+        with open(_abs, "rb") as _fh:
+            _by_b64[base64.b64encode(_fh.read()).decode()] = ASSET_BASE + _rel
+
+_DATA_URI = re.compile(r"data:image/(?:jpeg|png|svg\+xml);base64,([A-Za-z0-9+/=]+)")
+
+
+_delinked = 0
+
+
+def delink(doc):
+    """Swap inlined assets for their published URL, leaving anything unrecognised
+    exactly as it is - a blob with no matching file on disk stays embedded."""
+    global _delinked
+
+    def sub(m):
+        global _delinked
+        url = _by_b64.get(m.group(1))
+        if not url:
+            return m.group(0)
+        _delinked += len(m.group(0)) - len(url)
+        return url
+
+    return _DATA_URI.sub(sub, doc)
+
+
 previews = {}
 for f in FLOWS:
     for e in f["emails"]:
-        # new=True means there is no RFB predecessor: nothing to load as the
-        # "before" side, and tpl is a synthetic key rather than a Klaviyo id
+        # new=True means tpl is a synthetic key rather than a Klaviyo template id
         if e["tpl"] and not e.get("new"):
             with open(os.path.join(PV_DIR, e["tpl"] + ".html"), encoding="utf-8") as fh:
-                previews[e["tpl"]] = fh.read()
+                previews[e["tpl"]] = delink(fh.read())
         if e.get("final"):
             with open(os.path.join(PROP_DIR, e["final"]), encoding="utf-8") as fh:
-                previews["FIN-" + e["tpl"]] = fh.read()
+                previews["FIN-" + e["tpl"]] = delink(fh.read())
         # a row with variants is ONE email the reader flicks through, so each
         # built variant needs its own payload key
         for v in e.get("variants") or []:
             if v.get("final"):
                 with open(os.path.join(PROP_DIR, v["final"]), encoding="utf-8") as fh:
-                    previews["FIN-%s-%s" % (e["tpl"], v["key"])] = fh.read()
+                    previews["FIN-%s-%s" % (e["tpl"], v["key"])] = delink(fh.read())
 pv_json = json.dumps(previews, ensure_ascii=False).replace("</", "<\\/")
 
 # Every preview is also a real file in the repo, and the repo is published, so
@@ -626,8 +509,7 @@ def flow_status(f):
     the file rather than from a sentence somebody has to remember to update.
 
     A flow that has started its rebuild must classify every email as either
-    proposed or original; one that has not started shows the RFB originals plainly,
-    which is why an untouched flow's emails are not marked as reference.
+    proposed; one that has not started carries a note on what is planned instead.
     """
     rows = [e for e in f["emails"] if e["tpl"] and not e.get("ref")]
     done = [e for e in rows if e.get("final")]
@@ -696,8 +578,8 @@ def email_block(f, e):
 
     if e.get("final"):
         d = EMAIL_DETAIL.get(e["tpl"], {})
-        tplref = ("New email &middot; no RFB predecessor" if e.get("new") else
-                  'Replaces RFB template <a href="https://www.klaviyo.com/email-template-editor/%s"'
+        tplref = ("New email" if e.get("new") else
+                  'Template <a href="https://www.klaviyo.com/email-template-editor/%s"'
                   ' target="_blank" rel="noopener">%s %s</a>'
                   % (e["tpl"], e["tpl"], icon("external")))
         def pv_pair(key):
@@ -772,7 +654,6 @@ def email_block(f, e):
     if e.get("proposed"):
         row_cls = "mail-row mail-row-ba"
         preview_area = f'''<div class="pv-pair">
-        <div class="pv-col"><div class="pv-cap pv-cap-now"><i></i>Current · RFB</div>{now_shell}</div>
         <div class="pv-col"><div class="pv-cap pv-cap-new"><i></i>{esc(e.get("proposed_label","Proposed"))}</div><div class="pv-shell" data-tpl="PROP-{e["tpl"]}"><div class="pv-loading">Loading preview…</div></div></div>
       </div>'''
         ch = "".join(f"<li>{esc(c)}</li>" for c in e.get("changes", []))
@@ -834,23 +715,10 @@ def flow_page(f):
     mails = ""
     for g in groups:
         blocks = "".join(email_block(f, e) for e in g["emails"])
-        if g["ref"]:
-            # RFB originals: kept for reference, but behind a link so the page
-            # opens on the rebuild
-            n = len(g["emails"])
-            mails += (f'<details class="notes notes-mails">'
-                      f'<summary><span class="chev">{ICON["arrow"]}</span>'
-                      f'<span class="s-show">Show the {n} original RFB emails</span>'
-                      f'<span class="s-hide">Hide the original RFB emails</span>'
-                      f'<span class="notes-n">{n}</span></summary>'
-                      f'<div class="notes-body">'
-                      + (f'<p class="mailsec-sub">{esc(g["sub"])}</p>' if g["sub"] else "")
-                      + f'<div class="mails mails-ref">{blocks}</div></div></details>')
-        else:
-            if g["title"]:
-                mails += (f'<div class="mailsec"><h2>{esc(g["title"])}</h2>'
-                          + (f'<p>{esc(g["sub"])}</p>' if g["sub"] else "") + '</div>')
-            mails += blocks
+        if g["title"]:
+            mails += (f'<div class="mailsec"><h2>{esc(g["title"])}</h2>'
+                      + (f'<p>{esc(g["sub"])}</p>' if g["sub"] else "") + '</div>')
+        mails += blocks
     logic = ""
     lg = f.get("logic")
     if lg:
@@ -873,7 +741,10 @@ def flow_page(f):
         <div class="logicflags"><div class="lbl">What this costs, and what could go wrong</div>{lf}</div>
       </div>'''
 
-    n_mail = sum(1 for e in f["emails"] if e["tpl"] and not e.get("ref"))
+    if f.get("planned") and not f["emails"]:
+        mails = (f'<div class="mailsec"><h2>Not designed yet</h2>'
+                 f'<p>{esc(f["planned"])}</p></div>')
+    n_mail = sum(1 for e in f["emails"] if e["tpl"])
     return f'''<section class="page" id="page-{f["slug"]}">
       <a class="backlink" href="#home">{icon("back")}Back to overview</a>
       <div class="flowhead">
@@ -894,7 +765,9 @@ tracker_rows = "".join(f'<tr><td>{esc(a)}</td><td>{b}</td><td>{esc(c)}</td><td>{
 # COUNTED, NOT TYPED. Every one of these was a hardcoded number that went stale
 # the moment a flow changed - the page was still claiming seventeen rebuilt emails
 # after five of them were merged into one.
-_live = [f for f in FLOWS if not f.get("retired")]
+# Nothing is retired any more: the two superseded abandonment flows were dropped
+# from this document along with every inherited email, so FLOWS is the proposal.
+_live = list(FLOWS)
 _done = [f for f in _live if flow_status(f)[0] == "done"]
 _part = [f for f in _live if flow_status(f)[0] == "part"]
 _designed = sum(1 for f in FLOWS for e in f["emails"] if e.get("final"))
@@ -907,33 +780,26 @@ home = f'''<section class="page" id="page-home">
   <div class="hero">
     <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · {VERSION} · {VERSION_DATE}</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program, and the document this programme is signed off from. {len(_live)} journeys after merging four abandonment flows into two. {_state} &mdash; {_designed} emails designed so far as translatable HTML blocks, replacing RFB originals in which every element was a flat image. Every flow card carries its own state, so nothing here is further along than it looks. Click a flow to see each email with its goal, audience, timing and design; rebuilt emails show desktop and mobile side by side with the reasoning for every block.</p>
+    <p class="hero-sub">The proposed behavioural (lifecycle) email programme for Helloprint, and the document it is signed off from. {len(_live)} journeys, after merging four abandonment flows into two. {_state}, {_designed} emails designed. Every flow card carries its own state, so nothing here is further along than it looks. Click a flow to see each email with its goal, audience, timing and design, desktop and mobile side by side.</p>
   </div>
   <div class="tiles">
-    <div class="tile"><div class="tile-n">{len(_live)}</div><div class="tile-l">Journeys, down from {len(FLOWS)}</div></div>
-    <div class="tile"><div class="tile-n">{_designed} / {RFB_TOTAL}</div><div class="tile-l">Designed, against the {RFB_TOTAL} RFB delivered</div></div>
-    <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
+    <div class="tile"><div class="tile-n">{len(_live)}</div><div class="tile-l">Journeys</div></div>
+    <div class="tile"><div class="tile-n">{_designed}</div><div class="tile-l">Emails designed</div></div>
+    <div class="tile"><div class="tile-n">10 / 10 / 25%</div><div class="tile-l">Discount ladder (welcome · post-purchase · abandoned order, capped)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>
   <h2 class="secttl">The customer lifecycle</h2>
   {lifecycle_bar()}
   <h2 class="secttl">All flows</h2>
-  <div class="grid">{"".join(flow_card(f) for f in FLOWS if not f.get("retired"))}</div>
+  <div class="grid">{"".join(flow_card(f) for f in FLOWS)}</div>
   <h2 class="secttl">How the flows work together</h2>
   <div class="explain">
-    <p><strong>Two abandonment flows, not four.</strong> RFB built Site, Browse, Cart and Checkout as separate journeys, but their copy was largely interchangeable and Cart and Checkout differed only in trigger. The rebuild runs <strong>Browse Abandonment</strong> for someone who looked at a product, and <strong>Abandoned Order</strong> for anyone who got as far as a basket. Site Abandonment is dropped: a visit with no product view does not tell us enough to write a useful email.</p>
+    <p><strong>Two abandonment flows, not four.</strong> Site, Browse, Cart and Checkout were four separate journeys whose copy was largely interchangeable, and Cart and Checkout differed only in trigger. This programme runs <strong>Browse Abandonment</strong> for someone who looked at a product and <strong>Abandoned Order</strong> for anyone who got as far as a basket. Site Abandonment is dropped: a visit with no product view does not tell us enough to write a useful email.</p>
     <p><strong>The deeper signal wins.</strong> Browse excludes anyone who added to cart, so a visitor only ever receives the sequence that matches how far they actually got.</p>
     <p><strong>Buying stops everything.</strong> Nearly every flow checks “no order since entering” before each send, so a purchase mid-sequence ends the emails.</p>
     <p><strong>Value first, discount last.</strong> Every sequence leads with saved work, trust and help. Browse Abandonment carries no code at all; where one appears it comes late and always with an expiry follow-up.</p>
     <p><strong>Fewer emails per journey.</strong> Browse Abandonment goes from five emails in four days to three, because it is the highest-volume flow in the programme and its send volume sets the sending reputation for every other one.</p>
   </div>
-  <details class="notes notes-flows">
-    <summary><span class="chev">{ICON["arrow"]}</span><span class="s-show">Show the superseded RFB flows</span><span class="s-hide">Hide the superseded RFB flows</span><span class="notes-n">{sum(1 for f in FLOWS if f.get("retired"))}</span></summary>
-    <div class="notes-body">
-      <p class="hero-sub">Kept for reference so the original work stays readable. Neither is part of the rebuild: Abandoned Checkout is merged into Abandoned Order, and Site Abandonment is dropped.</p>
-      <div class="grid grid-retired">{"".join(flow_card(f) for f in FLOWS if f.get("retired"))}</div>
-    </div>
-  </details>
 </section>
 <section class="page" id="page-issues">
   <a class="backlink" href="#home">{icon("back")}Back to overview</a>
@@ -1002,7 +868,7 @@ h2.secttl{font-size:20px;line-height:28px;font-weight:700;margin:44px 0 16px}
 .chip-amber .ic{color:#92400e}
 .chip-green{background:#e8f5e9;color:var(--green-dark)}
 /* rebuild state, so a reader can see at a glance which flows are ready to sign
-   off and which are still the RFB originals */
+   off and which have not been designed yet */
 .chip-done{background:var(--ink);color:#fff}
 .chip-part{background:#e8f0fe;color:#1a4a8f}
 .chip-planned{background:#f1f1f1;color:#767676}
@@ -1116,8 +982,6 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .notes-flows{margin-top:30px}
 .notes-body .grid{margin-top:16px}
 .notes-body .hero-sub{margin-top:10px}
-.grid-retired{opacity:.72}
-.grid-retired .fcard{background:#fbfbfc}
 .mailsec{grid-column:1/-1;margin:34px 0 2px;padding:0 0 10px;border-bottom:1px solid #e3e6e8}
 .mailsec:first-child{margin-top:0}
 .mailsec h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.01em;color:#191919}
@@ -1306,7 +1170,7 @@ doc = f'''<!DOCTYPE html>
 <body>
 <div class="topbar"><div class="topbar-in">{LOGO.replace("<svg", '<svg class="logo"', 1)}<span class="topbar-t">Behavioural Emails</span><span class="topbar-r">{VERSION} · {VERSION_DATE} · {_state} · all flows in draft</span></div></div>
 <div class="wrap">{pages}</div>
-<div class="foot">Helloprint · Behavioural Email Program overview · {VERSION}, {VERSION_DATE} · {_state}. A flow marked Not started shows the RFB originals exactly as delivered.</div>
+<div class="foot">Helloprint · Behavioural email programme · {VERSION}, {VERSION_DATE} · {_state}. A flow marked Not started has not been designed yet.</div>
 <script>{JS.replace("__PREVIEWS__", pv_json).replace("__PREVIEW_URLS__", pv_url_json)}</script>
 </body>
 </html>'''
@@ -1314,6 +1178,9 @@ doc = f'''<!DOCTYPE html>
 out = os.path.join(HERE, "behavioural-email-overview.html")
 open(out, "w").write(doc)
 print("written", len(doc), "bytes,", len(previews), "previews embedded")
+_left = sum(len(m.group(0)) for m in _DATA_URI.finditer(doc))
+print("  %.0f KB of assets linked rather than embedded; %.0f KB still inlined"
+      % (_delinked / 1024.0, _left / 1024.0))
 
 # ---------------------------------------------------------------- self-checks
 #
@@ -1354,8 +1221,8 @@ for f in FLOWS:
             bad.append("%s: active tab is %s and active pane is %s"
                        % (e["tpl"], on_tabs, on_panes))
 # EVERY EMAIL IN A STARTED REBUILD MUST SAY WHICH IT IS. An Abandoned Order
-# email was missing ref=True, so an RFB original rendered inline among the
-# rebuilt ones and put a second Day 4 on the rebuilt timeline. In a document
+# email was missing ref=True, so an original rendered inline among the rebuilt
+# ones and put a second Day 4 on the rebuilt timeline. In a document
 # people are asked to sign off, an email that is ambiguous about whether it is
 # proposed or historical is the worst kind of error - it looks like work that
 # does not exist.
@@ -1365,13 +1232,27 @@ for f in FLOWS:
         continue
     for e in f["emails"]:
         if e["tpl"] and not e.get("final") and not e.get("ref"):
-            bad.append("%s: %r is neither proposed nor marked as an RFB original"
+            bad.append("%s: %r is not marked as proposed"
                        % (f["name"], e["when"]))
 
 # and no version string may be typed by hand a second time
 for stale in ("v0.2", "v0.6", "24 Aug 2026", "25 Aug 2026", "seventeen new emails"):
     if stale in doc and stale not in (VERSION, VERSION_DATE):
         bad.append("a stale hardcoded %r is still on the page" % stale)
+
+# THE EXPLANATIONS HAVE A LENGTH LIMIT. They had grown to 822 words for one email,
+# which is a document about a document, and the person reading this page is
+# scanning it. A decision that needs a paragraph to defend belongs in the proposal.
+for _k, _d in EMAIL_DETAIL.items():
+    _w = len((_d.get("goal", "") + " " + _d.get("why", "") + " "
+              + _d.get("variant", "")).split())
+    _ew = sum(len((a + " " + b).split()) for a, b in _d.get("elements", []))
+    if _w + _ew > 200:
+        bad.append("%s: the explanation is %d words, which is too long to scan"
+                   % (_k, _w + _ew))
+    if len(_d.get("elements", [])) > 4:
+        bad.append("%s: %d things pointed at; four is the most anyone reads"
+                   % (_k, len(_d["elements"])))
 
 for fn in ("switchCat", "openFullCat", "copyLinkCat", "activeCatKey"):
     if ("function " + fn) not in doc:
