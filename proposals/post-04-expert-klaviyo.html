@@ -58,6 +58,11 @@
 .hp-pex-body{padding:26px 40px 4px;text-align:left;}
 .hp-pex-greet{margin:0 0 18px;font-size:17px;line-height:26px;color:#191919;font-weight:600;}
 .hp-pex-p{margin:0 0 18px;font-size:16px;line-height:27px;color:#333333;}
+/* the four offers: bold question, answer after it, one per line. Scannable
+   without becoming a set of cards - this is still a letter */
+.hp-pex-offers{margin:0 0 18px;}
+.hp-pex-offer{margin:0 0 11px;font-size:16px;line-height:26px;color:#333333;padding:0 0 0 14px;border-left:2px solid #e3efe7;}
+.hp-pex-offer b{color:#191919;font-weight:700;}
 .hp-pex-sign{margin:26px 0 0;font-size:16px;line-height:26px;color:#191919;font-weight:700;}
 /* a text link, not a pill. A personal note with a green button on it is a campaign */
 .hp-pex-more{padding:24px 40px 34px;text-align:left;}
@@ -75,11 +80,11 @@
   .hp-pex-body{padding:22px 22px 4px;}
   .hp-pex-more{padding:20px 22px 28px;}
   .hp-pex-rule{margin:0 22px;}
-  .hp-pex-p{font-size:15px;line-height:25px;}
+  .hp-pex-p,.hp-pex-offer{font-size:15px;line-height:25px;}
 }
 </style>
 
-<div class="hp-pex-pre">Ask me before you order, not after.</div>
+<div class="hp-pex-pre">How did the last job turn out?</div>
 
 <div class="hp-pex-wrap">
   <div class="hp-pex-shell">
@@ -90,7 +95,9 @@
 
     <div class="hp-pex-body">
       <p class="hp-pex-greet">{% if first_name %}Hi {{ first_name }},{% else %}Hi there,{% endif %}</p>
-      <p class="hp-pex-p">I am John, part of the print expert team here. This is not an offer. I am writing because most of what people overspend on print is settled before the order is placed rather than after, and those are quick questions for me.</p><p class="hp-pex-p">Where the price stops climbing for the quantity you actually need. Whether the material will hold up where the job is going. What has to change if it needs to fold, or hang outside, or last a winter. I have specced print for over twenty years and there is nearly always one of those worth a second look.</p><p class="hp-pex-p">So if you have something coming up, reply to this email and tell me what it is for. I will come back with what I would print it on, what it costs at two or three quantities, and whether there is a cheaper route to the same result. If it is not on the site, I can usually still get it.</p><p class="hp-pex-p">Nothing to claim here, and nothing that expires.</p>
+      <p class="hp-pex-p">I am John, one of the print experts here. I am not selling you anything. I wanted to introduce myself properly, because it is a great deal easier to help before an order than after one.</p><p class="hp-pex-p">How did the last job turn out? If something was not right, tell me and I will sort it out.</p><p class="hp-pex-p">And if you have anything coming up, I would rather hear about it early. Some of what I can take off your hands:</p>
+      <div class="hp-pex-offers"><p class="hp-pex-offer"><b>Not sure about a file?</b> Send it over and I will look at it before it goes anywhere.</p><p class="hp-pex-offer"><b>Need something we do not sell?</b> Tell me what it is and I will find out who makes it.</p><p class="hp-pex-offer"><b>Not sure how many to order?</b> I will price it at a few quantities. The step up is usually smaller than people expect.</p><p class="hp-pex-offer"><b>Not sure it will last?</b> Tell me where it is going and I will tell you what to print it on.</p></div>
+      <p class="hp-pex-p">Just reply to this email. It comes to me.</p>
       <p class="hp-pex-sign">&mdash; John, print expert team</p>
     </div>
 

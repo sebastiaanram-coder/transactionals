@@ -68,28 +68,41 @@ SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
 COPY = dict(
-    pre="Ask me before you order, not after.",
+    pre="How did the last job turn out?",
     # Klaviyo renders a blank for a missing property, so the fallback is explicit
     greet_named="Hi {{ first_name }},",
     greet_plain="Hi there,",
-    paras=[
-        "I am John, part of the print expert team here. This is not an offer. I am "
-        "writing because most of what people overspend on print is settled before "
-        "the order is placed rather than after, and those are quick questions for me.",
+    opening=[
+        "I am John, one of the print experts here. I am not selling you anything. "
+        "I wanted to introduce myself properly, because it is a great deal easier "
+        "to help before an order than after one.",
 
-        "Where the price stops climbing for the quantity you actually need. Whether "
-        "the material will hold up where the job is going. What has to change if it "
-        "needs to fold, or hang outside, or last a winter. I have specced print for "
-        "over twenty years and there is nearly always one of those worth a second "
-        "look.",
+        "How did the last job turn out? If something was not right, tell me and I "
+        "will sort it out.",
 
-        "So if you have something coming up, reply to this email and tell me what it "
-        "is for. I will come back with what I would print it on, what it costs at "
-        "two or three quantities, and whether there is a cheaper route to the same "
-        "result. If it is not on the site, I can usually still get it.",
-
-        "Nothing to claim here, and nothing that expires.",
+        "And if you have anything coming up, I would rather hear about it early. "
+        "Some of what I can take off your hands:",
     ],
+    # FOUR OFFERS, ALL OF THEM THINGS JOHN CAN ACTUALLY DO. The first one is the
+    # careful one: "send it over and I will look at it" is John offering to check
+    # one file himself before an order, which is what a print expert does. It is
+    # NOT the claim that file checking is included as standard - the site
+    # contradicts itself on that, /always-a-perfect-design says files are checked
+    # at no cost and the cart says otherwise, and that is on the go-live list. A
+    # named person offering a favour is defensible; a promise about the service is
+    # not, and the checks below draw the line there rather than banning the subject.
+    offers=[
+        ("Not sure about a file?",
+         "Send it over and I will look at it before it goes anywhere."),
+        ("Need something we do not sell?",
+         "Tell me what it is and I will find out who makes it."),
+        ("Not sure how many to order?",
+         "I will price it at a few quantities. The step up is usually smaller than "
+         "people expect."),
+        ("Not sure it will last?",
+         "Tell me where it is going and I will tell you what to print it on."),
+    ],
+    closing="Just reply to this email. It comes to me.",
     sign="&mdash; John, print expert team",
     link="Or start from the catalogue",
     foot_help="Help Centre",
@@ -107,6 +120,11 @@ CSS = """
 .%(P)s-body{padding:26px 40px 4px;text-align:left;}
 .%(P)s-greet{margin:0 0 18px;font-size:17px;line-height:26px;color:#191919;font-weight:600;}
 .%(P)s-p{margin:0 0 18px;font-size:16px;line-height:27px;color:#333333;}
+/* the four offers: bold question, answer after it, one per line. Scannable
+   without becoming a set of cards - this is still a letter */
+.%(P)s-offers{margin:0 0 18px;}
+.%(P)s-offer{margin:0 0 11px;font-size:16px;line-height:26px;color:#333333;padding:0 0 0 14px;border-left:2px solid #e3efe7;}
+.%(P)s-offer b{color:#191919;font-weight:700;}
 .%(P)s-sign{margin:26px 0 0;font-size:16px;line-height:26px;color:#191919;font-weight:700;}
 /* a text link, not a pill. A personal note with a green button on it is a campaign */
 .%(P)s-more{padding:24px 40px 34px;text-align:left;}
@@ -124,7 +142,7 @@ CSS = """
   .%(P)s-body{padding:22px 22px 4px;}
   .%(P)s-more{padding:20px 22px 28px;}
   .%(P)s-rule{margin:0 22px;}
-  .%(P)s-p{font-size:15px;line-height:25px;}
+  .%(P)s-p,.%(P)s-offer{font-size:15px;line-height:25px;}
 }
 """
 
@@ -143,7 +161,9 @@ BODY = """
 
     <div class="{P}-body">
       <p class="{P}-greet">{GREET}</p>
-      {PARAS}
+      {OPENING}
+      <div class="{P}-offers">{OFFERS}</div>
+      <p class="{P}-p">{CLOSING}</p>
       <p class="{P}-sign">{SIGN}</p>
     </div>
 
@@ -184,10 +204,13 @@ def greeting(live):
 
 def build(live):
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
-    paras = "".join('<p class="%s-p">%s</p>' % (P, t) for t in COPY["paras"])
+    opening = "".join('<p class="%s-p">%s</p>' % (P, t) for t in COPY["opening"])
+    offers = "".join('<p class="%s-offer"><b>%s</b> %s</p>' % (P, q, a)
+                     for q, a in COPY["offers"])
     vals = dict(
         P=P, CSS=CSS % {"P": P}, PRE=COPY["pre"],
-        GREET=greeting(live), PARAS=paras, SIGN=COPY["sign"],
+        GREET=greeting(live), OPENING=opening, OFFERS=offers,
+        CLOSING=COPY["closing"], SIGN=COPY["sign"],
         LINK=COPY["link"], FOOT_HELP=COPY["foot_help"],
         HOME=sc.market_url("", live), CS=sc.market_url("cs", live),
         UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
@@ -282,7 +305,9 @@ vis = re.sub(r"\s+", " ", vis).strip().lower()
 # is the email saying out loud that there is no offer, which is the opposite of the
 # thing being guarded against - and it tripped this check on the first run.
 for money in (r"\bdiscount\b", r"\d+\s*%", r"\bcode\b", r"\bvoucher\b",
-              r"\bpromo\b", r"\bsave \d", r"\boff your\b",
+              r"\bpromo\b", r"\bsave \d",
+              # "off your NEXT order", not "take it off your hands"
+              r"\boff your (?:next|first|second|order)\b",
               r"(?<!nothing that )\bexpires\b"):
     if re.search(money, vis):
         errs.append("discount language found (%s) - day 60 is meant to be the first "
@@ -318,11 +343,21 @@ for bad in ("your first order", "your order of", "quantity of", "you ordered"):
     if bad in vis: errs.append("says %r, which presta cannot support" % bad)
 for jarg in ("bleed", "dpi", "cmyk", "safe area", "pre-flight", "gsm"):
     if jarg in vis: errs.append("jargon found, house style forbids it: %s" % jarg)
+# WHERE THE LINE IS ON FILE CHECKING. John offering to look at one file before an
+# order is a favour he can do and the email now says so. What is forbidden is the
+# claim that checking is part of the service, because the site contradicts itself
+# on exactly that - /always-a-perfect-design says files are checked at no cost, the
+# cart says otherwise - and it is on the go-live list. So the guard bans the
+# process claim, not the subject.
 for claim in ("no ticket", "no form", "within 30 seconds", "instantly", "24/7",
-              "free file check", "we check your files", "always available"):
+              "always available",
+              "free file check", "we check your files", "we check every file",
+              "at no extra cost", "included in every order", "always checked",
+              "every file is checked"):
     if claim in vis:
-        errs.append("claims %r, which is not established - the site contradicts "
-                    "itself on file checking" % claim)
+        errs.append("claims %r, which is a promise about the service rather than "
+                    "an offer from John - the site contradicts itself on file "
+                    "checking" % claim)
 
 # and it must not reuse John's other email word for word
 for phrase in ("a quantity that costs less at the next step up",
