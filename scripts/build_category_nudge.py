@@ -127,7 +127,7 @@ CATEGORIES = [
         sub="Whatever it is, this is the print that puts it in front of people, and what tends to go with what.",
         pre="The print that puts your next campaign in front of people.",
         hero="hero-commercial-print",
-        hero_alt="Printed flyers fanned out on a dark green velvet sofa",
+        hero_alt="A printed flyer tucked under the wiper of a dark green car",
         # The photograph runs to the very top of the card, rounded corners and
         # all, and the wordmark sits under it above the eyebrow - so the picture
         # speaks before the brand does. The alternative, wordmark on ink with the

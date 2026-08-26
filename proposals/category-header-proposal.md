@@ -152,11 +152,27 @@ drifts more than 3/255 from it — or if the *first* row has faded, because ther
 nothing above it to blend into and a fade there is a grey wash across the top of
 the email.
 
-**The crop had to change with the fade.** The rejected shape wanted its window
-pushed 210px down the source, so its bottom fade landed on empty velvet and
-whatever the top edge cut through was hidden anyway. Without a top fade that same
-window sliced the headline off the flyer behind, so this one starts at 0 and keeps
-the whole stack in frame.
+**Every photograph needs its own crop and its own fade depth.** How far down the
+window sits, and how much of the frame the fade may eat, depend on how much of its
+source the subject fills. The flyer on the car windscreen fills most of its frame,
+so it gets a shallower fade (24% rather than 33%) and a window lifted a quarter of
+the way down; a third of the frame given to the fade dissolved the bottom of the
+flyer itself. Both are per-header settings, expressed as fractions of the source
+rather than in pixels — the sources are not all the same size.
+
+**And this is where a real bug was hiding.** Cropping and resizing were folded into
+a single `sips` invocation, and `-c 1434 2048 -z 588 840` on a 2048px square
+returns **840×411**, not 840×588. Silently. Every cropped asset in the repo was
+built at the wrong aspect ratio: headers 840×411, feature images 504×283 instead of
+504×378. Nothing caught it because every other check passed — the fades were
+correct, the weights were plausible, the previews looked fine. The crop is
+arithmetic in our own code now, the resize is one call that asserts its own output
+size, and the build compares every file on disk against the size it was asked for.
+
+The knock-on is that the weight budget was calibrated against undersized files and
+never meant anything. Corrected, Commercial Print loads **406 KB** across seven
+photographs. That is the honest number, and it is the one to argue with if the
+email should be lighter.
 
 **Outlook squares the top corners.** It ignores `border-radius` entirely. That is
 already true of the white card itself, so the email stays consistent with itself

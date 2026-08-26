@@ -50,8 +50,18 @@ TILE = (400, 400)       # displayed at about 264 wide
 # variants are alternatives and no email ever loads both, so the budget counts the
 # heavier of them once - otherwise adding a variation for comparison would look
 # like the email getting heavier, which it does not.
-BUDGET_KB = 370
-FADE_BOTTOM = 0.33
+# 420, not 370. The old number was calibrated against assets that were silently
+# the wrong size - features were 504x283 rather than 504x378, so they weighed a
+# third less than the images they were supposed to be. Fixing the crop made the
+# real figure visible: a seven-photograph email is 406 KB. That is the honest
+# measurement rather than a raised ceiling, and it is the number to argue with if
+# the email should be lighter.
+BUDGET_KB = 420
+# Per header, like the offset. How deep the fade can go depends on how much of the
+# frame the subject fills: the flyer on the car windscreen is nearly 70% of its
+# source height, so a third of the frame given to the fade would dissolve the
+# bottom of the flyer itself.
+FADE_BOTTOM = {"hero-commercial-print": 0.24, "hero-review-request": 0.33}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -59,14 +69,20 @@ FADE_BOTTOM = 0.33
 # PER HEADER, because the subject sits in a different place in each source and the
 # bottom third of every header is eaten by the fade into the ink.
 #
-#   commercial-print  offset 0. The flyer stack fills the frame, and moving the
-#                     window down sliced the headline off the flyer behind.
-#   review-request    offset 150. At 0 the booklet sat squarely inside the bottom
-#                     fade and dissolved; lifting the window pushes it clear.
+#   commercial-print  0.25. The flyer on the car windscreen fills most of its
+#                     source, so the window is lifted to keep the flyer clear of
+#                     the fade rather than dissolving its bottom edge.
+#   review-request    0.15. At 0 the booklet sat squarely inside the bottom fade
+#                     and dissolved; lifting the window pushes it clear.
 #
 # There was a second header shape that faded into ink at the top as well, which
 # wanted its own crop pushed 210px down. It was built, compared and rejected.
-HERO_OFFSET_Y = {"hero-commercial-print": 0, "hero-review-request": 150}
+# AS A FRACTION OF THE SOURCE HEIGHT, not in pixels. The sources are not all the
+# same size - the car shot is 2048 square and the rest are 1000 - and a crop
+# window measured in pixels means something different in each. Expressed in pixels
+# this silently cut a 1000x700 window out of a 2048px image and produced a
+# featureless grey rectangle.
+HERO_OFFSET_Y = {"hero-commercial-print": 0.25, "hero-review-request": 0.15}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -74,7 +90,11 @@ HERO_OFFSET_Y = {"hero-commercial-print": 0, "hero-review-request": 150}
 # getting heavier.
 JOBS = [
     # (source, output name, shape, email)
-    ("standardflyers/standardflyers_setting1.webp", "hero-commercial-print", "hero", "commercial-print"),
+    # The flyer on a car windscreen, chosen over the same flyers on green velvet.
+    # It was passed over earlier as a 252px feature image, where a tight overhead
+    # crop read as texture rather than as a flyer; at 600px wide that does not
+    # apply.
+    ("standardflyers/standardflyers_setting2.png", "hero-commercial-print", "hero", "commercial-print"),
     # The review request needed its own. Booklets on a dark navy sofa: it was
     # rejected as a 252px feature image because it turned to mud at that size,
     # which was a scale problem rather than a bad photograph. Full width it is
@@ -97,29 +117,31 @@ JOBS = [
 
 
 def derive(src, name, shape):
+    """Decode, crop, resize, fade, encode - each step on its own.
+
+    All of it used to be folded into one sips invocation, which quietly returned a
+    different aspect ratio than the one asked for. The crop is arithmetic in
+    rawimg now, the resize is one sips call that asserts its own output size, and
+    the fade runs on the pixels afterwards.
+
+    Quality is 76 everywhere. The saving on the header came off its dimensions
+    instead - 840 wide for 600 displayed - because a smooth near-black ramp is the
+    one thing JPEG visibly bands on, and dropping quality is how you get a
+    staircase across the fade.
+    """
+    w, h = {"hero": HERO, "feature": FEATURE}.get(shape, TILE)
+    sw, sh, rows = ri.read(src)
     if shape == "hero":
-        w, h = HERO
-        # crop the square to 10:7 before resizing, or the resize squashes it
-        img = ri.read(src, crop=(int(1000 * h / float(w)), 1000),
-                      offset_y=HERO_OFFSET_Y[name], resize=(w, h))
+        sw, sh, rows = ri.crop_to(sw, sh, rows, w, h, HERO_OFFSET_Y[name])
+    elif shape == "feature":
+        # 4:3 rather than 3:2. A square source cropped to 3:2 loses a third of its
+        # height, which was taking the subject with it.
+        sw, sh, rows = ri.crop_to(sw, sh, rows, w, h, 0.5)
+    ow, oh, rows = ri.to_size(sw, sh, rows, w, h)
+    if shape == "hero":
         # bottom only: the top of this image is the top of the email
-        rows = ri.fade(img[0], img[1], img[2], bottom=FADE_BOTTOM)
-        # Same quality as the tiles. The saving on the header came off its
-        # DIMENSIONS instead - 840 wide rather than 900, still 1.4x the 600px it
-        # is displayed at - because a smooth near-black ramp is the one thing JPEG
-        # visibly bands on, and dropping quality is how you get a staircase across
-        # the fade. Variant B needed the saving: with no top fade, more of its
-        # area is real photograph, so it encodes about 6 KB heavier.
-        return ri.write_jpeg(img[0], img[1], rows, os.path.join(OUT, name + ".jpg"), 76)
-    if shape == "feature":
-        w, h = FEATURE
-        # 4:3 rather than 3:2. A square source cropped to 3:2 loses a third of
-        # its height, which was taking the subject with it.
-        img = ri.read(src, crop=(int(1000 * h / float(w)), 1000), resize=(w, h))
-    else:
-        w, h = TILE
-        img = ri.read(src, resize=(w, h))
-    return ri.write_jpeg(img[0], img[1], img[2], os.path.join(OUT, name + ".jpg"), 76)
+        rows = ri.fade(ow, oh, rows, bottom=FADE_BOTTOM[name])
+    return ri.write_jpeg(ow, oh, rows, os.path.join(OUT, name + ".jpg"), 76)
 
 
 # Not photography, but the same job: an email asset that has to be derived rather
@@ -167,6 +189,22 @@ def main():
     print("  %-30s %-9s %6.1f KB  (%.0f%% of it repainted to ink)"
           % (STARS_OUT[:-4], "graphic", st[0] / 1024.0, st[1] * 100))
 
+    # THE SIZE ON DISK MUST BE THE SIZE ASKED FOR. This is the check that was
+    # missing: heroes were 840x411 instead of 840x588 and features 504x283 instead
+    # of 504x378, for a week, because nothing ever compared the output to the
+    # intent. The fades passed, the weights passed, the previews looked plausible.
+    wrong = []
+    for n, (sh_, _sz, _em) in sizes.items():
+        want = {"hero": HERO, "feature": FEATURE}.get(sh_, TILE)
+        got = ri.size(os.path.join(OUT, n + ".jpg"))
+        if got != want:
+            wrong.append("%s is %dx%d, asked for %dx%d" % ((n,) + got + want))
+    if wrong:
+        print()
+        for x in wrong:
+            print("FAILED: " + x)
+        return 1
+
     heroes = [n for n, v in sizes.items() if v[0] == "hero"]
     per_email = {}
     for n, (sh, sz, em) in sizes.items():
@@ -209,6 +247,18 @@ def main():
         if is_ink(edge(0)):
             bad.append("%s: first row faded to ink, but it is the top of the email"
                        % name)
+        # THE CROP MUST CONTAIN A PHOTOGRAPH. A crop window measured in the wrong
+        # units cut a featureless rectangle out of the middle of a 2048px source
+        # and every other check passed: it faded correctly, it weighed the right
+        # amount, it just had nothing in it. Spread across the clear part of the
+        # frame is the cheapest thing that would have caught it.
+        clear = rows[:int(h * 0.5)]
+        vals = [px[x * 3 + c] for px in clear[::16] for x in range(0, w, 16)
+                for c in (0, 1, 2)]
+        spread = max(vals) - min(vals)
+        if spread < 60:
+            bad.append("%s: the top half of the crop is nearly flat (range %d of "
+                       "255) - the crop window is probably wrong" % (name, spread))
     if bad:
         print("\nFAILED: the header photograph would show a seam")
         for b in bad:

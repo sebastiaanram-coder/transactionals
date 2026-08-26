@@ -23,26 +23,57 @@ def _sips(*args):
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def read(path, crop=None, resize=None, offset_y=None):
+def size(path):
+    """(width, height) of a source, without decoding it."""
+    out = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", path],
+                         capture_output=True, text=True, check=True).stdout
+    d = dict(l.strip().split(": ") for l in out.splitlines() if ": " in l)
+    return int(d["pixelWidth"]), int(d["pixelHeight"])
+
+
+def read(path, resize=None):
     """Decode any format sips can read into (w, h, [top-down BGR rows]).
 
-    crop     (h, w) passed to sips -c, which crops centred.
-    offset_y shifts that crop window down the source, for when centred puts the
-             subject where a fade is about to eat it.
-    resize   (w, h) passed to sips -z, which fits inside the box.
-    Order matters: crop first, then resize, or the crop is of the wrong frame.
+    resize (w, h) is passed to sips -z on its own. Cropping is NOT done here - see
+    crop_to - because combining -c and -z in one sips call does not do what the
+    flags suggest: `-c 1434 2048 -z 588 840` on a 2048 square returned 840x411
+    rather than 840x588, silently, and every asset in this repo was built at the
+    wrong aspect ratio for a week. One operation per invocation.
     """
     with tempfile.TemporaryDirectory() as tmp:
         bmp = os.path.join(tmp, "x.bmp")
         args = ["-s", "format", "bmp"]
-        if crop:
-            args += ["-c", str(crop[0]), str(crop[1])]
-            if offset_y is not None:
-                args += ["--cropOffset", str(offset_y), "0"]
         if resize:
             args += ["-z", str(resize[1]), str(resize[0])]
         _sips(*args, path, "--out", bmp)
         return _read_bmp(bmp)
+
+
+def crop_to(w, h, rows, box_w, box_h, offset=0.5):
+    """Crop to the aspect of box_w:box_h, keeping the full width.
+
+    offset is where the window sits vertically, 0.0 at the top and 1.0 at the
+    bottom, so it means the same thing whatever size the source is. Expressing it
+    in pixels was the other half of the bug above: 520 is a quarter of the way down
+    a 2048px source and half way down a 1000px one.
+    """
+    ch = int(round(w * box_h / float(box_w)))
+    if ch >= h:
+        return w, h, rows
+    top = int(round((h - ch) * min(max(offset, 0.0), 1.0)))
+    return w, ch, rows[top:top + ch]
+
+
+def to_size(w, h, rows, tw, th, quality=None):
+    """Resize exactly, via one sips call, and prove it came back the right size."""
+    with tempfile.TemporaryDirectory() as tmp:
+        src, dst = os.path.join(tmp, "a.bmp"), os.path.join(tmp, "b.bmp")
+        _write_bmp(w, h, rows, src)
+        _sips("-s", "format", "bmp", "-z", str(th), str(tw), src, "--out", dst)
+        ow, oh, orows = _read_bmp(dst)
+    if (ow, oh) != (tw, th):
+        raise AssertionError("asked for %dx%d, sips returned %dx%d" % (tw, th, ow, oh))
+    return ow, oh, orows
 
 
 def _read_bmp(path):
@@ -70,15 +101,19 @@ def _read_bmp(path):
     return w, abs(h), (rows[::-1] if h > 0 else rows)
 
 
+def _write_bmp(w, h, rows, path):
+    stride = (w * 3 + 3) // 4 * 4
+    pad = b"\x00" * (stride - w * 3)
+    px = b"".join(bytes(rows[y]) + pad for y in range(h - 1, -1, -1))
+    hdr = (b"BM" + struct.pack("<IHHI", 14 + 40 + len(px), 0, 0, 54)
+           + struct.pack("<IiiHHIIiiII", 40, w, h, 1, 24, 0, len(px), 0, 0, 0, 0))
+    open(path, "wb").write(hdr + px)
+
+
 def write_jpeg(w, h, rows, out, quality=82):
     with tempfile.TemporaryDirectory() as tmp:
         bmp = os.path.join(tmp, "x.bmp")
-        stride = (w * 3 + 3) // 4 * 4
-        pad = b"\x00" * (stride - w * 3)
-        px = b"".join(bytes(rows[y]) + pad for y in range(h - 1, -1, -1))
-        hdr = (b"BM" + struct.pack("<IHHI", 14 + 40 + len(px), 0, 0, 54)
-               + struct.pack("<IiiHHIIiiII", 40, w, h, 1, 24, 0, len(px), 0, 0, 0, 0))
-        open(bmp, "wb").write(hdr + px)
+        _write_bmp(w, h, rows, bmp)
         os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
         _sips("-s", "format", "jpeg", "-s", "formatOptions", str(quality),
               bmp, "--out", out)
@@ -92,12 +127,7 @@ def write_png(w, h, rows, out):
     every one of those edges at any quality worth the bytes."""
     with tempfile.TemporaryDirectory() as tmp:
         bmp = os.path.join(tmp, "x.bmp")
-        stride = (w * 3 + 3) // 4 * 4
-        pad = b"\x00" * (stride - w * 3)
-        px = b"".join(bytes(rows[y]) + pad for y in range(h - 1, -1, -1))
-        hdr = (b"BM" + struct.pack("<IHHI", 14 + 40 + len(px), 0, 0, 54)
-               + struct.pack("<IiiHHIIiiII", 40, w, h, 1, 24, 0, len(px), 0, 0, 0, 0))
-        open(bmp, "wb").write(hdr + px)
+        _write_bmp(w, h, rows, bmp)
         os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
         _sips("-s", "format", "png", bmp, "--out", out)
     return os.path.getsize(out)
