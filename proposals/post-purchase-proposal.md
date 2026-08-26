@@ -490,6 +490,64 @@ rating is a materially better ask.
 
 ---
 
+## 3c. Should the print expert email carry a discount?
+
+Asked directly, and the answer is no. Three reasons, in order of weight.
+
+**Day 45 is still inside the reorder curve.** The median is 30 days and the p75 is
+68 (§1.7), so day 45 sits in the middle of the distribution rather than past it. A
+meaningful share of the people who read this email were going to order anyway, and
+a discount there is margin spent on a decision already made. That is the same
+argument that kept the discount out of day 32, and it has not stopped being true
+thirteen days later.
+
+**The ladder needs day 60 to be the first time money appears.** If day 45 carries
+10%, day 60 is no longer an escalation — it is a repeat, and the only way to make
+it feel like a step up is to go deeper than 10%. That matters here more than it
+usually would: 25% is already reachable within 72 hours of a first visit in the
+Abandoned Order flow, and "wait and you will be offered money" is a pattern
+customers learn. Adding a fourth discount touchpoint makes it easier to learn.
+
+**An offer attached to a personal note makes the person the wrapper.** This is the
+one email in the programme that is not selling anything, which is exactly where its
+credibility comes from. Put 10% under John's name and the sequence reads as: a
+human was sent to soften you up for the code. The email says so out loud —
+*"Nothing to claim here, and nothing that expires"* — and that line only works if
+it is true.
+
+### What it offers instead, and why that is not nothing
+
+The objection to a free email is that it has no reason to exist. So John offers
+three concrete things, none of which cost margin, and all of which are already
+established elsewhere in the programme:
+
+- **He will price the job at two or three quantities.** True and useful: a
+  thousand flyers rarely costs twice what five hundred does, which is the kind of
+  thing a customer cannot see from a product page.
+- **He will say what he would print it on.** The category emails already promise
+  to match material to where the sign is going.
+- **He will source what is not in the catalogue.** Corporate Gifts already says
+  the catalogue is a starting point.
+
+What he must **not** offer is free file checking. The site contradicts itself on
+whether that is included — `/always-a-perfect-design` says files are checked at no
+cost, the cart says otherwise (issue on the go-live list) — and a named person
+promising it is worse than a page implying it.
+
+### If this is reversed
+
+There is a build check that fails on discount language in this email, so adding one
+is a deliberate act rather than an edit that slips through. The line to delete
+first is *"Nothing to claim here, and nothing that expires"*, and the honest
+consequence is that day 60 and day 73 need rethinking rather than keeping.
+
+**Worth measuring rather than arguing:** this email should be judged on replies and
+on assisted conversion, not on orders attributed to the click. If it produces
+neither after a few hundred sends, the discount question reopens with evidence
+behind it.
+
+---
+
 ## 3a. The category nudge rotates, and never repeats itself
 
 The flow runs again on every order. The nudge is the one step that must not send

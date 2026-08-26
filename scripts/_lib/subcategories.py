@@ -112,6 +112,32 @@ def preview_field(name, which):
     return field(name, "en-IE", which) or field(name, FALLBACK, which) or ""
 
 
+def market_path(cf_locale):
+    return (_D.get("market_path") or {}).get(cf_locale)
+
+
+def market_url(path, live, esc=lambda x: x):
+    """A helloprint.com URL with the right market segment, per locale.
+
+    Every email in this programme still hardcodes /en-ie/ for its home and
+    help-centre links, which is on the go-live list. This is the fix, and new
+    emails should use it rather than adding to that debt.
+    """
+    if not live:
+        return "https://www.helloprint.com/%s/%s" % (market_path("en-IE"), path)
+    out = ""
+    for email_loc, cf_loc in LOCALE_MAP.items():
+        seg = market_path(cf_loc)
+        if not seg:
+            continue
+        kw = "if" if not out else "elif"
+        out += ("{%% %s %s == '%s' %%}%s"
+                % (kw, LOCALE_EXPR, email_loc,
+                   esc("https://www.helloprint.com/%s/%s" % (seg, path))))
+    return out + ("{%% else %%}%s{%% endif %%}"
+                  % esc("https://www.helloprint.com/%s/%s" % (market_path("en-GB"), path)))
+
+
 def landing(slug):
     """The snapshot key of the page the header and both buttons go to, if the
     email has one. See LANDINGS in scripts/fetch_subcategories.py for why this is
