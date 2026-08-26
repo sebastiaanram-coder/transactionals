@@ -31,10 +31,16 @@ import rawimg as ri
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "newstyle")
 
-# Roughly 1.8x the display size. 2x looked no better in the client and cost
-# twice the bytes; the whole set has to stay light enough that a phone on a train
-# renders it before the reader scrolls past.
-HERO = (840, 588)       # displayed at 600 wide
+# Roughly 1.3x to 1.8x the display size. 2x looked no better in the client and
+# cost twice the bytes; the whole set has to stay light enough that a phone on a
+# train renders it before the reader scrolls past.
+#
+# The header is the lowest multiple of the three on purpose. Green velvet is
+# texture-dense and it was the heaviest single asset in the set at 840 wide; the
+# saving came off its resolution rather than its quality, because a near-black
+# gradient is the one thing JPEG visibly bands on and 1.3x of a photograph is
+# indistinguishable from 1.4x.
+HERO = (780, 546)       # displayed at 600 wide, so 1.3x
 FEATURE = (504, 378)    # displayed at 252 wide
 TILE = (400, 400)       # displayed at about 264 wide
 
@@ -61,7 +67,7 @@ BUDGET_KB = 420
 # frame the subject fills: the flyer on the car windscreen is nearly 70% of its
 # source height, so a third of the frame given to the fade would dissolve the
 # bottom of the flyer itself.
-FADE_BOTTOM = {"hero-commercial-print": 0.24, "hero-review-request": 0.33}
+FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -69,11 +75,17 @@ FADE_BOTTOM = {"hero-commercial-print": 0.24, "hero-review-request": 0.33}
 # PER HEADER, because the subject sits in a different place in each source and the
 # bottom third of every header is eaten by the fade into the ink.
 #
-#   commercial-print  0.25. The flyer on the car windscreen fills most of its
-#                     source, so the window is lifted to keep the flyer clear of
-#                     the fade rather than dissolving its bottom edge.
-#   review-request    0.15. At 0 the booklet sat squarely inside the bottom fade
-#                     and dissolved; lifting the window pushes it clear.
+# MEASURED, NOT GUESSED. The subject's position was found by looking for the warm
+# cream of the paper against the cool car and the dark velvet - the first attempt
+# at this by eye put the flyer inside the fade twice.
+#
+#   commercial-print  velvet, flyer occupies 0.19-0.79 of the source. 0.50 with an
+#                     18% fade: a little crop at the top, the bottom edge of the
+#                     stack easing into the ink.
+#   review-request    car, flyer occupies 0.32-0.77 of the source and the window
+#                     cannot start low enough to clear a deep fade. 0.85 puts the
+#                     window as low as it goes - the least headroom available -
+#                     and a 24% fade then leaves the whole flyer above it.
 #
 # There was a second header shape that faded into ink at the top as well, which
 # wanted its own crop pushed 210px down. It was built, compared and rejected.
@@ -82,7 +94,7 @@ FADE_BOTTOM = {"hero-commercial-print": 0.24, "hero-review-request": 0.33}
 # window measured in pixels means something different in each. Expressed in pixels
 # this silently cut a 1000x700 window out of a 2048px image and produced a
 # featureless grey rectangle.
-HERO_OFFSET_Y = {"hero-commercial-print": 0.25, "hero-review-request": 0.15}
+HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -90,16 +102,11 @@ HERO_OFFSET_Y = {"hero-commercial-print": 0.25, "hero-review-request": 0.15}
 # getting heavier.
 JOBS = [
     # (source, output name, shape, email)
-    # The flyer on a car windscreen, chosen over the same flyers on green velvet.
-    # It was passed over earlier as a 252px feature image, where a tight overhead
-    # crop read as texture rather than as a flyer; at 600px wide that does not
-    # apply.
-    ("standardflyers/standardflyers_setting2.png", "hero-commercial-print", "hero", "commercial-print"),
-    # The review request needed its own. Booklets on a dark navy sofa: it was
-    # rejected as a 252px feature image because it turned to mud at that size,
-    # which was a scale problem rather than a bad photograph. Full width it is
-    # calm, warm and already nearly ink at the bottom edge.
-    ("booklets/booklets_setting1.webp", "hero-review-request", "hero", "review-request"),
+    ("standardflyers/standardflyers_setting1.webp", "hero-commercial-print", "hero", "commercial-print"),
+    # The flyer under a car wiper. Passed over earlier as a 252px feature image,
+    # where a tight crop read as texture rather than as a flyer; at 600px wide it
+    # is the most distinctive shot in the set.
+    ("standardflyers/standardflyers_setting2.png", "hero-review-request", "hero", "review-request"),
     # Both feature shots were changed after seeing them at 252px beside prose.
     # booklets_setting1 is a dark navy interior that turns to mud at that size,
     # and standardflyers_setting2 is a tight overhead that reads as texture

@@ -152,13 +152,15 @@ drifts more than 3/255 from it — or if the *first* row has faded, because ther
 nothing above it to blend into and a fade there is a grey wash across the top of
 the email.
 
-**Every photograph needs its own crop and its own fade depth.** How far down the
-window sits, and how much of the frame the fade may eat, depend on how much of its
-source the subject fills. The flyer on the car windscreen fills most of its frame,
-so it gets a shallower fade (24% rather than 33%) and a window lifted a quarter of
-the way down; a third of the frame given to the fade dissolved the bottom of the
-flyer itself. Both are per-header settings, expressed as fractions of the source
-rather than in pixels — the sources are not all the same size.
+**Every photograph needs its own crop and its own fade depth**, and both are
+measured rather than guessed. How far down the window sits, and how much of the
+frame the fade may eat, depend on how much of its source the subject fills — so
+the subject's position is found by looking for the warm cream of the paper against
+the cool car and the dark velvet. Guessing it by eye put the flyer inside the fade
+twice. This header's flyers occupy 19–79% of their source, which gives a centred
+window and an 18% fade; the review request's car shot occupies 32–77% and needs the
+window as low as it will go. Both are fractions of the source rather than pixel
+counts, because the sources are not all the same size.
 
 **And this is where a real bug was hiding.** Cropping and resizing were folded into
 a single `sips` invocation, and `-c 1434 2048 -z 588 840` on a 2048px square

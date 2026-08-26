@@ -83,7 +83,7 @@ SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
 COPY = dict(
-    hero_alt="A printed booklet resting on a dark blue sofa",
+    hero_alt="A printed flyer tucked under the wiper of a dark green car",
     eyebrow="ABOUT A MINUTE",
     stars_label="Rate your experience on Trustpilot",
     h1="Would you tell other businesses how it went?",
