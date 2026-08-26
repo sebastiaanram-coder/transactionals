@@ -23,9 +23,10 @@
     "Folded Leaflets",
     "Poster Printing",
     "Business Cards",
-    "Cards & Invitations"
+    "Roller Banners"
    ],
    "label": "Commercial Print",
+   "landing": "promotional-printing",
    "match": [
     "Commercial Print"
    ]
@@ -331,45 +332,6 @@
    "id": "6EwA08P0gEKeqAmYA62eG6",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/5geTr5nz3TOtzCTAh2ghws/24e4e657d05a3683589374f28b2e0d8d/menu-image-clothing-caps.png",
    "name_en": "Caps"
-  },
-  "cards-invitations": {
-   "by_locale": {
-    "en-GB": {
-     "name": "Cards & Invitations",
-     "url": "https://www.helloprint.com/en-gb/cards-and-invites"
-    },
-    "en-IE": {
-     "name": "Cards & Invitations",
-     "url": "https://www.helloprint.com/en-ie/cards-and-invites"
-    },
-    "es-ES": {
-     "name": "Tarjetas e invitaciones",
-     "url": "https://www.helloprint.com/es-es/tarjetas-e-invitaciones"
-    },
-    "fr-BE": {
-     "name": "Cartes & invitations",
-     "url": "https://www.helloprint.com/fr-be/cartes-et-invitations"
-    },
-    "fr-FR": {
-     "name": "Cartes & invitations",
-     "url": "https://www.helloprint.com/fr-fr/cartes-et-invitations"
-    },
-    "it": {
-     "name": "Biglietti e Inviti",
-     "url": "https://www.helloprint.com/it-it/biglietti-e-inviti"
-    },
-    "nl": {
-     "name": "Kaarten & uitnodigingen",
-     "url": "https://www.helloprint.com/nl-nl/kaarten-en-uitnodigingen"
-    },
-    "nl-BE": {
-     "name": "Kaarten & uitnodigingen",
-     "url": "https://www.helloprint.com/nl-be/kaarten-en-uitnodigingen"
-    }
-   },
-   "id": "3XwRHInZLiAGcI2QqucqUG",
-   "image": "https://images.ctfassets.net/wm1n7oady8a5/6OsG9z6x2gmcAYyYokAaau/d675ab5252ea5400fe4829ef583a0b27/Greeting-card-product-image.png",
-   "name_en": "Cards & Invitations"
   },
   "folded-leaflets": {
    "by_locale": {
@@ -799,6 +761,46 @@
    "id": "3nCN0b4dldxWfPqPWli4bM",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/6qRAPpgi08iXc7uNHyW5cv/36dd1d1f45f5ba19056dc0c95a3bc6b2/Ontwerp_zonder_titel__7_.png",
    "name_en": "Printed Food Packaging"
+  },
+  "promotional-printing": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Promotional Products",
+     "url": "https://www.helloprint.com/en-gb/promotional-printing"
+    },
+    "en-IE": {
+     "name": "Promotional Products",
+     "url": "https://www.helloprint.com/en-ie/promotional-printing"
+    },
+    "es-ES": {
+     "name": "Artículos promocionales",
+     "url": "https://www.helloprint.com/es-es/impresion-promocional"
+    },
+    "fr-BE": {
+     "name": "Supports Marketing",
+     "url": "https://www.helloprint.com/fr-be/impression-support-marketing"
+    },
+    "fr-FR": {
+     "name": "Supports Marketing",
+     "url": "https://www.helloprint.com/fr-fr/impression-support-marketing"
+    },
+    "it": {
+     "name": "Materiale Pubblicitario",
+     "url": "https://www.helloprint.com/it-it/stampa-promozionale"
+    },
+    "nl": {
+     "name": "Reclamedrukwerk",
+     "url": "https://www.helloprint.com/nl-nl/reclame-drukwerk"
+    },
+    "nl-BE": {
+     "name": "Reclamedrukwerk",
+     "url": "https://www.helloprint.com/nl-be/reclame-drukwerk"
+    }
+   },
+   "id": "MRjlkRa7meqiqSY0mSowg",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/7I7tFHYLzxg8CdFiHll09c/f6b34b8123672340923f12fae218017f/marketing-materials.png",
+   "landing": true,
+   "name_en": "promotional-printing"
   },
   "roller-banners": {
    "by_locale": {

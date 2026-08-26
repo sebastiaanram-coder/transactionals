@@ -30,6 +30,9 @@
   home and help-centre links market-aware. The category links are already
   per-locale.
 
+  Header and both buttons go to:
+    NONE SET - falls back to the first tile, which is wrong
+
   Subcategories in this email:
     Canvas Tote Bags             https://www.helloprint.com/en-ie/printing-cottonbags
     Pens                         https://www.helloprint.com/en-ie/ballpoint-pens
@@ -43,10 +46,35 @@
 .hp-catcg-root *{box-sizing:border-box;}
 .hp-catcg-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
 .hp-catcg-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
-/* the dark header: wordmark, category, headline and first call to action all on
-   ink, so the top reads as one block rather than a logo bar with a page under it */
-.hp-catcg-dark{background:#191919;padding:26px 32px 32px;text-align:center;}
-.hp-catcg-dark img.hp-catcg-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 26px;}
+/* THE DARK HEADER IS THREE STACKED BLOCKS, not one padded box, because the
+   photograph has to bleed to both edges while the type stays inset:
+     -dark   wordmark on ink
+     -hero   the photograph, full width, no padding
+     -darkb  eyebrow, headline, subtext, first call to action - back on ink
+   All three are the same #191919, and the photograph itself fades to exactly
+   that colour at its top and bottom edge, so the three read as one block with a
+   picture inside it. The fade is baked into the JPEG on purpose: Outlook ignores
+   CSS gradients, so a fade written in CSS is a hard-edged photograph for a large
+   part of the audience. See scripts/make_newstyle_assets.py. */
+.hp-catcg-dark{background:#191919;padding:26px 32px 22px;text-align:center;}
+.hp-catcg-dark img.hp-catcg-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0;}
+.hp-catcg-hero{background:#191919;font-size:0;line-height:0;}
+/* colour is set because with images off the alt text lands on ink */
+.hp-catcg-hero img{width:100%;max-width:600px;height:auto;display:block;border:0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+.hp-catcg-darkb{background:#191919;padding:2px 32px 32px;text-align:center;}
+/* HEADER VARIANT B: the photograph is the first thing in the card, so it carries
+   the card's own top corners. Outlook ignores border-radius and will show them
+   square - which is already true of the white card itself, so the email stays
+   consistent with itself there rather than gaining a mismatch. */
+.hp-catcg-heroT{background:#191919;font-size:0;line-height:0;}
+.hp-catcg-heroT img{width:100%;max-width:600px;height:auto;display:block;border:0;
+  border-radius:18px 18px 0 0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+/* b puts the wordmark here instead, above the eyebrow, so this block needs the
+   top padding that the wordmark bar used to have */
+.hp-catcg-darkc{background:#191919;padding:26px 32px 32px;text-align:center;}
+.hp-catcg-darkc img.hp-catcg-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 20px;}
 .hp-catcg-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .hp-catcg-h1{margin:0 auto 12px;max-width:440px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .hp-catcg-sub{margin:0 auto 24px;max-width:420px;font-size:16px;line-height:25px;color:#b4b4b4;}
@@ -58,10 +86,10 @@
 /* FEATURE ROW: image beside prose. Deliberately not a product card - no price,
    no border, no button. The Welcome flow's content-block pattern. */
 .hp-catcg-ftbl{width:100%;border-collapse:collapse;margin:0 0 24px;}
-.hp-catcg-fim{width:216px;vertical-align:top;padding:0 18px 0 0;}
+.hp-catcg-fim{width:252px;vertical-align:top;padding:0 18px 0 0;}
 .hp-catcg-fim.hp-catcg-right{padding:0 0 0 18px;}  /* flipped row: image sits right */
-.hp-catcg-fim img{width:100%;max-width:216px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
-.hp-catcg-fim{width:216px;}
+.hp-catcg-fim img{width:100%;max-width:252px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+.hp-catcg-fim{width:252px;}
 .hp-catcg-ftx{vertical-align:top;}
 .hp-catcg-fh{margin:0 0 6px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .hp-catcg-fb{margin:0 0 10px;font-size:15px;line-height:23px;color:#555555;}
@@ -75,20 +103,34 @@
    "Catalogos, libros y revistas" once this is translated */
 .hp-catcg-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
 .hp-catcg-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
-/* closing content block */
-.hp-catcg-cb{margin:8px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;}
-.hp-catcg-cbtbl{width:100%;border-collapse:collapse;}
-.hp-catcg-cbic{width:56px;vertical-align:top;padding:0 16px 0 0;}
-.hp-catcg-cbic img{width:38px;height:38px;display:block;border:0;}
-.hp-catcg-cbtx{vertical-align:top;}
-.hp-catcg-cbh{margin:0 0 5px;font-size:17px;line-height:24px;font-weight:800;color:#191919;letter-spacing:-.008em;}
-.hp-catcg-cbb{margin:0;font-size:15px;line-height:23px;color:#555555;}
-/* review */
-.hp-catcg-rev{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
-.hp-catcg-revstars{display:block;margin:0 auto 12px;border:0;width:120px;height:25px;}
-.hp-catcg-revq{display:block;margin:0 auto 9px;max-width:430px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
-.hp-catcg-revph{display:block;margin:0 auto 9px;max-width:420px;border:2px dashed #d4d4d4;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#767676;background:#fafafa;}
-.hp-catcg-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
+/* THE BREAK BAND, which is now the review. The email used to run prose straight
+   into a grid of tiles, which read as one long column that changed shape halfway
+   down for no reason. This is the pause: a full-bleed band of the same ink as the
+   header, sitting between the feature rows and the grid, which is where the join
+   was.
+   WHAT IS IN IT CHANGED. It held a piece of product advice; it now holds a real
+   customer review, because a stranger vouching for us earns the most prominent
+   spot in the email far better than a note about artwork does. The advice moved
+   to the bottom, on white. */
+.hp-catcg-band{background:#191919;padding:34px 34px 32px;text-align:center;margin:34px 0 0;}
+.hp-catcg-bandeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 16px;}
+.hp-catcg-bstars{display:block;margin:0 auto 16px;border:0;width:132px;height:28px;}
+.hp-catcg-bq{display:block;margin:0 auto 14px;max-width:440px;font-size:20px;line-height:29px;font-weight:700;color:#ffffff;letter-spacing:-.012em;}
+/* a short green keyline between the words and the name: it stops the attribution
+   reading as part of the sentence, which it did when both were simply centred */
+.hp-catcg-brule{display:block;width:34px;height:2px;background:#00b67a;margin:0 auto 13px;font-size:0;line-height:0;}
+.hp-catcg-bby{display:block;font-size:12px;line-height:18px;color:#8f8f8f;}
+.hp-catcg-bph{display:block;margin:0 auto 13px;max-width:430px;border:2px dashed #3f3f3f;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#9a9a9a;background:#212121;}
+/* GOOD TO KNOW, now on white at the bottom. It reads as a footnote to the
+   browsing rather than as an interruption of it, which is what it always was. */
+.hp-catcg-gk{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
+.hp-catcg-gkeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#008539;margin:0 0 9px;}
+.hp-catcg-gkh{margin:0 0 6px;font-size:18px;line-height:25px;font-weight:800;color:#191919;letter-spacing:-.01em;}
+.hp-catcg-gkb{margin:0 auto;max-width:430px;font-size:15px;line-height:23px;color:#555555;}
+/* the centred heading that introduces the grid */
+.hp-catcg-gsect{margin:30px 24px 0;text-align:center;}
+.hp-catcg-gh{margin:0 0 5px;font-size:21px;line-height:28px;font-weight:800;color:#191919;letter-spacing:-.014em;}
+.hp-catcg-gs{margin:0 auto 22px;max-width:400px;font-size:14px;line-height:21px;color:#767676;}
 /* contact */
 .hp-catcg-help{margin:28px 24px 0;background:#f1f8f4;border-radius:14px;padding:24px 22px 22px;text-align:center;}
 .hp-catcg-help img{display:block;margin:0 auto 12px;border:0;}
@@ -108,13 +150,20 @@
 .hp-catcg-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
 .hp-catcg-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
-  .hp-catcg-dark{padding:22px 20px 28px;}
-  .hp-catcg-dark img.hp-catcg-mark{width:126px;margin-bottom:22px;}
+  .hp-catcg-dark{padding:22px 20px 18px;}
+  .hp-catcg-dark img.hp-catcg-mark{width:126px;margin-bottom:0;}
+  .hp-catcg-darkb{padding:2px 20px 28px;}
+  .hp-catcg-darkc{padding:22px 20px 28px;}
+  .hp-catcg-darkc img.hp-catcg-mark{width:126px;margin-bottom:18px;}
+  .hp-catcg-band{padding:30px 22px 28px;margin-top:28px;}
+  .hp-catcg-bq{font-size:18px;line-height:26px;}
+  .hp-catcg-gsect{margin-left:14px;margin-right:14px;}
+  .hp-catcg-gh{font-size:19px;line-height:26px;}
   .hp-catcg-h1{font-size:26px;line-height:33px;max-width:none;}
   .hp-catcg-sub{font-size:15px;line-height:23px;max-width:none;}
   .hp-catcg-cta,.hp-catcg-cta2{padding:15px 26px;}
   .hp-catcg-sect{margin-left:14px;margin-right:14px;}
-  /* the feature row stacks: a 216px image beside prose is unreadable at 320px */
+  /* the feature row stacks: a 252px image beside prose is unreadable at 320px */
   .hp-catcg-fim,.hp-catcg-fim.hp-catcg-right{display:block;width:100%!important;padding:0 0 12px 0!important;}
   .hp-catcg-fim img{max-width:100%;}
   .hp-catcg-fh{font-size:18px;line-height:25px;}
@@ -122,7 +171,7 @@
   /* the grid does NOT stack - two-up is the point */
   .hp-catcg-tile{padding:0 4px 12px;}
   .hp-catcg-tname{font-size:14px;line-height:19px;min-height:38px;}
-  .hp-catcg-cb,.hp-catcg-rev,.hp-catcg-help,.hp-catcg-tail{margin-left:14px;margin-right:14px;}
+  .hp-catcg-gk,.hp-catcg-help,.hp-catcg-tail{margin-left:14px;margin-right:14px;}
   .hp-catcg-foot{padding-left:18px;padding-right:18px;}
 }
 </style>
@@ -134,34 +183,37 @@
 
     <div class="hp-catcg-dark">
       <a href="https://www.helloprint.com/en-ie/"><img class="hp-catcg-mark" src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="142"></a>
+    </div>
+    <div class="hp-catcg-darkb">
       <span class="hp-catcg-eyebrow">CORPORATE GIFTS</span>
       <h1 class="hp-catcg-h1">Something to hand out at the next event?</h1>
       <p class="hp-catcg-sub">The things that stay in use long after a flyer is in the bin.</p>
       <a class="hp-catcg-cta" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/printing-cottonbags{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/printing-cottonbags{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/katoenentassen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/katoenentassen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/sacs-coton{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/sacs-coton{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/imprimir-bolsa-algodon{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/borse-di-tela{% else %}https://www.helloprint.com/en-gb/printing-cottonbags{% endif %}">See the range</a>
     </div>
 
+
     <div class="hp-catcg-sect">
       <h2 class="hp-catcg-sh">Popular in Corporate Gifts</h2>
       <p class="hp-catcg-ss">Among the most ordered in this category by businesses like yours.</p>
-      <table class="hp-catcg-ftbl" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-catcg-fim" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/printing-cottonbags{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/printing-cottonbags{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/katoenentassen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/katoenentassen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/sacs-coton{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/sacs-coton{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/imprimir-bolsa-algodon{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/borse-di-tela{% else %}https://www.helloprint.com/en-gb/printing-cottonbags{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/6UKJKFkRifue7levJ4bLhI/72c8570fb645b32a013eacff0278f331/10.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=480&h=320&q=80" alt="{% if event.Locale == "en-IE" %}Canvas Tote Bags{% elif event.Locale == "en-GB" %}Canvas Tote Bags{% elif event.Locale == "nl-NL" %}Katoenen tassen{% elif event.Locale == "nl-BE" %}Katoenen tassen{% elif event.Locale == "fr-FR" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "fr-BE" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "es-ES" %}Tote bags{% elif event.Locale == "it-IT" %}Tote bags{% else %}Canvas Tote Bags{% endif %}" width="216"></a></td><td class="hp-catcg-ftx" valign="top" dir="ltr"><p class="hp-catcg-fh">{% if event.Locale == "en-IE" %}Canvas Tote Bags{% elif event.Locale == "en-GB" %}Canvas Tote Bags{% elif event.Locale == "nl-NL" %}Katoenen tassen{% elif event.Locale == "nl-BE" %}Katoenen tassen{% elif event.Locale == "fr-FR" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "fr-BE" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "es-ES" %}Tote bags{% elif event.Locale == "it-IT" %}Tote bags{% else %}Canvas Tote Bags{% endif %}</p><p class="hp-catcg-fb">The one giveaway people keep using. Cotton, your logo on the side, and cheap enough per bag to hand out at a stand without counting them.</p><a class="hp-catcg-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/printing-cottonbags{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/printing-cottonbags{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/katoenentassen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/katoenentassen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/sacs-coton{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/sacs-coton{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/imprimir-bolsa-algodon{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/borse-di-tela{% else %}https://www.helloprint.com/en-gb/printing-cottonbags{% endif %}">See the range &rarr;</a></td></tr></table><table class="hp-catcg-ftbl" role="presentation" cellpadding="0" cellspacing="0" dir="rtl"><tr><td class="hp-catcg-fim hp-catcg-right" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/ballpoint-pens{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/ballpoint-pens{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/pennen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/pennen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/stylo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/stylo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/boligrafos-para-personalizar{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/penne-a-sfera{% else %}https://www.helloprint.com/en-gb/ballpoint-pens{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/4NXiyPrpvopEq6tHEE4GSg/d518a275698cbef14f2b84aa149f9862/Landingpage-Personalised-Writing-Instruments-Pens-removebg-preview.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=480&h=320&q=80" alt="{% if event.Locale == "en-IE" %}Pens{% elif event.Locale == "en-GB" %}Pens{% elif event.Locale == "nl-NL" %}Pennen{% elif event.Locale == "nl-BE" %}Pennen{% elif event.Locale == "fr-FR" %}Stylos{% elif event.Locale == "fr-BE" %}Stylos{% elif event.Locale == "es-ES" %}Bolígrafos{% elif event.Locale == "it-IT" %}Penne{% else %}Pens{% endif %}" width="216"></a></td><td class="hp-catcg-ftx" valign="top" dir="ltr"><p class="hp-catcg-fh">{% if event.Locale == "en-IE" %}Pens{% elif event.Locale == "en-GB" %}Pens{% elif event.Locale == "nl-NL" %}Pennen{% elif event.Locale == "nl-BE" %}Pennen{% elif event.Locale == "fr-FR" %}Stylos{% elif event.Locale == "fr-BE" %}Stylos{% elif event.Locale == "es-ES" %}Bolígrafos{% elif event.Locale == "it-IT" %}Penne{% else %}Pens{% endif %}</p><p class="hp-catcg-fb">Still the thing that ends up in a drawer and gets used for a year. Hundreds of them for about the price of a small print run.</p><a class="hp-catcg-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/ballpoint-pens{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/ballpoint-pens{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/pennen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/pennen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/stylo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/stylo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/boligrafos-para-personalizar{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/penne-a-sfera{% else %}https://www.helloprint.com/en-gb/ballpoint-pens{% endif %}">See the range &rarr;</a></td></tr></table>
+      <table class="hp-catcg-ftbl" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-catcg-fim" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/printing-cottonbags{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/printing-cottonbags{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/katoenentassen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/katoenentassen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/sacs-coton{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/sacs-coton{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/imprimir-bolsa-algodon{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/borse-di-tela{% else %}https://www.helloprint.com/en-gb/printing-cottonbags{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/6UKJKFkRifue7levJ4bLhI/72c8570fb645b32a013eacff0278f331/10.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=504&h=378&q=80" alt="{% if event.Locale == "en-IE" %}Canvas Tote Bags{% elif event.Locale == "en-GB" %}Canvas Tote Bags{% elif event.Locale == "nl-NL" %}Katoenen tassen{% elif event.Locale == "nl-BE" %}Katoenen tassen{% elif event.Locale == "fr-FR" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "fr-BE" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "es-ES" %}Tote bags{% elif event.Locale == "it-IT" %}Tote bags{% else %}Canvas Tote Bags{% endif %}" width="252"></a></td><td class="hp-catcg-ftx" valign="top" dir="ltr"><p class="hp-catcg-fh">{% if event.Locale == "en-IE" %}Canvas Tote Bags{% elif event.Locale == "en-GB" %}Canvas Tote Bags{% elif event.Locale == "nl-NL" %}Katoenen tassen{% elif event.Locale == "nl-BE" %}Katoenen tassen{% elif event.Locale == "fr-FR" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "fr-BE" %}Tote bags &amp; Sacs en coton{% elif event.Locale == "es-ES" %}Tote bags{% elif event.Locale == "it-IT" %}Tote bags{% else %}Canvas Tote Bags{% endif %}</p><p class="hp-catcg-fb">The one giveaway people keep using. Cotton, your logo on the side, and cheap enough per bag to hand out at a stand without counting them.</p><a class="hp-catcg-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/printing-cottonbags{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/printing-cottonbags{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/katoenentassen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/katoenentassen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/sacs-coton{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/sacs-coton{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/imprimir-bolsa-algodon{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/borse-di-tela{% else %}https://www.helloprint.com/en-gb/printing-cottonbags{% endif %}">See the range &rarr;</a></td></tr></table><table class="hp-catcg-ftbl" role="presentation" cellpadding="0" cellspacing="0" dir="rtl"><tr><td class="hp-catcg-fim hp-catcg-right" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/ballpoint-pens{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/ballpoint-pens{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/pennen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/pennen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/stylo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/stylo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/boligrafos-para-personalizar{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/penne-a-sfera{% else %}https://www.helloprint.com/en-gb/ballpoint-pens{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/4NXiyPrpvopEq6tHEE4GSg/d518a275698cbef14f2b84aa149f9862/Landingpage-Personalised-Writing-Instruments-Pens-removebg-preview.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=504&h=378&q=80" alt="{% if event.Locale == "en-IE" %}Pens{% elif event.Locale == "en-GB" %}Pens{% elif event.Locale == "nl-NL" %}Pennen{% elif event.Locale == "nl-BE" %}Pennen{% elif event.Locale == "fr-FR" %}Stylos{% elif event.Locale == "fr-BE" %}Stylos{% elif event.Locale == "es-ES" %}Bolígrafos{% elif event.Locale == "it-IT" %}Penne{% else %}Pens{% endif %}" width="252"></a></td><td class="hp-catcg-ftx" valign="top" dir="ltr"><p class="hp-catcg-fh">{% if event.Locale == "en-IE" %}Pens{% elif event.Locale == "en-GB" %}Pens{% elif event.Locale == "nl-NL" %}Pennen{% elif event.Locale == "nl-BE" %}Pennen{% elif event.Locale == "fr-FR" %}Stylos{% elif event.Locale == "fr-BE" %}Stylos{% elif event.Locale == "es-ES" %}Bolígrafos{% elif event.Locale == "it-IT" %}Penne{% else %}Pens{% endif %}</p><p class="hp-catcg-fb">Still the thing that ends up in a drawer and gets used for a year. Hundreds of them for about the price of a small print run.</p><a class="hp-catcg-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/ballpoint-pens{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/ballpoint-pens{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/pennen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/pennen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/stylo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/stylo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/boligrafos-para-personalizar{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/penne-a-sfera{% else %}https://www.helloprint.com/en-gb/ballpoint-pens{% endif %}">See the range &rarr;</a></td></tr></table>
+    </div>
+
+    <div class="hp-catcg-band">
+      <span class="hp-catcg-bandeye">WHAT CUSTOMERS SAY</span>
+      <img class="hp-catcg-bstars" src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-5-on-ink.png" alt="5 out of 5 on Trustpilot" width="132" height="28">
+      {% if event.Locale|slice:":2" == "en" %}<span class="hp-catcg-bq">&ldquo;Very easy to upload design and position it on the golf umbrellas. Delivery was around a week which for a customised product is very good. Very happy and will use them again.&rdquo;</span><span class="hp-catcg-brule">&nbsp;</span><span class="hp-catcg-bby">Paul &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "nl" %}<span class="hp-catcg-bq">&ldquo;Super!! Goed geholpen tijdens de feedback ronde, op tij afgeleverd en het zag er top uit.&rdquo;</span><span class="hp-catcg-brule">&nbsp;</span><span class="hp-catcg-bby">Shalina Halma &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "fr" %}<span class="hp-catcg-bq">&ldquo;Accompagnée lors de la commande et produit conforme, parfait,merci&rdquo;</span><span class="hp-catcg-brule">&nbsp;</span><span class="hp-catcg-bby">Laurence &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "es" %}<span class="hp-catcg-bq">&ldquo;Sensacional, siempre HelloPrint trabaja de maravilla. Gracias&rdquo;</span><span class="hp-catcg-brule">&nbsp;</span><span class="hp-catcg-bby">Juan Canada &middot; 5 out of 5 on Trustpilot</span>{% else %}<span class="hp-catcg-bph">Trustpilot quote to be added &mdash; pick a review about a promotional item, ideally mentioning branding quality.</span><span class="hp-catcg-bby">Verified Trustpilot review</span>{% endif %}
+    </div>
+
+    <div class="hp-catcg-gsect">
+      <h2 class="hp-catcg-gh">More in Corporate Gifts</h2>
+      <p class="hp-catcg-gs">Two more that people keep on a desk rather than throw away.</p>
       <table class="hp-catcg-tiles" role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="hp-catcg-tile" valign="top"><a class="hp-catcg-card" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/notebook-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/notebook-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/notitieblok-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/notitieblok-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-carnet{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-carnet{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/cuadernos-de-notas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-taccuini{% else %}https://www.helloprint.com/en-gb/notebook-printing{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/2I48ifEjqo2yi4ygmyCmS4/e31a9f154ce5006a43407437e09559e3/6.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=528&h=528&q=80" alt="{% if event.Locale == "en-IE" %}Notebooks{% elif event.Locale == "en-GB" %}Notebooks{% elif event.Locale == "nl-NL" %}Notitieboekjes{% elif event.Locale == "nl-BE" %}Notitieboekjes{% elif event.Locale == "fr-FR" %}Carnets de notes{% elif event.Locale == "fr-BE" %}Carnets de notes{% elif event.Locale == "es-ES" %}Libretas y cuadernos{% elif event.Locale == "it-IT" %}Taccuini{% else %}Notebooks{% endif %}"><span class="hp-catcg-tname">{% if event.Locale == "en-IE" %}Notebooks{% elif event.Locale == "en-GB" %}Notebooks{% elif event.Locale == "nl-NL" %}Notitieboekjes{% elif event.Locale == "nl-BE" %}Notitieboekjes{% elif event.Locale == "fr-FR" %}Carnets de notes{% elif event.Locale == "fr-BE" %}Carnets de notes{% elif event.Locale == "es-ES" %}Libretas y cuadernos{% elif event.Locale == "it-IT" %}Taccuini{% else %}Notebooks{% endif %}</span><span class="hp-catcg-tlink">See the range &rarr;</span></a></td><td class="hp-catcg-tile" valign="top"><a class="hp-catcg-card" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/printed-water-bottles{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/printed-water-bottles{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/waterflessen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/waterflessen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/gourdesimprimees{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/gourdesimprimees{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/botellas-agua-personalizadas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/borracce-personalizzate{% else %}https://www.helloprint.com/en-gb/printed-water-bottles{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/1Rx4D8aQLAyKh3IStifGff/6904ee208197d3285ea7373613e1a12f/Sirius_RPET_650_ml_PDP_Copy_4.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=528&h=528&q=80" alt="{% if event.Locale == "en-IE" %}Water Bottles{% elif event.Locale == "en-GB" %}Water Bottles{% elif event.Locale == "nl-NL" %}Waterflessen{% elif event.Locale == "nl-BE" %}Waterflessen{% elif event.Locale == "fr-FR" %}Gourdes{% elif event.Locale == "fr-BE" %}Gourdes{% elif event.Locale == "es-ES" %}Botellas de agua{% elif event.Locale == "it-IT" %}Borracce{% else %}Water Bottles{% endif %}"><span class="hp-catcg-tname">{% if event.Locale == "en-IE" %}Water Bottles{% elif event.Locale == "en-GB" %}Water Bottles{% elif event.Locale == "nl-NL" %}Waterflessen{% elif event.Locale == "nl-BE" %}Waterflessen{% elif event.Locale == "fr-FR" %}Gourdes{% elif event.Locale == "fr-BE" %}Gourdes{% elif event.Locale == "es-ES" %}Botellas de agua{% elif event.Locale == "it-IT" %}Borracce{% else %}Water Bottles{% endif %}</span><span class="hp-catcg-tlink">See the range &rarr;</span></a></td></tr></table>
     </div>
 
-    <div class="hp-catcg-cb">
-      <table class="hp-catcg-cbtbl" role="presentation" cellpadding="0" cellspacing="0">
-        <tr>
-          <td class="hp-catcg-cbic" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/icon-layers.png" alt="" width="38" height="38"></td>
-          <td class="hp-catcg-cbtx" valign="top">
-            <p class="hp-catcg-cbh">If we do not list it, we can still find it</p>
-            <p class="hp-catcg-cbb">The catalogue is a starting point. Tell our team what you have in mind and they will source it and come back with a price.</p>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="hp-catcg-rev">
-      <img class="hp-catcg-revstars" src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-4-5.png" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
-      {% if event.Locale|slice:":2" == "en" %}<span class="hp-catcg-revq">&ldquo;Very easy to upload design and position it on the golf umbrellas. Delivery was around a week which for a customised product is very good. Very happy and will use them again.&rdquo;</span><span class="hp-catcg-revby">Paul &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "nl" %}<span class="hp-catcg-revq">&ldquo;Super!! Goed geholpen tijdens de feedback ronde, op tij afgeleverd en het zag er top uit.&rdquo;</span><span class="hp-catcg-revby">Shalina Halma &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "fr" %}<span class="hp-catcg-revq">&ldquo;Accompagnée lors de la commande et produit conforme, parfait,merci&rdquo;</span><span class="hp-catcg-revby">Laurence &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "es" %}<span class="hp-catcg-revq">&ldquo;Sensacional, siempre HelloPrint trabaja de maravilla. Gracias&rdquo;</span><span class="hp-catcg-revby">Juan Canada &middot; 5 out of 5 on Trustpilot</span>{% else %}<span class="hp-catcg-revph">Trustpilot quote to be added &mdash; pick a review about a promotional item, ideally mentioning branding quality.</span><span class="hp-catcg-revby">Verified Trustpilot review</span>{% endif %}
+    <div class="hp-catcg-gk">
+      <span class="hp-catcg-gkeye">GOOD TO KNOW</span>
+      <p class="hp-catcg-gkh">If we do not list it, we can still find it</p>
+      <p class="hp-catcg-gkb">The catalogue is a starting point. Tell our team what you have in mind and they will source it and come back with a price.</p>
     </div>
 
     <div class="hp-catcg-help">

@@ -184,46 +184,78 @@ FLOWS = [
    trigger="Placed Order",
    trigger_detail="Fires on the Placed Order event; a conditional split then checks purchase history (see flag).",
    audience=["Fresh buyers, intended for FIRST-time buyers (see flag)", "Stops if a new order is placed mid-sequence", "Ireland + United Kingdom only"],
-   reentry="30 days", incentive="None", cadence="40 minutes after the order, then day 1, day 5, day 12 and day 32",
-   flow_note="Being rebuilt. The five Day 32 category emails below are built and render-verified; the rest of the proposed flow (review request day 18, reminder day 25, print expert day 45, discount day 60 and 73) is specified in proposals/post-purchase-proposal.md but not yet designed. The five RFB emails after them are the originals, all draft.",
+   reentry="Every order (see the rotation below)", incentive="None",
+   cadence="40 minutes after the order, then day 1, day 5, day 12 and day 32",
+   flow_note="Being rebuilt. The Day 32 category nudge below is built and render-verified for Commercial Print; the other four categories are specified but not designed, and the rest of the proposed flow (review request day 18, reminder day 25, print expert day 45, discount day 60 and 73) is in proposals/post-purchase-proposal.md. The five RFB emails after it are the originals, all draft.",
+   logic=dict(
+     title="How the category nudge rotates",
+     intro="The flow runs again on every order, and the nudge is the one step that must not repeat itself. So the choice of which category to send is made at send time, from what the customer has already been sent.",
+     ring=["Commercial Print", "Signage &amp; Outdoor", "Labels &amp; Packaging",
+           "Clothing &amp; Textiles", "Corporate Gifts"],
+     steps=[
+       ("Start where they spent.",
+        "A conditional split on the category of the order they just placed. Five branches, one per category. This is the same split the flow has today."),
+       ("Ask whether they have already had that one.",
+        "In each branch: <em>has not received this category&rsquo;s nudge in the last 6 months</em>. If they have not, that is the email they get, and nothing else runs."),
+       ("If they have, walk the ring.",
+        "A single shared chain then tries the five in a fixed order and sends the first one they have not received in 6 months. So a customer who buys flyers twice gets Commercial Print, then Signage &amp; Outdoor."),
+       ("When they have had all five, send nothing.",
+        "Not a failure &mdash; a frequency cap. The oldest nudge falls out of the 6-month window on its own, and the next order after that starts the ring again from the top."),
+     ],
+     window="6 months",
+     window_why="Five nudges, and repeat buyers reorder on a 30-day median, so somebody ordering monthly works through the whole set in about five months. A 6-month window is just long enough to cover that, which means the ring resets exactly when it has been exhausted rather than long before or long after. It is a parameter, not a measurement &mdash; worth revisiting once there is send data.",
+     flags=[
+       "Klaviyo flows cannot loop, so the ring has to be unrolled into nested conditional splits. Five branch checks, five ring checks and six endpoints &mdash; about sixteen nodes. Mechanical, but it has to be built by hand and it will be tedious to change.",
+       "Re-entry has to be opened up. It is set to 30 days today, and the nudge lands on day 32, so a customer who reorders quickly is blocked from re-entering and never reaches the second nudge at all. This is the single setting that makes or breaks the rotation.",
+       "The &ldquo;has received&rdquo; filter points at a specific flow message. Duplicate that message, or replace it with a new one, and every customer looks like they have never received it. Rename freely; do not re-create.",
+       "After the first cycle this email stops being a nudge and becomes a cross-sell. The copy survives it &mdash; &ldquo;What are you promoting next?&rdquo; is as true of banners as of flyers &mdash; but a flyer buyer being shown water bottles is a different proposition from a flyer buyer being shown posters, and it should be judged on its own numbers rather than on the nudge&rsquo;s.",
+       "The alternative, worth testing rather than assuming away: keep them in their own category and rotate the six tiles instead. It holds relevance but needs roughly twice the subcategories per category, and Clothing and Corporate Gifts do not have them.",
+       "Nothing rotates until a second category is built. With one nudge live the ring has one stop, so step three never fires.",
+     ],
+   ),
    flow_flags=["The conditional split (Placed Order > 0 all time) is always true after an order, so it does nothing. Email 1 says “your first order”, so the intent was probably “= 1” (first-time buyers only). Decide the audience in the rebuild.",
     "Overlap with the transactional program: emails 1, 2 and 5 partly duplicate the transactional order confirmation, expectation-setting and review request. Decide the behavioural vs transactional split before go-live."],
    emails=[
-    dict(step=3, when="Day 32 \u00b7 Commercial Print", subject="Running low, or starting the next one?",
-      preview="The print most businesses reorder, and what goes with it.",
-      goal="", who="", tpl="CATCP", new=True, flags=[], badge=None,
-      final="category-commercial-print-proposed.html"),
-    dict(step=3, when="Day 32 \u00b7 Signage & Outdoor", subject="For the next event, or the front of the building?",
-      preview="Signs, flags and banners, for a day out or a decade.",
-      goal="", who="", tpl="CATSO", new=True, flags=[], badge=None,
-      final="category-signage-outdoor-proposed.html"),
-    dict(step=3, when="Day 32 \u00b7 Labels & Packaging", subject="Running low on labels, or on bags?",
-      preview="Labels, stickers and the packaging they go on.",
-      goal="", who="", tpl="CATLP", new=True, flags=[], badge=None,
-      final="category-labels-packaging-proposed.html"),
-    dict(step=3, when="Day 32 \u00b7 Clothing & Textiles", subject="Kitting out the team?",
-      preview="Shirts and textiles with your logo on them.",
-      goal="", who="", tpl="CATCT", new=True, flags=[], badge=None,
-      final="category-clothing-textiles-proposed.html"),
-    dict(step=3, when="Day 32 \u00b7 Corporate Gifts", subject="Something to hand out at the next event?",
-      preview="Things that stay in use long after a flyer is in the bin.",
-      goal="", who="", tpl="CATCG", new=True, flags=[], badge=None,
-      final="category-corporate-gifts-proposed.html"),
-    dict(step=1, when="40 minutes after the order", subject="Thank you for your first order", preview="A quick note from the team printing it.",
+    dict(step=3, when="Day 32 \u00b7 Category nudge", subject="One email, five categories",
+      section="Rebuilt flow \u2014 proposed",
+      section_sub="One email at day 32, chosen at send time from five categories so it never repeats itself. Commercial Print is built; use the tabs to switch. The rest of the proposed flow \u2014 review request, reminder, print expert, discount \u2014 is specified in proposals/post-purchase-proposal.md but not yet designed.",
+      preview="Split on the category they bought in, then rotated so nobody sees the same one twice.",
+      goal="", who="", tpl="CATNUDGE", new=True, flags=[], badge=None,
+      final="category-commercial-print-proposed.html",
+      variants=[
+        dict(key="cp", label="Commercial Print", subject="What are you promoting next?",
+             preview="Whatever it is, this is the print that puts it in front of people, and what tends to go with what.",
+             final="category-commercial-print-proposed.html"),
+        dict(key="so", label="Signage & Outdoor", subject="For the next event, or the front of the building?",
+             preview="Signs, flags and banners, for a day out or a decade.", final=None,
+             todo="Needs photography (3 of 4 tiles covered) and a landing page."),
+        dict(key="lp", label="Labels & Packaging", subject="Running low on labels, or on bags?",
+             preview="Labels, stickers and the packaging they go on.", final=None,
+             todo="No photography at all (0 of 4 tiles) and no landing page."),
+        dict(key="ct", label="Clothing & Textiles", subject="Kitting out the team?",
+             preview="Shirts and textiles with your logo on them.", final=None,
+             todo="No photography at all (0 of 4 tiles) and no landing page."),
+        dict(key="cg", label="Corporate Gifts", subject="Something to hand out at the next event?",
+             preview="Things that stay in use long after a flyer is in the bin.", final=None,
+             todo="No photography at all (0 of 4 tiles) and no landing page."),
+      ]),
+    dict(step=1, when="40 minutes after the order", subject="Thank you for your first order",
+      section="Original RFB flow",
+      section_sub="The five original emails, all draft. Kept visible until the rebuild is approved.", preview="A quick note from the team printing it.",
       goal="Human thank-you from the team, reinforcing the buy decision right after purchase.",
-      who="Buyers, ~40 minutes after ordering.", tpl="V5VA8k", flags=["Partly duplicates the transactional order confirmation"], badge=None),
+      who="Buyers, ~40 minutes after ordering.", tpl="V5VA8k", ref=True, flags=["Partly duplicates the transactional order confirmation"], badge=None),
     dict(step=2, when="Day 1", subject="Here is what happens next", preview="From file check to your doorstep.",
       goal="Set expectations: the production journey from file check to delivery, reducing support contacts.",
-      who="Same buyers, one day after the order.", tpl="YdJPfh", flags=["Overlaps with transactional status emails"], badge=None),
+      who="Same buyers, one day after the order.", tpl="YdJPfh", ref=True, flags=["Overlaps with transactional status emails"], badge=None),
     dict(step=3, when="Day 5", subject="Getting the most from your print", preview="Simple tips, no jargon.",
       goal="Usage tips that add value beyond the order and keep the brand warm during production/delivery.",
-      who="Same buyers, five days in.", tpl="YkK5L7", flags=[], badge=None),
+      who="Same buyers, five days in.", tpl="YkK5L7", ref=True, flags=[], badge=None),
     dict(step=4, when="Day 12", subject="Real reviews and the people behind your print", preview="Simple tips, no jargon.",
       goal="Community and social proof after delivery; primes the customer for the review ask.",
-      who="Same buyers, day 12, no new order since.", tpl="Wc9aJs", flags=["Preview text duplicates email 3 (copy bug)"], badge=None),
+      who="Same buyers, day 12, no new order since.", tpl="Wc9aJs", ref=True, flags=["Preview text duplicates email 3 (copy bug)"], badge=None),
     dict(step=5, when="Day 32", subject="How did your order turn out", preview="A quick reply helps us more than you think.",
       goal="Feedback and review request, one month after the order.",
-      who="Same buyers, final email of the series.", tpl="Y8ayN7", flags=["Overlaps with the transactional review request"], badge=None),
+      who="Same buyers, final email of the series.", tpl="Y8ayN7", ref=True, flags=["Overlaps with the transactional review request"], badge=None),
    ]),
  dict(slug="winback", name="Customer Winback", stage="Retain", flow_id="WsYFJR",
    trigger="Placed Order + 90-day wait",
@@ -291,60 +323,18 @@ FLOWS = [
 # each block is in it.
 # ---------------------------------------------------------------------------
 EMAIL_DETAIL = {
- "CATCP": dict(
-   goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
+ "CATNUDGE": dict(
+   goal="Bring the customer back for more of what they already buy, without spending a discount to do it \u2014 and, on later orders, widen what they buy.",
    why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the five emails",
-   variant="Six ranges, because this is 5.45M of gross profit \u2014 the biggest of the five by a wide margin.",
+   variant_label="One email, five categories, and only one of them built",
+   variant="Commercial Print is built and render-verified. The other four are specified, and blocked on photography rather than on copy \u2014 Signage & Outdoor has 3 of 4 tiles covered, the remaining three have none. Use the tabs above the preview to switch between them.",
    elements=[
      ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
-     ("Feature rows, then a grid.", "Booklets and flyers as feature rows, then folded leaflets, posters, business cards and cards &amp; invitations in the grid \u2014 82% of the category\u2019s gross profit. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
-     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
-     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
-   ]),
- "CATSO": dict(
-   goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
-   why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the five emails",
-   variant="Four ranges. Flag Printing is fifth at 101k but sits beside Beach Flags and Banners, and three flag-ish tiles reads thin.",
-   elements=[
-     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
-     ("Feature rows, then a grid.", "Banners and signage &amp; panels as feature rows, beach flags and roller banners in the grid. Beach Flags was the surprise: 248k of gross profit on 5,730 items, and it never surfaced in any product-level shortlist. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
-     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
-     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
-   ]),
- "CATLP": dict(
-   goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
-   why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the five emails",
-   variant="Two categories in one email. Packaging was 77k of gross profit and could not justify a send of its own; Labels had only three subcategories and could not fill four tiles. Together they do both.",
-   elements=[
-     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
-     ("Feature rows, then a grid.", "Labels &amp; stickers and paper bags as feature rows \u2014 one from each half rather than the top two by gross profit, because the top two are Labels &amp; Stickers and its own child. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
-     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
-     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
-   ]),
- "CATCT": dict(
-   goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
-   why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the five emails",
-   variant="Four ranges, and the thinnest of the five at 239k. Worth watching: it falls away steeply after T-shirts \u2014 102k, then 22k, 18k, 14k.",
-   elements=[
-     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
-     ("Feature rows, then a grid.", "T-shirts and polo shirts as feature rows, interior textiles and caps in the grid. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
-     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
-     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
-   ]),
- "CATCG": dict(
-   goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
-   why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the five emails",
-   variant="Four ranges out of 1,293 products and a very long tail.",
-   elements=[
-     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
-     ("Feature rows, then a grid.", "Tote bags and pens as feature rows, notebooks and water bottles in the grid. A far better email than the product version, which offered a key ring and two cotton bags. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
-     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
-     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
+     ("A photograph set into the ink header.", "The fade is baked into the JPEG rather than written in CSS, because Outlook ignores CSS gradients \u2014 so a fade in CSS is a hard-edged photograph for a large part of the audience. Two header shapes are built: the wordmark above the photograph, or the photograph running to the top of the card with the wordmark under it."),
+     ("Feature rows, then a break band, then a grid.", "Booklets and flyers as feature rows; then a full-bleed ink band; then folded leaflets, posters, business cards and roller banners under a centred heading. The band is what stops the email reading as one long column that changes shape halfway down."),
+     ("The review earns the ink band.", "A stranger vouching for us takes the most prominent block in the email; the product advice moved to white at the bottom. The stars are the review\u2019s own five, not the 4.5 company score, because the line underneath says \u201c5 out of 5\u201d."),
+     ("The header and both buttons go to the category page.", "Per locale \u2014 /promotional-printing, /reclame-drukwerk, /impression-support-marketing and so on. They used to go to the first tile, which sent every reader to Booklets whatever they had ordered."),
+     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave. This is the open blocker on sending."),
    ]),
  "Vb23CK": dict(
    goal="Turn a fresh subscriber into a first order while intent is highest, and set the price expectation before anyone else does.",
@@ -521,6 +511,12 @@ for f in FLOWS:
         if e.get("final"):
             with open(os.path.join(PROP_DIR, e["final"]), encoding="utf-8") as fh:
                 previews["FIN-" + e["tpl"]] = fh.read()
+        # a row with variants is ONE email the reader flicks through, so each
+        # built variant needs its own payload key
+        for v in e.get("variants") or []:
+            if v.get("final"):
+                with open(os.path.join(PROP_DIR, v["final"]), encoding="utf-8") as fh:
+                    previews["FIN-%s-%s" % (e["tpl"], v["key"])] = fh.read()
 pv_json = json.dumps(previews, ensure_ascii=False).replace("</", "<\\/")
 
 # Every preview is also a real file in the repo, and the repo is published, so
@@ -533,6 +529,9 @@ for f in FLOWS:
             pv_urls[e["tpl"]] = "previews/%s.html" % e["tpl"]
         if e.get("final"):
             pv_urls["FIN-" + e["tpl"]] = "proposals/%s" % e["final"]
+        for v in e.get("variants") or []:
+            if v.get("final"):
+                pv_urls["FIN-%s-%s" % (e["tpl"], v["key"])] = "proposals/%s" % v["final"]
 pv_url_json = json.dumps(pv_urls, ensure_ascii=False)
 
 ICON = {
@@ -612,11 +611,52 @@ def email_block(f, e):
                   'Replaces RFB template <a href="https://www.klaviyo.com/email-template-editor/%s"'
                   ' target="_blank" rel="noopener">%s %s</a>'
                   % (e["tpl"], e["tpl"], icon("external")))
-        preview_area = f'''<div class="pv-pair">
-        <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="FIN-{e["tpl"]}" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
-        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="FIN-{e["tpl"]}" data-w="375"><div class="pv-loading">Loading preview…</div></div>
+        def pv_pair(key):
+            return f'''<div class="pv-pair">
+        <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="{key}" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
+        <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="{key}" data-w="375"><div class="pv-loading">Loading preview…</div></div>
         <span class="deskhint">Desktop view is hidden on small screens. Use “Open full size” above to see it.</span></div>
       </div>'''
+
+        vars_ = e.get("variants") or []
+        if vars_:
+            # ONE EMAIL, FLICKED THROUGH. Five categories are five versions of the
+            # same email, not five emails, so they share a row and a tab strip
+            # rather than stacking down the page.
+            rid = "cat-" + e["tpl"]
+            tabs, panes = "", ""
+            first = next((v for v in vars_ if v.get("final")), vars_[0])
+            for v in vars_:
+                on = " catt-on" if v is first else ""
+                if v.get("final"):
+                    tabs += (f'<button class="catt{on}" data-row="{rid}" data-key="{v["key"]}"'
+                             f' onclick="switchCat(this)">{esc(v["label"])}</button>')
+                else:
+                    tabs += (f'<button class="catt catt-todo" disabled'
+                             f' title="{esc(v.get("todo",""))}">{esc(v["label"])}'
+                             f'<span class="catt-x">not built</span></button>')
+                if not v.get("final"):
+                    continue
+                panes += (f'<div class="catpane{" catpane-on" if v is first else ""}"'
+                          f' data-row="{rid}" data-key="{v["key"]}">'
+                          f'<div class="catsubj"><span>Subject</span>{esc(v["subject"])}</div>'
+                          f'{pv_pair("FIN-%s-%s" % (e["tpl"], v["key"]))}</div>')
+            todo = [v for v in vars_ if not v.get("final")]
+            foot = (f'<div class="cattodo">{icon("alert")}<span>{len(todo)} of {len(vars_)} '
+                    f'not built yet. Hover a greyed tab for what each one is waiting on.</span></div>'
+                    if todo else "")
+            preview_area = (f'<div class="catwrap"><div class="cattabs">{tabs}</div>'
+                            f'{panes}{foot}</div>')
+        else:
+            preview_area = pv_pair("FIN-%s" % e["tpl"])
+        # with tabs, these act on whichever variant is showing rather than on a
+        # fixed one, or the links quietly disagree with the preview beside them
+        if e.get("variants"):
+            openarg = f"openFullCat('cat-{e['tpl']}')"
+            copyarg = f"copyLinkCat('cat-{e['tpl']}', this)"
+        else:
+            openarg = f"openFull('FIN-{e['tpl']}')"
+            copyarg = f"copyLink('FIN-{e['tpl']}', this)"
         els = "".join(f'<li><strong>{esc(a)}</strong> {esc(b)}</li>' for a, b in d.get("elements", []))
         notes = ""
         if d.get("goal"):
@@ -635,7 +675,7 @@ def email_block(f, e):
         <p class="prev">{esc(e["preview"])}</p>
         <span class="badge badge-green">Rebuilt · universal HTML block</span>
         {notes}
-        <div class="tpl-line">{tplref} · <a href="javascript:void(0)" onclick="openFull('FIN-{e["tpl"]}')">Open full size</a> · <a href="javascript:void(0)" onclick="copyLink('FIN-{e["tpl"]}', this)">Copy shareable link</a></div>
+        <div class="tpl-line">{tplref} · <a href="javascript:void(0)" onclick="{openarg}">Open full size</a> · <a href="javascript:void(0)" onclick="{copyarg}">Copy shareable link</a></div>
       </div>
       {preview_area}
     </div>'''
@@ -722,16 +762,39 @@ def flow_page(f):
                 mails += (f'<div class="mailsec"><h2>{esc(g["title"])}</h2>'
                           + (f'<p>{esc(g["sub"])}</p>' if g["sub"] else "") + '</div>')
             mails += blocks
+    logic = ""
+    lg = f.get("logic")
+    if lg:
+        ring = ""
+        for i, r in enumerate(lg["ring"]):
+            ring += (('<span class="ringarrow">&rarr;</span>' if i else "")
+                     + f'<span class="ringchip">{r}</span>')
+        ring += ('<span class="ringarrow ringarrow-back">&#8629;</span>'
+                 '<span class="ringchip ringchip-reset">'
+                 f'window expires after {lg["window"]}, start again</span>')
+        li = "".join(f'<li><strong>{h}</strong> {b}</li>' for h, b in lg["steps"])
+        lf = "".join(f'<div class="flagline">{icon("alert")}<span>{fl}</span></div>'
+                     for fl in lg.get("flags", []))
+        logic = f'''<div class="logicbox">
+        <h2>{lg["title"]}</h2>
+        <p class="logicintro">{lg["intro"]}</p>
+        <div class="ring">{ring}</div>
+        <ol class="logicsteps">{li}</ol>
+        <div class="logicwin"><div class="lbl">Why {lg["window"]}</div><p>{lg["window_why"]}</p></div>
+        <div class="logicflags"><div class="lbl">What this costs, and what could go wrong</div>{lf}</div>
+      </div>'''
+
     n_mail = sum(1 for e in f["emails"] if e["tpl"] and not e.get("ref"))
     return f'''<section class="page" id="page-{f["slug"]}">
       <a class="backlink" href="#home">{icon("back")}Back to overview</a>
       <div class="flowhead">
         <div><span class="stage {stage_class[f["stage"]]}">{f["stage"]}</span>
         <h1>{esc(f["name"])}</h1>
-        <p class="flowsub">{esc(f["mail_line"]) if f.get("mail_line") else f"{n_mail} emails"} · Flow <a href="https://www.klaviyo.com/flow/{f["flow_id"]}/edit" target="_blank" rel="noopener">{f["flow_id"]} {icon("external")}</a> · Status: draft</p></div>
+        <p class="flowsub">{esc(f["mail_line"]) if f.get("mail_line") else (f"{n_mail} email" if n_mail == 1 else f"{n_mail} emails")} · Flow <a href="https://www.klaviyo.com/flow/{f["flow_id"]}/edit" target="_blank" rel="noopener">{f["flow_id"]} {icon("external")}</a> · Status: draft</p></div>
       </div>
       {facts}{note}{fflags}
       <div class="tl">{tl_items}</div>
+      {logic}
       <div class="mails">{mails}</div>
       <div class="pagenav"><a href="#home">{icon("back")}All flows</a></div>
     </section>'''
@@ -897,6 +960,46 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .pv-shell{width:392px;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#fff;position:relative;align-self:start}
 .pv-shell iframe{border:0;transform-origin:top left;display:block}
 .pv-loading{padding:40px 0;text-align:center;font-size:12px;color:var(--ink3)}
+/* the rotation, drawn rather than described: a reader should be able to see that
+   it is a ring and that it resets, without reading the list underneath */
+.logicbox{border:1px solid var(--bd);background:#fff;border-radius:14px;
+  padding:22px 22px 20px;margin:0 0 26px}
+.logicbox h2{font-size:17px;line-height:24px;margin:0 0 6px;letter-spacing:-.01em}
+.logicintro{margin:0 0 16px;font-size:14px;line-height:21px;color:var(--ink3);max-width:70ch}
+.ring{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 18px;
+  padding:14px;border-radius:11px;background:var(--surf)}
+.ringchip{display:inline-block;font-size:12px;line-height:1;font-weight:700;padding:8px 11px;
+  border-radius:999px;background:var(--ink);color:#fff;white-space:nowrap}
+.ringchip-reset{background:transparent;color:var(--ink3);border:1px dashed var(--bd);font-weight:600}
+.ringarrow{color:var(--ink3);font-size:13px}
+.ringarrow-back{font-size:15px}
+.logicsteps{margin:0 0 4px;padding-left:20px}
+.logicsteps li{font-size:14px;line-height:21px;margin:0 0 9px;max-width:78ch}
+.logicsteps strong{color:var(--ink)}
+.logicwin{margin:14px 0 0;padding:14px 0 0;border-top:1px solid var(--bd)}
+.logicwin .lbl,.logicflags .lbl{font-size:10px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink3);margin:0 0 6px}
+.logicwin p{margin:0;font-size:14px;line-height:21px;max-width:78ch}
+.logicflags{margin:16px 0 0;padding:14px 0 0;border-top:1px solid var(--bd)}
+/* ONE EMAIL, FIVE CATEGORIES. A tab strip rather than five stacked rows: they
+   are versions of the same email, and stacking them made the flow look like it
+   sends five emails on the same day, which it never does. */
+.catwrap{display:block}
+.cattabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.catt{appearance:none;border:1px solid var(--bd);background:#fff;color:var(--ink);
+  font:600 12px/1 inherit;padding:8px 11px;border-radius:999px;cursor:pointer;letter-spacing:.01em}
+.catt:hover{border-color:var(--ink)}
+.catt-on{background:var(--ink);border-color:var(--ink);color:#fff}
+.catt-todo{cursor:not-allowed;opacity:.55;border-style:dashed;display:inline-flex;align-items:center;gap:6px}
+.catt-todo .catt-x{font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.08em;opacity:.8}
+.catpane{display:none}
+.catpane-on{display:block}
+.catsubj{font-size:12px;line-height:18px;color:var(--ink3);margin:0 0 10px}
+.catsubj span{display:inline-block;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  font-size:10px;color:var(--ink);margin-right:8px}
+.cattodo{display:flex;gap:7px;align-items:flex-start;margin:12px 0 0;font-size:12px;
+  line-height:18px;color:var(--ink3)}
+.cattodo svg{width:14px;height:14px;flex:0 0 14px;margin-top:2px}
 .pv-none{width:392px;border:1px dashed var(--bd);border-radius:12px;padding:48px 24px;text-align:center;font-size:14px;line-height:22px;color:var(--ink3);align-self:start}
 .pv-none code{font-size:12px;background:var(--surf);padding:1px 6px;border-radius:4px}
 .mail-row-ba{grid-template-columns:1fr}
@@ -1020,6 +1123,27 @@ function openFull(id){
   const blob = new Blob([PREVIEWS[id]], {type:'text/html'});
   window.open(URL.createObjectURL(blob), '_blank');
 }
+function activeCatKey(rid){
+  const p = document.querySelector('.catpane.catpane-on[data-row="'+rid+'"]');
+  return p ? rid.replace(/^cat-/,'') + '-' + p.dataset.key : null;
+}
+function openFullCat(rid){ const k = activeCatKey(rid); if(k) openFull('FIN-'+k); }
+function copyLinkCat(rid, el){ const k = activeCatKey(rid); if(k) copyLink('FIN-'+k, el); }
+// One email, several categories. The panes for the tabs that are not showing are
+// display:none, and a hidden shell measures zero width - so mounting has to wait
+// until the pane is visible or every iframe in it is scaled against nothing.
+function switchCat(btn){
+  const rid = btn.dataset.row, key = btn.dataset.key;
+  document.querySelectorAll('.catt[data-row="'+rid+'"]').forEach(b =>
+    b.classList.toggle('catt-on', b === btn));
+  let shown = null;
+  document.querySelectorAll('.catpane[data-row="'+rid+'"]').forEach(p => {
+    const on = p.dataset.key === key;
+    p.classList.toggle('catpane-on', on);
+    if (on) shown = p;
+  });
+  if (shown) mountPreviews(shown);
+}
 function copyLink(id, el){
   const u = PREVIEW_URLS[id];
   if (!u) return;
@@ -1083,3 +1207,50 @@ doc = f'''<!DOCTYPE html>
 out = os.path.join(HERE, "behavioural-email-overview.html")
 open(out, "w").write(doc)
 print("written", len(doc), "bytes,", len(previews), "previews embedded")
+
+# ---------------------------------------------------------------- self-checks
+#
+# The category tabs are the one interactive thing on this page, and the way they
+# break is silent: a tab whose pane is missing just does nothing when clicked, and
+# a pane pointing at a payload key that was never registered shows "Preview
+# unavailable" to whoever opens the page rather than to whoever built it. So the
+# wiring is checked here rather than trusted.
+bad = []
+for f in FLOWS:
+    for e in f["emails"]:
+        vs = e.get("variants") or []
+        if not vs:
+            continue
+        built = [v for v in vs if v.get("final")]
+        if not built:
+            bad.append("%s: variants declared but none built" % e["tpl"])
+        for v in vs:
+            if v.get("final"):
+                key = "FIN-%s-%s" % (e["tpl"], v["key"])
+                if key not in previews:
+                    bad.append("%s: no preview payload for %s" % (e["tpl"], key))
+                if ('data-tpl="%s"' % key) not in doc:
+                    bad.append("%s: %s is in the payload but no shell asks for it"
+                               % (e["tpl"], key))
+                if ('data-key="%s"' % v["key"]) not in doc:
+                    bad.append("%s: tab %s has no pane" % (e["tpl"], v["key"]))
+            elif not v.get("todo"):
+                bad.append("%s: %s is not built and says nothing about why"
+                           % (e["tpl"], v["key"]))
+        if len(set(v["key"] for v in vs)) != len(vs):
+            bad.append("%s: duplicate variant key" % e["tpl"])
+        # exactly one tab and one pane start active, and they must be the same one
+        rid = "cat-" + e["tpl"]
+        on_tabs = re.findall(r'catt catt-on" data-row="%s" data-key="([a-z]+)"' % rid, doc)
+        on_panes = re.findall(r'catpane catpane-on" data-row="%s" data-key="([a-z]+)"' % rid, doc)
+        if len(on_tabs) != 1 or on_tabs != on_panes:
+            bad.append("%s: active tab is %s and active pane is %s"
+                       % (e["tpl"], on_tabs, on_panes))
+for fn in ("switchCat", "openFullCat", "copyLinkCat", "activeCatKey"):
+    if ("function " + fn) not in doc:
+        bad.append("the %s function is missing from the page" % fn)
+if bad:
+    for b in bad:
+        print("  FAIL  " + b)
+    raise SystemExit(1)
+print("tab wiring checks out")

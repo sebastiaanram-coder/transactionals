@@ -30,6 +30,9 @@
   home and help-centre links market-aware. The category links are already
   per-locale.
 
+  Header and both buttons go to:
+    NONE SET - falls back to the first tile, which is wrong
+
   Subcategories in this email:
     Banners                      https://www.helloprint.com/en-ie/banner-printing
     Signage & Panels             https://www.helloprint.com/en-ie/panels-and-signs
@@ -43,10 +46,35 @@
 .hp-catso-root *{box-sizing:border-box;}
 .hp-catso-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
 .hp-catso-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
-/* the dark header: wordmark, category, headline and first call to action all on
-   ink, so the top reads as one block rather than a logo bar with a page under it */
-.hp-catso-dark{background:#191919;padding:26px 32px 32px;text-align:center;}
-.hp-catso-dark img.hp-catso-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 26px;}
+/* THE DARK HEADER IS THREE STACKED BLOCKS, not one padded box, because the
+   photograph has to bleed to both edges while the type stays inset:
+     -dark   wordmark on ink
+     -hero   the photograph, full width, no padding
+     -darkb  eyebrow, headline, subtext, first call to action - back on ink
+   All three are the same #191919, and the photograph itself fades to exactly
+   that colour at its top and bottom edge, so the three read as one block with a
+   picture inside it. The fade is baked into the JPEG on purpose: Outlook ignores
+   CSS gradients, so a fade written in CSS is a hard-edged photograph for a large
+   part of the audience. See scripts/make_newstyle_assets.py. */
+.hp-catso-dark{background:#191919;padding:26px 32px 22px;text-align:center;}
+.hp-catso-dark img.hp-catso-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0;}
+.hp-catso-hero{background:#191919;font-size:0;line-height:0;}
+/* colour is set because with images off the alt text lands on ink */
+.hp-catso-hero img{width:100%;max-width:600px;height:auto;display:block;border:0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+.hp-catso-darkb{background:#191919;padding:2px 32px 32px;text-align:center;}
+/* HEADER VARIANT B: the photograph is the first thing in the card, so it carries
+   the card's own top corners. Outlook ignores border-radius and will show them
+   square - which is already true of the white card itself, so the email stays
+   consistent with itself there rather than gaining a mismatch. */
+.hp-catso-heroT{background:#191919;font-size:0;line-height:0;}
+.hp-catso-heroT img{width:100%;max-width:600px;height:auto;display:block;border:0;
+  border-radius:18px 18px 0 0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+/* b puts the wordmark here instead, above the eyebrow, so this block needs the
+   top padding that the wordmark bar used to have */
+.hp-catso-darkc{background:#191919;padding:26px 32px 32px;text-align:center;}
+.hp-catso-darkc img.hp-catso-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 20px;}
 .hp-catso-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .hp-catso-h1{margin:0 auto 12px;max-width:440px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .hp-catso-sub{margin:0 auto 24px;max-width:420px;font-size:16px;line-height:25px;color:#b4b4b4;}
@@ -58,10 +86,10 @@
 /* FEATURE ROW: image beside prose. Deliberately not a product card - no price,
    no border, no button. The Welcome flow's content-block pattern. */
 .hp-catso-ftbl{width:100%;border-collapse:collapse;margin:0 0 24px;}
-.hp-catso-fim{width:216px;vertical-align:top;padding:0 18px 0 0;}
+.hp-catso-fim{width:252px;vertical-align:top;padding:0 18px 0 0;}
 .hp-catso-fim.hp-catso-right{padding:0 0 0 18px;}  /* flipped row: image sits right */
-.hp-catso-fim img{width:100%;max-width:216px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
-.hp-catso-fim{width:216px;}
+.hp-catso-fim img{width:100%;max-width:252px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+.hp-catso-fim{width:252px;}
 .hp-catso-ftx{vertical-align:top;}
 .hp-catso-fh{margin:0 0 6px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .hp-catso-fb{margin:0 0 10px;font-size:15px;line-height:23px;color:#555555;}
@@ -75,20 +103,34 @@
    "Catalogos, libros y revistas" once this is translated */
 .hp-catso-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
 .hp-catso-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
-/* closing content block */
-.hp-catso-cb{margin:8px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;}
-.hp-catso-cbtbl{width:100%;border-collapse:collapse;}
-.hp-catso-cbic{width:56px;vertical-align:top;padding:0 16px 0 0;}
-.hp-catso-cbic img{width:38px;height:38px;display:block;border:0;}
-.hp-catso-cbtx{vertical-align:top;}
-.hp-catso-cbh{margin:0 0 5px;font-size:17px;line-height:24px;font-weight:800;color:#191919;letter-spacing:-.008em;}
-.hp-catso-cbb{margin:0;font-size:15px;line-height:23px;color:#555555;}
-/* review */
-.hp-catso-rev{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
-.hp-catso-revstars{display:block;margin:0 auto 12px;border:0;width:120px;height:25px;}
-.hp-catso-revq{display:block;margin:0 auto 9px;max-width:430px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
-.hp-catso-revph{display:block;margin:0 auto 9px;max-width:420px;border:2px dashed #d4d4d4;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#767676;background:#fafafa;}
-.hp-catso-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
+/* THE BREAK BAND, which is now the review. The email used to run prose straight
+   into a grid of tiles, which read as one long column that changed shape halfway
+   down for no reason. This is the pause: a full-bleed band of the same ink as the
+   header, sitting between the feature rows and the grid, which is where the join
+   was.
+   WHAT IS IN IT CHANGED. It held a piece of product advice; it now holds a real
+   customer review, because a stranger vouching for us earns the most prominent
+   spot in the email far better than a note about artwork does. The advice moved
+   to the bottom, on white. */
+.hp-catso-band{background:#191919;padding:34px 34px 32px;text-align:center;margin:34px 0 0;}
+.hp-catso-bandeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 16px;}
+.hp-catso-bstars{display:block;margin:0 auto 16px;border:0;width:132px;height:28px;}
+.hp-catso-bq{display:block;margin:0 auto 14px;max-width:440px;font-size:20px;line-height:29px;font-weight:700;color:#ffffff;letter-spacing:-.012em;}
+/* a short green keyline between the words and the name: it stops the attribution
+   reading as part of the sentence, which it did when both were simply centred */
+.hp-catso-brule{display:block;width:34px;height:2px;background:#00b67a;margin:0 auto 13px;font-size:0;line-height:0;}
+.hp-catso-bby{display:block;font-size:12px;line-height:18px;color:#8f8f8f;}
+.hp-catso-bph{display:block;margin:0 auto 13px;max-width:430px;border:2px dashed #3f3f3f;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#9a9a9a;background:#212121;}
+/* GOOD TO KNOW, now on white at the bottom. It reads as a footnote to the
+   browsing rather than as an interruption of it, which is what it always was. */
+.hp-catso-gk{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
+.hp-catso-gkeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#008539;margin:0 0 9px;}
+.hp-catso-gkh{margin:0 0 6px;font-size:18px;line-height:25px;font-weight:800;color:#191919;letter-spacing:-.01em;}
+.hp-catso-gkb{margin:0 auto;max-width:430px;font-size:15px;line-height:23px;color:#555555;}
+/* the centred heading that introduces the grid */
+.hp-catso-gsect{margin:30px 24px 0;text-align:center;}
+.hp-catso-gh{margin:0 0 5px;font-size:21px;line-height:28px;font-weight:800;color:#191919;letter-spacing:-.014em;}
+.hp-catso-gs{margin:0 auto 22px;max-width:400px;font-size:14px;line-height:21px;color:#767676;}
 /* contact */
 .hp-catso-help{margin:28px 24px 0;background:#f1f8f4;border-radius:14px;padding:24px 22px 22px;text-align:center;}
 .hp-catso-help img{display:block;margin:0 auto 12px;border:0;}
@@ -108,13 +150,20 @@
 .hp-catso-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
 .hp-catso-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
-  .hp-catso-dark{padding:22px 20px 28px;}
-  .hp-catso-dark img.hp-catso-mark{width:126px;margin-bottom:22px;}
+  .hp-catso-dark{padding:22px 20px 18px;}
+  .hp-catso-dark img.hp-catso-mark{width:126px;margin-bottom:0;}
+  .hp-catso-darkb{padding:2px 20px 28px;}
+  .hp-catso-darkc{padding:22px 20px 28px;}
+  .hp-catso-darkc img.hp-catso-mark{width:126px;margin-bottom:18px;}
+  .hp-catso-band{padding:30px 22px 28px;margin-top:28px;}
+  .hp-catso-bq{font-size:18px;line-height:26px;}
+  .hp-catso-gsect{margin-left:14px;margin-right:14px;}
+  .hp-catso-gh{font-size:19px;line-height:26px;}
   .hp-catso-h1{font-size:26px;line-height:33px;max-width:none;}
   .hp-catso-sub{font-size:15px;line-height:23px;max-width:none;}
   .hp-catso-cta,.hp-catso-cta2{padding:15px 26px;}
   .hp-catso-sect{margin-left:14px;margin-right:14px;}
-  /* the feature row stacks: a 216px image beside prose is unreadable at 320px */
+  /* the feature row stacks: a 252px image beside prose is unreadable at 320px */
   .hp-catso-fim,.hp-catso-fim.hp-catso-right{display:block;width:100%!important;padding:0 0 12px 0!important;}
   .hp-catso-fim img{max-width:100%;}
   .hp-catso-fh{font-size:18px;line-height:25px;}
@@ -122,7 +171,7 @@
   /* the grid does NOT stack - two-up is the point */
   .hp-catso-tile{padding:0 4px 12px;}
   .hp-catso-tname{font-size:14px;line-height:19px;min-height:38px;}
-  .hp-catso-cb,.hp-catso-rev,.hp-catso-help,.hp-catso-tail{margin-left:14px;margin-right:14px;}
+  .hp-catso-gk,.hp-catso-help,.hp-catso-tail{margin-left:14px;margin-right:14px;}
   .hp-catso-foot{padding-left:18px;padding-right:18px;}
 }
 </style>
@@ -134,34 +183,37 @@
 
     <div class="hp-catso-dark">
       <a href="https://www.helloprint.com/en-ie/"><img class="hp-catso-mark" src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="142"></a>
+    </div>
+    <div class="hp-catso-darkb">
       <span class="hp-catso-eyebrow">SIGNAGE & OUTDOOR</span>
       <h1 class="hp-catso-h1">For the next event, or the front of the building?</h1>
       <p class="hp-catso-sub">Signs, flags and banners, built for one afternoon outdoors or several years of it.</p>
       <a class="hp-catso-cta" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/banner-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/banner-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/banners-en-spandoeken-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/banners-en-spandoeken-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/banderole-publicitaire{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/banderole-publicitaire{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/lonas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/banner-pubblicitari{% else %}https://www.helloprint.com/en-gb/banner-printing{% endif %}">See the range</a>
     </div>
 
+
     <div class="hp-catso-sect">
       <h2 class="hp-catso-sh">Popular in Signage & Outdoor</h2>
       <p class="hp-catso-ss">Among the most ordered in this category by businesses like yours.</p>
-      <table class="hp-catso-ftbl" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-catso-fim" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/banner-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/banner-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/banners-en-spandoeken-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/banners-en-spandoeken-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/banderole-publicitaire{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/banderole-publicitaire{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/lonas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/banner-pubblicitari{% else %}https://www.helloprint.com/en-gb/banner-printing{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/5ik4P8UwXpMsvOFYV4N9t8/a3ba0379f69484aabf9322afe10d343e/Untitled_design__4_.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=480&h=320&q=80" alt="{% if event.Locale == "en-IE" %}Banners{% elif event.Locale == "en-GB" %}Banners{% elif event.Locale == "nl-NL" %}Banners{% elif event.Locale == "nl-BE" %}Banners{% elif event.Locale == "fr-FR" %}Bâches et banderoles{% elif event.Locale == "fr-BE" %}Bâches et banderoles{% elif event.Locale == "es-ES" %}Lonas y pancartas{% elif event.Locale == "it-IT" %}Banner e striscioni{% else %}Banners{% endif %}" width="216"></a></td><td class="hp-catso-ftx" valign="top" dir="ltr"><p class="hp-catso-fh">{% if event.Locale == "en-IE" %}Banners{% elif event.Locale == "en-GB" %}Banners{% elif event.Locale == "nl-NL" %}Banners{% elif event.Locale == "nl-BE" %}Banners{% elif event.Locale == "fr-FR" %}Bâches et banderoles{% elif event.Locale == "fr-BE" %}Bâches et banderoles{% elif event.Locale == "es-ES" %}Lonas y pancartas{% elif event.Locale == "it-IT" %}Banner e striscioni{% else %}Banners{% endif %}</p><p class="hp-catso-fb">For a fence, a scaffold or the front of a building. Hemmed and eyeleted, so it goes up with cable ties and comes down in one piece for the next time.</p><a class="hp-catso-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/banner-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/banner-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/banners-en-spandoeken-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/banners-en-spandoeken-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/banderole-publicitaire{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/banderole-publicitaire{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/lonas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/banner-pubblicitari{% else %}https://www.helloprint.com/en-gb/banner-printing{% endif %}">See the range &rarr;</a></td></tr></table><table class="hp-catso-ftbl" role="presentation" cellpadding="0" cellspacing="0" dir="rtl"><tr><td class="hp-catso-fim hp-catso-right" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/panels-and-signs{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/panels-and-signs{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/reclamebord{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/reclamebord{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/affichage-et-panneaux{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/affichage-et-panneaux{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/paneles-y-senales{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/insegne{% else %}https://www.helloprint.com/en-gb/panels-and-signs{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/3mDfY6eYAJsVwdTYg136BA/c3b360be3160584b11427b94236d53ef/16.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=480&h=320&q=80" alt="{% if event.Locale == "en-IE" %}Signage &amp; Panels{% elif event.Locale == "en-GB" %}Signage &amp; Panels{% elif event.Locale == "nl-NL" %}Reclameborden{% elif event.Locale == "nl-BE" %}Reclameborden{% elif event.Locale == "fr-FR" %}Panneaux &amp; pancartes{% elif event.Locale == "fr-BE" %}Panneaux &amp; pancartes{% elif event.Locale == "es-ES" %}Paneles y señales{% elif event.Locale == "it-IT" %}Pannelli e insegne{% else %}Signage &amp; Panels{% endif %}" width="216"></a></td><td class="hp-catso-ftx" valign="top" dir="ltr"><p class="hp-catso-fh">{% if event.Locale == "en-IE" %}Signage &amp; Panels{% elif event.Locale == "en-GB" %}Signage &amp; Panels{% elif event.Locale == "nl-NL" %}Reclameborden{% elif event.Locale == "nl-BE" %}Reclameborden{% elif event.Locale == "fr-FR" %}Panneaux &amp; pancartes{% elif event.Locale == "fr-BE" %}Panneaux &amp; pancartes{% elif event.Locale == "es-ES" %}Paneles y señales{% elif event.Locale == "it-IT" %}Pannelli e insegne{% else %}Signage &amp; Panels{% endif %}</p><p class="hp-catso-fb">Foamex indoors or under cover, aluminium where it has to take weather and years of it. Tell us where the sign is going and we will match the material to it.</p><a class="hp-catso-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/panels-and-signs{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/panels-and-signs{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/reclamebord{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/reclamebord{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/affichage-et-panneaux{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/affichage-et-panneaux{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/paneles-y-senales{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/insegne{% else %}https://www.helloprint.com/en-gb/panels-and-signs{% endif %}">See the range &rarr;</a></td></tr></table>
+      <table class="hp-catso-ftbl" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-catso-fim" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/banner-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/banner-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/banners-en-spandoeken-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/banners-en-spandoeken-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/banderole-publicitaire{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/banderole-publicitaire{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/lonas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/banner-pubblicitari{% else %}https://www.helloprint.com/en-gb/banner-printing{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/5ik4P8UwXpMsvOFYV4N9t8/a3ba0379f69484aabf9322afe10d343e/Untitled_design__4_.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=504&h=378&q=80" alt="{% if event.Locale == "en-IE" %}Banners{% elif event.Locale == "en-GB" %}Banners{% elif event.Locale == "nl-NL" %}Banners{% elif event.Locale == "nl-BE" %}Banners{% elif event.Locale == "fr-FR" %}Bâches et banderoles{% elif event.Locale == "fr-BE" %}Bâches et banderoles{% elif event.Locale == "es-ES" %}Lonas y pancartas{% elif event.Locale == "it-IT" %}Banner e striscioni{% else %}Banners{% endif %}" width="252"></a></td><td class="hp-catso-ftx" valign="top" dir="ltr"><p class="hp-catso-fh">{% if event.Locale == "en-IE" %}Banners{% elif event.Locale == "en-GB" %}Banners{% elif event.Locale == "nl-NL" %}Banners{% elif event.Locale == "nl-BE" %}Banners{% elif event.Locale == "fr-FR" %}Bâches et banderoles{% elif event.Locale == "fr-BE" %}Bâches et banderoles{% elif event.Locale == "es-ES" %}Lonas y pancartas{% elif event.Locale == "it-IT" %}Banner e striscioni{% else %}Banners{% endif %}</p><p class="hp-catso-fb">For a fence, a scaffold or the front of a building. Hemmed and eyeleted, so it goes up with cable ties and comes down in one piece for the next time.</p><a class="hp-catso-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/banner-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/banner-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/banners-en-spandoeken-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/banners-en-spandoeken-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/banderole-publicitaire{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/banderole-publicitaire{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/lonas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/banner-pubblicitari{% else %}https://www.helloprint.com/en-gb/banner-printing{% endif %}">See the range &rarr;</a></td></tr></table><table class="hp-catso-ftbl" role="presentation" cellpadding="0" cellspacing="0" dir="rtl"><tr><td class="hp-catso-fim hp-catso-right" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/panels-and-signs{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/panels-and-signs{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/reclamebord{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/reclamebord{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/affichage-et-panneaux{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/affichage-et-panneaux{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/paneles-y-senales{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/insegne{% else %}https://www.helloprint.com/en-gb/panels-and-signs{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/3mDfY6eYAJsVwdTYg136BA/c3b360be3160584b11427b94236d53ef/16.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=504&h=378&q=80" alt="{% if event.Locale == "en-IE" %}Signage &amp; Panels{% elif event.Locale == "en-GB" %}Signage &amp; Panels{% elif event.Locale == "nl-NL" %}Reclameborden{% elif event.Locale == "nl-BE" %}Reclameborden{% elif event.Locale == "fr-FR" %}Panneaux &amp; pancartes{% elif event.Locale == "fr-BE" %}Panneaux &amp; pancartes{% elif event.Locale == "es-ES" %}Paneles y señales{% elif event.Locale == "it-IT" %}Pannelli e insegne{% else %}Signage &amp; Panels{% endif %}" width="252"></a></td><td class="hp-catso-ftx" valign="top" dir="ltr"><p class="hp-catso-fh">{% if event.Locale == "en-IE" %}Signage &amp; Panels{% elif event.Locale == "en-GB" %}Signage &amp; Panels{% elif event.Locale == "nl-NL" %}Reclameborden{% elif event.Locale == "nl-BE" %}Reclameborden{% elif event.Locale == "fr-FR" %}Panneaux &amp; pancartes{% elif event.Locale == "fr-BE" %}Panneaux &amp; pancartes{% elif event.Locale == "es-ES" %}Paneles y señales{% elif event.Locale == "it-IT" %}Pannelli e insegne{% else %}Signage &amp; Panels{% endif %}</p><p class="hp-catso-fb">Foamex indoors or under cover, aluminium where it has to take weather and years of it. Tell us where the sign is going and we will match the material to it.</p><a class="hp-catso-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/panels-and-signs{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/panels-and-signs{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/reclamebord{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/reclamebord{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/affichage-et-panneaux{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/affichage-et-panneaux{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/paneles-y-senales{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/insegne{% else %}https://www.helloprint.com/en-gb/panels-and-signs{% endif %}">See the range &rarr;</a></td></tr></table>
+    </div>
+
+    <div class="hp-catso-band">
+      <span class="hp-catso-bandeye">WHAT CUSTOMERS SAY</span>
+      <img class="hp-catso-bstars" src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-5-on-ink.png" alt="5 out of 5 on Trustpilot" width="132" height="28">
+      {% if event.Locale|slice:":2" == "en" %}<span class="hp-catso-bq">&ldquo;Needed a new pop up banner for work and HelloPrint was really easy to use, the end product looks amazing too.&rdquo;</span><span class="hp-catso-brule">&nbsp;</span><span class="hp-catso-bby">Douglas &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "nl" %}<span class="hp-catso-bq">&ldquo;Goede service. Ik kreeg desgevraagd goede hulp bij de opmaak. De geprinte plaat ziet er prachtig uit&rdquo;</span><span class="hp-catso-brule">&nbsp;</span><span class="hp-catso-bby">Arno &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "fr" %}<span class="hp-catso-bq">&ldquo;Le rapport qualité prix et la rapidité de traitement m&#x27;ont comblé. Je recommande!&rdquo;</span><span class="hp-catso-brule">&nbsp;</span><span class="hp-catso-bby">joanny Mermoz &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "es" %}<span class="hp-catso-bq">&ldquo;muy buenos precios, buena calidad, entregas muy rapido, muy satisfecho con sus productos, volveré a comprar con ellos.&rdquo;</span><span class="hp-catso-brule">&nbsp;</span><span class="hp-catso-bby">Javier Sotomayor &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "it" %}<span class="hp-catso-bq">&ldquo;Acquisto molto facile, personale molto disponibile prodotti al top mi sono trovato benissimo ho ordinato due Bandiere a goccia hanno saputo realizzarle in maniera eccezionale. Grazie.&rdquo;</span><span class="hp-catso-brule">&nbsp;</span><span class="hp-catso-bby">Eros &middot; 5 out of 5 on Trustpilot</span>{% else %}<span class="hp-catso-bph">Trustpilot quote to be added &mdash; pick a review about a banner or sign, ideally mentioning setup or durability.</span><span class="hp-catso-bby">Verified Trustpilot review</span>{% endif %}
+    </div>
+
+    <div class="hp-catso-gsect">
+      <h2 class="hp-catso-gh">More in Signage &amp; Outdoor</h2>
+      <p class="hp-catso-gs">Two more that go up quickly and come back out for the next one.</p>
       <table class="hp-catso-tiles" role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="hp-catso-tile" valign="top"><a class="hp-catso-card" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/beachflag-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/beachflag-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/beachvlaggen-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/beachvlaggen-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/drapeaux-plage{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/drapeaux-plage{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/banderolasdeplaya-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/vele-pubblicitarie{% else %}https://www.helloprint.com/en-gb/beachflag-printing{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/6Wc9ZjECFmpH9IeU1CYcMV/429104508d16d7cf91fd087efc4e581e/17.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=528&h=528&q=80" alt="{% if event.Locale == "en-IE" %}Beach Flags{% elif event.Locale == "en-GB" %}Beach Flags{% elif event.Locale == "nl-NL" %}Beachflags{% elif event.Locale == "nl-BE" %}Beachflags{% elif event.Locale == "fr-FR" %}Beachflags &amp; Oriflammes{% elif event.Locale == "fr-BE" %}Beachflags &amp; Oriflammes{% elif event.Locale == "es-ES" %}Banderolas{% elif event.Locale == "it-IT" %}Vele pubblicitarie{% else %}Beach Flags{% endif %}"><span class="hp-catso-tname">{% if event.Locale == "en-IE" %}Beach Flags{% elif event.Locale == "en-GB" %}Beach Flags{% elif event.Locale == "nl-NL" %}Beachflags{% elif event.Locale == "nl-BE" %}Beachflags{% elif event.Locale == "fr-FR" %}Beachflags &amp; Oriflammes{% elif event.Locale == "fr-BE" %}Beachflags &amp; Oriflammes{% elif event.Locale == "es-ES" %}Banderolas{% elif event.Locale == "it-IT" %}Vele pubblicitarie{% else %}Beach Flags{% endif %}</span><span class="hp-catso-tlink">See the range &rarr;</span></a></td><td class="hp-catso-tile" valign="top"><a class="hp-catso-card" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/rollupbanners-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/rollupbanners-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/rollupbanners-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/rollupbanners-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/personnalisation-kakemonos{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/personnalisation-kakemonos{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/bannersrollup-impresos{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-banner-rollup{% else %}https://www.helloprint.com/en-gb/rollupbanners-printing{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/3IQjVkObjZ3jsVKEuYF7q8/d1735a07bbe192bc69794670568a4328/product-image-500x500-Roller-Banner-Printing-Promo-Roller-Banner.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=528&h=528&q=80" alt="{% if event.Locale == "en-IE" %}Roller Banners{% elif event.Locale == "en-GB" %}Roller Banners{% elif event.Locale == "nl-NL" %}Roll-up banners{% elif event.Locale == "nl-BE" %}Roll-up banners{% elif event.Locale == "fr-FR" %}Kakémonos roll-up{% elif event.Locale == "fr-BE" %}Kakémonos roll-up{% elif event.Locale == "es-ES" %}Roll up publicitarios{% elif event.Locale == "it-IT" %}Roll up pubblicitari{% else %}Roller Banners{% endif %}"><span class="hp-catso-tname">{% if event.Locale == "en-IE" %}Roller Banners{% elif event.Locale == "en-GB" %}Roller Banners{% elif event.Locale == "nl-NL" %}Roll-up banners{% elif event.Locale == "nl-BE" %}Roll-up banners{% elif event.Locale == "fr-FR" %}Kakémonos roll-up{% elif event.Locale == "fr-BE" %}Kakémonos roll-up{% elif event.Locale == "es-ES" %}Roll up publicitarios{% elif event.Locale == "it-IT" %}Roll up pubblicitari{% else %}Roller Banners{% endif %}</span><span class="hp-catso-tlink">See the range &rarr;</span></a></td></tr></table>
     </div>
 
-    <div class="hp-catso-cb">
-      <table class="hp-catso-cbtbl" role="presentation" cellpadding="0" cellspacing="0">
-        <tr>
-          <td class="hp-catso-cbic" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/icon-clock.png" alt="" width="38" height="38"></td>
-          <td class="hp-catso-cbtx" valign="top">
-            <p class="hp-catso-cbh">Roller banners travel</p>
-            <p class="hp-catso-cbb">They roll into their own case, go up in seconds, and come back out for the next event. One order that keeps earning.</p>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="hp-catso-rev">
-      <img class="hp-catso-revstars" src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-4-5.png" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
-      {% if event.Locale|slice:":2" == "en" %}<span class="hp-catso-revq">&ldquo;Needed a new pop up banner for work and HelloPrint was really easy to use, the end product looks amazing too.&rdquo;</span><span class="hp-catso-revby">Douglas &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "nl" %}<span class="hp-catso-revq">&ldquo;Goede service. Ik kreeg desgevraagd goede hulp bij de opmaak. De geprinte plaat ziet er prachtig uit&rdquo;</span><span class="hp-catso-revby">Arno &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "fr" %}<span class="hp-catso-revq">&ldquo;Le rapport qualité prix et la rapidité de traitement m&#x27;ont comblé. Je recommande!&rdquo;</span><span class="hp-catso-revby">joanny Mermoz &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "es" %}<span class="hp-catso-revq">&ldquo;muy buenos precios, buena calidad, entregas muy rapido, muy satisfecho con sus productos, volveré a comprar con ellos.&rdquo;</span><span class="hp-catso-revby">Javier Sotomayor &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "it" %}<span class="hp-catso-revq">&ldquo;Acquisto molto facile, personale molto disponibile prodotti al top mi sono trovato benissimo ho ordinato due Bandiere a goccia hanno saputo realizzarle in maniera eccezionale. Grazie.&rdquo;</span><span class="hp-catso-revby">Eros &middot; 5 out of 5 on Trustpilot</span>{% else %}<span class="hp-catso-revph">Trustpilot quote to be added &mdash; pick a review about a banner or sign, ideally mentioning setup or durability.</span><span class="hp-catso-revby">Verified Trustpilot review</span>{% endif %}
+    <div class="hp-catso-gk">
+      <span class="hp-catso-gkeye">GOOD TO KNOW</span>
+      <p class="hp-catso-gkh">Roller banners travel</p>
+      <p class="hp-catso-gkb">They roll into their own case, go up in seconds, and come back out for the next event. One order that keeps earning.</p>
     </div>
 
     <div class="hp-catso-help">

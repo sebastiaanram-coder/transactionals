@@ -30,6 +30,9 @@
   home and help-centre links market-aware. The category links are already
   per-locale.
 
+  Header and both buttons go to:
+    NONE SET - falls back to the first tile, which is wrong
+
   Subcategories in this email:
     T-shirts                     https://www.helloprint.com/en-ie/tshirt-printing
     Polo Shirts                  https://www.helloprint.com/en-ie/personalised-polo-shirts
@@ -43,10 +46,35 @@
 .hp-catct-root *{box-sizing:border-box;}
 .hp-catct-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
 .hp-catct-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
-/* the dark header: wordmark, category, headline and first call to action all on
-   ink, so the top reads as one block rather than a logo bar with a page under it */
-.hp-catct-dark{background:#191919;padding:26px 32px 32px;text-align:center;}
-.hp-catct-dark img.hp-catct-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 26px;}
+/* THE DARK HEADER IS THREE STACKED BLOCKS, not one padded box, because the
+   photograph has to bleed to both edges while the type stays inset:
+     -dark   wordmark on ink
+     -hero   the photograph, full width, no padding
+     -darkb  eyebrow, headline, subtext, first call to action - back on ink
+   All three are the same #191919, and the photograph itself fades to exactly
+   that colour at its top and bottom edge, so the three read as one block with a
+   picture inside it. The fade is baked into the JPEG on purpose: Outlook ignores
+   CSS gradients, so a fade written in CSS is a hard-edged photograph for a large
+   part of the audience. See scripts/make_newstyle_assets.py. */
+.hp-catct-dark{background:#191919;padding:26px 32px 22px;text-align:center;}
+.hp-catct-dark img.hp-catct-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0;}
+.hp-catct-hero{background:#191919;font-size:0;line-height:0;}
+/* colour is set because with images off the alt text lands on ink */
+.hp-catct-hero img{width:100%;max-width:600px;height:auto;display:block;border:0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+.hp-catct-darkb{background:#191919;padding:2px 32px 32px;text-align:center;}
+/* HEADER VARIANT B: the photograph is the first thing in the card, so it carries
+   the card's own top corners. Outlook ignores border-radius and will show them
+   square - which is already true of the white card itself, so the email stays
+   consistent with itself there rather than gaining a mismatch. */
+.hp-catct-heroT{background:#191919;font-size:0;line-height:0;}
+.hp-catct-heroT img{width:100%;max-width:600px;height:auto;display:block;border:0;
+  border-radius:18px 18px 0 0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+/* b puts the wordmark here instead, above the eyebrow, so this block needs the
+   top padding that the wordmark bar used to have */
+.hp-catct-darkc{background:#191919;padding:26px 32px 32px;text-align:center;}
+.hp-catct-darkc img.hp-catct-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 20px;}
 .hp-catct-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .hp-catct-h1{margin:0 auto 12px;max-width:440px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .hp-catct-sub{margin:0 auto 24px;max-width:420px;font-size:16px;line-height:25px;color:#b4b4b4;}
@@ -58,10 +86,10 @@
 /* FEATURE ROW: image beside prose. Deliberately not a product card - no price,
    no border, no button. The Welcome flow's content-block pattern. */
 .hp-catct-ftbl{width:100%;border-collapse:collapse;margin:0 0 24px;}
-.hp-catct-fim{width:216px;vertical-align:top;padding:0 18px 0 0;}
+.hp-catct-fim{width:252px;vertical-align:top;padding:0 18px 0 0;}
 .hp-catct-fim.hp-catct-right{padding:0 0 0 18px;}  /* flipped row: image sits right */
-.hp-catct-fim img{width:100%;max-width:216px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
-.hp-catct-fim{width:216px;}
+.hp-catct-fim img{width:100%;max-width:252px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+.hp-catct-fim{width:252px;}
 .hp-catct-ftx{vertical-align:top;}
 .hp-catct-fh{margin:0 0 6px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .hp-catct-fb{margin:0 0 10px;font-size:15px;line-height:23px;color:#555555;}
@@ -75,20 +103,34 @@
    "Catalogos, libros y revistas" once this is translated */
 .hp-catct-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
 .hp-catct-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
-/* closing content block */
-.hp-catct-cb{margin:8px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;}
-.hp-catct-cbtbl{width:100%;border-collapse:collapse;}
-.hp-catct-cbic{width:56px;vertical-align:top;padding:0 16px 0 0;}
-.hp-catct-cbic img{width:38px;height:38px;display:block;border:0;}
-.hp-catct-cbtx{vertical-align:top;}
-.hp-catct-cbh{margin:0 0 5px;font-size:17px;line-height:24px;font-weight:800;color:#191919;letter-spacing:-.008em;}
-.hp-catct-cbb{margin:0;font-size:15px;line-height:23px;color:#555555;}
-/* review */
-.hp-catct-rev{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
-.hp-catct-revstars{display:block;margin:0 auto 12px;border:0;width:120px;height:25px;}
-.hp-catct-revq{display:block;margin:0 auto 9px;max-width:430px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
-.hp-catct-revph{display:block;margin:0 auto 9px;max-width:420px;border:2px dashed #d4d4d4;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#767676;background:#fafafa;}
-.hp-catct-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
+/* THE BREAK BAND, which is now the review. The email used to run prose straight
+   into a grid of tiles, which read as one long column that changed shape halfway
+   down for no reason. This is the pause: a full-bleed band of the same ink as the
+   header, sitting between the feature rows and the grid, which is where the join
+   was.
+   WHAT IS IN IT CHANGED. It held a piece of product advice; it now holds a real
+   customer review, because a stranger vouching for us earns the most prominent
+   spot in the email far better than a note about artwork does. The advice moved
+   to the bottom, on white. */
+.hp-catct-band{background:#191919;padding:34px 34px 32px;text-align:center;margin:34px 0 0;}
+.hp-catct-bandeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 16px;}
+.hp-catct-bstars{display:block;margin:0 auto 16px;border:0;width:132px;height:28px;}
+.hp-catct-bq{display:block;margin:0 auto 14px;max-width:440px;font-size:20px;line-height:29px;font-weight:700;color:#ffffff;letter-spacing:-.012em;}
+/* a short green keyline between the words and the name: it stops the attribution
+   reading as part of the sentence, which it did when both were simply centred */
+.hp-catct-brule{display:block;width:34px;height:2px;background:#00b67a;margin:0 auto 13px;font-size:0;line-height:0;}
+.hp-catct-bby{display:block;font-size:12px;line-height:18px;color:#8f8f8f;}
+.hp-catct-bph{display:block;margin:0 auto 13px;max-width:430px;border:2px dashed #3f3f3f;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#9a9a9a;background:#212121;}
+/* GOOD TO KNOW, now on white at the bottom. It reads as a footnote to the
+   browsing rather than as an interruption of it, which is what it always was. */
+.hp-catct-gk{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
+.hp-catct-gkeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#008539;margin:0 0 9px;}
+.hp-catct-gkh{margin:0 0 6px;font-size:18px;line-height:25px;font-weight:800;color:#191919;letter-spacing:-.01em;}
+.hp-catct-gkb{margin:0 auto;max-width:430px;font-size:15px;line-height:23px;color:#555555;}
+/* the centred heading that introduces the grid */
+.hp-catct-gsect{margin:30px 24px 0;text-align:center;}
+.hp-catct-gh{margin:0 0 5px;font-size:21px;line-height:28px;font-weight:800;color:#191919;letter-spacing:-.014em;}
+.hp-catct-gs{margin:0 auto 22px;max-width:400px;font-size:14px;line-height:21px;color:#767676;}
 /* contact */
 .hp-catct-help{margin:28px 24px 0;background:#f1f8f4;border-radius:14px;padding:24px 22px 22px;text-align:center;}
 .hp-catct-help img{display:block;margin:0 auto 12px;border:0;}
@@ -108,13 +150,20 @@
 .hp-catct-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
 .hp-catct-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
-  .hp-catct-dark{padding:22px 20px 28px;}
-  .hp-catct-dark img.hp-catct-mark{width:126px;margin-bottom:22px;}
+  .hp-catct-dark{padding:22px 20px 18px;}
+  .hp-catct-dark img.hp-catct-mark{width:126px;margin-bottom:0;}
+  .hp-catct-darkb{padding:2px 20px 28px;}
+  .hp-catct-darkc{padding:22px 20px 28px;}
+  .hp-catct-darkc img.hp-catct-mark{width:126px;margin-bottom:18px;}
+  .hp-catct-band{padding:30px 22px 28px;margin-top:28px;}
+  .hp-catct-bq{font-size:18px;line-height:26px;}
+  .hp-catct-gsect{margin-left:14px;margin-right:14px;}
+  .hp-catct-gh{font-size:19px;line-height:26px;}
   .hp-catct-h1{font-size:26px;line-height:33px;max-width:none;}
   .hp-catct-sub{font-size:15px;line-height:23px;max-width:none;}
   .hp-catct-cta,.hp-catct-cta2{padding:15px 26px;}
   .hp-catct-sect{margin-left:14px;margin-right:14px;}
-  /* the feature row stacks: a 216px image beside prose is unreadable at 320px */
+  /* the feature row stacks: a 252px image beside prose is unreadable at 320px */
   .hp-catct-fim,.hp-catct-fim.hp-catct-right{display:block;width:100%!important;padding:0 0 12px 0!important;}
   .hp-catct-fim img{max-width:100%;}
   .hp-catct-fh{font-size:18px;line-height:25px;}
@@ -122,7 +171,7 @@
   /* the grid does NOT stack - two-up is the point */
   .hp-catct-tile{padding:0 4px 12px;}
   .hp-catct-tname{font-size:14px;line-height:19px;min-height:38px;}
-  .hp-catct-cb,.hp-catct-rev,.hp-catct-help,.hp-catct-tail{margin-left:14px;margin-right:14px;}
+  .hp-catct-gk,.hp-catct-help,.hp-catct-tail{margin-left:14px;margin-right:14px;}
   .hp-catct-foot{padding-left:18px;padding-right:18px;}
 }
 </style>
@@ -134,34 +183,37 @@
 
     <div class="hp-catct-dark">
       <a href="https://www.helloprint.com/en-ie/"><img class="hp-catct-mark" src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="142"></a>
+    </div>
+    <div class="hp-catct-darkb">
       <span class="hp-catct-eyebrow">CLOTHING & TEXTILES</span>
       <h1 class="hp-catct-h1">Kitting out the team?</h1>
       <p class="hp-catct-sub">Shirts and textiles, with your logo printed or stitched on.</p>
       <a class="hp-catct-cta" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/tshirt-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/tshirt-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/tshirt-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/tshirt-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-t-shirts{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-t-shirts{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/camisetas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-magliette{% else %}https://www.helloprint.com/en-gb/tshirt-printing{% endif %}">See the range</a>
     </div>
 
+
     <div class="hp-catct-sect">
       <h2 class="hp-catct-sh">Popular in Clothing & Textiles</h2>
       <p class="hp-catct-ss">Among the most ordered in this category by businesses like yours.</p>
-      <table class="hp-catct-ftbl" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-catct-fim" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/tshirt-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/tshirt-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/tshirt-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/tshirt-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-t-shirts{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-t-shirts{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/camisetas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-magliette{% else %}https://www.helloprint.com/en-gb/tshirt-printing{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/4RkQgL6cX46UJK9SIrxVef/b3798507798ff8ae79429941101333f0/sportsware.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=480&h=320&q=80" alt="{% if event.Locale == "en-IE" %}T-shirts{% elif event.Locale == "en-GB" %}T-shirts{% elif event.Locale == "nl-NL" %}T-shirts{% elif event.Locale == "nl-BE" %}T-shirts{% elif event.Locale == "fr-FR" %}T-shirts{% elif event.Locale == "fr-BE" %}T-shirts{% elif event.Locale == "es-ES" %}Camisetas{% elif event.Locale == "it-IT" %}Magliette{% else %}T-shirts{% endif %}" width="216"></a></td><td class="hp-catct-ftx" valign="top" dir="ltr"><p class="hp-catct-fh">{% if event.Locale == "en-IE" %}T-shirts{% elif event.Locale == "en-GB" %}T-shirts{% elif event.Locale == "nl-NL" %}T-shirts{% elif event.Locale == "nl-BE" %}T-shirts{% elif event.Locale == "fr-FR" %}T-shirts{% elif event.Locale == "fr-BE" %}T-shirts{% elif event.Locale == "es-ES" %}Camisetas{% elif event.Locale == "it-IT" %}Magliette{% else %}T-shirts{% endif %}</p><p class="hp-catct-fb">Printed or embroidered, in the size breakdown you actually need rather than the same size throughout. Send your logo and we will say which method suits it.</p><a class="hp-catct-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/tshirt-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/tshirt-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/tshirt-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/tshirt-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-t-shirts{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-t-shirts{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/camisetas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-magliette{% else %}https://www.helloprint.com/en-gb/tshirt-printing{% endif %}">See the range &rarr;</a></td></tr></table><table class="hp-catct-ftbl" role="presentation" cellpadding="0" cellspacing="0" dir="rtl"><tr><td class="hp-catct-fim hp-catct-right" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/personalised-polo-shirts{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/polos-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/polos-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/tshirt-polo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/tshirt-polo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/polos-personalizados{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/polo-personalizzate{% else %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/k7WNLeTJsqHZ4quaY6vT8/4b32ffcdd1289dddcc9842fba8bf1eb6/Search_image__7_.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=480&h=320&q=80" alt="{% if event.Locale == "en-IE" %}Polo Shirts{% elif event.Locale == "en-GB" %}Polo Shirts{% elif event.Locale == "nl-NL" %}Polo&#x27;s{% elif event.Locale == "nl-BE" %}Polo&#x27;s{% elif event.Locale == "fr-FR" %}Polos{% elif event.Locale == "fr-BE" %}Polos{% elif event.Locale == "es-ES" %}Polos{% elif event.Locale == "it-IT" %}Polo{% else %}Polo Shirts{% endif %}" width="216"></a></td><td class="hp-catct-ftx" valign="top" dir="ltr"><p class="hp-catct-fh">{% if event.Locale == "en-IE" %}Polo Shirts{% elif event.Locale == "en-GB" %}Polo Shirts{% elif event.Locale == "nl-NL" %}Polo&#x27;s{% elif event.Locale == "nl-BE" %}Polo&#x27;s{% elif event.Locale == "fr-FR" %}Polos{% elif event.Locale == "fr-BE" %}Polos{% elif event.Locale == "es-ES" %}Polos{% elif event.Locale == "it-IT" %}Polo{% else %}Polo Shirts{% endif %}</p><p class="hp-catct-fb">A step up from a t-shirt for anyone who meets customers. Embroidery outlasts print on a collar and comes out of the wash better.</p><a class="hp-catct-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/personalised-polo-shirts{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/polos-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/polos-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/tshirt-polo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/tshirt-polo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/polos-personalizados{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/polo-personalizzate{% else %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% endif %}">See the range &rarr;</a></td></tr></table>
+      <table class="hp-catct-ftbl" role="presentation" cellpadding="0" cellspacing="0"><tr><td class="hp-catct-fim" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/tshirt-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/tshirt-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/tshirt-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/tshirt-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-t-shirts{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-t-shirts{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/camisetas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-magliette{% else %}https://www.helloprint.com/en-gb/tshirt-printing{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/4RkQgL6cX46UJK9SIrxVef/b3798507798ff8ae79429941101333f0/sportsware.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=504&h=378&q=80" alt="{% if event.Locale == "en-IE" %}T-shirts{% elif event.Locale == "en-GB" %}T-shirts{% elif event.Locale == "nl-NL" %}T-shirts{% elif event.Locale == "nl-BE" %}T-shirts{% elif event.Locale == "fr-FR" %}T-shirts{% elif event.Locale == "fr-BE" %}T-shirts{% elif event.Locale == "es-ES" %}Camisetas{% elif event.Locale == "it-IT" %}Magliette{% else %}T-shirts{% endif %}" width="252"></a></td><td class="hp-catct-ftx" valign="top" dir="ltr"><p class="hp-catct-fh">{% if event.Locale == "en-IE" %}T-shirts{% elif event.Locale == "en-GB" %}T-shirts{% elif event.Locale == "nl-NL" %}T-shirts{% elif event.Locale == "nl-BE" %}T-shirts{% elif event.Locale == "fr-FR" %}T-shirts{% elif event.Locale == "fr-BE" %}T-shirts{% elif event.Locale == "es-ES" %}Camisetas{% elif event.Locale == "it-IT" %}Magliette{% else %}T-shirts{% endif %}</p><p class="hp-catct-fb">Printed or embroidered, in the size breakdown you actually need rather than the same size throughout. Send your logo and we will say which method suits it.</p><a class="hp-catct-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/tshirt-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/tshirt-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/tshirt-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/tshirt-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-t-shirts{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-t-shirts{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/camisetas-impresas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-magliette{% else %}https://www.helloprint.com/en-gb/tshirt-printing{% endif %}">See the range &rarr;</a></td></tr></table><table class="hp-catct-ftbl" role="presentation" cellpadding="0" cellspacing="0" dir="rtl"><tr><td class="hp-catct-fim hp-catct-right" valign="top" dir="ltr"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/personalised-polo-shirts{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/polos-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/polos-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/tshirt-polo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/tshirt-polo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/polos-personalizados{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/polo-personalizzate{% else %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/k7WNLeTJsqHZ4quaY6vT8/4b32ffcdd1289dddcc9842fba8bf1eb6/Search_image__7_.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=504&h=378&q=80" alt="{% if event.Locale == "en-IE" %}Polo Shirts{% elif event.Locale == "en-GB" %}Polo Shirts{% elif event.Locale == "nl-NL" %}Polo&#x27;s{% elif event.Locale == "nl-BE" %}Polo&#x27;s{% elif event.Locale == "fr-FR" %}Polos{% elif event.Locale == "fr-BE" %}Polos{% elif event.Locale == "es-ES" %}Polos{% elif event.Locale == "it-IT" %}Polo{% else %}Polo Shirts{% endif %}" width="252"></a></td><td class="hp-catct-ftx" valign="top" dir="ltr"><p class="hp-catct-fh">{% if event.Locale == "en-IE" %}Polo Shirts{% elif event.Locale == "en-GB" %}Polo Shirts{% elif event.Locale == "nl-NL" %}Polo&#x27;s{% elif event.Locale == "nl-BE" %}Polo&#x27;s{% elif event.Locale == "fr-FR" %}Polos{% elif event.Locale == "fr-BE" %}Polos{% elif event.Locale == "es-ES" %}Polos{% elif event.Locale == "it-IT" %}Polo{% else %}Polo Shirts{% endif %}</p><p class="hp-catct-fb">A step up from a t-shirt for anyone who meets customers. Embroidery outlasts print on a collar and comes out of the wash better.</p><a class="hp-catct-fl" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/personalised-polo-shirts{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/polos-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/polos-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/tshirt-polo-personnalise{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/tshirt-polo-personnalise{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/polos-personalizados{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/polo-personalizzate{% else %}https://www.helloprint.com/en-gb/personalised-polo-shirts{% endif %}">See the range &rarr;</a></td></tr></table>
+    </div>
+
+    <div class="hp-catct-band">
+      <span class="hp-catct-bandeye">WHAT CUSTOMERS SAY</span>
+      <img class="hp-catct-bstars" src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-5-on-ink.png" alt="5 out of 5 on Trustpilot" width="132" height="28">
+      {% if event.Locale|slice:":2" == "en" %}<span class="hp-catct-bq">&ldquo;T-shirts were made very fast and delivered on time. I also like the online Design interface on HelloPrint&#x27;s website&rdquo;</span><span class="hp-catct-brule">&nbsp;</span><span class="hp-catct-bby">Xenia &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "nl" %}<span class="hp-catct-bq">&ldquo;Het ontwerpen ging vlot, met een duidelijke goedkeuringsflow en aandacht voor de mogelijkheden van je ontwerp. De delivery verliep correct.&rdquo;</span><span class="hp-catct-brule">&nbsp;</span><span class="hp-catct-bby">Stefanie Van der Veken &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "fr" %}<span class="hp-catct-bq">&ldquo;Commande arrivée comme prévu au relais Bpost! T-shirts ok. Merci.&rdquo;</span><span class="hp-catct-brule">&nbsp;</span><span class="hp-catct-bby">GIOVANNA CADEDDU &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "es" %}<span class="hp-catct-bq">&ldquo;Rapidez. Buen producto. Facilidad de seguimiento del pedido y atención al cliente eficiente.&rdquo;</span><span class="hp-catct-brule">&nbsp;</span><span class="hp-catct-bby">Toni Abelló &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "it" %}<span class="hp-catct-bq">&ldquo;Ottimo sito, veramente intuitivo, spedizioni super veloci qualità prezzo Mella media👍&rdquo;</span><span class="hp-catct-brule">&nbsp;</span><span class="hp-catct-bby">Sandro Flaim &middot; 5 out of 5 on Trustpilot</span>{% else %}<span class="hp-catct-bph">Trustpilot quote to be added &mdash; pick a review about clothing, ideally mentioning fit, sizing or print quality.</span><span class="hp-catct-bby">Verified Trustpilot review</span>{% endif %}
+    </div>
+
+    <div class="hp-catct-gsect">
+      <h2 class="hp-catct-gh">More in Clothing &amp; Textiles</h2>
+      <p class="hp-catct-gs">Two more to put a logo on, in sizes from one upwards.</p>
       <table class="hp-catct-tiles" role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="hp-catct-tile" valign="top"><a class="hp-catct-card" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/interior-textiles{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/interior-textiles{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/interieur-textiel{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/interieur-textiel{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-textile-interieur{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-textile-interieur{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/impresion-textil-interiores{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-tessili-per-interni{% else %}https://www.helloprint.com/en-gb/interior-textiles{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/3AmHIEisYtFTU4juOiYbeE/8d3fd0b7e50b85371e08d2b4d90e2849/9.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=528&h=528&q=80" alt="{% if event.Locale == "en-IE" %}Interior Textiles{% elif event.Locale == "en-GB" %}Interior Textiles{% elif event.Locale == "nl-NL" %}Interieurtextiel{% elif event.Locale == "nl-BE" %}Interieurtextiel{% elif event.Locale == "fr-FR" %}Textile pour décoration d&#x27;intérieur{% elif event.Locale == "fr-BE" %}Textile pour décoration d&#x27;intérieur{% elif event.Locale == "es-ES" %}Textiles interiores{% elif event.Locale == "it-IT" %}Tessuti per interni{% else %}Interior Textiles{% endif %}"><span class="hp-catct-tname">{% if event.Locale == "en-IE" %}Interior Textiles{% elif event.Locale == "en-GB" %}Interior Textiles{% elif event.Locale == "nl-NL" %}Interieurtextiel{% elif event.Locale == "nl-BE" %}Interieurtextiel{% elif event.Locale == "fr-FR" %}Textile pour décoration d&#x27;intérieur{% elif event.Locale == "fr-BE" %}Textile pour décoration d&#x27;intérieur{% elif event.Locale == "es-ES" %}Textiles interiores{% elif event.Locale == "it-IT" %}Tessuti per interni{% else %}Interior Textiles{% endif %}</span><span class="hp-catct-tlink">See the range &rarr;</span></a></td><td class="hp-catct-tile" valign="top"><a class="hp-catct-card" href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/personalised-caps{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/personalised-caps{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/petten-bedrukken{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/petten-bedrukken{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/casquettes-personnalisees{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/casquettes-personnalisees{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/gorras-personalizadas{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/cappellini-personalizzati{% else %}https://www.helloprint.com/en-gb/personalised-caps{% endif %}"><img src="https://images.ctfassets.net/wm1n7oady8a5/5geTr5nz3TOtzCTAh2ghws/24e4e657d05a3683589374f28b2e0d8d/menu-image-clothing-caps.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=528&h=528&q=80" alt="{% if event.Locale == "en-IE" %}Caps{% elif event.Locale == "en-GB" %}Caps{% elif event.Locale == "nl-NL" %}Petten{% elif event.Locale == "nl-BE" %}Petten{% elif event.Locale == "fr-FR" %}Casquettes{% elif event.Locale == "fr-BE" %}Casquettes{% elif event.Locale == "es-ES" %}Gorras{% elif event.Locale == "it-IT" %}Cappellini{% else %}Caps{% endif %}"><span class="hp-catct-tname">{% if event.Locale == "en-IE" %}Caps{% elif event.Locale == "en-GB" %}Caps{% elif event.Locale == "nl-NL" %}Petten{% elif event.Locale == "nl-BE" %}Petten{% elif event.Locale == "fr-FR" %}Casquettes{% elif event.Locale == "fr-BE" %}Casquettes{% elif event.Locale == "es-ES" %}Gorras{% elif event.Locale == "it-IT" %}Cappellini{% else %}Caps{% endif %}</span><span class="hp-catct-tlink">See the range &rarr;</span></a></td></tr></table>
     </div>
 
-    <div class="hp-catct-cb">
-      <table class="hp-catct-cbtbl" role="presentation" cellpadding="0" cellspacing="0">
-        <tr>
-          <td class="hp-catct-cbic" valign="top"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/icon-tag.png" alt="" width="38" height="38"></td>
-          <td class="hp-catct-cbtx" valign="top">
-            <p class="hp-catct-cbh">Mixed sizes, one order</p>
-            <p class="hp-catct-cbb">You do not have to order the same size throughout. Send the breakdown you need and we will put it together as one job.</p>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="hp-catct-rev">
-      <img class="hp-catct-revstars" src="https://REPLACE-WITH-KLAVIYO-ASSET/trustpilot-stars-4-5.png" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
-      {% if event.Locale|slice:":2" == "en" %}<span class="hp-catct-revq">&ldquo;T-shirts were made very fast and delivered on time. I also like the online Design interface on HelloPrint&#x27;s website&rdquo;</span><span class="hp-catct-revby">Xenia &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "nl" %}<span class="hp-catct-revq">&ldquo;Het ontwerpen ging vlot, met een duidelijke goedkeuringsflow en aandacht voor de mogelijkheden van je ontwerp. De delivery verliep correct.&rdquo;</span><span class="hp-catct-revby">Stefanie Van der Veken &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "fr" %}<span class="hp-catct-revq">&ldquo;Commande arrivée comme prévu au relais Bpost! T-shirts ok. Merci.&rdquo;</span><span class="hp-catct-revby">GIOVANNA CADEDDU &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "es" %}<span class="hp-catct-revq">&ldquo;Rapidez. Buen producto. Facilidad de seguimiento del pedido y atención al cliente eficiente.&rdquo;</span><span class="hp-catct-revby">Toni Abelló &middot; 5 out of 5 on Trustpilot</span>{% elif event.Locale|slice:":2" == "it" %}<span class="hp-catct-revq">&ldquo;Ottimo sito, veramente intuitivo, spedizioni super veloci qualità prezzo Mella media👍&rdquo;</span><span class="hp-catct-revby">Sandro Flaim &middot; 5 out of 5 on Trustpilot</span>{% else %}<span class="hp-catct-revph">Trustpilot quote to be added &mdash; pick a review about clothing, ideally mentioning fit, sizing or print quality.</span><span class="hp-catct-revby">Verified Trustpilot review</span>{% endif %}
+    <div class="hp-catct-gk">
+      <span class="hp-catct-gkeye">GOOD TO KNOW</span>
+      <p class="hp-catct-gkh">Mixed sizes, one order</p>
+      <p class="hp-catct-gkb">You do not have to order the same size throughout. Send the breakdown you need and we will put it together as one job.</p>
     </div>
 
     <div class="hp-catct-help">

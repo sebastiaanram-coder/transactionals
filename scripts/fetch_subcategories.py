@@ -49,13 +49,26 @@ EMAILS = {
     "commercial-print": dict(
         label="Commercial Print", match=["Commercial Print"],
         feature=["Booklets & Brochures", "Leaflet Printing & Flyers"],
-        grid=["Folded Leaflets", "Poster Printing", "Business Cards", "Cards & Invitations"],
-        # 2.10M, 1.04M | 539k, 446k, 355k, 261k - 82% of the category
+        grid=["Folded Leaflets", "Poster Printing", "Business Cards", "Roller Banners"],
+        # 2.10M, 1.04M | 539k, 446k, 355k
+        #
+        # THE FOURTH TILE IS NOT THE FOURTH BY GROSS PROFIT. Cards & Invitations
+        # ranks there at 261k; Roller Banners is 175k and belongs to Signage &
+        # Outdoor. It is here because the new-style photography has a roller
+        # banner and has no greeting card, and one packshot on white beside three
+        # art-directed shots was the worst-looking tile in the email. It also
+        # reads straight: everything else here is print that advertises something,
+        # and so is a roller banner.
+        # Put Cards & Invitations back the moment there is a shot of one - the
+        # end-of-year case for it has not gone away.
     ),
     "signage-outdoor": dict(
         label="Signage & Outdoor", match=["Signage & Outdoor"],
         feature=["Banners", "Signage & Panels"],
         grid=["Beach Flags", "Roller Banners"],
+        # Roller Banners is deliberately in Commercial Print too. Different
+        # audience, different email, and it is the closest thing the photography
+        # has to a fourth promotional format.
         # 408k, 320k | 248k, 175k. Flag Printing is 5th at 101k but sits beside
         # Beach Flags and Banners, and three flag-ish tiles reads thin.
     ),
@@ -78,6 +91,23 @@ EMAILS = {
         grid=["Notebooks", "Water Bottles"],
         # 160k, 113k | 71k, 66k
     ),
+}
+
+
+# WHERE THE HEADER AND THE TWO BUTTONS GO. Not a subcategory: the email invites a
+# browse, so all three land on the category page rather than on whichever tile
+# happens to be listed first - which is what they did before, and it sent everyone
+# to Booklets.
+#
+# Keyed by Contentful entry id rather than by name, because the name is localised
+# and "Promotional Products" in English is "Reclamedrukwerk" in Dutch and
+# "Supports Marketing" in French. The id is the only stable handle.
+#
+# Only Commercial Print has one so far. Without one the email falls back to its
+# first feature tile, which is wrong in the same way - so the other four need this
+# filled in before they go live.
+LANDINGS = {
+    "commercial-print": ("promotional-printing", "MRjlkRa7meqiqSY0mSowg"),
 }
 
 
@@ -113,9 +143,18 @@ def main():
             for n, i in ids.items()}
     byid = {i: key_for(n) for n, i in ids.items()}
 
+    # the landing pages ride along in the same per-locale fetch. They are marked
+    # so the image check below does not demand a search image from them: nothing
+    # renders a landing page as a tile.
+    for slug, (key, eid) in LANDINGS.items():
+        subs[key] = {"name_en": key, "id": eid, "image": None,
+                     "landing": True, "by_locale": {}}
+        byid[eid] = key
+
     for loc in LOCALES:
+        every = list(ids.values()) + [eid for _, eid in LANDINGS.values()]
         d = cf.get("/entries", content_type="pageHomeModular", locale=loc, limit=60,
-                   **{"sys.id[in]": ",".join(ids.values())})
+                   **{"sys.id[in]": ",".join(every)})
         assets = {x["sys"]["id"]: x for x in (d.get("includes") or {}).get("Asset", [])}
         for it in d["items"]:
             k = byid[it["sys"]["id"]]
@@ -139,11 +178,14 @@ def main():
                             break
 
     gaps = [(k, l) for k, v in subs.items() for l in LOCALES if l not in v["by_locale"]]
-    noimg = [k for k, v in subs.items() if not v["image"]]
+    noimg = [k for k, v in subs.items() if not v["image"] and not v.get("landing")]
+    emails = {k: dict(v) for k, v in EMAILS.items()}
+    for slug, (key, _) in LANDINGS.items():
+        emails[slug]["landing"] = key
     payload = {"fetched": dt.date.today().isoformat(),
                "space": cf.SPACE, "environment": cf.ENVIR,
                "locales": LOCALES, "market_path": MARKET_PATH,
-               "emails": EMAILS, "subcategories": subs}
+               "emails": emails, "subcategories": subs}
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=1, sort_keys=True)

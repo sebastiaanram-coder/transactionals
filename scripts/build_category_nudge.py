@@ -45,6 +45,7 @@ _lib/reviews.py.
 """
 import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import rawimg as ri
 import reviews as rv
 import subcategories as sc
 
@@ -67,14 +68,39 @@ def datauri(name):
 
 _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
-    "IMG_STARS":    "trustpilot-stars-4-5.png",
+    # 5 stars, not the 4.5 company score. The line under the quote says "5 out of
+    # 5", which is that review's own rating, and a card showing 4.5 above text
+    # saying 5 was contradicting itself. The ink version has its white gutters
+    # repainted so it can sit on the dark band - see make_newstyle_assets.py.
+    "IMG_STARS":    "trustpilot-stars-5-on-ink.png",
     "IMG_AGENTS":   "cs-agents-ellipse.png",
-    "ICON_TAG":     "icon-tag.png",
-    "ICON_LAYERS":  "icon-layers.png",
-    "ICON_CLOCK":   "icon-clock.png",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+
+# THE PHOTOGRAPHY FOLLOWS THE SAME RULE AS EVERY OTHER ASSET: inlined in the
+# preview, a URL in the Klaviyo build. The first version of this linked the
+# preview at the published copy of this repo, which was wrong - it made a preview
+# that only renders once someone has pushed, and every preview here is supposed
+# to be openable straight from a checkout with no network at all.
+#
+# The cost is real: about 400 KB of base64 per email, and build_overview.py
+# inlines every preview into the overview document. That is the price of previews
+# that do not lie about what the email looks like.
+#
+# The URL side is the published copy of this repo, which means the Klaviyo
+# template renders the moment it is pasted, before anyone uploads anything. IT IS
+# NOT A PRODUCTION HOST - move these into Klaviyo's asset library before the flow
+# is switched on. A live send should not depend on GitHub Pages.
+PHOTO_BASE = "https://sebastiaanram-coder.github.io/transactionals/assets/newstyle/"
+PHOTO_DIR = os.path.join(ASSETS, "newstyle")
+
+
+def photo(name, live):
+    if live:
+        return PHOTO_BASE + name + ".jpg"
+    with open(os.path.join(PHOTO_DIR, name + ".jpg"), "rb") as f:
+        return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 
 CTA = "See the range"
 
@@ -87,9 +113,47 @@ CTA = "See the range"
 CATEGORIES = [
     dict(
         slug="commercial-print", code="cp",
-        h1="Running low, or starting the next one?",
-        sub="The print most businesses come back for, and a couple of things that go well beside it.",
-        pre="The print most businesses reorder, and what goes with it.",
+        # NOT A REPLENISHMENT EMAIL. The first version opened "Running low, or
+        # starting the next one?", which is a stationery question - it suits
+        # somebody whose letterheads are down to the last box. Everything in this
+        # email is print that advertises something: a campaign, an event, a
+        # launch. So the headline asks what they are promoting next, and the
+        # eyebrow says promotional print rather than the internal category name.
+        # Five alternatives are in proposals/category-header-proposal.md.
+        eyebrow="PROMOTIONAL PRINT",
+        sect_h="Where most campaigns start",
+        sect_sub="The two formats businesses order most when they have something to advertise.",
+        h1="What are you promoting next?",
+        sub="Whatever it is, this is the print that puts it in front of people, and what tends to go with what.",
+        pre="The print that puts your next campaign in front of people.",
+        hero="hero-commercial-print",
+        hero_alt="Printed flyers fanned out on a dark green velvet sofa",
+        # TWO HEADER SHAPES, both built, so they can be compared rather than
+        # argued about. They differ in where the photograph starts and where the
+        # wordmark sits, which changes what the first screen of the email is:
+        #   a  wordmark on ink, then the photograph opening out of it. The brand
+        #      speaks first and the picture is set into the ink on both sides.
+        #   b  the photograph runs to the very top of the card, rounded corners
+        #      and all, and the wordmark sits under it above the eyebrow. The
+        #      picture speaks first.
+        # Each needs its own file: a fades at the top, b must not, and that is
+        # baked into the pixels.
+        headers=[
+            dict(key="a", style="fade", hero="hero-commercial-print"),
+            dict(key="b", style="top", hero="hero-commercial-print-top"),
+        ],
+        # New-style photography for all six. Getting there meant swapping the
+        # fourth tile - see scripts/fetch_subcategories.py.
+        photos={
+            "Booklets & Brochures": "feature-booklets",
+            "Leaflet Printing & Flyers": "feature-leaflets",
+            "Folded Leaflets": "tile-folded-leaflets",
+            "Poster Printing": "tile-posters",
+            "Business Cards": "tile-business-cards",
+            "Roller Banners": "tile-rollup",
+        },
+        grid_h="More ways to advertise it",
+        grid_sub="Four more formats, in the quantities businesses actually order.",
         body={
             "Booklets & Brochures":
                 "A catalogue, a programme, a company report. Stapled for something short, bound "
@@ -100,7 +164,7 @@ CATEGORIES = [
                 "costs twice what five hundred does, so it is worth pricing the next quantity up "
                 "before you order.",
         },
-        block=("ICON_LAYERS", "One design, several products",
+        block=("One design, several products",
                "The same artwork can run across flyers, leaflets and posters. Send it once and we "
                "will fit it to each size rather than asking you to redo it."),
         review_hint="pick a review that mentions print quality or turnaround",
@@ -110,6 +174,8 @@ CATEGORIES = [
         h1="For the next event, or the front of the building?",
         sub="Signs, flags and banners, built for one afternoon outdoors or several years of it.",
         pre="Signs, flags and banners, for a day out or a decade.",
+        grid_h="More in Signage &amp; Outdoor",
+        grid_sub="Two more that go up quickly and come back out for the next one.",
         body={
             "Banners":
                 "For a fence, a scaffold or the front of a building. Hemmed and eyeleted, so it "
@@ -118,7 +184,7 @@ CATEGORIES = [
                 "Foamex indoors or under cover, aluminium where it has to take weather and years "
                 "of it. Tell us where the sign is going and we will match the material to it.",
         },
-        block=("ICON_CLOCK", "Roller banners travel",
+        block=("Roller banners travel",
                "They roll into their own case, go up in seconds, and come back out for the next "
                "event. One order that keeps earning."),
         review_hint="pick a review about a banner or sign, ideally mentioning setup or durability",
@@ -128,6 +194,8 @@ CATEGORIES = [
         h1="Running low on labels, or on bags?",
         sub="Labels and stickers, and the packaging they go on. Both in runs small enough to try first.",
         pre="Labels, stickers and the packaging they go on.",
+        grid_h="More in Labels &amp; Packaging",
+        grid_sub="Two more, both in runs small enough to try a design first.",
         body={
             "Labels & Stickers":
                 "On a roll for an applicator, on a sheet for applying by hand, or cut to whatever "
@@ -136,7 +204,7 @@ CATEGORIES = [
                 "Your name on the thing a customer carries out of the shop. Runs start at a "
                 "hundred, so a new design does not have to arrive on a pallet.",
         },
-        block=("ICON_LAYERS", "Send the whole list at once",
+        block=("Send the whole list at once",
                "If you are ordering labels and bags together, send both and we will keep the "
                "colour consistent across them rather than treating them as two jobs."),
         review_hint="pick a review about labels, stickers or packaging",
@@ -146,6 +214,8 @@ CATEGORIES = [
         h1="Kitting out the team?",
         sub="Shirts and textiles, with your logo printed or stitched on.",
         pre="Shirts and textiles with your logo on them.",
+        grid_h="More in Clothing &amp; Textiles",
+        grid_sub="Two more to put a logo on, in sizes from one upwards.",
         body={
             "T-shirts":
                 "Printed or embroidered, in the size breakdown you actually need rather than the "
@@ -154,7 +224,7 @@ CATEGORIES = [
                 "A step up from a t-shirt for anyone who meets customers. Embroidery outlasts "
                 "print on a collar and comes out of the wash better.",
         },
-        block=("ICON_TAG", "Mixed sizes, one order",
+        block=("Mixed sizes, one order",
                "You do not have to order the same size throughout. Send the breakdown you need "
                "and we will put it together as one job."),
         review_hint="pick a review about clothing, ideally mentioning fit, sizing or print quality",
@@ -164,6 +234,8 @@ CATEGORIES = [
         h1="Something to hand out at the next event?",
         sub="The things that stay in use long after a flyer is in the bin.",
         pre="Things that stay in use long after a flyer is in the bin.",
+        grid_h="More in Corporate Gifts",
+        grid_sub="Two more that people keep on a desk rather than throw away.",
         body={
             "Canvas Tote Bags":
                 "The one giveaway people keep using. Cotton, your logo on the side, and cheap "
@@ -172,7 +244,7 @@ CATEGORIES = [
                 "Still the thing that ends up in a drawer and gets used for a year. Hundreds of "
                 "them for about the price of a small print run.",
         },
-        block=("ICON_LAYERS", "If we do not list it, we can still find it",
+        block=("If we do not list it, we can still find it",
                "The catalogue is a starting point. Tell our team what you have in mind and they "
                "will source it and come back with a price."),
         review_hint="pick a review about a promotional item, ideally mentioning branding quality",
@@ -186,10 +258,35 @@ CSS = """
 .%(P)s-root *{box-sizing:border-box;}
 .%(P)s-wrap{width:100%%;background:#f8f8f8;padding:0 0 32px;}
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
-/* the dark header: wordmark, category, headline and first call to action all on
-   ink, so the top reads as one block rather than a logo bar with a page under it */
-.%(P)s-dark{background:#191919;padding:26px 32px 32px;text-align:center;}
-.%(P)s-dark img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0 0 26px;}
+/* THE DARK HEADER IS THREE STACKED BLOCKS, not one padded box, because the
+   photograph has to bleed to both edges while the type stays inset:
+     -dark   wordmark on ink
+     -hero   the photograph, full width, no padding
+     -darkb  eyebrow, headline, subtext, first call to action - back on ink
+   All three are the same #191919, and the photograph itself fades to exactly
+   that colour at its top and bottom edge, so the three read as one block with a
+   picture inside it. The fade is baked into the JPEG on purpose: Outlook ignores
+   CSS gradients, so a fade written in CSS is a hard-edged photograph for a large
+   part of the audience. See scripts/make_newstyle_assets.py. */
+.%(P)s-dark{background:#191919;padding:26px 32px 22px;text-align:center;}
+.%(P)s-dark img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0;}
+.%(P)s-hero{background:#191919;font-size:0;line-height:0;}
+/* colour is set because with images off the alt text lands on ink */
+.%(P)s-hero img{width:100%%;max-width:600px;height:auto;display:block;border:0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+.%(P)s-darkb{background:#191919;padding:2px 32px 32px;text-align:center;}
+/* HEADER VARIANT B: the photograph is the first thing in the card, so it carries
+   the card's own top corners. Outlook ignores border-radius and will show them
+   square - which is already true of the white card itself, so the email stays
+   consistent with itself there rather than gaining a mismatch. */
+.%(P)s-heroT{background:#191919;font-size:0;line-height:0;}
+.%(P)s-heroT img{width:100%%;max-width:600px;height:auto;display:block;border:0;
+  border-radius:18px 18px 0 0;
+  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
+/* b puts the wordmark here instead, above the eyebrow, so this block needs the
+   top padding that the wordmark bar used to have */
+.%(P)s-darkc{background:#191919;padding:26px 32px 32px;text-align:center;}
+.%(P)s-darkc img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0 0 20px;}
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .%(P)s-h1{margin:0 auto 12px;max-width:440px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .%(P)s-sub{margin:0 auto 24px;max-width:420px;font-size:16px;line-height:25px;color:#b4b4b4;}
@@ -201,10 +298,10 @@ CSS = """
 /* FEATURE ROW: image beside prose. Deliberately not a product card - no price,
    no border, no button. The Welcome flow's content-block pattern. */
 .%(P)s-ftbl{width:100%%;border-collapse:collapse;margin:0 0 24px;}
-.%(P)s-fim{width:216px;vertical-align:top;padding:0 18px 0 0;}
+.%(P)s-fim{width:252px;vertical-align:top;padding:0 18px 0 0;}
 .%(P)s-fim.%(P)s-right{padding:0 0 0 18px;}  /* flipped row: image sits right */
-.%(P)s-fim img{width:100%%;max-width:216px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
-.%(P)s-fim{width:216px;}
+.%(P)s-fim img{width:100%%;max-width:252px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+.%(P)s-fim{width:252px;}
 .%(P)s-ftx{vertical-align:top;}
 .%(P)s-fh{margin:0 0 6px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .%(P)s-fb{margin:0 0 10px;font-size:15px;line-height:23px;color:#555555;}
@@ -218,20 +315,34 @@ CSS = """
    "Catalogos, libros y revistas" once this is translated */
 .%(P)s-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
 .%(P)s-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
-/* closing content block */
-.%(P)s-cb{margin:8px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;}
-.%(P)s-cbtbl{width:100%%;border-collapse:collapse;}
-.%(P)s-cbic{width:56px;vertical-align:top;padding:0 16px 0 0;}
-.%(P)s-cbic img{width:38px;height:38px;display:block;border:0;}
-.%(P)s-cbtx{vertical-align:top;}
-.%(P)s-cbh{margin:0 0 5px;font-size:17px;line-height:24px;font-weight:800;color:#191919;letter-spacing:-.008em;}
-.%(P)s-cbb{margin:0;font-size:15px;line-height:23px;color:#555555;}
-/* review */
-.%(P)s-rev{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
-.%(P)s-revstars{display:block;margin:0 auto 12px;border:0;width:120px;height:25px;}
-.%(P)s-revq{display:block;margin:0 auto 9px;max-width:430px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
-.%(P)s-revph{display:block;margin:0 auto 9px;max-width:420px;border:2px dashed #d4d4d4;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#767676;background:#fafafa;}
-.%(P)s-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
+/* THE BREAK BAND, which is now the review. The email used to run prose straight
+   into a grid of tiles, which read as one long column that changed shape halfway
+   down for no reason. This is the pause: a full-bleed band of the same ink as the
+   header, sitting between the feature rows and the grid, which is where the join
+   was.
+   WHAT IS IN IT CHANGED. It held a piece of product advice; it now holds a real
+   customer review, because a stranger vouching for us earns the most prominent
+   spot in the email far better than a note about artwork does. The advice moved
+   to the bottom, on white. */
+.%(P)s-band{background:#191919;padding:34px 34px 32px;text-align:center;margin:34px 0 0;}
+.%(P)s-bandeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 16px;}
+.%(P)s-bstars{display:block;margin:0 auto 16px;border:0;width:132px;height:28px;}
+.%(P)s-bq{display:block;margin:0 auto 14px;max-width:440px;font-size:20px;line-height:29px;font-weight:700;color:#ffffff;letter-spacing:-.012em;}
+/* a short green keyline between the words and the name: it stops the attribution
+   reading as part of the sentence, which it did when both were simply centred */
+.%(P)s-brule{display:block;width:34px;height:2px;background:#00b67a;margin:0 auto 13px;font-size:0;line-height:0;}
+.%(P)s-bby{display:block;font-size:12px;line-height:18px;color:#8f8f8f;}
+.%(P)s-bph{display:block;margin:0 auto 13px;max-width:430px;border:2px dashed #3f3f3f;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#9a9a9a;background:#212121;}
+/* GOOD TO KNOW, now on white at the bottom. It reads as a footnote to the
+   browsing rather than as an interruption of it, which is what it always was. */
+.%(P)s-gk{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
+.%(P)s-gkeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#008539;margin:0 0 9px;}
+.%(P)s-gkh{margin:0 0 6px;font-size:18px;line-height:25px;font-weight:800;color:#191919;letter-spacing:-.01em;}
+.%(P)s-gkb{margin:0 auto;max-width:430px;font-size:15px;line-height:23px;color:#555555;}
+/* the centred heading that introduces the grid */
+.%(P)s-gsect{margin:30px 24px 0;text-align:center;}
+.%(P)s-gh{margin:0 0 5px;font-size:21px;line-height:28px;font-weight:800;color:#191919;letter-spacing:-.014em;}
+.%(P)s-gs{margin:0 auto 22px;max-width:400px;font-size:14px;line-height:21px;color:#767676;}
 /* contact */
 .%(P)s-help{margin:28px 24px 0;background:#f1f8f4;border-radius:14px;padding:24px 22px 22px;text-align:center;}
 .%(P)s-help img{display:block;margin:0 auto 12px;border:0;}
@@ -251,13 +362,20 @@ CSS = """
 .%(P)s-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
 .%(P)s-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
-  .%(P)s-dark{padding:22px 20px 28px;}
-  .%(P)s-dark img.%(P)s-mark{width:126px;margin-bottom:22px;}
+  .%(P)s-dark{padding:22px 20px 18px;}
+  .%(P)s-dark img.%(P)s-mark{width:126px;margin-bottom:0;}
+  .%(P)s-darkb{padding:2px 20px 28px;}
+  .%(P)s-darkc{padding:22px 20px 28px;}
+  .%(P)s-darkc img.%(P)s-mark{width:126px;margin-bottom:18px;}
+  .%(P)s-band{padding:30px 22px 28px;margin-top:28px;}
+  .%(P)s-bq{font-size:18px;line-height:26px;}
+  .%(P)s-gsect{margin-left:14px;margin-right:14px;}
+  .%(P)s-gh{font-size:19px;line-height:26px;}
   .%(P)s-h1{font-size:26px;line-height:33px;max-width:none;}
   .%(P)s-sub{font-size:15px;line-height:23px;max-width:none;}
   .%(P)s-cta,.%(P)s-cta2{padding:15px 26px;}
   .%(P)s-sect{margin-left:14px;margin-right:14px;}
-  /* the feature row stacks: a 216px image beside prose is unreadable at 320px */
+  /* the feature row stacks: a 252px image beside prose is unreadable at 320px */
   .%(P)s-fim,.%(P)s-fim.%(P)s-right{display:block;width:100%%!important;padding:0 0 12px 0!important;}
   .%(P)s-fim img{max-width:100%%;}
   .%(P)s-fh{font-size:18px;line-height:25px;}
@@ -265,7 +383,7 @@ CSS = """
   /* the grid does NOT stack - two-up is the point */
   .%(P)s-tile{padding:0 4px 12px;}
   .%(P)s-tname{font-size:14px;line-height:19px;min-height:38px;}
-  .%(P)s-cb,.%(P)s-rev,.%(P)s-help,.%(P)s-tail{margin-left:14px;margin-right:14px;}
+  .%(P)s-gk,.%(P)s-help,.%(P)s-tail{margin-left:14px;margin-right:14px;}
   .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
 """
@@ -279,36 +397,30 @@ BODY = """
 <div class="{P}-wrap">
   <div class="{P}-shell">
 
-    <div class="{P}-dark">
-      <a href="{HOME}"><img class="{P}-mark" src="{IMG_WORDMARK}" alt="Helloprint" width="142"></a>
-      <span class="{P}-eyebrow">{LABEL_UP}</span>
-      <h1 class="{P}-h1">{H1}</h1>
-      <p class="{P}-sub">{SUB}</p>
-      <a class="{P}-cta" href="{FIRST_URL}">{CTA}</a>
-    </div>
+{HEADER}
 
     <div class="{P}-sect">
-      <h2 class="{P}-sh">Popular in {LABEL}</h2>
-      <p class="{P}-ss">Among the most ordered in this category by businesses like yours.</p>
+      <h2 class="{P}-sh">{SECT_H}</h2>
+      <p class="{P}-ss">{SECT_SUB}</p>
       {FEATURES}
+    </div>
+
+    <div class="{P}-band">
+      <span class="{P}-bandeye">WHAT CUSTOMERS SAY</span>
+      <img class="{P}-bstars" src="{IMG_STARS}" alt="5 out of 5 on Trustpilot" width="132" height="28">
+      {REVIEW}
+    </div>
+
+    <div class="{P}-gsect">
+      <h2 class="{P}-gh">{GRID_H}</h2>
+      <p class="{P}-gs">{GRID_SUB}</p>
       {TILES}
     </div>
 
-    <div class="{P}-cb">
-      <table class="{P}-cbtbl" role="presentation" cellpadding="0" cellspacing="0">
-        <tr>
-          <td class="{P}-cbic" valign="top"><img src="{B_ICON}" alt="" width="38" height="38"></td>
-          <td class="{P}-cbtx" valign="top">
-            <p class="{P}-cbh">{B_TITLE}</p>
-            <p class="{P}-cbb">{B_BODY}</p>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="{P}-rev">
-      <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
-      {REVIEW}
+    <div class="{P}-gk">
+      <span class="{P}-gkeye">GOOD TO KNOW</span>
+      <p class="{P}-gkh">{B_TITLE}</p>
+      <p class="{P}-gkb">{B_BODY}</p>
     </div>
 
     <div class="{P}-help">
@@ -347,6 +459,63 @@ BODY = """
 """
 
 
+def img_for(cat, sub, shape, live):
+    """The new-style photograph if the set has one of this thing, else the
+    category's Contentful search image.
+
+    Deliberately a per-subcategory lookup rather than a per-email switch: the
+    photography covers five of Commercial Print's six subcategories, and a
+    missing shot should cost one tile its photograph, not the whole email its
+    new look.
+    """
+    name = (cat.get("photos") or {}).get(sub)
+    if name:
+        return photo(name, live)
+    return sc.image(sub, *(504, 378) if shape == "feature" else (528, 528))
+
+
+def headers_of(cat):
+    """The header variants to build. One unnamed default when none are declared."""
+    return cat.get("headers") or [dict(key="", style="fade", hero=cat.get("hero"))]
+
+
+def header_block(P, cat, live, hdr, home):
+    """The whole dark header, in one of two shapes.
+
+    fade  wordmark on ink, then the photograph opening out of that ink and
+          closing back into it. The brand speaks first.
+    top   the photograph runs to the top of the card and the wordmark sits below
+          it, above the eyebrow. The picture speaks first.
+
+    Only Commercial Print has a photograph so far. Without one both shapes
+    collapse to what the header was before any of this - wordmark, headline,
+    subtext on ink - rather than leaving a gap where a picture should be.
+    """
+    mark = ('<a href="%s"><img class="%s-mark" src="%s" alt="Helloprint" '
+            'width="142"></a>' % (home, P, cat["_wordmark"]))
+    words = ('      <span class="%s-eyebrow">%s</span>\n'
+             '      <h1 class="%s-h1">%s</h1>\n'
+             '      <p class="%s-sub">%s</p>\n'
+             '      <a class="%s-cta" href="%s">%s</a>\n'
+             % (P, cat["_eyebrow"], P, cat["h1"], P, cat["sub"],
+                P, cat["_first_url"], CTA))
+
+    pic = ""
+    if hdr.get("hero"):
+        pic = ('    <div class="%s-%s"><a href="%s"><img src="%s" alt="%s" '
+               'width="600"></a></div>\n'
+               % (P, "heroT" if hdr["style"] == "top" else "hero", cat["_first_url"],
+                  photo(hdr["hero"], live), esc(cat["hero_alt"])))
+
+    if hdr["style"] == "top" and pic:
+        return (pic
+                + '    <div class="%s-darkc">\n      %s\n%s    </div>\n'
+                % (P, mark, words))
+    return ('    <div class="%s-dark">\n      %s\n    </div>\n' % (P, mark)
+            + pic
+            + '    <div class="%s-darkb">\n%s    </div>\n' % (P, words))
+
+
 def name_of(sub, live):
     return sc.locale_switch(sub, "name", esc) if live else esc(sc.preview_field(sub, "name"))
 
@@ -359,9 +528,9 @@ def feature(P, cat, sub, i, live):
     """Image beside prose, sides alternating. Not a product card by design: no
     price, no border, no button - the Welcome flow's content pattern, which is
     what stops these reading as a shop shelf."""
-    # 3:2, not square. A square feature image is 216px tall on desktop and
-    # fills an entire phone screen once the row stacks.
-    img = sc.image(sub, 480, 320)
+    # 4:3, not square. A square feature image is as tall as the column on
+    # desktop and fills an entire phone screen once the row stacks.
+    img = img_for(cat, sub, "feature", live)
     right = (i % 2 == 1)
     # ALTERNATE WITH dir, NOT BY REORDERING THE CELLS. The image is always first
     # in the markup, so when the row stacks on a phone the image comes before its
@@ -372,7 +541,7 @@ def feature(P, cat, sub, i, live):
     # order follows the markup. dir="ltr" on each cell keeps the content itself
     # left-to-right.
     cell = ('<td class="%s-fim%s" valign="top" dir="ltr"><a href="%s">'
-            '<img src="%s" alt="%s" width="216"></a></td>'
+            '<img src="%s" alt="%s" width="252"></a></td>'
             % (P, (" %s-right" % P) if right else "", url_of(sub, live), img, name_of(sub, live)))
     text = ('<td class="%s-ftx" valign="top" dir="ltr">'
             '<p class="%s-fh">%s</p><p class="%s-fb">%s</p>'
@@ -385,13 +554,13 @@ def feature(P, cat, sub, i, live):
             % (P, ' dir="rtl"' if right else "", cell + text))
 
 
-def grid(P, subs, live):
+def grid(P, cat, subs, live):
     cells = []
     for sub in subs:
         cells.append('<td class="%s-tile" valign="top"><a class="%s-card" href="%s">'
                      '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
                      '<span class="%s-tlink">%s &rarr;</span></a></td>'
-                     % (P, P, url_of(sub, live), sc.image(sub, 528, 528),
+                     % (P, P, url_of(sub, live), img_for(cat, sub, "tile", live),
                         name_of(sub, live), P, name_of(sub, live), P, CTA))
     rows = ""
     for i in range(0, len(cells), 2):
@@ -406,13 +575,14 @@ def grid(P, subs, live):
 def review_block(P, cat, live):
     """A real review per language, or a visible placeholder. Never translated."""
     def quote(r):
-        return ('<span class="%s-revq">&ldquo;%s&rdquo;</span>'
-                '<span class="%s-revby">%s</span>'
-                % (P, esc(r["text"]), P, rv.attribution(r)))
+        return ('<span class="%s-bq">&ldquo;%s&rdquo;</span>'
+                '<span class="%s-brule">&nbsp;</span>'
+                '<span class="%s-bby">%s</span>'
+                % (P, esc(r["text"]), P, P, rv.attribution(r)))
 
     def placeholder():
-        return ('<span class="%s-revph">Trustpilot quote to be added &mdash; %s.</span>'
-                '<span class="%s-revby">Verified Trustpilot review</span>'
+        return ('<span class="%s-bph">Trustpilot quote to be added &mdash; %s.</span>'
+                '<span class="%s-bby">Verified Trustpilot review</span>'
                 % (P, cat["review_hint"], P))
 
     # the merged Labels & Packaging email draws on either half's reviews
@@ -434,19 +604,35 @@ def review_block(P, cat, live):
     return out + "{%% else %%}%s{%% endif %%}" % placeholder()
 
 
-def build(cat, live):
+def build(cat, live, hdr=None):
     P = "hp-cat" + cat["code"]
     conf = sc.emails()[cat["slug"]]
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
     feats = "".join(feature(P, cat, s, i, live) for i, s in enumerate(conf["feature"]))
+    home = "https://www.helloprint.com/en-ie/"
+    # THE HEADER AND BOTH BUTTONS GO TO THE CATEGORY PAGE, not to a tile. They
+    # used to go to url_of(feature[0]), which meant every reader of this email was
+    # sent to Booklets whatever they had ordered - a browse invitation landing on
+    # one product page. The feature and tile links are unaffected: those are
+    # meant to be specific.
+    land = sc.landing(cat["slug"])
+    cat = dict(cat, _first_url=url_of(land, live) if land
+                                else url_of(conf["feature"][0], live),
+               _wordmark=assets["IMG_WORDMARK"],
+               _eyebrow=cat.get("eyebrow") or conf["label"].upper())
     vals = dict(
-        P=P, CSS=CSS % {"P": P}, LABEL=conf["label"], LABEL_UP=conf["label"].upper(),
+        P=P, CSS=CSS % {"P": P}, LABEL=conf["label"],
         H1=cat["h1"], SUB=cat["sub"], PRE=cat["pre"], CTA=CTA,
-        FEATURES=feats, TILES=grid(P, conf["grid"], live),
-        B_ICON=assets[cat["block"][0]], B_TITLE=cat["block"][1], B_BODY=cat["block"][2],
+        FEATURES=feats, TILES=grid(P, cat, conf["grid"], live),
+        HEADER=header_block(P, cat, live, hdr or headers_of(cat)[0], home),
+        B_TITLE=cat["block"][0], B_BODY=cat["block"][1],
+        GRID_H=cat["grid_h"], GRID_SUB=cat["grid_sub"],
+        SECT_H=cat.get("sect_h") or ("Popular in %s" % conf["label"]),
+        SECT_SUB=cat.get("sect_sub")
+        or "Among the most ordered in this category by businesses like yours.",
         REVIEW=review_block(P, cat, live),
-        FIRST_URL=url_of(conf["feature"][0], live),
-        HOME="https://www.helloprint.com/en-ie/",
+        FIRST_URL=cat["_first_url"],   # the bottom button, same destination
+        HOME=home,
         CS="https://www.helloprint.com/en-ie/cs",
         UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
     )
@@ -498,6 +684,9 @@ KLAVIYO_DOC = """<!--
   home and help-centre links market-aware. The category links are already
   per-locale.
 
+  Header and both buttons go to:
+%(land)s
+
   Subcategories in this email:
 %(subs)s
 -->
@@ -506,24 +695,60 @@ KLAVIYO_DOC = """<!--
 
 # ---------------------------------------------------------------- emit
 
-errs, written = [], []
+errs, warns, written = [], [], []
 for cat in CATEGORIES:
     P = "hp-cat" + cat["code"]
     conf = sc.emails().get(cat["slug"])
     if not conf:
         errs.append("%s: no entry in the subcategory snapshot" % cat["slug"]); continue
-    prev, livb = build(cat, False), build(cat, True)
+
+    # PHOTOGRAPHS FIRST, BEFORE ANYTHING IS BUILT. The preview inlines each file,
+    # so a name that does not exist on disk raises FileNotFoundError inside
+    # build() and the run dies on a traceback - which is how this check came to be
+    # written below the build, where it could never run. Named and reported here.
+    shown = conf["feature"] + conf["grid"]
+    want = list((cat.get("photos") or {}).items())
+    if cat.get("hero"):
+        want.append(("the header", cat["hero"]))
+    want += [("the header", h["hero"]) for h in headers_of(cat) if h.get("hero")]
+    gone = [n for _, n in want if not os.path.exists(os.path.join(PHOTO_DIR, n + ".jpg"))]
+    stray = [k for k, _ in want if k != "the header" and k not in shown]
+    for n in gone:
+        errs.append("%s: %s.jpg is missing from assets/newstyle - run "
+                    "scripts/make_newstyle_assets.py" % (cat["slug"], n))
+    for k in stray:
+        errs.append("%s: photo mapped to %r, which this email does not show"
+                    % (cat["slug"], k))
+    if gone or stray:
+        continue
+
     subs = "\n".join("    %-28s %s" % (s, sc.preview_field(s, "url"))
                      for s in conf["feature"] + conf["grid"])
-    pdoc = PREVIEW_DOC % {"label": conf["label"], "body": prev}
-    kdoc = KLAVIYO_DOC % {"label": conf["label"], "match": ", ".join(conf["match"]),
-                          "body": livb, "subs": subs}
-    open(os.path.join(OUT, "category-%s-proposed.html" % cat["slug"]), "w",
-         encoding="utf-8").write(pdoc)
-    open(os.path.join(OUT, "category-%s-klaviyo.html" % cat["slug"]), "w",
-         encoding="utf-8").write(kdoc)
-    written.append((conf["label"], len(conf["feature"]), len(conf["grid"]),
-                    len(pdoc), len(kdoc)))
+    hdrs = headers_of(cat)
+    for n, hdr in enumerate(hdrs):
+        prev, livb = build(cat, False, hdr), build(cat, True, hdr)
+        # the first variant is the email; the rest are named alternatives sitting
+        # beside it, so a link to the plain filename never moves
+        tag = "" if n == 0 else "-header-%s" % hdr["key"]
+        label = conf["label"] + ("" if n == 0 else " (header %s)" % hdr["key"])
+        pdoc = PREVIEW_DOC % {"label": label, "body": prev}
+        _l = sc.landing(cat["slug"])
+        kdoc = KLAVIYO_DOC % {
+            "label": label, "match": ", ".join(conf["match"]), "body": livb,
+            "subs": subs,
+            "land": ("\n".join("    %-6s %s" % (el, sc.field(_l, cl, "url"))
+                                for el, cl in sc.LOCALE_MAP.items()) if _l
+                     else "    NONE SET - falls back to the first tile, which is wrong"),
+        }
+        open(os.path.join(OUT, "category-%s%s-proposed.html" % (cat["slug"], tag)),
+             "w", encoding="utf-8").write(pdoc)
+        open(os.path.join(OUT, "category-%s%s-klaviyo.html" % (cat["slug"], tag)),
+             "w", encoding="utf-8").write(kdoc)
+        written.append((label, len(conf["feature"]), len(conf["grid"]),
+                        len(pdoc), len(kdoc)))
+        if n == 0:
+            prev0, livb0 = prev, livb
+    prev, livb = prev0, livb0
 
     t = conf["label"]
     if "REPLACE-WITH-KLAVIYO-ASSET" in prev: errs.append(t + ": preview leaked a sentinel URL")
@@ -539,20 +764,138 @@ for cat in CATEGORIES:
     for s in conf["feature"] + conf["grid"]:
         if not sc.sub(s): errs.append("%s: %r is not in the snapshot" % (t, s)); continue
         for el, cl in sc.LOCALE_MAP.items():
-            if not sc.field(s, cl, "url"): errs.append("%s: %s has no URL for %s" % (t, s, cl))
+            # sc.has, not sc.field: field() falls back to English, so this check
+            # was passing for locales that had nothing of their own
+            if not sc.has(s, cl, "url"):
+                errs.append("%s: %s has no URL of its own for %s" % (t, s, cl))
         if not sc.image(s): errs.append("%s: %s has no image" % (t, s))
         # each one appears as a link in the live build
         if sc.field(s, "en-GB", "url") not in livb:
             errs.append("%s: %s is not linked in the live build" % (t, s))
+    # THE STARS PICTURE MUST NOT CONTRADICT THE WORDS UNDER IT. The image is five
+    # stars and the line says "N out of 5" from the review itself, so a review
+    # with fewer than five stars would put a five-star picture over a four-star
+    # claim. This is the bug the swap uncovered: the old block showed the 4.5
+    # company score above text saying 5.
+    slugs = ["labels", "packaging"] if cat["slug"] == "labels-packaging" else [cat["slug"]]
+    for sl in slugs:
+        for lg in rv.available(sl):
+            r = rv.get(sl, lg)
+            if r and r.get("stars") != 5:
+                errs.append("%s: the %s review is %s stars but the picture is five"
+                            % (t, lg, r.get("stars")))
+    if "out of 5 on Trustpilot" in livb and "stars-5-on-ink" not in livb:
+        errs.append(t + ": the review claims a rating but the stars are not the ink five")
+
     # feature copy must exist for exactly the feature subcategories
     if set(cat["body"]) != set(conf["feature"]):
         errs.append("%s: feature copy is %s but the snapshot features %s"
                     % (t, sorted(cat["body"]), sorted(conf["feature"])))
     # grid rows must be pairs
-    for row in re.findall(r"<tr>(.*?)</tr>", grid(P, conf["grid"], True), re.S):
+    for row in re.findall(r"<tr>(.*?)</tr>", grid(P, cat, conf["grid"], True), re.S):
         if row.count("%s-tile" % P) != 2:
             errs.append(t + ": a grid row is not two cells")
     if "%s-dark" % P not in livb: errs.append(t + ": the dark header is gone")
+    # THE BREAK BAND HAS TO SIT BETWEEN THE PROSE AND THE GRID. That position is
+    # the entire point of it, and it is the sort of thing a later edit reorders
+    # without noticing. Measured on markup only, so a class name inside the
+    # stylesheet cannot satisfy it.
+    markup = livb.split("</style>", 1)[1]
+    try:
+        i_feat = markup.rindex("%s-ftbl" % P)
+        i_band = markup.index("%s-band" % P)
+        i_rev = min(markup.index("%s-b%s" % (P, x))
+                    for x in ("q", "ph") if "%s-b%s" % (P, x) in markup)
+        i_gh = markup.index("%s-gh" % P)
+        i_tiles = markup.index("%s-tiles" % P)
+        i_gk = markup.index("%s-gkh" % P)
+        # prose, then the review on ink, then the grid, then the advice on white.
+        # The review earns the ink band; the advice is a footnote to the browsing.
+        if not i_feat < i_band < i_rev < i_gh < i_tiles < i_gk:
+            errs.append(t + ": band, review, grid and good-to-know are out of order")
+    except ValueError:
+        errs.append(t + ": band, review, grid heading or good-to-know is missing")
+    if "%s-cb" % P in markup: errs.append(t + ": the old closing block is still there")
+    for dead in ("-revq", "-revby", "-revph", "-revstars", "-rev\"", "-bandh", "-bandb"):
+        if P + dead in livb:
+            errs.append("%s: %s is left over from before the swap" % (t, dead))
+
+    # THE HEADER AND BOTH BUTTONS MUST LEAVE FOR THE CATEGORY PAGE. This is the
+    # check for the bug where all three went to whichever tile was listed first,
+    # so every reader landed on Booklets. Read off the rendered hrefs rather than
+    # off the variable that fed them, because the point is what a reader clicks.
+    # NOT [^"]* FOR AN HREF HERE. A live href is a Django conditional and carries
+    # its own double quotes - href="{% if event.Locale == "en-IE" %}https://..." -
+    # so a naive attribute pattern stops at the first inner quote and every link
+    # looks like it points at nothing. Klaviyo renders the template before any
+    # HTML parser sees it, so the quotes are gone by the time it is mail; they are
+    # only a problem for something reading the template, which is what this is.
+    land = sc.landing(cat["slug"])
+    tops = re.findall(r'class="%s-(?:heroT|hero)"><a href="(.*?)">' % P, markup)
+    tops += re.findall(r'class="%s-cta2?" href="(.*?)">' % P, markup)
+    expected = 2 + (1 if any(h.get("hero") for h in hdrs) else 0)
+    if len(tops) != expected:
+        errs.append("%s: expected %d top-level links (%sboth buttons), found %d"
+                    % (t, expected, "header and " if expected == 3 else "", len(tops)))
+    if land:
+        want = sc.field(land, "en-GB", "url")
+        tiles = [sc.field(x, "en-GB", "url") for x in conf["feature"] + conf["grid"]]
+        for href in tops:
+            if want not in href:
+                errs.append("%s: a header or button link does not go to %s" % (t, land))
+            for tile_url in tiles:
+                if tile_url in href:
+                    errs.append("%s: a header or button link goes to a tile (%s)"
+                                % (t, tile_url))
+        for el, cl in sc.LOCALE_MAP.items():
+            if not sc.has(land, cl, "url"):
+                errs.append("%s: landing page has no URL of its own for %s" % (t, cl))
+    else:
+        warns.append("%s: no landing page, so the header and both buttons still go "
+                     "to the first tile (%s). Add one to LANDINGS in "
+                     "scripts/fetch_subcategories.py before this goes live."
+                     % (t, conf["feature"][0]))
+    # every header variant has to render its own photograph, in its own shape,
+    # and none of them may quietly fall back to the other one's asset
+    for hdr in hdrs:
+        if not hdr.get("hero"):
+            continue
+        b = build(cat, True, hdr)
+        want = "%s-heroT" % P if hdr["style"] == "top" else "%s-hero\"" % P
+        if want not in b:
+            errs.append("%s: header %r did not render as style %r"
+                        % (t, hdr["key"], hdr["style"]))
+        if photo(hdr["hero"], True) not in b:
+            errs.append("%s: header %r is not using %s" % (t, hdr["key"], hdr["hero"]))
+        # THE SHAPE AND THE PIXELS HAVE TO AGREE. A style and a filename are two
+        # halves of the same decision held in two places, so this reads the image
+        # rather than trusting the name: a "fade" header needs a photograph that
+        # opens out of ink, and a "top" header needs one that does not, or the
+        # email gets a grey wash across its first rows. Cheap and offline - one
+        # row of one JPEG.
+        hw, _, hrows = ri.read(os.path.join(PHOTO_DIR, hdr["hero"] + ".jpg"))
+        first = tuple(sum(hrows[0][x * 3 + c] for x in range(hw)) // hw
+                      for c in (2, 1, 0))
+        opens_on_ink = max(abs(first[c] - ri.INK[c]) for c in range(3)) <= 3
+        if hdr["style"] == "fade" and not opens_on_ink:
+            errs.append("%s: header %r fades at the top but %s does not open on "
+                        "ink" % (t, hdr["key"], hdr["hero"]))
+        if hdr["style"] == "top" and opens_on_ink:
+            errs.append("%s: header %r runs to the top of the email but %s opens "
+                        "on ink, which would show as a grey wash"
+                        % (t, hdr["key"], hdr["hero"]))
+        # the wordmark moves between the two shapes; in b it must sit inside the
+        # block that carries the eyebrow, which is the whole point of the variant
+        mk = b.split("</style>", 1)[1]
+        if hdr["style"] == "top":
+            if mk.index("%s-mark" % P) < mk.index("%s-heroT" % P):
+                errs.append("%s: header b puts the wordmark above the photograph" % t)
+            if mk.index("%s-mark" % P) > mk.index("%s-eyebrow" % P):
+                errs.append("%s: header b puts the wordmark below the eyebrow" % t)
+        else:
+            if mk.index("%s-mark" % P) > mk.index("%s-hero" % P):
+                errs.append("%s: header a puts the wordmark below the photograph" % t)
+        if not cat.get("hero_alt"): errs.append(t + ": hero has no alt text")
     # house style, on what a reader sees
     doc = re.sub(r"<!--.*?-->", "", livb, flags=re.S)
     doc = re.sub(r"<style[^>]*>.*?</style>", "", doc, flags=re.S)
@@ -578,6 +921,8 @@ for label, nf, ng, a, b in written:
     print("%-22s %8d %6d  %9d %9d" % (label, nf, ng, a, b))
 print("\n%d emails | categories %s | reviews %s, %d cached"
       % (len(written), sc.fetched(), rv.fetched() or "NOT FETCHED", rv.count()))
+for w in dict.fromkeys(warns):
+    print("  TO DO  " + w)
 if errs:
     for e in dict.fromkeys(errs): print("  FAIL  " + e)
     raise SystemExit(1)

@@ -61,6 +61,18 @@ def field(name, cf_locale, which):
     return row.get(which)
 
 
+def has(name, cf_locale, which):
+    """Whether this locale has its OWN value, with no fallback.
+
+    field() resolves to English when a locale is missing, which is right for
+    rendering and useless for checking - a build check written on field() can
+    never fail, because there is always something to return. Anything asking "is
+    this locale actually covered" has to come through here.
+    """
+    row = ((sub(name) or {}).get("by_locale") or {}).get(cf_locale) or {}
+    return bool(row.get(which))
+
+
 def image(name, w=560, h=560):
     """The category's searchImage, padded on white to the ratio asked for.
 
@@ -98,6 +110,13 @@ def locale_switch(name, which, esc=lambda x: x):
 def preview_field(name, which):
     """What the preview shows: the Irish English version."""
     return field(name, "en-IE", which) or field(name, FALLBACK, which) or ""
+
+
+def landing(slug):
+    """The snapshot key of the page the header and both buttons go to, if the
+    email has one. See LANDINGS in scripts/fetch_subcategories.py for why this is
+    not just the first tile."""
+    return (emails().get(slug) or {}).get("landing")
 
 
 def missing():

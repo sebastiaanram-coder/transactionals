@@ -451,6 +451,66 @@ not have them.
 
 ---
 
+## 3a. The category nudge rotates, and never repeats itself
+
+The flow runs again on every order. The nudge is the one step that must not send
+the same thing twice, so the choice of category is made at send time from what
+the customer has already been sent.
+
+```
+Commercial Print → Signage & Outdoor → Labels & Packaging → Clothing & Textiles → Corporate Gifts
+        ↑                                                                                │
+        └──────────── the 6-month window expires, and the ring starts again ─────────────┘
+```
+
+1. **Start where they spent.** A conditional split on the category of the order
+   they just placed. Five branches, one per category — the same split the flow
+   already has.
+2. **Ask whether they have already had that one.** In each branch: *has not
+   received this category's nudge in the last 6 months*. If they have not, that
+   is the email they get and nothing else runs.
+3. **If they have, walk the ring.** One shared chain tries the five in a fixed
+   order and sends the first they have not received in 6 months. A customer who
+   buys flyers twice gets Commercial Print, then Signage & Outdoor.
+4. **When they have had all five, send nothing.** Not a failure — a frequency
+   cap. The oldest nudge falls out of the window on its own, and the next order
+   after that starts the ring again from the top.
+
+### Why six months
+
+Five nudges, and repeat buyers reorder on a 30-day median (§1.7), so somebody
+ordering monthly works through the whole set in about five months. Six months is
+just long enough to cover that, which means the ring resets when it has been
+exhausted rather than long before or long after.
+
+This is a parameter, not a measurement. Worth revisiting once there is send data.
+
+### What it costs, and what could go wrong
+
+- **Klaviyo flows cannot loop.** The ring has to be unrolled into nested
+  conditional splits: five branch checks, five ring checks, six endpoints — about
+  sixteen nodes. Mechanical, but hand-built and tedious to change.
+- **Re-entry has to be opened up.** It is 30 days today and the nudge lands on
+  day 32, so a customer who reorders quickly is blocked from re-entering and
+  never reaches a second nudge at all. This one setting makes or breaks the
+  rotation.
+- **The "has received" filter points at a specific flow message.** Duplicate that
+  message, or replace it with a new one, and every customer looks like they have
+  never received it. Rename freely; do not re-create.
+- **After the first cycle this stops being a nudge and becomes a cross-sell.** The
+  copy survives it — "What are you promoting next?" is as true of banners as of
+  flyers — but a flyer buyer shown water bottles is a different proposition from a
+  flyer buyer shown posters, and should be judged on its own numbers rather than
+  on the nudge's.
+- **The alternative, worth testing rather than assuming away:** keep them in their
+  own category and rotate the six tiles instead. It holds relevance but needs
+  roughly twice the subcategories per category, and Clothing and Corporate Gifts
+  do not have them.
+- **Nothing rotates until a second category is built.** With one nudge live the
+  ring has one stop, so step 3 never fires.
+
+---
+
 ## 4. What this replaces
 
 | RFB email | Verdict |
