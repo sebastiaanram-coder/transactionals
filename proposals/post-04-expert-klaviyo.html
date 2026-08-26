@@ -83,17 +83,19 @@
 .hp-pex-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 /* a text link, not a pill. A personal note with a green button on it is a campaign */
 .hp-pex-catlink{font-size:16px;line-height:26px;font-weight:700;color:#008539;text-decoration:none;}
-.hp-pex-rule{border-top:1px solid #ececec;margin:0 40px;}
-.hp-pex-foot{max-width:600px;margin:0 auto;padding:22px 24px 0;text-align:center;}
-.hp-pex-footlinks{font-size:13px;line-height:20px;}
-.hp-pex-footlinks a{color:#767676;text-decoration:none;font-weight:600;}
-.hp-pex-legal{font-size:11px;line-height:17px;color:#767676;padding:12px 0 0;}
-.hp-pex-unsub{padding:8px 0 26px;}
-.hp-pex-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
+/* NO FOOTER. There is no help-centre bar, no social row and no second wordmark -
+   a letter does not have one. What survives is a single line of company identity
+   outside the card: Helloprint B.V. is a Dutch company writing to businesses in
+   the UK, Ireland and the EU, and identifying itself in a commercial message is a
+   legal requirement rather than a design choice. It is the one thing here that
+   cannot go. */
+.hp-pex-legal{max-width:600px;margin:0 auto;padding:16px 40px 0;font-size:11px;line-height:17px;color:#8f8f8f;text-align:left;}
+.hp-pex-unsublink{color:#767676;text-decoration:underline;}
 .hp-pex-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
   .hp-pex-head{padding:24px 22px 0;}
   .hp-pex-body{padding:22px 22px 26px;}
+  .hp-pex-legal{padding:14px 22px 0;}
   .hp-pex-rule{margin:0 22px;}
   .hp-pex-p,.hp-pex-offer{font-size:15px;line-height:25px;}
 }
@@ -114,6 +116,7 @@
       <div class="hp-pex-offers"><p class="hp-pex-offer"><b>Not sure about a file?</b> Send it over and I will look at it before it goes anywhere.</p><p class="hp-pex-offer"><b>Need something we do not sell?</b> Tell me what it is and I will find out who makes it.</p><p class="hp-pex-offer"><b>Not sure how many to order?</b> I will price it at a few quantities. The step up is usually smaller than people expect.</p><p class="hp-pex-offer"><b>Not sure it will last?</b> Tell me where it is going and I will tell you what to print it on.</p></div>
       <p class="hp-pex-p">Just reply to this email. It comes to me.</p>
       <p class="hp-pex-p"><a class="hp-pex-catlink" href="{% if event.Locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif event.Locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif event.Locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif event.Locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif event.Locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif event.Locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif event.Locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif event.Locale == 'it-IT' %}https://www.helloprint.com/it-it/{% else %}https://www.helloprint.com/en-gb/{% endif %}">Or start from the catalogue &rarr;</a></p>
+      <p class="hp-pex-p">And if you would rather not hear from me again, {% unsubscribe 'just say the word' %} and I will take you off the list.</p>
 
       <div class="hp-pex-sigrule"></div>
       <table class="hp-pex-sigtbl" role="presentation" cellpadding="0" cellspacing="0">
@@ -128,19 +131,9 @@
       </table>
     </div>
 
-    <div class="hp-pex-rule"></div>
-
-    <div class="hp-pex-foot" style="padding-top:18px">
-      <span class="hp-pex-footlinks">
-        <a href="{% if event.Locale == 'en-IE' %}https://www.helloprint.com/en-ie/cs{% elif event.Locale == 'en-GB' %}https://www.helloprint.com/en-gb/cs{% elif event.Locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/cs{% elif event.Locale == 'nl-BE' %}https://www.helloprint.com/nl-be/cs{% elif event.Locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/cs{% elif event.Locale == 'fr-BE' %}https://www.helloprint.com/fr-be/cs{% elif event.Locale == 'es-ES' %}https://www.helloprint.com/es-es/cs{% elif event.Locale == 'it-IT' %}https://www.helloprint.com/it-it/cs{% else %}https://www.helloprint.com/en-gb/cs{% endif %}">Help Centre</a>
-      </span>
-      <div class="hp-pex-legal">
-        Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
-      </div>
-      <div class="hp-pex-unsub">{% unsubscribe 'Unsubscribe' %}</div>
-    </div>
-
   </div>
+
+  <div class="hp-pex-legal">Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01</div>
 </div>
 </div>
 

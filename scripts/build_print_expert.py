@@ -33,6 +33,15 @@ JOHN IS ALREADY IN THIS PROGRAMME - he signs the high-value Abandoned Order emai
 where he does hand over a code. Same voice, same seniority, and deliberately not
 the same three examples, or this reads as a copy-paste of that note.
 
+NO FOOTER, AND THE UNSUBSCRIBE IS IN THE COPY. A letter does not have a
+help-centre bar or a second wordmark, so both are gone, and the opt-out is a
+sentence John would write rather than eight-point grey type. Two things about that
+were not negotiable: it is Klaviyo's unsubscribe tag, so it is a real one-click
+opt-out rather than a mailto; and the sentence says what the link does, because a
+warm label hiding its own function is worse for the reader and weaker as consent.
+The single line of company identity survives - Helloprint B.V. writing commercially
+to businesses in the UK, Ireland and the EU has to say who it is.
+
 MARKET-AWARE LINKS FROM THE START. Every other email here hardcodes /en-ie/, which
 is on the go-live list. This one uses sc.market_url. /all-products was the obvious
 target and 404s in both Belgian markets, so the link is the market root, which was
@@ -108,8 +117,15 @@ COPY = dict(
          "Tell me where it is going and I will tell you what to print it on."),
     ],
     closing="Just reply to this email. It comes to me.",
+    # THE UNSUBSCRIBE, IN THE COPY RATHER THAN IN A FOOTER. The link label is warm
+    # and the sentence around it says plainly what the link does - "take you off
+    # the list" - because a friendly label that hides its own function is worse for
+    # the reader and weaker as a consent mechanism. Klaviyo's tag supplies the
+    # label, so this is a real unsubscribe and not a mailto.
+    unsub_before="And if you would rather not hear from me again, ",
+    unsub_label="just say the word",
+    unsub_after=" and I will take you off the list.",
     link="Or start from the catalogue",
-    foot_help="Help Centre",
 )
 
 CSS = """
@@ -149,17 +165,19 @@ CSS = """
 .%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 /* a text link, not a pill. A personal note with a green button on it is a campaign */
 .%(P)s-catlink{font-size:16px;line-height:26px;font-weight:700;color:#008539;text-decoration:none;}
-.%(P)s-rule{border-top:1px solid #ececec;margin:0 40px;}
-.%(P)s-foot{max-width:600px;margin:0 auto;padding:22px 24px 0;text-align:center;}
-.%(P)s-footlinks{font-size:13px;line-height:20px;}
-.%(P)s-footlinks a{color:#767676;text-decoration:none;font-weight:600;}
-.%(P)s-legal{font-size:11px;line-height:17px;color:#767676;padding:12px 0 0;}
-.%(P)s-unsub{padding:8px 0 26px;}
-.%(P)s-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
+/* NO FOOTER. There is no help-centre bar, no social row and no second wordmark -
+   a letter does not have one. What survives is a single line of company identity
+   outside the card: Helloprint B.V. is a Dutch company writing to businesses in
+   the UK, Ireland and the EU, and identifying itself in a commercial message is a
+   legal requirement rather than a design choice. It is the one thing here that
+   cannot go. */
+.%(P)s-legal{max-width:600px;margin:0 auto;padding:16px 40px 0;font-size:11px;line-height:17px;color:#8f8f8f;text-align:left;}
+.%(P)s-unsublink{color:#767676;text-decoration:underline;}
 .%(P)s-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
 @media only screen and (max-width:480px){
   .%(P)s-head{padding:24px 22px 0;}
   .%(P)s-body{padding:22px 22px 26px;}
+  .%(P)s-legal{padding:14px 22px 0;}
   .%(P)s-rule{margin:0 22px;}
   .%(P)s-p,.%(P)s-offer{font-size:15px;line-height:25px;}
 }
@@ -184,6 +202,7 @@ BODY = """
       <div class="{P}-offers">{OFFERS}</div>
       <p class="{P}-p">{CLOSING}</p>
       <p class="{P}-p"><a class="{P}-catlink" href="{HOME}">{LINK} &rarr;</a></p>
+      <p class="{P}-p">{UNSUB}</p>
 
       <div class="{P}-sigrule"></div>
       <table class="{P}-sigtbl" role="presentation" cellpadding="0" cellspacing="0">
@@ -198,19 +217,9 @@ BODY = """
       </table>
     </div>
 
-    <div class="{P}-rule"></div>
-
-    <div class="{P}-foot" style="padding-top:18px">
-      <span class="{P}-footlinks">
-        <a href="{CS}">{FOOT_HELP}</a>
-      </span>
-      <div class="{P}-legal">
-        Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
-      </div>
-      <div class="{P}-unsub">{UNSUB}</div>
-    </div>
-
   </div>
+
+  <div class="{P}-legal">{LEGAL}</div>
 </div>
 </div>
 """
@@ -228,6 +237,20 @@ def greeting(live):
             % (COPY["greet_named"], COPY["greet_plain"]))
 
 
+def unsub_line(live):
+    """The unsubscribe, as a sentence John would write.
+
+    The label is Klaviyo's to render, so this is a genuine one-click unsubscribe
+    and not a mailto asking somebody to compose a request. The sentence around it
+    states the consequence in plain words, because a charming label that conceals
+    what it does is both worse for the reader and weaker as a consent mechanism -
+    and this is now the only visible unsubscribe in the email.
+    """
+    link = ("{%% unsubscribe '%s' %%}" % COPY["unsub_label"] if live
+            else '<a class="%s-unsublink" href="#">%s</a>' % (P, COPY["unsub_label"]))
+    return COPY["unsub_before"] + link + COPY["unsub_after"]
+
+
 def build(live):
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
     opening = "".join('<p class="%s-p">%s</p>' % (P, t) for t in COPY["opening"])
@@ -237,9 +260,11 @@ def build(live):
         P=P, CSS=CSS % {"P": P}, PRE=COPY["pre"],
         GREET=greeting(live), OPENING=opening, OFFERS=offers,
         CLOSING=COPY["closing"],
-        LINK=COPY["link"], FOOT_HELP=COPY["foot_help"],
-        HOME=sc.market_url("", live), CS=sc.market_url("cs", live),
-        UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
+        LINK=COPY["link"],
+        HOME=sc.market_url("", live),
+        UNSUB=unsub_line(live),
+        LEGAL=("Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, "
+               "Netherlands &middot; VAT NL855793302B01"),
     )
     vals.update(assets)
     return BODY.format(**vals)
@@ -319,9 +344,31 @@ if "REPLACE-WITH-KLAVIYO-ASSET" in prev: errs.append("preview leaked a sentinel 
 if "data:image" in livb: errs.append("Klaviyo build leaked a data URI")
 if "{%" in prev or "{{" in prev: errs.append("preview leaked an unrendered tag")
 if "{%%" in livb: errs.append("literal {%% in the output")
-if "unsubscribe" not in livb: errs.append("no unsubscribe tag")
-
 markup = livb.split("</style>", 1)[1]
+if "{% unsubscribe" not in livb:
+    errs.append("no unsubscribe tag - a marketing flow email needs a real one")
+# It now lives in the copy, so it has to be IN the letter rather than under the
+# signature. Measured on the markup, not the whole document: the first -sigrule in
+# the file is the CSS rule, which comes before all of the markup, and comparing
+# across the two is how this check failed on a correct email the first time.
+if "{% unsubscribe" in markup:
+    if markup.index("{% unsubscribe") > markup.index("%s-sigrule" % P):
+        errs.append("the unsubscribe sits after the signature; it belongs in the copy")
+elif "{% unsubscribe" in livb:
+    errs.append("the unsubscribe is in the stylesheet rather than the copy")
+# and the sentence around it must say what it does
+if "take you off the list" not in livb:
+    errs.append("the unsubscribe label is warm but the sentence does not say what "
+                "the link does")
+# the company has to identify itself even with the footer gone
+for bit in ("Helloprint B.V.", "Rotterdam", "VAT NL855793302B01"):
+    if bit not in livb:
+        errs.append("company identity is missing (%s) - required in a commercial "
+                    "message, and the only footer element that cannot go" % bit)
+for gone in ("-footlinks", "-unsub{", "Help Centre"):
+    if P + gone in livb or gone in livb:
+        errs.append("footer remnant still present: %s" % gone)
+
 vis = re.sub(r"\{%.*?%\}", " ", re.sub(r"<[^>]+>", " ", markup), flags=re.S)
 vis = re.sub(r"\s+", " ", vis).strip().lower()
 
@@ -358,12 +405,12 @@ for name, doc in (("preview", prev), ("klaviyo", livb)):
             errs.append("%s: signature is missing %s" % (name, part))
 
 # links, per market, and no /en-ie/ left hardcoded
+# only one outbound link survives the footer going: the catalogue. The help centre
+# went with the footer, which is right - the route to help in this email is John.
 for email_loc, cf_loc in sc.LOCALE_MAP.items():
-    seg = sc.market_path(cf_loc)
-    for path in ("", "cs"):
-        want = "https://www.helloprint.com/%s/%s" % (seg, path)
-        if ("event.Locale == '%s' %%}%s" % (email_loc, want)) not in livb:
-            errs.append("%s does not point at %s" % (email_loc, want))
+    want = "https://www.helloprint.com/%s/" % sc.market_path(cf_loc)
+    if ("event.Locale == '%s' %%}%s" % (email_loc, want)) not in livb:
+        errs.append("%s does not point at %s" % (email_loc, want))
 if livb.count("/en-ie/") != livb.count("event.Locale == 'en-IE'"):
     errs.append("an /en-ie/ link is hardcoded rather than switched per market")
 
@@ -398,7 +445,7 @@ for phrase in ("a quantity that costs less at the next step up",
 words = len(vis.split())
 print("post-04-expert            preview %6d  klaviyo %6d  |  %d words of copy"
       % (len(prev), len(livb), words))
-print("links: %d locales, market root and help centre, all checked over HTTP"
+print("links: the market root in %d locales, all checked over HTTP"
       % len(sc.LOCALE_MAP))
 if words > 260:
     errs.append("%d words: too long for an email that claims to be a quick note" % words)
