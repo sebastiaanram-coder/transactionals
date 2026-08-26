@@ -68,7 +68,8 @@ BUDGET_KB = 420
 # source height, so a third of the frame given to the fade would dissolve the
 # bottom of the flyer itself.
 FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
-               "hero-review-reminder": 0.30}
+               "hero-review-reminder": 0.30,
+               "hero-offer": 0.30, "hero-offer-last": 0.30}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -89,6 +90,10 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
 #                     and a 24% fade then leaves the whole flyer above it.
 #   review-reminder   cards, subject occupies only 0.33-0.68, so there is room for
 #                     both: 0.80 and a deep 30% fade.
+#   offer             roller banner, subject 0.29-0.49 and small in frame, so the
+#                     window has room almost anywhere: 0.45 centres it.
+#   offer-last        booklets, subject 0.53-0.78, which sits low enough that only
+#                     the very bottom of the window clears a 30% fade: 1.00.
 #
 # There was a second header shape that faded into ink at the top as well, which
 # wanted its own crop pushed 210px down. It was built, compared and rejected.
@@ -98,7 +103,8 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
 # this silently cut a 1000x700 window out of a 2048px image and produced a
 # featureless grey rectangle.
 HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
-                 "hero-review-reminder": 0.80}
+                 "hero-review-reminder": 0.80,
+                 "hero-offer": 0.45, "hero-offer-last": 1.00}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -117,6 +123,13 @@ JOBS = [
     # starts. posters_setting2 was the other candidate and its bottom eighth is at
     # 150, where a fade reads as a vignette rather than a blend.
     ("standardbusinesscards/standardbusinesscards_setting2.webp", "hero-review-reminder", "hero", "review-reminder"),
+    # The two discount emails. Both picked on the same measurement as the others -
+    # a bottom eighth that is already close to ink, so the fade has nothing to
+    # invent. The roller banner has somebody walking past it, which suits the
+    # email that is finally selling something; the booklets on a navy sofa are
+    # quiet, which suits the last word.
+    ("budgetrollupbanners/budgetrollupbanners_setting1.webp", "hero-offer", "hero", "offer"),
+    ("booklets/booklets_setting1.webp", "hero-offer-last", "hero", "offer-last"),
     # Both feature shots were changed after seeing them at 252px beside prose.
     # booklets_setting1 is a dark navy interior that turns to mud at that size,
     # and standardflyers_setting2 is a tight overhead that reads as texture
