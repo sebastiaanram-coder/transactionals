@@ -349,3 +349,125 @@ Worth noting the same question now applies to **Clothing & Textiles at €239k**
 it clears the bar Packaging failed, but not by much, and its four tiles fall away
 steeply after T-shirts (102k, then 22k, 18k, 14k). Not a recommendation to fold
 it, just a flag that it is the next-weakest.
+
+---
+
+# Addendum 2: reassignment, and six tiles for Commercial Print
+
+Supersedes the editorial-slot recommendation in Addendum 1 for this case. The
+slot mechanism is still worth building; it is just not what Cards & Invitations
+needs.
+
+## Why the editorial slot was the wrong answer here
+
+On the full figures, Cards & Invitations is **€261k of gross profit on 17,265
+items at 43.2% margin — the highest margin of any Commercial Print
+subcategory**, ahead of Business Cards at 37.9% and well clear of Booklets at
+31.1%.
+
+That is not a seasonal indulgence needing a January expiry. It is a strong tile
+that a taxonomy quirk hid, and it earns its place in March as much as December.
+Putting it through an editorial slot with an expiry would have removed a
+top-margin range from the biggest email every January.
+
+## The rule change
+
+**Old:** assign each PLP to the email whose feed category contributes the most of
+its gross profit.
+
+**New:** assign it to the email whose feed category contributes the most **among
+the six that have an email**, provided that share is meaningful — **at least 10%
+of the PLP's gross profit and at least €25,000 absolute**.
+
+Restricting the vote to eligible categories is the fix. Cards & Invitations has
+€226k under Photo products, which has no email, and €35k under Commercial Print —
+13% of the PLP and €35k absolute, so it clears both bars and lands in Commercial
+Print.
+
+The thresholds exist so this does not become a floodgate, and it does not:
+
+**Rescued: 1.** Cards & Invitations, and nothing else.
+
+**Still out: 18**, correctly. The largest is *Request a Quote* at €1.18M, which
+has no gross profit in any of the six — it is the bespoke-quote funnel, not a
+product range. Then *Photo on Canvas* at €17k, also entirely Photo products.
+Everything below that fails on size: *Floor and Bar Mats* is 35% Corporate Gifts
+but only €2.4k, *Photo Gifts* 34% but €1.1k.
+
+Worth noting one genuinely odd row the thresholds also filter out: *Wine Glasses*
+shows **-4%** — negative gross profit on its Commercial Print sliver. Small
+enough to ignore here, but a negative-margin line is worth someone's attention
+independently.
+
+## Commercial Print goes to six tiles
+
+Posters stays. So does Business Cards. With Cards & Invitations reassigned there
+are six subcategories worth showing and only four slots, and the honest answer is
+that the biggest email has earned more room than the others.
+
+| | Subcategory | GP | Items | GPM |
+|---|---|---|---|---|
+| 1 | Booklets & Brochures | 2.10M | 29,096 | 31.1% |
+| 2 | Leaflet Printing & Flyers | 1.04M | 57,011 | 33.5% |
+| 3 | Folded Leaflets | 539k | 14,776 | 30.7% |
+| 4 | Poster Printing | 446k | 32,276 | 36.4% |
+| 5 | Business Cards | 355k | 29,540 | 37.9% |
+| 6 | Cards & Invitations | 261k | 17,265 | 43.2% |
+
+**Six tiles cover 82% of the category's gross profit.** No judgement calls left —
+this is simply the top six, and it resolves the Folded Leaflets question I
+flagged earlier: with six slots the near-duplication with Flyers stops mattering
+because there is no longer anything better being displaced.
+
+### It costs less than it sounds
+
+The grid is unchanged — still two per row, still the same tile. Three rows
+instead of two:
+
+| Tile section, mobile | Height |
+|---|---|
+| 3 products stacked, the original | 1,287px |
+| 4 tiles, 2×2 | 562px |
+| **6 tiles, 2×3** | **843px** |
+
+Still a third shorter than the design this replaced, with twice the ranges. The
+grid builder already handles any count in rows of two and pads an odd one, so
+this needs no template change at all.
+
+### The other four emails stay at four
+
+Only Commercial Print has the depth. Their 4th, 5th and 6th:
+
+| Email | 4th | 5th | 6th |
+|---|---|---|---|
+| Signage & Outdoor | Roller Banners 175k | Flag Printing 101k | Exhibition Stands 69k |
+| Corporate Gifts | Water Bottles 66k | Lanyards 28k | Sweets 26k |
+| Clothing & Textiles | Caps 14k | Hoodies 14k | Tablecloths 14k |
+| Labels & Packaging | Printed Food Packaging 10k | Packaging Accessories 9k | Gift Boxes 6k |
+
+**Signage is the arguable one** — €101k and €69k are real, and six would cover
+more of a €1.35M category. I would still start it at four and revisit on click
+data, because Flag Printing sits next to Beach Flags and Banners and three
+flag-ish tiles is a thin-looking email. Say if you would rather it went to six
+now.
+
+Clothing falls off a cliff after T-shirts — three tiles at €14k each. Four is
+already generous there.
+
+## What this settles, and what is still open
+
+Settled: the reassignment rule with thresholds, Cards & Invitations in Commercial
+Print permanently, six tiles there and four elsewhere, Posters and Business Cards
+both kept.
+
+Still open:
+
+1. **The heading.** With six data-earned tiles and no seasonal pick, "Popular in
+   Commercial Print / Among the most ordered in this category" is true again — so
+   it can stay as it is. The "Where to start" rewrite from Addendum 1 is only
+   needed if the editorial slot is actually used.
+2. **Build the editorial slot anyway?** I would, as an empty capability with the
+   expiry enforcement, because Black Friday and campaign pushes will want it. But
+   nothing goes in it today.
+3. **Signage at four or six.**
+4. Still unverified: that an assembled `{market-path}/{curl}` URL returns 200.
