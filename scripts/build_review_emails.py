@@ -12,7 +12,7 @@ delivery - see below.
 WHY DAY 18, AND WHY THAT MATTERS TO THE COPY. The only lead-time evidence is
 PromisedDeliveryDate on five v4 orders: median 9 days, longest 20. Day 18 clears
 the median comfortably and does not clear the tail, so a minority of readers will
-not have their print yet. RFB asked on day 12, which is how a review request
+not have their print yet. Asking on day 12, as the inherited flow did, is how a review request
 becomes a complaint.
 
 The email is written for that. It never claims the print has arrived, and the
