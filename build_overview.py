@@ -76,7 +76,7 @@ FLOWS = [
       preview="Still available at the same starting price. Change the spec and the price moves with it.",
       goal="", who="", tpl="X2GaSL", flags=[], badge=None,
       section="Rebuilt flow — proposed",
-      section_sub="Three emails instead of five. Email 1 is built; emails 2 and 3 are specified but not yet designed.",
+      section_sub="Three emails instead of five, all three built and render-verified.",
       final="browse-01-proposed.html"),
     dict(step=2, when="24 hours after the product view", subject="You do not need the finished artwork yet",
       preview="We check every file for free before it prints. Or our designers can make it for you.",
@@ -155,7 +155,7 @@ FLOWS = [
       who="Same audience, three days in, still not converted.", tpl="VtF4Ei", ref=True, flags=[], badge=None),
     dict(step=5, when="Day 4", subject="Your 10% ends in 24 hours", preview="After that, your saved order stays, the code does not.",
       goal="Urgency close: the code expires in 24 hours, the saved order does not. Last email of the sequence.",
-      who="Same audience, final email.", tpl="YrvM4D", flags=[], badge=None),
+      who="Same audience, final email.", tpl="YrvM4D", ref=True, flags=[], badge=None),
    ]),
  dict(slug="abandoned-checkout", name="Abandoned Checkout", stage="Convert", retired=True, flow_id="TK2jXt",
    trigger="Started Checkout",
@@ -455,7 +455,23 @@ EMAIL_DETAIL = {
    ]),
 }
 
+# ONE VERSION, IN ONE PLACE. The top bar, the hero and the footer each carried
+# their own version string and their own date, and by the time anyone noticed they
+# disagreed: v0.2/24 Aug in two of them and v0.6/25 Aug in the third. A document
+# people are asked to sign off cannot contradict itself about which version it is.
+VERSION = "v0.7"
+VERSION_DATE = "26 Aug 2026"
+
+# What RFB delivered, for the "replacing N" framing. A fixed historical number,
+# not something derivable from what is in this file now.
+RFB_TOTAL = 36
+
 ISSUES = [
+ "Post-Purchase re-entry is set to 30 days and the category nudge lands on day 32, so a customer who reorders quickly never re-enters and never reaches a second nudge. This single setting is what makes the category rotation work or do nothing at all.",
+ "Four of the five category nudges have no photography. Signage & Outdoor has 3 of 4 tiles covered; Labels & Packaging, Clothing & Textiles and Corporate Gifts have none. Twelve shots in the same style unblock them, thirteen with a greeting card, which also buys Cards & Invitations its tile back in Commercial Print.",
+ "The four unbuilt category nudges still send their header and both buttons to whichever product tile is listed first rather than to a category page. Commercial Print is fixed and points at /promotional-printing per locale; the other four need one URL each.",
+ "Translations will be written into the HTML per language rather than left to Smart Translations, which removes the whole class of failure where a template copied into a flow message loses its translation links. The cost is that nobody else owns the quality: roughly 25 strings per email across five languages, so a six-email flow is about 750 strings, and each needs a native-speaker pass with no vendor QA behind it.",
+ "The photography is served from the published copy of this repo so the templates render on paste. That is a review host, not a production one \u2014 the images must move into Klaviyo\u2019s asset library before any flow is switched on, along with the three interface assets that still carry a placeholder URL.",
  "Text-in-image templates everywhere (except Welcome v2): untranslatable, invisible with images off, unreadable for screen readers. The core reason for the rebuild.",
  "No unsubscribe link in RFB templates (verified on Welcome; check the rest). Compliance risk. The rebuilt Email #2 already fixes this.",
  "UTM tracking is off on every email: no GA/attribution once live. Define the UTM convention and enable per flow.",
@@ -469,7 +485,7 @@ ISSUES = [
  "Sunset property is a dead end: nothing excludes Sunset Unengaged profiles yet.",
  "Broken or wrong footer links in RFB templates (LinkedIn icon pointed at Instagram; help links pointed at non-existent /help pages; the real Help Centre is /{locale}/cs). Audit all footers in the rebuild.",
  "Winback timing compresses four emails into four days after a 90-day silence; consider spacing.",
- "Product feed images are unusable at email size: 300 KB to 6.5 MB, up to 2048px, and the host ignores resize parameters. Klaviyo's own thumbnail URL is byte-identical to the full one. The feed needs to emit a ~600px variant, and to drop .webp, which Outlook cannot render.",
+ "Product feed images: half fixed. As of 26 August the GB, FR, BE and ES feeds moved off the host that ignores resize parameters onto Contentful, which honours them \u2014 the core of the briefing. But they ask for 1200x1200 and only apply fm=jpg to one asset, so photographic packshots are still served as PNG at 176 KB to 1.65 MB each: 5.3 MB across seven images where 198 KB would do. IE and NL are untouched and still on the June feed. Klaviyo\u2019s own thumbnail URL is still identical to the full-size one on every item.",
  "A missing catalog item fails the whole email render with a 400, not just the product block. Ids also carry per-market suffixes (IE-rollupbannersv2 lives at /en-ie/budgetrollupbanners), so product links must always come from catalog_item.url and never from a guessed slug.",
  "Catalog categories are unusable for filtering: every category returns an empty external_id, so they all share one compound id. Same-category recommendations have to be assembled at build time from the category on the event instead.",
  "Some feed titles are untranslated slugs, e.g. GB-gatefoldfoldedleaflets is titled “gatefoldfoldedleaflets”. Any email showing that product would print the slug as the product name. Sweep the feed for titles equal to their slug.",
@@ -552,14 +568,34 @@ def icon(name, cls=""):
 
 # ---- flow cards (home) ----
 stage_class = {"Acquire":"st-acq","Convert":"st-conv","Onboard":"st-onb","Retain":"st-ret","Hygiene":"st-hyg"}
+def flow_status(f):
+    """Rebuilt, part-built or not started - worked out from what is actually in
+    the file rather than from a sentence somebody has to remember to update.
+
+    A flow that has started its rebuild must classify every email as either
+    proposed or original; one that has not started shows the RFB originals plainly,
+    which is why an untouched flow's emails are not marked as reference.
+    """
+    rows = [e for e in f["emails"] if e["tpl"] and not e.get("ref")]
+    done = [e for e in rows if e.get("final")]
+    gaps = sum(1 for e in done for v in (e.get("variants") or []) if not v.get("final"))
+    if not done:
+        return "planned", "Not started"
+    if len(done) == len(rows) and not gaps:
+        return "done", "Rebuilt"
+    return "part", "Part-built"
+
+
 def flow_card(f):
     n_mail = sum(1 for e in f["emails"] if e["tpl"])
     nflags = len(f.get("flow_flags",[])) + sum(len(e["flags"]) for e in f["emails"])
     span = f["cadence"]
     inc = f["incentive"]
     flagchip = f'<span class="chip chip-amber">{icon("alert")}{nflags} to fix</span>' if nflags else '<span class="chip chip-green">'+icon("check")+'clean</span>'
+    scls, slab = flow_status(f)
+    statechip = f'<span class="chip chip-{scls}">{esc(slab)}</span>'
     return f'''<a class="fcard" href="#{f["slug"]}">
-      <div class="fcard-top"><span class="stage {stage_class[f["stage"]]}">{f["stage"]}</span>{flagchip}</div>
+      <div class="fcard-top"><span class="stage {stage_class[f["stage"]]}">{f["stage"]}</span>{statechip}{flagchip}</div>
       <h3>{esc(f["name"])}</h3>
       <div class="fmeta">{icon("zap")}<span>{esc(f["trigger"])}</span></div>
       <div class="fmeta">{icon("clock")}<span>{esc(span)}</span></div>
@@ -802,15 +838,27 @@ def flow_page(f):
 issues_rows = "".join(f'<li>{esc(i)}</li>' for i in ISSUES)
 tracker_rows = "".join(f'<tr><td>{esc(a)}</td><td>{b}</td><td>{esc(c)}</td><td>{esc(d)}</td><td>{esc(e)}</td></tr>' for a,b,c,d,e in TRACKER)
 
+# COUNTED, NOT TYPED. Every one of these was a hardcoded number that went stale
+# the moment a flow changed - the page was still claiming seventeen rebuilt emails
+# after five of them were merged into one.
+_live = [f for f in FLOWS if not f.get("retired")]
+_done = [f for f in _live if flow_status(f)[0] == "done"]
+_part = [f for f in _live if flow_status(f)[0] == "part"]
+_designed = sum(1 for f in FLOWS for e in f["emails"] if e.get("final"))
+_todo = [f for f in _live if flow_status(f)[0] == "planned"]
+_state = ("%d of %d journeys rebuilt" % (len(_done), len(_live))
+          + (", %d part-built" % len(_part) if _part else "")
+          + (", %d not started" % len(_todo) if _todo else ""))
+
 home = f'''<section class="page" id="page-home">
   <div class="hero">
-    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.6 · 25 Aug 2026</div>
+    <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · {VERSION} · {VERSION_DATE}</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: seventeen new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program, and the document this programme is signed off from. {len(_live)} journeys after merging four abandonment flows into two. {_state} &mdash; {_designed} emails designed so far as translatable HTML blocks, replacing RFB originals in which every element was a flat image. Every flow card carries its own state, so nothing here is further along than it looks. Click a flow to see each email with its goal, audience, timing and design; rebuilt emails show desktop and mobile side by side with the reasoning for every block.</p>
   </div>
   <div class="tiles">
-    <div class="tile"><div class="tile-n">7</div><div class="tile-l">Journeys, down from 9</div></div>
-    <div class="tile"><div class="tile-n">17 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">{len(_live)}</div><div class="tile-l">Journeys, down from {len(FLOWS)}</div></div>
+    <div class="tile"><div class="tile-n">{_designed} / {RFB_TOTAL}</div><div class="tile-l">Designed, against the {RFB_TOTAL} RFB delivered</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>
@@ -900,6 +948,12 @@ h2.secttl{font-size:20px;line-height:28px;font-weight:700;margin:44px 0 16px}
 .chip-amber{background:#fef3c7;color:#92400e}
 .chip-amber .ic{color:#92400e}
 .chip-green{background:#e8f5e9;color:var(--green-dark)}
+/* rebuild state, so a reader can see at a glance which flows are ready to sign
+   off and which are still the RFB originals */
+.chip-done{background:var(--ink);color:#fff}
+.chip-part{background:#e8f0fe;color:#1a4a8f}
+.chip-planned{background:#f1f1f1;color:#767676}
+.fcard-top{gap:5px;flex-wrap:wrap}
 .chip-green .ic{color:var(--green-dark)}
 .fmeta{display:flex;align-items:flex-start;font-size:12px;line-height:16px;color:var(--ink3);margin:4px 0}
 .fmeta .ic{flex:none;margin-top:0}
@@ -1197,9 +1251,9 @@ doc = f'''<!DOCTYPE html>
 <style>{CSS}</style>
 </head>
 <body>
-<div class="topbar"><div class="topbar-in">{LOGO.replace("<svg", '<svg class="logo"', 1)}<span class="topbar-t">Behavioural Emails</span><span class="topbar-r">v0.2 · 24 Aug 2026 · Welcome rebuilt · all flows in draft</span></div></div>
+<div class="topbar"><div class="topbar-in">{LOGO.replace("<svg", '<svg class="logo"', 1)}<span class="topbar-t">Behavioural Emails</span><span class="topbar-r">{VERSION} · {VERSION_DATE} · {_state} · all flows in draft</span></div></div>
 <div class="wrap">{pages}</div>
-<div class="foot">Helloprint · Behavioural Email Program overview · v0.2, 24 Aug 2026 · Welcome flow shows the rebuilt emails; the other eight flows show the RFB originals as delivered</div>
+<div class="foot">Helloprint · Behavioural Email Program overview · {VERSION}, {VERSION_DATE} · {_state}. A flow marked Not started shows the RFB originals exactly as delivered.</div>
 <script>{JS.replace("__PREVIEWS__", pv_json).replace("__PREVIEW_URLS__", pv_url_json)}</script>
 </body>
 </html>'''
@@ -1246,6 +1300,26 @@ for f in FLOWS:
         if len(on_tabs) != 1 or on_tabs != on_panes:
             bad.append("%s: active tab is %s and active pane is %s"
                        % (e["tpl"], on_tabs, on_panes))
+# EVERY EMAIL IN A STARTED REBUILD MUST SAY WHICH IT IS. An Abandoned Order
+# email was missing ref=True, so an RFB original rendered inline among the
+# rebuilt ones and put a second Day 4 on the rebuilt timeline. In a document
+# people are asked to sign off, an email that is ambiguous about whether it is
+# proposed or historical is the worst kind of error - it looks like work that
+# does not exist.
+for f in FLOWS:
+    started = any(e.get("final") for e in f["emails"])
+    if not started:
+        continue
+    for e in f["emails"]:
+        if e["tpl"] and not e.get("final") and not e.get("ref"):
+            bad.append("%s: %r is neither proposed nor marked as an RFB original"
+                       % (f["name"], e["when"]))
+
+# and no version string may be typed by hand a second time
+for stale in ("v0.2", "v0.6", "24 Aug 2026", "25 Aug 2026", "seventeen new emails"):
+    if stale in doc and stale not in (VERSION, VERSION_DATE):
+        bad.append("a stale hardcoded %r is still on the page" % stale)
+
 for fn in ("switchCat", "openFullCat", "copyLinkCat", "activeCatKey"):
     if ("function " + fn) not in doc:
         bad.append("the %s function is missing from the page" % fn)
