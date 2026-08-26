@@ -185,7 +185,7 @@ FLOWS = [
    trigger_detail="Fires on the Placed Order event; a conditional split then checks purchase history (see flag).",
    audience=["Fresh buyers, intended for FIRST-time buyers (see flag)", "Stops if a new order is placed mid-sequence", "Ireland + United Kingdom only"],
    reentry="30 days", incentive="None", cadence="40 minutes after the order, then day 1, day 5, day 12 and day 32",
-   flow_note="Being rebuilt. The six Day 32 category emails below are built and render-verified; the rest of the proposed flow (review request day 18, reminder day 25, print expert day 45, discount day 60 and 73) is specified in proposals/post-purchase-proposal.md but not yet designed. The five RFB emails after them are the originals, all draft.",
+   flow_note="Being rebuilt. The five Day 32 category emails below are built and render-verified; the rest of the proposed flow (review request day 18, reminder day 25, print expert day 45, discount day 60 and 73) is specified in proposals/post-purchase-proposal.md but not yet designed. The five RFB emails after them are the originals, all draft.",
    flow_flags=["The conditional split (Placed Order > 0 all time) is always true after an order, so it does nothing. Email 1 says “your first order”, so the intent was probably “= 1” (first-time buyers only). Decide the audience in the rebuild.",
     "Overlap with the transactional program: emails 1, 2 and 5 partly duplicate the transactional order confirmation, expectation-setting and review request. Decide the behavioural vs transactional split before go-live."],
    emails=[
@@ -197,20 +197,16 @@ FLOWS = [
       preview="Signs, flags and banners, for a day out or a decade.",
       goal="", who="", tpl="CATSO", new=True, flags=[], badge=None,
       final="category-signage-outdoor-proposed.html"),
-    dict(step=3, when="Day 32 \u00b7 Labels", subject="Running low on labels?",
-      preview="On a roll, on a sheet, or cut to your own shape.",
-      goal="", who="", tpl="CATLB", new=True, flags=[], badge=None,
-      final="category-labels-proposed.html"),
-    dict(step=3, when="Day 32 \u00b7 Packaging", subject="Packaging that does some of the selling",
-      preview="Bags and boxes with your name on them.",
-      goal="", who="", tpl="CATPK", new=True, flags=[], badge=None,
-      final="category-packaging-proposed.html"),
+    dict(step=3, when="Day 32 \u00b7 Labels & Packaging", subject="Running low on labels, or on bags?",
+      preview="Labels, stickers and the packaging they go on.",
+      goal="", who="", tpl="CATLP", new=True, flags=[], badge=None,
+      final="category-labels-packaging-proposed.html"),
     dict(step=3, when="Day 32 \u00b7 Clothing & Textiles", subject="Kitting out the team?",
-      preview="T-shirts, hoodies and caps with your logo on them.",
+      preview="Shirts and textiles with your logo on them.",
       goal="", who="", tpl="CATCT", new=True, flags=[], badge=None,
       final="category-clothing-textiles-proposed.html"),
     dict(step=3, when="Day 32 \u00b7 Corporate Gifts", subject="Something to hand out at the next event?",
-      preview="Things that stay on a desk longer than a flyer.",
+      preview="Things that stay in use long after a flyer is in the bin.",
       goal="", who="", tpl="CATCG", new=True, flags=[], badge=None,
       final="category-corporate-gifts-proposed.html"),
     dict(step=1, when="40 minutes after the order", subject="Thank you for your first order", preview="A quick note from the team printing it.",
@@ -298,68 +294,57 @@ EMAIL_DETAIL = {
  "CATCP": dict(
    goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
    why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the six categories",
-   variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. France sees two tiles rather than three: FR-booklets5 does not exist in the feed.",
+   variant_label="Across the five emails",
+   variant="Six ranges, because this is 5.45M of gross profit \u2014 the biggest of the five by a wide margin.",
    elements=[
-     ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "Flyers, posters and stapled booklets — the three most ordered products in this category, from 133 real line items."),
-     ("Every tile is market-guarded.", "France sees two tiles rather than three: FR-booklets5 does not exist in the feed. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
-     ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
+     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
+     ("Feature rows, then a grid.", "Booklets and flyers as feature rows, then folded leaflets, posters, business cards and cards &amp; invitations in the grid \u2014 82% of the category\u2019s gross profit. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
+     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
+     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
    ]),
  "CATSO": dict(
    goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
    why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the six categories",
-   variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. Spain sees no tiles at all and falls back to a sentence: none of the three exists in ES.",
+   variant_label="Across the five emails",
+   variant="Four ranges. Flag Printing is fifth at 101k but sits beside Beach Flags and Banners, and three flag-ish tiles reads thin.",
    elements=[
-     ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "Foamex signs, custom flags and roller banners — the three most ordered, from 57 line items."),
-     ("Every tile is market-guarded.", "Spain sees no tiles at all and falls back to a sentence: none of the three exists in ES. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
-     ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
+     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
+     ("Feature rows, then a grid.", "Banners and signage &amp; panels as feature rows, beach flags and roller banners in the grid. Beach Flags was the surprise: 248k of gross profit on 5,730 items, and it never surfaced in any product-level shortlist. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
+     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
+     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
    ]),
- "CATLB": dict(
+ "CATLP": dict(
    goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
    why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the six categories",
-   variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. France sees two tiles: FR-stickers does not exist in the feed.",
+   variant_label="Across the five emails",
+   variant="Two categories in one email. Packaging was 77k of gross profit and could not justify a send of its own; Labels had only three subcategories and could not fill four tiles. Together they do both.",
    elements=[
-     ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "Labels on roll, individual stickers and custom-shape stickers \u2014 59% of category gross profit. Sticker sheets were dropped at 3.6%."),
-     ("Every tile is market-guarded.", "France sees two tiles: FR-stickers does not exist in the feed. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
-     ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
-   ]),
- "CATPK": dict(
-   goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
-   why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the six categories",
-   variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. Britain sees one tile: neither kraft bag exists in GB.",
-   elements=[
-     ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "Budget paper bags, kraft bags and greaseproof paper. The smallest category by far \u2014 879 order items and 77k gross profit in the period \u2014 so these are the top of a small pool."),
-     ("Every tile is market-guarded.", "Britain sees one tile: neither kraft bag exists in GB. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
-     ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
+     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
+     ("Feature rows, then a grid.", "Labels &amp; stickers and paper bags as feature rows \u2014 one from each half rather than the top two by gross profit, because the top two are Labels &amp; Stickers and its own child. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
+     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
+     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
    ]),
  "CATCT": dict(
    goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
    why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the six categories",
-   variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. Full coverage in all six markets.",
+   variant_label="Across the five emails",
+   variant="Four ranges, and the thinnest of the five at 239k. Worth watching: it falls away steeply after T-shirts \u2014 102k, then 22k, 18k, 14k.",
    elements=[
-     ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "Two t-shirts and a tablecloth, which is genuinely the category\u2019s top three by gross profit. Hoodies and caps did not reach the top eight."),
-     ("Every tile is market-guarded.", "Full coverage in all six markets. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
-     ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
+     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
+     ("Feature rows, then a grid.", "T-shirts and polo shirts as feature rows, interior textiles and caps in the grid. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
+     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
+     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
    ]),
  "CATCG": dict(
    goal="Bring the customer back for more of what they already buy, without spending a discount to do it.",
    why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",
-   variant_label="Across the six categories",
-   variant="One template, six configurations, keyed on the first element of the order\u2019s Categories path. Spain sees two tiles: ES-notepads does not exist in the feed.",
+   variant_label="Across the five emails",
+   variant="Four ranges out of 1,293 products and a very long tail.",
    elements=[
-     ("Dark header, then the products.", "Wordmark, category, headline and the first call to action all sit on ink, so the top reads as one block rather than a logo bar with a page underneath."),
-     ("Most ordered, chosen from real orders.", "A tote, a notebook and pens. The tote alone is 10.1% of category gross profit and the most ordered item in it. Notepads was removed \u2014 it is a Commercial Print product that had been filed here by mistake."),
-     ("Every tile is market-guarded.", "Spain sees two tiles: ES-notepads does not exist in the feed. A catalogue item that does not exist returns an error and kills the whole send, so a tile is only requested where it is verified to exist \u2014 all 108 market-product pairs were checked and 8 are missing."),
-     ("Review quote and one image are deliberate placeholders.", "There are no reviews in Klaviyo to pull from, and inventing a quote under \u201cVerified Trustpilot review\u201d would be fabricating a record. Both slots are designed, sized and visibly marked."),
+     ("Categories, not products.", "No prices, no minimum quantities, and no catalogue lookups \u2014 which removes the worst failure mode of the product version, where one missing catalogue item returned an error and killed the whole send. All 176 subcategory-locale URLs were checked over HTTP and returned 200."),
+     ("Feature rows, then a grid.", "Tote bags and pens as feature rows, notebooks and water bottles in the grid. A far better email than the product version, which offered a key ring and two cotton bags. The feature rows carry an image, a paragraph and a link, which is what stops these reading as a shop shelf; the grid is compact. Sides alternate on desktop, and it is always image-first once stacked on a phone."),
+     ("Names, URLs and images all come from Contentful.", "Per locale, and complete: 176 of 176 name-and-URL slots filled, 22 of 22 images present. The images are Contentful assets, so they resize properly \u2014 unlike almost all product-feed images, which is the open blocker in the feed briefing."),
+     ("The review is still never translated.", "A per-language conditional picks a review a customer actually wrote in that language, or shows a visible placeholder. A translated review would be a quote the named person never gave."),
    ]),
  "Vb23CK": dict(
    goal="Turn a fresh subscriber into a first order while intent is highest, and set the price expectation before anyone else does.",
@@ -758,11 +743,11 @@ home = f'''<section class="page" id="page-home">
   <div class="hero">
     <div class="hero-kicker">Behavioural Email Program · IE + UK pilot · v0.6 · 25 Aug 2026</div>
     <h1>Behavioural Emails</h1>
-    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: eighteen new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
+    <p class="hero-sub">The complete overview of Helloprint's behavioural (lifecycle) email program. Seven journeys after merging four abandonment flows into two. The Welcome flow has been rebuilt in full, and Browse Abandonment is complete: seventeen new emails as translatable HTML blocks, replacing RFB originals in which every element was an image. Click any flow to see each email with its goal, audience, timing and design. Rebuilt emails show desktop and mobile side by side, with the reasoning for every block.</p>
   </div>
   <div class="tiles">
     <div class="tile"><div class="tile-n">7</div><div class="tile-l">Journeys, down from 9</div></div>
-    <div class="tile"><div class="tile-n">18 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
+    <div class="tile"><div class="tile-n">17 / 36</div><div class="tile-l">Rebuilt as HTML blocks</div></div>
     <div class="tile"><div class="tile-n">10 / 10 / 15%</div><div class="tile-l">Discount ladder (welcome · cart &amp; checkout · winback)</div></div>
     <a class="tile tile-link" href="#issues"><div class="tile-n tile-amber">{len(ISSUES)}</div><div class="tile-l">Issues to fix before go-live {ICON["arrow"]}</div></a>
   </div>

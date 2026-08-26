@@ -47,6 +47,7 @@ def env(name, root="/Users/sebastiaan.ram/Developer/transactionals"):
     return ""
 SPACE, TOK = env("CONTENTFUL_SPACE_ID"), env("CONTENTFUL_CDA_TOKEN")
 ENVIR = env("CONTENTFUL_ENVIRONMENT") or "master"
+UA = "helloprint-behavioural-email/1.0 (+internal tooling)"
 BASE = "https://cdn.contentful.com/spaces/%s/environments/%s" % (SPACE, ENVIR)
 def get(path, **p):
     url = BASE + path + ("?" + urllib.parse.urlencode(p) if p else "")

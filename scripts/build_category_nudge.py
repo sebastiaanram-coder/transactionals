@@ -1,58 +1,69 @@
 #!/usr/bin/env python3
 """
-Build the six category nudge emails for the post-purchase flow.
+Build the five category nudge emails for the post-purchase flow.
 
-One template, six configurations. This is email 3 of the post-purchase proposal
-(day 32, "need more {category}?"), split by the top-level category of what the
-customer last bought.
+One template, five configurations. Email 3 of the post-purchase proposal (day 32,
+"need more of what you bought?"), split on the top-level category of the last
+order.
 
-WHY ONE BUILDER AND NOT SIX FILES. The six emails differ only in copy, products
-and category name. Six files would drift - that has already happened twice in
-this repo, which is why _lib/basket.py and _lib/discount.py exist. Change the
-template once here and all six rebuild.
+WHAT CHANGED FROM THE PRODUCT VERSION, and why it is not a small change:
 
-WHY THE CATEGORY IS THE TOP LEVEL. presta Placed Order carries Categories as a
-path, ["Commercial Print", "All Flyers", "Flyers"], on about two thirds of
-orders. The first element is one of roughly ten values, so six emails cover the
-sendable volume. Keying on the leaf instead would need dozens.
+  No products, no prices, no minimums. The tiles are CATEGORIES now, taken from
+  Contentful. So there is no "from EUR300.11 for 100 units" arguing against a
+  browse invitation, and the whole bug class behind "for 500.0 unites" and
+  "for 1 units" is gone because there is no number to format.
 
-MARKET COMES FROM THE LOCALE. event.Locale|slice:"3:5" turns nl-NL into NL and
-fr-BE into BE, which is exactly the catalogue's market prefix - so a single
-catalog expression serves every market with no per-market duplication. See
-_lib/category_products.py.
+  NO {% catalog %} AT ALL. That removes the worst failure mode in the old design:
+  a catalogue item that does not exist returns HTTP 400 and the entire email
+  fails to send. 10 of 144 product-market pairs were missing, which is why the
+  product tiles needed a per-market grid. A category page that is missing would
+  be a dead link, not a dead send - and none are missing: all 176
+  subcategory-locale URLs were checked over HTTP and returned 200.
 
-REVIEWS COME FROM TRUSTPILOT, PER LANGUAGE, OR NOT AT ALL. scripts/
-fetch_reviews.py pulls tagged service reviews into data/trustpilot-reviews.json
-and the review block is built from that. A language with no suitable cached
-review shows the visible placeholder - never a translated review, because
-running one customer's words through a translator and attributing them to that
-customer in another language invents a quote they never gave. See _lib/reviews.py.
+  Images come from Contentful, not the product feed. They are assets on
+  images.ctfassets.net, which honours resize parameters - unlike the 95% of feed
+  product images on storage.googleapis.com that ignore them. The feed's
+  no-email-sized-variant problem does not apply here.
 
-*** THE REVIEW BLOCK MUST BE EXCLUDED FROM SMART TRANSLATIONS. *** Everything
-else in these emails is meant to be translated; the reviews are the exception.
-If a translation pass rewrites them, every non-source language ends up with a
-fabricated quote carrying a real person's name. Not yet verified how Klaviyo
-lets a region opt out - the highest-priority open question on this flow.
+TWO SHAPES OF TILE, because six would not fit as equals:
+
+  FEATURE rows  image beside a heading, a paragraph and a link. The pattern from
+                the Welcome flow's "three things worth knowing" block, which is
+                what makes these read as content rather than as products.
+  GRID tiles    image, category name, link. Two per row, no prose.
+
+Commercial Print carries six (2 feature + 4 grid) because it is 5.45M of gross
+profit with six subcategories worth showing. The other four carry four.
+
+ONLY THE NAME AND URL VARY BY LOCALE. The prose is ours and can be
+machine-translated with the rest of the email, so it appears once. See
+_lib/subcategories.py for why that matters to the file size.
+
+REVIEWS ARE STILL NEVER TRANSLATED - a per-language conditional picks a review a
+customer actually wrote in that language, or a visible placeholder. See
+_lib/reviews.py.
 """
 import base64, html, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import reviews as rv
+import subcategories as sc
+
 
 def esc(t):
-    # customer-written text goes into HTML, so it is escaped. A review
-    # containing < or & is not a licence to break the email.
-    return html.escape(t, quote=False)
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
-import category_products as cp
-import reviews as rv
+    return html.escape(t or "", quote=True)
+
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 ASSETS = os.path.join(ROOT, "assets")
 OUT = os.path.join(ROOT, "proposals")
 
+
 def datauri(name):
     mime = "image/png" if name.endswith(".png") else "image/jpeg"
     with open(os.path.join(ASSETS, name), "rb") as f:
         return "data:%s;base64,%s" % (mime, base64.b64encode(f.read()).decode())
+
 
 _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
@@ -65,115 +76,108 @@ _A = {
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
-# ---------------------------------------------------------------- the six
+CTA = "See the range"
+
+# ---------------------------------------------------------------- the five
+#
+# `feature` and `grid` come from data/subcategories.json, so the ranking lives
+# with the data. What lives here is the copy: one paragraph per feature row, and
+# one closing block per email.
 
 CATEGORIES = [
     dict(
-        slug="commercial-print", code="cp", label="Commercial Print",
-        # the exact string presta puts in Categories[0], which the flow splits on
-        match="Commercial Print",
+        slug="commercial-print", code="cp",
         h1="Running low, or starting the next one?",
         sub="The print most businesses come back for, and a couple of things that go well beside it.",
         pre="The print most businesses reorder, and what goes with it.",
-        blocks=[
-            ("ICON_TAG", "The price per piece drops fast",
-             "A thousand flyers rarely costs twice what five hundred does. If you are close to the "
-             "next quantity up, it is worth pricing both before you order."),
-            ("ICON_LAYERS", "One design, several products",
-             "The same artwork can run across flyers, leaflets and posters. Send it once and we will "
-             "fit it to each size rather than asking you to redo it."),
-        ],
-        img_note="A campaign in use - flyers on a counter, a poster in a window",
-        review_hint="pick a review that mentions print quality or turnaround on flyers",
+        body={
+            "Booklets & Brochures":
+                "A catalogue, a programme, a company report. Stapled for something short, bound "
+                "with a spine for something thicker. Send the pages and we will tell you which "
+                "binding suits the count.",
+            "Leaflet Printing & Flyers":
+                "Still the cheapest way to put something in somebody's hand. A thousand rarely "
+                "costs twice what five hundred does, so it is worth pricing the next quantity up "
+                "before you order.",
+        },
+        block=("ICON_LAYERS", "One design, several products",
+               "The same artwork can run across flyers, leaflets and posters. Send it once and we "
+               "will fit it to each size rather than asking you to redo it."),
+        review_hint="pick a review that mentions print quality or turnaround",
     ),
     dict(
-        slug="signage-outdoor", code="so", label="Signage & Outdoor",
-        match="Signage & Outdoor",
+        slug="signage-outdoor", code="so",
         h1="For the next event, or the front of the building?",
         sub="Signs, flags and banners, built for one afternoon outdoors or several years of it.",
         pre="Signs, flags and banners, for a day out or a decade.",
-        blocks=[
-            ("ICON_LAYERS", "Built for where it is going",
-             "A banner on a fence takes wind and rain for months. A feather flag is made to be moved "
-             "between events. Tell us where it is going and we will match the material to it."),
-            ("ICON_CLOCK", "Roller banners travel",
-             "They roll into their own case, go up in seconds, and come back out for the next event. "
-             "One order that keeps earning."),
-        ],
-        img_note="A roller banner at a trade stand, or signage on a shopfront",
+        body={
+            "Banners":
+                "For a fence, a scaffold or the front of a building. Hemmed and eyeleted, so it "
+                "goes up with cable ties and comes down in one piece for the next time.",
+            "Signage & Panels":
+                "Foamex indoors or under cover, aluminium where it has to take weather and years "
+                "of it. Tell us where the sign is going and we will match the material to it.",
+        },
+        block=("ICON_CLOCK", "Roller banners travel",
+               "They roll into their own case, go up in seconds, and come back out for the next "
+               "event. One order that keeps earning."),
         review_hint="pick a review about a banner or sign, ideally mentioning setup or durability",
     ),
     dict(
-        slug="labels", code="lb", label="Labels",
-        match="Labels",
-        h1="Running low on labels?",
-        sub="On a roll, on a sheet, or cut to whatever shape your product needs.",
-        pre="On a roll, on a sheet, or cut to your own shape.",
-        blocks=[
-            ("ICON_LAYERS", "On a roll, or cut to your own shape",
-             "Rolls suit an applicator or a production line. Individual and custom-shape stickers go "
-             "on by hand and make more sense for smaller batches."),
-            ("ICON_TAG", "An odd shape costs the same as a square",
-             "Circles, ovals and cut-to-outline are priced the same way as a rectangle, so the shape "
-             "can be whatever suits the product."),
-        ],
-        img_note="Labels applied to real packaging - a jar, a bottle, a box",
-        review_hint="pick a review about labels or stickers, ideally mentioning the cut or the finish",
+        slug="labels-packaging", code="lp",
+        h1="Running low on labels, or on bags?",
+        sub="Labels and stickers, and the packaging they go on. Both in runs small enough to try first.",
+        pre="Labels, stickers and the packaging they go on.",
+        body={
+            "Labels & Stickers":
+                "On a roll for an applicator, on a sheet for applying by hand, or cut to whatever "
+                "outline your product needs. An odd shape is priced the same as a square.",
+            "Paper Bags":
+                "Your name on the thing a customer carries out of the shop. Runs start at a "
+                "hundred, so a new design does not have to arrive on a pallet.",
+        },
+        block=("ICON_LAYERS", "Send the whole list at once",
+               "If you are ordering labels and bags together, send both and we will keep the "
+               "colour consistent across them rather than treating them as two jobs."),
+        review_hint="pick a review about labels, stickers or packaging",
     ),
     dict(
-        slug="packaging", code="pk", label="Packaging",
-        match="Packaging",
-        h1="Packaging that does some of the selling",
-        sub="Bags and boxes with your name on them, in runs small enough to try first.",
-        pre="Bags and boxes with your name on them.",
-        blocks=[
-            ("ICON_TAG", "Smaller runs than you would expect",
-             "Paper bags start at a hundred, so a new design does not have to arrive on a pallet. "
-             "Order one run, see it in a customer\u2019s hand, then scale it."),
-            ("ICON_LAYERS", "Send the whole list at once",
-             "If you are ordering a bag and a box together, send both and we will keep the colour "
-             "consistent across them rather than treating them as two jobs."),
-        ],
-        img_note="Branded packaging in use - a takeaway counter or a shop bag",
-        review_hint="pick a review about packaging, ideally mentioning colour or consistency",
-    ),
-    dict(
-        slug="clothing-textiles", code="ct", label="Clothing & Textiles",
-        match="Clothing & Textiles",
+        slug="clothing-textiles", code="ct",
         h1="Kitting out the team?",
-        sub="T-shirts and table linen, with your logo printed or stitched on.",
-        pre="T-shirts and table linen with your logo on them.",
-        blocks=[
-            ("ICON_LAYERS", "Mixed sizes in one order",
-             "You do not have to order the same size throughout. Send the breakdown you actually "
-             "need and we will put it together."),
-            ("ICON_TAG", "Printed or embroidered",
-             "Print handles detail and lots of colour. Embroidery lasts longer on workwear and "
-             "washes better. Send your logo and we will say which suits it."),
-        ],
-        img_note="A team in branded shirts, or a dressed table at an event",
+        sub="Shirts and textiles, with your logo printed or stitched on.",
+        pre="Shirts and textiles with your logo on them.",
+        body={
+            "T-shirts":
+                "Printed or embroidered, in the size breakdown you actually need rather than the "
+                "same size throughout. Send your logo and we will say which method suits it.",
+            "Polo Shirts":
+                "A step up from a t-shirt for anyone who meets customers. Embroidery outlasts "
+                "print on a collar and comes out of the wash better.",
+        },
+        block=("ICON_TAG", "Mixed sizes, one order",
+               "You do not have to order the same size throughout. Send the breakdown you need "
+               "and we will put it together as one job."),
         review_hint="pick a review about clothing, ideally mentioning fit, sizing or print quality",
     ),
     dict(
-        slug="corporate-gifts", code="cg", label="Corporate Gifts",
-        match="Corporate Gifts",
+        slug="corporate-gifts", code="cg",
         h1="Something to hand out at the next event?",
-        sub="Totes, notebooks and pens that stay in use long after a flyer is in the bin.",
+        sub="The things that stay in use long after a flyer is in the bin.",
         pre="Things that stay in use long after a flyer is in the bin.",
-        blocks=[
-            ("ICON_TAG", "Minimums are lower than you would think",
-             "Tote bags start at one, so you can hold a sample before committing to a crate of them. "
-             "Tell us the headcount and we will price to it."),
-            ("ICON_LAYERS", "If we do not list it, we can still find it",
-             "The catalogue is a starting point. Tell our team what you have in mind and they will "
-             "source it and come back with a price."),
-        ],
-        img_note="Gifts on an event table, or a branded tote being carried",
-        review_hint="pick a review about a promotional item, ideally mentioning the branding quality",
+        body={
+            "Canvas Tote Bags":
+                "The one giveaway people keep using. Cotton, your logo on the side, and cheap "
+                "enough per bag to hand out at a stand without counting them.",
+            "Pens":
+                "Still the thing that ends up in a drawer and gets used for a year. Hundreds of "
+                "them for about the price of a small print run.",
+        },
+        block=("ICON_LAYERS", "If we do not list it, we can still find it",
+               "The catalogue is a starting point. Tell our team what you have in mind and they "
+               "will source it and come back with a price."),
+        review_hint="pick a review about a promotional item, ideally mentioning branding quality",
     ),
 ]
-
-MARKET = 'event.Locale|slice:"3:5"'
 
 # ---------------------------------------------------------------- template
 
@@ -182,9 +186,8 @@ CSS = """
 .%(P)s-root *{box-sizing:border-box;}
 .%(P)s-wrap{width:100%%;background:#f8f8f8;padding:0 0 32px;}
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
-/* THE DARK HEADER. Wordmark, category, headline and the first call to action all
-   live on ink, so the top of the email reads as one block rather than a logo bar
-   with a page under it. Rounded only at the top, matching the order emails. */
+/* the dark header: wordmark, category, headline and first call to action all on
+   ink, so the top reads as one block rather than a logo bar with a page under it */
 .%(P)s-dark{background:#191919;padding:26px 32px 32px;text-align:center;}
 .%(P)s-dark img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0 0 26px;}
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
@@ -192,38 +195,41 @@ CSS = """
 .%(P)s-sub{margin:0 auto 24px;max-width:420px;font-size:16px;line-height:25px;color:#b4b4b4;}
 .%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .%(P)s-cta2{display:inline-block;background:#191919;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
-/* most ordered */
 .%(P)s-sect{margin:32px 24px 0;}
 .%(P)s-sh{margin:0 0 4px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
-.%(P)s-ss{margin:0 0 18px;font-size:14px;line-height:21px;color:#767676;}
-.%(P)s-tiles{width:100%%;border-collapse:separate;border-spacing:0;}
+.%(P)s-ss{margin:0 0 20px;font-size:14px;line-height:21px;color:#767676;}
+/* FEATURE ROW: image beside prose. Deliberately not a product card - no price,
+   no border, no button. The Welcome flow's content-block pattern. */
+.%(P)s-ftbl{width:100%%;border-collapse:collapse;margin:0 0 24px;}
+.%(P)s-fim{width:216px;vertical-align:top;padding:0 18px 0 0;}
+.%(P)s-fim.%(P)s-right{padding:0 0 0 18px;}  /* flipped row: image sits right */
+.%(P)s-fim img{width:100%%;max-width:216px;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+.%(P)s-fim{width:216px;}
+.%(P)s-ftx{vertical-align:top;}
+.%(P)s-fh{margin:0 0 6px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
+.%(P)s-fb{margin:0 0 10px;font-size:15px;line-height:23px;color:#555555;}
+.%(P)s-fl{font-size:14px;line-height:21px;font-weight:700;color:#008539;text-decoration:none;}
+/* GRID: two per row on every screen, no media query needed for the structure */
+.%(P)s-tiles{width:100%%;border-collapse:separate;border-spacing:0;table-layout:fixed;}
 .%(P)s-tile{width:50%%;vertical-align:top;padding:0 6px 14px;}
-.%(P)s-card{display:block;text-decoration:none;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;}
-.%(P)s-card img{width:100%%;max-width:100%%;height:auto;display:block;border:0;background:#ffffff;}
-.%(P)s-tiles{table-layout:fixed;}
-.%(P)s-tin{padding:12px 12px 14px;}
-/* Reserve two lines for the name so cards in a row stay aligned. Names
-   come from the feed per market, so "Flyers" sits beside "Standaard
-   visitekaartjes" and one wraps while the other does not. */
-.%(P)s-tname{display:block;font-size:14px;line-height:20px;font-weight:800;color:#191919;margin:0 0 3px;min-height:40px;}
-.%(P)s-tprice{display:block;font-size:13px;line-height:19px;color:#555555;}
-.%(P)s-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;margin-top:7px;}
-/* content blocks */
-.%(P)s-cb{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;}
+.%(P)s-card{display:block;text-decoration:none;}
+.%(P)s-card img{width:100%%;max-width:100%%;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
+/* two lines reserved so cards in a row stay level: "Posters" sits beside
+   "Catalogos, libros y revistas" once this is translated */
+.%(P)s-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
+.%(P)s-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
+/* closing content block */
+.%(P)s-cb{margin:8px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;}
 .%(P)s-cbtbl{width:100%%;border-collapse:collapse;}
 .%(P)s-cbic{width:56px;vertical-align:top;padding:0 16px 0 0;}
 .%(P)s-cbic img{width:38px;height:38px;display:block;border:0;}
 .%(P)s-cbtx{vertical-align:top;}
 .%(P)s-cbh{margin:0 0 5px;font-size:17px;line-height:24px;font-weight:800;color:#191919;letter-spacing:-.008em;}
 .%(P)s-cbb{margin:0;font-size:15px;line-height:23px;color:#555555;}
-/* the image slot nobody has filled yet, drawn as an obvious gap rather than
-   a stock photo standing in for a decision */
-.%(P)s-ph{margin:28px 24px 0;border:2px dashed #d4d4d4;border-radius:12px;background:#fafafa;padding:30px 22px;text-align:center;}
-.%(P)s-phl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.14em;color:#a0a0a0;margin-bottom:7px;}
-.%(P)s-pht{display:block;font-size:14px;line-height:21px;color:#767676;max-width:340px;margin:0 auto;}
 /* review */
 .%(P)s-rev{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
 .%(P)s-revstars{display:block;margin:0 auto 12px;border:0;width:120px;height:25px;}
+.%(P)s-revq{display:block;margin:0 auto 9px;max-width:430px;font-size:17px;line-height:26px;font-weight:700;color:#191919;letter-spacing:-.01em;}
 .%(P)s-revph{display:block;margin:0 auto 9px;max-width:420px;border:2px dashed #d4d4d4;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#767676;background:#fafafa;}
 .%(P)s-revby{display:block;font-size:12px;line-height:18px;color:#767676;}
 /* contact */
@@ -251,14 +257,15 @@ CSS = """
   .%(P)s-sub{font-size:15px;line-height:23px;max-width:none;}
   .%(P)s-cta,.%(P)s-cta2{padding:15px 26px;}
   .%(P)s-sect{margin-left:14px;margin-right:14px;}
-  /* tiles stay two-up on mobile - that is the whole point of the grid.
-     Only the padding tightens. */
+  /* the feature row stacks: a 216px image beside prose is unreadable at 320px */
+  .%(P)s-fim,.%(P)s-fim.%(P)s-right{display:block;width:100%%!important;padding:0 0 12px 0!important;}
+  .%(P)s-fim img{max-width:100%%;}
+  .%(P)s-fh{font-size:18px;line-height:25px;}
+  .%(P)s-ftx{display:block;width:100%%!important;}
+  /* the grid does NOT stack - two-up is the point */
   .%(P)s-tile{padding:0 4px 12px;}
-  /* three lines on a phone: the longest localised names, like the French
-     water bottle at 47 characters, genuinely need it in a 150px column */
-  .%(P)s-tname{font-size:13px;line-height:18px;min-height:54px;}
-  .%(P)s-tprice,.%(P)s-tlink{font-size:12px;line-height:17px;}
-  .%(P)s-cb,.%(P)s-ph,.%(P)s-rev,.%(P)s-help,.%(P)s-tail{margin-left:14px;margin-right:14px;}
+  .%(P)s-tname{font-size:14px;line-height:19px;min-height:38px;}
+  .%(P)s-cb,.%(P)s-rev,.%(P)s-help,.%(P)s-tail{margin-left:14px;margin-right:14px;}
   .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
 """
@@ -277,42 +284,26 @@ BODY = """
       <span class="{P}-eyebrow">{LABEL_UP}</span>
       <h1 class="{P}-h1">{H1}</h1>
       <p class="{P}-sub">{SUB}</p>
-      <a class="{P}-cta" href="{CTA_URL}">{CTA_LABEL}</a>
+      <a class="{P}-cta" href="{FIRST_URL}">{CTA}</a>
     </div>
 
     <div class="{P}-sect">
       <h2 class="{P}-sh">Popular in {LABEL}</h2>
       <p class="{P}-ss">Among the most ordered in this category by businesses like yours.</p>
+      {FEATURES}
       {TILES}
     </div>
 
     <div class="{P}-cb">
       <table class="{P}-cbtbl" role="presentation" cellpadding="0" cellspacing="0">
         <tr>
-          <td class="{P}-cbic" valign="top"><img src="{B1_ICON}" alt="" width="38" height="38"></td>
+          <td class="{P}-cbic" valign="top"><img src="{B_ICON}" alt="" width="38" height="38"></td>
           <td class="{P}-cbtx" valign="top">
-            <p class="{P}-cbh">{B1_TITLE}</p>
-            <p class="{P}-cbb">{B1_BODY}</p>
+            <p class="{P}-cbh">{B_TITLE}</p>
+            <p class="{P}-cbb">{B_BODY}</p>
           </td>
         </tr>
       </table>
-    </div>
-
-    <div class="{P}-cb">
-      <table class="{P}-cbtbl" role="presentation" cellpadding="0" cellspacing="0">
-        <tr>
-          <td class="{P}-cbic" valign="top"><img src="{B2_ICON}" alt="" width="38" height="38"></td>
-          <td class="{P}-cbtx" valign="top">
-            <p class="{P}-cbh">{B2_TITLE}</p>
-            <p class="{P}-cbb">{B2_BODY}</p>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="{P}-ph">
-      <span class="{P}-phl">IMAGE TO BE SUPPLIED</span>
-      <span class="{P}-pht">{IMG_NOTE}</span>
     </div>
 
     <div class="{P}-rev">
@@ -330,7 +321,7 @@ BODY = """
     </div>
 
     <div class="{P}-tail">
-      <a class="{P}-cta2" href="{CTA_URL}">{CTA_LABEL}</a>
+      <a class="{P}-cta2" href="{FIRST_URL}">{CTA}</a>
     </div>
 
   </div>
@@ -355,81 +346,53 @@ BODY = """
 </div>
 """
 
-def review_block(P, cat, live):
-    """A real review per language, or a visible placeholder.
 
-    Never a translated one. The quote is stored and rendered verbatim - a review
-    too long for the block is skipped at fetch time rather than trimmed here,
-    because editing a customer's words misrepresents them."""
-    def quote(r):
-        return ('<span class="%s-revq">&ldquo;%s&rdquo;</span>'
-                '<span class="%s-revby">%s</span>'
-                % (P, esc(r["text"]), P, rv.attribution(r)))
-
-    def placeholder():
-        return ('<span class="%s-revph">Trustpilot quote to be added &mdash; %s.</span>'
-                '<span class="%s-revby">Verified Trustpilot review</span>'
-                % (P, cat["review_hint"], P))
-
-    langs = rv.available(cat["slug"])
-    if not live:
-        # the preview shows the source-language review if we have one
-        r = rv.get(cat["slug"], "en") or (rv.get(cat["slug"], langs[0]) if langs else None)
-        return quote(r) if r else placeholder()
-    if not langs:
-        return placeholder()
-    out = ""
-    for i, l in enumerate(langs):
-        kw = "if" if i == 0 else "elif"
-        out += '{%% %s %s == "%s" %%}%s' % (kw, rv.LANG_EXPR, l,
-                                            quote(rv.get(cat["slug"], l)))
-    return out + "{%% else %%}%s{%% endif %%}" % placeholder()
+def name_of(sub, live):
+    return sc.locale_switch(sub, "name", esc) if live else esc(sc.preview_field(sub, "name"))
 
 
-def tile_sample(P, base, name, price, moq, unit, path):
-    return (
-        '<td class="%s-tile" valign="top">'
-        '<a class="%s-card" href="https://www.helloprint.com/en-ie/%s">'
-        '<img src="%s" alt="%s">'
-        '<span class="%s-tin">'
-        '<span class="%s-tname">%s</span>'
-        '<span class="%s-tprice">%s</span>'
-        '<span class="%s-tlink">Order again &rarr;</span>'
-        '</span></a></td>'
-        % (P, P, path, cp.preview_image(base), name, P, P, name, P,
-           cp.qty_line(price, moq, unit), P))
+def url_of(sub, live):
+    return sc.locale_switch(sub, "url") if live else sc.preview_field(sub, "url")
 
-def market_test(markets):
-    return " or ".join('%s == "%s"' % (MARKET, m) for m in markets)
 
-def tile_live(P, base):
-    """Everything visible comes from the live feed, so the market decides the
-    name, price, currency, link and photo. The catalog id is assembled from the
-    locale - see the module docstring.
+def feature(P, cat, sub, i, live):
+    """Image beside prose, sides alternating. Not a product card by design: no
+    price, no border, no button - the Welcome flow's content pattern, which is
+    what stops these reading as a shop shelf."""
+    # 3:2, not square. A square feature image is 216px tall on desktop and
+    # fills an entire phone screen once the row stacks.
+    img = sc.image(sub, 480, 320)
+    right = (i % 2 == 1)
+    # ALTERNATE WITH dir, NOT BY REORDERING THE CELLS. The image is always first
+    # in the markup, so when the row stacks on a phone the image comes before its
+    # own heading. Writing the text cell first instead put the flyer image AFTER
+    # the flyer link, where it read as belonging to the next section.
+    # dir="rtl" on the row flips the two cells on desktop, where the table lays
+    # out horizontally, and does nothing once the cells become blocks - block
+    # order follows the markup. dir="ltr" on each cell keeps the content itself
+    # left-to-right.
+    cell = ('<td class="%s-fim%s" valign="top" dir="ltr"><a href="%s">'
+            '<img src="%s" alt="%s" width="216"></a></td>'
+            % (P, (" %s-right" % P) if right else "", url_of(sub, live), img, name_of(sub, live)))
+    text = ('<td class="%s-ftx" valign="top" dir="ltr">'
+            '<p class="%s-fh">%s</p><p class="%s-fb">%s</p>'
+            '<a class="%s-fl" href="%s">%s &rarr;</a></td>'
+            % (P, P, name_of(sub, live), P, esc(cat["body"][sub]), P, url_of(sub, live), CTA))
+    # dir goes on the TABLE, not the tr - a tr does not establish the direction
+    # context the cell layout uses, and the flip silently did nothing there.
+    return ('<table class="%s-ftbl" role="presentation" cellpadding="0" '
+            'cellspacing="0"%s><tr>%s</tr></table>'
+            % (P, ' dir="rtl"' if right else "", cell + text))
 
-    The market test lives on the grid rather than here - see tiles()."""
-    return (
-        '<td class="%(P)s-tile" valign="top">'
-        '{%% catalog %(MK)s|add:"-%(B)s" %%}'
-        '<a class="%(P)s-card" href="{{ catalog_item.url }}">'
-        '<img src="{{ catalog_item.featured_image.full.src }}" alt="{{ catalog_item.title }}">'
-        '<span class="%(P)s-tin">'
-        '<span class="%(P)s-tname">{{ catalog_item.title }}</span>'
-        '<span class="%(P)s-tprice">from '
-        '{%% if catalog_item.metadata.currency == "GBP" %%}&pound;{%% elif catalog_item.metadata.currency == "SEK" %%}SEK {%% else %%}&euro;{%% endif %%}'
-        '{{ catalog_item.metadata.from_price|floatformat:2 }}'
-        # floatformat:0 or the feed's number renders as "for 500.0 unites".
-        # Caught by rendering against the live catalogue, not by reading this.
-        '{%% if catalog_item.metadata.min_order_quantity > 1 %%} for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} {{ catalog_item.metadata.unit }}{%% endif %%}'
-        '</span>'
-        '<span class="%(P)s-tlink">Order again &rarr;</span>'
-        '</span></a>'
-        '{%% endcatalog %%}</td>'
-        % {"P": P, "MK": MARKET, "B": base})
 
-def grid(P, cells):
-    """Rows of two. An odd count gets an empty cell so the row still spans the
-    table and the last tile does not stretch to full width."""
+def grid(P, subs, live):
+    cells = []
+    for sub in subs:
+        cells.append('<td class="%s-tile" valign="top"><a class="%s-card" href="%s">'
+                     '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
+                     '<span class="%s-tlink">%s &rarr;</span></a></td>'
+                     % (P, P, url_of(sub, live), sc.image(sub, 528, 528),
+                        name_of(sub, live), P, name_of(sub, live), P, CTA))
     rows = ""
     for i in range(0, len(cells), 2):
         pair = cells[i:i + 2]
@@ -440,50 +403,49 @@ def grid(P, cells):
             'cellpadding="0" cellspacing="0">%s</table>' % (P, rows))
 
 
-def tiles(P, cat, live):
-    """Four products, two per row, on every screen.
+def review_block(P, cat, live):
+    """A real review per language, or a visible placeholder. Never translated."""
+    def quote(r):
+        return ('<span class="%s-revq">&ldquo;%s&rdquo;</span>'
+                '<span class="%s-revby">%s</span>'
+                % (P, esc(r["text"]), P, rv.attribution(r)))
 
-    WHY A GRID PER MARKET RATHER THAN PER-TILE GUARDS. Availability varies - a
-    category can have 4 products in Ireland and 2 in Spain - and a 2x2 grid with
-    individual tiles conditionally removed goes diagonal: an empty cell top-right
-    and another bottom-left. So the grid is built per market from the products
-    that market actually has, and wrapped in a single market test. Every market
-    gets a well-formed grid, and no market is ever sent a catalogue id it does
-    not stock.
+    def placeholder():
+        return ('<span class="%s-revph">Trustpilot quote to be added &mdash; %s.</span>'
+                '<span class="%s-revby">Verified Trustpilot review</span>'
+                % (P, cat["review_hint"], P))
 
-    The cost is the grid repeated once per market, about 12KB in total, which is
-    comfortably inside Gmail's 102KB clipping threshold."""
+    # the merged Labels & Packaging email draws on either half's reviews
+    slugs = ["labels", "packaging"] if cat["slug"] == "labels-packaging" else [cat["slug"]]
+    langs, pick = [], {}
+    for s in slugs:
+        for l in rv.available(s):
+            if l not in pick:
+                pick[l] = rv.get(s, l); langs.append(l)
     if not live:
-        return grid(P, [tile_sample(P, *p) for p in cp.PRODUCTS[cat["slug"]]])
+        r = pick.get("en") or (pick[langs[0]] if langs else None)
+        return quote(r) if r else placeholder()
+    if not langs:
+        return placeholder()
     out = ""
-    for i, m in enumerate(cp.MARKETS):
-        avail = [p for p in cp.PRODUCTS[cat["slug"]] if m in cp.markets_for(p[0])]
-        if not avail:
-            continue
-        kw = "if" if not out else "elif"
-        out += '{%% %s %s == "%s" %%}%s' % (kw, MARKET, m,
-                                            grid(P, [tile_live(P, p[0]) for p in avail]))
-    # A market outside the list, or one with nothing left, gets a sentence.
-    return out + ('{%% else %%}<p class="%s-ss">The full range is on the site, '
-                  'priced for your country.</p>{%% endif %%}' % P)
+    for i, l in enumerate(langs):
+        kw = "if" if i == 0 else "elif"
+        out += '{%% %s %s == "%s" %%}%s' % (kw, rv.LANG_EXPR, l, quote(pick[l]))
+    return out + "{%% else %%}%s{%% endif %%}" % placeholder()
 
 
 def build(cat, live):
     P = "hp-cat" + cat["code"]
-    css = CSS % {"P": P}
+    conf = sc.emails()[cat["slug"]]
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
-    first_path = cp.PRODUCTS[cat["slug"]][0][5]
+    feats = "".join(feature(P, cat, s, i, live) for i, s in enumerate(conf["feature"]))
     vals = dict(
-        P=P, CSS=css, LABEL=cat["label"], LABEL_UP=cat["label"].upper(),
-        H1=cat["h1"], SUB=cat["sub"], PRE=cat["pre"],
-        TILES=tiles(P, cat, live),
-        B1_ICON=assets[cat["blocks"][0][0]], B1_TITLE=cat["blocks"][0][1], B1_BODY=cat["blocks"][0][2],
-        B2_ICON=assets[cat["blocks"][1][0]], B2_TITLE=cat["blocks"][1][1], B2_BODY=cat["blocks"][1][2],
-        IMG_NOTE=cat["img_note"], REVIEW=review_block(P, cat, live),
-        CTA_LABEL="See the range",
-        # TODO the real category landing page. Until someone confirms the URL
-        # pattern this points at the leading product, which is a real page.
-        CTA_URL="https://www.helloprint.com/en-ie/" + first_path,
+        P=P, CSS=CSS % {"P": P}, LABEL=conf["label"], LABEL_UP=conf["label"].upper(),
+        H1=cat["h1"], SUB=cat["sub"], PRE=cat["pre"], CTA=CTA,
+        FEATURES=feats, TILES=grid(P, conf["grid"], live),
+        B_ICON=assets[cat["block"][0]], B_TITLE=cat["block"][1], B_BODY=cat["block"][2],
+        REVIEW=review_block(P, cat, live),
+        FIRST_URL=url_of(conf["feature"][0], live),
         HOME="https://www.helloprint.com/en-ie/",
         CS="https://www.helloprint.com/en-ie/cs",
         UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
@@ -491,13 +453,14 @@ def build(cat, live):
     vals.update(assets)
     return BODY.format(**vals)
 
+
 PREVIEW_DOC = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Category nudge - %(label)s</title></head>
 <body style="margin:0;padding:0;background:#f8f8f8;">
 <!-- HP - Post-Purchase - category nudge - %(label)s
-     Preview uses the IE catalogue. Live build reads the feed per market.
+     Preview shows the en-IE names and URLs. Live build switches on event.Locale.
      Generated by scripts/build_category_nudge.py - do not hand-edit. -->
 %(body)s
 </body></html>
@@ -509,183 +472,112 @@ KLAVIYO_DOC = """<!--
   Generated by scripts/build_category_nudge.py - do not hand-edit.
 
   Flow      Post-Purchase, email 3 (day 32 in the proposal)
-  Split on  Placed Order -> Categories contains "%(match)s" as the FIRST element
+  Split on  Placed Order -> Categories[0] in (%(match)s)
   Exclude   ShopName contains "connect." (resellers get their own flows)
   Gate      no Placed Order since entering the flow
 
-  MARKET IS TAKEN FROM THE LOCALE. event.Locale|slice:"3:5" turns nl-NL into NL
-  and fr-BE into BE, which is the catalogue's market prefix, so one template
-  serves every market. Nothing is hardcoded to Ireland except the preview.
+  CATEGORIES, NOT PRODUCTS. No prices, no minimum quantities, and no
+  {%% catalog %%} lookups - so the failure mode where one missing catalogue item
+  returns 400 and kills the entire send does not exist in this email. All 176
+  subcategory-locale URLs were checked over HTTP and returned 200.
 
-  *** MARKETS ARE ALLOW-LISTED: %(markets)s. *** A catalogue item that does not
-  exist returns HTTP 400 and the WHOLE email fails to send - not a blank tile.
-  IT is excluded because IT-notepads is already known missing from the feed. Run
-  the id checklist below before adding a market.
+  NAME AND URL SWITCH ON event.Locale, mapped to the Contentful locale:
+  nl-NL->nl, it-IT->it, and Belgium keeps both nl-BE and fr-BE because it is two
+  languages in one market. The prose does NOT switch - it is ours and should be
+  translated with the rest of the email.
 
-  REVIEW QUOTE IS A PLACEHOLDER and must be replaced with a real Trustpilot
-  review before sending. There are no reviews in Klaviyo to pull from, and a
-  made-up quote under "Verified Trustpilot review" would be a fabricated record.
+  *** THE REVIEW BLOCK MUST BE EXCLUDED FROM SMART TRANSLATIONS. *** Everything
+  else here is meant to be translated; the review is the exception. A translation
+  pass would turn every non-source language into a quote the named customer never
+  gave. Still unresolved - see docs/trustpilot-reviews.md.
 
-  IMAGE SLOT IS A PLACEHOLDER: %(img_note)s.
+  Images are Contentful assets and are requested padded square on white, so they
+  resize properly - unlike most of the product feed.
 
-  ALSO BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, and replace the
-  category call-to-action URL - it currently points at the leading product page
-  because the category landing URL pattern is unconfirmed.
+  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, and make the /en-ie/
+  home and help-centre links market-aware. The category links are already
+  per-locale.
 
-  Catalogue ids this email needs, all of which must exist:
-%(ids)s
+  Subcategories in this email:
+%(subs)s
 -->
 %(body)s
 """
 
 # ---------------------------------------------------------------- emit
 
-errs = []
-written = []
+errs, written = [], []
 for cat in CATEGORIES:
     P = "hp-cat" + cat["code"]
-    prev = build(cat, live=False)
-    livb = build(cat, live=True)
-    ids = "\n".join("    %-26s %s" % (p[0], " ".join(cp.markets_for(p[0])))
-                    for p in cp.PRODUCTS[cat["slug"]])
-    pdoc = PREVIEW_DOC % {"label": cat["label"], "body": prev}
-    kdoc = KLAVIYO_DOC % {"label": cat["label"], "match": cat["match"], "body": livb,
-                          "markets": ", ".join(cp.categories_markets(cat["slug"])), "img_note": cat["img_note"],
-                          "ids": ids}
-    pn = "category-%s-proposed.html" % cat["slug"]
-    kn = "category-%s-klaviyo.html" % cat["slug"]
-    open(os.path.join(OUT, pn), "w", encoding="utf-8").write(pdoc)
-    open(os.path.join(OUT, kn), "w", encoding="utf-8").write(kdoc)
-    written.append((cat["label"], len(pdoc), len(kdoc)))
+    conf = sc.emails().get(cat["slug"])
+    if not conf:
+        errs.append("%s: no entry in the subcategory snapshot" % cat["slug"]); continue
+    prev, livb = build(cat, False), build(cat, True)
+    subs = "\n".join("    %-28s %s" % (s, sc.preview_field(s, "url"))
+                     for s in conf["feature"] + conf["grid"])
+    pdoc = PREVIEW_DOC % {"label": conf["label"], "body": prev}
+    kdoc = KLAVIYO_DOC % {"label": conf["label"], "match": ", ".join(conf["match"]),
+                          "body": livb, "subs": subs}
+    open(os.path.join(OUT, "category-%s-proposed.html" % cat["slug"]), "w",
+         encoding="utf-8").write(pdoc)
+    open(os.path.join(OUT, "category-%s-klaviyo.html" % cat["slug"]), "w",
+         encoding="utf-8").write(kdoc)
+    written.append((conf["label"], len(conf["feature"]), len(conf["grid"]),
+                    len(pdoc), len(kdoc)))
 
-    t = cat["label"]
+    t = conf["label"]
     if "REPLACE-WITH-KLAVIYO-ASSET" in prev: errs.append(t + ": preview leaked a sentinel URL")
     if "data:image" in livb: errs.append(t + ": Klaviyo build leaked a data URI")
     if "{%" in prev or "{{" in prev: errs.append(t + ": preview leaked an unrendered tag")
     if "unsubscribe" not in livb: errs.append(t + ": no unsubscribe tag")
-    for bad in ("intcomma", "{% with "):
-        if bad in livb: errs.append("%s: unsupported %s" % (t, bad))
-    if "catalog_item." in livb.split("{% catalog ", 1)[0]:
-        errs.append(t + ": a catalog binding sits before the first catalog block")
-    # the market must never be hardcoded in the live build
-    for m in cp.MARKETS:
-        if '"%s-' % m in livb: errs.append("%s: market %s is hardcoded in the live build" % (t, m))
-    if MARKET not in livb: errs.append(t + ": the live build does not derive the market from Locale")
-    if "min_order_quantity }}" in livb:
-        errs.append(t + ": min_order_quantity needs floatformat:0 or it prints 500.0")
-    # THE CHECK THAT MATTERS: each market's grid must request exactly the
-    # products that market stocks - no more, because a missing catalogue id is a
-    # 400 and a dead send, and no fewer, because a silently dropped product is a
-    # tile nobody notices is gone.
-    expected_blocks = 0
-    # Find the MARKET branches specifically. Scanning for the next "{% elif %}"
-    # does not work: each tile contains its own if/elif for the currency symbol,
-    # so a generic scan cuts the grid off after the first tile - which is exactly
-    # how the first version of this check reported one product per market.
-    pat = re.compile(r'\{%% (?:if|elif) %s == "([A-Z]{2})" %%\}' % re.escape(MARKET))
-    spans = [(m.group(1), m.end()) for m in pat.finditer(livb)]
-    seen_markets = [m for m, _ in spans]
-    for i, (m, pos) in enumerate(spans):
-        if i + 1 < len(spans):
-            stop = spans[i + 1][1]
-        else:
-            # the else that closes the grid conditional; without this the last
-            # market's block ran to the end of the email and picked up the
-            # content blocks, review and footer rows as if they were tiles
-            closer = '{%% else %%}<p class="%s-ss">' % P
-            k = livb.find(closer, pos)
-            stop = k if k >= 0 else len(livb)
-        block = livb[pos:stop]
-        avail = [p[0] for p in cp.PRODUCTS[cat["slug"]] if m in cp.markets_for(p[0])]
-        got = re.findall(r'\|add:"-([a-z0-9]+)"', block)
-        if sorted(got) != sorted(avail):
-            errs.append("%s: %s grid requests %s, should be %s"
-                        % (t, m, sorted(got), sorted(avail)))
-        for row in re.findall(r"<tr>(.*?)</tr>", block, re.S):
-            if row.count("%s-tile" % P) != 2:
-                errs.append("%s: %s grid has a row that is not two cells" % (t, m))
-    for m in cp.MARKETS:
-        avail = [p[0] for p in cp.PRODUCTS[cat["slug"]] if m in cp.markets_for(p[0])]
-        if avail and m not in seen_markets:
-            errs.append("%s: market %s has products but no grid" % (t, m))
-        if seen_markets.count(m) > 1:
-            errs.append("%s: market %s has more than one grid" % (t, m))
-        expected_blocks += len(avail)
-    n_blocks = livb.count("{% catalog ")
-    if n_blocks != expected_blocks:
-        errs.append("%s: %d catalog blocks, expected %d across the markets"
-                    % (t, n_blocks, expected_blocks))
-    if livb.count("{% endcatalog %}") != n_blocks:
-        errs.append("%s: unbalanced catalog blocks" % t)
-    # four products is the design; two per row only works with an even number
-    if len(cp.PRODUCTS[cat["slug"]]) != 4:
-        errs.append("%s: %d products declared, the grid is built for 4"
-                    % (t, len(cp.PRODUCTS[cat["slug"]])))
-    # A MINIMUM QUOTED IN COPY MUST BELONG TO A PRODUCT ON SCREEN. The Corporate
-    # Gifts copy claimed "notepads at a hundred" while notepads was not one of
-    # its tiles - and notepads is a Commercial Print product, so the sentence
-    # described something the reader could not see under a heading saying these
-    # were the category's most ordered.
-    WORDS = {"one": 1, "five": 5, "ten": 10, "twenty-five": 25, "fifty": 50,
-             "a hundred": 100, "two hundred": 200, "five hundred": 500,
-             "a thousand": 1000}
-    shown = {p[3] for p in cp.PRODUCTS[cat["slug"]]}
-    for _, _, body in [(b[0], b[1], b[2]) for b in cat["blocks"]]:
-        for phrase, n in WORDS.items():
-            if re.search(r"start(?:s)? at %s\b" % re.escape(phrase), body) and n not in shown:
-                errs.append("%s: copy says a minimum of %d, but no product shown has that "
-                            "minimum order quantity" % (t, n))
-        for m in re.finditer(r"and ([a-z ]+?) at ([a-z ]+?)(?:,|\.| so)", body):
-            n = WORDS.get(m.group(2).strip())
-            if n is not None and n not in shown:
-                errs.append("%s: copy says %r at %d, which is not a minimum of anything shown"
-                            % (t, m.group(1).strip(), n))
-    # House style: no jargon in what a reader SEES - the text between tags plus
-    # alt text, not the markup, and not the Django tags either (an early version
-    # tripped on "gsm" inside a catalogue id, which nobody ever reads).
+    # the whole point of the change: no catalogue lookups, no prices
+    if "{% catalog" in livb: errs.append(t + ": a catalog lookup came back")
+    for bad in ("from &euro;", "from &pound;", "min_order_quantity", "from_price"):
+        if bad in livb: errs.append("%s: price or minimum leaked in: %s" % (t, bad))
+    if "{%%" in livb: errs.append(t + ": literal {%% in the output")
+    # every subcategory must be reachable in every locale
+    for s in conf["feature"] + conf["grid"]:
+        if not sc.sub(s): errs.append("%s: %r is not in the snapshot" % (t, s)); continue
+        for el, cl in sc.LOCALE_MAP.items():
+            if not sc.field(s, cl, "url"): errs.append("%s: %s has no URL for %s" % (t, s, cl))
+        if not sc.image(s): errs.append("%s: %s has no image" % (t, s))
+        # each one appears as a link in the live build
+        if sc.field(s, "en-GB", "url") not in livb:
+            errs.append("%s: %s is not linked in the live build" % (t, s))
+    # feature copy must exist for exactly the feature subcategories
+    if set(cat["body"]) != set(conf["feature"]):
+        errs.append("%s: feature copy is %s but the snapshot features %s"
+                    % (t, sorted(cat["body"]), sorted(conf["feature"])))
+    # grid rows must be pairs
+    for row in re.findall(r"<tr>(.*?)</tr>", grid(P, conf["grid"], True), re.S):
+        if row.count("%s-tile" % P) != 2:
+            errs.append(t + ": a grid row is not two cells")
+    if "%s-dark" % P not in livb: errs.append(t + ": the dark header is gone")
+    # house style, on what a reader sees
     doc = re.sub(r"<!--.*?-->", "", livb, flags=re.S)
     doc = re.sub(r"<style[^>]*>.*?</style>", "", doc, flags=re.S)
-    alts = " ".join(re.findall(r'alt="([^"]*)"', doc))
-    txt = re.sub(r"<[^>]+>", " ", doc)
-    txt = re.sub(r"\{%.*?%\}", " ", txt, flags=re.S)
-    txt = re.sub(r"\{\{.*?\}\}", " ", txt, flags=re.S)
-    vis = (txt + " " + alts).lower()
+    vis = (re.sub(r"\{\{.*?\}\}", " ", re.sub(r"\{%.*?%\}", " ",
+           re.sub(r"<[^>]+>", " ", doc), flags=re.S), flags=re.S) + " "
+           + " ".join(re.findall(r'alt="([^"]*)"', doc))).lower()
     for j in ("bleed", "dpi", "cmyk", "safe area", "pre-flight", "gsm"):
-        if j in vis:
-            errs.append("%s: jargon found, house style forbids it: %s" % (t, j))
-    # a figure must never be split from its unit
-    for loose in re.findall(r"\d+ (?:units|unit)", vis):
-        errs.append("%s: %r can break across lines" % (t, loose))
+        if j in vis: errs.append("%s: jargon found, house style forbids it: %s" % (t, j))
 
-# the six must genuinely differ - a copy-paste slip would be invisible otherwise
-bodies = {c["slug"]: build(c, live=True) for c in CATEGORIES}
-for a in CATEGORIES:
-    for b in CATEGORIES:
-        if a["slug"] < b["slug"] and bodies[a["slug"]] == bodies[b["slug"]]:
-            errs.append("%s and %s are identical" % (a["slug"], b["slug"]))
-seen = {}
-for c in CATEGORIES:
-    if c["h1"] in seen: errs.append("%s reuses the headline of %s" % (c["slug"], seen[c["h1"]]))
-    seen[c["h1"]] = c["slug"]
-    if c["code"] in [x["code"] for x in CATEGORIES if x is not c]:
-        errs.append("duplicate class prefix code: " + c["code"])
-if len(cp.PRODUCTS) != len(CATEGORIES):
-    errs.append("product table has %d categories, the builder has %d" % (len(cp.PRODUCTS), len(CATEGORIES)))
+# the five must genuinely differ
+bodies = {c["slug"]: build(c, True) for c in CATEGORIES if sc.emails().get(c["slug"])}
+for a in list(bodies):
+    for b in list(bodies):
+        if a < b and bodies[a] == bodies[b]: errs.append("%s and %s are identical" % (a, b))
+codes = [c["code"] for c in CATEGORIES]
+if len(set(codes)) != len(codes): errs.append("duplicate class prefix code")
+if len(CATEGORIES) != len(sc.emails()):
+    errs.append("%d categories in the builder, %d in the snapshot"
+                % (len(CATEGORIES), len(sc.emails())))
 
-for label, a, b in written:
-    print("  %-20s preview %6d   klaviyo %6d" % (label, a, b))
-print("\n%d emails, product snapshot %s" % (len(written), cp.REFRESHED))
-print("trustpilot cache: %s, %d category+language reviews"
-      % (rv.fetched() or "NOT FETCHED YET - run scripts/fetch_reviews.py", rv.count()))
-total = len(cp.MARKETS) * sum(len(v) for v in cp.PRODUCTS.values())
-print("catalogue ids requested: %d of %d possible; %d verified missing from the feed"
-      % (len(cp.all_ids()), total, total - len(cp.all_ids())))
-print("\ntiles each market sees:")
-print("  %-20s %s" % ("", "  ".join(cp.MARKETS)))
-for slug, row in cp.coverage().items():
-    flags = "".join("%3d " % row[m] for m in cp.MARKETS)
-    note = "  <- falls back to text" if 0 in row.values() else ""
-    print("  %-20s %s%s" % (slug, flags, note))
+print("%-22s %8s %6s  %9s %9s" % ("email", "feature", "grid", "preview", "klaviyo"))
+for label, nf, ng, a, b in written:
+    print("%-22s %8d %6d  %9d %9d" % (label, nf, ng, a, b))
+print("\n%d emails | categories %s | reviews %s, %d cached"
+      % (len(written), sc.fetched(), rv.fetched() or "NOT FETCHED", rv.count()))
 if errs:
     for e in dict.fromkeys(errs): print("  FAIL  " + e)
     raise SystemExit(1)

@@ -1,0 +1,960 @@
+{
+ "emails": {
+  "clothing-textiles": {
+   "feature": [
+    "T-shirts",
+    "Polo Shirts"
+   ],
+   "grid": [
+    "Interior Textiles",
+    "Caps"
+   ],
+   "label": "Clothing & Textiles",
+   "match": [
+    "Clothing & Textiles"
+   ]
+  },
+  "commercial-print": {
+   "feature": [
+    "Booklets & Brochures",
+    "Leaflet Printing & Flyers"
+   ],
+   "grid": [
+    "Folded Leaflets",
+    "Poster Printing",
+    "Business Cards",
+    "Cards & Invitations"
+   ],
+   "label": "Commercial Print",
+   "match": [
+    "Commercial Print"
+   ]
+  },
+  "corporate-gifts": {
+   "feature": [
+    "Canvas Tote Bags",
+    "Pens"
+   ],
+   "grid": [
+    "Notebooks",
+    "Water Bottles"
+   ],
+   "label": "Corporate Gifts",
+   "match": [
+    "Corporate Gifts"
+   ]
+  },
+  "labels-packaging": {
+   "feature": [
+    "Labels & Stickers",
+    "Paper Bags"
+   ],
+   "grid": [
+    "Labels On Roll",
+    "Printed Food Packaging"
+   ],
+   "label": "Labels & Packaging",
+   "match": [
+    "Labels",
+    "Packaging"
+   ]
+  },
+  "signage-outdoor": {
+   "feature": [
+    "Banners",
+    "Signage & Panels"
+   ],
+   "grid": [
+    "Beach Flags",
+    "Roller Banners"
+   ],
+   "label": "Signage & Outdoor",
+   "match": [
+    "Signage & Outdoor"
+   ]
+  }
+ },
+ "environment": "master",
+ "fetched": "2026-08-26",
+ "locales": [
+  "en-IE",
+  "en-GB",
+  "nl",
+  "nl-BE",
+  "fr-FR",
+  "fr-BE",
+  "es-ES",
+  "it"
+ ],
+ "market_path": {
+  "en-GB": "en-gb",
+  "en-IE": "en-ie",
+  "es-ES": "es-es",
+  "fr-BE": "fr-be",
+  "fr-FR": "fr-fr",
+  "it": "it-it",
+  "nl": "nl-nl",
+  "nl-BE": "nl-be"
+ },
+ "space": "wm1n7oady8a5",
+ "subcategories": {
+  "banners": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Banners",
+     "url": "https://www.helloprint.com/en-gb/banner-printing"
+    },
+    "en-IE": {
+     "name": "Banners",
+     "url": "https://www.helloprint.com/en-ie/banner-printing"
+    },
+    "es-ES": {
+     "name": "Lonas y pancartas",
+     "url": "https://www.helloprint.com/es-es/lonas-impresas"
+    },
+    "fr-BE": {
+     "name": "Bâches et banderoles",
+     "url": "https://www.helloprint.com/fr-be/banderole-publicitaire"
+    },
+    "fr-FR": {
+     "name": "Bâches et banderoles",
+     "url": "https://www.helloprint.com/fr-fr/banderole-publicitaire"
+    },
+    "it": {
+     "name": "Banner e striscioni",
+     "url": "https://www.helloprint.com/it-it/banner-pubblicitari"
+    },
+    "nl": {
+     "name": "Banners",
+     "url": "https://www.helloprint.com/nl-nl/banners-en-spandoeken-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Banners",
+     "url": "https://www.helloprint.com/nl-be/banners-en-spandoeken-bedrukken"
+    }
+   },
+   "id": "2CgArMWtuwGC80nvkvzMeY",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/5ik4P8UwXpMsvOFYV4N9t8/a3ba0379f69484aabf9322afe10d343e/Untitled_design__4_.png",
+   "name_en": "Banners"
+  },
+  "beach-flags": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Beach Flags",
+     "url": "https://www.helloprint.com/en-gb/beachflag-printing"
+    },
+    "en-IE": {
+     "name": "Beach Flags",
+     "url": "https://www.helloprint.com/en-ie/beachflag-printing"
+    },
+    "es-ES": {
+     "name": "Banderolas",
+     "url": "https://www.helloprint.com/es-es/banderolasdeplaya-impresas"
+    },
+    "fr-BE": {
+     "name": "Beachflags & Oriflammes",
+     "url": "https://www.helloprint.com/fr-be/drapeaux-plage"
+    },
+    "fr-FR": {
+     "name": "Beachflags & Oriflammes",
+     "url": "https://www.helloprint.com/fr-fr/drapeaux-plage"
+    },
+    "it": {
+     "name": "Vele pubblicitarie",
+     "url": "https://www.helloprint.com/it-it/vele-pubblicitarie"
+    },
+    "nl": {
+     "name": "Beachflags",
+     "url": "https://www.helloprint.com/nl-nl/beachvlaggen-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Beachflags",
+     "url": "https://www.helloprint.com/nl-be/beachvlaggen-bedrukken"
+    }
+   },
+   "id": "pq3CfXK1HP7pxVnXcW04d",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6Wc9ZjECFmpH9IeU1CYcMV/429104508d16d7cf91fd087efc4e581e/17.png",
+   "name_en": "Beach Flags"
+  },
+  "booklets-brochures": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Booklets & Brochures",
+     "url": "https://www.helloprint.com/en-gb/brochure-and-booklet-printing"
+    },
+    "en-IE": {
+     "name": "Booklets",
+     "url": "https://www.helloprint.com/en-ie/brochure-and-booklet-printing"
+    },
+    "es-ES": {
+     "name": "Catálogos, libros y revistas",
+     "url": "https://www.helloprint.com/es-es/catalogos-y-folletos-impresos"
+    },
+    "fr-BE": {
+     "name": "Brochures, Livrets et Catalogues",
+     "url": "https://www.helloprint.com/fr-be/impression-brochure"
+    },
+    "fr-FR": {
+     "name": "Brochures, Livrets et Catalogues",
+     "url": "https://www.helloprint.com/fr-fr/impression-brochure"
+    },
+    "it": {
+     "name": "Cataloghi, riviste e libri",
+     "url": "https://www.helloprint.com/it-it/stampa-cataloghi"
+    },
+    "nl": {
+     "name": "Brochures",
+     "url": "https://www.helloprint.com/nl-nl/brochures-drukken"
+    },
+    "nl-BE": {
+     "name": "Brochures",
+     "url": "https://www.helloprint.com/nl-be/brochures-drukken"
+    }
+   },
+   "id": "5S3q2ijApUeC0AkucCCsse",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6aN5mDE5DHFCKnOXkhmwVi/37f1d23093388b03a9146cafc53c604c/1.png",
+   "name_en": "Booklets & Brochures"
+  },
+  "business-cards": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Business Cards",
+     "url": "https://www.helloprint.com/en-gb/businesscards-printing"
+    },
+    "en-IE": {
+     "name": "Business Cards",
+     "url": "https://www.helloprint.com/en-ie/businesscards-printing"
+    },
+    "es-ES": {
+     "name": "Tarjetas de visita",
+     "url": "https://www.helloprint.com/es-es/tarjetas-de-visita"
+    },
+    "fr-BE": {
+     "name": "Cartes de visite",
+     "url": "https://www.helloprint.com/fr-be/impression-carte-de-visite"
+    },
+    "fr-FR": {
+     "name": "Cartes de visite",
+     "url": "https://www.helloprint.com/fr-fr/impression-carte-de-visite"
+    },
+    "it": {
+     "name": "Biglietti da visita",
+     "url": "https://www.helloprint.com/it-it/biglietti-da-visita"
+    },
+    "nl": {
+     "name": "Visitekaartjes",
+     "url": "https://www.helloprint.com/nl-nl/visitekaartje-drukken"
+    },
+    "nl-BE": {
+     "name": "Visitekaartjes",
+     "url": "https://www.helloprint.com/nl-be/visitekaartje-drukken"
+    }
+   },
+   "id": "5T6frRhFrqCsWmA0IWMgUy",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/5CSkDZm2Dms8sYa4y6M8e0/878620dbb08ee1e84c755a90f66ab864/classic_business_cards.png",
+   "name_en": "Business Cards"
+  },
+  "canvas-tote-bags": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Canvas Tote Bags",
+     "url": "https://www.helloprint.com/en-gb/printing-cottonbags"
+    },
+    "en-IE": {
+     "name": "Canvas Tote Bags",
+     "url": "https://www.helloprint.com/en-ie/printing-cottonbags"
+    },
+    "es-ES": {
+     "name": "Tote bags",
+     "url": "https://www.helloprint.com/es-es/imprimir-bolsa-algodon"
+    },
+    "fr-BE": {
+     "name": "Tote bags & Sacs en coton",
+     "url": "https://www.helloprint.com/fr-be/sacs-coton"
+    },
+    "fr-FR": {
+     "name": "Tote bags & Sacs en coton",
+     "url": "https://www.helloprint.com/fr-fr/sacs-coton"
+    },
+    "it": {
+     "name": "Tote bags",
+     "url": "https://www.helloprint.com/it-it/borse-di-tela"
+    },
+    "nl": {
+     "name": "Katoenen tassen",
+     "url": "https://www.helloprint.com/nl-nl/katoenentassen-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Katoenen tassen",
+     "url": "https://www.helloprint.com/nl-be/katoenentassen-bedrukken"
+    }
+   },
+   "id": "3wJyRtqe6sigcwAeMQywgU",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6UKJKFkRifue7levJ4bLhI/72c8570fb645b32a013eacff0278f331/10.png",
+   "name_en": "Canvas Tote Bags"
+  },
+  "caps": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Caps",
+     "url": "https://www.helloprint.com/en-gb/personalised-caps"
+    },
+    "en-IE": {
+     "name": "Caps",
+     "url": "https://www.helloprint.com/en-ie/personalised-caps"
+    },
+    "es-ES": {
+     "name": "Gorras",
+     "url": "https://www.helloprint.com/es-es/gorras-personalizadas"
+    },
+    "fr-BE": {
+     "name": "Casquettes",
+     "url": "https://www.helloprint.com/fr-be/casquettes-personnalisees"
+    },
+    "fr-FR": {
+     "name": "Casquettes",
+     "url": "https://www.helloprint.com/fr-fr/casquettes-personnalisees"
+    },
+    "it": {
+     "name": "Cappellini",
+     "url": "https://www.helloprint.com/it-it/cappellini-personalizzati"
+    },
+    "nl": {
+     "name": "Petten",
+     "url": "https://www.helloprint.com/nl-nl/petten-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Petten",
+     "url": "https://www.helloprint.com/nl-be/petten-bedrukken"
+    }
+   },
+   "id": "6EwA08P0gEKeqAmYA62eG6",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/5geTr5nz3TOtzCTAh2ghws/24e4e657d05a3683589374f28b2e0d8d/menu-image-clothing-caps.png",
+   "name_en": "Caps"
+  },
+  "cards-invitations": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Cards & Invitations",
+     "url": "https://www.helloprint.com/en-gb/cards-and-invites"
+    },
+    "en-IE": {
+     "name": "Cards & Invitations",
+     "url": "https://www.helloprint.com/en-ie/cards-and-invites"
+    },
+    "es-ES": {
+     "name": "Tarjetas e invitaciones",
+     "url": "https://www.helloprint.com/es-es/tarjetas-e-invitaciones"
+    },
+    "fr-BE": {
+     "name": "Cartes & invitations",
+     "url": "https://www.helloprint.com/fr-be/cartes-et-invitations"
+    },
+    "fr-FR": {
+     "name": "Cartes & invitations",
+     "url": "https://www.helloprint.com/fr-fr/cartes-et-invitations"
+    },
+    "it": {
+     "name": "Biglietti e Inviti",
+     "url": "https://www.helloprint.com/it-it/biglietti-e-inviti"
+    },
+    "nl": {
+     "name": "Kaarten & uitnodigingen",
+     "url": "https://www.helloprint.com/nl-nl/kaarten-en-uitnodigingen"
+    },
+    "nl-BE": {
+     "name": "Kaarten & uitnodigingen",
+     "url": "https://www.helloprint.com/nl-be/kaarten-en-uitnodigingen"
+    }
+   },
+   "id": "3XwRHInZLiAGcI2QqucqUG",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6OsG9z6x2gmcAYyYokAaau/d675ab5252ea5400fe4829ef583a0b27/Greeting-card-product-image.png",
+   "name_en": "Cards & Invitations"
+  },
+  "folded-leaflets": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Folded Leaflets",
+     "url": "https://www.helloprint.com/en-gb/foldedleaflets"
+    },
+    "en-IE": {
+     "name": "Folded Leaflets",
+     "url": "https://www.helloprint.com/en-ie/foldedleaflets"
+    },
+    "es-ES": {
+     "name": "Folletos plegados",
+     "url": "https://www.helloprint.com/es-es/folletospublicitarios"
+    },
+    "fr-BE": {
+     "name": "Dépliants et plaquettes commerciales",
+     "url": "https://www.helloprint.com/fr-be/depliantslivresplies"
+    },
+    "fr-FR": {
+     "name": "Dépliants et plaquettes commerciales",
+     "url": "https://www.helloprint.com/fr-fr/depliantslivresplies"
+    },
+    "it": {
+     "name": "Pieghevoli",
+     "url": "https://www.helloprint.com/it-it/stampa-brochure"
+    },
+    "nl": {
+     "name": "Folders",
+     "url": "https://www.helloprint.com/nl-nl/folders"
+    },
+    "nl-BE": {
+     "name": "Folders",
+     "url": "https://www.helloprint.com/nl-be/folders"
+    }
+   },
+   "id": "6QGEe77ZQsJm4dsQRlvzFP",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/3Jf2cBof3W460cAUg2mSGa/eccbf6bb0def971437f73feb504f18ca/new-product-image-folded-leaflet-trifold-transparent.png",
+   "name_en": "Folded Leaflets"
+  },
+  "interior-textiles": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Interior Textiles",
+     "url": "https://www.helloprint.com/en-gb/interior-textiles"
+    },
+    "en-IE": {
+     "name": "Interior Textiles",
+     "url": "https://www.helloprint.com/en-ie/interior-textiles"
+    },
+    "es-ES": {
+     "name": "Textiles interiores",
+     "url": "https://www.helloprint.com/es-es/impresion-textil-interiores"
+    },
+    "fr-BE": {
+     "name": "Textile pour décoration d'intérieur",
+     "url": "https://www.helloprint.com/fr-be/impression-textile-interieur"
+    },
+    "fr-FR": {
+     "name": "Textile pour décoration d'intérieur",
+     "url": "https://www.helloprint.com/fr-fr/impression-textile-interieur"
+    },
+    "it": {
+     "name": "Tessuti per interni",
+     "url": "https://www.helloprint.com/it-it/stampa-tessili-per-interni"
+    },
+    "nl": {
+     "name": "Interieurtextiel",
+     "url": "https://www.helloprint.com/nl-nl/interieur-textiel"
+    },
+    "nl-BE": {
+     "name": "Interieurtextiel",
+     "url": "https://www.helloprint.com/nl-be/interieur-textiel"
+    }
+   },
+   "id": "2ktIEgbbMvIurZCEM2kpyr",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/3AmHIEisYtFTU4juOiYbeE/8d3fd0b7e50b85371e08d2b4d90e2849/9.png",
+   "name_en": "Interior Textiles"
+  },
+  "labels-on-roll": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Labels On Roll",
+     "url": "https://www.helloprint.com/en-gb/labels-on-roll"
+    },
+    "en-IE": {
+     "name": "Labels On Roll",
+     "url": "https://www.helloprint.com/en-ie/labels-on-roll"
+    },
+    "es-ES": {
+     "name": "Pegatinas en rollo",
+     "url": "https://www.helloprint.com/es-es/pegatinas-en-rollo"
+    },
+    "fr-BE": {
+     "name": "Étiquettes en rouleau",
+     "url": "https://www.helloprint.com/fr-be/etiquette-autocollant-rouleau"
+    },
+    "fr-FR": {
+     "name": "Étiquettes en rouleau",
+     "url": "https://www.helloprint.com/fr-fr/etiquette-autocollant-rouleau"
+    },
+    "it": {
+     "name": "Adesivi in bobina",
+     "url": "https://www.helloprint.com/it-it/adesivirotolo"
+    },
+    "nl": {
+     "name": "Stickers op rol",
+     "url": "https://www.helloprint.com/nl-nl/stickers-op-rol"
+    },
+    "nl-BE": {
+     "name": "Stickers op rol",
+     "url": "https://www.helloprint.com/nl-be/stickers-op-rol"
+    }
+   },
+   "id": "RKZ5rn86cKmIeKG2aCSeA",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/3OMKOX6kUNJEbvU2mkLWsG/f10f121529565f8f2d7b27bf8a7c0b55/labels_on_roll_search.png",
+   "name_en": "Labels On Roll"
+  },
+  "labels-stickers": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Labels & Stickers",
+     "url": "https://www.helloprint.com/en-gb/all-stickers"
+    },
+    "en-IE": {
+     "name": "Labels & Stickers",
+     "url": "https://www.helloprint.com/en-ie/all-stickers"
+    },
+    "es-ES": {
+     "name": "Pegatinas y adhesivos",
+     "url": "https://www.helloprint.com/es-es/todas-las-pegatinas"
+    },
+    "fr-BE": {
+     "name": "Autocollants et stickers",
+     "url": "https://www.helloprint.com/fr-be/impressions-stickers"
+    },
+    "fr-FR": {
+     "name": "Autocollants et stickers",
+     "url": "https://www.helloprint.com/fr-fr/impressions-stickers"
+    },
+    "it": {
+     "name": "Adesivi ed etichette",
+     "url": "https://www.helloprint.com/it-it/tutti-gli-stickers"
+    },
+    "nl": {
+     "name": "Stickers",
+     "url": "https://www.helloprint.com/nl-nl/alle-stickers"
+    },
+    "nl-BE": {
+     "name": "Stickers",
+     "url": "https://www.helloprint.com/nl-be/alle-stickers"
+    }
+   },
+   "id": "6gAyPHz95YgmAIGUeMKqaU",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/1h5mTyaRRCf5LIrWyLjTZi/d815c3d04675bd0b1d1d58e9d93c16c8/Stickers-Custom-Size-Product-Image-1.png",
+   "name_en": "Labels & Stickers"
+  },
+  "leaflet-printing-flyers": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Leaflet Printing & Flyers",
+     "url": "https://www.helloprint.com/en-gb/flyers"
+    },
+    "en-IE": {
+     "name": "Leaflet Printing & Flyers",
+     "url": "https://www.helloprint.com/en-ie/flyers"
+    },
+    "es-ES": {
+     "name": "Flyers",
+     "url": "https://www.helloprint.com/es-es/flyers"
+    },
+    "fr-BE": {
+     "name": "Flyers",
+     "url": "https://www.helloprint.com/fr-be/flyers"
+    },
+    "fr-FR": {
+     "name": "Flyers",
+     "url": "https://www.helloprint.com/fr-fr/flyers"
+    },
+    "it": {
+     "name": "Volantini",
+     "url": "https://www.helloprint.com/it-it/volantini"
+    },
+    "nl": {
+     "name": "Flyers",
+     "url": "https://www.helloprint.com/nl-nl/flyers"
+    },
+    "nl-BE": {
+     "name": "Flyers",
+     "url": "https://www.helloprint.com/nl-be/flyers"
+    }
+   },
+   "id": "xaky4LcL76FGnnJH7Ih61",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6UyZ82yNCMz2nkH4C7jfk3/0f80acb4783ec5facc1f974c457542ab/2.png",
+   "name_en": "Leaflet Printing & Flyers"
+  },
+  "notebooks": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Notebooks",
+     "url": "https://www.helloprint.com/en-gb/notebook-printing"
+    },
+    "en-IE": {
+     "name": "Notebooks",
+     "url": "https://www.helloprint.com/en-ie/notebook-printing"
+    },
+    "es-ES": {
+     "name": "Libretas y cuadernos",
+     "url": "https://www.helloprint.com/es-es/cuadernos-de-notas"
+    },
+    "fr-BE": {
+     "name": "Carnets de notes",
+     "url": "https://www.helloprint.com/fr-be/impression-carnet"
+    },
+    "fr-FR": {
+     "name": "Carnets de notes",
+     "url": "https://www.helloprint.com/fr-fr/impression-carnet"
+    },
+    "it": {
+     "name": "Taccuini",
+     "url": "https://www.helloprint.com/it-it/stampa-taccuini"
+    },
+    "nl": {
+     "name": "Notitieboekjes",
+     "url": "https://www.helloprint.com/nl-nl/notitieblok-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Notitieboekjes",
+     "url": "https://www.helloprint.com/nl-be/notitieblok-bedrukken"
+    }
+   },
+   "id": "3jgakbM432WyDtjIh9epVe",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/2I48ifEjqo2yi4ygmyCmS4/e31a9f154ce5006a43407437e09559e3/6.png",
+   "name_en": "Notebooks"
+  },
+  "paper-bags": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Paper Bags",
+     "url": "https://www.helloprint.com/en-gb/printing-paperbags"
+    },
+    "en-IE": {
+     "name": "Paper Bags",
+     "url": "https://www.helloprint.com/en-ie/printing-paperbags"
+    },
+    "es-ES": {
+     "name": "Bolsas de papel",
+     "url": "https://www.helloprint.com/es-es/bolsa-papel"
+    },
+    "fr-BE": {
+     "name": "Sacs en papier",
+     "url": "https://www.helloprint.com/fr-be/impression-sackraft"
+    },
+    "fr-FR": {
+     "name": "Sacs en papier",
+     "url": "https://www.helloprint.com/fr-fr/impression-sackraft"
+    },
+    "it": {
+     "name": "Buste di carta",
+     "url": "https://www.helloprint.com/it-it/buste-di-carta"
+    },
+    "nl": {
+     "name": "Papieren tassen",
+     "url": "https://www.helloprint.com/nl-nl/papierentassen-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Papieren tassen",
+     "url": "https://www.helloprint.com/nl-be/papierentassen-bedrukken"
+    }
+   },
+   "id": "60F78qfrqw4eCwqGsgqqQe",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/5UYpTBOrqE0aocecWUs6ME/e010062930bf0c492574cad7cc770324/tile-paper-bags-trans.png",
+   "name_en": "Paper Bags"
+  },
+  "pens": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Pens",
+     "url": "https://www.helloprint.com/en-gb/ballpoint-pens"
+    },
+    "en-IE": {
+     "name": "Pens",
+     "url": "https://www.helloprint.com/en-ie/ballpoint-pens"
+    },
+    "es-ES": {
+     "name": "Bolígrafos",
+     "url": "https://www.helloprint.com/es-es/boligrafos-para-personalizar"
+    },
+    "fr-BE": {
+     "name": "Stylos",
+     "url": "https://www.helloprint.com/fr-be/stylo-personnalise"
+    },
+    "fr-FR": {
+     "name": "Stylos",
+     "url": "https://www.helloprint.com/fr-fr/stylo-personnalise"
+    },
+    "it": {
+     "name": "Penne",
+     "url": "https://www.helloprint.com/it-it/penne-a-sfera"
+    },
+    "nl": {
+     "name": "Pennen",
+     "url": "https://www.helloprint.com/nl-nl/pennen-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Pennen",
+     "url": "https://www.helloprint.com/nl-be/pennen-bedrukken"
+    }
+   },
+   "id": "2ZnZvOV79eoAK2ug8gEwK2",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/4NXiyPrpvopEq6tHEE4GSg/d518a275698cbef14f2b84aa149f9862/Landingpage-Personalised-Writing-Instruments-Pens-removebg-preview.png",
+   "name_en": "Pens"
+  },
+  "polo-shirts": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Polo Shirts",
+     "url": "https://www.helloprint.com/en-gb/personalised-polo-shirts"
+    },
+    "en-IE": {
+     "name": "Polo Shirts",
+     "url": "https://www.helloprint.com/en-ie/personalised-polo-shirts"
+    },
+    "es-ES": {
+     "name": "Polos",
+     "url": "https://www.helloprint.com/es-es/polos-personalizados"
+    },
+    "fr-BE": {
+     "name": "Polos",
+     "url": "https://www.helloprint.com/fr-be/tshirt-polo-personnalise"
+    },
+    "fr-FR": {
+     "name": "Polos",
+     "url": "https://www.helloprint.com/fr-fr/tshirt-polo-personnalise"
+    },
+    "it": {
+     "name": "Polo",
+     "url": "https://www.helloprint.com/it-it/polo-personalizzate"
+    },
+    "nl": {
+     "name": "Polo's",
+     "url": "https://www.helloprint.com/nl-nl/polos-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Polo's",
+     "url": "https://www.helloprint.com/nl-be/polos-bedrukken"
+    }
+   },
+   "id": "4GnXBz3dcAKwCCqmCqwE4g",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/k7WNLeTJsqHZ4quaY6vT8/4b32ffcdd1289dddcc9842fba8bf1eb6/Search_image__7_.png",
+   "name_en": "Polo Shirts"
+  },
+  "poster-printing": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Poster Printing",
+     "url": "https://www.helloprint.com/en-gb/poster-printing"
+    },
+    "en-IE": {
+     "name": "Posters",
+     "url": "https://www.helloprint.com/en-ie/poster-printing"
+    },
+    "es-ES": {
+     "name": "Carteles y Pósters",
+     "url": "https://www.helloprint.com/es-es/posters-impresos"
+    },
+    "fr-BE": {
+     "name": "Affiches et Posters",
+     "url": "https://www.helloprint.com/fr-be/impression-affiches-et-posters"
+    },
+    "fr-FR": {
+     "name": "Affiches et Posters",
+     "url": "https://www.helloprint.com/fr-fr/impression-affiches-et-posters"
+    },
+    "it": {
+     "name": "Manifesti e Poster personalizzati",
+     "url": "https://www.helloprint.com/it-it/stampa-poster"
+    },
+    "nl": {
+     "name": "Posters",
+     "url": "https://www.helloprint.com/nl-nl/posters-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Posters",
+     "url": "https://www.helloprint.com/nl-be/posters-bedrukken"
+    }
+   },
+   "id": "4mzxZueh2omgQg6w8oAmka",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/68Pq4bsbhqFBakHixNcehX/1f171e974b81395c10d11ce2b7c850c7/4.png",
+   "name_en": "Poster Printing"
+  },
+  "printed-food-packaging": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Printed Food Packaging",
+     "url": "https://www.helloprint.com/en-gb/printed-food-packaging"
+    },
+    "en-IE": {
+     "name": "Printed Food Packaging",
+     "url": "https://www.helloprint.com/en-ie/printed-food-packaging"
+    },
+    "es-ES": {
+     "name": "Envases alimentarios impresos",
+     "url": "https://www.helloprint.com/es-es/envases-alimentarios-personalizados"
+    },
+    "fr-BE": {
+     "name": "Emballages alimentaires imprimés",
+     "url": "https://www.helloprint.com/fr-be/emballages-alimentaires-imprimes"
+    },
+    "fr-FR": {
+     "name": "Emballages alimentaires imprimés",
+     "url": "https://www.helloprint.com/fr-fr/emballages-alimentaires-imprimes"
+    },
+    "it": {
+     "name": "Imballaggi stampati per alimenti",
+     "url": "https://www.helloprint.com/it-it/imballaggi-alimentari-personalizzati"
+    },
+    "nl": {
+     "name": "Bedrukte voedselverpakkingen",
+     "url": "https://www.helloprint.com/nl-nl/bedrukt-voedselverpakking"
+    },
+    "nl-BE": {
+     "name": "Bedrukte voedselverpakkingen",
+     "url": "https://www.helloprint.com/nl-be/bedrukt-voedselverpakking"
+    }
+   },
+   "id": "3nCN0b4dldxWfPqPWli4bM",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6qRAPpgi08iXc7uNHyW5cv/36dd1d1f45f5ba19056dc0c95a3bc6b2/Ontwerp_zonder_titel__7_.png",
+   "name_en": "Printed Food Packaging"
+  },
+  "roller-banners": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Roller Banners",
+     "url": "https://www.helloprint.com/en-gb/rollupbanners-printing"
+    },
+    "en-IE": {
+     "name": "Roller Banners",
+     "url": "https://www.helloprint.com/en-ie/rollupbanners-printing"
+    },
+    "es-ES": {
+     "name": "Roll up publicitarios",
+     "url": "https://www.helloprint.com/es-es/bannersrollup-impresos"
+    },
+    "fr-BE": {
+     "name": "Kakémonos roll-up",
+     "url": "https://www.helloprint.com/fr-be/personnalisation-kakemonos"
+    },
+    "fr-FR": {
+     "name": "Kakémonos roll-up",
+     "url": "https://www.helloprint.com/fr-fr/personnalisation-kakemonos"
+    },
+    "it": {
+     "name": "Roll up pubblicitari",
+     "url": "https://www.helloprint.com/it-it/stampa-banner-rollup"
+    },
+    "nl": {
+     "name": "Roll-up banners",
+     "url": "https://www.helloprint.com/nl-nl/rollupbanners-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Roll-up banners",
+     "url": "https://www.helloprint.com/nl-be/rollupbanners-bedrukken"
+    }
+   },
+   "id": "4YyL4JGbTiAMOA06Q4UoGA",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/3IQjVkObjZ3jsVKEuYF7q8/d1735a07bbe192bc69794670568a4328/product-image-500x500-Roller-Banner-Printing-Promo-Roller-Banner.png",
+   "name_en": "Roller Banners"
+  },
+  "signage-panels": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Signage & Panels",
+     "url": "https://www.helloprint.com/en-gb/panels-and-signs"
+    },
+    "en-IE": {
+     "name": "Signage & Panels",
+     "url": "https://www.helloprint.com/en-ie/panels-and-signs"
+    },
+    "es-ES": {
+     "name": "Paneles y señales",
+     "url": "https://www.helloprint.com/es-es/paneles-y-senales"
+    },
+    "fr-BE": {
+     "name": "Panneaux & pancartes",
+     "url": "https://www.helloprint.com/fr-be/affichage-et-panneaux"
+    },
+    "fr-FR": {
+     "name": "Panneaux & pancartes",
+     "url": "https://www.helloprint.com/fr-fr/affichage-et-panneaux"
+    },
+    "it": {
+     "name": "Pannelli e insegne",
+     "url": "https://www.helloprint.com/it-it/insegne"
+    },
+    "nl": {
+     "name": "Reclameborden",
+     "url": "https://www.helloprint.com/nl-nl/reclamebord"
+    },
+    "nl-BE": {
+     "name": "Reclameborden",
+     "url": "https://www.helloprint.com/nl-be/reclamebord"
+    }
+   },
+   "id": "6jPrK3NRIHED8v56KkI76z",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/3mDfY6eYAJsVwdTYg136BA/c3b360be3160584b11427b94236d53ef/16.png",
+   "name_en": "Signage & Panels"
+  },
+  "t-shirts": {
+   "by_locale": {
+    "en-GB": {
+     "name": "T-shirts",
+     "url": "https://www.helloprint.com/en-gb/tshirt-printing"
+    },
+    "en-IE": {
+     "name": "T-shirts",
+     "url": "https://www.helloprint.com/en-ie/tshirt-printing"
+    },
+    "es-ES": {
+     "name": "Camisetas",
+     "url": "https://www.helloprint.com/es-es/camisetas-impresas"
+    },
+    "fr-BE": {
+     "name": "T-shirts",
+     "url": "https://www.helloprint.com/fr-be/impression-t-shirts"
+    },
+    "fr-FR": {
+     "name": "T-shirts",
+     "url": "https://www.helloprint.com/fr-fr/impression-t-shirts"
+    },
+    "it": {
+     "name": "Magliette",
+     "url": "https://www.helloprint.com/it-it/stampa-magliette"
+    },
+    "nl": {
+     "name": "T-shirts",
+     "url": "https://www.helloprint.com/nl-nl/tshirt-bedrukken"
+    },
+    "nl-BE": {
+     "name": "T-shirts",
+     "url": "https://www.helloprint.com/nl-be/tshirt-bedrukken"
+    }
+   },
+   "id": "EToQdgeWligsgSAmEYC88",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/4RkQgL6cX46UJK9SIrxVef/b3798507798ff8ae79429941101333f0/sportsware.png",
+   "name_en": "T-shirts"
+  },
+  "water-bottles": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Water Bottles",
+     "url": "https://www.helloprint.com/en-gb/printed-water-bottles"
+    },
+    "en-IE": {
+     "name": "Water Bottles",
+     "url": "https://www.helloprint.com/en-ie/printed-water-bottles"
+    },
+    "es-ES": {
+     "name": "Botellas de agua",
+     "url": "https://www.helloprint.com/es-es/botellas-agua-personalizadas"
+    },
+    "fr-BE": {
+     "name": "Gourdes",
+     "url": "https://www.helloprint.com/fr-be/gourdesimprimees"
+    },
+    "fr-FR": {
+     "name": "Gourdes",
+     "url": "https://www.helloprint.com/fr-fr/gourdesimprimees"
+    },
+    "it": {
+     "name": "Borracce",
+     "url": "https://www.helloprint.com/it-it/borracce-personalizzate"
+    },
+    "nl": {
+     "name": "Waterflessen",
+     "url": "https://www.helloprint.com/nl-nl/waterflessen-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Waterflessen",
+     "url": "https://www.helloprint.com/nl-be/waterflessen-bedrukken"
+    }
+   },
+   "id": "6EayEYDfPDfMuXNLaw2iua",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/1Rx4D8aQLAyKh3IStifGff/6904ee208197d3285ea7373613e1a12f/Sirius_RPET_650_ml_PDP_Copy_4.png",
+   "name_en": "Water Bottles"
+  }
+ }
+}
