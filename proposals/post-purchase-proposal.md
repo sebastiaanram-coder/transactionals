@@ -608,6 +608,90 @@ This is a parameter, not a measurement. Worth revisiting once there is send data
 
 ---
 
+## 3d. Emails 5 and 6: the discount, and the deadline
+
+A proposal. Nothing built.
+
+### One email 5, not one per category
+
+**Recommended, and it is also the easiest.** Three reasons:
+
+1. **The lever is the code, not the category.** Day 32 already did the
+   category job, and did it without spending anything. By day 60 the new
+   information is the offer and the clock.
+2. **Per category it is ten emails, not two** — five at day 60 and five at day
+   73 — and each would have to interact with the rotation. Which category does
+   the discount use: the one they bought in, or the one the nudge showed them?
+   There is no good answer, and both are wrong for anyone who has cycled.
+3. **Four of the five categories have no photography**, so a category-specific
+   day 60 could not ship even if it were the better design.
+
+What we give up is category relevance in the discount email. The cheap fix, for
+later: once the four missing category landing URLs exist, the **button** can point
+at the category they bought in without touching the design. One link switch, same
+email, no new artwork.
+
+### Email 5 — day 60
+
+| | |
+|---|---|
+| Job | Convert to the next order |
+| Gate | No order since entering the flow |
+| Offer | 10%, expiring 14 days after the send |
+| Shape | Photographic header like the category nudge, a different photograph, and the code as the hero — the first email in this flow where the offer leads |
+
+Every email before this one has deliberately not sold. This one should look like it
+is selling, because it is, and pretending otherwise after three emails of restraint
+would read as a bait. The copy says what it is: they have not ordered in two
+months, here is 10% for a fortnight.
+
+### Email 6 — day 73
+
+| | |
+|---|---|
+| Job | Close the window email 5 opened |
+| Gate | No order since, **and the code unused** |
+| Shape | Short. The deadline is the whole email |
+
+The second gate is the one worth getting right: *code unused*, not just *no order*.
+Without it we chase somebody who already redeemed. There is precedent to follow —
+the Abandoned Order low branch closes the same way, and its title had to be
+rewritten to fit a phone, which is checked in that builder.
+
+### The coupon is the blocker, and there is a real decision in it
+
+**No coupons exist in Klaviyo — verified, the account has zero.** So this is a
+decision rather than a lookup, and it affects the Abandoned Order flow too.
+
+- **Klaviyo native coupons** issue a *unique code per profile* and carry
+  `expires_at` **per code**. That is exactly what "expires in 14 days" needs in an
+  evergreen flow: the clock starts when the customer receives it.
+- **A static code** (`HELLO10`, `BASKET10`) cannot do that. Its expiry is a fixed
+  date, so "14 days" is only true for whoever receives it on day one. Everybody
+  else is told something false, or the code never really expires.
+
+`BASKET10` and `BASKET25` have the same problem and it is still open — they promise
+72 hours from a static code. **Recommendation: Klaviyo coupons, and fix both flows
+with the same mechanism.** It needs codes pre-generated in bulk, which is a job
+rather than a setting.
+
+### Four things to decide before these can be written
+
+1. **The code name.** Not `HELLO10` (welcome) and not `BASKET10` (abandoned
+   order). If we go with Klaviyo coupons the customer never sees a shared name
+   anyway, only their own code.
+2. **Does 10% apply before or after delivery and VAT?** The Welcome flow already
+   has a live contradiction here — it claims prices include delivery and VAT above
+   four figures that exclude both. Whatever the answer, the email has to state it.
+3. **Is there a minimum order value?** 10% of a €20 order costs more to serve than
+   it earns.
+4. **Capped or not?** `BASKET25` is capped at 25 because a flat percentage let a
+   €149 basket beat a €151 one. Day 60 has no basket at send time, so there is
+   nothing to cap *against* — but equally no ceiling on what a single order can
+   cost us.
+
+---
+
 ## 4. What this replaces
 
 | RFB email | Verdict |

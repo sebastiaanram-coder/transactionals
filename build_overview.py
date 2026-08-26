@@ -141,7 +141,7 @@ FLOWS = [
       preview="A minute on Trustpilot, if you can spare it.",
       goal="", who="", tpl="POST01", new=True, flags=[], badge=None,
       section="Rebuilt flow \u2014 proposed",
-      section_sub="Four of six designed. Review request day 18, reminder day 25, category nudge day 32, print expert day 45. The two discount emails at day 60 and 73 are specified in proposals/post-purchase-proposal.md but not yet designed.",
+      section_sub="Four of six designed. Review request day 18, reminder day 25, category nudge day 32, print expert day 45. Day 60 and day 73 carry the discount and its deadline \u2014 proposed in proposals/post-purchase-proposal.md 3d, one email each rather than one per category, and blocked on a coupon decision rather than on design.",
       final="post-01-review-proposed.html"),
     dict(step=2, when="Day 25", subject="Nobody takes a printer\u2019s word for it",
       preview="A line about how it went carries further than our own marketing.",
@@ -360,6 +360,7 @@ VERSION = "v0.8"
 VERSION_DATE = "26 Aug 2026"
 
 ISSUES = [
+ "There are no coupons in Klaviyo \u2014 the account has zero. Day 60 promises 10% for 14 days and the Abandoned Order flow promises 10% and 25% for 72 hours, and a static code cannot expire per customer: its expiry is a fixed date, so the claim is only true for whoever gets it first. Klaviyo\u2019s own coupons issue a unique code per profile with an expiry per code, which is what an evergreen flow needs. One mechanism would fix both flows, and it needs codes generated in bulk.",
  "Post-Purchase re-entry is set to 30 days and the category nudge lands on day 32, so a customer who reorders quickly never re-enters and never reaches a second nudge. This single setting is what makes the category rotation work or do nothing at all.",
  "Four of the five category nudges have no photography. Signage & Outdoor has 3 of 4 tiles covered; Labels & Packaging, Clothing & Textiles and Corporate Gifts have none. Twelve shots in the same style unblock them, thirteen with a greeting card, which also buys Cards & Invitations its tile back in Commercial Print.",
  "The four unbuilt category nudges still send their header and both buttons to whichever product tile is listed first rather than to a category page. Commercial Print is fixed and points at /promotional-printing per locale; the other four need one URL each.",
