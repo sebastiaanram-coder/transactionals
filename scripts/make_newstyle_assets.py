@@ -69,7 +69,8 @@ BUDGET_KB = 420
 # bottom of the flyer itself.
 FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
                "hero-review-reminder": 0.30,
-               "hero-offer": 0.30, "hero-offer-last": 0.30}
+               "hero-offer": 0.30, "hero-offer-last": 0.30,
+               "hero-winback-news": 0.38, "hero-winback-offer": 0.38}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -104,7 +105,8 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
 # featureless grey rectangle.
 HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
                  "hero-review-reminder": 0.80,
-                 "hero-offer": 0.45, "hero-offer-last": 1.00}
+                 "hero-offer": 0.45, "hero-offer-last": 1.00,
+                 "hero-winback-news": 0.00, "hero-winback-offer": 0.35}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -130,6 +132,12 @@ JOBS = [
     # quiet, which suits the last word.
     ("budgetrollupbanners/budgetrollupbanners_setting1.webp", "hero-offer", "hero", "offer"),
     ("booklets/booklets_setting1.webp", "hero-offer-last", "hero", "offer-last"),
+    # Winback. Both bottoms sit higher than the others - 86 and 103 of 255 rather
+    # than the 30s - so both get a deeper fade to reach the ink without a visible
+    # step. banners_setting2 has its subject high in frame at 0.70-0.85, which is
+    # why its window sits at the very top.
+    ("banners/banners_setting2.webp", "hero-winback-news", "hero", "winback-news"),
+    ("halffoldleaflets/halffoldleaflets_setting2.webp", "hero-winback-offer", "hero", "winback-offer"),
     # Both feature shots were changed after seeing them at 252px beside prose.
     # booklets_setting1 is a dark navy interior that turns to mud at that size,
     # and standardflyers_setting2 is a tight overhead that reads as texture
