@@ -451,6 +451,45 @@ not have them.
 
 ---
 
+## 3b. Verified Trustpilot reviews are available to us
+
+The day-18 email currently links to Trustpilot's public review form, which
+produces **organic** reviews. There is a better option, and it is not
+hypothetical: the Trustpilot credentials already in `.env` reach the Invitations
+API. Probing it returned `missing 'email'` rather than a permissions error, on
+both endpoints that matter:
+
+- `POST /private/business-units/{id}/invitation-links` — mints a unique review
+  link for one customer and one order reference. Reviews arriving through it are
+  **verified**, and we keep our own email design.
+- `POST /private/business-units/{id}/email-invitations` — Trustpilot sends the
+  invitation itself. Also verified, but it is a second email from a different
+  sender and we lose the design.
+
+The first is the one worth having, and the only obstacle is that Klaviyo cannot
+call an API mid-flow. So the link has to be on the profile before the email sends:
+
+1. A nightly job finds orders placed 17 days ago, excluding Connect, cancelled
+   and refunded.
+2. For each, it asks Trustpilot for an invitation link.
+3. It writes that link onto the Klaviyo profile as a property.
+4. The day-18 email uses the property **with a fallback to the plain per-language
+   link** when it is empty, so a job that did not run costs us a verified review
+   rather than a broken email.
+
+Worth doing, and worth doing after sign-off rather than before: it changes the
+quality of what comes back, not the design of the email.
+
+### One thing to check on the plain link
+
+Loading `/evaluate/helloprint.com?stars=4` leaves all five rating radios
+unchecked, so the `stars` parameter is ignored on a public review link. That is
+why the email has one button rather than five clickable stars. Invitation links
+may honour it — worth testing once step 2 above exists, because a one-click
+rating is a materially better ask.
+
+---
+
 ## 3a. The category nudge rotates, and never repeats itself
 
 The flow runs again on every order. The nudge is the one step that must not send

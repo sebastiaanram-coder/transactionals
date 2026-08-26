@@ -96,13 +96,47 @@ def category_of(r):
     return None
 
 
+def refresh_score(cache_path):
+    """Merge the live aggregate score into the cache without touching the quotes.
+
+    Separate from a full refresh on purpose. The email states "4.5 out of 5 from
+    over N reviews", which goes stale on its own schedule, and re-running the
+    whole fetch to update two numbers would also re-select every quoted review -
+    silently changing the copy of five other emails.
+    """
+    import urllib.request
+    with open(cache_path, encoding="utf-8") as f:
+        bu = json.load(f)["business_unit"]
+    tok = trustpilot.access_token()
+    req = urllib.request.Request(
+        "https://api.trustpilot.com/v1/private/business-units/%s" % bu,
+        headers={"Authorization": "Bearer " + tok})
+    d = json.load(urllib.request.urlopen(req, timeout=30))
+    with open(cache_path, encoding="utf-8") as f:
+        cache = json.load(f)
+    cache["score"] = (d.get("score") or {}).get("trustScore")
+    cache["review_total"] = (d.get("numberOfReviews") or {}).get("total")
+    cache["score_fetched"] = dt.date.today().isoformat()
+    with open(cache_path, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=1, sort_keys=True)
+    print("score %s from %s reviews, recorded %s"
+          % (cache["score"], format(cache["review_total"], ","), cache["score_fetched"]))
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--score-only", action="store_true",
+                    help="refresh just the aggregate score and review count, "
+                         "leaving the selected quotes untouched")
     ap.add_argument("--inventory", action="store_true",
                     help="print the tag groups and values found, then stop")
     ap.add_argument("--pages", type=int, default=10,
                     help="pages of 100 per language (default 10)")
     a = ap.parse_args()
+
+    if a.score_only:
+        return refresh_score(OUT)
 
     # TAGS ONLY EXIST ON THE PRIVATE ENDPOINT, so everything here goes through a
     # bearer token. Verified: the public endpoint has no tags field at all.

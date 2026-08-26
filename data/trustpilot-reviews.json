@@ -9,6 +9,7 @@
   "es",
   "it"
  ],
+ "review_total": 34374,
  "reviews": {
   "clothing-textiles|en": {
    "author": "Xenia",
@@ -843,5 +844,7 @@
    "title": "Goede service"
   }
  },
+ "score": 4.5,
+ "score_fetched": "2026-08-26",
  "tag_group": "generic"
 }

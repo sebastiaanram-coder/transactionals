@@ -216,9 +216,13 @@ FLOWS = [
    flow_flags=["The conditional split (Placed Order > 0 all time) is always true after an order, so it does nothing. Email 1 says “your first order”, so the intent was probably “= 1” (first-time buyers only). Decide the audience in the rebuild.",
     "Overlap with the transactional program: emails 1, 2 and 5 partly duplicate the transactional order confirmation, expectation-setting and review request. Decide the behavioural vs transactional split before go-live."],
    emails=[
-    dict(step=3, when="Day 32 \u00b7 Category nudge", subject="One email, five categories",
+    dict(step=1, when="Day 18", subject="Would you tell other businesses how it went?",
+      preview="A minute on Trustpilot, if you can spare it.",
+      goal="", who="", tpl="POST01", new=True, flags=[], badge=None,
       section="Rebuilt flow \u2014 proposed",
-      section_sub="One email at day 32, chosen at send time from five categories so it never repeats itself. Commercial Print is built; use the tabs to switch. The rest of the proposed flow \u2014 review request, reminder, print expert, discount \u2014 is specified in proposals/post-purchase-proposal.md but not yet designed.",
+      section_sub="Two of six designed. The review request at day 18 and the category nudge at day 32; the reminder, the print expert and the two discount emails are specified in proposals/post-purchase-proposal.md but not yet designed.",
+      final="post-01-review-proposed.html"),
+    dict(step=3, when="Day 32 \u00b7 Category nudge", subject="One email, five categories",
       preview="Split on the category they bought in, then rotated so nobody sees the same one twice.",
       goal="", who="", tpl="CATNUDGE", new=True, flags=[], badge=None,
       final="category-commercial-print-proposed.html",
@@ -323,6 +327,18 @@ FLOWS = [
 # each block is in it.
 # ---------------------------------------------------------------------------
 EMAIL_DETAIL = {
+ "POST01": dict(
+   goal="Get a Trustpilot service review, and catch an unhappy order before it becomes a public one-star.",
+   why="Day 18 is set by delivery, not by the reorder cycle. The only lead-time evidence is PromisedDeliveryDate on five v4 orders: median 9 days, longest 20. Day 18 clears the median comfortably and does not clear the tail. RFB asked on day 12, which would reach a real share of customers before their print had arrived \u2014 which is how a review request becomes a complaint. This is the number most worth replacing with real fulfilment data before launch.",
+   variant_label="What it deliberately does not do",
+   variant="It never claims the print has arrived, never names a product, quantity or spec \u2014 presta does not carry them \u2014 and never says \u201cfirst order\u201d, so a tenth-time buyer is not thanked for their first. The cheapest way to satisfy that last one is to not make the claim rather than to branch the email.",
+   elements=[
+     ("One button, not five stars.", "The obvious design is a row of stars each linking to ?stars=N. Trustpilot does not honour that on a plain review link \u2014 loading it leaves all five radios unchecked \u2014 so a reader clicking four stars would land on a blank form. One button that says what it does."),
+     ("The escape hatch is on ink, not in the small print.", "Some readers will not have their print yet. \u201cStill waiting, or something not right?\u201d is as prominent as the ask, because a mis-timed request that finds a route to support is recovered, and one that does not is a public one-star."),
+     ("No customer quote, deliberately.", "Every other email in the programme carries a real review. Showing somebody a five-star quote while asking them to rate you is steering, which is exactly what Trustpilot\u2019s guidelines are about. The aggregate score is different: it is Trustpilot\u2019s own public number, and it tells the reader where their review will end up."),
+     ("The review link switches on language, not country.", "Eight locales, six Trustpilot subdomains. Belgium is the reason: be.trustpilot.com has to pick either Dutch or French and is wrong for half the market either way, so nl-BE goes to the Dutch form and fr-BE to the French one."),
+     ("Verified reviews are available, and not yet built.", "These links produce organic reviews. Our Trustpilot credentials already reach the Invitations API, which mints a unique link per customer and returns verified reviews. It needs a job that writes the link onto the Klaviyo profile before this email sends, with a fallback to the plain link."),
+   ]),
  "CATNUDGE": dict(
    goal="Bring the customer back for more of what they already buy, without spending a discount to do it \u2014 and, on later orders, widen what they buy.",
    why="Day 32 sits on the median reorder gap, which is 30 days, so this lands while intent is genuinely live. It carries no offer on purpose: half of repeat customers reorder inside a month with no email at all, so a discount here would mostly pay for orders that were already coming.",

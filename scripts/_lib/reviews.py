@@ -83,5 +83,41 @@ def attribution(r):
     return "%s &middot; %d out of 5 on Trustpilot" % (who, r["stars"])
 
 
+def score():
+    """The live TrustScore, as a dated snapshot in the cache.
+
+    Refresh with `python3 scripts/fetch_reviews.py --score-only`, which touches
+    these two numbers and nothing else."""
+    return _DATA.get("score")
+
+
+def review_total():
+    return _DATA.get("review_total")
+
+
+def score_fetched():
+    return _DATA.get("score_fetched")
+
+
+# WHERE A REVIEW GETS WRITTEN, per language rather than per country.
+#
+# Trustpilot serves its review form in the language of the subdomain, and there
+# are eight locales but only six languages. Belgium is the reason this is keyed on
+# language: be.trustpilot.com has to pick one of Dutch or French, and whichever it
+# picks is wrong for half of Belgium. nl and fr both get a form they can read.
+#
+# NO PER-STAR LINKS. The obvious design is a row of five stars each linking to
+# ?stars=N. It does not work: loading /evaluate/helloprint.com?stars=4 leaves all
+# five radios unchecked, so a reader who clicks four stars lands on a blank form.
+# One button, and it says what it does.
+TP_BY_LANG = {"en-IE": "ie", "en-GB": "uk", "nl": "nl", "nl-BE": "nl",
+              "fr-FR": "fr", "fr-BE": "fr", "es-ES": "es", "it": "it"}
+TP_URL = "https://%s.trustpilot.com/evaluate/helloprint.com"
+
+
+def write_url(cf_locale):
+    return TP_URL % TP_BY_LANG.get(cf_locale, "uk")
+
+
 def count():
     return len(_DATA.get("reviews") or {})
