@@ -3,10 +3,11 @@
 Built and render-verified for **Commercial Print** only, as agreed. The other four
 are untouched apart from picking up the new grid heading.
 
-Two header shapes to choose between, both built:
+Preview: `proposals/category-commercial-print-proposed.html`.
 
-- `proposals/category-commercial-print-proposed.html` — **A**, wordmark above the photograph
-- `proposals/category-commercial-print-header-b-proposed.html` — **B**, photograph to the top of the card
+The header shape and the headline are both settled — photograph to the top, and
+"What are you promoting next?". The five headline options are kept below as a
+record of what was considered.
 
 ---
 
@@ -131,39 +132,38 @@ the fill leaks into the squares, stops the build rather than shipping.
 
 ---
 
-## 3a. Two header shapes, both built
+## 3a. The header: photograph to the top — decided
 
-They differ in where the photograph starts and where the wordmark sits, which
-changes what the first screen of the email is.
+The photograph runs to the very top of the card, carrying the card's own 18px
+corners, with the wordmark under it above the eyebrow. The picture speaks before
+the brand does.
 
-| | **A** — `category-commercial-print-proposed.html` | **B** — `category-commercial-print-header-b-proposed.html` |
-|---|---|---|
-| order | wordmark on ink, photograph, then the words | photograph, then wordmark, then the words |
-| photograph | fades into ink at the top **and** the bottom | runs to the very top of the card, fades at the bottom only |
-| corners | none needed | carries the card's own 18px top corners |
-| first impression | the brand speaks first | the picture speaks first |
+The alternative — wordmark on ink, then the photograph opening out of that ink and
+closing back into it at both ends — was built, compared side by side and rejected.
+It has been removed rather than left in the repo: one header, one asset, one code
+path, and every check on it reachable.
 
-**They need two separate image files, not one.** The fade is baked into the
-pixels, so a photograph that opens out of ink and one that opens on velvet are
-different JPEGs. The build now reads the first row of whichever file a variant
-names and fails if the pixels and the declared shape disagree — a "fade" header
-pointing at B's image would put a grey wash across the top of the email, and a
-"top" header pointing at A's would too, in the other direction.
+Three things that came out of building both, worth keeping on the record:
 
-**They also want different crops**, which was not obvious until both were on
-screen. A's window is pushed 210px down the source so its bottom fade lands on
-empty velvet; whatever the top edge cuts through is hidden by the top fade
-anyway. B has no top fade, so that same window sliced the headline off the flyer
-behind — its window starts at 0 and keeps the whole stack in frame.
+**The fade is baked into the pixels, not written in CSS.** Outlook ignores CSS
+gradients, so a fade in CSS is a hard-edged photograph for a large part of the
+audience. The image ends in exactly `#191919`, and the build fails if the last row
+drifts more than 3/255 from it — or if the *first* row has faded, because there is
+nothing above it to blend into and a fade there is a grey wash across the top of
+the email.
 
-**Outlook shows B's top corners square.** It ignores `border-radius` entirely.
-That is already true of the white card itself today, so the email stays
-consistent with itself there rather than gaining a mismatch.
+**The crop had to change with the fade.** The rejected shape wanted its window
+pushed 210px down the source, so its bottom fade landed on empty velvet and
+whatever the top edge cut through was hidden anyway. Without a top fade that same
+window sliced the headline off the flyer behind, so this one starts at 0 and keeps
+the whole stack in frame.
 
-**One trade in B worth naming:** with images off, the top of the email is empty
-until the wordmark, because the wordmark is now underneath the photograph. In A
-the brand is the first thing either way. Neither is wrong — it depends whether
-you would rather lead with the picture or the logo.
+**Outlook squares the top corners.** It ignores `border-radius` entirely. That is
+already true of the white card itself, so the email stays consistent with itself
+there rather than gaining a mismatch.
+
+**One trade, accepted:** with images off, the top of the email is blank until the
+wordmark, because the wordmark now sits under the photograph.
 
 ---
 
@@ -176,7 +176,7 @@ advertises something: a campaign, an event, a launch. Nobody runs low on posters
 
 Option 1 is built and in the preview. Any of the five is a one-line swap.
 
-### 1. Ask what is next — *built, recommended*
+### 1. Ask what is next — **chosen**
 > **PROMOTIONAL PRINT**
 > **What are you promoting next?**
 > Whatever it is, this is the print that puts it in front of people, and what tends

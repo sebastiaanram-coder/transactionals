@@ -51,31 +51,23 @@ TILE = (400, 400)       # displayed at about 264 wide
 # heavier of them once - otherwise adding a variation for comparison would look
 # like the email getting heavier, which it does not.
 BUDGET_KB = 370
-FADE_TOP = 0.15
 FADE_BOTTOM = 0.33
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
 # proposals/category-header-proposal.md.
-# THE TWO HEADER VARIANTS WANT DIFFERENT CROPS, because they fade differently.
+# The photograph runs to the very top of the email, so its top edge is fully
+# visible and there is no fade to hide what the crop cuts through. Offset 0 keeps
+# the whole flyer stack in frame with velvet around it; pushing the window down
+# sliced the headline off the flyer behind.
 #
-# `hero` fades at the top, so the window is pushed 210px down the source: that
-# puts the bottom fade on empty velvet instead of halfway through a line of the
-# flyer's own body copy, and whatever the top edge cuts through is hidden by the
-# top fade anyway.
-#
-# `hero_top` has no top fade - it is the first thing in the email - so the top
-# edge is fully visible and a pushed-down window sliced the headline off the
-# flyer behind. Offset 0 keeps the whole stack in frame with velvet around it.
-HERO_OFFSET_Y = {"hero": 210, "hero_top": 0}
+# There was a second header shape that faded into ink at the top as well, which
+# wanted its own crop pushed 210px down. It was built, compared and rejected.
+HERO_OFFSET_Y = 0
 
 JOBS = [
     # (source, output name, shape)
     ("standardflyers/standardflyers_setting1.webp", "hero-commercial-print", "hero"),
-    # Variant B of the header: the photograph runs to the very top of the email,
-    # so it fades at the bottom only. Its top row must NOT be ink - there is
-    # nothing above it to blend into, just the rounded corner of the card.
-    ("standardflyers/standardflyers_setting1.webp", "hero-commercial-print-top", "hero_top"),
     # Both feature shots were changed after seeing them at 252px beside prose.
     # booklets_setting1 is a dark navy interior that turns to mud at that size,
     # and standardflyers_setting2 is a tight overhead that reads as texture
@@ -93,14 +85,13 @@ JOBS = [
 
 
 def derive(src, name, shape):
-    if shape in ("hero", "hero_top"):
+    if shape == "hero":
         w, h = HERO
         # crop the square to 10:7 before resizing, or the resize squashes it
         img = ri.read(src, crop=(int(1000 * h / float(w)), 1000),
-                      offset_y=HERO_OFFSET_Y[shape], resize=(w, h))
-        rows = ri.fade(img[0], img[1], img[2],
-                       top=0.0 if shape == "hero_top" else FADE_TOP,
-                       bottom=FADE_BOTTOM)
+                      offset_y=HERO_OFFSET_Y, resize=(w, h))
+        # bottom only: the top of this image is the top of the email
+        rows = ri.fade(img[0], img[1], img[2], bottom=FADE_BOTTOM)
         # Same quality as the tiles. The saving on the header came off its
         # DIMENSIONS instead - 840 wide rather than 900, still 1.4x the 600px it
         # is displayed at - because a smooth near-black ramp is the one thing JPEG
@@ -164,13 +155,11 @@ def main():
     print("  %-30s %-9s %6.1f KB  (%.0f%% of it repainted to ink)"
           % (STARS_OUT[:-4], "graphic", st[0] / 1024.0, st[1] * 100))
 
-    heroes = [n for n, (sh, _) in sizes.items() if sh in ("hero", "hero_top")]
+    heroes = [n for n, (sh, _) in sizes.items() if sh == "hero"]
     rest = sum(sz for n, (_, sz) in sizes.items() if n not in heroes)
     one_email = rest + (max(sizes[n][1] for n in heroes) if heroes else 0)
-    print("\n%d files on disk, %.0f KB. One email loads %.0f KB"
-          " (%d heroes are alternatives, counted once)."
-          % (len(sizes), sum(sz for _, sz in sizes.values()) / 1024.0,
-             one_email / 1024.0, len(heroes)))
+    print("\n%d files, %.0f KB, all of which one email loads."
+          % (len(sizes), one_email / 1024.0))
     if one_email / 1024.0 > BUDGET_KB:
         print("FAILED: %.0f KB is over the %d KB budget for one email"
               % (one_email / 1024.0, BUDGET_KB))
@@ -181,7 +170,6 @@ def main():
     # drift and fail on anything a reader could see.
     bad = []
     for name in heroes:
-        shape = sizes[name][0]
         w, h, rows = ri.read(os.path.join(OUT, name + ".jpg"))
 
         def edge(y):
@@ -191,24 +179,20 @@ def main():
         def is_ink(rgb):
             return max(abs(rgb[c] - ri.INK[c]) for c in range(3)) <= 3
 
-        # the bottom always has to meet the ink block under it
+        # the bottom has to meet the ink block under it with no seam
         if not is_ink(edge(h - 1)):
             bad.append("%s: last row is rgb%s, wanted rgb%s" % (name, edge(h - 1), ri.INK))
-        if shape == "hero":
-            if not is_ink(edge(0)):
-                bad.append("%s: first row is rgb%s, wanted rgb%s" % (name, edge(0), ri.INK))
-        else:
-            # variant B has nothing above it, so a faded top would read as a
-            # grey wash across the top of the email rather than a blend
-            if is_ink(edge(0)):
-                bad.append("%s: first row faded to ink, but this variant runs to "
-                           "the top of the email and must not" % name)
+        # and the top must NOT, because there is nothing above it to blend into -
+        # a faded top here reads as a grey wash across the top of the email
+        if is_ink(edge(0)):
+            bad.append("%s: first row faded to ink, but it is the top of the email"
+                       % name)
     if bad:
-        print("\nFAILED: a header photograph would show a seam")
+        print("\nFAILED: the header photograph would show a seam")
         for b in bad:
             print("  " + b)
         return 1
-    print("header fades check out: bottoms meet the ink, variant B opens on the photograph")
+    print("header opens on the photograph and closes into the ink: no seam")
     return 0
 
 

@@ -128,20 +128,12 @@ CATEGORIES = [
         pre="The print that puts your next campaign in front of people.",
         hero="hero-commercial-print",
         hero_alt="Printed flyers fanned out on a dark green velvet sofa",
-        # TWO HEADER SHAPES, both built, so they can be compared rather than
-        # argued about. They differ in where the photograph starts and where the
-        # wordmark sits, which changes what the first screen of the email is:
-        #   a  wordmark on ink, then the photograph opening out of it. The brand
-        #      speaks first and the picture is set into the ink on both sides.
-        #   b  the photograph runs to the very top of the card, rounded corners
-        #      and all, and the wordmark sits under it above the eyebrow. The
-        #      picture speaks first.
-        # Each needs its own file: a fades at the top, b must not, and that is
-        # baked into the pixels.
-        headers=[
-            dict(key="a", style="fade", hero="hero-commercial-print"),
-            dict(key="b", style="top", hero="hero-commercial-print-top"),
-        ],
+        # The photograph runs to the very top of the card, rounded corners and
+        # all, and the wordmark sits under it above the eyebrow - so the picture
+        # speaks before the brand does. The alternative, wordmark on ink with the
+        # photograph opening out of it and fading back into it at both ends, was
+        # built, compared and rejected.
+        headers=[dict(key="", style="photo", hero="hero-commercial-print")],
         # New-style photography for all six. Getting there meant swapping the
         # fourth tile - see scripts/fetch_subcategories.py.
         photos={
@@ -270,21 +262,18 @@ CSS = """
    part of the audience. See scripts/make_newstyle_assets.py. */
 .%(P)s-dark{background:#191919;padding:26px 32px 22px;text-align:center;}
 .%(P)s-dark img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0;}
-.%(P)s-hero{background:#191919;font-size:0;line-height:0;}
-/* colour is set because with images off the alt text lands on ink */
-.%(P)s-hero img{width:100%%;max-width:600px;height:auto;display:block;border:0;
-  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
 .%(P)s-darkb{background:#191919;padding:2px 32px 32px;text-align:center;}
-/* HEADER VARIANT B: the photograph is the first thing in the card, so it carries
-   the card's own top corners. Outlook ignores border-radius and will show them
-   square - which is already true of the white card itself, so the email stays
-   consistent with itself there rather than gaining a mismatch. */
-.%(P)s-heroT{background:#191919;font-size:0;line-height:0;}
-.%(P)s-heroT img{width:100%%;max-width:600px;height:auto;display:block;border:0;
+/* The photograph is the first thing in the card, so it carries the card's own top
+   corners. Outlook ignores border-radius and will show them square - which is
+   already true of the white card itself, so the email stays consistent with
+   itself there rather than gaining a mismatch.
+   colour is set because with images off the alt text lands on ink. */
+.%(P)s-hero{background:#191919;font-size:0;line-height:0;}
+.%(P)s-hero img{width:100%%;max-width:600px;height:auto;display:block;border:0;
   border-radius:18px 18px 0 0;
   color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
-/* b puts the wordmark here instead, above the eyebrow, so this block needs the
-   top padding that the wordmark bar used to have */
+/* the wordmark sits here, above the eyebrow, so this block needs the top padding
+   that a wordmark bar would have had */
 .%(P)s-darkc{background:#191919;padding:26px 32px 32px;text-align:center;}
 .%(P)s-darkc img.%(P)s-mark{width:142px;max-width:46%%;height:auto;display:inline-block;border:0;margin:0 0 20px;}
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
@@ -476,20 +465,18 @@ def img_for(cat, sub, shape, live):
 
 def headers_of(cat):
     """The header variants to build. One unnamed default when none are declared."""
-    return cat.get("headers") or [dict(key="", style="fade", hero=cat.get("hero"))]
+    return cat.get("headers") or [dict(key="", style="plain", hero=None)]
 
 
 def header_block(P, cat, live, hdr, home):
     """The whole dark header, in one of two shapes.
 
-    fade  wordmark on ink, then the photograph opening out of that ink and
-          closing back into it. The brand speaks first.
-    top   the photograph runs to the top of the card and the wordmark sits below
-          it, above the eyebrow. The picture speaks first.
-
-    Only Commercial Print has a photograph so far. Without one both shapes
-    collapse to what the header was before any of this - wordmark, headline,
-    subtext on ink - rather than leaving a gap where a picture should be.
+    photo  the photograph runs to the top of the card, carrying the card's own
+           rounded corners, and the wordmark sits under it above the eyebrow.
+    plain  no photograph at all: wordmark on ink, then the words. This is what
+           the header was before any of this, and it is what the four emails
+           without photography still get - better than a gap where a picture
+           should be.
     """
     mark = ('<a href="%s"><img class="%s-mark" src="%s" alt="Helloprint" '
             'width="142"></a>' % (home, P, cat["_wordmark"]))
@@ -504,10 +491,10 @@ def header_block(P, cat, live, hdr, home):
     if hdr.get("hero"):
         pic = ('    <div class="%s-%s"><a href="%s"><img src="%s" alt="%s" '
                'width="600"></a></div>\n'
-               % (P, "heroT" if hdr["style"] == "top" else "hero", cat["_first_url"],
+               % (P, "hero", cat["_first_url"],
                   photo(hdr["hero"], live), esc(cat["hero_alt"])))
 
-    if hdr["style"] == "top" and pic:
+    if hdr["style"] == "photo" and pic:
         return (pic
                 + '    <div class="%s-darkc">\n      %s\n%s    </div>\n'
                 % (P, mark, words))
@@ -831,7 +818,7 @@ for cat in CATEGORIES:
     # HTML parser sees it, so the quotes are gone by the time it is mail; they are
     # only a problem for something reading the template, which is what this is.
     land = sc.landing(cat["slug"])
-    tops = re.findall(r'class="%s-(?:heroT|hero)"><a href="(.*?)">' % P, markup)
+    tops = re.findall(r'class="%s-hero"><a href="(.*?)">' % P, markup)
     tops += re.findall(r'class="%s-cta2?" href="(.*?)">' % P, markup)
     expected = 2 + (1 if any(h.get("hero") for h in hdrs) else 0)
     if len(tops) != expected:
@@ -861,40 +848,29 @@ for cat in CATEGORIES:
         if not hdr.get("hero"):
             continue
         b = build(cat, True, hdr)
-        want = "%s-heroT" % P if hdr["style"] == "top" else "%s-hero\"" % P
-        if want not in b:
-            errs.append("%s: header %r did not render as style %r"
-                        % (t, hdr["key"], hdr["style"]))
+        if ("%s-hero" % P) not in b:
+            errs.append("%s: header %r has a photograph but did not render it"
+                        % (t, hdr["key"]))
         if photo(hdr["hero"], True) not in b:
             errs.append("%s: header %r is not using %s" % (t, hdr["key"], hdr["hero"]))
-        # THE SHAPE AND THE PIXELS HAVE TO AGREE. A style and a filename are two
-        # halves of the same decision held in two places, so this reads the image
-        # rather than trusting the name: a "fade" header needs a photograph that
-        # opens out of ink, and a "top" header needs one that does not, or the
-        # email gets a grey wash across its first rows. Cheap and offline - one
-        # row of one JPEG.
+        # THE MARKUP AND THE PIXELS HAVE TO AGREE. The photograph is the top of
+        # the email, so it must not open on ink - a fade there is a grey wash
+        # across the first rows rather than a blend into anything. Read off the
+        # image rather than trusting the filename. Cheap and offline: one row of
+        # one JPEG.
         hw, _, hrows = ri.read(os.path.join(PHOTO_DIR, hdr["hero"] + ".jpg"))
         first = tuple(sum(hrows[0][x * 3 + c] for x in range(hw)) // hw
                       for c in (2, 1, 0))
-        opens_on_ink = max(abs(first[c] - ri.INK[c]) for c in range(3)) <= 3
-        if hdr["style"] == "fade" and not opens_on_ink:
-            errs.append("%s: header %r fades at the top but %s does not open on "
-                        "ink" % (t, hdr["key"], hdr["hero"]))
-        if hdr["style"] == "top" and opens_on_ink:
-            errs.append("%s: header %r runs to the top of the email but %s opens "
-                        "on ink, which would show as a grey wash"
-                        % (t, hdr["key"], hdr["hero"]))
+        if max(abs(first[c] - ri.INK[c]) for c in range(3)) <= 3:
+            errs.append("%s: %s opens on ink, but it runs to the top of the email, "
+                        "so that shows as a grey wash" % (t, hdr["hero"]))
         # the wordmark moves between the two shapes; in b it must sit inside the
         # block that carries the eyebrow, which is the whole point of the variant
+        # photograph, then wordmark, then eyebrow. That order IS the design.
         mk = b.split("</style>", 1)[1]
-        if hdr["style"] == "top":
-            if mk.index("%s-mark" % P) < mk.index("%s-heroT" % P):
-                errs.append("%s: header b puts the wordmark above the photograph" % t)
-            if mk.index("%s-mark" % P) > mk.index("%s-eyebrow" % P):
-                errs.append("%s: header b puts the wordmark below the eyebrow" % t)
-        else:
-            if mk.index("%s-mark" % P) > mk.index("%s-hero" % P):
-                errs.append("%s: header a puts the wordmark below the photograph" % t)
+        if not (mk.index("%s-hero" % P) < mk.index("%s-mark" % P)
+                < mk.index("%s-eyebrow" % P)):
+            errs.append("%s: header is not photograph, then wordmark, then eyebrow" % t)
         if not cat.get("hero_alt"): errs.append(t + ": hero has no alt text")
     # house style, on what a reader sees
     doc = re.sub(r"<!--.*?-->", "", livb, flags=re.S)

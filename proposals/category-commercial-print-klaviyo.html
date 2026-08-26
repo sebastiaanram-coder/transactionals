@@ -67,21 +67,18 @@
    part of the audience. See scripts/make_newstyle_assets.py. */
 .hp-catcp-dark{background:#191919;padding:26px 32px 22px;text-align:center;}
 .hp-catcp-dark img.hp-catcp-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0;}
-.hp-catcp-hero{background:#191919;font-size:0;line-height:0;}
-/* colour is set because with images off the alt text lands on ink */
-.hp-catcp-hero img{width:100%;max-width:600px;height:auto;display:block;border:0;
-  color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
 .hp-catcp-darkb{background:#191919;padding:2px 32px 32px;text-align:center;}
-/* HEADER VARIANT B: the photograph is the first thing in the card, so it carries
-   the card's own top corners. Outlook ignores border-radius and will show them
-   square - which is already true of the white card itself, so the email stays
-   consistent with itself there rather than gaining a mismatch. */
-.hp-catcp-heroT{background:#191919;font-size:0;line-height:0;}
-.hp-catcp-heroT img{width:100%;max-width:600px;height:auto;display:block;border:0;
+/* The photograph is the first thing in the card, so it carries the card's own top
+   corners. Outlook ignores border-radius and will show them square - which is
+   already true of the white card itself, so the email stays consistent with
+   itself there rather than gaining a mismatch.
+   colour is set because with images off the alt text lands on ink. */
+.hp-catcp-hero{background:#191919;font-size:0;line-height:0;}
+.hp-catcp-hero img{width:100%;max-width:600px;height:auto;display:block;border:0;
   border-radius:18px 18px 0 0;
   color:#ffffff;font-size:13px;line-height:19px;font-family:inherit;}
-/* b puts the wordmark here instead, above the eyebrow, so this block needs the
-   top padding that the wordmark bar used to have */
+/* the wordmark sits here, above the eyebrow, so this block needs the top padding
+   that a wordmark bar would have had */
 .hp-catcp-darkc{background:#191919;padding:26px 32px 32px;text-align:center;}
 .hp-catcp-darkc img.hp-catcp-mark{width:142px;max-width:46%;height:auto;display:inline-block;border:0;margin:0 0 20px;}
 .hp-catcp-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
@@ -190,11 +187,9 @@
 <div class="hp-catcp-wrap">
   <div class="hp-catcp-shell">
 
-    <div class="hp-catcp-dark">
-      <a href="https://www.helloprint.com/en-ie/"><img class="hp-catcp-mark" src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="142"></a>
-    </div>
     <div class="hp-catcp-hero"><a href="{% if event.Locale == "en-IE" %}https://www.helloprint.com/en-ie/promotional-printing{% elif event.Locale == "en-GB" %}https://www.helloprint.com/en-gb/promotional-printing{% elif event.Locale == "nl-NL" %}https://www.helloprint.com/nl-nl/reclame-drukwerk{% elif event.Locale == "nl-BE" %}https://www.helloprint.com/nl-be/reclame-drukwerk{% elif event.Locale == "fr-FR" %}https://www.helloprint.com/fr-fr/impression-support-marketing{% elif event.Locale == "fr-BE" %}https://www.helloprint.com/fr-be/impression-support-marketing{% elif event.Locale == "es-ES" %}https://www.helloprint.com/es-es/impresion-promocional{% elif event.Locale == "it-IT" %}https://www.helloprint.com/it-it/stampa-promozionale{% else %}https://www.helloprint.com/en-gb/promotional-printing{% endif %}"><img src="https://sebastiaanram-coder.github.io/transactionals/assets/newstyle/hero-commercial-print.jpg" alt="Printed flyers fanned out on a dark green velvet sofa" width="600"></a></div>
-    <div class="hp-catcp-darkb">
+    <div class="hp-catcp-darkc">
+      <a href="https://www.helloprint.com/en-ie/"><img class="hp-catcp-mark" src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-wordmark-white-on-ink.png" alt="Helloprint" width="142"></a>
       <span class="hp-catcp-eyebrow">PROMOTIONAL PRINT</span>
       <h1 class="hp-catcp-h1">What are you promoting next?</h1>
       <p class="hp-catcp-sub">Whatever it is, this is the print that puts it in front of people, and what tends to go with what.</p>
