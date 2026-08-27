@@ -18,7 +18,9 @@ Notes on what is NOT available (all confirmed by render, do not "fix" these):
   - {% with %} is NOT supported
   - a missing catalog item fails the WHOLE render with a 400
 """
-import base64, os, re
+import base64, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import i18n
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -311,7 +313,7 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">Still available at the same starting price. Change the spec and the price moves with it.</div>
+<div class="{P}-pre">{T_PRE}</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -326,10 +328,10 @@ BODY = """
     <!-- hero : light, green does the accent work. No photograph, so the
          packshot below is the only image competing for attention. -->
     <div class="{P}-hero">
-      <span class="{P}-eyebrow">STILL AVAILABLE</span>
-      <h1 class="{P}-h1">Still thinking it over?</h1>
-      <p class="{P}-sub">Nothing has changed since you looked. Pick up where you left off, or change the spec and see what it comes to.</p>
-      <a class="{P}-cta" href="{PROD_URL}">Back to your product</a>
+      <span class="{P}-eyebrow">{T_EYEBROW}</span>
+      <h1 class="{P}-h1">{T_H1}</h1>
+      <p class="{P}-sub">{T_SUB}</p>
+      <a class="{P}-cta" href="{PROD_URL}">{T_BR_BACK}</a>
     </div>
 
     <!-- product : title, price, preset quantity and packshot all come from the
@@ -350,15 +352,15 @@ BODY = """
          each answered by a person rather than a feature. Evidence for the
          choice is in proposals/browse-abandonment-proposal.md section 7. -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">Not ready to order yet?</h2>
-      <p class="{P}-sectsub">There is someone here for each of these.</p>
+      <h2 class="{P}-secttl">{T_SECT_H}</h2>
+      <p class="{P}-sectsub">{T_SECT_SUB}</p>
       <div class="{P}-qa">
         <div class="{P}-qarow">
           <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td class="{P}-qaav" valign="middle"><img src="{AV_DESIGNER}" alt="" width="56" height="56"></td>
             <td class="{P}-qatx" valign="top">
-              <p class="{P}-qq">Artwork not finished?</p>
-              <p class="{P}-qa-a">Send whatever you have, even a rough version. Our designers will tell you what will not print well and fix it before it goes on press.</p>
+              <p class="{P}-qq">{T_QA_0_Q}</p>
+              <p class="{P}-qa-a">{T_QA_0_A}</p>
             </td>
           </tr></table>
         </div>
@@ -366,8 +368,8 @@ BODY = """
           <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td class="{P}-qaav" valign="middle"><img src="{AV_EXPERT}" alt="" width="56" height="56"></td>
             <td class="{P}-qatx" valign="top">
-              <p class="{P}-qq">Odd size, tight deadline, unusual finish?</p>
-              <p class="{P}-qa-a">Our print experts spec jobs like this all day. Describe the job and they will come back with what is possible and what it costs.</p>
+              <p class="{P}-qq">{T_QA_1_Q}</p>
+              <p class="{P}-qa-a">{T_QA_1_A}</p>
             </td>
           </tr></table>
         </div>
@@ -375,8 +377,8 @@ BODY = """
           <table class="{P}-qatbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td class="{P}-qaav" valign="middle"><img src="{AV_QUOTE}" alt="" width="56" height="56"></td>
             <td class="{P}-qatx" valign="top">
-              <p class="{P}-qq">Someone else has to approve it?</p>
-              <p class="{P}-qa-a">We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward for sign-off.</p>
+              <p class="{P}-qq">{T_QA_2_Q}</p>
+              <p class="{P}-qa-a">{T_QA_2_A}</p>
             </td>
           </tr></table>
         </div>
@@ -384,8 +386,8 @@ BODY = """
     </div>
 
     <div class="{P}-mid">
-      <a class="{P}-cta-g" href="{PROD_URL}">Continue on the product page</a>
-      <p class="{P}-midnote">Or just reply to this email and a print expert will pick it up.</p>
+      <a class="{P}-cta-g" href="{PROD_URL}">{T_CTA}</a>
+      <p class="{P}-midnote">{T_BR_REPLY}</p>
     </div>
 
     {CATALOG_CLOSE}
@@ -400,7 +402,7 @@ BODY = """
       <a class="{P}-tp-link" href="https://ie.trustpilot.com/review/helloprint.com">
         <img class="{P}-tp-stars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 stars on Trustpilot" width="135" height="28">
         <span class="{P}-tp-score"><em>4.5</em> out of 5 on Trustpilot</span>
-        <span class="{P}-tp-sub">Based on more than 34,000 reviews</span>
+        <span class="{P}-tp-sub">{T_REVIEWS_NOTE}</span>
       </a>
     </div>
 
@@ -409,7 +411,7 @@ BODY = """
     <!-- help -->
     <div class="{P}-help">
       <img class="{P}-help-agents" src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
-      <span class="{P}-helpttl">Questions before you order?</span>
+      <span class="{P}-helpttl">{T_SECT2_H}</span>
       <span class="{P}-helplinks">
         <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
@@ -438,8 +440,35 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets, xsell):
+# EVERY TRANSLATABLE STRING IN THIS EMAIL, as (key, English). The English here is
+# the source of record: i18n compares it against data/translations.json and fails
+# the build if the two have drifted apart.
+TRANSLATED = [
+    ('pre', 'Still available at the same starting price. Change the spec and the price moves with it.'),
+    ('eyebrow', 'STILL AVAILABLE'),
+    ('h1', 'Still thinking it over?'),
+    ('sub', 'Nothing has changed since you looked. Pick up where you left off, or change the spec and see what it comes to.'),
+    ('br.back', 'Back to your product'),
+    ('sect_h', 'Not ready to order yet?'),
+    ('sect_sub', 'There is someone here for each of these.'),
+    ('qa.0.q', 'Artwork not finished?'),
+    ('qa.0.a', 'Send whatever you have, even a rough version. Our designers will tell you what will not print well and fix it before it goes on press.'),
+    ('qa.1.q', 'Odd size, tight deadline, unusual finish?'),
+    ('qa.1.a', 'Our print experts spec jobs like this all day. Describe the job and they will come back with what is possible and what it costs.'),
+    ('qa.2.q', 'Someone else has to approve it?'),
+    ('qa.2.a', 'We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward for sign-off.'),
+    ('sect2_h', 'Questions before you order?'),
+    ('cta', 'Continue on the product page'),
+    ('br.reply', 'Or just reply to this email and a print expert will pick it up.'),
+    ('reviews_note', 'Based on more than 34,000 reviews'),
+]
+
+
+def build(bindings, assets, xsell, live=False, locale=None):
+    tr = i18n.translator("browse-01", live, locale)
     vals = {"P": P, "CSS": CSS}
+    for _k, _e in TRANSLATED:
+        vals["T_" + re.sub(r"[^A-Z0-9]", "_", _k.upper())] = tr(_k, _e)
     vals.update(bindings)
     vals.update(assets)
     vals["XSELL"] = xsell
@@ -498,8 +527,15 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS, sample_xsell())
-live_body = build(LIVE, LIVE_ASSETS, live_xsell())
+prev_body = build(SAMPLE, SAMPLE_ASSETS, sample_xsell(), False)
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    open(os.path.join(OUT, "browse-01-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(
+             PREVIEW_DOC % build(SAMPLE, SAMPLE_ASSETS, sample_xsell(), False, _loc))
+live_body = build(LIVE, LIVE_ASSETS, live_xsell(), True)
 prev = PREVIEW_DOC % prev_body
 live = KLAVIYO_DOC % live_body
 
@@ -537,7 +573,10 @@ for claim in ("VAT included", "delivery and VAT", "all-inclusive", "includes del
     if claim.lower() in price_region.lower():
         errs.append("price-inclusion claim is not true of from_price: " + claim)
 import re as _re
-_ans = _re.findall(r'class="%s-qa-a">([^<]+)<' % P, live_body)
+# MEASURED ON THE PREVIEW, not the live build. The live build carries nine
+# languages per answer, so the lengths it reports are nine answers glued together
+# and the evenness they describe is meaningless.
+_ans = _re.findall(r'class="%s-qa-a">([^<]+)<' % P, prev_body)
 if len(_ans) != 3:
     errs.append("expected 3 doubt explanations, found %d" % len(_ans))
 elif max(map(len, _ans)) - min(map(len, _ans)) > 12:

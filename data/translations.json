@@ -319,6 +319,38 @@
    "de": "Hallo,",
    "es": "Hola:",
    "it": "Ciao,"
+  },
+  "br.back": {
+   "en": "Back to your product",
+   "nl": "Terug naar je product",
+   "fr": "Retour à votre produit",
+   "de": "Zurück zu Ihrem Produkt",
+   "es": "Volver a tu producto",
+   "it": "Torna al tuo prodotto"
+  },
+  "br.view": {
+   "en": "View product",
+   "nl": "Bekijk product",
+   "fr": "Voir le produit",
+   "de": "Produkt ansehen",
+   "es": "Ver producto",
+   "it": "Vedi il prodotto"
+  },
+  "br.jobtitle": {
+   "en": "YOUR PRINT JOB",
+   "nl": "JOUW DRUKOPDRACHT",
+   "fr": "VOTRE TRAVAIL D'IMPRESSION",
+   "de": "IHR DRUCKAUFTRAG",
+   "es": "TU TRABAJO DE IMPRESIÓN",
+   "it": "IL TUO LAVORO DI STAMPA"
+  },
+  "br.reply": {
+   "en": "Or just reply to this email and a person will pick it up.",
+   "nl": "Of antwoord gewoon op deze mail, dan pakt iemand het op.",
+   "fr": "Ou répondez simplement à cet e-mail et quelqu'un s'en occupera.",
+   "de": "Oder antworten Sie einfach auf diese E-Mail, dann kümmert sich jemand darum.",
+   "es": "O responde a este correo y alguien se ocupará.",
+   "it": "Oppure rispondi a questa email e qualcuno se ne occuperà."
   }
  },
  "commercial-print": {
@@ -1567,6 +1599,548 @@
    "de": "Nutzen Sie ihn, bevor er weg ist",
    "es": "Úsalo antes de que se vaya",
    "it": "Usalo prima che scada"
+  }
+ },
+ "browse-01": {
+  "pre": {
+   "en": "Still available at the same starting price. Change the spec and the price moves with it.",
+   "nl": "Nog steeds beschikbaar voor dezelfde vanafprijs. Pas de specificatie aan en de prijs beweegt mee.",
+   "fr": "Toujours disponible au même prix de départ. Changez les options et le prix suit.",
+   "de": "Weiterhin zum selben Startpreis verfügbar. Ändern Sie die Ausführung, und der Preis geht mit.",
+   "es": "Sigue disponible al mismo precio de partida. Cambia las opciones y el precio va con ellas.",
+   "it": "Ancora disponibile allo stesso prezzo di partenza. Cambia le opzioni e il prezzo si adegua."
+  },
+  "eyebrow": {
+   "en": "STILL AVAILABLE",
+   "nl": "NOG BESCHIKBAAR",
+   "fr": "TOUJOURS DISPONIBLE",
+   "de": "WEITERHIN VERFÜGBAR",
+   "es": "SIGUE DISPONIBLE",
+   "it": "ANCORA DISPONIBILE"
+  },
+  "h1": {
+   "en": "Still thinking it over?",
+   "nl": "Nog aan het twijfelen?",
+   "fr": "Vous hésitez encore ?",
+   "de": "Noch am Überlegen?",
+   "es": "¿Sigues dándole vueltas?",
+   "it": "Ci stai ancora pensando?"
+  },
+  "sub": {
+   "en": "Nothing has changed since you looked. Pick up where you left off, or change the spec and see what it comes to.",
+   "nl": "Er is niets veranderd sinds je keek. Ga verder waar je gebleven was, of pas de specificatie aan en kijk wat het wordt.",
+   "fr": "Rien n'a changé depuis votre visite. Reprenez où vous en étiez, ou modifiez les options et voyez ce que ça donne.",
+   "de": "Seit Ihrem Besuch hat sich nichts geändert. Machen Sie da weiter, wo Sie aufgehört haben, oder ändern Sie die Ausführung und sehen Sie, was dabei herauskommt.",
+   "es": "No ha cambiado nada desde que lo miraste. Retoma donde lo dejaste, o cambia las opciones y mira en qué queda.",
+   "it": "Non è cambiato nulla da quando l'hai guardato. Riprendi da dove eri rimasto, oppure cambia le opzioni e guarda quanto viene."
+  },
+  "sect_h": {
+   "en": "Not ready to order yet?",
+   "nl": "Nog niet klaar om te bestellen?",
+   "fr": "Pas encore prêt à commander ?",
+   "de": "Noch nicht bereit zu bestellen?",
+   "es": "¿Todavía no listo para pedir?",
+   "it": "Non ancora pronto a ordinare?"
+  },
+  "sect_sub": {
+   "en": "There is someone here for each of these.",
+   "nl": "Voor elk van deze dingen zit hier iemand klaar.",
+   "fr": "Pour chacun de ces cas, il y a quelqu'un ici.",
+   "de": "Für jeden dieser Fälle sitzt hier jemand.",
+   "es": "Para cada una de estas cosas hay alguien aquí.",
+   "it": "Per ognuna di queste cose qui c'è qualcuno."
+  },
+  "qa.0.q": {
+   "en": "Artwork not finished?",
+   "nl": "Ontwerp nog niet af?",
+   "fr": "Votre visuel n'est pas terminé ?",
+   "de": "Druckdatei noch nicht fertig?",
+   "es": "¿El diseño no está terminado?",
+   "it": "Il file non è finito?"
+  },
+  "qa.0.a": {
+   "en": "Send whatever you have, even a rough version. Our designers will tell you what will not print well and fix it before it goes on press.",
+   "nl": "Stuur wat je hebt, ook een ruwe versie. Onze ontwerpers zeggen wat niet goed zal drukken en lossen het op voordat het op de pers gaat.",
+   "fr": "Envoyez ce que vous avez, même une version approximative. Nos graphistes vous diront ce qui s'imprimera mal et le corrigeront avant le tirage.",
+   "de": "Schicken Sie, was Sie haben, auch eine grobe Fassung. Unsere Designer sagen Ihnen, was nicht gut druckt, und beheben es vor dem Druck.",
+   "es": "Envía lo que tengas, aunque sea una versión en bruto. Nuestros diseñadores te dirán qué no va a imprimir bien y lo arreglarán antes de entrar en máquina.",
+   "it": "Mandaci quello che hai, anche una versione grezza. I nostri designer ti diranno cosa non verrà bene in stampa e lo sistemeranno prima di andare in macchina."
+  },
+  "qa.1.q": {
+   "en": "Odd size, tight deadline, unusual finish?",
+   "nl": "Afwijkend formaat, krappe deadline, bijzondere afwerking?",
+   "fr": "Format inhabituel, délai serré, finition particulière ?",
+   "de": "Ungewöhnliches Format, knapper Termin, besondere Veredelung?",
+   "es": "¿Tamaño raro, plazo ajustado, acabado poco común?",
+   "it": "Formato insolito, scadenza stretta, finitura particolare?"
+  },
+  "qa.1.a": {
+   "en": "Our print experts spec jobs like this all day. Describe the job and they will come back with what is possible and what it costs.",
+   "nl": "Onze printexperts specificeren dit soort opdrachten de hele dag. Beschrijf de opdracht en zij komen terug met wat kan en wat het kost.",
+   "fr": "Nos experts en impression traitent ce genre de travaux toute la journée. Décrivez le vôtre et ils reviendront avec ce qui est possible et ce que ça coûte.",
+   "de": "Unsere Druckexperten kalkulieren solche Aufträge den ganzen Tag. Beschreiben Sie den Auftrag, dann melden sie sich mit dem, was möglich ist und was es kostet.",
+   "es": "Nuestros expertos en impresión definen trabajos así todo el día. Describe el tuyo y volverán con lo que es posible y cuánto cuesta.",
+   "it": "I nostri esperti di stampa definiscono lavori così tutto il giorno. Descrivi il lavoro e torneranno con cosa è possibile e quanto costa."
+  },
+  "qa.2.q": {
+   "en": "Someone else has to approve it?",
+   "nl": "Moet iemand anders het goedkeuren?",
+   "fr": "Quelqu'un doit valider ?",
+   "de": "Muss jemand anders zustimmen?",
+   "es": "¿Tiene que aprobarlo otra persona?",
+   "it": "Deve approvarlo qualcun altro?"
+  },
+  "sect2_h": {
+   "en": "Questions before you order?",
+   "nl": "Vragen voor je bestelt?",
+   "fr": "Des questions avant de commander ?",
+   "de": "Fragen vor der Bestellung?",
+   "es": "¿Dudas antes de pedir?",
+   "it": "Domande prima di ordinare?"
+  },
+  "cta": {
+   "en": "Continue on the product page",
+   "nl": "Ga verder op de productpagina",
+   "fr": "Continuer sur la page produit",
+   "de": "Weiter auf der Produktseite",
+   "es": "Continúa en la página del producto",
+   "it": "Continua sulla pagina del prodotto"
+  },
+  "reviews_note": {
+   "en": "Based on more than 34,000 reviews",
+   "nl": "Op basis van meer dan 34.000 reviews",
+   "fr": "Sur la base de plus de 34 000 avis",
+   "de": "Auf Basis von mehr als 34.000 Bewertungen",
+   "es": "A partir de más de 34.000 opiniones",
+   "it": "Sulla base di oltre 34.000 recensioni"
+  },
+  "xsell_h": {
+   "en": "Other sizes and folds",
+   "nl": "Andere formaten en vouwen",
+   "fr": "Autres formats et pliages",
+   "de": "Andere Formate und Falzungen",
+   "es": "Otros tamaños y plegados",
+   "it": "Altri formati e pieghe"
+  },
+  "qa.2.a": {
+   "en": "We will put it in a written quote showing the full total, VAT and delivery included, so you have one number to forward for sign-off.",
+   "nl": "Wij zetten het in een schriftelijke offerte met het complete totaal, inclusief btw en verzending, zodat je één bedrag kunt doorsturen ter goedkeuring.",
+   "fr": "Nous le mettons dans un devis écrit avec le total complet, TVA et livraison comprises, pour que vous n'ayez qu'un chiffre à transmettre pour validation.",
+   "de": "Wir setzen es in ein schriftliches Angebot mit der vollständigen Summe inklusive Steuer und Versand, damit Sie eine Zahl zur Freigabe weiterleiten können.",
+   "es": "Lo ponemos en un presupuesto por escrito con el total completo, IVA y envío incluidos, para que tengas una sola cifra que reenviar para su aprobación.",
+   "it": "Lo mettiamo in un preventivo scritto con il totale completo, IVA e spedizione incluse, così hai un solo numero da inoltrare per l'approvazione."
+  }
+ },
+ "browse-02": {
+  "pre": {
+   "en": "Order now and send your file later. Nothing goes on press until it has been checked.",
+   "nl": "Bestel nu en stuur je bestand later. Er gaat niets op de pers voordat het is gecontroleerd.",
+   "fr": "Commandez maintenant et envoyez votre fichier plus tard. Rien ne part en impression avant vérification.",
+   "de": "Jetzt bestellen und die Datei später schicken. Nichts geht in den Druck, bevor es geprüft wurde.",
+   "es": "Pide ahora y envía tu archivo después. Nada entra en máquina sin haberse revisado.",
+   "it": "Ordina ora e manda il file dopo. Niente va in stampa prima di essere controllato."
+  },
+  "eyebrow": {
+   "en": "ARTWORK",
+   "nl": "ONTWERP",
+   "fr": "VISUEL",
+   "de": "DRUCKDATEI",
+   "es": "DISEÑO",
+   "it": "FILE"
+  },
+  "h1": {
+   "en": "You do not need the finished artwork yet",
+   "nl": "Je hebt het definitieve ontwerp nog niet nodig",
+   "fr": "Vous n'avez pas encore besoin du visuel définitif",
+   "de": "Sie brauchen die fertige Datei noch nicht",
+   "es": "Todavía no necesitas el diseño definitivo",
+   "it": "Non ti serve ancora il file definitivo"
+  },
+  "sub": {
+   "en": "Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.",
+   "nl": "Bestel wanneer je zover bent en stuur je bestand daarna. Er gaat niets op de pers voordat het is gecontroleerd.",
+   "fr": "Commandez quand vous êtes prêt et envoyez votre fichier ensuite. Rien ne part en impression avant vérification.",
+   "de": "Bestellen Sie, wenn Sie so weit sind, und schicken Sie die Datei danach. Nichts geht in den Druck, bevor es geprüft wurde.",
+   "es": "Pide cuando estés listo y envía el archivo después. Nada entra en máquina sin haberse revisado.",
+   "it": "Ordina quando sei pronto e manda il file dopo. Niente va in stampa prima di essere controllato."
+  },
+  "sect_h": {
+   "en": "Three ways to get us your design",
+   "nl": "Drie manieren om ons je ontwerp te sturen",
+   "fr": "Trois façons de nous transmettre votre visuel",
+   "de": "Drei Wege, uns Ihr Design zu schicken",
+   "es": "Tres formas de hacernos llegar tu diseño",
+   "it": "Tre modi per farci avere il tuo file"
+  },
+  "sect_sub": {
+   "en": "Pick whichever suits. All three end up in the same place.",
+   "nl": "Kies wat je uitkomt. Alle drie komen op dezelfde plek uit.",
+   "fr": "Choisissez ce qui vous arrange. Les trois aboutissent au même endroit.",
+   "de": "Nehmen Sie, was Ihnen passt. Alle drei enden am selben Ort.",
+   "es": "Elige lo que te venga bien. Las tres acaban en el mismo sitio.",
+   "it": "Scegli quello che ti conviene. Tutti e tre finiscono nello stesso posto."
+  },
+  "route.0.t": {
+   "en": "Upload later",
+   "nl": "Later uploaden",
+   "fr": "Envoyer plus tard",
+   "de": "Später hochladen",
+   "es": "Subir después",
+   "it": "Carica dopo"
+  },
+  "route.0.b": {
+   "en": "Add to cart now and send your files after checkout.",
+   "nl": "Leg nu in je winkelwagen en stuur je bestanden na het afrekenen.",
+   "fr": "Ajoutez au panier maintenant et envoyez vos fichiers après la commande.",
+   "de": "Jetzt in den Warenkorb legen und die Dateien nach der Bestellung schicken.",
+   "es": "Añádelo al carrito ahora y envía los archivos después de pagar.",
+   "it": "Aggiungi al carrello ora e manda i file dopo il pagamento."
+  },
+  "route.1.t": {
+   "en": "Design online",
+   "nl": "Online ontwerpen",
+   "fr": "Créer en ligne",
+   "de": "Online gestalten",
+   "es": "Diseñar online",
+   "it": "Progetta online"
+  },
+  "route.1.b": {
+   "en": "Customise it in our editor, with a live preview.",
+   "nl": "Pas het aan in onze editor, met een live voorbeeld.",
+   "fr": "Personnalisez-le dans notre éditeur, avec un aperçu en direct.",
+   "de": "Passen Sie es in unserem Editor an, mit Live-Vorschau.",
+   "es": "Personalízalo en nuestro editor, con vista previa en directo.",
+   "it": "Personalizzalo nel nostro editor, con anteprima dal vivo."
+  },
+  "route.2.t": {
+   "en": "Upload your design",
+   "nl": "Je ontwerp uploaden",
+   "fr": "Envoyer votre visuel",
+   "de": "Design hochladen",
+   "es": "Sube tu diseño",
+   "it": "Carica il tuo file"
+  },
+  "route.2.b": {
+   "en": "You have print-ready files, or your own designer.",
+   "nl": "Je hebt drukklare bestanden, of je eigen ontwerper.",
+   "fr": "Vous avez des fichiers prêts à imprimer, ou votre propre graphiste.",
+   "de": "Sie haben druckfertige Dateien oder einen eigenen Designer.",
+   "es": "Tienes archivos listos para imprimir, o tu propio diseñador.",
+   "it": "Hai file pronti per la stampa, o un tuo grafico."
+  },
+  "templates": {
+   "en": "Every product has templates to download, already the right size.",
+   "nl": "Bij elk product kun je sjablonen downloaden, al op de juiste maat.",
+   "fr": "Chaque produit a des gabarits à télécharger, déjà au bon format.",
+   "de": "Zu jedem Produkt gibt es Vorlagen zum Herunterladen, bereits im richtigen Format.",
+   "es": "Cada producto tiene plantillas para descargar, ya con el tamaño correcto.",
+   "it": "Ogni prodotto ha modelli da scaricare, già della misura giusta."
+  },
+  "checks_h": {
+   "en": "We look at every file before it prints",
+   "nl": "Wij bekijken elk bestand voordat het gedrukt wordt",
+   "fr": "Nous regardons chaque fichier avant impression",
+   "de": "Wir sehen uns jede Datei vor dem Druck an",
+   "es": "Miramos cada archivo antes de imprimirlo",
+   "it": "Guardiamo ogni file prima di stamparlo"
+  },
+  "checks_sub": {
+   "en": "So the thing that arrives is the thing you pictured.",
+   "nl": "Zodat wat er aankomt is wat je voor ogen had.",
+   "fr": "Pour que ce qui arrive soit ce que vous aviez en tête.",
+   "de": "Damit das, was ankommt, dem entspricht, was Sie sich vorgestellt haben.",
+   "es": "Para que lo que llega sea lo que tenías en mente.",
+   "it": "Così quello che arriva è quello che avevi in mente."
+  },
+  "check.0": {
+   "en": "Nothing important gets cut off at the edges",
+   "nl": "Er valt niets belangrijks weg aan de randen",
+   "fr": "Rien d'important n'est coupé sur les bords",
+   "de": "An den Rändern geht nichts Wichtiges verloren",
+   "es": "No se corta nada importante en los bordes",
+   "it": "Ai bordi non si perde niente di importante"
+  },
+  "check.1": {
+   "en": "Photos and logos come out sharp, not fuzzy",
+   "nl": "Foto's en logo's komen scherp uit de pers, niet wazig",
+   "fr": "Photos et logos ressortent nets, pas flous",
+   "de": "Fotos und Logos kommen scharf heraus, nicht unscharf",
+   "es": "Las fotos y los logos salen nítidos, no borrosos",
+   "it": "Foto e loghi vengono nitidi, non sfocati"
+  },
+  "check.2": {
+   "en": "Colours print the way you expect them to",
+   "nl": "Kleuren drukken zoals je verwacht",
+   "fr": "Les couleurs s'impriment comme vous l'attendez",
+   "de": "Farben drucken so, wie Sie es erwarten",
+   "es": "Los colores salen como esperas",
+   "it": "I colori vengono come te li aspetti"
+  },
+  "check.3": {
+   "en": "If something looks wrong, you hear from us first",
+   "nl": "Ziet iets er niet goed uit, dan hoor je het eerst van ons",
+   "fr": "Si quelque chose cloche, vous l'apprenez de nous d'abord",
+   "de": "Wenn etwas nicht stimmt, hören Sie es zuerst von uns",
+   "es": "Si algo no cuadra, lo sabes por nosotros primero",
+   "it": "Se qualcosa non va, lo senti prima da noi"
+  },
+  "premium_eyebrow": {
+   "en": "PREMIUM DESIGN CHECK",
+   "nl": "PREMIUM ONTWERPCONTROLE",
+   "fr": "VÉRIFICATION PREMIUM DU VISUEL",
+   "de": "PREMIUM-DATEICHECK",
+   "es": "REVISIÓN PREMIUM DEL DISEÑO",
+   "it": "CONTROLLO PREMIUM DEL FILE"
+  },
+  "premium_h": {
+   "en": "Want a person to check it as well?",
+   "nl": "Wil je dat er ook iemand naar kijkt?",
+   "fr": "Vous voulez qu'une personne le vérifie aussi ?",
+   "de": "Soll auch ein Mensch draufschauen?",
+   "es": "¿Quieres que además lo revise una persona?",
+   "it": "Vuoi che lo controlli anche una persona?"
+  },
+  "premium_sub": {
+   "en": "Eight out of ten customers add it. Reprinting a job costs many times more than the check does.",
+   "nl": "Acht op de tien klanten nemen het erbij. Opnieuw drukken kost een veelvoud van wat de controle kost.",
+   "fr": "Huit clients sur dix l'ajoutent. Réimprimer coûte bien plus cher que la vérification.",
+   "de": "Acht von zehn Kunden nehmen ihn dazu. Ein Nachdruck kostet ein Vielfaches des Checks.",
+   "es": "Ocho de cada diez clientes lo añaden. Reimprimir cuesta muchas veces más que la revisión.",
+   "it": "Otto clienti su dieci lo aggiungono. Ristampare costa molte volte più del controllo."
+  },
+  "premium.0": {
+   "en": "A print expert reviews it, not just software",
+   "nl": "Een printexpert kijkt ernaar, niet alleen software",
+   "fr": "Un expert en impression le relit, pas seulement un logiciel",
+   "de": "Ein Druckexperte prüft sie, nicht nur eine Software",
+   "es": "Lo revisa un experto en impresión, no solo un software",
+   "it": "Lo rivede un esperto di stampa, non solo un software"
+  },
+  "premium.1": {
+   "en": "We contact you before printing if anything looks off",
+   "nl": "Wij nemen contact op voor het drukken als iets niet klopt",
+   "fr": "Nous vous contactons avant impression si quelque chose cloche",
+   "de": "Wir melden uns vor dem Druck, wenn etwas nicht stimmt",
+   "es": "Te contactamos antes de imprimir si algo no cuadra",
+   "it": "Ti contattiamo prima di stampare se qualcosa non va"
+  },
+  "premium.2": {
+   "en": "Backed by our 100% Satisfaction Guarantee",
+   "nl": "Met onze 100% Tevredenheidsgarantie",
+   "fr": "Couvert par notre garantie satisfaction 100%",
+   "de": "Abgesichert durch unsere 100% Zufriedenheitsgarantie",
+   "es": "Con nuestra Garantía de Satisfacción del 100%",
+   "it": "Con la nostra Garanzia di Soddisfazione 100%"
+  },
+  "ask_h": {
+   "en": "Rather just ask someone?",
+   "nl": "Vraag je het liever gewoon aan iemand?",
+   "fr": "Vous préférez simplement demander ?",
+   "de": "Lieber einfach jemanden fragen?",
+   "es": "¿Prefieres preguntar a alguien?",
+   "it": "Preferisci semplicemente chiedere?"
+  },
+  "ask_mail": {
+   "en": "E-mail us your file",
+   "nl": "Mail ons je bestand",
+   "fr": "Envoyez-nous votre fichier",
+   "de": "Schicken Sie uns Ihre Datei",
+   "es": "Envíanos tu archivo",
+   "it": "Mandaci il tuo file"
+  },
+  "ask_how": {
+   "en": "How the design check works",
+   "nl": "Hoe de ontwerpcontrole werkt",
+   "fr": "Comment fonctionne la vérification",
+   "de": "Wie der Dateicheck funktioniert",
+   "es": "Cómo funciona la revisión",
+   "it": "Come funziona il controllo"
+  }
+ },
+ "browse-03": {
+  "pre": {
+   "en": "Tell the quote desk what the job is. A tailored price back within 24 hours.",
+   "nl": "Vertel de offertebalie wat de opdracht is. Een prijs op maat binnen 24 uur terug.",
+   "fr": "Dites au service devis en quoi consiste le travail. Un prix sur mesure sous 24 heures.",
+   "de": "Sagen Sie dem Angebotsteam, worum es geht. Ein Preis auf Maß innerhalb von 24 Stunden.",
+   "es": "Cuéntale al equipo de presupuestos cuál es el trabajo. Un precio a medida en 24 horas.",
+   "it": "Racconta al team preventivi qual è il lavoro. Un prezzo su misura entro 24 ore."
+  },
+  "eyebrow": {
+   "en": "GET A QUOTE",
+   "nl": "VRAAG EEN OFFERTE",
+   "fr": "DEMANDER UN DEVIS",
+   "de": "ANGEBOT ANFORDERN",
+   "es": "PIDE PRESUPUESTO",
+   "it": "CHIEDI UN PREVENTIVO"
+  },
+  "h1": {
+   "en": "Tell us the job. We will price it.",
+   "nl": "Vertel ons de opdracht. Wij prijzen hem.",
+   "fr": "Dites-nous le travail. Nous le chiffrons.",
+   "de": "Sagen Sie uns den Auftrag. Wir kalkulieren ihn.",
+   "es": "Cuéntanos el trabajo. Nosotros lo presupuestamos.",
+   "it": "Raccontaci il lavoro. Lo quotiamo noi."
+  },
+  "sub": {
+   "en": "An odd size, a tight deadline, or a number someone else approves. Our quote desk answers within 24 hours.",
+   "nl": "Een afwijkend formaat, een krappe deadline, of een bedrag dat iemand anders goedkeurt. Onze offertebalie antwoordt binnen 24 uur.",
+   "fr": "Un format inhabituel, un délai serré, ou un montant que quelqu'un d'autre doit valider. Notre service devis répond sous 24 heures.",
+   "de": "Ein ungewöhnliches Format, ein knapper Termin oder eine Summe, die jemand anders freigibt. Unser Angebotsteam antwortet innerhalb von 24 Stunden.",
+   "es": "Un tamaño raro, un plazo ajustado, o una cifra que aprueba otra persona. Nuestro equipo de presupuestos responde en 24 horas.",
+   "it": "Un formato insolito, una scadenza stretta, o una cifra che approva qualcun altro. Il nostro team preventivi risponde entro 24 ore."
+  },
+  "cta": {
+   "en": "Request a quote",
+   "nl": "Offerte aanvragen",
+   "fr": "Demander un devis",
+   "de": "Angebot anfordern",
+   "es": "Pedir presupuesto",
+   "it": "Richiedi un preventivo"
+  },
+  "sect_h": {
+   "en": "Three reasons people ask us instead",
+   "nl": "Drie redenen waarom mensen het ons vragen",
+   "fr": "Trois raisons pour lesquelles on nous demande",
+   "de": "Drei Gründe, warum man uns fragt",
+   "es": "Tres razones por las que nos preguntan",
+   "it": "Tre motivi per cui ce lo chiedono"
+  },
+  "sect_sub": {
+   "en": "If any of these is what stopped you, the page was never going to fix it.",
+   "nl": "Als een van deze dingen je tegenhield, ging de pagina dat toch niet oplossen.",
+   "fr": "Si c'est l'une de ces raisons qui vous a arrêté, la page n'allait pas la résoudre.",
+   "de": "Wenn Sie einer dieser Punkte aufgehalten hat, konnte die Seite das ohnehin nicht lösen.",
+   "es": "Si algo de esto es lo que te frenó, la página no lo iba a resolver.",
+   "it": "Se è una di queste cose ad averti fermato, la pagina non l'avrebbe risolta."
+  },
+  "blocked.0.t": {
+   "en": "The spec is unusual",
+   "nl": "De specificatie is bijzonder",
+   "fr": "Le cahier des charges sort de l'ordinaire",
+   "de": "Die Ausführung ist ungewöhnlich",
+   "es": "Las especificaciones son poco comunes",
+   "it": "Le specifiche sono insolite"
+  },
+  "blocked.0.b": {
+   "en": "Forty years in the graphic trade sits behind the quote desk. Say what the job has to do and they work out how to make it.",
+   "nl": "Achter de offertebalie zit veertig jaar ervaring in het grafische vak. Zeg wat de opdracht moet doen en zij bedenken hoe het gemaakt wordt.",
+   "fr": "Quarante ans de métier dans les arts graphiques se trouvent derrière le service devis. Dites ce que le travail doit faire et ils trouvent comment le réaliser.",
+   "de": "Hinter dem Angebotsteam stehen vierzig Jahre grafisches Gewerbe. Sagen Sie, was der Auftrag leisten muss, dann finden sie den Weg dorthin.",
+   "es": "Detrás del equipo de presupuestos hay cuarenta años de oficio gráfico. Di qué tiene que hacer el trabajo y ellos averiguan cómo hacerlo.",
+   "it": "Dietro il team preventivi ci sono quarant'anni di mestiere grafico. Di' cosa deve fare il lavoro e trovano loro il modo di realizzarlo."
+  },
+  "blocked.1.t": {
+   "en": "You need it by a date",
+   "nl": "Je hebt het op een datum nodig",
+   "fr": "Vous en avez besoin pour une date",
+   "de": "Sie brauchen es zu einem Termin",
+   "es": "Lo necesitas para una fecha",
+   "it": "Ti serve entro una data"
+  },
+  "blocked.1.b": {
+   "en": "Tell them the date. Most products go out for next-day delivery where possible, and you get a straight answer if it cannot be done.",
+   "nl": "Geef ze de datum. De meeste producten gaan waar mogelijk de volgende dag de deur uit, en als het niet kan hoor je dat gewoon.",
+   "fr": "Donnez-leur la date. La plupart des produits partent en livraison le lendemain quand c'est possible, et vous obtenez une réponse franche si ce n'est pas faisable.",
+   "de": "Nennen Sie ihnen das Datum. Die meisten Produkte gehen wo möglich mit Lieferung am nächsten Tag raus, und wenn es nicht geht, sagen sie es Ihnen klar.",
+   "es": "Diles la fecha. La mayoría de los productos salen con entrega al día siguiente cuando es posible, y si no se puede te lo dicen claro.",
+   "it": "Dai loro la data. La maggior parte dei prodotti parte con consegna il giorno dopo quando è possibile, e se non si può te lo dicono chiaramente."
+  },
+  "blocked.2.t": {
+   "en": "Someone has to approve it",
+   "nl": "Iemand moet het goedkeuren",
+   "fr": "Quelqu'un doit valider",
+   "de": "Jemand muss es freigeben",
+   "es": "Alguien tiene que aprobarlo",
+   "it": "Qualcuno deve approvarlo"
+  },
+  "blocked.2.b": {
+   "en": "A written quote with the full total in it, so there is one number to forward instead of a basket to describe.",
+   "nl": "Een schriftelijke offerte met het complete totaal erin, zodat je één bedrag kunt doorsturen in plaats van een winkelwagen te moeten uitleggen.",
+   "fr": "Un devis écrit avec le total complet, pour n'avoir qu'un chiffre à transmettre au lieu d'un panier à décrire.",
+   "de": "Ein schriftliches Angebot mit der vollständigen Summe, also eine Zahl zum Weiterleiten statt eines Warenkorbs zum Erklären.",
+   "es": "Un presupuesto por escrito con el total completo, así hay una cifra que reenviar en vez de un carrito que describir.",
+   "it": "Un preventivo scritto con il totale completo, così c'è un numero da inoltrare invece di un carrello da descrivere."
+  },
+  "steps_h": {
+   "en": "How a quote works",
+   "nl": "Hoe een offerte werkt",
+   "fr": "Comment se passe un devis",
+   "de": "Wie ein Angebot abläuft",
+   "es": "Cómo funciona un presupuesto",
+   "it": "Come funziona un preventivo"
+  },
+  "steps_sub": {
+   "en": "Three steps, no phone call to book.",
+   "nl": "Drie stappen, geen belafspraak nodig.",
+   "fr": "Trois étapes, aucun rendez-vous téléphonique à prendre.",
+   "de": "Drei Schritte, kein Telefontermin nötig.",
+   "es": "Tres pasos, sin llamada que agendar.",
+   "it": "Tre passaggi, nessuna telefonata da fissare."
+  },
+  "step.0.t": {
+   "en": "Tell them what you need",
+   "nl": "Zeg wat je nodig hebt",
+   "fr": "Dites ce dont vous avez besoin",
+   "de": "Sagen Sie, was Sie brauchen",
+   "es": "Di qué necesitas",
+   "it": "Di' cosa ti serve"
+  },
+  "step.0.b": {
+   "en": "A sketch, a photo of an old print, a spec sheet, or just a sentence. Up to five files.",
+   "nl": "Een schets, een foto van een oude druk, een specificatieblad, of gewoon één zin. Tot vijf bestanden.",
+   "fr": "Un croquis, la photo d'un ancien tirage, une fiche technique, ou juste une phrase. Jusqu'à cinq fichiers.",
+   "de": "Eine Skizze, ein Foto eines alten Drucks, ein Datenblatt oder einfach ein Satz. Bis zu fünf Dateien.",
+   "es": "Un boceto, una foto de una impresión antigua, una ficha técnica, o solo una frase. Hasta cinco archivos.",
+   "it": "Uno schizzo, la foto di una vecchia stampa, una scheda tecnica, o solo una frase. Fino a cinque file."
+  },
+  "step.1.t": {
+   "en": "They come back within 24 hours",
+   "nl": "Ze komen binnen 24 uur terug",
+   "fr": "Ils reviennent sous 24 heures",
+   "de": "Sie melden sich innerhalb von 24 Stunden",
+   "es": "Vuelven en 24 horas",
+   "it": "Ti rispondono entro 24 ore"
+  },
+  "step.1.b": {
+   "en": "A tailored price with the full total in it, not a range and not a callback to arrange a call.",
+   "nl": "Een prijs op maat met het complete totaal erin, geen bandbreedte en geen terugbelverzoek om een gesprek te plannen.",
+   "fr": "Un prix sur mesure avec le total complet, pas une fourchette ni un rappel pour convenir d'un appel.",
+   "de": "Ein Preis auf Maß mit der vollständigen Summe, keine Spanne und kein Rückruf, um ein Gespräch zu vereinbaren.",
+   "es": "Un precio a medida con el total completo, no un rango ni una llamada para concertar otra llamada.",
+   "it": "Un prezzo su misura con il totale completo, non una forbice e non una richiamata per fissare una chiamata."
+  },
+  "step.2.t": {
+   "en": "Order it, or send it on",
+   "nl": "Bestel het, of stuur het door",
+   "fr": "Commandez, ou transmettez",
+   "de": "Bestellen oder weiterleiten",
+   "es": "Pídelo, o reenvíalo",
+   "it": "Ordinalo, o inoltralo"
+  },
+  "step.2.b": {
+   "en": "Place it yourself, or forward the quote to whoever signs things off.",
+   "nl": "Plaats hem zelf, of stuur de offerte door naar wie tekent.",
+   "fr": "Passez la commande vous-même, ou transmettez le devis à la personne qui valide.",
+   "de": "Bestellen Sie selbst, oder leiten Sie das Angebot an die Person weiter, die freigibt.",
+   "es": "Hazlo tú mismo, o reenvía el presupuesto a quien firma.",
+   "it": "Ordinalo tu, oppure inoltra il preventivo a chi approva."
+  },
+  "team_eyebrow": {
+   "en": "PRINT EXPERT TEAM",
+   "nl": "PRINTEXPERT-TEAM",
+   "fr": "ÉQUIPE D'EXPERTS EN IMPRESSION",
+   "de": "DRUCKEXPERTEN-TEAM",
+   "es": "EQUIPO DE EXPERTOS EN IMPRESIÓN",
+   "it": "TEAM ESPERTI DI STAMPA"
+  },
+  "team_h": {
+   "en": "Send them the awkward job",
+   "nl": "Stuur ze de lastige klus",
+   "fr": "Confiez-leur le travail délicat",
+   "de": "Schicken Sie ihnen den kniffligen Auftrag",
+   "es": "Mándales el trabajo complicado",
+   "it": "Manda loro il lavoro difficile"
   }
  }
 }

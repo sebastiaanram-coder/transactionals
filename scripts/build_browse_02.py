@@ -19,7 +19,9 @@ wrong in a two-market flow. The value is argued without a number instead.
 Icons, tick and the circular avatar are baked images: Outlook ignores
 border-radius and most clients strip inline SVG.
 """
-import base64, os, re
+import base64, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import i18n
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -194,12 +196,14 @@ CSS = """
 }
 """ % {"P": P}
 
-def routes_html(a):
+def routes_html(a, tr=None):
+    t_ = (lambda k, e: e) if tr is None else tr
     cells = "".join(
         '<td class="%s-rtcell" valign="top"><div class="%s-card">'
         '<img class="%s-rticon" src="%s" alt="" width="48" height="48">'
         '<p class="%s-rtttl">%s</p><p class="%s-rttx">%s</p></div></td>'
-        % (P, P, P, a[ic], P, t, P, b) for ic, t, b in ROUTES)
+        % (P, P, P, a[ic], P, t_("route.%d.t" % i, t), P, t_("route.%d.b" % i, b))
+        for i, (ic, t, b) in enumerate(ROUTES))
     return ('<table class="%s-rt" role="presentation" cellpadding="0" cellspacing="0">'
             '<tr>%s</tr></table>' % (P, cells))
 
@@ -212,19 +216,23 @@ def _ticklist(a, items, tick="IMG_TICK"):
         '<td class="%s-cktx" valign="top">%s</td></tr>' % (P, a[tick], P, c)
         for c in items)
 
-def checks_html(a):
+def checks_html(a, tr=None):
+    t_ = (lambda k, e: e) if tr is None else tr
+    items = [t_("check.%d" % i, x) for i, x in enumerate(CHECKS)]
     return ('<table class="%s-ckc" role="presentation" cellpadding="0" '
-            'cellspacing="0" align="center">%s</table>' % (P, _ticklist(a, CHECKS)))
+            'cellspacing="0" align="center">%s</table>' % (P, _ticklist(a, items)))
 
-def premium_html(a):
+def premium_html(a, tr=None):
+    t_ = (lambda k, e: e) if tr is None else tr
+    items = [t_("premium.%d" % i, x) for i, x in enumerate(PREMIUM)]
     return ('<table class="%s-ck" role="presentation" cellpadding="0" cellspacing="0">'
-            '%s</table>' % (P, _ticklist(a, PREMIUM, tick="IMG_TICK_G")))
+            '%s</table>' % (P, _ticklist(a, items, tick="IMG_TICK_G")))
 
 BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">Order now and send your file later. Nothing goes on press until it has been checked.</div>
+<div class="{P}-pre">{T_PRE}</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -239,10 +247,10 @@ BODY = """
          Most people never find it, so it leads here, set over the photograph. -->
     <div class="{P}-hero">
       <div class="{P}-heroov">
-        <span class="{P}-eyebrow">ARTWORK</span>
-        <h1 class="{P}-h1">You do not need the finished artwork yet</h1>
-        <p class="{P}-sub">Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.</p>
-        <a class="{P}-cta" href="{PROD_URL}">Back to your product</a>
+        <span class="{P}-eyebrow">{T_EYEBROW}</span>
+        <h1 class="{P}-h1">{T_H1}</h1>
+        <p class="{P}-sub">{T_SUB}</p>
+        <a class="{P}-cta" href="{PROD_URL}">{T_BR_BACK}</a>
       </div>
       <img class="{P}-heroimg" src="{IMG_HERO}" alt="Helloprint colleagues checking customer print files on screen" width="600">
     </div>
@@ -251,7 +259,7 @@ BODY = """
       <table class="{P}-antbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
         <td class="{P}-anim" valign="middle"><img src="{PROD_IMG}" alt="" width="52"></td>
         <td class="{P}-antx" valign="middle">
-          <span class="{P}-anlbl">YOUR PRINT JOB</span>
+          <span class="{P}-anlbl">{T_BR_JOBTITLE}</span>
           <span class="{P}-anname">{PROD_TITLE}</span>
         </td>
         <td class="{P}-anlink" valign="middle">View product &rarr;</td>
@@ -260,41 +268,41 @@ BODY = """
 
     <!-- the product page's own three options, same words and order -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">Three ways to get us your design</h2>
-      <p class="{P}-sectsub">Pick whichever suits. All three end up in the same place.</p>
+      <h2 class="{P}-secttl">{T_SECT_H}</h2>
+      <p class="{P}-sectsub">{T_SECT_SUB}</p>
       {ROUTES}
-      <p class="{P}-tplline">Every product has templates to download, already the right size.<br><a href="{PROD_URL}">Get the ones for {PROD_TITLE} &rarr;</a></p>
+      <p class="{P}-tplline">{T_TEMPLATES}<br><a href="{PROD_URL}">Get the ones for {PROD_TITLE} &rarr;</a></p>
     </div>
 
     <!-- plain language on purpose: no bleed, no dpi, no CMYK -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">We look at every file before it prints</h2>
-      <p class="{P}-sectsub">So the thing that arrives is the thing you pictured.</p>
+      <h2 class="{P}-secttl">{T_CHECKS_H}</h2>
+      <p class="{P}-sectsub">{T_CHECKS_SUB}</p>
       {CHECKS}
     </div>
 
     <!-- the assurance centrepiece. The free check is automated; a person is
          the paid Premium tier, and the copy must keep that distinction. -->
     <div class="{P}-prem">
-      <span class="{P}-premlbl">PREMIUM DESIGN CHECK</span>
-      <h2 class="{P}-premttl">Want a person to check it as well?</h2>
+      <span class="{P}-premlbl">{T_PREMIUM_EYEBROW}</span>
+      <h2 class="{P}-premttl">{T_PREMIUM_H}</h2>
       <p class="{P}-premtx">Every file gets an automatic check at no cost. For a little extra at checkout, one of our print experts goes through it by hand as well.</p>
       {PREMIUM}
-      <p class="{P}-premnote">Eight out of ten customers add it. Reprinting a job costs many times more than the check does.</p>
+      <p class="{P}-premnote">{T_PREMIUM_SUB}</p>
     </div>
 
     <div class="{P}-help">
       <img class="{P}-helpav" src="{AV_DESIGNER}" alt="" width="64" height="64">
-      <span class="{P}-helpttl">Rather just ask someone?</span>
+      <span class="{P}-helpttl">{T_ASK_H}</span>
       <p class="{P}-helptx">Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.</p>
       <span class="{P}-helplinks">
-        <a href="mailto:hello@helloprint.com">E-mail us your file</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/always-a-perfect-design">How the design check works</a>
+        <a href="mailto:hello@helloprint.com">{T_ASK_MAIL}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/always-a-perfect-design">{T_ASK_HOW}</a>
       </span>
     </div>
 
     <div class="{P}-mid">
       <a class="{P}-cta-g" href="{PROD_URL}">Back to your product</a>
-      <p class="{P}-midnote">Or just reply to this email and a person will pick it up.</p>
+      <p class="{P}-midnote">{T_BR_REPLY}</p>
     </div>
 
     {CATALOG_CLOSE}
@@ -321,11 +329,37 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets):
+
+TRANSLATED = [
+    ('eyebrow', 'ARTWORK'),
+    ('pre', 'Order now and send your file later. Nothing goes on press until it has been checked.'),
+    ('h1', 'You do not need the finished artwork yet'),
+    ('sub', 'Order when you are ready and send your file afterwards. Nothing goes on press until it has been checked.'),
+    ('br.back', 'Back to your product'),
+    ('br.jobtitle', 'YOUR PRINT JOB'),
+    ('sect_h', 'Three ways to get us your design'),
+    ('sect_sub', 'Pick whichever suits. All three end up in the same place.'),
+    ('templates', 'Every product has templates to download, already the right size.'),
+    ('checks_h', 'We look at every file before it prints'),
+    ('checks_sub', 'So the thing that arrives is the thing you pictured.'),
+    ('premium_eyebrow', 'PREMIUM DESIGN CHECK'),
+    ('premium_h', 'Want a person to check it as well?'),
+    ('premium_sub', 'Eight out of ten customers add it. Reprinting a job costs many times more than the check does.'),
+    ('ask_h', 'Rather just ask someone?'),
+    ('ask_mail', 'E-mail us your file'),
+    ('ask_how', 'How the design check works'),
+    ('br.reply', 'Or just reply to this email and a person will pick it up.'),
+]
+
+def build(bindings, assets, live=False, locale=None):
+    import re as _r
+    tr = i18n.translator("browse-02", live, locale)
     # fragments are fully resolved before insertion, so BODY.format runs once
     # and never meets a stray CSS brace
-    vals = {"P": P, "CSS": CSS, "ROUTES": routes_html(assets),
-            "CHECKS": checks_html(assets), "PREMIUM": premium_html(assets)}
+    vals = {"P": P, "CSS": CSS, "ROUTES": routes_html(assets, tr),
+            "CHECKS": checks_html(assets, tr), "PREMIUM": premium_html(assets, tr)}
+    for _k, _e in TRANSLATED:
+        vals["T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper())] = tr(_k, _e)
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
 
@@ -365,8 +399,15 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS)
-live_body = build(LIVE, LIVE_ASSETS)
+prev_body = build(SAMPLE, SAMPLE_ASSETS, False)
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    open(os.path.join(OUT, "browse-02-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(
+             PREVIEW_DOC % build(SAMPLE, SAMPLE_ASSETS, False, _loc))
+live_body = build(LIVE, LIVE_ASSETS, True)
 prev = PREVIEW_DOC % prev_body
 live = KLAVIYO_DOC % live_body
 open(os.path.join(OUT, "browse-02-proposed.html"), "w", encoding="utf-8").write(prev)

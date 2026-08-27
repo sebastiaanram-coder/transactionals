@@ -23,7 +23,9 @@ which was an overpromise, and has been corrected to match.
 
 No price anywhere: a quote IS the answer to the price question. Enforced.
 """
-import base64, os, re
+import base64, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import i18n
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -186,17 +188,20 @@ CSS = """
 }
 """ % {"P": P}
 
-def blocked_html(a):
+def blocked_html(a, tr=None):
+    t_ = (lambda k, e: e) if tr is None else tr
     rows = "".join(
         '<div class="%s-blrow"><table class="%s-bltbl" role="presentation" cellpadding="0" '
         'cellspacing="0"><tr><td class="%s-bltick" valign="top">'
         '<img src="%s" alt="" width="20" height="20"></td>'
         '<td class="%s-bltx" valign="top"><p class="%s-blttl">%s</p>'
         '<p class="%s-blbody">%s</p></td></tr></table></div>'
-        % (P, P, P, a["IMG_TICK"], P, P, t, P, b) for t, b in BLOCKED)
+        % (P, P, P, a["IMG_TICK"], P, P, t_("blocked.%d.t" % i, t), P,
+           t_("blocked.%d.b" % i, b)) for i, (t, b) in enumerate(BLOCKED))
     return '<div class="%s-bl">%s</div>' % (P, rows)
 
-def steps_html():
+def steps_html(tr=None):
+    t_ = (lambda k, e: e) if tr is None else tr
     out = ""
     for i, (t, b) in enumerate(STEPS, 1):
         out += ('<tr><td class="%s-tlnum" align="center" valign="top">'
@@ -205,7 +210,9 @@ def steps_html():
                 'class="%s-dot">%d</td></tr></table></td>'
                 '<td class="%s-tltxt" valign="top">'
                 '<span class="%s-tlttl">%s</span>'
-                '<span class="%s-tlbody">%s</span></td></tr>' % (P, P, i, P, P, t, P, b))
+                '<span class="%s-tlbody">%s</span></td></tr>'
+                % (P, P, i, P, P, t_("step.%d.t" % (i-1), t), P,
+                   t_("step.%d.b" % (i-1), b)))
         if i < len(STEPS):
             out += ('<tr><td class="%s-tlspine" align="center" valign="top">'
                     '<table role="presentation" cellpadding="0" cellspacing="0" width="2"><tr>'
@@ -218,7 +225,7 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">Tell the quote desk what the job is. A tailored price back within 24 hours.</div>
+<div class="{P}-pre">{T_PRE}</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -231,10 +238,10 @@ BODY = """
 
     <div class="{P}-hero">
       <div class="{P}-heroov">
-        <span class="{P}-eyebrow">GET A QUOTE</span>
-        <h1 class="{P}-h1">Tell us the job. We will price it.</h1>
-        <p class="{P}-sub">An odd size, a tight deadline, or a number someone else approves. Our quote desk answers within 24 hours.</p>
-        <a class="{P}-cta" href="{QUOTE_URL}">Request a quote</a>
+        <span class="{P}-eyebrow">{T_EYEBROW}</span>
+        <h1 class="{P}-h1">{T_H1}</h1>
+        <p class="{P}-sub">{T_SUB}</p>
+        <a class="{P}-cta" href="{QUOTE_URL}">{T_CTA}</a>
       </div>
       <img class="{P}-heroimg" src="{IMG_HERO}" alt="The Helloprint team who price the unusual jobs" width="600">
     </div>
@@ -243,7 +250,7 @@ BODY = """
       <table class="{P}-antbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
         <td class="{P}-anim" valign="middle"><img src="{PROD_IMG}" alt="" width="52"></td>
         <td class="{P}-antx" valign="middle">
-          <span class="{P}-anlbl">YOUR PRINT JOB</span>
+          <span class="{P}-anlbl">{T_BR_JOBTITLE}</span>
           <span class="{P}-anname">{PROD_TITLE}</span>
         </td>
         <td class="{P}-anlink" valign="middle">View product &rarr;</td>
@@ -253,30 +260,30 @@ BODY = """
     <!-- the three ways to be blocked. Not the undecided: emails 1 and 2 have
          already served them. -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">Three reasons people ask us instead</h2>
-      <p class="{P}-sectsub">If any of these is what stopped you, the page was never going to fix it.</p>
+      <h2 class="{P}-secttl">{T_SECT_H}</h2>
+      <p class="{P}-sectsub">{T_SECT_SUB}</p>
       {BLOCKED}
     </div>
 
     <!-- numbered path: a quote is genuinely a sequence -->
     <div class="{P}-sect">
-      <h2 class="{P}-secttl">How a quote works</h2>
-      <p class="{P}-sectsub">Three steps, no phone call to book.</p>
+      <h2 class="{P}-secttl">{T_STEPS_H}</h2>
+      <p class="{P}-sectsub">{T_STEPS_SUB}</p>
       {STEPS}
     </div>
 
     <div class="{P}-john">
       <img class="{P}-johnav" src="{AV_JOHN}" alt="" width="76" height="76">
       <span class="{P}-johnname">John</span>
-      <span class="{P}-johnrole">PRINT EXPERT TEAM</span>
+      <span class="{P}-johnrole">{T_TEAM_EYEBROW}</span>
       <p class="{P}-johntx">That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.</p>
     </div>
 
     <div class="{P}-close">
-      <span class="{P}-closettl">Send them the awkward job</span>
+      <span class="{P}-closettl">{T_TEAM_H}</span>
       <span class="{P}-closetxt">A standard run or something nobody has printed before. Either way you get a price within 24 hours and a straight answer on what is possible.</span>
       <a class="{P}-cta-g" href="{QUOTE_URL}">Request a quote</a>
-      <span class="{P}-closealt">Or just reply to this email and a person will pick it up.</span>
+      <span class="{P}-closealt">{T_BR_REPLY}</span>
     </div>
 
     {CATALOG_CLOSE}
@@ -303,9 +310,30 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets):
+TRANSLATED = [
+    ('pre', 'Tell the quote desk what the job is. A tailored price back within 24 hours.'),
+    ('eyebrow', 'GET A QUOTE'),
+    ('h1', 'Tell us the job. We will price it.'),
+    ('sub', 'An odd size, a tight deadline, or a number someone else approves. Our quote desk answers within 24 hours.'),
+    ('cta', 'Request a quote'),
+    ('br.jobtitle', 'YOUR PRINT JOB'),
+    ('sect_h', 'Three reasons people ask us instead'),
+    ('sect_sub', 'If any of these is what stopped you, the page was never going to fix it.'),
+    ('steps_h', 'How a quote works'),
+    ('steps_sub', 'Three steps, no phone call to book.'),
+    ('team_eyebrow', 'PRINT EXPERT TEAM'),
+    ('team_h', 'Send them the awkward job'),
+    ('br.reply', 'Or just reply to this email and a person will pick it up.'),
+]
+
+
+def build(bindings, assets, live=False, locale=None):
+    import re as _r
+    tr = i18n.translator("browse-03", live, locale)
     vals = {"P": P, "CSS": CSS, "QUOTE_URL": QUOTE_URL,
-            "BLOCKED": blocked_html(assets), "STEPS": steps_html()}
+            "BLOCKED": blocked_html(assets, tr), "STEPS": steps_html(tr)}
+    for _k, _e in TRANSLATED:
+        vals["T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper())] = tr(_k, _e)
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
 
@@ -345,8 +373,15 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS)
-live_body = build(LIVE, LIVE_ASSETS)
+prev_body = build(SAMPLE, SAMPLE_ASSETS, False)
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    open(os.path.join(OUT, "browse-03-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(
+             PREVIEW_DOC % build(SAMPLE, SAMPLE_ASSETS, False, _loc))
+live_body = build(LIVE, LIVE_ASSETS, True)
 prev = PREVIEW_DOC % prev_body
 live = KLAVIYO_DOC % live_body
 open(os.path.join(OUT, "browse-03-proposed.html"), "w", encoding="utf-8").write(prev)
