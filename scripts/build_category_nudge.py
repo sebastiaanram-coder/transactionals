@@ -709,15 +709,25 @@ def header_block(P, cat, live, hdr, home, tr=None):
             + '    <div class="%s-darkb">\n%s    </div>\n' % (P, words))
 
 
-def name_of(sub, live):
-    return sc.locale_switch(sub, "name", esc) if live else esc(sc.preview_field(sub, "name"))
+# THE PREVIEW HAS TO FOLLOW THE LANGUAGE IT IS PREVIEWING. These used to fall back
+# to preview_field, which is pinned to one locale, so a French preview showed
+# French prose next to English product names - "Booklets", "Leaflet Printing &
+# Flyers" - and the proofreader could not tell whether the names were untranslated
+# or just unpreviewed. The live template was always right; only the preview lied,
+# which is worse, because the preview is the thing anyone actually reads.
+def name_of(sub, live, locale=None):
+    if live:
+        return sc.locale_switch(sub, "name", esc)
+    return esc(sc.field(sub, sc.LOCALE_MAP.get(locale or "en-IE", "en-IE"), "name"))
 
 
-def url_of(sub, live):
-    return sc.locale_switch(sub, "url") if live else sc.preview_field(sub, "url")
+def url_of(sub, live, locale=None):
+    if live:
+        return sc.locale_switch(sub, "url")
+    return sc.field(sub, sc.LOCALE_MAP.get(locale or "en-IE", "en-IE"), "url")
 
 
-def feature(P, cat, sub, i, live, tr=None):
+def feature(P, cat, sub, i, live, tr=None, locale=None):
     """Image beside prose, sides alternating. Not a product card by design: no
     price, no border, no button - the Welcome flow's content pattern, which is
     what stops these reading as a shop shelf."""
@@ -735,11 +745,11 @@ def feature(P, cat, sub, i, live, tr=None):
     # left-to-right.
     cell = ('<td class="%s-fim%s" valign="top" dir="ltr"><a href="%s">'
             '<img src="%s" alt="%s" width="252"></a></td>'
-            % (P, (" %s-right" % P) if right else "", url_of(sub, live), img, name_of(sub, live)))
+            % (P, (" %s-right" % P) if right else "", url_of(sub, live, locale), img, name_of(sub, live, locale)))
     text = ('<td class="%s-ftx" valign="top" dir="ltr">'
             '<p class="%s-fh">%s</p><p class="%s-fb">%s</p>'
             '<a class="%s-fl" href="%s">%s &rarr;</a></td>'
-            % (P, P, name_of(sub, live), P, esc(cat["body"][sub]) if tr is None else tr("body.%s" % sub, cat["body"][sub], esc),
+            % (P, P, name_of(sub, live, locale), P, esc(cat["body"][sub]) if tr is None else tr("body.%s" % sub, cat["body"][sub], esc),
                P, url_of(sub, live), CTA if tr is None else tr("cta.see_range", CTA)))
     # dir goes on the TABLE, not the tr - a tr does not establish the direction
     # context the cell layout uses, and the flip silently did nothing there.
@@ -748,14 +758,14 @@ def feature(P, cat, sub, i, live, tr=None):
             % (P, ' dir="rtl"' if right else "", cell + text))
 
 
-def grid(P, cat, subs, live):
+def grid(P, cat, subs, live, locale=None):
     cells = []
     for sub in subs:
         cells.append('<td class="%s-tile" valign="top"><a class="%s-card" href="%s">'
                      '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
                      '<span class="%s-tlink">%s &rarr;</span></a></td>'
-                     % (P, P, url_of(sub, live), img_for(cat, sub, "tile", live),
-                        name_of(sub, live), P, name_of(sub, live), P, CTA))
+                     % (P, P, url_of(sub, live, locale), img_for(cat, sub, "tile", live),
+                        name_of(sub, live, locale), P, name_of(sub, live, locale), P, CTA))
     rows = ""
     for i in range(0, len(cells), 2):
         pair = cells[i:i + 2]
@@ -873,7 +883,7 @@ def build(cat, live, hdr=None, locale=None):
     tr = translator(cat["slug"], live, locale)
     conf = sc.emails()[cat["slug"]]
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
-    feats = "".join(feature(P, cat, s, i, live, tr)
+    feats = "".join(feature(P, cat, s, i, live, tr, locale)
                 for i, s in enumerate(conf["feature"]))
     home = "https://www.helloprint.com/en-ie/"
     # THE HEADER AND BOTH BUTTONS GO TO THE CATEGORY PAGE, not to a tile. They
@@ -882,18 +892,18 @@ def build(cat, live, hdr=None, locale=None):
     # one product page. The feature and tile links are unaffected: those are
     # meant to be specific.
     land = sc.landing(cat["slug"])
-    cat = dict(cat, _first_url=url_of(land, live) if land
-                                else url_of(conf["feature"][0], live),
+    cat = dict(cat, _first_url=url_of(land, live, locale) if land
+                                else url_of(conf["feature"][0], live, locale),
                _wordmark=assets["IMG_WORDMARK"],
                # the brands page, per market, for the band's tiles and its link
                _brands_url=(sc.locale_switch("our-brands", "url") if live
-                            else sc.preview_field("our-brands", "url")),
+                            else url_of("our-brands", False, locale)),
                _eyebrow=cat.get("eyebrow") or conf["label"].upper())
     vals = dict(
         P=P, CSS=CSS % {"P": P}, LABEL=conf["label"],
         H1=tr("h1", cat["h1"]), SUB=tr("sub", cat["sub"]),
         PRE=tr("pre", cat["pre"]), CTA=tr("cta.see_range", CTA),
-        FEATURES=feats, TILES=grid(P, cat, conf["grid"], live),
+        FEATURES=feats, TILES=grid(P, cat, conf["grid"], live, locale),
         BRANDS=brands_block(P, cat, live, tr),
         HEADER=header_block(P, cat, live, hdr or headers_of(cat)[0], home, tr),
         B_TITLE=tr("block.title", cat["block"][0]),
