@@ -66,6 +66,7 @@ claim rather than to branch the email.
 import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import reviews as rv
+import i18n
 import subcategories as sc          # for LOCALE_MAP only: one list of locales
 
 
@@ -307,27 +308,38 @@ def star_row(P, url, label):
             ' align="center"><tr>%s</tr></table></a>' % (P, url, esc(label), P, cells))
 
 
-def build(e, live):
+def build(e, live, locale=None):
     P = "hp-" + e["code"]
+    tr = i18n.translator(e["slug"], live, locale)
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
     url = tp_switch(live)
     score = ""
     if e["score"]:
+        # THE %s PLACEHOLDERS HAVE TO SURVIVE TRANSLATION, so the fill happens
+        # after the switch is built - which means filling every branch at once.
+        # Doing it before would put the numbers inside one language's sentence and
+        # leave the other eight with literal %s.
+        nums = (rv.score(), format(rv.review_total() // 1000 * 1000, ","))
         score = ('<p class="%s-scoretx">%s</p>'
-                 % (P, SHARED["score"] % (rv.score(),
-                                          format(rv.review_total() // 1000 * 1000, ","))))
+                 % (P, tr("review.score", SHARED["score"]).replace(
+                     "%s", "\x00", 1).replace("%s", "\x01", 1)
+                    .replace("\x00", str(nums[0])).replace("\x01", nums[1])))
     vals = dict(
         P=P, CSS=CSS % {"P": P},
-        EYEBROW=e["eyebrow"], H1=e["h1"], SUB=e["sub"], PRE=e["pre"],
-        CTA=SHARED["cta"],
-        HERO_IMG=photo(e["hero"], live), HERO_ALT=esc(e["hero_alt"]),
-        STARS=star_row(P, url, SHARED["stars_label"]),
+        EYEBROW=tr("eyebrow", e["eyebrow"]), H1=tr("h1", e["h1"]),
+        SUB=tr("sub", e["sub"]), PRE=tr("pre", e["pre"]),
+        CTA=tr("review.cta", SHARED["cta"]),
+        HERO_IMG=photo(e["hero"], live),
+        HERO_ALT=tr("hero_alt", e["hero_alt"], esc),
+        STARS=star_row(P, url, tr("review.stars_label", SHARED["stars_label"])),
         SCORE=score,
-        BAND_H=e["band_h"], BAND_B=e["band_b"], BAND_LINK=SHARED["band_link"],
+        BAND_H=tr("band_h", e["band_h"]), BAND_B=tr("band_b", e["band_b"]),
+        BAND_LINK=tr("help.centre", SHARED["band_link"]),
         TP_URL=url,
         HOME="https://www.helloprint.com/en-ie/",
         CS="https://www.helloprint.com/en-ie/cs",
-        UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
+        UNSUB=(("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe")) if live
+               else '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe")),
     )
     vals.update(assets)
     return BODY.format(**vals)
@@ -405,6 +417,13 @@ for e in EMAILS:
                               score=rv.score(),
                               total=format(rv.review_total(), ","),
                               fetched=rv.score_fetched())
+    for _lg in i18n.LANGS:
+        if _lg == i18n.SOURCE:
+            continue
+        _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+        open(os.path.join(OUT, "%s-%s-proposed.html" % (e["slug"], _lg)), "w",
+             encoding="utf-8").write(
+                 PREVIEW_DOC % dict(meta, body=build(e, False, _loc)))
     open(os.path.join(OUT, e["slug"] + "-proposed.html"), "w",
          encoding="utf-8").write(pdoc)
     open(os.path.join(OUT, e["slug"] + "-klaviyo.html"), "w",
@@ -445,12 +464,19 @@ for e in EMAILS:
         want = rv.write_url(cf_loc)
         if ("event.Locale == '%s' %%}%s" % (email_loc, want)) not in livb:
             errs.append("%s: %s does not point at %s" % (t, email_loc, want))
-    # two places carry the review link now: the star row and the one button
-    n_switch = livb.count("{%% if event.Locale == '%s'" % list(sc.LOCALE_MAP)[0])
+    # TWO PLACES CARRY THE REVIEW LINK: the star row and the one button. This used
+    # to count every locale switch in the file and assume they were all review
+    # links. Once the copy itself became a locale switch that assumption broke and
+    # it reported thirteen. Count the switches that actually open with the review
+    # URL, and count the fallbacks the same way.
+    _first = list(sc.LOCALE_MAP)[0]
+    _tp = "{%% if event.Locale == '%s' %%}%s" % (_first, rv.write_url(sc.LOCALE_MAP[_first]))
+    n_switch = livb.count(_tp)
     if n_switch != 2:
         errs.append("%s: expected the review link twice (stars, button), found %d"
                     % (t, n_switch))
-    if livb.count("{% else %}") != n_switch or livb.count("{% endif %}") != n_switch:
+    # every TP switch must end in a fallback, or an unknown locale gets no link
+    if livb.count("%s.trustpilot.com" % rv.TP_BY_LANG["en-GB"]) < n_switch:
         errs.append(t + ": a review link is missing its fallback")
     if "stars=" in livb: errs.append(t + ": a ?stars= link came back; Trustpilot ignores it")
 

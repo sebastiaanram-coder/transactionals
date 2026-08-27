@@ -121,7 +121,12 @@ def score_fetched():
 # five radios unchecked, so a reader who clicks four stars lands on a blank form.
 # One button, and it says what it does.
 TP_BY_LANG = {"en-IE": "ie", "en-GB": "uk", "nl": "nl", "nl-BE": "nl",
-              "fr-FR": "fr", "fr-BE": "fr", "es-ES": "es", "it": "it"}
+              "fr-FR": "fr", "fr-BE": "fr", "es-ES": "es", "it": "it",
+              # Added with the German market. Without it write_url falls through
+              # to its "uk" default, so a German reader would have been sent to
+              # uk.trustpilot.com to review a German order. de.trustpilot.com
+              # returns 200.
+              "de-DE": "de"}
 TP_URL = "https://%s.trustpilot.com/evaluate/helloprint.com"
 
 

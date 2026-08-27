@@ -112,3 +112,76 @@ def keys_for(email):
 
 def shared_keys():
     return sorted((data().get("_shared") or {}).keys())
+
+
+# ---------------------------------------------------------------- the switch
+#
+# Lives here rather than in a builder because there are ten builders and one
+# correct way to emit this. Two of them had already been written by hand and both
+# had leaks: a helper pinned to one locale, and a call site that never received
+# the translator at all.
+MISSING, DRIFT = [], []
+
+
+def translator(scope, live, locale=None):
+    """tr(key, english, escape=None) -> one locale's text, or a nine-way switch.
+
+    NINE BRANCHES AND NO `or`, and {% else %} is always English. Grouping locales
+    that share a translation would halve the size, but `or` inside an {% if %} has
+    never been rendered in this account and neither has `|slice`; an exact-match
+    elif chain has, including an 83-branch one. Using the last locale as the else
+    would serve Italian to any locale we do not know about.
+
+    ESCAPE AFTER TRANSLATING, never before: passing esc(english) in makes the
+    drift check compare an escaped string against the raw one on file, and it
+    cannot be done afterwards because by then the string is a Django switch.
+    """
+    def tr(key, english, escape=None):
+        e = escape or (lambda x: x)
+        miss = missing(scope, key)
+        if miss:
+            MISSING.append((scope, key, miss))
+        drifted = source_drift(scope, key, english)
+        if drifted:
+            DRIFT.append((scope, key, english, drifted))
+        if not live:
+            return e(get(scope, key, locale or "en-GB", english))
+        texts = [(loc, e(get(scope, key, loc, english))) for loc in LOCALES]
+        if len({t for _, t in texts}) == 1:
+            return texts[0][1]
+        out = ""
+        for i, (loc, txt) in enumerate(texts):
+            out += "{%% %s event.Locale == '%s' %%}%s" % (
+                "if" if i == 0 else "elif", loc, txt)
+        return out + "{%% else %%}%s{%% endif %%}" % e(
+            get(scope, key, FALLBACK_LOCALE, english))
+    return tr
+
+
+def report(errs, warns=None):
+    """Drift is an error, missing translations are a count. Call from a builder."""
+    seen = set()
+    for scope, key, now, stored in DRIFT:
+        if (scope, key) in seen:
+            continue
+        seen.add((scope, key))
+        errs.append("%s: English for %r changed since it was translated. Now %r, "
+                    "translated from %r. Update data/translations.json."
+                    % (scope, key, now[:48], stored[:48]))
+    need = {}
+    for scope, key, miss in MISSING:
+        need.setdefault(scope, set()).add(key)
+    return {k: sorted(v) for k, v in need.items()}
+
+
+def leaks(path, lang, phrases):
+    """English found in a non-English preview means a call site is unwired.
+
+    Visible text only: the first version of this read the raw file and reported a
+    phrase that turned out to be a CSS comment, in every file.
+    """
+    import housestyle
+    if lang == SOURCE:
+        return []
+    txt = housestyle.visible(open(path, encoding="utf-8").read())
+    return [p for p in phrases if p.lower() in txt]

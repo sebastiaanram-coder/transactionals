@@ -612,45 +612,6 @@ BODY = """
 # A string that comes out identical in all nine locales is emitted plain, with no
 # conditional at all, which keeps brand terms and numbers from generating nine
 # copies of themselves.
-TR_MISSING, TR_DRIFT = [], []
-
-
-def translator(cat_slug, live, locale=None):
-    """tr(key, english) -> one locale's text, or a nine-way switch."""
-    def note(key, english):
-        miss = i18n.missing(cat_slug, key)
-        if miss:
-            TR_MISSING.append((cat_slug, key, miss))
-        drifted = i18n.source_drift(cat_slug, key, english)
-        if drifted:
-            TR_DRIFT.append((cat_slug, key, english, drifted))
-
-    def tr(key, english, escape=None):
-        # ESCAPE AFTER TRANSLATING, NEVER BEFORE. Passing esc(english) in made the
-        # drift check compare an escaped string against the raw one stored in the
-        # file, so every string containing an apostrophe reported itself as
-        # changed. It also cannot be done afterwards on the live output, because by
-        # then the string is a Django switch and escaping would eat the tags.
-        e = escape or (lambda x: x)
-        note(key, english)
-        if not live:
-            return e(i18n.get(cat_slug, key, locale or "en-GB", english))
-        texts = [(loc, e(i18n.get(cat_slug, key, loc, english))) for loc in i18n.LOCALES]
-        if len({t for _, t in texts}) == 1:
-            return texts[0][1]
-        # EVERY LOCALE GETS ITS OWN BRANCH AND {% else %} IS ENGLISH. Using the
-        # last locale as the else saved one branch and meant any locale we do not
-        # know about - a new market, en-US, an empty Locale - would have been
-        # served Italian. The fallback has to be the source language.
-        out = ""
-        for i, (loc, txt) in enumerate(texts):
-            out += "{%% %s event.Locale == '%s' %%}%s" % (
-                "if" if i == 0 else "elif", loc, txt)
-        return out + "{%% else %%}%s{%% endif %%}" % e(
-            i18n.get(cat_slug, key, i18n.FALLBACK_LOCALE, english))
-    return tr
-
-
 def img_for(cat, sub, shape, live):
     """The new-style photograph if the set has one of this thing, else the
     category's Contentful search image.
@@ -882,7 +843,7 @@ def review_block(P, cat, live, locale=None, tr=None):
 
 def build(cat, live, hdr=None, locale=None):
     P = "hp-cat" + cat["code"]
-    tr = translator(cat["slug"], live, locale)
+    tr = i18n.translator(cat["slug"], live, locale)
     conf = sc.emails()[cat["slug"]]
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
     feats = "".join(feature(P, cat, s, i, live, tr, locale)
@@ -1289,38 +1250,18 @@ for _f in sorted(_glob.glob(os.path.join(OUT, "category-*-*-proposed.html"))):
     # VISIBLE TEXT ONLY. The first version read the raw file and reported "GOOD TO
     # KNOW" in all thirty previews, because that phrase is a CSS comment above the
     # rule it names. A check that cries wolf on every file is worse than no check.
-    _txt = housestyle.visible(open(_f, encoding="utf-8").read())
-    for _p in LEAKS:
-        if _p.lower() in _txt:
-            errs.append("%s: English leaked into the %s preview (%r). A call site is "
-                        "not going through the translator."
-                        % (os.path.basename(_f), _lg, _p))
+    for _p in i18n.leaks(_f, _lg, LEAKS):
+        errs.append("%s: English leaked into the %s preview (%r). A call site is "
+                    "not going through the translator."
+                    % (os.path.basename(_f), _lg, _p))
 
 # ---- translation coverage, the thing a proofreader needs to see
-if TR_DRIFT:
-    seen = set()
-    for slug, key, now, stored in TR_DRIFT:
-        if (slug, key) in seen:
-            continue
-        seen.add((slug, key))
-        errs.append("%s: English for %r changed since it was translated. Now %r, "
-                    "translated from %r. Update data/translations.json."
-                    % (slug, key, now[:48], stored[:48]))
-
-need = {}
-for slug, key, miss in TR_MISSING:
-    need.setdefault(slug, {}).setdefault(key, miss)
-if need:
-    tot = sum(len(v) for v in need.values())
-    print("\ntranslations still to write: %d strings" % tot)
-    for slug in sorted(need):
-        by = {}
-        for key, miss in need[slug].items():
-            for m in miss:
-                by.setdefault(m, 0)
-                by[m] += 1
-        print("  %-20s %s" % (slug, ", ".join("%s %d" % (l, n)
-                                              for l, n in sorted(by.items()))))
+_need = i18n.report(errs)
+if _need:
+    print("\ntranslations still to write: %d strings"
+          % sum(len(v) for v in _need.values()))
+    for _slug in sorted(_need):
+        print("  %-20s %s" % (_slug, ", ".join(_need[_slug])[:90]))
 
 print("\n%d emails | categories %s | reviews %s, %d cached"
       % (len(written), sc.fetched(), rv.fetched() or "NOT FETCHED", rv.count()))
