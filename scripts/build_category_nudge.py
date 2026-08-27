@@ -49,6 +49,7 @@ import rawimg as ri
 import reviews as rv
 import subcategories as sc
 import i18n
+import housestyle
 
 
 def esc(t):
@@ -758,14 +759,15 @@ def feature(P, cat, sub, i, live, tr=None, locale=None):
             % (P, ' dir="rtl"' if right else "", cell + text))
 
 
-def grid(P, cat, subs, live, locale=None):
+def grid(P, cat, subs, live, locale=None, tr=None):
     cells = []
     for sub in subs:
         cells.append('<td class="%s-tile" valign="top"><a class="%s-card" href="%s">'
                      '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
                      '<span class="%s-tlink">%s &rarr;</span></a></td>'
                      % (P, P, url_of(sub, live, locale), img_for(cat, sub, "tile", live),
-                        name_of(sub, live, locale), P, name_of(sub, live, locale), P, CTA))
+                        name_of(sub, live, locale), P, name_of(sub, live, locale), P,
+                        CTA if tr is None else tr("cta.see_range", CTA)))
     rows = ""
     for i in range(0, len(cells), 2):
         pair = cells[i:i + 2]
@@ -903,7 +905,7 @@ def build(cat, live, hdr=None, locale=None):
         P=P, CSS=CSS % {"P": P}, LABEL=conf["label"],
         H1=tr("h1", cat["h1"]), SUB=tr("sub", cat["sub"]),
         PRE=tr("pre", cat["pre"]), CTA=tr("cta.see_range", CTA),
-        FEATURES=feats, TILES=grid(P, cat, conf["grid"], live, locale),
+        FEATURES=feats, TILES=grid(P, cat, conf["grid"], live, locale, tr),
         BRANDS=brands_block(P, cat, live, tr),
         HEADER=header_block(P, cat, live, hdr or headers_of(cat)[0], home, tr),
         B_TITLE=tr("block.title", cat["block"][0]),
@@ -1266,6 +1268,34 @@ if len(CATEGORIES) != len(sc.emails()):
 print("%-22s %8s %6s  %9s %9s" % ("email", "feature", "grid", "preview", "klaviyo"))
 for label, nf, ng, a, b in written:
     print("%-22s %8d %6d  %9d %9d" % (label, nf, ng, a, b))
+# ---- ENGLISH LEAKING INTO A TRANSLATED PREVIEW
+#
+# Two separate leaks shipped before this existed, and both were invisible from the
+# code: the product names came from a locale-pinned helper, and the grid tiles
+# used the raw CTA constant because grid() never received the translator. Both
+# looked like translation gaps to a reader and were actually wiring gaps.
+#
+# So rather than trusting that every call site was threaded, read the built file
+# back and look for the English. Any of these phrases in a non-English preview
+# means a string got past the translator.
+LEAKS = ["See the range", "WHAT CUSTOMERS SAY", "GOOD TO KNOW",
+         "Not sure which one you need", "E-mail us", "Chat with us", "Help Centre",
+         "out of 5 on Trustpilot", "BRANDS WE CARRY", "See all brands"]
+import glob as _glob
+for _f in sorted(_glob.glob(os.path.join(OUT, "category-*-*-proposed.html"))):
+    _lg = os.path.basename(_f).rsplit("-", 2)[1]
+    if _lg not in i18n.LANGS or _lg == i18n.SOURCE:
+        continue
+    # VISIBLE TEXT ONLY. The first version read the raw file and reported "GOOD TO
+    # KNOW" in all thirty previews, because that phrase is a CSS comment above the
+    # rule it names. A check that cries wolf on every file is worse than no check.
+    _txt = housestyle.visible(open(_f, encoding="utf-8").read())
+    for _p in LEAKS:
+        if _p.lower() in _txt:
+            errs.append("%s: English leaked into the %s preview (%r). A call site is "
+                        "not going through the translator."
+                        % (os.path.basename(_f), _lg, _p))
+
 # ---- translation coverage, the thing a proofreader needs to see
 if TR_DRIFT:
     seen = set()
