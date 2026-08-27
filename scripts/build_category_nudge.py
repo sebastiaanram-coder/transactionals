@@ -163,6 +163,24 @@ CATEGORIES = [
     ),
     dict(
         slug="signage-outdoor", code="so",
+        # Same template as Commercial Print, and the same reasoning behind the
+        # eyebrow: the customer-facing framing rather than the internal category
+        # name. Here they happen to be the same words.
+        eyebrow="SIGNAGE &amp; OUTDOOR",
+        sect_h="Where most signage starts",
+        sect_sub="The two formats businesses order most when something has to be read from a distance.",
+        hero="hero-signage-outdoor",
+        hero_alt="Three printed flags flying on masts against a bright sky",
+        headers=[dict(key="", style="photo", hero="hero-signage-outdoor")],
+        # Three of the four. Beach Flags has no new-style shot, so it falls back
+        # to its Contentful packshot on white - which is the documented behaviour:
+        # a missing photograph costs one tile its picture, not the whole email its
+        # look. It is the one image this email still needs.
+        photos={
+            "Banners": "feature-banners",
+            "Signage & Panels": "feature-signage-panels",
+            "Roller Banners": "tile-rollup",
+        },
         h1="For the next event, or the front of the building?",
         sub="Signs, flags and banners, built for one afternoon outdoors or several years of it.",
         pre="Signs, flags and banners, for a day out or a decade.",

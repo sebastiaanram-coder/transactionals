@@ -70,13 +70,14 @@
     "Roller Banners"
    ],
    "label": "Signage & Outdoor",
+   "landing": "signage-and-outdoor",
    "match": [
     "Signage & Outdoor"
    ]
   }
  },
  "environment": "master",
- "fetched": "2026-08-26",
+ "fetched": "2026-08-27",
  "locales": [
   "en-IE",
   "en-GB",
@@ -840,6 +841,46 @@
    "id": "4YyL4JGbTiAMOA06Q4UoGA",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/3IQjVkObjZ3jsVKEuYF7q8/d1735a07bbe192bc69794670568a4328/product-image-500x500-Roller-Banner-Printing-Promo-Roller-Banner.png",
    "name_en": "Roller Banners"
+  },
+  "signage-and-outdoor": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Signage & Outdoor Products",
+     "url": "https://www.helloprint.com/en-gb/outdoor"
+    },
+    "en-IE": {
+     "name": "Outdoor Advertising",
+     "url": "https://www.helloprint.com/en-ie/outdoor"
+    },
+    "es-ES": {
+     "name": "Publicidad exterior",
+     "url": "https://www.helloprint.com/es-es/paneles-exterior"
+    },
+    "fr-BE": {
+     "name": "Support publicitaire d'extérieur",
+     "url": "https://www.helloprint.com/fr-be/impression-exterieur"
+    },
+    "fr-FR": {
+     "name": "Support publicitaire d'extérieur",
+     "url": "https://www.helloprint.com/fr-fr/impression-exterieur"
+    },
+    "it": {
+     "name": "Espositori e pubblicità da esterno",
+     "url": "https://www.helloprint.com/it-it/esterni"
+    },
+    "nl": {
+     "name": "Buitenreclame",
+     "url": "https://www.helloprint.com/nl-nl/buitenreclame"
+    },
+    "nl-BE": {
+     "name": "Buitenreclame",
+     "url": "https://www.helloprint.com/nl-be/buitenreclame"
+    }
+   },
+   "id": "19EC3YhE1kLWKXrHIzsJHP",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/2X4K7h0G9vHoh3bgzjWYBU/f1211f037bf0d03c479873b6e3c14445/Outdoor.png",
+   "landing": true,
+   "name_en": "signage-and-outdoor"
   },
   "signage-panels": {
    "by_locale": {

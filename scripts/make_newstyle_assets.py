@@ -24,7 +24,7 @@ is the mistake the first version of these emails made. Grid tiles are square
 because the source is square and a 2x2 grid of squares stays level. The hero is
 10:7, wide enough to survive the fades eating the top and bottom.
 """
-import argparse, os, sys
+import argparse, os, sys, urllib.request
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import rawimg as ri
 
@@ -70,7 +70,8 @@ BUDGET_KB = 420
 FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
                "hero-review-reminder": 0.30,
                "hero-offer": 0.30, "hero-offer-last": 0.30,
-               "hero-winback-news": 0.30, "hero-winback-offer": 0.38}
+               "hero-winback-news": 0.30, "hero-winback-offer": 0.38,
+               "hero-signage-outdoor": 0.28}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -124,12 +125,42 @@ HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
                  # puts the banner bottom at 0.91 of the window and needs a fade under 0.09
                  # - too short to blend into the ink block underneath. The banner is the
                  # product, so the banner wins.
-                 "hero-winback-news": 0.75, "hero-winback-offer": 0.35}
+                 "hero-winback-news": 0.75, "hero-winback-offer": 0.35,
+                 # flags sit high in a 1200x1000 frame; first pass, checked by eye
+                 "hero-signage-outdoor": 0.85}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
 # budget is per email, and a second hero for a second email is not the first email
 # getting heavier.
+# SOURCES THAT ARE NOT IN THE ZIP. The signage hero is a Contentful asset, so the
+# URL does the format and the size - which is what "reformat via Contentful
+# parameters" buys you - and everything after that still happens here, because
+# Contentful cannot fade an image into ink and the fade is the whole join between
+# the photograph and the block beneath it.
+#
+# Kept in assets/sources/ and committed. 400KB, and it means the hero can be
+# rebuilt from a clean checkout without the zip and without the network.
+CONTENTFUL = {
+    "flags.webp": ("https://images.ctfassets.net/wm1n7oady8a5/1fyKaG8yk5oEMp4xDLcbPh/"
+                   "bd2010d44723e2643b2c555db6f3813b/flags.webp"
+                   "?fm=jpg&fl=progressive&q=94&w=1200"),
+}
+SRC_DIR = os.path.join(ROOT, "assets", "sources")
+
+
+def fetch_sources():
+    """Download anything in CONTENTFUL that is not on disk yet."""
+    os.makedirs(SRC_DIR, exist_ok=True)
+    for fn, url in CONTENTFUL.items():
+        p = os.path.join(SRC_DIR, fn)
+        if os.path.exists(p):
+            continue
+        print("  fetching %s from Contentful" % fn)
+        with urllib.request.urlopen(url) as r, open(p, "wb") as f:
+            f.write(r.read())
+
+
 JOBS = [
     # (source, output name, shape, email)
     ("standardflyers/standardflyers_setting1.webp", "hero-commercial-print", "hero", "commercial-print"),
@@ -150,6 +181,17 @@ JOBS = [
     # quiet, which suits the last word.
     ("budgetrollupbanners/budgetrollupbanners_setting1.webp", "hero-offer", "hero", "offer"),
     ("booklets/booklets_setting1.webp", "hero-offer-last", "hero", "offer-last"),
+    # SIGNAGE & OUTDOOR. The hero is the mast-flag shot from Contentful, not the
+    # zip. banners_setting1 rather than _setting2 for the Banners feature row,
+    # because _setting2 is already the winback hero and the two shots carry the
+    # same banner artwork.
+    ("@flags.webp", "hero-signage-outdoor", "hero", "signage-outdoor"),
+    ("banners/banners_setting1.webp", "feature-banners", "feature", "signage-outdoor"),
+    # foamexsigns_setting1 leans against concrete on a concrete floor, which reads
+    # as a sign in a building. _setting2 is a domestic interior with a pot plant,
+    # which is a nice photograph and the wrong one for a paragraph about aluminium
+    # taking weather.
+    ("foamexsigns/foamexsigns_setting1.webp", "feature-signage-panels", "feature", "signage-outdoor"),
     # Winback. Both bottoms sit higher than the others - 86 and 103 of 255 rather
     # than the 30s - so both get a deeper fade to reach the ink without a visible
     # step. banners_setting2 has its subject high in frame at 0.70-0.85, which is
@@ -230,9 +272,13 @@ def main():
     a = ap.parse_args()
 
     os.makedirs(OUT, exist_ok=True)
+    fetch_sources()
     sizes = {}
     for src, name, shape, email in JOBS:
-        p = os.path.join(a.src, src)
+        # "@name" means assets/sources (a Contentful asset), anything else is
+        # relative to the extracted zip
+        p = (os.path.join(SRC_DIR, src[1:]) if src.startswith("@")
+             else os.path.join(a.src, src))
         if not os.path.exists(p):
             print("FAILED: missing source %s" % src)
             return 1

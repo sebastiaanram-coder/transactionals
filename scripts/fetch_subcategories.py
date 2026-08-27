@@ -108,6 +108,9 @@ EMAILS = {
 # filled in before they go live.
 LANDINGS = {
     "commercial-print": ("promotional-printing", "MRjlkRa7meqiqSY0mSowg"),
+    # "Signage & Outdoor Products" - the category landing page, not one of the
+    # tiles. Found by searchName; the nav calls it Outdoor.
+    "signage-outdoor": ("signage-and-outdoor", "19EC3YhE1kLWKXrHIzsJHP"),
 }
 
 
