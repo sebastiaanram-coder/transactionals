@@ -193,8 +193,8 @@ FLOWS = [
     "Post-Purchase ends at day 73 with a 10% offer, so a winback discount at day 90 is 17 days behind one that just failed. The high branch holds money back to day 140; the low branch uses 15% rather than repeating 10%."],
    planned="Proposed in proposals/winback-proposal.md and not yet designed. Four emails in four days becomes two branches split on order value: high value gets a person at day 90 and holds money to day 140, low value gets the code at day 90 and a last call at day 120. Before either, a split on the customer\u2019s own order rhythm \u2014 at 90 days the occasional buyer, whose median gap is 180 days, is not lapsed at all.",
    emails=[
-    dict(step=1, when="Day 90 \u00b7 high value", subject="It has been three months. Worth a look at what you print?",
-      preview="It has been three months. Worth a look at what you print?",
+    dict(step=1, when="Day 90 \u00b7 high value", subject="A date you are printing towards?",
+      preview="Tell me the date and I will work back from it.",
       goal="", who="", tpl="WB1H", new=True, flags=[], badge=None,
       section="Rebuilt flow \u2014 proposed",
       section_sub="Two branches, split on order value at \u20ac150 AOV \u2014 24% of customers, 49% of value. Before that, a split on the customer\u2019s own rhythm: at day 90 the occasional buyer, whose median gap is 180 days, is not lapsed at all and is held to day 180. The product grids come from Klaviyo\u2019s recommendation engine, which needs one test render before go-live. Proposed in proposals/winback-proposal.md.",
@@ -273,10 +273,11 @@ EMAIL_DETAIL = {
    goal="Reopen a conversation with the customers who carry half the value, without spending anything.",
    why="Day 90, high-value branch. Post-Purchase ended at day 73 with 10% off, so an offer here would sit seventeen days behind one that just failed. This spends a person instead.",
    variant_label="Why a letter and not a campaign",
-   variant="It reuses the day-45 letter template. At \u20ac150 an order and up, a print expert reading somebody\u2019s own buying back to them is worth more than a discount.",
+   variant="It reuses the day-45 letter template. At \u20ac150 an order and up, a print expert is worth more than a discount.",
    elements=[
-     ("The hook is their own rhythm, not our feelings.", "\u201cIt has been about three months, which is longer than most of the businesses I work with leave it.\u201d True by construction, and the build rejects \u201cwe miss you\u201d."),
-     ("No offer, and it says so.", "The money waits for day 140."),
+     ("The hook is their own rhythm, not our feelings.", "\u201cI noticed your last order with us was about three months ago, which is longer than most of the businesses I work with leave it.\u201d True by construction, and the build rejects \u201cwe miss you\u201d."),
+     ("It asks for a date and commits to three things back.", "What he would print it on, what it costs at two or three quantities, and when the file has to be with us to make it \u2014 the last being the thing a product page cannot tell them."),
+     ("No season is named.", "\u201cA season you print for every year\u201d rather than end-of-year: the flow fires all year, and a hardcoded season is the \u201cends 3 September\u201d mistake again. The build fails on nine season words."),
    ]),
  "WB2H": dict(
    goal="Give a lapsed high-value customer a reason to look again that is not a discount.",

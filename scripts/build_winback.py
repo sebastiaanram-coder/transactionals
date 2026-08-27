@@ -120,21 +120,27 @@ def photo(name, live):
 EMAILS = [
     dict(slug="winback-01-high", code="wb1h", branch="high", day=90, kind="letter",
          label="a print expert", hero=None,
-         pre="It has been three months. Worth a look at what you print?",
+         pre="Tell me the date and I will work back from it.",
          h1=None,
          paras=[
-             "I am John, one of the print experts here. It has been about three "
-             "months since your last order with us, which is longer than most of "
-             "the businesses I work with leave it, so I thought I would write.",
-             "I am not chasing you and there is nothing attached to this. What I can "
-             "do is look at what you print and tell you whether you are buying it "
-             "the best way — the quantity where the price stops climbing, a "
-             "material that would last longer outdoors, a format that would cost "
-             "less to post.",
-             "If something went wrong last time, I would rather hear it than not. "
-             "And if you have something coming up, tell me what it is for and I will "
-             "come back with what I would print it on and what it costs at a few "
-             "quantities.",
+             "I am John, one of the print experts here. I noticed your last order "
+             "with us was about three months ago, which is longer than most of the "
+             "businesses I work with leave it, so I thought I would write.",
+             # THE PARAGRAPH THAT HAS TO DO THE WORK. It used to offer to "look at "
+             # what you print and tell you whether you are buying it the best way",
+             # which is a shape rather than an offer. This asks for a date and
+             # commits to three specific things back, one of which - when the file
+             # has to be with us - is the thing print customers actually worry
+             # about and the thing a website cannot tell them.
+             "I am not chasing an order. What I am useful for is the part before "
+             "one. If you have a date you are printing towards &mdash; an event, an "
+             "opening, a season you print for every year &mdash; tell me the date "
+             "and what it is for, and I will work back from it: what I would print "
+             "it on, what it costs at two or three quantities, and when the file "
+             "needs to be with us to make it.",
+             "If you already have the file, send it over and I will look at it "
+             "before you order anything. And if something went wrong last time, I "
+             "would rather hear it than not.",
          ],
          closing="Just reply to this email. It comes to me."),
     dict(slug="winback-02-high", code="wb2h", branch="high", day=111, kind="news",
@@ -305,10 +311,17 @@ def code_block(P, live):
 
 
 def unsub(P, live):
+    """The opt-out, in John's words.
+
+    It used to end "and I will take you off the list", which said what the link
+    does but put the word LIST in a letter from a person - and a list is the one
+    thing a personal email must not sound like it came from. The consequence is
+    already in the first clause: not hearing from him again is what the sentence is
+    about, so the link needs no second explanation.
+    """
     link = ("{% unsubscribe 'just say the word' %}" if live
             else '<a class="%s-unslink" href="#">just say the word</a>' % P)
-    return ("And if you would rather not hear from me again, " + link
-            + " and I will take you off the list.")
+    return "And if you would rather not hear from me again, " + link + "."
 
 
 def build(e, live):
@@ -407,6 +420,21 @@ for e in EMAILS:
                  livb.split("</style>", 1)[1]), flags=re.S)
     vis = re.sub(r"\s+", " ", vis).strip().lower()
 
+    # THE WOVEN OPT-OUT HAS TO SAY WHAT IT DOES, and not in one exact wording. The
+    # first version of this check demanded the literal phrase "take you off the
+    # list", which then blocked a better sentence - "not hear from me again" states
+    # the outcome just as clearly and without the word list, which is the one thing
+    # a letter from a person must not sound like it came from.
+    #
+    # Only the letter needs it. The other four carry a footer link labelled
+    # Unsubscribe, which explains itself and needs no sentence around it.
+    if e["kind"] == "letter":
+        outcomes = ("not hear from me again", "will not hear from", "i will stop")
+        if not any(o in vis for o in outcomes):
+            errs.append(t + ": the woven opt-out does not say what clicking it does")
+    elif ">Unsubscribe<" not in livb and "'Unsubscribe'" not in livb:
+        errs.append(t + ": no plain unsubscribe link in the footer")
+
     # THE STRIP MUST NOT CARRY AN INVENTED CLAIM. A fabricated "now 30% faster" is
     # worse than an obvious gap, so every row stays a marked placeholder until
     # somebody supplies a checkable change.
@@ -451,6 +479,16 @@ for e in EMAILS:
         if guess in vis: errs.append("%s: states an undecided term (%r)" % (t, guess))
     for jarg in ("bleed", "dpi", "cmyk", "safe area", "pre-flight", "gsm"):
         if jarg in vis: errs.append("%s: jargon: %s" % (t, jarg))
+    # THE FLOW IS EVERGREEN AND FIRES ALL YEAR. Naming a season outright was the
+    # obvious way to make the offer concrete, and it is the same mistake as the
+    # hardcoded "ends 3 September" that sat in four promo bars: true in September,
+    # wrong in March, and nobody notices for months. "A season you print for every
+    # year" carries the same idea and survives being read in February.
+    for season in ("end of year", "end-of-year", "christmas", "black friday",
+                   "q4", "new year", "this autumn", "this summer", "festive"):
+        if season in vis:
+            errs.append("%s: names a season (%r) in a flow that fires all year"
+                        % (t, season))
     for bad in ("we miss you", "miss you", "long time no see", "where have you been"):
         if bad in vis:
             errs.append("%s: says %r — that is a sentence about us" % (t, bad))
