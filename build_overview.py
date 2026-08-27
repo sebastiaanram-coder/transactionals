@@ -273,11 +273,11 @@ EMAIL_DETAIL = {
    goal="Reopen a conversation with the customers who carry half the value, without spending anything.",
    why="Day 90. Post-Purchase ended at day 73 with 10% off, so an offer here would sit seventeen days behind one that just failed. This spends a person instead.",
    variant_label="It is not formatted, and that is the design",
-   variant="No logo, no card, no brand font, no footer, no button \u2014 nine lines of CSS, all on the signature. It renders in whatever the client uses for a normal message, which is the only way an email from a person reads as one.",
+   variant="No logo, no card, no brand font, no footer, no button \u2014 nine lines of CSS, all on the signature. It renders in whatever the client uses for a normal message.",
    elements=[
      ("The hook is their own rhythm, not our feelings.", "\u201cI noticed your last order was about three months ago.\u201d True by construction, and the build rejects \u201cwe miss you\u201d."),
      ("It asks for a date and commits to three things back.", "What to print it on, what it costs at two or three quantities, and when the file has to be with us \u2014 the last being what a product page cannot tell them."),
-     ("The two things that could not just go.", "The opt-out is a sentence John writes, which is the only formatting-free way to carry one. The company identity sits inside the signature \u2014 legally required, and a real signature carries an address anyway, so there it reads as a signature rather than a footer."),
+     ("The two things that could not just go.", "The opt-out is a sentence John writes \u2014 the only formatting-free way to carry one. The company line, legally required, sits inside the signature, where a real signature carries an address anyway."),
    ]),
  "WB2H": dict(
    goal="Give a lapsed high-value customer a reason to look again that is not a discount.",
