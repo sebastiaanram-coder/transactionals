@@ -123,11 +123,11 @@ FLOWS = [
    logic=dict(
      title="How the category nudge rotates",
      intro="The flow runs again on every order, and the nudge is the one step that must not repeat itself. So the choice of which category to send is made at send time, from what the customer has already been sent.",
-     ring=["Commercial Print", "Signage &amp; Outdoor", "Labels &amp; Packaging",
-           "Clothing &amp; Textiles", "Corporate Gifts"],
+     ring=["Commercial Print", "Stationery", "Signage &amp; Outdoor",
+           "Labels &amp; Packaging", "Clothing &amp; Textiles", "Corporate Gifts"],
      steps=[
        ("Start where they spent.",
-        "A conditional split on the category of the order they just placed. Five branches, one per category. This is the same split the flow has today."),
+        "A conditional split on the category of the order they just placed. Six branches, one per category. Five test Categories[0], the feed\u2019s main category. Stationery cannot, because it is a subcategory inside Commercial Print and a stationery buyer\u2019s Categories[0] reads Commercial Print: it tests whether Categories contains \u201cAll Stationery\u201d, and it has to be evaluated first, with Commercial Print excluding the same value."),
        ("Ask whether they have already had that one.",
         "In each branch: <em>has not received this category&rsquo;s nudge in the last 6 months</em>. If they have not, that is the email they get, and nothing else runs."),
        ("If they have, walk the ring.",
@@ -602,6 +602,31 @@ for f in FLOWS:
         for v in e.get("variants") or []:
             if v.get("final"):
                 pv_urls["FIN-%s-%s" % (e["tpl"], v["key"])] = "proposals/%s" % v["final"]
+# LANGUAGE VARIANTS ARE LOADED BY URL, NOT EMBEDDED. Every other preview is
+# inlined as srcdoc, but six languages across every built email would add several
+# megabytes to a page that is already 900KB. These are real files in the repo and
+# the repo is published, so the toggle just points the iframe at one.
+LANG_NAMES = {"en": "English", "nl": "Nederlands", "fr": "Français",
+              "de": "Deutsch", "es": "Español", "it": "Italiano"}
+LANGS = list(LANG_NAMES)
+pv_langs = {}
+for f in FLOWS:
+    for e in f["emails"]:
+        for v in (e.get("variants") or []) + ([e] if e.get("final") else []):
+            fin = v.get("final")
+            if not fin or not fin.endswith("-proposed.html"):
+                continue
+            key = ("FIN-%s-%s" % (e["tpl"], v["key"])) if v.get("key") else "FIN-" + e["tpl"]
+            stem = fin[:-len("-proposed.html")]
+            have = {}
+            for lg in LANGS:
+                rel = ("proposals/%s-proposed.html" % stem if lg == "en"
+                       else "proposals/%s-%s-proposed.html" % (stem, lg))
+                if os.path.exists(os.path.join(HERE, rel)):
+                    have[lg] = rel
+            if len(have) > 1:
+                pv_langs[key] = have
+pv_lang_json = json.dumps(pv_langs, ensure_ascii=False)
 pv_url_json = json.dumps(pv_urls, ensure_ascii=False)
 
 ICON = {
@@ -700,8 +725,19 @@ def email_block(f, e):
                   'Template <a href="https://www.klaviyo.com/email-template-editor/%s"'
                   ' target="_blank" rel="noopener">%s %s</a>'
                   % (e["tpl"], e["tpl"], icon("external")))
+        def lang_bar(key):
+            langs = pv_langs.get(key)
+            if not langs:
+                return ""
+            btns = "".join(
+                f'<button class="lgb{" lgb-on" if lg == "en" else ""}" '
+                f'data-key="{key}" data-lg="{lg}" onclick="switchLang(this)">'
+                f'{esc(LANG_NAMES[lg])}</button>' for lg in LANGS if lg in langs)
+            return (f'<div class="lgbar" data-key="{key}">'
+                    f'<span class="lgbar-t">Proofread in</span>{btns}</div>')
+
         def pv_pair(key):
-            return f'''<div class="pv-pair">
+            return lang_bar(key) + f'''<div class="pv-pair">
         <div class="pv-col pv-col-desk"><div class="pv-cap pv-cap-new"><i></i>Desktop · 600px · actual size</div><div class="pv-shell" data-tpl="{key}" data-w="600"><div class="pv-loading">Loading preview…</div></div></div>
         <div class="pv-col pv-col-mob"><div class="pv-cap pv-cap-now"><i></i>Mobile · 375px · actual size</div><div class="pv-shell" data-tpl="{key}" data-w="375"><div class="pv-loading">Loading preview…</div></div>
         <span class="deskhint">Desktop view is hidden on small screens. Use “Open full size” above to see it.</span></div>
@@ -1048,6 +1084,11 @@ h3.subj{font-size:20px;line-height:28px;font-weight:700;margin:0 0 4px}
 .tpl-line{margin-top:14px;font-size:12px;line-height:16px;color:var(--ink3)}
 .tpl-line .ic{width:11px;height:11px;margin:0 0 0 2px}.tpl-line .ic svg{width:11px;height:11px}
 .mail-pv{display:flex;justify-content:center}
+.lgbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 10px}
+.lgbar-t{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-right:2px}
+.lgb{font:inherit;font-size:12px;font-weight:600;padding:5px 11px;border:1px solid var(--bd);background:#fff;color:var(--ink2);border-radius:999px;cursor:pointer}
+.lgb:hover{border-color:var(--ink3)}
+.lgb-on{background:var(--ink);border-color:var(--ink);color:#fff}
 .pv-shell{width:392px;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#fff;position:relative;align-self:start}
 .pv-shell iframe{border:0;transform-origin:top left;display:block}
 .pv-loading{padding:40px 0;text-align:center;font-size:12px;color:var(--ink3)}
@@ -1262,6 +1303,28 @@ function copyLinkCat(rid, el){ const k = activeCatKey(rid); if(k) copyLink('FIN-
 // One email, several categories. The panes for the tabs that are not showing are
 // display:none, and a hidden shell measures zero width - so mounting has to wait
 // until the pane is visible or every iframe in it is scaled against nothing.
+const PREVIEW_LANGS = __PREVIEW_LANGS__;
+const LANG_NAMES = __LANG_NAMES__;
+
+// SWAP THE IFRAME's src, do not re-render from a payload. The English preview is
+// inlined as srcdoc like every other preview on this page; the other languages
+// are real published files, because embedding six languages of every email would
+// add megabytes to a page that already carries forty previews.
+function switchLang(btn){
+  const key = btn.dataset.key, lg = btn.dataset.lg;
+  document.querySelectorAll('.lgbar[data-key="'+key+'"] .lgb').forEach(b =>
+    b.classList.toggle('lgb-on', b.dataset.lg === lg));
+  const url = (PREVIEW_LANGS[key] || {})[lg];
+  document.querySelectorAll('.pv-shell[data-tpl="'+key+'"]').forEach(shell => {
+    const ifr = shell.querySelector('iframe');
+    if (!ifr) return;
+    shell.dataset.retries = 0;
+    if (lg === 'en' && PREVIEWS[key]) { ifr.removeAttribute('src'); ifr.srcdoc = PREVIEWS[key]; }
+    else if (url) { ifr.removeAttribute('srcdoc'); ifr.src = url; }
+    // load fires when the new document is in, and sizeShell runs off that
+  });
+}
+
 function switchCat(btn){
   const rid = btn.dataset.row, key = btn.dataset.key;
   document.querySelectorAll('.catt[data-row="'+rid+'"]').forEach(b =>
@@ -1325,7 +1388,7 @@ doc = f'''<!DOCTYPE html>
 <div class="topbar"><div class="topbar-in">{LOGO.replace("<svg", '<svg class="logo"', 1)}<span class="topbar-t">Behavioural Emails</span><span class="topbar-r">{VERSION} · {VERSION_DATE} · {_state} · all flows in draft</span></div></div>
 <div class="wrap">{pages}</div>
 <div class="foot">Helloprint · Behavioural email programme · {VERSION}, {VERSION_DATE} · {_state}. A flow marked Not started has not been designed yet.</div>
-<script>{JS.replace("__PREVIEWS__", pv_json).replace("__PREVIEW_URLS__", pv_url_json)}</script>
+<script>{JS.replace("__PREVIEWS__", pv_json).replace("__PREVIEW_URLS__", pv_url_json).replace("__PREVIEW_LANGS__", pv_lang_json).replace("__LANG_NAMES__", json.dumps(LANG_NAMES, ensure_ascii=False))}</script>
 </body>
 </html>'''
 

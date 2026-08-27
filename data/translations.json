@@ -210,5 +210,599 @@
    "es": "El mismo diseño sirve para flyers, dípticos y carteles. Envíalo una vez y lo adaptamos a cada formato, en lugar de pedirte que lo rehagas.",
    "it": "Lo stesso file va bene per volantini, pieghevoli e poster. Mandacelo una volta e lo adattiamo a ogni formato, invece di chiederti di rifarlo."
   }
+ },
+ "stationery": {
+  "eyebrow": {
+   "en": "BUSINESS STATIONERY",
+   "nl": "ZAKELIJK DRUKWERK",
+   "fr": "PAPETERIE D'ENTREPRISE",
+   "de": "GESCHÄFTSAUSSTATTUNG",
+   "es": "PAPELERÍA DE EMPRESA",
+   "it": "CARTA E BUSTE AZIENDALI"
+  },
+  "h1": {
+   "en": "Running low on office stationery?",
+   "nl": "Raakt je kantoordrukwerk op?",
+   "fr": "Vos fournitures de bureau s'épuisent ?",
+   "de": "Geht Ihre Geschäftsausstattung zur Neige?",
+   "es": "¿Se te está acabando la papelería?",
+   "it": "Stai finendo la carta intestata?"
+  },
+  "sub": {
+   "en": "Letterheads, envelopes and notepads, in quantities that last a while without filling a cupboard.",
+   "nl": "Briefpapier, enveloppen en notitieblokken, in aantallen die lang meegaan zonder je kast te vullen.",
+   "fr": "Papier en-tête, enveloppes et blocs-notes, en quantités qui durent sans encombrer le placard.",
+   "de": "Briefpapier, Umschläge und Blöcke, in Mengen, die lange reichen, ohne den Schrank zu füllen.",
+   "es": "Papel de carta, sobres y blocs, en cantidades que duran sin llenarte el armario.",
+   "it": "Carta intestata, buste e blocchi, in quantità che durano senza riempire l'armadio."
+  },
+  "pre": {
+   "en": "The print that runs out quietly, and what to top up.",
+   "nl": "Het drukwerk dat ongemerkt opraakt, en wat je moet bijbestellen.",
+   "fr": "Les imprimés qui s'épuisent sans bruit, et ce qu'il faut recommander.",
+   "de": "Die Drucksachen, die unbemerkt ausgehen, und was Sie nachbestellen sollten.",
+   "es": "El material impreso que se acaba sin avisar, y qué reponer.",
+   "it": "La stampa che finisce senza farsi notare, e cosa riordinare."
+  },
+  "sect_h": {
+   "en": "Where most reorders start",
+   "nl": "Waar de meeste nabestellingen beginnen",
+   "fr": "Par où commencent la plupart des réassorts",
+   "de": "Womit die meisten Nachbestellungen anfangen",
+   "es": "Por dónde empiezan la mayoría de las reposiciones",
+   "it": "Da dove parte la maggior parte dei riordini"
+  },
+  "sect_sub": {
+   "en": "The two that run out first, and what usually goes in the same order.",
+   "nl": "De twee die het eerst opraken, en wat er meestal bij besteld wordt.",
+   "fr": "Les deux qui s'épuisent en premier, et ce qui part généralement dans la même commande.",
+   "de": "Die zwei, die zuerst ausgehen, und was meistens mitbestellt wird.",
+   "es": "Los dos que se acaban antes, y lo que suele ir en el mismo pedido.",
+   "it": "I due che finiscono per primi, e cosa di solito va nello stesso ordine."
+  },
+  "grid_h": {
+   "en": "The rest of the set",
+   "nl": "De rest van de set",
+   "fr": "Le reste de la série",
+   "de": "Der Rest des Sets",
+   "es": "El resto del conjunto",
+   "it": "Il resto del set"
+  },
+  "grid_sub": {
+   "en": "Two more that tend to go in the same order.",
+   "nl": "Nog twee die meestal in dezelfde bestelling zitten.",
+   "fr": "Deux autres qui partent souvent dans la même commande.",
+   "de": "Zwei weitere, die meistens mitbestellt werden.",
+   "es": "Dos más que suelen ir en el mismo pedido.",
+   "it": "Altri due che di solito vanno nello stesso ordine."
+  },
+  "hero_alt": {
+   "en": "A printed letterhead, business cards, a branded envelope and two pens on a table",
+   "nl": "Bedrukt briefpapier, visitekaartjes, een bedrukte envelop en twee pennen op tafel",
+   "fr": "Du papier en-tête imprimé, des cartes de visite, une enveloppe personnalisée et deux stylos sur une table",
+   "de": "Bedrucktes Briefpapier, Visitenkarten, ein bedruckter Umschlag und zwei Stifte auf einem Tisch",
+   "es": "Papel de carta impreso, tarjetas de visita, un sobre personalizado y dos bolígrafos sobre una mesa",
+   "it": "Carta intestata stampata, biglietti da visita, una busta personalizzata e due penne su un tavolo"
+  },
+  "body.Notepads": {
+   "en": "Glued at the head so a sheet tears off clean, printed on every sheet or just the top one. Worth pricing the next quantity up before you order: the difference is rarely what you expect.",
+   "nl": "Aan de kop gelijmd zodat een vel er netjes af scheurt, bedrukt op elk vel of alleen op het bovenste. Reken het volgende aantal even door voor je bestelt: het verschil valt zelden uit zoals je denkt.",
+   "fr": "Collés en tête pour que la feuille se détache proprement, imprimés sur chaque feuille ou seulement sur la première. Regardez le prix de la quantité au-dessus avant de commander : l'écart est rarement celui qu'on imagine.",
+   "de": "Am Kopf geleimt, damit sich ein Blatt sauber abtrennt, bedruckt auf jedem Blatt oder nur auf dem obersten. Rechnen Sie vor der Bestellung die nächstgrößere Menge durch: Der Unterschied fällt selten so aus, wie man denkt.",
+   "es": "Encolados por la cabecera para que la hoja se arranque limpia, impresos en todas las hojas o solo en la primera. Mira el precio de la cantidad siguiente antes de pedir: la diferencia rara vez es la que esperas.",
+   "it": "Incollati in testa così il foglio si stacca pulito, stampati su ogni foglio o solo sul primo. Guarda il prezzo della quantità successiva prima di ordinare: la differenza raramente è quella che immagini."
+  },
+  "body.Envelopes": {
+   "en": "Your name on the outside, so post does not arrive anonymous. Windowed or plain, and in the sizes that fit the letterheads you already print.",
+   "nl": "Je naam op de buitenkant, zodat post niet anoniem aankomt. Met venster of zonder, en in de maten die passen bij het briefpapier dat je al laat drukken.",
+   "fr": "Votre nom à l'extérieur, pour que le courrier n'arrive pas anonyme. Avec ou sans fenêtre, et dans les formats qui vont avec le papier en-tête que vous imprimez déjà.",
+   "de": "Ihr Name außen, damit Post nicht anonym ankommt. Mit oder ohne Fenster, und in den Formaten, die zu Ihrem vorhandenen Briefpapier passen.",
+   "es": "Tu nombre por fuera, para que el correo no llegue anónimo. Con ventana o sin ella, y en los tamaños que encajan con el papel de carta que ya imprimes.",
+   "it": "Il tuo nome all'esterno, così la posta non arriva anonima. Con o senza finestra, e nei formati che vanno con la carta intestata che già stampi."
+  },
+  "block.title": {
+   "en": "Print the set as one job",
+   "nl": "Druk de set als één opdracht",
+   "fr": "Imprimez la série en une seule commande",
+   "de": "Drucken Sie das Set als einen Auftrag",
+   "es": "Imprime el conjunto en un solo pedido",
+   "it": "Stampa il set in un unico ordine"
+  },
+  "block.body": {
+   "en": "Letterheads, envelopes and notepads only look like a set if the colour matches on all three. Send them together and we will keep them consistent rather than treating them as separate jobs.",
+   "nl": "Briefpapier, enveloppen en notitieblokken zien er alleen uit als een set als de kleur op alle drie klopt. Stuur ze samen, dan houden wij ze gelijk in plaats van ze als losse opdrachten te behandelen.",
+   "fr": "Papier en-tête, enveloppes et blocs-notes ne forment une série que si la couleur est identique sur les trois. Envoyez-les ensemble et nous les garderons cohérents au lieu de les traiter comme des commandes séparées.",
+   "de": "Briefpapier, Umschläge und Blöcke wirken nur als Set, wenn die Farbe auf allen dreien stimmt. Schicken Sie sie zusammen, dann halten wir sie einheitlich, statt sie als getrennte Aufträge zu behandeln.",
+   "es": "El papel de carta, los sobres y los blocs solo parecen un conjunto si el color coincide en los tres. Envíalos juntos y los mantendremos iguales en lugar de tratarlos como pedidos separados.",
+   "it": "Carta intestata, buste e blocchi sembrano un set solo se il colore coincide su tutti e tre. Mandaceli insieme e li terremo uguali, invece di trattarli come ordini separati."
+  }
+ },
+ "signage-outdoor": {
+  "eyebrow": {
+   "en": "SIGNAGE &amp; OUTDOOR",
+   "nl": "SIGNING &amp; BUITENRECLAME",
+   "fr": "SIGNALÉTIQUE &amp; EXTÉRIEUR",
+   "de": "BESCHILDERUNG &amp; AUSSENWERBUNG",
+   "es": "RÓTULOS &amp; EXTERIOR",
+   "it": "INSEGNE &amp; ESTERNI"
+  },
+  "h1": {
+   "en": "For the next event, or the front of the building?",
+   "nl": "Voor het volgende evenement, of voor de gevel?",
+   "fr": "Pour le prochain événement, ou pour la façade ?",
+   "de": "Für das nächste Event oder für die Fassade?",
+   "es": "¿Para el próximo evento, o para la fachada?",
+   "it": "Per il prossimo evento o per la facciata?"
+  },
+  "sub": {
+   "en": "Signs, flags and banners, built for one afternoon outdoors or several years of it.",
+   "nl": "Borden, vlaggen en spandoeken, gemaakt voor één middag buiten of voor jaren.",
+   "fr": "Panneaux, drapeaux et banderoles, faits pour un après-midi dehors ou pour des années.",
+   "de": "Schilder, Fahnen und Banner, gemacht für einen Nachmittag draußen oder für Jahre.",
+   "es": "Carteles, banderas y lonas, hechos para una tarde al aire libre o para años.",
+   "it": "Insegne, bandiere e striscioni, fatti per un pomeriggio all'aperto o per anni."
+  },
+  "pre": {
+   "en": "Signs, flags and banners, for a day out or a decade.",
+   "nl": "Borden, vlaggen en spandoeken, voor één dag of tien jaar.",
+   "fr": "Panneaux, drapeaux et banderoles, pour une journée ou dix ans.",
+   "de": "Schilder, Fahnen und Banner, für einen Tag oder zehn Jahre.",
+   "es": "Carteles, banderas y lonas, para un día o para diez años.",
+   "it": "Insegne, bandiere e striscioni, per un giorno o per dieci anni."
+  },
+  "sect_h": {
+   "en": "Where most signage starts",
+   "nl": "Waar de meeste signing begint",
+   "fr": "Par où commence la plupart de la signalétique",
+   "de": "Womit die meiste Beschilderung anfängt",
+   "es": "Por dónde empieza la mayoría de la rotulación",
+   "it": "Da dove parte la maggior parte delle insegne"
+  },
+  "sect_sub": {
+   "en": "The two formats businesses order most when something has to be read from a distance.",
+   "nl": "De twee formaten die bedrijven het meest bestellen als iets van een afstand leesbaar moet zijn.",
+   "fr": "Les deux formats que les entreprises commandent le plus quand il faut lire de loin.",
+   "de": "Die zwei Formate, die Unternehmen am häufigsten bestellen, wenn etwas aus der Ferne lesbar sein muss.",
+   "es": "Los dos formatos que más piden las empresas cuando algo tiene que leerse desde lejos.",
+   "it": "I due formati che le aziende ordinano di più quando qualcosa deve leggersi da lontano."
+  },
+  "grid_h": {
+   "en": "More in Signage &amp; Outdoor",
+   "nl": "Meer in Signing &amp; Buitenreclame",
+   "fr": "Plus en Signalétique &amp; Extérieur",
+   "de": "Mehr in Beschilderung &amp; Außenwerbung",
+   "es": "Más en Rótulos &amp; Exterior",
+   "it": "Altro in Insegne &amp; Esterni"
+  },
+  "grid_sub": {
+   "en": "Two more that go up quickly and come back out for the next one.",
+   "nl": "Nog twee die snel staan en er bij de volgende keer weer uit komen.",
+   "fr": "Deux autres qui se montent vite et ressortent pour la fois suivante.",
+   "de": "Zwei weitere, die schnell stehen und beim nächsten Mal wieder rauskommen.",
+   "es": "Dos más que se montan rápido y vuelven a salir la próxima vez.",
+   "it": "Altri due che si montano in fretta e tornano fuori la volta dopo."
+  },
+  "hero_alt": {
+   "en": "Three printed flags flying on masts against a bright sky",
+   "nl": "Drie bedrukte vlaggen aan masten tegen een heldere lucht",
+   "fr": "Trois drapeaux imprimés sur des mâts devant un ciel lumineux",
+   "de": "Drei bedruckte Fahnen an Masten vor hellem Himmel",
+   "es": "Tres banderas impresas en mástiles contra un cielo despejado",
+   "it": "Tre bandiere stampate su pennoni contro un cielo limpido"
+  },
+  "body.Banners": {
+   "en": "For a fence, a scaffold or the front of a building. Hemmed and eyeleted, so it goes up with cable ties and comes down in one piece for the next time.",
+   "nl": "Voor een hek, een steiger of een gevel. Gezoomd en van ringen voorzien, dus hij gaat omhoog met tiewraps en komt er in één stuk weer af voor de volgende keer.",
+   "fr": "Pour une clôture, un échafaudage ou une façade. Ourlée et œilletée, elle se pose avec des colliers et se retire d'une pièce pour la fois suivante.",
+   "de": "Für einen Zaun, ein Gerüst oder eine Fassade. Gesäumt und geöst, also mit Kabelbindern angebracht und für das nächste Mal am Stück wieder abgenommen.",
+   "es": "Para una valla, un andamio o una fachada. Con dobladillo y ojales, se cuelga con bridas y se retira de una pieza para la próxima vez.",
+   "it": "Per una recinzione, un ponteggio o una facciata. Con orlo e occhielli, si monta con le fascette e si toglie tutto intero per la volta dopo."
+  },
+  "body.Signage & Panels": {
+   "en": "Foamex indoors or under cover, aluminium where it has to take weather and years of it. Tell us where the sign is going and we will match the material to it.",
+   "nl": "Foamex binnen of onder een afdak, aluminium waar het weer en wind jarenlang moet doorstaan. Vertel waar het bord komt te hangen en wij kiezen het materiaal erbij.",
+   "fr": "Le Foamex à l'intérieur ou à l'abri, l'aluminium là où il faut tenir les intempéries pendant des années. Dites-nous où ira le panneau et nous choisirons la matière.",
+   "de": "Foamex drinnen oder überdacht, Aluminium dort, wo es Wetter und Jahre aushalten muss. Sagen Sie uns, wo das Schild hin soll, dann wählen wir das Material dazu.",
+   "es": "Foamex en interior o bajo cubierta, aluminio donde tenga que aguantar la intemperie durante años. Dinos dónde va el cartel y elegimos el material que le corresponde.",
+   "it": "Foamex all'interno o al coperto, alluminio dove deve reggere le intemperie per anni. Dicci dove andrà l'insegna e scegliamo il materiale adatto."
+  },
+  "block.title": {
+   "en": "Roller banners travel",
+   "nl": "Roll-ups reizen mee",
+   "fr": "Les roll-ups voyagent",
+   "de": "Roll-ups reisen mit",
+   "es": "Los roll-ups viajan",
+   "it": "I roll-up viaggiano"
+  },
+  "block.body": {
+   "en": "They roll into their own case, go up in seconds, and come back out for the next event. One order that keeps earning.",
+   "nl": "Ze rollen in hun eigen koffer, staan in seconden en komen er bij het volgende evenement weer uit. Eén bestelling die zich blijft terugbetalen.",
+   "fr": "Ils s'enroulent dans leur propre housse, se montent en quelques secondes et ressortent pour l'événement suivant. Une commande qui continue de rapporter.",
+   "de": "Sie rollen sich in ihre eigene Tasche, stehen in Sekunden und kommen beim nächsten Event wieder heraus. Eine Bestellung, die sich weiter auszahlt.",
+   "es": "Se enrollan en su propia funda, se montan en segundos y vuelven a salir en el siguiente evento. Un pedido que sigue rindiendo.",
+   "it": "Si arrotolano nella propria custodia, si montano in pochi secondi e riescono per l'evento successivo. Un ordine che continua a rendere."
+  }
+ },
+ "labels-packaging": {
+  "eyebrow": {
+   "en": "LABELS &amp; PACKAGING",
+   "nl": "LABELS &amp; VERPAKKING",
+   "fr": "ÉTIQUETTES &amp; EMBALLAGE",
+   "de": "ETIKETTEN &amp; VERPACKUNG",
+   "es": "ETIQUETAS &amp; EMBALAJE",
+   "it": "ETICHETTE &amp; IMBALLAGGI"
+  },
+  "h1": {
+   "en": "Running low on labels, or on bags?",
+   "nl": "Raken je labels op, of je tassen?",
+   "fr": "Vos étiquettes s'épuisent, ou vos sacs ?",
+   "de": "Gehen die Etiketten aus, oder die Tüten?",
+   "es": "¿Se te acaban las etiquetas, o las bolsas?",
+   "it": "Stai finendo le etichette o i sacchetti?"
+  },
+  "sub": {
+   "en": "Labels and stickers, and the packaging they go on. Both in runs small enough to try first.",
+   "nl": "Labels en stickers, en de verpakking waar ze op gaan. Allebei in oplages klein genoeg om eerst uit te proberen.",
+   "fr": "Étiquettes et autocollants, et l'emballage sur lequel ils se collent. Les deux en tirages assez petits pour essayer d'abord.",
+   "de": "Etiketten und Aufkleber, und die Verpackung, auf die sie kommen. Beides in Auflagen, die klein genug zum Ausprobieren sind.",
+   "es": "Etiquetas y pegatinas, y el embalaje donde van. Ambas en tiradas lo bastante pequeñas para probar primero.",
+   "it": "Etichette e adesivi, e l'imballaggio su cui vanno. Entrambi in tirature abbastanza piccole da provare prima."
+  },
+  "pre": {
+   "en": "Labels, stickers and the packaging they go on.",
+   "nl": "Labels, stickers en de verpakking waar ze op gaan.",
+   "fr": "Étiquettes, autocollants et l'emballage sur lequel ils se collent.",
+   "de": "Etiketten, Aufkleber und die Verpackung, auf die sie kommen.",
+   "es": "Etiquetas, pegatinas y el embalaje donde van.",
+   "it": "Etichette, adesivi e l'imballaggio su cui vanno."
+  },
+  "sect_h": {
+   "en": "Where most label orders start",
+   "nl": "Waar de meeste labelbestellingen beginnen",
+   "fr": "Par où commencent la plupart des commandes d'étiquettes",
+   "de": "Womit die meisten Etikettenbestellungen anfangen",
+   "es": "Por dónde empiezan la mayoría de los pedidos de etiquetas",
+   "it": "Da dove parte la maggior parte degli ordini di etichette"
+  },
+  "sect_sub": {
+   "en": "The two formats businesses order most: one that goes on the product, one the customer carries out.",
+   "nl": "De twee formaten die bedrijven het meest bestellen: één die op het product gaat, één die de klant mee naar buiten neemt.",
+   "fr": "Les deux formats que les entreprises commandent le plus : l'un se colle sur le produit, l'autre repart avec le client.",
+   "de": "Die zwei Formate, die Unternehmen am häufigsten bestellen: eines kommt aufs Produkt, eines nimmt der Kunde mit.",
+   "es": "Los dos formatos que más piden las empresas: uno va en el producto, el otro se lo lleva el cliente.",
+   "it": "I due formati che le aziende ordinano di più: uno va sul prodotto, l'altro se lo porta via il cliente."
+  },
+  "grid_h": {
+   "en": "More in Labels &amp; Packaging",
+   "nl": "Meer in Labels &amp; Verpakking",
+   "fr": "Plus en Étiquettes &amp; Emballage",
+   "de": "Mehr in Etiketten &amp; Verpackung",
+   "es": "Más en Etiquetas &amp; Embalaje",
+   "it": "Altro in Etichette &amp; Imballaggi"
+  },
+  "grid_sub": {
+   "en": "Two more, both in runs small enough to try a design first.",
+   "nl": "Nog twee, allebei in oplages klein genoeg om een ontwerp eerst te proberen.",
+   "fr": "Deux autres, en tirages assez petits pour tester un visuel d'abord.",
+   "de": "Zwei weitere, beide in Auflagen, die klein genug sind, um ein Design erst zu testen.",
+   "es": "Dos más, en tiradas lo bastante pequeñas para probar un diseño primero.",
+   "it": "Altri due, in tirature abbastanza piccole da provare prima un design."
+  },
+  "hero_alt": {
+   "en": "A round eco-friendly sticker sealing a cardboard box",
+   "nl": "Een ronde eco-sticker die een kartonnen doos dichtplakt",
+   "fr": "Un autocollant rond écologique qui ferme une boîte en carton",
+   "de": "Ein runder Öko-Aufkleber, der einen Karton verschließt",
+   "es": "Una pegatina redonda ecológica que cierra una caja de cartón",
+   "it": "Un adesivo rotondo eco che chiude una scatola di cartone"
+  },
+  "body.Labels & Stickers": {
+   "en": "On a roll for an applicator, on a sheet for applying by hand, or cut to whatever outline your product needs. An odd shape is priced the same as a square.",
+   "nl": "Op rol voor een dispenser, op vel om met de hand te plakken, of gesneden op de vorm die jouw product nodig heeft. Een rare vorm kost hetzelfde als een vierkant.",
+   "fr": "En rouleau pour un applicateur, en planche pour poser à la main, ou découpés à la forme dont votre produit a besoin. Une forme irrégulière coûte le même prix qu'un carré.",
+   "de": "Auf Rolle für den Spender, auf Bogen zum Aufkleben von Hand, oder auf die Kontur geschnitten, die Ihr Produkt braucht. Eine ungewöhnliche Form kostet dasselbe wie ein Quadrat.",
+   "es": "En rollo para aplicador, en hoja para pegar a mano, o cortadas con la forma que necesite tu producto. Una forma rara cuesta lo mismo que un cuadrado.",
+   "it": "In rotolo per l'applicatore, in foglio da applicare a mano, o sagomate come serve al tuo prodotto. Una forma strana costa quanto un quadrato."
+  },
+  "body.Paper Bags": {
+   "en": "Your name on the thing a customer carries out of the shop. Runs start at a hundred, so a new design does not have to arrive on a pallet.",
+   "nl": "Je naam op het ding dat een klant de winkel uit draagt. Oplages beginnen bij honderd, dus een nieuw ontwerp hoeft niet op een pallet aan te komen.",
+   "fr": "Votre nom sur ce que le client emporte en sortant. Les tirages commencent à cent, donc un nouveau visuel n'arrive pas forcément sur une palette.",
+   "de": "Ihr Name auf dem, was der Kunde aus dem Laden trägt. Auflagen beginnen bei hundert, ein neues Design muss also nicht auf einer Palette ankommen.",
+   "es": "Tu nombre en lo que el cliente se lleva de la tienda. Las tiradas empiezan en cien, así que un diseño nuevo no tiene que llegar en un palé.",
+   "it": "Il tuo nome su ciò che il cliente porta fuori dal negozio. Le tirature partono da cento, quindi un nuovo design non deve arrivare su un bancale."
+  },
+  "block.title": {
+   "en": "Send the whole list at once",
+   "nl": "Stuur de hele lijst in één keer",
+   "fr": "Envoyez toute la liste d'un coup",
+   "de": "Schicken Sie die ganze Liste auf einmal",
+   "es": "Envía la lista entera de una vez",
+   "it": "Manda tutta la lista in una volta"
+  },
+  "block.body": {
+   "en": "If you are ordering labels and bags together, send both and we will keep the colour consistent across them rather than treating them as two jobs.",
+   "nl": "Bestel je labels en tassen tegelijk, stuur ze dan samen. Dan houden wij de kleur gelijk in plaats van er twee losse opdrachten van te maken.",
+   "fr": "Si vous commandez étiquettes et sacs ensemble, envoyez les deux et nous garderons la couleur identique au lieu d'en faire deux commandes distinctes.",
+   "de": "Wenn Sie Etiketten und Tüten zusammen bestellen, schicken Sie beides. Dann halten wir die Farbe einheitlich, statt zwei getrennte Aufträge daraus zu machen.",
+   "es": "Si pides etiquetas y bolsas a la vez, envía las dos y mantendremos el color igual en lugar de tratarlas como dos pedidos.",
+   "it": "Se ordini etichette e sacchetti insieme, mandaceli entrambi e terremo il colore uguale invece di farne due lavori separati."
+  }
+ },
+ "clothing-textiles": {
+  "eyebrow": {
+   "en": "CLOTHING &amp; TEXTILES",
+   "nl": "KLEDING &amp; TEXTIEL",
+   "fr": "VÊTEMENTS &amp; TEXTILE",
+   "de": "KLEIDUNG &amp; TEXTILIEN",
+   "es": "ROPA &amp; TEXTIL",
+   "it": "ABBIGLIAMENTO &amp; TESSUTI"
+  },
+  "h1": {
+   "en": "Kitting out the team?",
+   "nl": "Team in het nieuw?",
+   "fr": "Vous équipez l'équipe ?",
+   "de": "Team neu einkleiden?",
+   "es": "¿Vistiendo al equipo?",
+   "it": "Vesti la squadra?"
+  },
+  "sub": {
+   "en": "Shirts and textiles, with your logo printed or stitched on.",
+   "nl": "Shirts en textiel, met je logo erop gedrukt of geborduurd.",
+   "fr": "T-shirts et textiles, avec votre logo imprimé ou brodé.",
+   "de": "Shirts und Textilien, mit Ihrem Logo gedruckt oder gestickt.",
+   "es": "Camisetas y textil, con tu logo impreso o bordado.",
+   "it": "Magliette e tessuti, con il tuo logo stampato o ricamato."
+  },
+  "pre": {
+   "en": "Shirts and textiles with your logo on them.",
+   "nl": "Shirts en textiel met je logo erop.",
+   "fr": "T-shirts et textiles à votre logo.",
+   "de": "Shirts und Textilien mit Ihrem Logo.",
+   "es": "Camisetas y textil con tu logo.",
+   "it": "Magliette e tessuti con il tuo logo."
+  },
+  "sect_h": {
+   "en": "Where most team orders start",
+   "nl": "Waar de meeste teambestellingen beginnen",
+   "fr": "Par où commencent la plupart des commandes d'équipe",
+   "de": "Womit die meisten Team-Bestellungen anfangen",
+   "es": "Por dónde empiezan la mayoría de los pedidos de equipo",
+   "it": "Da dove parte la maggior parte degli ordini per il team"
+  },
+  "sect_sub": {
+   "en": "The two we print most when a business kits people out.",
+   "nl": "De twee die wij het meest bedrukken als een bedrijf mensen in het nieuw steekt.",
+   "fr": "Les deux que nous imprimons le plus quand une entreprise équipe ses équipes.",
+   "de": "Die zwei, die wir am häufigsten bedrucken, wenn ein Unternehmen sein Team einkleidet.",
+   "es": "Los dos que más imprimimos cuando una empresa viste a su gente.",
+   "it": "I due che stampiamo di più quando un'azienda veste le persone."
+  },
+  "grid_h": {
+   "en": "More in Clothing &amp; Textiles",
+   "nl": "Meer in Kleding &amp; Textiel",
+   "fr": "Plus en Vêtements &amp; Textile",
+   "de": "Mehr in Kleidung &amp; Textilien",
+   "es": "Más en Ropa &amp; Textil",
+   "it": "Altro in Abbigliamento &amp; Tessuti"
+  },
+  "grid_sub": {
+   "en": "Two more to put a logo on, in sizes from one upwards.",
+   "nl": "Nog twee om een logo op te zetten, in aantallen vanaf één.",
+   "fr": "Deux autres sur lesquels poser un logo, à partir d'une pièce.",
+   "de": "Zwei weitere für Ihr Logo, ab einem Stück.",
+   "es": "Dos más donde poner un logo, a partir de una unidad.",
+   "it": "Altri due su cui mettere un logo, a partire da un pezzo."
+  },
+  "hero_alt": {
+   "en": "A printed hoodie, beanie and shorts laid out on tarmac",
+   "nl": "Een bedrukte hoodie, muts en short op het asfalt",
+   "fr": "Un sweat à capuche, un bonnet et un short imprimés posés sur le bitume",
+   "de": "Ein bedruckter Hoodie, eine Mütze und eine Shorts auf dem Asphalt",
+   "es": "Una sudadera, un gorro y unos pantalones cortos impresos sobre el asfalto",
+   "it": "Una felpa, un berretto e dei pantaloncini stampati sull'asfalto"
+  },
+  "body.T-shirts": {
+   "en": "Printed or embroidered, in the size breakdown you actually need rather than the same size throughout. Send your logo and we will say which method suits it.",
+   "nl": "Bedrukt of geborduurd, in de matenverdeling die je echt nodig hebt in plaats van overal dezelfde maat. Stuur je logo en wij zeggen welke methode erbij past.",
+   "fr": "Imprimés ou brodés, avec la répartition de tailles dont vous avez vraiment besoin plutôt que la même taille partout. Envoyez votre logo et nous vous dirons quelle méthode lui convient.",
+   "de": "Bedruckt oder bestickt, in der Größenverteilung, die Sie wirklich brauchen, statt überall dieselbe Größe. Schicken Sie Ihr Logo, dann sagen wir Ihnen, welches Verfahren dazu passt.",
+   "es": "Impresas o bordadas, con el desglose de tallas que de verdad necesitas en vez de la misma talla para todos. Envía tu logo y te decimos qué método le encaja.",
+   "it": "Stampate o ricamate, con la distribuzione di taglie che ti serve davvero invece della stessa taglia per tutti. Mandaci il logo e ti diciamo quale metodo è adatto."
+  },
+  "body.Hoodies & Zip-up Hoodies": {
+   "en": "Heavier than a t-shirt and worn far longer, which is what makes one worth embroidering rather than printing. Zip or pullover, in the size breakdown you actually need.",
+   "nl": "Zwaarder dan een t-shirt en veel langer gedragen, en juist daarom de moeite waard om te borduren in plaats van te bedrukken. Met rits of over het hoofd, in de matenverdeling die je echt nodig hebt.",
+   "fr": "Plus épais qu'un t-shirt et porté bien plus longtemps, ce qui vaut la peine d'une broderie plutôt que d'une impression. Zippé ou à enfiler, avec la répartition de tailles dont vous avez vraiment besoin.",
+   "de": "Schwerer als ein T-Shirt und viel länger getragen, und genau deshalb eher zum Besticken als zum Bedrucken. Mit Reißverschluss oder zum Überziehen, in der Größenverteilung, die Sie wirklich brauchen.",
+   "es": "Más gruesa que una camiseta y se lleva mucho más tiempo, y por eso compensa bordarla en lugar de imprimirla. Con cremallera o cerrada, con el desglose de tallas que de verdad necesitas.",
+   "it": "Più pesante di una t-shirt e indossata molto più a lungo, ed è proprio questo che la rende adatta al ricamo più che alla stampa. Con zip o chiusa, nella distribuzione di taglie che ti serve davvero."
+  },
+  "block.title": {
+   "en": "Mixed sizes, one order",
+   "nl": "Gemengde maten, één bestelling",
+   "fr": "Tailles mélangées, une seule commande",
+   "de": "Gemischte Größen, eine Bestellung",
+   "es": "Tallas mezcladas, un solo pedido",
+   "it": "Taglie miste, un solo ordine"
+  },
+  "block.body": {
+   "en": "You do not have to order the same size throughout. Send the breakdown you need and we will put it together as one job.",
+   "nl": "Je hoeft niet overal dezelfde maat te bestellen. Stuur de verdeling die je nodig hebt, dan zetten wij het als één opdracht klaar.",
+   "fr": "Vous n'êtes pas obligé de commander la même taille partout. Envoyez la répartition dont vous avez besoin et nous en ferons une seule commande.",
+   "de": "Sie müssen nicht überall dieselbe Größe bestellen. Schicken Sie die Verteilung, die Sie brauchen, dann stellen wir sie als einen Auftrag zusammen.",
+   "es": "No tienes que pedir la misma talla para todo. Envía el desglose que necesitas y lo montamos como un solo pedido.",
+   "it": "Non devi ordinare la stessa taglia per tutti. Mandaci la distribuzione che ti serve e la mettiamo insieme come un unico ordine."
+  },
+  "brands.eyebrow": {
+   "en": "BRANDS WE CARRY",
+   "nl": "MERKEN DIE WIJ VOEREN",
+   "fr": "LES MARQUES QUE NOUS PROPOSONS",
+   "de": "MARKEN IN UNSEREM SORTIMENT",
+   "es": "MARCAS QUE TRABAJAMOS",
+   "it": "I MARCHI CHE TRATTIAMO"
+  },
+  "brands.h": {
+   "en": "Or put it on a brand they already know",
+   "nl": "Of zet het op een merk dat ze al kennen",
+   "fr": "Ou posez-le sur une marque qu'ils connaissent déjà",
+   "de": "Oder bringen Sie es auf einer Marke an, die man kennt",
+   "es": "O ponlo en una marca que ya conocen",
+   "it": "Oppure mettilo su un marchio che già conoscono"
+  },
+  "brands.sub": {
+   "en": "Not everything has to be a blank. We print on premium garment brands too, from the same file.",
+   "nl": "Niet alles hoeft blanco te zijn. Wij bedrukken ook premium kledingmerken, vanaf hetzelfde bestand.",
+   "fr": "Tout n'est pas obligé d'être neutre. Nous imprimons aussi sur des marques de vêtements premium, à partir du même fichier.",
+   "de": "Nicht alles muss neutral sein. Wir bedrucken auch Premium-Textilmarken, aus derselben Datei.",
+   "es": "No todo tiene que ser sin marca. También imprimimos sobre marcas de ropa premium, desde el mismo archivo.",
+   "it": "Non deve essere per forza neutro. Stampiamo anche su marchi di abbigliamento premium, dallo stesso file."
+  },
+  "brands.link": {
+   "en": "See all brands",
+   "nl": "Bekijk alle merken",
+   "fr": "Voir toutes les marques",
+   "de": "Alle Marken ansehen",
+   "es": "Ver todas las marcas",
+   "it": "Vedi tutti i marchi"
+  }
+ },
+ "corporate-gifts": {
+  "eyebrow": {
+   "en": "CORPORATE GIFTS",
+   "nl": "RELATIEGESCHENKEN",
+   "fr": "CADEAUX D'ENTREPRISE",
+   "de": "WERBEGESCHENKE",
+   "es": "REGALOS DE EMPRESA",
+   "it": "REGALI AZIENDALI"
+  },
+  "h1": {
+   "en": "Something to hand out at the next event?",
+   "nl": "Iets om uit te delen op het volgende evenement?",
+   "fr": "Quelque chose à distribuer au prochain événement ?",
+   "de": "Etwas zum Verteilen beim nächsten Event?",
+   "es": "¿Algo para repartir en el próximo evento?",
+   "it": "Qualcosa da distribuire al prossimo evento?"
+  },
+  "sub": {
+   "en": "The things that stay in use long after a flyer is in the bin.",
+   "nl": "De dingen die nog gebruikt worden lang nadat een flyer in de prullenbak ligt.",
+   "fr": "Les objets qui servent encore longtemps après qu'un flyer a fini à la poubelle.",
+   "de": "Die Dinge, die noch benutzt werden, lange nachdem ein Flyer im Papierkorb liegt.",
+   "es": "Las cosas que se siguen usando mucho después de que un flyer acabe en la papelera.",
+   "it": "Le cose che restano in uso molto dopo che un volantino è finito nel cestino."
+  },
+  "pre": {
+   "en": "Things that stay in use long after a flyer is in the bin.",
+   "nl": "Dingen die nog gebruikt worden lang nadat een flyer in de prullenbak ligt.",
+   "fr": "Des objets qui servent encore longtemps après qu'un flyer a fini à la poubelle.",
+   "de": "Dinge, die noch benutzt werden, lange nachdem ein Flyer im Papierkorb liegt.",
+   "es": "Cosas que se siguen usando mucho después de que un flyer acabe en la papelera.",
+   "it": "Cose che restano in uso molto dopo che un volantino è finito nel cestino."
+  },
+  "sect_h": {
+   "en": "Where most gift orders start",
+   "nl": "Waar de meeste geschenkbestellingen beginnen",
+   "fr": "Par où commencent la plupart des commandes de cadeaux",
+   "de": "Womit die meisten Geschenkbestellungen anfangen",
+   "es": "Por dónde empiezan la mayoría de los pedidos de regalos",
+   "it": "Da dove parte la maggior parte degli ordini di regali"
+  },
+  "sect_sub": {
+   "en": "The two that get handed out most, and kept longest.",
+   "nl": "De twee die het vaakst worden uitgedeeld, en het langst worden bewaard.",
+   "fr": "Les deux que l'on distribue le plus, et que l'on garde le plus longtemps.",
+   "de": "Die zwei, die am häufigsten verteilt und am längsten behalten werden.",
+   "es": "Los dos que más se reparten, y los que más tiempo se guardan.",
+   "it": "I due che si distribuiscono di più e si tengono più a lungo."
+  },
+  "grid_h": {
+   "en": "More in Corporate Gifts",
+   "nl": "Meer in Relatiegeschenken",
+   "fr": "Plus en Cadeaux d'entreprise",
+   "de": "Mehr in Werbegeschenke",
+   "es": "Más en Regalos de empresa",
+   "it": "Altro in Regali aziendali"
+  },
+  "grid_sub": {
+   "en": "Two more that people keep on a desk rather than throw away.",
+   "nl": "Nog twee die mensen op hun bureau houden in plaats van weggooien.",
+   "fr": "Deux autres que l'on garde sur un bureau plutôt que de jeter.",
+   "de": "Zwei weitere, die auf dem Schreibtisch bleiben statt im Müll zu landen.",
+   "es": "Dos más que la gente deja en el escritorio en vez de tirar.",
+   "it": "Altri due che la gente tiene sulla scrivania invece di buttare."
+  },
+  "hero_alt": {
+   "en": "A branded power bank, water bottle and notebook on a desk",
+   "nl": "Een bedrukte powerbank, drinkfles en notitieboek op een bureau",
+   "fr": "Une batterie externe, une gourde et un carnet personnalisés sur un bureau",
+   "de": "Eine bedruckte Powerbank, Trinkflasche und ein Notizbuch auf einem Schreibtisch",
+   "es": "Una batería externa, una botella y una libreta personalizadas sobre un escritorio",
+   "it": "Un power bank, una borraccia e un taccuino personalizzati su una scrivania"
+  },
+  "body.Canvas Tote Bags": {
+   "en": "The one giveaway people keep using. Cotton, your logo on the side, and cheap enough per bag to hand out at a stand without counting them.",
+   "nl": "Het enige weggeefartikel dat mensen blijven gebruiken. Katoen, je logo op de zijkant, en per tas goedkoop genoeg om op een stand uit te delen zonder te tellen.",
+   "fr": "Le seul cadeau que les gens continuent d'utiliser. Coton, votre logo sur le côté, et assez peu cher à l'unité pour en distribuer sur un stand sans compter.",
+   "de": "Das eine Werbegeschenk, das weiter benutzt wird. Baumwolle, Ihr Logo auf der Seite, und pro Tasche günstig genug, um sie am Stand zu verteilen, ohne zu zählen.",
+   "es": "El único regalo que la gente sigue usando. Algodón, tu logo en el lateral, y lo bastante barata por unidad como para repartirlas en un stand sin contarlas.",
+   "it": "L'unico gadget che le persone continuano a usare. Cotone, il tuo logo sul lato, e abbastanza economica da distribuirla a uno stand senza contarle."
+  },
+  "body.Pens": {
+   "en": "Still the thing that ends up in a drawer and gets used for a year. Hundreds of them for about the price of a small print run.",
+   "nl": "Nog altijd het ding dat in een la belandt en een jaar lang wordt gebruikt. Honderden stuks voor ongeveer de prijs van een kleine drukoplage.",
+   "fr": "Toujours l'objet qui finit dans un tiroir et sert pendant un an. Des centaines pour à peu près le prix d'un petit tirage.",
+   "de": "Immer noch das Ding, das in einer Schublade landet und ein Jahr lang benutzt wird. Hunderte davon für etwa den Preis einer kleinen Druckauflage.",
+   "es": "Sigue siendo lo que acaba en un cajón y se usa durante un año. Cientos de ellos por más o menos el precio de una tirada pequeña.",
+   "it": "È ancora la cosa che finisce in un cassetto e viene usata per un anno. Centinaia di pezzi per più o meno il prezzo di una piccola tiratura."
+  },
+  "block.title": {
+   "en": "If we do not list it, we can still find it",
+   "nl": "Staat het er niet bij, dan vinden we het alsnog",
+   "fr": "Si ce n'est pas au catalogue, nous pouvons le trouver",
+   "de": "Wenn es nicht im Katalog steht, finden wir es trotzdem",
+   "es": "Si no está en el catálogo, podemos encontrarlo igualmente",
+   "it": "Se non è a catalogo, possiamo comunque trovarlo"
+  },
+  "block.body": {
+   "en": "The catalogue is a starting point. Tell our team what you have in mind and they will source it and come back with a price.",
+   "nl": "De catalogus is een startpunt. Vertel ons team wat je in gedachten hebt, dan zoeken zij het en komen ze terug met een prijs.",
+   "fr": "Le catalogue est un point de départ. Dites à notre équipe ce que vous avez en tête : elle le sourcera et reviendra avec un prix.",
+   "de": "Der Katalog ist ein Ausgangspunkt. Sagen Sie unserem Team, was Ihnen vorschwebt, dann beschaffen wir es und melden uns mit einem Preis.",
+   "es": "El catálogo es un punto de partida. Cuéntale a nuestro equipo qué tienes en mente y lo buscarán y volverán con un precio.",
+   "it": "Il catalogo è un punto di partenza. Racconta al nostro team cosa hai in mente: lo troveranno e torneranno con un prezzo."
+  },
+  "brands.eyebrow": {
+   "en": "BRANDS WE CARRY",
+   "nl": "MERKEN DIE WIJ VOEREN",
+   "fr": "LES MARQUES QUE NOUS PROPOSONS",
+   "de": "MARKEN IN UNSEREM SORTIMENT",
+   "es": "MARCAS QUE TRABAJAMOS",
+   "it": "I MARCHI CHE TRATTIAMO"
+  },
+  "brands.h": {
+   "en": "Your logo on a name they already know",
+   "nl": "Je logo op een naam die ze al kennen",
+   "fr": "Votre logo sur un nom qu'ils connaissent déjà",
+   "de": "Ihr Logo auf einem Namen, den man kennt",
+   "es": "Tu logo en un nombre que ya conocen",
+   "it": "Il tuo logo su un nome che già conoscono"
+  },
+  "brands.sub": {
+   "en": "We personalise premium brands as well as our own ranges. Same file, same process.",
+   "nl": "Wij personaliseren premium merken naast onze eigen assortimenten. Zelfde bestand, zelfde proces.",
+   "fr": "Nous personnalisons des marques premium comme nos propres gammes. Même fichier, même processus.",
+   "de": "Wir veredeln Premium-Marken genauso wie unsere eigenen Sortimente. Gleiche Datei, gleicher Ablauf.",
+   "es": "Personalizamos marcas premium además de nuestras propias gamas. Mismo archivo, mismo proceso.",
+   "it": "Personalizziamo marchi premium oltre alle nostre linee. Stesso file, stesso processo."
+  },
+  "brands.link": {
+   "en": "See all brands",
+   "nl": "Bekijk alle merken",
+   "fr": "Voir toutes les marques",
+   "de": "Alle Marken ansehen",
+   "es": "Ver todas las marcas",
+   "it": "Vedi tutti i marchi"
+  }
  }
 }

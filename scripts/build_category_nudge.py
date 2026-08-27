@@ -766,7 +766,7 @@ def grid(P, cat, subs, live):
             'cellpadding="0" cellspacing="0">%s</table>' % (P, rows))
 
 
-def brands_block(P, cat, live):
+def brands_block(P, cat, live, tr=None):
     """Three in-setting brand shots on ink, between the grid and the closing note.
 
     Only shots of a product in use are here. /our-brands also carries flat
@@ -781,6 +781,7 @@ def brands_block(P, cat, live):
     b = cat.get("brands")
     if not b:
         return ""
+    t = (lambda k, e: e) if tr is None else tr
     cells = ""
     for it in b["items"]:
         cells += ('<td class="%s-bratd" valign="top">'
@@ -800,8 +801,9 @@ def brands_block(P, cat, live):
             '      <table class="{P}-bratbl" role="presentation" width="100%" '
             'cellpadding="0" cellspacing="0"><tr>{CELLS}</tr></table>\n'
             '      <a class="{P}-bralink" href="{URL}">{LINK} &rarr;</a>\n'
-            '    </div>\n').format(P=P, EYE=b["eyebrow"], H=b["h"], S=b["sub"],
-                                   CELLS=cells, URL=cat["_brands_url"], LINK=b["link"])
+            '    </div>\n').format(P=P, EYE=t("brands.eyebrow", b["eyebrow"]), H=t("brands.h", b["h"]),
+                                   S=t("brands.sub", b["sub"]),
+                                   CELLS=cells, URL=cat["_brands_url"], LINK=t("brands.link", b["link"]))
 
 
 def review_block(P, cat, live, locale=None, tr=None):
@@ -892,7 +894,7 @@ def build(cat, live, hdr=None, locale=None):
         H1=tr("h1", cat["h1"]), SUB=tr("sub", cat["sub"]),
         PRE=tr("pre", cat["pre"]), CTA=tr("cta.see_range", CTA),
         FEATURES=feats, TILES=grid(P, cat, conf["grid"], live),
-        BRANDS=brands_block(P, cat, live),
+        BRANDS=brands_block(P, cat, live, tr),
         HEADER=header_block(P, cat, live, hdr or headers_of(cat)[0], home, tr),
         B_TITLE=tr("block.title", cat["block"][0]),
         B_BODY=tr("block.body", cat["block"][1]),
