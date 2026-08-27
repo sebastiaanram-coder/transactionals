@@ -49,18 +49,23 @@ EMAILS = {
     "commercial-print": dict(
         label="Commercial Print", match=["Commercial Print"],
         feature=["Booklets & Brochures", "Leaflet Printing & Flyers"],
-        grid=["Folded Leaflets", "Poster Printing", "Business Cards", "Roller Banners"],
-        # 2.10M, 1.04M | 539k, 446k, 355k
+        grid=["Folded Leaflets", "Poster Printing", "Business Cards", "Cards & Invitations"],
+        # 2.10M, 1.04M | 539k, 446k, 355k, 261k
         #
-        # THE FOURTH TILE IS NOT THE FOURTH BY GROSS PROFIT. Cards & Invitations
-        # ranks there at 261k; Roller Banners is 175k and belongs to Signage &
-        # Outdoor. It is here because the new-style photography has a roller
-        # banner and has no greeting card, and one packshot on white beside three
-        # art-directed shots was the worst-looking tile in the email. It also
-        # reads straight: everything else here is print that advertises something,
-        # and so is a roller banner.
-        # Put Cards & Invitations back the moment there is a shot of one - the
-        # end-of-year case for it has not gone away.
+        # CARDS & INVITATIONS IS BACK, and the fourth tile is now the fourth by
+        # gross profit again. It had been swapped for Roller Banners at 175k, which
+        # belongs to Signage & Outdoor, purely because the photography had a roller
+        # banner and nothing card-shaped, and one packshot on white beside three
+        # art-directed shots was the worst-looking tile in the email. There is now
+        # a gold-foil postcard on a kraft envelope, so the reason is gone.
+        #
+        # A POSTCARD REPRESENTS THIS TILE HONESTLY. Postcards are sold under Cards
+        # & Invitations alongside greeting cards, invitations, wedding invitations
+        # and Christmas cards, and there is no separate Postcards subcategory for
+        # it to belong to instead - checked on the page.
+        #
+        # Roller Banners stays in Signage & Outdoor, where it started, so it is no
+        # longer in two emails.
     ),
     "signage-outdoor": dict(
         label="Signage & Outdoor", match=["Signage & Outdoor"],

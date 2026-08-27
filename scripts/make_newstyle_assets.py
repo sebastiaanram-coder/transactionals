@@ -192,6 +192,8 @@ CONTENTFUL = {
         ("https://images.ctfassets.net/wm1n7oady8a5/45mAeCy7whiITbBraKVvbE/944e85e0b355dc5df8deef4ae16f373d/jack_jones_2x.webp"),
     "brand-iqoniq.png":
         ("https://images.ctfassets.net/wm1n7oady8a5/2ywWhIH2IhV7rRYtlEA60v/2da266aed56a12fbfcb0da1f7e97774c/Untitled__1000_x_1000_px___1200_x_1000_px___1000_x_1000_px___1200_x_1000_px___19_.png"),
+    "cards-invitations.png":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/5d2mCZr0zsxxRbCHex6Ou7/eeab2469e4c93f2c74408a61bc5154df/Exclusive_finish_postcards_PDP_Copy_5.png"),
     "beach-flags.png":
         ("https://images.ctfassets.net/wm1n7oady8a5/2Wi021Wel4PV3cScm2cftd/e6ee6f4bd740a55e7ec047904cd1a778/beachflags_newsletter.png"),
     "pens.png":
@@ -307,6 +309,11 @@ JOBS = [
     ("@beach-flags.png", "tile-beach-flags", "tile", "signage-outdoor"),
     ("@pens.png", "feature-pens", "feature", "corporate-gifts"),
     ("@notebooks.png", "tile-notebooks", "tile", "corporate-gifts"),
+    # A gold-foil postcard with its reverse showing, on a kraft envelope. Postcards
+    # are sold under Cards & Invitations, alongside greeting cards and invitations,
+    # and there is no separate Postcards subcategory - so this represents the tile
+    # rather than standing in for it.
+    ("@cards-invitations.png", "tile-cards-invitations", "tile", "commercial-print"),
     # Winback. Both bottoms sit higher than the others - 86 and 103 of 255 rather
     # than the 30s - so both get a deeper fade to reach the ink without a visible
     # step. banners_setting2 has its subject high in frame at 0.70-0.85, which is

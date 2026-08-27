@@ -24,7 +24,7 @@
     "Folded Leaflets",
     "Poster Printing",
     "Business Cards",
-    "Roller Banners"
+    "Cards & Invitations"
    ],
    "label": "Commercial Print",
    "landing": "promotional-printing",
@@ -336,6 +336,45 @@
    "id": "6EwA08P0gEKeqAmYA62eG6",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/5geTr5nz3TOtzCTAh2ghws/24e4e657d05a3683589374f28b2e0d8d/menu-image-clothing-caps.png",
    "name_en": "Caps"
+  },
+  "cards-invitations": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Cards & Invitations",
+     "url": "https://www.helloprint.com/en-gb/cards-and-invites"
+    },
+    "en-IE": {
+     "name": "Cards & Invitations",
+     "url": "https://www.helloprint.com/en-ie/cards-and-invites"
+    },
+    "es-ES": {
+     "name": "Tarjetas e invitaciones",
+     "url": "https://www.helloprint.com/es-es/tarjetas-e-invitaciones"
+    },
+    "fr-BE": {
+     "name": "Cartes & invitations",
+     "url": "https://www.helloprint.com/fr-be/cartes-et-invitations"
+    },
+    "fr-FR": {
+     "name": "Cartes & invitations",
+     "url": "https://www.helloprint.com/fr-fr/cartes-et-invitations"
+    },
+    "it": {
+     "name": "Biglietti e Inviti",
+     "url": "https://www.helloprint.com/it-it/biglietti-e-inviti"
+    },
+    "nl": {
+     "name": "Kaarten & uitnodigingen",
+     "url": "https://www.helloprint.com/nl-nl/kaarten-en-uitnodigingen"
+    },
+    "nl-BE": {
+     "name": "Kaarten & uitnodigingen",
+     "url": "https://www.helloprint.com/nl-be/kaarten-en-uitnodigingen"
+    }
+   },
+   "id": "3XwRHInZLiAGcI2QqucqUG",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6OsG9z6x2gmcAYyYokAaau/d675ab5252ea5400fe4829ef583a0b27/Greeting-card-product-image.png",
+   "name_en": "Cards & Invitations"
   },
   "clothing": {
    "by_locale": {

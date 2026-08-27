@@ -142,7 +142,7 @@ CATEGORIES = [
             "Folded Leaflets": "tile-folded-leaflets",
             "Poster Printing": "tile-posters",
             "Business Cards": "tile-business-cards",
-            "Roller Banners": "tile-rollup",
+            "Cards & Invitations": "tile-cards-invitations",
         },
         grid_h="More ways to advertise it",
         grid_sub="Four more formats, in the quantities businesses actually order.",
