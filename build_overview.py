@@ -465,8 +465,8 @@ EMAIL_DETAIL = {
 # their own version string and their own date, and by the time anyone noticed they
 # disagreed. A document people are asked to sign off cannot contradict itself about
 # which version it is.
-VERSION = "v0.8"
-VERSION_DATE = "26 Aug 2026"
+VERSION = "v0.9"
+VERSION_DATE = "27 Aug 2026"
 
 ISSUES = [
  "The our-promises page states \u201cArtwork Check: we\u2019ll review your files to make sure they\u2019re print-perfect\u201d, which is the promise /always-a-perfect-design makes and the cart contradicts. The promise exists at company level, so the cart wording is the outlier \u2014 fixing that would let the print expert email offer file checking properly instead of writing around it.",
@@ -1191,7 +1191,20 @@ function sizeShell(shell){
     const d = ifr.contentDocument;
     h = Math.max(d.documentElement.scrollHeight, d.body ? d.body.scrollHeight : 0);
   }catch(e){ h = parseInt(ifr.style.height, 10) || 900; }
-  if (!h) return false;
+  // A real email is hundreds of pixels tall. Anything under 50 means the document
+  // is empty or still parsing, so size it now and come back rather than leaving a
+  // sliver on screen for good.
+  if (h < 50) {
+    let st = 'complete';
+    try{ st = ifr.contentDocument.readyState; }catch(e){}
+    if (st !== 'complete' || h === 0) {
+      if (!shell.dataset.retries || +shell.dataset.retries < 20) {
+        shell.dataset.retries = (+(shell.dataset.retries || 0) + 1);
+        setTimeout(() => sizeShell(shell), 150);
+      }
+      if (!h) return false;
+    }
+  }
   ifr.style.height = h + 'px';
   shell.style.height = Math.ceil(h * sc) + 'px';
   return true;
@@ -1209,7 +1222,10 @@ function mountPreviews(pageEl){
     const sc = Math.min(1, disp / vw);
     const ifr = document.createElement('iframe');
     ifr.setAttribute('sandbox','allow-same-origin allow-popups allow-popups-to-escape-sandbox');
-    ifr.loading = 'lazy';
+    // NOT loading='lazy'. A lazy iframe inside a hidden tab never starts loading,
+    // so sizeShell measured an empty about:srcdoc at 2px, set the shell to 2px and
+    // was never called again - the load event had already come and gone. There is
+    // no network fetch to defer anyway: srcdoc content is already in this page.
     ifr.style.width = vw + 'px';
     ifr.style.transform = 'scale(' + sc + ')';
     ifr.addEventListener('load', () => {
@@ -1391,6 +1407,11 @@ for fn in ("switchCat", "openFullCat", "copyLinkCat", "activeCatKey", "sizeShell
         bad.append("the %s function is missing from the page" % fn)
 # A HIDDEN TAB CANNOT BE MEASURED, so showing one has to size it. Without this
 # call every tab except the one open at load rendered as an empty box.
+# LAZY LOADING BROKE THIS ONCE. A hidden lazy iframe has an empty document, so it
+# measures a couple of pixels and the tab stays blank.
+if "loading = 'lazy'" in doc or 'loading="lazy"' in doc:
+    bad.append("a preview iframe is lazy-loaded, which leaves hidden tabs blank")
+
 _sc_body = doc.split("function switchCat", 1)[-1].split("\nfunction ", 1)[0]
 if "forEach(sizeShell)" not in _sc_body:
     bad.append("switchCat does not size the pane it just showed, so every tab "
