@@ -48,7 +48,7 @@ DOMAIN = "helloprint.com"
 # Languages we need a review in. Derived from real order volume: French and
 # Dutch are about three quarters of retail demand, English is a minority but
 # not small, Spanish and Italian are present.
-LANGUAGES = ["en", "nl", "fr", "es", "it"]
+LANGUAGES = ["en", "nl", "fr", "es", "it", "de"]
 
 # our category slug -> the tag values that mean it
 #
@@ -159,10 +159,14 @@ MODIFIERS = {
            "documentos", "agua", "alimentarios", "packaging"},
     "it": {"print", "stampa", "stampato", "stampati", "commercial",
            "spedizioni", "alimentare", "packaging"},
+    # German, populated the same way as the rest: read off --vocab before adding.
+    "de": {"print", "druck", "drucken", "bedruckt", "bedruckte", "papier",
+           "commercial", "packaging", "verpackung"},
 }
 
 LANG_LOCALES = {"en": ["en-IE", "en-GB"], "nl": ["nl", "nl-BE"],
-                "fr": ["fr-FR", "fr-BE"], "es": ["es-ES"], "it": ["it"]}
+                "fr": ["fr-FR", "fr-BE"], "es": ["es-ES"], "it": ["it"],
+                "de": ["de-DE"]}
 
 # tag slug -> the email whose tiles supply its vocabulary
 TAG_TO_EMAIL = {

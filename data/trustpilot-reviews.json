@@ -7,10 +7,41 @@
   "nl",
   "fr",
   "es",
-  "it"
+  "it",
+  "de"
  ],
  "review_total": 34394,
  "reviews": {
+  "clothing-textiles|de": {
+   "author": "Karsten Reimer",
+   "author_location": "",
+   "created_at": "2025-01-13T14:17:16Z",
+   "id": "6785044c4bcbb1fe531dc341",
+   "language": "de",
+   "match_tier": "tagged only, generic wording",
+   "product_words": 0,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "bandcmyecopolo65355pu428u"
+    },
+    {
+     "group": "generic",
+     "value": "Clothing & Textiles"
+    },
+    {
+     "group": "generic",
+     "value": "All Polos"
+    },
+    {
+     "group": "generic",
+     "value": "Polos"
+    }
+   ],
+   "text": "Wie immer schnelle Lieferung, guter Druck und gute Ware. Bin und bleibe Stammkunde.",
+   "title": "Wie immer schnelle Lieferung"
+  },
   "clothing-textiles|en": {
    "author": "Xenia",
    "author_location": "",
@@ -126,6 +157,36 @@
    "tags": [],
    "text": "Goede kwaliteit van de bedrukte T-shirts, vlotte en snelle levering. Perfect!",
    "title": "Goede kwaliteit van de bedrukte…"
+  },
+  "commercial-print|de": {
+   "author": "Heidi",
+   "author_location": "",
+   "created_at": "2025-01-12T14:52:59Z",
+   "id": "6783bb2bb3b07af6ae85a75a",
+   "language": "de",
+   "match_tier": "tagged+relevant",
+   "product_words": 1,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "standardflyers"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Flyers"
+    },
+    {
+     "group": "generic",
+     "value": "Flyers"
+    }
+   ],
+   "text": "Flyer von höchster Qualität, super Preis und zügige Lieferung.",
+   "title": "Top!!!"
   },
   "commercial-print|en": {
    "author": "Wim",
@@ -297,6 +358,36 @@
    "text": "Goede kwaliteit en stevige visitekaartjes + snelle levering.",
    "title": "Goede kwaliteit en stevige…"
   },
+  "corporate-gifts|de": {
+   "author": "Andreas",
+   "author_location": "",
+   "created_at": "2025-01-09T11:05:41Z",
+   "id": "677f91653de834326f6cff7c",
+   "language": "de",
+   "match_tier": "tagged only, generic wording",
+   "product_words": 0,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "lisbaocorkmousepad"
+    },
+    {
+     "group": "generic",
+     "value": "Corporate Gifts"
+    },
+    {
+     "group": "generic",
+     "value": "All Mousepads"
+    },
+    {
+     "group": "generic",
+     "value": "Mousepads"
+    }
+   ],
+   "text": "Persönlicher Kontakt und Kommunikation mit den Designexperten.",
+   "title": "Persönlicher Kontakt und Kommunikation…"
+  },
   "corporate-gifts|en": {
    "author": "Jamila",
    "author_location": "",
@@ -407,6 +498,36 @@
    ],
    "text": "Product zag er prima uit en is veel sneller geleverd dan verwacht.",
    "title": "Product zag er prima uit."
+  },
+  "labels|de": {
+   "author": "Marius",
+   "author_location": "",
+   "created_at": "2022-10-19T22:49:16Z",
+   "id": "635062cc377e522e3153c340",
+   "language": "de",
+   "match_tier": "tagged+relevant",
+   "product_words": 1,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "stickers"
+    },
+    {
+     "group": "generic",
+     "value": "Labels"
+    },
+    {
+     "group": "generic",
+     "value": "All Labels on Sheet"
+    },
+    {
+     "group": "generic",
+     "value": "Stickers"
+    }
+   ],
+   "text": "Sehr guter Kundenservice, fixe Lieferung, hochwertige Aufkleber. Äußerst zufrieden",
+   "title": "Sehr gute Arbeit"
   },
   "labels|en": {
    "author": "Bob W Christian",
@@ -549,6 +670,36 @@
    "text": "Veel begrip voor mijn persoonlijke situatie en bestelling van stickers was zo gepiept en had ik in no time in huis. Top bedrijf en meedenkende mensen!!",
    "title": "Altijd goed!"
   },
+  "packaging|de": {
+   "author": "Marius",
+   "author_location": "",
+   "created_at": "2022-10-19T22:49:16Z",
+   "id": "635062cc377e522e3153c340",
+   "language": "de",
+   "match_tier": "relevant, tagged labels",
+   "product_words": 1,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "stickers"
+    },
+    {
+     "group": "generic",
+     "value": "Labels"
+    },
+    {
+     "group": "generic",
+     "value": "All Labels on Sheet"
+    },
+    {
+     "group": "generic",
+     "value": "Stickers"
+    }
+   ],
+   "text": "Sehr guter Kundenservice, fixe Lieferung, hochwertige Aufkleber. Äußerst zufrieden",
+   "title": "Sehr gute Arbeit"
+  },
   "packaging|en": {
    "author": "TL",
    "author_location": "",
@@ -676,6 +827,40 @@
    "tags": [],
    "text": "Veel begrip voor mijn persoonlijke situatie en bestelling van stickers was zo gepiept en had ik in no time in huis. Top bedrijf en meedenkende mensen!!",
    "title": "Altijd goed!"
+  },
+  "signage-outdoor|de": {
+   "author": "Melina",
+   "author_location": "",
+   "created_at": "2026-03-09T11:39:43Z",
+   "id": "69ae955f228d23e90e3dacc3",
+   "language": "de",
+   "match_tier": "tagged+relevant",
+   "product_words": 2,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "rollupbannersv2"
+    },
+    {
+     "group": "generic",
+     "value": "Signage & Outdoor"
+    },
+    {
+     "group": "generic",
+     "value": "All Banners"
+    },
+    {
+     "group": "generic",
+     "value": "Roll-up Banners"
+    }
+   ],
+   "text": "Ich bin super zufrieden mit meinem Roll Up Banner Die Qualität ist super, die Lieferung schnell und unkompliziert und die generelle Erstellung über canva war ein absolutes Geschenk. Danke",
+   "title": "Ich bin super zufrieden mit meinem Roll…"
   },
   "signage-outdoor|en": {
    "author": "Theresa",
@@ -838,6 +1023,36 @@
    ],
    "text": "Super snelle service, op 2 dagen de banners binnen en perfect bedrukt!",
    "title": "Super snelle service"
+  },
+  "stationery|de": {
+   "author": "Dana",
+   "author_location": "",
+   "created_at": "2023-10-19T22:06:59Z",
+   "id": "65318c63942f0784a0a22ec3",
+   "language": "de",
+   "match_tier": "tagged only, generic wording",
+   "product_words": 0,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "bookmarks"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Stationery"
+    },
+    {
+     "group": "generic",
+     "value": "Bookmarks"
+    }
+   ],
+   "text": "Schnelle Lieferung. Top Preis-Leistungsverhältnis. Sehr gute Qualität.",
+   "title": "Perfekt"
   },
   "stationery|en": {
    "author": "QUINTIN HOWATSON",

@@ -48,6 +48,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_li
 import rawimg as ri
 import reviews as rv
 import subcategories as sc
+import i18n
 
 
 def esc(t):
@@ -534,8 +535,8 @@ BODY = """
     </div>
 
     <div class="{P}-band">
-      <span class="{P}-bandeye">WHAT CUSTOMERS SAY</span>
-      <img class="{P}-bstars" src="{IMG_STARS}" alt="5 out of 5 on Trustpilot" width="132" height="28">
+      <span class="{P}-bandeye">{T_REVIEWS}</span>
+      <img class="{P}-bstars" src="{IMG_STARS}" alt="{T_ALT_STARS}" width="132" height="28">
       {REVIEW}
     </div>
 
@@ -547,17 +548,17 @@ BODY = """
 
 {BRANDS}
     <div class="{P}-gk">
-      <span class="{P}-gkeye">GOOD TO KNOW</span>
+      <span class="{P}-gkeye">{T_GTK}</span>
       <p class="{P}-gkh">{B_TITLE}</p>
       <p class="{P}-gkb">{B_BODY}</p>
     </div>
 
     <div class="{P}-help">
-      <img src="{IMG_AGENTS}" alt="Three Helloprint print experts" width="112" height="44">
-      <span class="{P}-helpttl">Not sure which one you need?</span>
-      <p class="{P}-helptx">Tell a print expert what the job is for and they will tell you which option fits, what it costs and how quickly it can be with you. Reply to this email and it reaches them.</p>
+      <img src="{IMG_AGENTS}" alt="{T_ALT_AGENTS}" width="112" height="44">
+      <span class="{P}-helpttl">{T_HELP_TITLE}</span>
+      <p class="{P}-helptx">{T_HELP_BODY}</p>
       <span class="{P}-helplinks">
-        <a href="mailto:hello@helloprint.com">E-mail us</a><span>&middot;</span><a href="{CS}">Chat with us</a><span>&middot;</span><a href="{CS}">Help Centre</a>
+        <a href="mailto:hello@helloprint.com">{T_HELP_MAIL}</a><span>&middot;</span><a href="{CS}">{T_HELP_CHAT}</a><span>&middot;</span><a href="{CS}">{T_HELP_CENTRE}</a>
       </span>
     </div>
 
@@ -588,6 +589,67 @@ BODY = """
 """
 
 
+# ---------------------------------------------------------------- translation
+#
+# TWO OUTPUTS FROM ONE SOURCE. The Klaviyo file carries every language behind a
+# flat exact-match switch on event.Locale, the mechanism every template here
+# already uses. The previews are one file per language, so a colleague can read a
+# real rendered email in their own language rather than proofreading a table of
+# strings.
+#
+# NINE BRANCHES AND NO `or`. Grouping locales that share a translation would
+# halve the size:
+#
+#     {% if event.Locale == 'nl-NL' or event.Locale == 'nl-BE' %}
+#
+# but `or` inside an {% if %} has never been rendered in this account, and neither
+# has `|slice`. An exact-match elif chain has, including an 83-branch one. The
+# translation programme is not where an unverified mechanism gets introduced.
+# The verbosity is free anyway: Klaviyo renders before it sends, so exactly one
+# branch reaches the reader.
+#
+# A string that comes out identical in all nine locales is emitted plain, with no
+# conditional at all, which keeps brand terms and numbers from generating nine
+# copies of themselves.
+TR_MISSING, TR_DRIFT = [], []
+
+
+def translator(cat_slug, live, locale=None):
+    """tr(key, english) -> one locale's text, or a nine-way switch."""
+    def note(key, english):
+        miss = i18n.missing(cat_slug, key)
+        if miss:
+            TR_MISSING.append((cat_slug, key, miss))
+        drifted = i18n.source_drift(cat_slug, key, english)
+        if drifted:
+            TR_DRIFT.append((cat_slug, key, english, drifted))
+
+    def tr(key, english, escape=None):
+        # ESCAPE AFTER TRANSLATING, NEVER BEFORE. Passing esc(english) in made the
+        # drift check compare an escaped string against the raw one stored in the
+        # file, so every string containing an apostrophe reported itself as
+        # changed. It also cannot be done afterwards on the live output, because by
+        # then the string is a Django switch and escaping would eat the tags.
+        e = escape or (lambda x: x)
+        note(key, english)
+        if not live:
+            return e(i18n.get(cat_slug, key, locale or "en-GB", english))
+        texts = [(loc, e(i18n.get(cat_slug, key, loc, english))) for loc in i18n.LOCALES]
+        if len({t for _, t in texts}) == 1:
+            return texts[0][1]
+        # EVERY LOCALE GETS ITS OWN BRANCH AND {% else %} IS ENGLISH. Using the
+        # last locale as the else saved one branch and meant any locale we do not
+        # know about - a new market, en-US, an empty Locale - would have been
+        # served Italian. The fallback has to be the source language.
+        out = ""
+        for i, (loc, txt) in enumerate(texts):
+            out += "{%% %s event.Locale == '%s' %%}%s" % (
+                "if" if i == 0 else "elif", loc, txt)
+        return out + "{%% else %%}%s{%% endif %%}" % e(
+            i18n.get(cat_slug, key, i18n.FALLBACK_LOCALE, english))
+    return tr
+
+
 def img_for(cat, sub, shape, live):
     """The new-style photograph if the set has one of this thing, else the
     category's Contentful search image.
@@ -608,7 +670,7 @@ def headers_of(cat):
     return cat.get("headers") or [dict(key="", style="plain", hero=None)]
 
 
-def header_block(P, cat, live, hdr, home):
+def header_block(P, cat, live, hdr, home, tr=None):
     """The whole dark header, in one of two shapes.
 
     photo  the photograph runs to the top of the card, carrying the card's own
@@ -624,15 +686,19 @@ def header_block(P, cat, live, hdr, home):
              '      <h1 class="%s-h1">%s</h1>\n'
              '      <p class="%s-sub">%s</p>\n'
              '      <a class="%s-cta" href="%s">%s</a>\n'
-             % (P, cat["_eyebrow"], P, cat["h1"], P, cat["sub"],
-                P, cat["_first_url"], CTA))
+             % (P, cat["_eyebrow"] if tr is None else tr("eyebrow", cat["_eyebrow"]),
+                P, cat["h1"] if tr is None else tr("h1", cat["h1"]),
+                P, cat["sub"] if tr is None else tr("sub", cat["sub"]),
+                P, cat["_first_url"], CTA if tr is None else tr("cta.see_range", CTA)))
 
     pic = ""
     if hdr.get("hero"):
         pic = ('    <div class="%s-%s"><a href="%s"><img src="%s" alt="%s" '
                'width="600"></a></div>\n'
                % (P, "hero", cat["_first_url"],
-                  photo(hdr["hero"], live), esc(cat["hero_alt"])))
+                  photo(hdr["hero"], live),
+                  esc(cat["hero_alt"]) if tr is None
+                  else tr("hero_alt", cat["hero_alt"], esc)))
 
     if hdr["style"] == "photo" and pic:
         return (pic
@@ -651,7 +717,7 @@ def url_of(sub, live):
     return sc.locale_switch(sub, "url") if live else sc.preview_field(sub, "url")
 
 
-def feature(P, cat, sub, i, live):
+def feature(P, cat, sub, i, live, tr=None):
     """Image beside prose, sides alternating. Not a product card by design: no
     price, no border, no button - the Welcome flow's content pattern, which is
     what stops these reading as a shop shelf."""
@@ -673,7 +739,8 @@ def feature(P, cat, sub, i, live):
     text = ('<td class="%s-ftx" valign="top" dir="ltr">'
             '<p class="%s-fh">%s</p><p class="%s-fb">%s</p>'
             '<a class="%s-fl" href="%s">%s &rarr;</a></td>'
-            % (P, P, name_of(sub, live), P, esc(cat["body"][sub]), P, url_of(sub, live), CTA))
+            % (P, P, name_of(sub, live), P, esc(cat["body"][sub]) if tr is None else tr("body.%s" % sub, cat["body"][sub], esc),
+               P, url_of(sub, live), CTA if tr is None else tr("cta.see_range", CTA)))
     # dir goes on the TABLE, not the tr - a tr does not establish the direction
     # context the cell layout uses, and the flip silently did nothing there.
     return ('<table class="%s-ftbl" role="presentation" cellpadding="0" '
@@ -737,18 +804,41 @@ def brands_block(P, cat, live):
                                    CELLS=cells, URL=cat["_brands_url"], LINK=b["link"])
 
 
-def review_block(P, cat, live):
-    """A real review per language, or a visible placeholder. Never translated."""
+def review_block(P, cat, live, locale=None, tr=None):
+    """A real review per language, or a visible placeholder. NEVER translated.
+
+    The quote is what a named person actually wrote. Running it through a
+    translator would put a sentence in their mouth they never said, so the body is
+    swapped for a review written in that language, or the placeholder shows. Only
+    the scaffolding around it - "out of 5 on Trustpilot", the placeholder wording -
+    is translated.
+
+    THE SWITCH USED TO BE ON A FILTER. It was:
+
+        {% if event.Locale|slice:":2" == "nl" %}
+
+    and `|slice` inside an {% if %} comparison has never been rendered in this
+    account. If it does not evaluate, every locale falls through to {% else %} and
+    every one of these emails shows the placeholder instead of a review - a quiet
+    failure, not a loud one, which is the worst kind. It is now an exact-match
+    chain on event.Locale, the mechanism every other switch here uses and the one
+    that has actually been rendered. Same output, no unverified dependency.
+    """
+    def t(key, english):
+        return english if tr is None else tr(key, english)
+
     def quote(r):
         return ('<span class="%s-bq">&ldquo;%s&rdquo;</span>'
                 '<span class="%s-brule">&nbsp;</span>'
                 '<span class="%s-bby">%s</span>'
-                % (P, esc(r["text"]), P, P, rv.attribution(r)))
+                % (P, esc(r["text"]), P, P,
+                   rv.attribution(r, t("review.outof", "out of 5 on Trustpilot"))))
 
     def placeholder():
         return ('<span class="%s-bph">Trustpilot quote to be added. %s.</span>'
-                '<span class="%s-bby">Verified Trustpilot review</span>'
-                % (P, cat["review_hint"][0].upper() + cat["review_hint"][1:], P))
+                '<span class="%s-bby">%s</span>'
+                % (P, cat["review_hint"][0].upper() + cat["review_hint"][1:], P,
+                   t("review.verified", "Verified Trustpilot review")))
 
     # the merged Labels & Packaging email draws on either half's reviews
     slugs = ["labels", "packaging"] if cat["slug"] == "labels-packaging" else [cat["slug"]]
@@ -758,22 +848,31 @@ def review_block(P, cat, live):
             if l not in pick:
                 pick[l] = rv.get(s, l); langs.append(l)
     if not live:
-        r = pick.get("en") or (pick[langs[0]] if langs else None)
+        want = i18n.LOCALE_LANG.get(locale or "en-GB", "en")
+        r = pick.get(want) or pick.get("en")
         return quote(r) if r else placeholder()
     if not langs:
         return placeholder()
+    # one branch per LOCALE, carrying that locale's language's review
+    # same rule as the prose switch: an unknown locale falls back to English,
+    # never to whichever language happened to be last in the list
     out = ""
-    for i, l in enumerate(langs):
-        kw = "if" if i == 0 else "elif"
-        out += '{%% %s %s == "%s" %%}%s' % (kw, rv.LANG_EXPR, l, quote(pick[l]))
-    return out + "{%% else %%}%s{%% endif %%}" % placeholder()
+    for i, loc in enumerate(i18n.LOCALES):
+        lang = i18n.LOCALE_LANG[loc]
+        body = quote(pick[lang]) if lang in pick else placeholder()
+        out += "{%% %s event.Locale == '%s' %%}%s" % (
+            "if" if i == 0 else "elif", loc, body)
+    fb = quote(pick["en"]) if "en" in pick else placeholder()
+    return out + "{%% else %%}%s{%% endif %%}" % fb
 
 
-def build(cat, live, hdr=None):
+def build(cat, live, hdr=None, locale=None):
     P = "hp-cat" + cat["code"]
+    tr = translator(cat["slug"], live, locale)
     conf = sc.emails()[cat["slug"]]
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
-    feats = "".join(feature(P, cat, s, i, live) for i, s in enumerate(conf["feature"]))
+    feats = "".join(feature(P, cat, s, i, live, tr)
+                for i, s in enumerate(conf["feature"]))
     home = "https://www.helloprint.com/en-ie/"
     # THE HEADER AND BOTH BUTTONS GO TO THE CATEGORY PAGE, not to a tile. They
     # used to go to url_of(feature[0]), which meant every reader of this email was
@@ -790,20 +889,35 @@ def build(cat, live, hdr=None):
                _eyebrow=cat.get("eyebrow") or conf["label"].upper())
     vals = dict(
         P=P, CSS=CSS % {"P": P}, LABEL=conf["label"],
-        H1=cat["h1"], SUB=cat["sub"], PRE=cat["pre"], CTA=CTA,
+        H1=tr("h1", cat["h1"]), SUB=tr("sub", cat["sub"]),
+        PRE=tr("pre", cat["pre"]), CTA=tr("cta.see_range", CTA),
         FEATURES=feats, TILES=grid(P, cat, conf["grid"], live),
         BRANDS=brands_block(P, cat, live),
-        HEADER=header_block(P, cat, live, hdr or headers_of(cat)[0], home),
-        B_TITLE=cat["block"][0], B_BODY=cat["block"][1],
-        GRID_H=cat["grid_h"], GRID_SUB=cat["grid_sub"],
-        SECT_H=cat.get("sect_h") or ("Popular in %s" % conf["label"]),
-        SECT_SUB=cat.get("sect_sub")
-        or "Among the most ordered in this category by businesses like yours.",
-        REVIEW=review_block(P, cat, live),
+        HEADER=header_block(P, cat, live, hdr or headers_of(cat)[0], home, tr),
+        B_TITLE=tr("block.title", cat["block"][0]),
+        B_BODY=tr("block.body", cat["block"][1]),
+        GRID_H=tr("grid_h", cat["grid_h"]), GRID_SUB=tr("grid_sub", cat["grid_sub"]),
+        SECT_H=tr("sect_h", cat.get("sect_h") or ("Popular in %s" % conf["label"])),
+        SECT_SUB=tr("sect_sub", cat.get("sect_sub")
+                    or "Among the most ordered in this category by businesses like yours."),
+        REVIEW=review_block(P, cat, live, locale, tr),
         FIRST_URL=cat["_first_url"],   # the bottom button, same destination
         HOME=home,
         CS="https://www.helloprint.com/en-ie/cs",
-        UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
+        T_REVIEWS=tr("band.reviews", "WHAT CUSTOMERS SAY"),
+        T_GTK=tr("band.goodtoknow", "GOOD TO KNOW"),
+        T_ALT_STARS=tr("alt.stars", "5 out of 5 on Trustpilot"),
+        T_ALT_AGENTS=tr("alt.agents", "Three Helloprint print experts"),
+        T_HELP_TITLE=tr("help.title", "Not sure which one you need?"),
+        T_HELP_BODY=tr("help.body",
+            "Tell a print expert what the job is for and they will tell you which "
+            "option fits, what it costs and how quickly it can be with you. Reply "
+            "to this email and it reaches them."),
+        T_HELP_MAIL=tr("help.email", "E-mail us"),
+        T_HELP_CHAT=tr("help.chat", "Chat with us"),
+        T_HELP_CENTRE=tr("help.centre", "Help Centre"),
+        UNSUB=(("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe")) if live
+               else '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe")),
     )
     vals.update(assets)
     return BODY.format(**vals)
@@ -945,6 +1059,19 @@ for cat in CATEGORIES:
         }
         open(os.path.join(OUT, "category-%s%s-proposed.html" % (cat["slug"], tag)),
              "w", encoding="utf-8").write(pdoc)
+        # ONE PREVIEW PER LANGUAGE, so a colleague proofreads a rendered email in
+        # their own language rather than a spreadsheet of strings. English keeps
+        # the plain filename so every existing link still resolves. The locale
+        # picked for each language is its primary market; a Flemish or
+        # Belgian-French override would need its own file, and none exist yet.
+        for lg in i18n.LANGS:
+            if lg == i18n.SOURCE:
+                continue
+            loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == lg)
+            lbody = build(cat, False, hdr, loc)
+            open(os.path.join(OUT, "category-%s%s-%s-proposed.html"
+                              % (cat["slug"], tag, lg)), "w", encoding="utf-8").write(
+                PREVIEW_DOC % {"label": "%s (%s)" % (label, lg), "body": lbody})
         open(os.path.join(OUT, "category-%s%s-klaviyo.html" % (cat["slug"], tag)),
              "w", encoding="utf-8").write(kdoc)
         written.append((label, len(conf["feature"]), len(conf["grid"]),
@@ -1127,6 +1254,32 @@ if len(CATEGORIES) != len(sc.emails()):
 print("%-22s %8s %6s  %9s %9s" % ("email", "feature", "grid", "preview", "klaviyo"))
 for label, nf, ng, a, b in written:
     print("%-22s %8d %6d  %9d %9d" % (label, nf, ng, a, b))
+# ---- translation coverage, the thing a proofreader needs to see
+if TR_DRIFT:
+    seen = set()
+    for slug, key, now, stored in TR_DRIFT:
+        if (slug, key) in seen:
+            continue
+        seen.add((slug, key))
+        errs.append("%s: English for %r changed since it was translated. Now %r, "
+                    "translated from %r. Update data/translations.json."
+                    % (slug, key, now[:48], stored[:48]))
+
+need = {}
+for slug, key, miss in TR_MISSING:
+    need.setdefault(slug, {}).setdefault(key, miss)
+if need:
+    tot = sum(len(v) for v in need.values())
+    print("\ntranslations still to write: %d strings" % tot)
+    for slug in sorted(need):
+        by = {}
+        for key, miss in need[slug].items():
+            for m in miss:
+                by.setdefault(m, 0)
+                by[m] += 1
+        print("  %-20s %s" % (slug, ", ".join("%s %d" % (l, n)
+                                              for l, n in sorted(by.items()))))
+
 print("\n%d emails | categories %s | reviews %s, %d cached"
       % (len(written), sc.fetched(), rv.fetched() or "NOT FETCHED", rv.count()))
 for w in dict.fromkeys(warns):

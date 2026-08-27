@@ -35,7 +35,8 @@ OUT = os.path.join(ROOT, "data", "subcategories.json")
 
 # Contentful locale -> the market segment in a helloprint.com URL
 MARKET_PATH = {"en-IE": "en-ie", "en-GB": "en-gb", "nl": "nl-nl", "nl-BE": "nl-be",
-               "fr-FR": "fr-fr", "fr-BE": "fr-be", "es-ES": "es-es", "it": "it-it"}
+               "fr-FR": "fr-fr", "fr-BE": "fr-be", "es-ES": "es-es", "it": "it-it",
+               "de-DE": "de-de"}
 LOCALES = list(MARKET_PATH)
 
 # The five emails. Packaging was folded into Labels: on its own it was 77k of

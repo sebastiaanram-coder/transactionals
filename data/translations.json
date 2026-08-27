@@ -1,0 +1,214 @@
+{
+ "_shared": {
+  "cta.see_range": {
+   "en": "See the range",
+   "nl": "Bekijk het assortiment",
+   "fr": "Voir la gamme",
+   "de": "Zum Sortiment",
+   "es": "Ver la gama",
+   "it": "Scopri la gamma"
+  },
+  "band.reviews": {
+   "en": "WHAT CUSTOMERS SAY",
+   "nl": "WAT KLANTEN ZEGGEN",
+   "fr": "CE QUE DISENT NOS CLIENTS",
+   "de": "WAS KUNDEN SAGEN",
+   "es": "LO QUE DICEN LOS CLIENTES",
+   "it": "COSA DICONO I CLIENTI"
+  },
+  "band.goodtoknow": {
+   "en": "GOOD TO KNOW",
+   "nl": "GOED OM TE WETEN",
+   "fr": "BON À SAVOIR",
+   "de": "GUT ZU WISSEN",
+   "es": "CONVIENE SABER",
+   "it": "DA SAPERE"
+  },
+  "help.title": {
+   "en": "Not sure which one you need?",
+   "nl": "Weet je niet welke je nodig hebt?",
+   "fr": "Vous ne savez pas lequel choisir ?",
+   "de": "Nicht sicher, was Sie brauchen?",
+   "es": "¿No sabes cuál necesitas?",
+   "it": "Non sai quale ti serve?"
+  },
+  "help.body": {
+   "en": "Tell a print expert what the job is for and they will tell you which option fits, what it costs and how quickly it can be with you. Reply to this email and it reaches them.",
+   "nl": "Vertel een printexpert waarvoor het is en zij vertellen je welke optie past, wat het kost en hoe snel je het in huis hebt. Antwoord op deze mail en je bericht komt bij hen terecht.",
+   "fr": "Dites à un expert en impression à quoi servira le travail : il vous dira quelle option convient, ce qu'elle coûte et en combien de temps vous l'aurez. Répondez à cet e-mail et votre message leur parvient.",
+   "de": "Sagen Sie einem Druckexperten, wofür der Auftrag ist. Er sagt Ihnen, welche Option passt, was sie kostet und wie schnell Sie sie haben. Antworten Sie einfach auf diese E-Mail, dann landet Ihre Nachricht direkt bei ihm.",
+   "es": "Cuéntale a un experto en impresión para qué es el trabajo y te dirá qué opción encaja, cuánto cuesta y en cuánto tiempo lo tendrás. Responde a este correo y tu mensaje les llega directamente.",
+   "it": "Racconta a un esperto di stampa a cosa serve il lavoro e ti dirà quale opzione va bene, quanto costa e in quanto tempo lo avrai. Rispondi a questa email e il messaggio arriva direttamente a loro."
+  },
+  "help.email": {
+   "en": "E-mail us",
+   "nl": "Mail ons",
+   "fr": "Écrivez-nous",
+   "de": "Schreiben Sie uns",
+   "es": "Escríbenos",
+   "it": "Scrivici"
+  },
+  "help.chat": {
+   "en": "Chat with us",
+   "nl": "Chat met ons",
+   "fr": "Chattez avec nous",
+   "de": "Chatten Sie mit uns",
+   "es": "Chatea con nosotros",
+   "it": "Chatta con noi"
+  },
+  "help.centre": {
+   "en": "Help Centre",
+   "nl": "Helpcentrum",
+   "fr": "Centre d'aide",
+   "de": "Hilfe-Center",
+   "es": "Centro de ayuda",
+   "it": "Centro assistenza"
+  },
+  "foot.unsub": {
+   "en": "Unsubscribe",
+   "nl": "Afmelden",
+   "fr": "Se désabonner",
+   "de": "Abmelden",
+   "es": "Darse de baja",
+   "it": "Annulla iscrizione"
+  },
+  "alt.stars": {
+   "en": "5 out of 5 on Trustpilot",
+   "nl": "5 uit 5 op Trustpilot",
+   "fr": "5 sur 5 sur Trustpilot",
+   "de": "5 von 5 auf Trustpilot",
+   "es": "5 de 5 en Trustpilot",
+   "it": "5 su 5 su Trustpilot"
+  },
+  "alt.agents": {
+   "en": "Three Helloprint print experts",
+   "nl": "Drie printexperts van Helloprint",
+   "fr": "Trois experts en impression Helloprint",
+   "de": "Drei Druckexperten von Helloprint",
+   "es": "Tres expertos en impresión de Helloprint",
+   "it": "Tre esperti di stampa Helloprint"
+  },
+  "review.outof": {
+   "en": "out of 5 on Trustpilot",
+   "nl": "uit 5 op Trustpilot",
+   "fr": "sur 5 sur Trustpilot",
+   "de": "von 5 auf Trustpilot",
+   "es": "de 5 en Trustpilot",
+   "it": "su 5 su Trustpilot"
+  },
+  "review.verified": {
+   "en": "Verified Trustpilot review",
+   "nl": "Geverifieerde Trustpilot-review",
+   "fr": "Avis Trustpilot vérifié",
+   "de": "Verifizierte Trustpilot-Bewertung",
+   "es": "Opinión verificada de Trustpilot",
+   "it": "Recensione Trustpilot verificata"
+  }
+ },
+ "commercial-print": {
+  "eyebrow": {
+   "en": "PROMOTIONAL PRINT",
+   "nl": "PROMOTIEDRUKWERK",
+   "fr": "IMPRESSION PROMOTIONNELLE",
+   "de": "WERBEDRUCK",
+   "es": "IMPRESIÓN PROMOCIONAL",
+   "it": "STAMPA PROMOZIONALE"
+  },
+  "h1": {
+   "en": "What are you promoting next?",
+   "nl": "Wat ga je hierna promoten?",
+   "fr": "Quelle est votre prochaine campagne ?",
+   "de": "Was bewerben Sie als Nächstes?",
+   "es": "¿Qué vas a promocionar ahora?",
+   "it": "Cosa promuovi adesso?"
+  },
+  "sub": {
+   "en": "Whatever it is, this is the print that puts it in front of people, and what tends to go with what.",
+   "nl": "Wat het ook is, dit is het drukwerk dat het onder de ogen van mensen brengt, en wat er meestal bij besteld wordt.",
+   "fr": "Quoi que ce soit, voici les imprimés qui le mettent sous les yeux des gens, et ce qui va généralement avec.",
+   "de": "Was es auch ist: Das sind die Drucksachen, die es vor Augen bringen, und was meistens dazu bestellt wird.",
+   "es": "Sea lo que sea, este es el material impreso que lo pone delante de la gente, y lo que suele pedirse con ello.",
+   "it": "Qualunque cosa sia, questa è la stampa che la mette davanti alle persone, e quello che di solito si ordina insieme."
+  },
+  "pre": {
+   "en": "The print that puts your next campaign in front of people.",
+   "nl": "Het drukwerk dat je volgende campagne onder de ogen van mensen brengt.",
+   "fr": "Les imprimés qui mettent votre prochaine campagne sous les yeux des gens.",
+   "de": "Die Drucksachen, die Ihre nächste Kampagne vor Augen bringen.",
+   "es": "El material impreso que pone tu próxima campaña delante de la gente.",
+   "it": "La stampa che mette la tua prossima campagna davanti alle persone."
+  },
+  "sect_h": {
+   "en": "Where most campaigns start",
+   "nl": "Waar de meeste campagnes beginnen",
+   "fr": "Par où commencent la plupart des campagnes",
+   "de": "Womit die meisten Kampagnen anfangen",
+   "es": "Por dónde empiezan la mayoría de las campañas",
+   "it": "Da dove parte la maggior parte delle campagne"
+  },
+  "sect_sub": {
+   "en": "The two formats businesses order most when they have something to advertise.",
+   "nl": "De twee formaten die bedrijven het meest bestellen als ze iets te vertellen hebben.",
+   "fr": "Les deux formats que les entreprises commandent le plus quand elles ont quelque chose à annoncer.",
+   "de": "Die zwei Formate, die Unternehmen am häufigsten bestellen, wenn sie etwas zu bewerben haben.",
+   "es": "Los dos formatos que más piden las empresas cuando tienen algo que anunciar.",
+   "it": "I due formati che le aziende ordinano di più quando hanno qualcosa da pubblicizzare."
+  },
+  "grid_h": {
+   "en": "More ways to advertise it",
+   "nl": "Meer manieren om het te laten zien",
+   "fr": "D'autres façons de le faire savoir",
+   "de": "Weitere Wege, es zu bewerben",
+   "es": "Más formas de anunciarlo",
+   "it": "Altri modi per farlo sapere"
+  },
+  "grid_sub": {
+   "en": "Four more formats, in the quantities businesses actually order.",
+   "nl": "Nog vier formaten, in de aantallen die bedrijven echt bestellen.",
+   "fr": "Quatre autres formats, dans les quantités que les entreprises commandent vraiment.",
+   "de": "Vier weitere Formate, in den Mengen, die Unternehmen wirklich bestellen.",
+   "es": "Cuatro formatos más, en las cantidades que las empresas piden de verdad.",
+   "it": "Altri quattro formati, nelle quantità che le aziende ordinano davvero."
+  },
+  "hero_alt": {
+   "en": "Printed flyers fanned out on a dark green velvet sofa",
+   "nl": "Bedrukte flyers uitgewaaierd op een donkergroene fluwelen bank",
+   "fr": "Des flyers imprimés étalés sur un canapé en velours vert foncé",
+   "de": "Bedruckte Flyer aufgefächert auf einem dunkelgrünen Samtsofa",
+   "es": "Flyers impresos extendidos sobre un sofá de terciopelo verde oscuro",
+   "it": "Volantini stampati distesi su un divano di velluto verde scuro"
+  },
+  "body.Booklets & Brochures": {
+   "en": "A catalogue, a programme, a company report. Stapled for something short, bound with a spine for something thicker. Send the pages and we will tell you which binding suits the count.",
+   "nl": "Een catalogus, een programmaboekje, een jaarverslag. Geniet voor iets dunners, gebonden met een rug voor iets dikkers. Stuur de pagina's en wij zeggen welke binding bij dat aantal past.",
+   "fr": "Un catalogue, un programme, un rapport d'entreprise. Agrafé pour les petits volumes, relié avec un dos pour les plus épais. Envoyez les pages et nous vous dirons quelle reliure convient au nombre.",
+   "de": "Ein Katalog, ein Programmheft, ein Geschäftsbericht. Geheftet für wenige Seiten, mit Rücken gebunden für dickere. Schicken Sie uns die Seiten, dann sagen wir Ihnen, welche Bindung zur Seitenzahl passt.",
+   "es": "Un catálogo, un programa, una memoria de empresa. Grapado para lo más fino, encuadernado con lomo para lo más grueso. Envía las páginas y te decimos qué encuadernación encaja con esa cantidad.",
+   "it": "Un catalogo, un programma, un bilancio aziendale. Con punto metallico per poche pagine, con dorso per volumi più spessi. Mandaci le pagine e ti diciamo quale rilegatura va bene per quel numero."
+  },
+  "body.Leaflet Printing & Flyers": {
+   "en": "Still the cheapest way to put something in somebody's hand. A thousand rarely costs twice what five hundred does, so it is worth pricing the next quantity up before you order.",
+   "nl": "Nog altijd de goedkoopste manier om iemand iets in handen te geven. Duizend kost zelden het dubbele van vijfhonderd, dus het loont om het volgende aantal even door te rekenen voor je bestelt.",
+   "fr": "Toujours le moyen le moins cher de mettre quelque chose dans la main de quelqu'un. Mille coûtent rarement le double de cinq cents : ça vaut la peine de regarder le prix de la quantité au-dessus avant de commander.",
+   "de": "Immer noch der günstigste Weg, jemandem etwas in die Hand zu geben. Tausend kosten selten doppelt so viel wie fünfhundert, es lohnt sich also, vor der Bestellung die nächstgrößere Menge durchzurechnen.",
+   "es": "Sigue siendo la forma más barata de poner algo en la mano de alguien. Mil rara vez cuestan el doble que quinientos, así que merece la pena mirar el precio de la cantidad siguiente antes de pedir.",
+   "it": "È ancora il modo più economico per mettere qualcosa in mano a qualcuno. Mille raramente costano il doppio di cinquecento, quindi conviene guardare il prezzo della quantità successiva prima di ordinare."
+  },
+  "block.title": {
+   "en": "One design, several products",
+   "nl": "Één ontwerp, meerdere producten",
+   "fr": "Un seul visuel, plusieurs produits",
+   "de": "Ein Design, mehrere Produkte",
+   "es": "Un diseño, varios productos",
+   "it": "Un solo file, più prodotti"
+  },
+  "block.body": {
+   "en": "The same artwork can run across flyers, leaflets and posters. Send it once and we will fit it to each size rather than asking you to redo it.",
+   "nl": "Hetzelfde ontwerp kan op flyers, folders en posters. Stuur het één keer en wij passen het aan elk formaat aan, in plaats van jou te vragen het opnieuw te maken.",
+   "fr": "Le même visuel peut servir pour les flyers, les dépliants et les affiches. Envoyez-le une fois et nous l'adaptons à chaque format, plutôt que de vous demander de le refaire.",
+   "de": "Dasselbe Motiv passt auf Flyer, Falzflyer und Poster. Schicken Sie es einmal, dann passen wir es an jedes Format an, statt Sie darum zu bitten, es neu zu machen.",
+   "es": "El mismo diseño sirve para flyers, dípticos y carteles. Envíalo una vez y lo adaptamos a cada formato, en lugar de pedirte que lo rehagas.",
+   "it": "Lo stesso file va bene per volantini, pieghevoli e poster. Mandacelo una volta e lo adattiamo a ogni formato, invece di chiederti di rifarlo."
+  }
+ }
+}

@@ -42,7 +42,13 @@ CACHE = os.path.join(os.path.dirname(os.path.dirname(HERE)), "data",
 # is written in. Note this is deliberately NOT the market slice used for the
 # catalogue: fr-BE and nl-BE are one market but two languages, and a Belgian
 # reading in Dutch should get a Dutch review.
-LANG_EXPR = 'event.Locale|slice:":2"'
+# KEPT FOR REFERENCE, NO LONGER USED IN A CONDITIONAL. The review block used to
+# branch on this, and `|slice` inside an {% if %} comparison has never been
+# rendered in this account: if it does not evaluate, every locale falls through to
+# {% else %} and every email shows the placeholder instead of a review. That is a
+# silent failure, so the switch moved to exact matches on event.Locale, which is
+# what every other switch in these templates uses and has been rendered.
+LANG_EXPR = 'event.Locale|slice:":2"'   # unverified in an {% if %}; do not branch on it
 
 
 def _load():
@@ -74,13 +80,17 @@ def available(category_slug):
     return [l for l in languages() if get(category_slug, l)]
 
 
-def attribution(r):
+def attribution(r, outof="out of 5 on Trustpilot"):
     """The line under the quote. Star count and author are part of showing a
-    review honestly, so they are not optional."""
+    review honestly, so they are not optional.
+
+    The NAME is never translated and neither is the quote. Only the "out of 5 on
+    Trustpilot" scaffolding is, which the caller passes in.
+    """
     who = r["author"]
     if r.get("author_location"):
         who += ", " + r["author_location"]
-    return "%s &middot; %d out of 5 on Trustpilot" % (who, r["stars"])
+    return "%s &middot; %d %s" % (who, r["stars"], outof)
 
 
 def score():

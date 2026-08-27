@@ -108,9 +108,11 @@
   "fr-FR",
   "fr-BE",
   "es-ES",
-  "it"
+  "it",
+  "de-DE"
  ],
  "market_path": {
+  "de-DE": "de-de",
   "en-GB": "en-gb",
   "en-IE": "en-ie",
   "es-ES": "es-es",
@@ -124,6 +126,10 @@
  "subcategories": {
   "banners": {
    "by_locale": {
+    "de-DE": {
+     "name": "Banner & Roll-Up Banner",
+     "url": "https://www.helloprint.com/de-de/banner-drucken"
+    },
     "en-GB": {
      "name": "Banners",
      "url": "https://www.helloprint.com/en-gb/banner-printing"
@@ -163,6 +169,10 @@
   },
   "beach-flags": {
    "by_locale": {
+    "de-DE": {
+     "name": "Strandflaggen",
+     "url": "https://www.helloprint.com/de-de/beachflags"
+    },
     "en-GB": {
      "name": "Beach Flags",
      "url": "https://www.helloprint.com/en-gb/beachflag-printing"
@@ -202,6 +212,10 @@
   },
   "booklets-brochures": {
    "by_locale": {
+    "de-DE": {
+     "name": "Broschüren",
+     "url": "https://www.helloprint.com/de-de/broschueren-drukken"
+    },
     "en-GB": {
      "name": "Booklets & Brochures",
      "url": "https://www.helloprint.com/en-gb/brochure-and-booklet-printing"
@@ -241,6 +255,10 @@
   },
   "business-cards": {
    "by_locale": {
+    "de-DE": {
+     "name": "Visitenkarten",
+     "url": "https://www.helloprint.com/de-de/visitenkarten-drucken"
+    },
     "en-GB": {
      "name": "Business Cards",
      "url": "https://www.helloprint.com/en-gb/businesscards-printing"
@@ -280,6 +298,10 @@
   },
   "canvas-tote-bags": {
    "by_locale": {
+    "de-DE": {
+     "name": "Tote bags",
+     "url": "https://www.helloprint.com/de-de/baumwolltaschen-bedrukken"
+    },
     "en-GB": {
      "name": "Canvas Tote Bags",
      "url": "https://www.helloprint.com/en-gb/printing-cottonbags"
@@ -319,6 +341,10 @@
   },
   "caps": {
    "by_locale": {
+    "de-DE": {
+     "name": "Kappen",
+     "url": "https://www.helloprint.com/de-de/kappen-bedrucken"
+    },
     "en-GB": {
      "name": "Caps",
      "url": "https://www.helloprint.com/en-gb/personalised-caps"
@@ -358,6 +384,10 @@
   },
   "cards-invitations": {
    "by_locale": {
+    "de-DE": {
+     "name": "Karten & Einladungen",
+     "url": "https://www.helloprint.com/de-de/karten-und-einladungen"
+    },
     "en-GB": {
      "name": "Cards & Invitations",
      "url": "https://www.helloprint.com/en-gb/cards-and-invites"
@@ -397,6 +427,10 @@
   },
   "clothing": {
    "by_locale": {
+    "de-DE": {
+     "name": "Bekleidung & Textilien",
+     "url": "https://www.helloprint.com/de-de/bekleidung"
+    },
     "en-GB": {
      "name": "Clothing & Textiles",
      "url": "https://www.helloprint.com/en-gb/clothing"
@@ -437,6 +471,10 @@
   },
   "corporate-gifts-landing": {
    "by_locale": {
+    "de-DE": {
+     "name": "Werbeartikel & Werbegeschenke",
+     "url": "https://www.helloprint.com/de-de/werbeartikel-werbegeschenke"
+    },
     "en-GB": {
      "name": "Corporate Gifts",
      "url": "https://www.helloprint.com/en-gb/corporate-gifts"
@@ -477,6 +515,10 @@
   },
   "envelopes": {
    "by_locale": {
+    "de-DE": {
+     "name": "Briefumschläge",
+     "url": "https://www.helloprint.com/de-de/briefumschlaege"
+    },
     "en-GB": {
      "name": "Envelopes",
      "url": "https://www.helloprint.com/en-gb/envelopes"
@@ -516,6 +558,10 @@
   },
   "folded-leaflets": {
    "by_locale": {
+    "de-DE": {
+     "name": "Falzflyer",
+     "url": "https://www.helloprint.com/de-de/faltblaetter-drucken"
+    },
     "en-GB": {
      "name": "Folded Leaflets",
      "url": "https://www.helloprint.com/en-gb/foldedleaflets"
@@ -555,6 +601,10 @@
   },
   "folders-document-organisers": {
    "by_locale": {
+    "de-DE": {
+     "name": "Präsentationsmappen & Ordner",
+     "url": "https://www.helloprint.com/de-de/buchbinder-und-konferenzthemen"
+    },
     "en-GB": {
      "name": "Folders & Document Organisers",
      "url": "https://www.helloprint.com/en-gb/printed-folders"
@@ -594,6 +644,10 @@
   },
   "hoodies-zip-up-hoodies": {
    "by_locale": {
+    "de-DE": {
+     "name": "Hoodies & Kapuzenpullover",
+     "url": "https://www.helloprint.com/de-de/hoodies"
+    },
     "en-GB": {
      "name": "Hoodies & Zip-up Hoodies",
      "url": "https://www.helloprint.com/en-gb/personalised-hoodies"
@@ -633,6 +687,10 @@
   },
   "interior-textiles": {
    "by_locale": {
+    "de-DE": {
+     "name": "Textilien für den Innenbereich",
+     "url": "https://www.helloprint.com/de-de/innenraum-textildruck"
+    },
     "en-GB": {
      "name": "Interior Textiles",
      "url": "https://www.helloprint.com/en-gb/interior-textiles"
@@ -672,6 +730,10 @@
   },
   "labels-on-roll": {
    "by_locale": {
+    "de-DE": {
+     "name": "Etiketten auf Rolle",
+     "url": "https://www.helloprint.com/de-de/etiketten-auf-rolle"
+    },
     "en-GB": {
      "name": "Labels On Roll",
      "url": "https://www.helloprint.com/en-gb/labels-on-roll"
@@ -711,6 +773,10 @@
   },
   "labels-stickers": {
    "by_locale": {
+    "de-DE": {
+     "name": "Alle Sticker & Aufkleber",
+     "url": "https://www.helloprint.com/de-de/alle-sticker"
+    },
     "en-GB": {
      "name": "Labels & Stickers",
      "url": "https://www.helloprint.com/en-gb/all-stickers"
@@ -750,6 +816,10 @@
   },
   "leaflet-printing-flyers": {
    "by_locale": {
+    "de-DE": {
+     "name": "Flyer",
+     "url": "https://www.helloprint.com/de-de/flyer"
+    },
     "en-GB": {
      "name": "Leaflet Printing & Flyers",
      "url": "https://www.helloprint.com/en-gb/flyers"
@@ -789,6 +859,10 @@
   },
   "letterheads": {
    "by_locale": {
+    "de-DE": {
+     "name": "Briefpapier",
+     "url": "https://www.helloprint.com/de-de/briefpapier-druck"
+    },
     "en-GB": {
      "name": "Letterheads",
      "url": "https://www.helloprint.com/en-gb/letterhead-printing"
@@ -830,6 +904,10 @@
   },
   "notebooks": {
    "by_locale": {
+    "de-DE": {
+     "name": "Notizbücher und Notizhefte",
+     "url": "https://www.helloprint.com/de-de/notizbuecher-und-notizhefte"
+    },
     "en-GB": {
      "name": "Notebooks",
      "url": "https://www.helloprint.com/en-gb/notebook-printing"
@@ -869,6 +947,10 @@
   },
   "notepads": {
    "by_locale": {
+    "de-DE": {
+     "name": "Blöcke",
+     "url": "https://www.helloprint.com/de-de/notizblocke-druck"
+    },
     "en-GB": {
      "name": "Notepads",
      "url": "https://www.helloprint.com/en-gb/notepad-printing"
@@ -908,6 +990,10 @@
   },
   "our-brands": {
    "by_locale": {
+    "de-DE": {
+     "name": "Unsere Marken",
+     "url": "https://www.helloprint.com/de-de/unsere-marken"
+    },
     "en-GB": {
      "name": "Our Brands",
      "url": "https://www.helloprint.com/en-gb/our-brands"
@@ -948,6 +1034,10 @@
   },
   "paper-bags": {
    "by_locale": {
+    "de-DE": {
+     "name": "Papiertragetaschen",
+     "url": "https://www.helloprint.com/de-de/papiertragetaschen-papiertueten"
+    },
     "en-GB": {
      "name": "Paper Bags",
      "url": "https://www.helloprint.com/en-gb/printing-paperbags"
@@ -987,6 +1077,10 @@
   },
   "pens": {
    "by_locale": {
+    "de-DE": {
+     "name": "Stifte",
+     "url": "https://www.helloprint.com/de-de/kugelschreiber"
+    },
     "en-GB": {
      "name": "Pens",
      "url": "https://www.helloprint.com/en-gb/ballpoint-pens"
@@ -1026,6 +1120,10 @@
   },
   "poster-printing": {
    "by_locale": {
+    "de-DE": {
+     "name": "Poster & Plakate",
+     "url": "https://www.helloprint.com/de-de/posterdruck"
+    },
     "en-GB": {
      "name": "Poster Printing",
      "url": "https://www.helloprint.com/en-gb/poster-printing"
@@ -1065,6 +1163,10 @@
   },
   "printed-food-packaging": {
    "by_locale": {
+    "de-DE": {
+     "name": "Bedruckte Lebensmittelverpackungen",
+     "url": "https://www.helloprint.com/de-de/bedruckte-lebensmittelverpackungen"
+    },
     "en-GB": {
      "name": "Printed Food Packaging",
      "url": "https://www.helloprint.com/en-gb/printed-food-packaging"
@@ -1104,6 +1206,10 @@
   },
   "promotional-printing": {
    "by_locale": {
+    "de-DE": {
+     "name": "Werbematerial",
+     "url": "https://www.helloprint.com/de-de/werbematerial"
+    },
     "en-GB": {
      "name": "Promotional Products",
      "url": "https://www.helloprint.com/en-gb/promotional-printing"
@@ -1144,6 +1250,10 @@
   },
   "roller-banners": {
    "by_locale": {
+    "de-DE": {
+     "name": "Roll Up Banner",
+     "url": "https://www.helloprint.com/de-de/rollupbanner-drucken"
+    },
     "en-GB": {
      "name": "Roller Banners",
      "url": "https://www.helloprint.com/en-gb/rollupbanners-printing"
@@ -1183,6 +1293,10 @@
   },
   "signage-and-outdoor": {
    "by_locale": {
+    "de-DE": {
+     "name": "Außenwerbung",
+     "url": "https://www.helloprint.com/de-de/aussenwerbung"
+    },
     "en-GB": {
      "name": "Signage & Outdoor Products",
      "url": "https://www.helloprint.com/en-gb/outdoor"
@@ -1223,6 +1337,10 @@
   },
   "signage-panels": {
    "by_locale": {
+    "de-DE": {
+     "name": "Werbeschilder",
+     "url": "https://www.helloprint.com/de-de/werbeschilder"
+    },
     "en-GB": {
      "name": "Signage & Panels",
      "url": "https://www.helloprint.com/en-gb/panels-and-signs"
@@ -1262,6 +1380,10 @@
   },
   "stationery-landing": {
    "by_locale": {
+    "de-DE": {
+     "name": "Büro- & Schreibwaren",
+     "url": "https://www.helloprint.com/de-de/bueromaterial"
+    },
     "en-GB": {
      "name": "Stationery",
      "url": "https://www.helloprint.com/en-gb/stationery-and-office-supplies"
@@ -1302,6 +1424,10 @@
   },
   "t-shirts": {
    "by_locale": {
+    "de-DE": {
+     "name": "T-Shirts",
+     "url": "https://www.helloprint.com/de-de/t-shirt-bedrucken"
+    },
     "en-GB": {
      "name": "T-shirts",
      "url": "https://www.helloprint.com/en-gb/tshirt-printing"
@@ -1341,6 +1467,10 @@
   },
   "water-bottles": {
    "by_locale": {
+    "de-DE": {
+     "name": "Wasserflaschen",
+     "url": "https://www.helloprint.com/de-de/bedruckte-wasserflaschen"
+    },
     "en-GB": {
      "name": "Water Bottles",
      "url": "https://www.helloprint.com/en-gb/printed-water-bottles"

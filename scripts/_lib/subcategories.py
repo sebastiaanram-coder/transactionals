@@ -21,7 +21,14 @@ CACHE = os.path.join(ROOT, "data", "subcategories.json")
 
 # what the order event says -> what Contentful calls it
 LOCALE_MAP = {"en-IE": "en-IE", "en-GB": "en-GB", "nl-NL": "nl", "nl-BE": "nl-BE",
-              "fr-FR": "fr-FR", "fr-BE": "fr-BE", "es-ES": "es-ES", "it-IT": "it"}
+              "fr-FR": "fr-FR", "fr-BE": "fr-BE", "es-ES": "es-ES", "it-IT": "it",
+              # DACH, added once the numbers were looked at: 17,063 Brand Label
+              # orders and EUR332k of gross profit in the twelve months to
+              # 2026-09-01, which is MORE ORDERS THAN ITALY and about the same
+              # gross profit - and Italy had a full translation while German had
+              # nothing. Scandics was measured at the same time and left out:
+              # 3,075 orders and EUR46k does not pay for a language.
+              "de-DE": "de-DE"}
 FALLBACK = "en-GB"
 LOCALE_EXPR = "event.Locale"
 
