@@ -568,9 +568,9 @@ def review_block(P, cat, live):
                 % (P, esc(r["text"]), P, P, rv.attribution(r)))
 
     def placeholder():
-        return ('<span class="%s-bph">Trustpilot quote to be added &mdash; %s.</span>'
+        return ('<span class="%s-bph">Trustpilot quote to be added. %s.</span>'
                 '<span class="%s-bby">Verified Trustpilot review</span>'
-                % (P, cat["review_hint"], P))
+                % (P, cat["review_hint"][0].upper() + cat["review_hint"][1:], P))
 
     # the merged Labels & Packaging email draws on either half's reviews
     slugs = ["labels", "packaging"] if cat["slug"] == "labels-packaging" else [cat["slug"]]

@@ -274,7 +274,7 @@ BODY = """
           </td>
         </tr>
       </table>
-      <p class="{P}-ntx">I have specced print for over twenty years, and on orders around this size there is nearly always one detail worth a second look &mdash; a quantity that costs less at the next step up, a finish that will not survive the job, a date that is tighter than it needs to be.</p>
+      <p class="{P}-ntx">I have specced print for over twenty years, and on orders around this size there is nearly always one detail worth a second look: a quantity that costs less at the next step up, a finish that will not survive the job, a date that is tighter than it needs to be.</p>
       <p class="{P}-ntx">Send it over before you order and I will go through it. And to make the decision a bit easier, here is 10% off from me:</p>
 
       <div class="{P}-gift">
@@ -283,7 +283,7 @@ BODY = """
         <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="13" height="13">{SAVE_CLAUSE}expires {HOURS}&nbsp;hours after this email</span>
       </div>
 
-      <p class="{P}-nsig">&mdash; John, print expert team</p>
+      <p class="{P}-nsig">John, print expert team</p>
     </div>
 
     {BASKET}

@@ -133,11 +133,11 @@ EMAILS = [
              # has to be with us - is the thing print customers actually worry
              # about and the thing a website cannot tell them.
              "I am not chasing an order. What I am useful for is the part before "
-             "one. If you have a date you are printing towards &mdash; an event, an "
-             "opening, a season you print for every year &mdash; tell me the date "
-             "and what it is for, and I will work back from it: what I would print "
-             "it on, what it costs at two or three quantities, and when the file "
-             "needs to be with us to make it.",
+             "one. Is there a date you are printing towards? An event, an opening, "
+             "a season you print for every year. Tell me the date and what it is "
+             "for. I will come back with what I would print it on, what it "
+             "costs at two or three quantities, and when the file has to be with "
+             "us to hit it.",
              "If you already have the file, send it over and I will look at it "
              "before you order anything. And if something went wrong last time, I "
              "would rather hear it than not.",
@@ -246,16 +246,19 @@ CSS = """
 # the checks below mean anything.
 LETTER_CSS = """
 .%(P)s-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#ffffff;}
-/* The only styled thing is the signature, because a real corporate signature IS
-   styled - photo, name, role, address - which is what the reference example does.
-   Everything else inherits the client default, link colour included. */
-.%(P)s-sig{margin-top:22px;}
-.%(P)s-sav{padding-right:14px;vertical-align:top;}
-.%(P)s-sav img{width:64px;height:64px;border-radius:9999px;display:block;border:0;}
-.%(P)s-smeta{vertical-align:top;}
-.%(P)s-sname{display:block;font-weight:bold;}
-.%(P)s-srole{display:block;color:#666666;}
-.%(P)s-sorg{display:block;color:#888888;font-size:12px;line-height:18px;margin-top:8px;}
+/* The only styled thing is the signature, and it is the same block John signs the
+   day-45 letter with - avatar, bold name, letterspaced role, green address - so he
+   looks like one person across two flows. A real corporate signature IS styled and
+   does declare its own font; the body above it declares nothing and inherits
+   whatever the client uses for a normal message. */
+.%(P)s-sig{margin-top:24px;}
+.%(P)s-sig td{font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+.%(P)s-sav{width:76px;vertical-align:middle;padding:0 14px 0 0;}
+.%(P)s-sav img{width:62px;height:62px;border-radius:9999px;display:block;border:0;}
+.%(P)s-smeta{vertical-align:middle;}
+.%(P)s-sname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
+.%(P)s-srole{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.12em;color:#767676;margin-top:3px;}
+.%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 .%(P)s-unslink{color:inherit;}
 """
 
@@ -282,7 +285,7 @@ def products(P, live, n=4):
     head = ('<div class="%s-news"><p class="%s-newsh">%s</p>'
             '<p class="%s-newss">%s</p>'
             % (P, P, "Where to pick up",
-               P, "No prices here on purpose \u2014 a starting point, not a shelf."))
+               P, "No prices here on purpose. A starting point, not a shelf."))
     if live:
         cell = ('<td class="{P}-tile" valign="top"><a class="{P}-card" href="{{{{ item.url }}}}">'
                 '<img src="{{{{ item.featured_image.full.url }}}}" alt="{{{{ item.title }}}}">'
@@ -356,15 +359,16 @@ def build(e, live):
         # signature carries an address anyway, so in the signature it stops looking
         # like a footer and starts looking like a signature. The reference example
         # does exactly this.
+        # No address and no VAT number. The other four emails in this flow carry the
+        # full company line in their footers, so a reader of the programme always
+        # gets it - but if legal wants it on every message it goes back here.
         sig = ('<table class="{P}-sig" role="presentation" cellpadding="0" cellspacing="0"><tr>'
-               '<td class="{P}-sav"><img src="{AV_JOHN}" alt="" width="64" height="64"></td>'
-               '<td class="{P}-smeta">'
+               '<td class="{P}-sav" valign="middle"><img src="{AV_JOHN}" alt="John" '
+               'width="62" height="62"></td>'
+               '<td class="{P}-smeta" valign="middle">'
                '<span class="{P}-sname">John</span>'
-               '<span class="{P}-srole">Print expert team &middot; Helloprint</span>'
-               '<a href="mailto:hello@helloprint.com">hello@helloprint.com</a><br>'
-               '<a href="{HOME}">helloprint.com</a>'
-               '<span class="{P}-sorg">Helloprint B.V. &middot; Schiedamsevest 89, '
-               '3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01</span>'
+               '<span class="{P}-srole">PRINT EXPERT TEAM</span>'
+               '<a class="{P}-smail" href="{HOME}">hello@helloprint.com</a>'
                '</td></tr></table>').format(P=P, HOME=home, **A)
         return ('<div><style>%s</style>'
                 '<div class="%s-pre">%s</div>'
@@ -455,8 +459,13 @@ for e in EMAILS:
         # comments out first: this check reads the rules, and the comment above them
         # explains what is deliberately absent, so it names every property here
         css = re.sub(r"/\*.*?\*/", "", livb.split("</style>", 1)[0], flags=re.S)
+        # A FONT IS ALLOWED IN THE SIGNATURE AND NOWHERE ELSE. Real signatures
+        # declare one; a body that declares one stops looking like a normal message.
+        for rule in css.split("}"):
+            if "font-family" in rule and "-sig" not in rule.split("{")[0]:
+                errs.append("%s: a font is declared outside the signature (%s)"
+                            % (t, rule.split("{")[0].strip()))
         for tell, what in (
-                ("font-family", "a font declaration; it should inherit the client default"),
                 ("max-width", "a width; a real email does not have one"),
                 ("border-radius:18px", "a card"),
                 ("background:#191919", "a dark block"),
@@ -476,11 +485,10 @@ for e in EMAILS:
         # paragraphs carry no classes and no inline styles
         if re.search(r"<p[^>]+>", body):
             errs.append(t + ": a paragraph in the letter carries an attribute")
-        # and the legal line lives in the signature, not in a footer
-        if "VAT NL855793302B01" not in body:
-            errs.append(t + ": no company identity; required in a commercial message")
-        if body.index("VAT NL855793302B01") < body.index("%s-sig" % P):
-            errs.append(t + ": the company line sits outside the signature")
+        # the company still has to be identifiable, which the address is not the
+        # only way to do: the signature carries a helloprint.com address
+        if "helloprint.com" not in body:
+            errs.append(t + ": nothing identifies who sent it")
 
         outcomes = ("not hear from me again", "will not hear from", "i will stop")
         if not any(o in vis for o in outcomes):

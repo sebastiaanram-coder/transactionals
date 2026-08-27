@@ -1,6 +1,18 @@
 #!/usr/bin/env python3
 # Builds behavioural-email-overview.html (single self-contained file)
-import base64, json, os, re, html
+import base64, json, os, re, html, subprocess, sys
+
+# HOUSE STYLE, CHECKED FOR EVERY EMAIL IN ONE PLACE. This gate sits here, in
+# the overview build, because the overview is regenerated in every pass - so a
+# rule added later covers builders nobody remembers to update, and it runs
+# before every commit whether or not anyone thinks to run it.
+_hs = subprocess.run([sys.executable, os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), "scripts", "check_house_style.py")],
+    capture_output=True, text=True)
+print(_hs.stdout.strip())
+if _hs.returncode:
+    sys.stderr.write(_hs.stderr)
+    raise SystemExit(1)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PV_DIR = os.path.join(HERE, "previews")

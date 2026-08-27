@@ -81,7 +81,7 @@ SAMPLE_LINES = [
 
 EXPERT_ROWS = [
     ("Check the spec suits the job",
-     "Forty years in the graphic trade sits behind the desk. Not the artwork check — whether the paper, size and finish are right for what it is actually for."),
+     "Forty years in the graphic trade sits behind the desk. Not the artwork check, but whether the paper, size and finish are right for what it is actually for."),
     ("Confirm the delivery date",
      "Most products go out for next-day delivery where possible. If a date cannot be met you will be told plainly, rather than find out later."),
     ("Pay on invoice, not by card",
