@@ -32,11 +32,30 @@
 .hp-wb1l-newss{margin:0 auto 20px;max-width:400px;font-size:14px;line-height:21px;color:#767676;text-align:center;}
 .hp-wb1l-tiles{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;}
 .hp-wb1l-tile{width:50%;vertical-align:top;padding:0 6px 14px;}
+/* THREE-UP. Separate class rather than a tweak to -tile, because the two-up emails
+   in this flow must not move. Outlook keeps three across at 600px, which is what
+   it is for; small screens stack to one, because a third of a phone is 100px and
+   nobody taps that. */
+.hp-wb1l-tile3{width:33.33%;vertical-align:top;padding:0 5px 14px;}
 .hp-wb1l-card{display:block;text-decoration:none;}
 .hp-wb1l-card img{width:100%;max-width:100%;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
 .hp-wb1l-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
 .hp-wb1l-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
 /* code block, same treatment as the post-purchase offer so it reads as one ladder */
+/* THE EXPERT-TEAM BAND, on ink. Same device as the category nudge: a dark band
+   between two white sections stops three stacked blocks reading as one list. */
+.hp-wb1l-band{background:#191919;margin:30px 0 0;padding:30px 32px 32px;text-align:center;}
+.hp-wb1l-bandimg{width:100%;max-width:536px;height:auto;display:block;border:0;border-radius:12px;margin:0 auto 20px;}
+.hp-wb1l-bandeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 10px;}
+.hp-wb1l-bandh{margin:0 auto 10px;max-width:400px;font-size:23px;line-height:30px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
+.hp-wb1l-bandp{margin:0 auto 22px;max-width:420px;font-size:15px;line-height:24px;color:#b4b4b4;}
+/* THE NEXT-DAY BLOCK. Soft green rather than another white section or another dark
+   one: it is the third thing in a row and needs to be told apart at a glance. */
+.hp-wb1l-fast{margin:30px 24px 0;background:#f1f8f4;border-radius:14px;padding:24px 26px;text-align:center;}
+.hp-wb1l-fasticon{width:44px;height:44px;display:block;border:0;margin:0 auto 14px;}
+.hp-wb1l-fasth{margin:0 0 9px;font-size:20px;line-height:27px;font-weight:800;color:#191919;letter-spacing:-.012em;}
+.hp-wb1l-fastp{margin:0 auto 18px;max-width:410px;font-size:15px;line-height:23px;color:#4a4a4a;}
+.hp-wb1l-fastcta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:19px;font-weight:700;padding:13px 28px;border-radius:9999px;}
 .hp-wb1l-code{margin:0 auto 22px;max-width:400px;border:2px dashed #9fdbb8;border-radius:12px;padding:18px 20px 16px;background:#212121;}
 .hp-wb1l-codelbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.18em;color:#9fdbb8;margin:0 0 8px;}
 .hp-wb1l-codeval{display:block;font-size:25px;line-height:31px;font-weight:800;letter-spacing:.08em;color:#ffffff;}
@@ -59,6 +78,10 @@
   .hp-wb1l-cta{padding:15px 26px;}
   .hp-wb1l-news{margin-left:14px;margin-right:14px;}
   .hp-wb1l-tile{padding:0 4px 12px;}
+  .hp-wb1l-tile3{display:block!important;width:100%!important;padding:0 0 16px;}
+  .hp-wb1l-band{padding:24px 20px 26px;}
+  .hp-wb1l-bandh{font-size:21px;line-height:28px;}
+  .hp-wb1l-fast{margin-left:14px;margin-right:14px;padding:20px 18px;}
   .hp-wb1l-tname{font-size:14px;line-height:19px;min-height:38px;}
   .hp-wb1l-lhead{padding:24px 22px 0;}
   .hp-wb1l-lbody{padding:22px 22px 26px;}

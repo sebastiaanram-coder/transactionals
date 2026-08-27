@@ -75,7 +75,9 @@ PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 _A = {"IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
       "IMG_MARK_DARK": "helloprint-logo-dark.svg",
-      "AV_JOHN": "welcome-04-john-avatar.jpg"}
+      "AV_JOHN": "welcome-04-john-avatar.jpg",
+      "IMG_TEAM": "browse-02-hero-team-checking.jpg",
+      "ICON_CLOCK": "icon-clock.png"}
 
 
 def datauri(name):
@@ -89,6 +91,20 @@ SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
 LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
 
 CODE = "REPLACE-WITH-TALON-CODE"
+
+# THE NEXT-DAY SECTION HAS NOWHERE TO GO YET. Checked the site: there is no
+# next-day landing page (/next-day-delivery and /delivery both 404), no delivery
+# filter on /all-products, and no navigation entry for it. What DOES exist is a
+# per-product badge - a flyers category page shows "Fast Delivery" on some products
+# and "Next Day Delivery" on others, and the copy there says next day is available
+# "across selected products". So the section can tell a reader what to look for
+# truthfully, but the CTA needs a page that somebody has to build.
+NEXTDAY_URL = "REPLACE-WITH-NEXT-DAY-COLLECTION"
+
+# The three tiles in email 2 are a hand-pick that has not been made yet. This
+# marker goes in the markup so nobody mistakes the stand-ins for the choice, and a
+# build check refuses to drop it while they are still stand-ins.
+PICK_TODO = "TO DO: replace these three with the hand-picked products"
 SAMPLE_CODE = "BACK-7XQ2-15"
 PERCENT = 15
 EXPIRY_DAYS = 14
@@ -143,14 +159,16 @@ EMAILS = [
              "would rather hear it than not.",
          ],
          closing="Just reply to this email. It comes to me."),
+    # Three sections, and the header deliberately has no button of its own: each
+    # section owns its action, and a fourth CTA above them competes with all three.
     dict(slug="winback-02-high", code="wb2h", branch="high", day=111, kind="news",
          label="worth another look", hero="hero-winback-news",
          hero_alt="A printed banner on a fence beside a tennis court",
-         eyebrow="WORTH ANOTHER LOOK",
+         eyebrow="STILL HERE WHEN YOU NEED US",
          h1="A few things worth another look",
-         sub="No offer attached. Just the print businesses come back for most, in "
-             "case one of them is your next job.",
-         cta="See the range", offer=False, tiles=4),
+         sub="No offer attached. Some print worth picking up, the team who can "
+             "help you plan it, and what to do when the date is tight.",
+         cta=None, offer=False, tiles=3, across=3, team=True, nextday=True),
     dict(slug="winback-03-high", code="wb3h", branch="high", day=140, kind="offer",
          label="the offer", hero="hero-winback-offer",
          hero_alt="A folded leaflet standing on a wooden sideboard",
@@ -201,11 +219,30 @@ CSS = """
 .%(P)s-newss{margin:0 auto 20px;max-width:400px;font-size:14px;line-height:21px;color:#767676;text-align:center;}
 .%(P)s-tiles{width:100%%;border-collapse:separate;border-spacing:0;table-layout:fixed;}
 .%(P)s-tile{width:50%%;vertical-align:top;padding:0 6px 14px;}
+/* THREE-UP. Separate class rather than a tweak to -tile, because the two-up emails
+   in this flow must not move. Outlook keeps three across at 600px, which is what
+   it is for; small screens stack to one, because a third of a phone is 100px and
+   nobody taps that. */
+.%(P)s-tile3{width:33.33%%;vertical-align:top;padding:0 5px 14px;}
 .%(P)s-card{display:block;text-decoration:none;}
 .%(P)s-card img{width:100%%;max-width:100%%;height:auto;display:block;border:0;border-radius:10px;background:#ffffff;}
 .%(P)s-tname{display:block;font-size:15px;line-height:20px;font-weight:800;color:#191919;margin:9px 0 1px;min-height:40px;}
 .%(P)s-tlink{display:block;font-size:13px;line-height:19px;font-weight:700;color:#008539;}
 /* code block, same treatment as the post-purchase offer so it reads as one ladder */
+/* THE EXPERT-TEAM BAND, on ink. Same device as the category nudge: a dark band
+   between two white sections stops three stacked blocks reading as one list. */
+.%(P)s-band{background:#191919;margin:30px 0 0;padding:30px 32px 32px;text-align:center;}
+.%(P)s-bandimg{width:100%%;max-width:536px;height:auto;display:block;border:0;border-radius:12px;margin:0 auto 20px;}
+.%(P)s-bandeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 10px;}
+.%(P)s-bandh{margin:0 auto 10px;max-width:400px;font-size:23px;line-height:30px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
+.%(P)s-bandp{margin:0 auto 22px;max-width:420px;font-size:15px;line-height:24px;color:#b4b4b4;}
+/* THE NEXT-DAY BLOCK. Soft green rather than another white section or another dark
+   one: it is the third thing in a row and needs to be told apart at a glance. */
+.%(P)s-fast{margin:30px 24px 0;background:#f1f8f4;border-radius:14px;padding:24px 26px;text-align:center;}
+.%(P)s-fasticon{width:44px;height:44px;display:block;border:0;margin:0 auto 14px;}
+.%(P)s-fasth{margin:0 0 9px;font-size:20px;line-height:27px;font-weight:800;color:#191919;letter-spacing:-.012em;}
+.%(P)s-fastp{margin:0 auto 18px;max-width:410px;font-size:15px;line-height:23px;color:#4a4a4a;}
+.%(P)s-fastcta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:19px;font-weight:700;padding:13px 28px;border-radius:9999px;}
 .%(P)s-code{margin:0 auto 22px;max-width:400px;border:2px dashed #9fdbb8;border-radius:12px;padding:18px 20px 16px;background:#212121;}
 .%(P)s-codelbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.18em;color:#9fdbb8;margin:0 0 8px;}
 .%(P)s-codeval{display:block;font-size:25px;line-height:31px;font-weight:800;letter-spacing:.08em;color:#ffffff;}
@@ -228,6 +265,10 @@ CSS = """
   .%(P)s-cta{padding:15px 26px;}
   .%(P)s-news{margin-left:14px;margin-right:14px;}
   .%(P)s-tile{padding:0 4px 12px;}
+  .%(P)s-tile3{display:block!important;width:100%%!important;padding:0 0 16px;}
+  .%(P)s-band{padding:24px 20px 26px;}
+  .%(P)s-bandh{font-size:21px;line-height:28px;}
+  .%(P)s-fast{margin-left:14px;margin-right:14px;padding:20px 18px;}
   .%(P)s-tname{font-size:14px;line-height:19px;min-height:38px;}
   .%(P)s-lhead{padding:24px 22px 0;}
   .%(P)s-lbody{padding:22px 22px 26px;}
@@ -276,7 +317,7 @@ FOOT = """
 """
 
 
-def products(P, live, n=4):
+def products(P, live, n=4, across=2):
     """A grid of things to come back to.
 
     Live: Klaviyo's recommendation engine. Preview: real Contentful subcategories,
@@ -284,9 +325,14 @@ def products(P, live, n=4):
     verified in this account; divisibleby is not."""
     head = ('<div class="%s-news"><p class="%s-newsh">%s</p>'
             '<p class="%s-newss">%s</p>'
-            % (P, P, "Where to pick up",
-               P, "No prices here on purpose. A starting point, not a shelf."))
-    if live:
+            % (P, P, ("A few worth picking up" if across == 3 else "Where to pick up"),
+               P, ("Three we would put in front of you first. No prices attached."
+                   if across == 3
+                   else "No prices here on purpose. A starting point, not a shelf.")))
+    tcls = "-tile3" if across == 3 else "-tile"
+    if across == 3:
+        head += "<!-- %s -->" % PICK_TODO
+    if live and across != 3:
         cell = ('<td class="{P}-tile" valign="top"><a class="{P}-card" href="{{{{ item.url }}}}">'
                 '<img src="{{{{ item.featured_image.full.url }}}}" alt="{{{{ item.title }}}}">'
                 '<span class="{P}-tname">{{{{ item.title }}}}</span>'
@@ -300,21 +346,82 @@ def products(P, live, n=4):
                 % (P, rows))
         return head + grid + "</div>"
 
+    # THREE-UP IS A HAND-PICK, NOT A RECOMMENDATION. The engine returns four by
+    # relevance; these three are chosen. Until they are chosen, the tiles are real
+    # verified subcategories so the layout can be judged - and because a
+    # {% catalog %} call naming an id that does not exist 400s the WHOLE render,
+    # placeholder ids here would mean an email that cannot send at all.
     cells = ""
     for name in PREVIEW_TILES[:n]:
-        cells += ('<td class="%s-tile" valign="top"><a class="%s-card" href="%s">'
+        # Live tiles need the reader's own language and market, so name and URL
+        # come from a locale conditional; the image is one Contentful URL that
+        # serves every locale. Preview shows one locale so the layout is judgeable.
+        if live:
+            nm, url = (sc.locale_switch(name, "name", esc),
+                       sc.locale_switch(name, "url"))
+        else:
+            nm = url = None
+            nm, url = esc(sc.preview_field(name, "name")), sc.preview_field(name, "url")
+        cells += ('<td class="%s%s" valign="top"><a class="%s-card" href="%s">'
                   '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
                   '<span class="%s-tlink">See the range &rarr;</span></a></td>'
-                  % (P, P, sc.preview_field(name, "url"), sc.image(name, 400, 400),
-                     esc(sc.preview_field(name, "name")), P,
-                     esc(sc.preview_field(name, "name")), P))
+                  % (P, tcls, P, url, sc.image(name, 400, 400), nm, P, nm, P))
     rows = ""
     cl = [c for c in cells.split("</td>") if c.strip()]
     cl = [c + "</td>" for c in cl]
-    for i in range(0, len(cl), 2):
-        rows += "<tr>%s</tr>" % "".join(cl[i:i + 2])
+    for i in range(0, len(cl), across):
+        rows += "<tr>%s</tr>" % "".join(cl[i:i + across])
     return (head + '<table class="%s-tiles" role="presentation" width="100%%" '
             'cellpadding="0" cellspacing="0">%s</table>' % (P, rows)) + "</div>"
+
+
+def team_band(P, live, cs, A):
+    """The people, on ink, between the two white sections.
+
+    NO CLAIM ABOUT THE SUPPORT PROCESS. An earlier draft of another email said
+    there is no form and no ticket number, which I could not verify and removed.
+    This says what the team does and how to reach them, and nothing about what
+    reaching them is not.
+    """
+    return ('<div class="{P}-band">'
+            # ALT DESCRIBES THIS PHOTO. The file is named team-checking and I wrote
+            # the alt from the name: "checking a printed sheet". It is not that. It
+            # is three of the team at their desks on headsets, which a screen reader
+            # would otherwise have been told wrongly.
+            '<img class="{P}-bandimg" src="{IMG_TEAM}" alt="Three of the team at '
+            'their desks, on headsets" width="536">'
+            '<span class="{P}-bandeye">THE PRINT EXPERT TEAM</span>'
+            '<h2 class="{P}-bandh">There is a team behind the website</h2>'
+            # NOT "people who print this every day". They advise on print; the
+            # printing itself is not done in that room, and the photo shows a desk
+            # and a headset. What is true is that they see jobs like this all day.
+            '<p class="{P}-bandp">Print experts who see jobs like yours every day. '
+            'If you have a '
+            'campaign to plan, a size you are not sure about, or a job you have '
+            'never printed before, send them a message and one of them will come '
+            'back to you.</p>'
+            '<a class="{P}-cta" href="{CS}">Ping the team a message</a>'
+            '</div>').format(P=P, CS=cs, **A)
+
+
+def next_day(P, live, A):
+    """Speed, in the words the product pages actually use.
+
+    "Next Day Delivery" is a badge on individual products, so that is what the
+    reader is told to look for. The CTA has no page to point at yet - see
+    NEXTDAY_URL - so in the preview it goes to a real category to keep the layout
+    honest, and live it carries the placeholder for whoever builds the page.
+    """
+    href = NEXTDAY_URL if live else sc.landing("promotional-printing")
+    return ('<div class="{P}-fast">'
+            '<img class="{P}-fasticon" src="{ICON_CLOCK}" alt="" width="44" height="44">'
+            '<h2 class="{P}-fasth">In a hurry? We&rsquo;ve got your back</h2>'
+            '<p class="{P}-fastp">Not everything has to take a week. A lot of what '
+            'we print carries a Next Day Delivery badge, so if your date is tight '
+            'there is usually a way to make it. If you cannot see it on the '
+            'product, ask us and we will tell you what can still land in time.</p>'
+            '<a class="{P}-fastcta" href="{HREF}">See what ships next day</a>'
+            '</div>').format(P=P, HREF=href, **A)
 
 
 def code_block(P, live):
@@ -382,13 +489,20 @@ def build(e, live):
             '<a href="{HOME}"><img class="{P}-mark" src="{IMG_WORDMARK}" alt="Helloprint" width="142"></a>'
             '<span class="{P}-eyebrow">{EYEBROW}</span>'
             '<h1 class="{P}-h1">{H1}</h1><p class="{P}-sub">{SUB}</p>'
-            '{CODE}<a class="{P}-cta" href="{HOME}">{CTA}</a>{TERMS}</div>').format(
-        P=P, HOME=home, EYEBROW=e["eyebrow"], H1=e["h1"], SUB=e["sub"], CTA=e["cta"],
+            '{CODE}{CTA}{TERMS}</div>').format(
+        P=P, HOME=home, EYEBROW=e["eyebrow"], H1=e["h1"], SUB=e["sub"],
+        CTA=('<a class="%s-cta" href="%s">%s</a>' % (P, home, e["cta"])
+             if e.get("cta") else ""),
         CODE=(code_block(P, live) if e.get("offer") else ""),
         TERMS=('<span class="%s-terms">One use per customer.</span>' % P
                if e.get("offer") else ""),
         **A)
-    news = products(P, live, e.get("tiles", 4)) if e.get("tiles") else ""
+    news = (products(P, live, e.get("tiles", 4), e.get("across", 2))
+            if e.get("tiles") else "")
+    # Products, then people, then speed: what to print, who helps you decide, and
+    # what to do when the date is the problem.
+    news += team_band(P, live, cs, A) if e.get("team") else ""
+    news += next_day(P, live, A) if e.get("nextday") else ""
     return ('<div class="{P}-root"><style>{CSS}</style><div class="{P}-pre">{PRE}</div>'
             '<div class="{P}-wrap"><div class="{P}-shell">{HERO}{DARK}{NEWS}'
             '<div class="{P}-tail"></div></div>{FOOT}</div></div>').format(
@@ -499,7 +613,24 @@ for e in EMAILS:
     # THE STRIP MUST NOT CARRY AN INVENTED CLAIM. A fabricated "now 30% faster" is
     # worse than an obvious gap, so every row stays a marked placeholder until
     # somebody supplies a checkable change.
-    if e.get("tiles"):
+    # TWO KINDS OF GRID, AND THEY MUST NOT BE CONFUSED. The two-up grids ask
+    # Klaviyo's engine for whatever is most relevant. The three-up grid is a
+    # hand-pick, so it must NOT call the engine - and it must not name a catalogue
+    # id either, because a missing one 400s the whole render.
+    if e.get("tiles") and e.get("across", 2) == 3:
+        if "catalog" in livb:
+            errs.append(t + ": a hand-picked grid must not call the catalogue")
+        # COUNTED ON THE MARKUP ONLY. -tile3 also appears twice in the stylesheet
+        # (the rule and its media query), and counting the whole document reported
+        # five tiles for three. This is the third check in the project to trip on
+        # a class name in the CSS; the fix is always to cut the style block first.
+        mk = livb.split("</style>", 1)[-1]
+        if mk.count("-tile3") != e["tiles"]:
+            errs.append(t + ": expected %d three-up tiles in the markup, found %d"
+                        % (e["tiles"], mk.count("-tile3")))
+        if PICK_TODO not in livb or PICK_TODO not in prev:
+            errs.append(t + ": the hand-pick placeholders are not marked as such")
+    elif e.get("tiles"):
         # THE LIVE GRID MUST ASK THE ENGINE, AND THE PREVIEW MUST NOT PRETEND TO.
         if "{% catalog person %}" not in livb:
             errs.append(t + ": the live grid does not use the recommendation engine")
