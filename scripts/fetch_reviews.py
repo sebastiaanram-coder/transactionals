@@ -35,9 +35,10 @@ SELECTION RULES, and why each exists:
   language matched      a Dutch reader gets a review written in Dutch. Never a
                         translated one - see the note in _lib/reviews.py.
 """
-import argparse, collections, json, os, sys, datetime as dt
+import argparse, collections, json, os, re, sys, datetime as dt
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import trustpilot
+import subcategories as sc
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -75,6 +76,149 @@ TAG_MAP = {
 TAG_GROUP = "generic"
 
 MIN_LEN, MAX_LEN = 60, 190
+
+# ---------------------------------------------------------------- relevance
+#
+# A REVIEW HAS TO BE ABOUT THE THING, not merely tagged with it. "Very good and
+# quick experience. Highly recommend." is tagged All Stationery and says nothing
+# about stationery, so quoting it under a stationery headline wastes the most
+# prominent block in the email. Tagged is necessary and not sufficient.
+#
+# WHERE THE VOCABULARY COMES FROM, and why it is not a hand-written word list.
+# Translating product words into five languages by hand is exactly the kind of
+# invention that goes unnoticed and stays wrong. Instead the vocabulary is
+# derived from the localised subcategory names already in
+# data/subcategories.json: the words a customer uses for a product ARE its name,
+# and we hold every name in every locale.
+#
+# Two filters make those names usable as evidence:
+#
+#   unique to one email   "printing" appears in Leaflet Printing and Poster
+#                         Printing, "labels" in two of the Labels tiles. A token
+#                         that describes more than one email cannot distinguish
+#                         between them, so it is dropped. Counted per EMAIL, not
+#                         per tag, because the labels and packaging tags share one
+#                         email and counting per tag cancelled every token they
+#                         had.
+#
+#   not generic           measured against the reviews themselves rather than
+#                         guessed. A token in more than GENERIC_DF of the reviews
+#                         in its language is describing the shop, not a product:
+#                         "print", "quality", "service". This is what stops
+#                         "great print quality" counting as a review about
+#                         printed leaflets.
+GENERIC_DF = 0.06
+
+# WORDS THAT SIT IN A PRODUCT NAME WITHOUT NAMING THE PRODUCT.
+#
+# This list is hand-written, unlike the product vocabulary, and that is a
+# deliberate exception: these are generic words in each language rather than
+# product translations, so getting one wrong costs a missed match instead of a
+# confident lie. Every one was read off `--vocab` with its document frequency
+# before being added, and `--vocab` is how the list gets audited later.
+#
+# Document frequency alone cannot do this job. In English "booklets" is 2.9% and
+# "flyers" 2.3% while "printed" is 4.4% and "paper" 2.0%: the good and the bad
+# overlap, so no threshold separates them. What separates them is grammar. These
+# are modifiers, materials and logistics.
+#
+# What each one actually broke, before it was removed:
+#   printed, paper   "HelloPrint are my go-to for printed paper" was picked for
+#                    BOTH Labels and Packaging, off "Printed Food Packaging" and
+#                    "Paper Bags". It is not a review about bags.
+#   bedrukte         "Goede kwaliteit van de bedrukte T-shirts" was picked for
+#                    Labels, off "Bedrukte voedselverpakkingen". It is a t-shirt.
+#   spedizioni       Italian for shipments, and it sits in the envelopes name
+#                    "Buste da lettere e per spedizioni" at 0.9% of Italian
+#                    reviews - so any review praising delivery counted as a
+#                    review about stationery.
+#   packaging        the same trap in English, and it survived the first pass.
+#                    "Arrived quickly and in good packaging, leaflets look
+#                    great" was picked for Labels AND Packaging. In a review it
+#                    almost always means the box it came in, not a printed
+#                    product. Out in every language, including the ones where it
+#                    only appears because the email label is English.
+#   roll             English only, and the third variant of the same trap. It
+#                    comes from "Labels On Roll" and it matched "did a roll up
+#                    banner", so Labels and Packaging were both handed a banner
+#                    review. The French "rouleau" and Spanish "rollo" are not
+#                    ambiguous in their own languages and stay.
+#
+# NOT removed, though they look similar: "tête" in French and "lettere" in
+# Italian are the only letterhead words those languages have here, and "carta" in
+# Spanish likewise. Dropping a modifier that is carrying a product on its own
+# makes the product unfindable.
+MODIFIERS = {
+    "en": {"print", "printed", "printing", "paper", "business", "document",
+           "commercial", "packaging", "roll"},
+    "nl": {"print", "bedrukt", "bedrukte", "bedrukken", "papier", "papieren",
+           "katoenen", "commercial", "packaging"},
+    "fr": {"print", "imprimé", "imprimés", "imprimée", "commercial",
+           "commerciales", "document", "coton", "alimentaires", "packaging"},
+    "es": {"print", "impreso", "impresos", "impresa", "commercial",
+           "documentos", "agua", "alimentarios", "packaging"},
+    "it": {"print", "stampa", "stampato", "stampati", "commercial",
+           "spedizioni", "alimentare", "packaging"},
+}
+
+LANG_LOCALES = {"en": ["en-IE", "en-GB"], "nl": ["nl", "nl-BE"],
+                "fr": ["fr-FR", "fr-BE"], "es": ["es-ES"], "it": ["it"]}
+
+# tag slug -> the email whose tiles supply its vocabulary
+TAG_TO_EMAIL = {
+    "stationery": "stationery",
+    "commercial-print": "commercial-print",
+    "signage-outdoor": "signage-outdoor",
+    "labels": "labels-packaging",
+    "packaging": "labels-packaging",
+    "clothing-textiles": "clothing-textiles",
+    "corporate-gifts": "corporate-gifts",
+}
+
+
+def _tokens(txt):
+    return set(re.findall(r"[a-z\u00e0-\u00ff]{4,}", (txt or "").lower()))
+
+
+def build_vocab(lang, texts):
+    """{tag slug: set of tokens} for one language, filtered as described above."""
+    per_email = {}
+    for tag, email in TAG_TO_EMAIL.items():
+        e = sc.emails().get(email) or {}
+        v = set()
+        for sub in (e.get("feature") or []) + (e.get("grid") or []):
+            for loc in LANG_LOCALES[lang]:
+                v |= _tokens(sc.field(sub, loc, "name"))
+        v |= _tokens(e.get("label"))
+        per_email.setdefault(email, set()).update(v)
+
+    # a token that names more than one email cannot tell them apart
+    owners = collections.Counter(t for v in per_email.values() for t in v)
+    # and one that turns up all over the corpus is about the shop, not a product
+    n = max(1, len(texts))
+    df = collections.Counter()
+    for t in texts:
+        df.update(_tokens(t))
+
+    out, dropped = {}, collections.Counter()
+    for tag, email in TAG_TO_EMAIL.items():
+        keep = set()
+        for t in per_email[email]:
+            if t in MODIFIERS.get(lang, ()):
+                dropped["modifier"] += 1
+            elif owners[t] > 1:
+                dropped["shared"] += 1
+            elif df[t] / float(n) > GENERIC_DF:
+                dropped["generic"] += 1
+            else:
+                keep.add(t)
+        out[tag] = keep
+    return out, dropped
+
+
+def relevance(r, vocab_tokens):
+    """How many distinct product words from the vocabulary the review uses."""
+    return len(_tokens(r["text"]) & vocab_tokens)
 
 
 # Display names that are not names. "false" turned up as a literal author on a
@@ -142,6 +286,11 @@ def main():
                          "leaving the selected quotes untouched")
     ap.add_argument("--inventory", action="store_true",
                     help="print the tag groups and values found, then stop")
+    ap.add_argument("--vocab", action="store_true",
+                    help="print the relevance vocabulary per category with each "
+                         "token's document frequency in the reviews, then stop. "
+                         "This is how GENERIC_DF gets set on evidence rather than "
+                         "taste, and how a bad pick gets diagnosed.")
     ap.add_argument("--pages", type=int, default=10,
                     help="pages of 100 per language (default 10)")
     a = ap.parse_args()
@@ -175,22 +324,79 @@ def main():
         print("to the group above, then run again without --inventory.")
         return 0
 
-    # newest first per language, so the pick is recent as well as suitable
+    # COLLECT FIRST, CHOOSE SECOND. The old loop took the newest usable review
+    # that carried the right tag and stopped, which is why a stationery headline
+    # ended up over "Very good and quick experience." Relevance can only be judged
+    # against the whole candidate set and against the corpus, so nothing is chosen
+    # until every page has been read.
     picked, counts, seen = {}, collections.Counter(), 0
+    cand = collections.defaultdict(list)      # lang -> [(age, slug, review)]
+    corpus = collections.defaultdict(list)    # lang -> [text]
     for lang in LANGUAGES:
-        for raw in trustpilot.private_reviews(token, bu, language=lang,
-                                              stars=5, pages=a.pages):
+        for age, raw in enumerate(trustpilot.private_reviews(
+                token, bu, language=lang, stars=5, pages=a.pages)):
             seen += 1
             r = trustpilot.normalise(raw)
+            corpus[lang].append(r.get("text") or "")
             if not usable(r):
                 continue
-            slug = category_of(r)
-            if slug is None:
+            cand[lang].append((age, category_of(r), r))
+
+    # THREE TIERS, in the order Sebastiaan set: tagged and relevant first; then a
+    # relevant review under a DIFFERENT tag, because a review that names the
+    # product is worth more than one that merely carries the label; then a tagged
+    # review that says nothing specific, which is where this started and is still
+    # better than a visible placeholder. Every pick records which tier it came
+    # from, so a generic or borrowed quote is visible in the cache and in the
+    # report rather than looking like a considered choice.
+    vocabs, drops = {}, collections.Counter()
+    for lang in LANGUAGES:
+        vocabs[lang], d = build_vocab(lang, corpus[lang])
+        drops.update(d)
+
+    if a.vocab:
+        for lang in LANGUAGES:
+            n = max(1, len(corpus[lang]))
+            df = collections.Counter()
+            for t in corpus[lang]:
+                df.update(_tokens(t))
+            print("\n=== %s, %d reviews scanned ===" % (lang, n))
+            for tag in TAG_MAP:
+                kept = sorted(vocabs[lang].get(tag, set()),
+                              key=lambda t: -df[t])
+                print("  %-18s %s" % (tag, ", ".join(
+                    "%s %.1f%%" % (t, 100.0 * df[t] / n) for t in kept) or "(nothing)"))
+        return 0
+
+    tiers = collections.Counter()
+    for lang in LANGUAGES:
+        for slug in TAG_MAP:
+            words = vocabs[lang].get(slug, set())
+            scored = [(relevance(r, words), age, sl, r) for age, sl, r in cand[lang]]
+            # (hits desc, shorter text, newer) - shorter reads better in the block
+            def best(rows):
+                return sorted(rows, key=lambda x: (-x[0], len(x[3]["text"]), x[1]))[0]
+            tagged_rel = [x for x in scored if x[2] == slug and x[0] > 0]
+            other_rel = [x for x in scored if x[2] != slug and x[0] > 0]
+            tagged_any = [x for x in scored if x[2] == slug]
+            if tagged_rel:
+                hits, _, _, r = best(tagged_rel); tier = "tagged+relevant"
+            elif other_rel:
+                hits, _, sl, r = best(other_rel)
+                tier = "relevant, tagged %s" % (sl or "nothing")
+            elif tagged_any:
+                hits, _, _, r = best(tagged_any); tier = "tagged only, generic wording"
+            else:
                 continue
-            key = "%s|%s" % (slug, lang)
-            if key not in picked:            # newest wins, list is desc
-                picked[key] = r
-                counts[slug] += 1
+            r = dict(r, match_tier=tier, product_words=hits)
+            picked["%s|%s" % (slug, lang)] = r
+            counts[slug] += 1
+            tiers[tier.split(",")[0]] += 1
+
+    print("\nvocabulary: dropped %d modifiers, %d shared between emails, "
+          "%d too common in the reviews themselves"
+          % (drops["modifier"], drops["shared"], drops["generic"]))
+    print("picks by tier: " + ", ".join("%s %d" % (k, v) for k, v in tiers.most_common()))
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     payload = {
@@ -222,9 +428,11 @@ def main():
         json.dump(payload, f, ensure_ascii=False, indent=1, sort_keys=True)
 
     print("\nscanned %d reviews, kept %d" % (seen, len(picked)))
-    print("\n%-20s %s" % ("category", "  ".join("%-4s" % l for l in LANGUAGES)))
+    print("\n%-20s%s" % ("category", "".join("  %-8s" % l for l in LANGUAGES)))
+    MARK = {"tagged+relevant": "good", "relevant": "xtag", "tagged only": "GENERIC"}
     for slug in TAG_MAP:
-        row = "".join("  %-4s" % ("yes" if "%s|%s" % (slug, l) in picked else "-")
+        row = "".join("  %-8s" % MARK.get(
+            (picked.get("%s|%s" % (slug, l), {}).get("match_tier") or "-").split(",")[0], "-")
                       for l in LANGUAGES)
         print("%-20s%s" % (slug, row))
     missing = [k for slug in TAG_MAP for l in LANGUAGES
