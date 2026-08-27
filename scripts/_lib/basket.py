@@ -18,6 +18,16 @@ Rules baked in, all learned from live Started Checkout events:
     the number of line items, NOT the print run, so "Quantity 1" against 1,000
     flyers tells the reader nothing.
 """
+import i18n
+
+# THE TRANSLATOR IS PASSED IN, NOT HELD. It was module state for about ten
+# minutes, set by the builder before rendering, and that broke immediately: the
+# line fragments are built as ARGUMENTS to build(), so they run before build()
+# can set anything, and the low-value preview rendered with the high-value
+# email's live translator still in place. Django tags leaked into a preview.
+# Shared state plus argument evaluation order is not worth the saved parameter.
+def _t(tr, key, english):
+    return english if tr is None else tr(key, english)
 
 def css(P):
     return """
@@ -66,40 +76,42 @@ def _row(P, thumb, name, qty_line, cur, price, href):
     return ('<tr class="%s-brow">%s<td class="%s-litx">%s%s</td>'
             '<td class="%s-lip">%s%s</td></tr>' % (P, thumb, P, nm, q, P, cur, price))
 
-def sample_lines(P, assets, items, cur):
+def sample_lines(P, assets, items, cur, tr=None):
     """items: (kind, name, qty_int, price, img, href)"""
     out = ""
     for kind, name, qty, price, img, href in items:
         if kind == "product":
             thumb = '<td class="%s-lim"><img src="%s" alt="" width="80"></td>' % (P, img)
-            qline = "Quantity %d" % qty if qty > 1 else ""
+            qline = ("%s %d" % (_t(tr, "bk.qty", "Quantity"), qty)) if qty > 1 else ""
         else:
             thumb = ('<td class="%s-limsvc"><img src="%s" alt="" width="24" height="24"></td>'
                      % (P, assets["IMG_TICK"]))
-            qline = "Added at checkout"
+            qline = _t(tr, "bk.added", "Added at checkout")
         out += _row(P, thumb, name, qline, cur, price, href)
     return out
 
-def live_lines(P, assets, cur):
+def live_lines(P, assets, cur, tr=None):
     prod_thumb = ('<td class="%s-lim"><img src="{{ catalog_item.featured_image.full.src }}" '
                   'alt="" width="80"></td>' % P)
     svc_thumb = ('<td class="%s-limsvc"><img src="%s" alt="" width="24" height="24"></td>'
                  % (P, assets["IMG_TICK"]))
     # Quantity is the line count, not the print run, so it only earns a line
     # when it is greater than one
-    qline = ('{% if it.Quantity > 1 %}Quantity {{ it.Quantity }}{% endif %}')
+    qline = ('{%% if it.Quantity > 1 %%}%s {{ it.Quantity }}{%% endif %%}'
+             % _t(tr, "bk.qty", "Quantity"))
     product = ('{% catalog it.ProductID %}'
                + _row(P, prod_thumb, "{{ catalog_item.title }}", qline, cur,
                       "{{ it.RowTotal|floatformat:2 }}", "{{ it.ProductURL }}")
                + '{% endcatalog %}')
-    service = _row(P, svc_thumb, "{{ it.ProductName }}", "Added at checkout", cur,
+    service = _row(P, svc_thumb, "{{ it.ProductName }}",
+                   _t(tr, "bk.added", "Added at checkout"), cur,
                    "{{ it.RowTotal|floatformat:2 }}", None)
     return ('{% for it in event.Items %}'
             '{% if it.ProductID|slice:"2:3" == "-" %}' + product +
             '{% else %}' + service + '{% endif %}'
             '{% endfor %}')
 
-def block(P, lines, num, cur, total):
+def block(P, lines, num, cur, total, tr=None):
     return ('<div class="%(P)s-bwrap">'
             '<table class="%(P)s-bhd" role="presentation" cellpadding="0" cellspacing="0"><tr>'
             '<td valign="middle">'
@@ -110,15 +122,20 @@ def block(P, lines, num, cur, total):
             '<td width="26" height="26" bgcolor="#008539" align="center" valign="middle" '
             'class="%(P)s-badge">%(NUM)s</td></tr></table></td>'
             '</tr></table></td>'
-            '<td class="%(P)s-bhdr" valign="middle">Saved for you</td>'
+            '<td class="%(P)s-bhdr" valign="middle">%(SAVED)s</td>'
             '</tr></table>'
             '<table class="%(P)s-btbl" role="presentation" cellpadding="0" cellspacing="0">'
             '%(LINES)s'
-            '<tr class="%(P)s-trow"><td class="%(P)s-tlbl" colspan="2">Total</td>'
+            '<tr class="%(P)s-trow"><td class="%(P)s-tlbl" colspan="2">%(TOTAL_LBL)s</td>'
             '<td class="%(P)s-tval">%(CUR)s%(TOTAL)s</td></tr>'
             '</table></div>'
-            '<p class="%(P)s-tnote">Delivery and VAT are confirmed at checkout.</p>'
-            % {"P": P, "LINES": lines, "NUM": num, "CUR": cur, "TOTAL": total})
+            '<p class="%(P)s-tnote">%(NOTE)s</p>'
+            # TOTAL_LBL is the word, TOTAL is the amount. They were briefly the
+            # same key, which put the word "Total" in the price column.
+            % {"P": P, "SAVED": _t(tr, "bk.saved", "Saved for you"),
+               "TOTAL_LBL": _t(tr, "bk.total", "Total"),
+               "NOTE": _t(tr, "bk.note", "Delivery and VAT are confirmed at checkout."),
+               "LINES": lines, "NUM": num, "CUR": cur, "TOTAL": total})
 
 def checks(live_body, P, tag, errs):
     if live_body.count('{% if it.ProductID|slice:"2:3" == "-" %}') != 1:

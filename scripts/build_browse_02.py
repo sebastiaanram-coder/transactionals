@@ -40,7 +40,7 @@ SAMPLE = {
     "PROD_TITLE": "A5 Flyers",
     "PROD_IMG":   ("https://contentful.helloprint.com/wm1n7oady8a5/1aW8MTed9cdjC0t9NWfMyk/"
                    "ac8238ad30f1abf0e25f58b48896a492/flyers_a5.png"),
-    "UNSUB": '<a href="#">Unsubscribe</a>',
+    "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
     "CATALOG_OPEN": "{% catalog event.ProductID %}", "CATALOG_CLOSE": "{% endcatalog %}",
@@ -331,6 +331,7 @@ BODY = """
 
 
 TRANSLATED = [
+    ('foot.unsub', 'Unsubscribe'),
     ('eyebrow', 'ARTWORK'),
     ('pre', 'Order now and send your file later. Nothing goes on press until it has been checked.'),
     ('h1', 'You do not need the finished artwork yet'),

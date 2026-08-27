@@ -48,7 +48,7 @@ SAMPLE = {
     # preset quantity of 1 is common (all the banners), and "for 1 units" is
     # wrong, so the whole phrase is conditional and drops out at qty 1
     "QTY_PHRASE": "for 1000 units &middot; ",
-    "UNSUB":      '<a href="#">Unsubscribe</a>',
+    "UNSUB":      '<a href="#">{T_FOOT_UNSUB}</a>',
     "XSELL":      None,  # filled in build()
 }
 
@@ -400,8 +400,8 @@ BODY = """
     <!-- trustpilot -->
     <div class="{P}-trust">
       <a class="{P}-tp-link" href="https://ie.trustpilot.com/review/helloprint.com">
-        <img class="{P}-tp-stars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 stars on Trustpilot" width="135" height="28">
-        <span class="{P}-tp-score"><em>4.5</em> out of 5 on Trustpilot</span>
+        <img class="{P}-tp-stars" src="{IMG_STARS}" alt="{T_TP_ALT_STARS}" width="135" height="28">
+        <span class="{P}-tp-score">{T_TP_SCORE_LINE}</span>
         <span class="{P}-tp-sub">{T_REVIEWS_NOTE}</span>
       </a>
     </div>
@@ -413,7 +413,7 @@ BODY = """
       <img class="{P}-help-agents" src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
       <span class="{P}-helpttl">{T_SECT2_H}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
     </div>
 
@@ -444,6 +444,12 @@ BODY = """
 # the source of record: i18n compares it against data/translations.json and fails
 # the build if the two have drifted apart.
 TRANSLATED = [
+    ('tp.alt_stars', 'Rated 4.5 out of 5 stars on Trustpilot'),
+    ('tp.score_line', '<em>4.5</em> out of 5 on Trustpilot'),
+    ('help.chat', 'Chat with us'),
+    ('help.centre', 'Help Centre'),
+    ('foot.unsub', 'Unsubscribe'),
+    ('review.outof', 'out of 5 on Trustpilot'),
     ('pre', 'Still available at the same starting price. Change the spec and the price moves with it.'),
     ('eyebrow', 'STILL AVAILABLE'),
     ('h1', 'Still thinking it over?'),

@@ -25,7 +25,8 @@ Flip CAP to None here if the decision is to run it uncapped.
 """
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
-import basket, discount
+import basket
+import i18n, discount
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -110,7 +111,7 @@ SAMPLE = {
     "CUR": "&euro;", "TOTAL": "70.77", "NUM": "3",
     "BAND": band_sample(SAMPLE_TOTAL, "&euro;"),
     "SAVE_CLAUSE": clause_sample(SAMPLE_TOTAL, "&euro;"),
-    "UNSUB": '<a href="#">Unsubscribe</a>',
+    "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
     "CHECKOUT_URL": "{{ event.CheckoutURL }}",
@@ -257,7 +258,7 @@ BODY = """
       <span class="{P}-eyebrow">LAST CALL</span>
       <h1 class="{P}-h1">25% off, for the next {HOURS}&nbsp;hours</h1>
       <p class="{P}-sub">Use code <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. This is the last email we will send about this basket.</p>
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
     <div class="{P}-dl">
@@ -266,7 +267,7 @@ BODY = """
           <td class="{P}-dlic" valign="middle"><img src="{IMG_CLOCK}" alt="" width="26" height="26"></td>
           <td class="{P}-dltx" valign="middle">
             <p class="{P}-dlttl">{DEADLINE_TITLE_HTML}</p>
-            <p class="{P}-dlsub">Your basket stays saved either way. It is the discount that expires, not the order.</p>
+            <p class="{P}-dlsub">{T_ORD_SAVED_EITHER}</p>
           </td>
         </tr>
       </table>
@@ -278,27 +279,27 @@ BODY = """
     <div class="{P}-mid">
       <span class="{P}-code">Use code <strong>{CODE}</strong></span><br>
       <span class="{P}-terms">25% off your basket, up to {CUR}25 off. One use per customer, and it cannot be combined with another code.</span>
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
     <div class="{P}-q">{QUICK}</div>
 
     <div class="{P}-rev">
-      <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
+      <img class="{P}-revstars" src="{IMG_STARS}" alt="{T_TP_ALT}" width="120" height="25">
       <p class="{P}-revq">&ldquo;Ordered late, arrived early, and the print was better than the proof.&rdquo;</p>
-      <span class="{P}-revby">Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000</span>
+      <span class="{P}-revby">{T_TP_VERIFIED_LINE}</span>
     </div>
 
     <div class="{P}-last">
-      <span class="{P}-lastttl">And that is us done</span>
+      <span class="{P}-lastttl">{T_DONE_H}</span>
       <p class="{P}-lasttx">If the timing is wrong, no harm done, and we will stop emailing you about it. Your basket stays where it is for whenever the job comes back around.</p>
     </div>
 
     <div class="{P}-help">
       <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
-      <span class="{P}-helpttl">Stuck on something?</span>
+      <span class="{P}-helpttl">{T_STUCK_H}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
     </div>
 
@@ -324,10 +325,29 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets, lines):
-    vals = {"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE, "HOURS": HOURS,
+TRANSLATED = [
+    ('tp.alt', 'Rated 4.5 out of 5 on Trustpilot'),
+    ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000'),
+    ('review.outof', 'out of 5 on Trustpilot'),
+    ('ord.finish', 'Finish the job'),
+    ('ord.saved_either', 'Your basket stays saved either way. It is the discount that expires, not the order.'),
+    ('done_h', 'And that is us done'),
+    ('stuck_h', 'Stuck on something?'),
+    ('help.chat', 'Chat with us'),
+    ('help.centre', 'Help Centre'),
+    ('foot.unsub', 'Unsubscribe'),
+]
+
+
+def build(bindings, assets, lines, live=False, locale=None):
+    import re as _r
+    tr = i18n.translator('order-03-low', live, locale)
+    vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
+            for _k, _e in TRANSLATED}
+    vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE, "HOURS": HOURS,
             "DEADLINE_TITLE_HTML": nb(DEADLINE_TITLE),
-            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
+            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
+                                 bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
 
@@ -378,10 +398,21 @@ KLAVIYO_DOC = """<!--
 %(body)s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]))
-live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]))
+prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                              i18n.translator('order-03-low', False)))
+live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
+                            i18n.translator('order-03-low', True)), True)
 prev_doc = PREVIEW_DOC % prev_body
 live_doc = KLAVIYO_DOC % {"split": SPLIT, "cap": CAP, "hours": HOURS, "code": CODE, "body": live_body}
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    _b = build(SAMPLE, SAMPLE_ASSETS,
+               basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                                   i18n.translator('order-03-low', False, _loc)), False, _loc)
+    open(os.path.join(OUT, "order-03-low-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-03-low-proposed.html"), "w", encoding="utf-8").write(prev_doc)
 open(os.path.join(OUT, "order-03-low-klaviyo.html"), "w", encoding="utf-8").write(live_doc)
 

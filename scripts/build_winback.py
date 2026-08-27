@@ -308,7 +308,7 @@ FOOT = """
   <div class="{P}-foot">
     <span class="{P}-footlinks">
       <a href="mailto:hello@helloprint.com">hello@helloprint.com</a> &middot;
-      <a href="{CS}">Help Centre</a>
+      <a href="{CS}">{T_HELP_CENTRE}</a>
     </span>
     <div class="{P}-legal">
       Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
@@ -340,7 +340,8 @@ def products(P, live, n=4, across=2, tr=None):
         cell = ('<td class="{P}-tile" valign="top"><a class="{P}-card" href="{{{{ item.url }}}}">'
                 '<img src="{{{{ item.featured_image.full.url }}}}" alt="{{{{ item.title }}}}">'
                 '<span class="{P}-tname">{{{{ item.title }}}}</span>'
-                '<span class="{P}-tlink">See the range &rarr;</span></a></td>').format(P=P)
+                '<span class="{P}-tlink">{CTA} &rarr;</span></a></td>').format(
+            P=P, CTA=tr("cta.see_range", "See the range"))
         rows = ""
         for lo in range(0, n, 2):
             rows += ('<tr>{%% for item in catalog_items|slice:"%d:%d" %%}%s{%% endfor %%}</tr>'
@@ -368,8 +369,9 @@ def products(P, live, n=4, across=2, tr=None):
             nm, url = esc(sc.preview_field(name, "name")), sc.preview_field(name, "url")
         cells += ('<td class="%s%s" valign="top"><a class="%s-card" href="%s">'
                   '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
-                  '<span class="%s-tlink">See the range &rarr;</span></a></td>'
-                  % (P, tcls, P, url, sc.image(name, 400, 400), nm, P, nm, P))
+                  '<span class="%s-tlink">%s &rarr;</span></a></td>'
+                  % (P, tcls, P, url, sc.image(name, 400, 400), nm, P, nm, P,
+                     tr("cta.see_range", "See the range")))
     rows = ""
     cl = [c for c in cells.split("</td>") if c.strip()]
     cl = [c + "</td>" for c in cl]
@@ -483,9 +485,12 @@ def build(e, live, locale=None):
     A = LIVE_ASSETS if live else SAMPLE_ASSETS
     home, cs = sc.market_url("", live), sc.market_url("cs", live)
     common = dict(P=P, CSS=CSS % {"P": P},
+                  T_HELP_CENTRE=tr("help.centre", "Help Centre"),
+                  T_FOOT_UNSUB=tr("foot.unsub", "Unsubscribe"),
                   PRE=tr("pre", e["pre"]) if e.get("pre") else "",
                   CS=cs, UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live
-                                else '<a href="#">Unsubscribe</a>'))
+                                else '<a href="#">%s</a>'
+                                % tr("foot.unsub", "Unsubscribe")))
 
     if e["kind"] == "letter":
         # PLAIN <p> AND NOTHING ELSE. No classes on the paragraphs, no inline
@@ -655,7 +660,7 @@ for e in EMAILS:
         outcomes = ("not hear from me again", "will not hear from", "i will stop")
         if not any(o in vis for o in outcomes):
             errs.append(t + ": the woven opt-out does not say what clicking it does")
-    elif ">Unsubscribe<" not in livb and "'Unsubscribe'" not in livb:
+    elif ">{T_FOOT_UNSUB}<" not in livb and "'Unsubscribe'" not in livb:
         errs.append(t + ": no plain unsubscribe link in the footer")
 
     # THE STRIP MUST NOT CARRY AN INVENTED CLAIM. A fabricated "now 30% faster" is

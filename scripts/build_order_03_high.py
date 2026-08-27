@@ -45,7 +45,8 @@ weakest possible version of the truth on the one cart most worth recovering.
 """
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
-import basket, discount
+import basket
+import i18n, discount
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -109,7 +110,7 @@ SAMPLE = {
     "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
     "CUR": "&euro;", "TOTAL": "237.33", "NUM": "4",
     "SAVE_CLAUSE": clause_sample(SAMPLE_TOTAL, "&euro;"),
-    "UNSUB": '<a href="#">Unsubscribe</a>',
+    "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
     "CHECKOUT_URL": "{{ event.CheckoutURL }}",
@@ -257,10 +258,10 @@ BODY = """
     </div>
 
     <div class="{P}-hero">
-      <span class="{P}-eyebrow">LAST ONE FROM US</span>
-      <h1 class="{P}-h1">Still happy to go through this with you</h1>
+      <span class="{P}-eyebrow">{T_EYEBROW}</span>
+      <h1 class="{P}-h1">{T_H1}</h1>
       <p class="{P}-sub">An order this size is worth ten minutes of someone else&rsquo;s time before you pay for it.</p>
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
       <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">or speak to a print expert</a></p>
     </div>
 
@@ -270,7 +271,7 @@ BODY = """
           <td class="{P}-nav" valign="middle"><img src="{AV_JOHN}" alt="" width="62" height="62"></td>
           <td class="{P}-nmeta" valign="middle">
             <span class="{P}-nname">John</span>
-            <span class="{P}-nrole">PRINT EXPERT TEAM</span>
+            <span class="{P}-nrole">{T_ORD_ROLE}</span>
           </td>
         </tr>
       </table>
@@ -278,33 +279,33 @@ BODY = """
       <p class="{P}-ntx">Send it over before you order and I will go through it. And to make the decision a bit easier, here is 10% off from me:</p>
 
       <div class="{P}-gift">
-        <span class="{P}-giftlbl">JOHN&rsquo;S CODE FOR YOU</span>
+        <span class="{P}-giftlbl">{T_CODE_LABEL}</span>
         <span class="{P}-code">Use code <strong>{CODE}</strong></span>
         <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="13" height="13">{SAVE_CLAUSE}expires {HOURS}&nbsp;hours after this email</span>
       </div>
 
-      <p class="{P}-nsig">John, print expert team</p>
+      <p class="{P}-nsig">{T_SIG}</p>
     </div>
 
     {BASKET}
 
     <div class="{P}-mid">
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
       <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">or send it to John first</a></p>
     </div>
 
     <div class="{P}-q">{QUICK}</div>
 
     <div class="{P}-last">
-      <span class="{P}-lastttl">And that is us done</span>
+      <span class="{P}-lastttl">{T_DONE_H}</span>
       <p class="{P}-lasttx">This is the last email we will send about this basket. It stays saved for whenever the job comes back around, and the offer to look at it with you does not expire.</p>
     </div>
 
     <div class="{P}-help">
       <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
-      <span class="{P}-helpttl">Stuck on something?</span>
+      <span class="{P}-helpttl">{T_STUCK_H}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
     </div>
 
@@ -330,9 +331,29 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets, lines):
-    vals = {"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE, "HOURS": HOURS,
-            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
+TRANSLATED = [
+    ('ord.finish', 'Finish the job'),
+    ('foot.unsub', 'Unsubscribe'),
+    ('eyebrow', 'LAST ONE FROM US'),
+    ('h1', 'Still happy to go through this with you'),
+    ('ord.role', 'PRINT EXPERT TEAM'),
+    ('code_label', 'JOHN&rsquo;S CODE FOR YOU'),
+    ('sig', 'John, print expert team'),
+    ('done_h', 'And that is us done'),
+    ('stuck_h', 'Stuck on something?'),
+    ('help.chat', 'Chat with us'),
+    ('help.centre', 'Help Centre'),
+]
+
+
+def build(bindings, assets, lines, live=False, locale=None):
+    import re as _r
+    tr = i18n.translator('order-03-high', live, locale)
+    vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
+            for _k, _e in TRANSLATED}
+    vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE, "HOURS": HOURS,
+            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
+                                 bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
 
@@ -387,11 +408,22 @@ KLAVIYO_DOC = """<!--
 %(body)s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]))
-live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]))
+prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                              i18n.translator('order-03-high', False)))
+live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
+                            i18n.translator('order-03-high', True)), True)
 prev_doc = PREVIEW_DOC % prev_body
 live_doc = KLAVIYO_DOC % {"split": SPLIT, "hours": HOURS, "code": CODE, "ceiling": CEILING,
                           "deepest": int(CEILING * RATE), "body": live_body}
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    _b = build(SAMPLE, SAMPLE_ASSETS,
+               basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                                   i18n.translator('order-03-high', False, _loc)), False, _loc)
+    open(os.path.join(OUT, "order-03-high-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-03-high-proposed.html"), "w", encoding="utf-8").write(prev_doc)
 open(os.path.join(OUT, "order-03-high-klaviyo.html"), "w", encoding="utf-8").write(live_doc)
 

@@ -19,7 +19,8 @@ is always true and never overstated. Verified by render.
 """
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
-import basket, discount
+import basket
+import i18n, discount
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -81,7 +82,7 @@ SAMPLE = {
     "CUR": "&euro;", "TOTAL": "70.77", "NUM": "3",
     "BAND": band_sample(SAMPLE_TOTAL, "&euro;"),
     "SAVE_CLAUSE": clause_sample(SAMPLE_TOTAL, "&euro;"),
-    "UNSUB": '<a href="#">Unsubscribe</a>',
+    "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
     "CHECKOUT_URL": "{{ event.CheckoutURL }}",
@@ -208,10 +209,10 @@ BODY = """
     </div>
 
     <div class="{P}-hero">
-      <span class="{P}-eyebrow">STILL IN YOUR BASKET</span>
+      <span class="{P}-eyebrow">{T_ORD_STILL}</span>
       <h1 class="{P}-h1">10% off the basket you saved</h1>
       <p class="{P}-sub">Use code <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. Everything is still configured exactly as you left it, and the code runs for 72 hours.</p>
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
     {BASKET}
@@ -219,22 +220,22 @@ BODY = """
 
     <div class="{P}-mid">
       <span class="{P}-code">Use code <strong>{CODE}</strong></span><br>
-      <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+      <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
     <div class="{P}-q">{QUICK}</div>
 
     <div class="{P}-rev">
-      <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
+      <img class="{P}-revstars" src="{IMG_STARS}" alt="{T_TP_ALT}" width="120" height="25">
       <p class="{P}-revq">&ldquo;Good quality, super fast and they checked my work. Really lovely.&rdquo;</p>
-      <span class="{P}-revby">Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000</span>
+      <span class="{P}-revby">{T_TP_VERIFIED_LINE}</span>
     </div>
 
     <div class="{P}-help">
       <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
-      <span class="{P}-helpttl">Stuck on something?</span>
+      <span class="{P}-helpttl">{T_STUCK_H}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
     </div>
 
@@ -260,9 +261,27 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets, lines):
-    vals = {"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE,
-            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
+TRANSLATED = [
+    ('tp.alt', 'Rated 4.5 out of 5 on Trustpilot'),
+    ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000'),
+    ('review.outof', 'out of 5 on Trustpilot'),
+    ('ord.still', 'STILL IN YOUR BASKET'),
+    ('ord.finish', 'Finish the job'),
+    ('stuck_h', 'Stuck on something?'),
+    ('help.chat', 'Chat with us'),
+    ('help.centre', 'Help Centre'),
+    ('foot.unsub', 'Unsubscribe'),
+]
+
+
+def build(bindings, assets, lines, live=False, locale=None):
+    import re as _r
+    tr = i18n.translator('order-02-low', live, locale)
+    vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
+            for _k, _e in TRANSLATED}
+    vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE,
+            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
+                                 bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
 
@@ -306,8 +325,19 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]))
-live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]))
+prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                              i18n.translator('order-02-low', False)))
+live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
+                            i18n.translator('order-02-low', True)), True)
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    _b = build(SAMPLE, SAMPLE_ASSETS,
+               basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                                   i18n.translator('order-02-low', False, _loc)), False, _loc)
+    open(os.path.join(OUT, "order-02-low-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-02-low-proposed.html"), "w", encoding="utf-8").write(PREVIEW_DOC % prev_body)
 open(os.path.join(OUT, "order-02-low-klaviyo.html"), "w", encoding="utf-8").write(KLAVIYO_DOC % (CODE, live_body))
 

@@ -468,10 +468,11 @@ EMAIL_DETAIL = {
 # their own version string and their own date, and by the time anyone noticed they
 # disagreed. A document people are asked to sign off cannot contradict itself about
 # which version it is.
-VERSION = "v0.9"
-VERSION_DATE = "27 Aug 2026"
+VERSION = "v1.0"
+VERSION_DATE = "28 Aug 2026"
 
 ISSUES = [
+ "Every email in the programme is translated into six languages across nine locales: English, Dutch, French, German, Spanish and Italian, with nl-BE reading Dutch and fr-BE reading French unless a string is given its own override. 392 keys, one universal HTML block per email carrying all of them behind a switch on event.Locale, and 145 rendered previews so a colleague proofreads an email rather than a spreadsheet. Use the Proofread in bar above any preview. What is NOT done is the native-speaker pass: these are my translations, and nobody whose first language it is has read them yet.",
  "The review band now requires the review to be ABOUT the category, not merely tagged with it. Of 35 category-language slots, 17 quote a review that names the product and carries the right tag, 13 quote one that names the product under a different tag, 4 fall back to a tagged review with generic wording and 1 has nothing and shows the placeholder. The four generic ones are Stationery in French and Italian, Labels and Packaging in English, and Clothing in Spanish; they are worth hunting by hand, because a stranger naming the product is the entire value of that block. scripts/fetch_reviews.py --vocab shows why any given pick was made.",
  "THE EVENT PAYLOADS BLOCK MORE OF THIS PROGRAMME THAN ANYTHING ELSE, and none of it is a design question. Measured on the 100 most recent events of each type: Locale is completely absent from Started Checkout and Viewed Product, 0 of 100 each, which is why the six abandoned-order and three browse emails carry hardcoded /en-ie/ links and can only run in Ireland. Categories is absent from every v4 Placed Order event and missing on 30% of presta, so the six category nudges have nothing to route on. Written up for the payload owners in proposals/event-payload-handover.md, with the field names, formats and acceptance criteria.",
  "A live defect in the six abandoned-order emails, found while measuring the above: they print {{ it.ProductURL }}, and that field is on 8 of 150 basket lines, so the product link is empty for about 95% of rows. Ours to fix, not the payload owners\u2019: the templates already open a catalogue lookup for the product image, so the link should come from there. Separately, ProductID is missing on 5 of 150 lines, and a catalogue lookup on an empty id fails the whole render rather than one row, so those templates also need a guard.",

@@ -26,6 +26,7 @@ five-element overlay either darkened them or left the link on lit photo.
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
+import i18n
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -50,7 +51,7 @@ LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items
 SAMPLE = {
     "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
     "CUR": "&euro;", "TOTAL": "237.33", "NUM": "4",
-    "UNSUB": '<a href="#">Unsubscribe</a>',
+    "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
     "CHECKOUT_URL": "{{ event.CheckoutURL }}",
@@ -173,7 +174,7 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">A print expert can check the spec, confirm the date, and sort invoicing before you pay.</div>
+<div class="{P}-pre">{T_PRE}</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -184,10 +185,10 @@ BODY = """
 
     <div class="{P}-hero">
       <div class="{P}-heroov">
-        <span class="{P}-eyebrow">BEFORE YOU PAY</span>
-        <h1 class="{P}-h1">Want a print expert to look at it first?</h1>
-        <p class="{P}-sub">On an order this size, ten minutes of someone else&rsquo;s time is usually worth having.</p>
-        <a class="{P}-cta" href="{CHECKOUT_URL}">Finish the job</a>
+        <span class="{P}-eyebrow">{T_EYEBROW}</span>
+        <h1 class="{P}-h1">{T_H1}</h1>
+        <p class="{P}-sub">{T_SUB}</p>
+        <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
       </div>
       <img class="{P}-heroimg" src="{IMG_HERO}" alt="The Helloprint print expert team" width="600">
     </div>
@@ -197,26 +198,26 @@ BODY = """
     {BASKET}
 
     <div class="{P}-mid">
-      <a class="{P}-cta-g" href="{CHECKOUT_URL}">Finish the job</a>
+      <a class="{P}-cta-g" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
     <div class="{P}-rs">
-      <h2 class="{P}-rshd">What they will actually do</h2>
+      <h2 class="{P}-rshd">{T_SECT_H}</h2>
       {ROWS}
     </div>
 
     <div class="{P}-john">
       <img class="{P}-johnav" src="{AV_JOHN}" alt="" width="76" height="76">
       <span class="{P}-johnname">John</span>
-      <span class="{P}-johnrole">PRINT EXPERT TEAM</span>
-      <p class="{P}-johntx">John has specced print for over twenty years. He and his team handle everything from a straightforward reprint to the jobs other printers turn down.</p>
+      <span class="{P}-johnrole">{T_ORD_ROLE}</span>
+      <p class="{P}-johntx">{T_BIO}</p>
     </div>
 
     <div class="{P}-close">
-      <span class="{P}-closettl">Or just finish it</span>
-      <span class="{P}-closetxt">The basket is saved and nothing is charged until you confirm. If you would rather have a second pair of eyes on it first, say the word.</span>
-      <a class="{P}-cta-g" href="{CHECKOUT_URL}">Finish the job</a>
-      <span class="{P}-closealt">Or reply to this email and a print expert will pick it up.</span>
+      <span class="{P}-closettl">{T_OR_H}</span>
+      <span class="{P}-closetxt">{T_OR_B}</span>
+      <a class="{P}-cta-g" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
+      <span class="{P}-closealt">{T_ORD_REPLY}</span>
     </div>
 
   </div>
@@ -241,9 +242,30 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets, lines):
-    vals = {"P": P, "CSS": CSS, "ROWS": expert_rows(assets),
-            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
+TRANSLATED = [
+    ('ord.finish', 'Finish the job'),
+    ('foot.unsub', 'Unsubscribe'),
+    ('pre', 'A print expert can check the spec, confirm the date, and sort invoicing before you pay.'),
+    ('eyebrow', 'BEFORE YOU PAY'),
+    ('h1', 'Want a print expert to look at it first?'),
+    ('sub', 'On an order this size, ten minutes of someone else&rsquo;s time is usually worth having.'),
+    ('sect_h', 'What they will actually do'),
+    ('ord.role', 'PRINT EXPERT TEAM'),
+    ('bio', 'John has specced print for over twenty years. He and his team handle everything from a straightforward reprint to the jobs other printers turn down.'),
+    ('or_h', 'Or just finish it'),
+    ('or_b', 'The basket is saved and nothing is charged until you confirm. If you would rather have a second pair of eyes on it first, say the word.'),
+    ('ord.reply', 'Or reply to this email and a print expert will pick it up.'),
+]
+
+
+def build(bindings, assets, lines, live=False, locale=None):
+    import re as _r
+    tr = i18n.translator('order-02-high', live, locale)
+    vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
+            for _k, _e in TRANSLATED}
+    vals.update({"P": P, "CSS": CSS, "ROWS": expert_rows(assets),
+            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
+                                 bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
     return BODY.format(**vals)
 
@@ -282,8 +304,19 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]))
-live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]))
+prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                              i18n.translator('order-02-high', False)))
+live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
+                            i18n.translator('order-02-high', True)), True)
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    _b = build(SAMPLE, SAMPLE_ASSETS,
+               basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                                   i18n.translator('order-02-high', False, _loc)), False, _loc)
+    open(os.path.join(OUT, "order-02-high-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-02-high-proposed.html"), "w", encoding="utf-8").write(PREVIEW_DOC % prev_body)
 open(os.path.join(OUT, "order-02-high-klaviyo.html"), "w", encoding="utf-8").write(KLAVIYO_DOC % live_body)
 

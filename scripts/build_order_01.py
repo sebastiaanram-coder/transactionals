@@ -31,6 +31,7 @@ catalog lookup happens.
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
+import i18n
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -59,7 +60,7 @@ SAMPLE = {
     "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
     "CUR": "&euro;", "TOTAL": "237.33",
     "NUM": "4",
-    "UNSUB": '<a href="#">Unsubscribe</a>',
+    "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
     "CATALOG_OPEN": "", "CATALOG_CLOSE": "",
@@ -199,7 +200,7 @@ EXPERT = """
           <span class="{P}-explbl">ON AN ORDER THIS SIZE</span>
           <p class="{P}-expttl">Want someone to check it first?</p>
           <p class="{P}-expbody">John and the Print Expert Team can go through the spec with you, confirm the delivery date, and tell you if anything will not print well. Before you pay for it, not after.</p>
-          <span class="{P}-explink"><a href="mailto:hello@helloprint.com">Ask a print expert</a></span>
+          <span class="{P}-explink"><a href="mailto:hello@helloprint.com">{T_ORD_ASK}</a></span>
         </td>
       </tr></table>
     </div>
@@ -209,7 +210,7 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">Everything you configured is saved. Pick up where you left off.</div>
+<div class="{P}-pre">{T_PRE}</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -220,10 +221,10 @@ BODY = """
 
     <div class="{P}-hero">
       <div class="{P}-heroov">
-        <span class="{P}-eyebrow">YOUR BASKET</span>
-        <h1 class="{P}-h1">Left something behind?</h1>
-        <p class="{P}-sub">Nothing has been lost. Every option you picked is saved exactly as you left it.</p>
-        <a class="{P}-cta" href="{CHECKOUT_URL}">Return to checkout</a>
+        <span class="{P}-eyebrow">{T_ORD_BASKET}</span>
+        <h1 class="{P}-h1">{T_H1}</h1>
+        <p class="{P}-sub">{T_SUB}</p>
+        <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_RETURN}</a>
       </div>
       <img class="{P}-heroimg" src="{IMG_HERO}" alt="" width="600">
     </div>
@@ -235,23 +236,23 @@ BODY = """
 
 
     <div class="{P}-mid">
-      <a class="{P}-cta-g" href="{CHECKOUT_URL}">Return to checkout</a>
+      <a class="{P}-cta-g" href="{CHECKOUT_URL}">{T_ORD_RETURN}</a>
     </div>
 
 {EXPERT_BLOCK}
     <div class="{P}-rs">{REASSURE}</div>
 
     <div class="{P}-rev">
-      <img class="{P}-revstars" src="{IMG_STARS}" alt="Rated 4.5 out of 5 on Trustpilot" width="120" height="25">
+      <img class="{P}-revstars" src="{IMG_STARS}" alt="{T_TP_ALT}" width="120" height="25">
       <p class="{P}-revq">&ldquo;Good quality, super fast and they checked my work. Really lovely.&rdquo;</p>
-      <span class="{P}-revby">Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000</span>
+      <span class="{P}-revby">{T_TP_VERIFIED_LINE}</span>
     </div>
 
     <div class="{P}-help">
       <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
-      <span class="{P}-helpttl">Something not right in there?</span>
+      <span class="{P}-helpttl">{T_HELP_H}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">Chat with us</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">Help Centre</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
       </span>
     </div>
 
@@ -277,9 +278,31 @@ BODY = """
 </div>
 """
 
-def build(bindings, assets, lines, high):
-    vals = {"P": P, "CSS": CSS, "REASSURE": reassure(assets),
-            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"], bindings["TOTAL"])}
+TRANSLATED = [
+    ('tp.alt', 'Rated 4.5 out of 5 on Trustpilot'),
+    ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000'),
+    ('foot.unsub', 'Unsubscribe'),
+    ('review.outof', 'out of 5 on Trustpilot'),
+    ('pre', 'Everything you configured is saved. Pick up where you left off.'),
+    ('ord.basket', 'YOUR BASKET'),
+    ('h1', 'Left something behind?'),
+    ('sub', 'Nothing has been lost. Every option you picked is saved exactly as you left it.'),
+    ('ord.return', 'Return to checkout'),
+    ('ord.ask', 'Ask a print expert'),
+    ('help_h', 'Something not right in there?'),
+    ('help.chat', 'Chat with us'),
+    ('help.centre', 'Help Centre'),
+]
+
+
+def build(bindings, assets, lines, high, live=False, locale=None):
+    import re as _r
+    tr = i18n.translator('order-01', live, locale)
+    vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
+            for _k, _e in TRANSLATED}
+    vals.update({"P": P, "CSS": CSS, "REASSURE": reassure(assets),
+            "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
+                                 bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
     vals["EXPERT_BLOCK"] = EXPERT.format(**vals) if high else ""
     return BODY.format(**vals)
@@ -327,8 +350,21 @@ errs = []
 
 def emit(high):
     tag = "high" if high else "low"
-    pb = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"]), high)
-    lb = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"]), high)
+    pb = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                              i18n.translator('order-01', False)), high)
+    lb = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
+                            i18n.translator('order-01', True)), high, True)
+    for _lg in i18n.LANGS:
+        if _lg == i18n.SOURCE:
+            continue
+        _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+        _b = build(SAMPLE, SAMPLE_ASSETS,
+                   basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
+                                       i18n.translator("order-01", False, _loc)),
+                   high, False, _loc)
+        open(os.path.join(OUT, "order-01-%s-%s-proposed.html" % (tag, _lg)), "w",
+             encoding="utf-8").write(PREVIEW_DOC % (tag, _b))
+
     open(os.path.join(OUT, "order-01-%s-proposed.html" % tag), "w", encoding="utf-8").write(
         PREVIEW_DOC % (tag, pb))
     open(os.path.join(OUT, "order-01-%s-klaviyo.html" % tag), "w", encoding="utf-8").write(

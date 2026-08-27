@@ -184,7 +184,7 @@ BODY = """
   <div class="{P}-foot">
     <span class="{P}-footlinks">
       <a href="mailto:hello@helloprint.com">hello@helloprint.com</a> &middot;
-      <a href="{CS}">Help Centre</a>
+      <a href="{CS}">{T_HELP_CENTRE}</a>
     </span>
     <div class="{P}-legal">
       Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
@@ -228,6 +228,8 @@ def build(e, live, locale=None):
     P = "hp-" + e["code"]
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
     vals = dict(
+        T_HELP_CENTRE=tr('help.centre', 'Help Centre'),
+        T_FOOT_UNSUB=tr('foot.unsub', 'Unsubscribe'),
         P=P, CSS=CSS % {"P": P},
         PRE=tr("pre", e["pre"]), EYEBROW=tr("eyebrow", e["eyebrow"]),
         H1=tr("h1", e["h1"]), SUB=tr("sub", e["sub"]),
