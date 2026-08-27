@@ -60,6 +60,7 @@ three weeks later reads as a resend.
 import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import subcategories as sc
+import i18n
 
 
 def esc(t):
@@ -317,7 +318,7 @@ FOOT = """
 """
 
 
-def products(P, live, n=4, across=2):
+def products(P, live, n=4, across=2, tr=None):
     """A grid of things to come back to.
 
     Live: Klaviyo's recommendation engine. Preview: real Contentful subcategories,
@@ -325,10 +326,13 @@ def products(P, live, n=4, across=2):
     verified in this account; divisibleby is not."""
     head = ('<div class="%s-news"><p class="%s-newsh">%s</p>'
             '<p class="%s-newss">%s</p>'
-            % (P, P, ("A few worth picking up" if across == 3 else "Where to pick up"),
-               P, ("Three we would put in front of you first. No prices attached."
-                   if across == 3
-                   else "No prices here on purpose. A starting point, not a shelf.")))
+            % (P, P,
+               (tr("wb.grid_h3", "A few worth picking up") if across == 3
+                else tr("wb.grid_h2", "Where to pick up")),
+               P,
+               (tr("wb.grid_sub3", "Three we would put in front of you first. No prices attached.")
+                if across == 3
+                else tr("wb.grid_sub2", "No prices here on purpose. A starting point, not a shelf."))))
     tcls = "-tile3" if across == 3 else "-tile"
     if across == 3:
         head += "<!-- %s -->" % PICK_TODO
@@ -375,7 +379,7 @@ def products(P, live, n=4, across=2):
             'cellpadding="0" cellspacing="0">%s</table>' % (P, rows)) + "</div>"
 
 
-def team_band(P, live, cs, A):
+def team_band(P, live, cs, A, tr):
     """The people, on ink, between the two white sections.
 
     NO CLAIM ABOUT THE SUPPORT PROCESS. An earlier draft of another email said
@@ -388,23 +392,28 @@ def team_band(P, live, cs, A):
             # the alt from the name: "checking a printed sheet". It is not that. It
             # is three of the team at their desks on headsets, which a screen reader
             # would otherwise have been told wrongly.
-            '<img class="{P}-bandimg" src="{IMG_TEAM}" alt="Three of the team at '
-            'their desks, on headsets" width="536">'
-            '<span class="{P}-bandeye">THE PRINT EXPERT TEAM</span>'
-            '<h2 class="{P}-bandh">There is a team behind the website</h2>'
+            '<img class="{P}-bandimg" src="{IMG_TEAM}" alt="{ALT}" width="536">'
+            '<span class="{P}-bandeye">{EYE}</span>'
+            '<h2 class="{P}-bandh">{H}</h2>'
             # NOT "people who print this every day". They advise on print; the
             # printing itself is not done in that room, and the photo shows a desk
             # and a headset. What is true is that they see jobs like this all day.
-            '<p class="{P}-bandp">Print experts who see jobs like yours every day. '
-            'If you have a '
-            'campaign to plan, a size you are not sure about, or a job you have '
-            'never printed before, send them a message and one of them will come '
-            'back to you.</p>'
-            '<a class="{P}-cta" href="{CS}">Ping the team a message</a>'
-            '</div>').format(P=P, CS=cs, **A)
+            '<p class="{P}-bandp">{B}</p>'
+            '<a class="{P}-cta" href="{CS}">{CTA}</a>'
+            '</div>').format(
+                P=P, CS=cs,
+                ALT=tr("wb.team_alt", "Three of the team at their desks, on headsets"),
+                EYE=tr("wb.team_eyebrow", "THE PRINT EXPERT TEAM"),
+                H=tr("wb.team_h", "There is a team behind the website"),
+                B=tr("wb.team_b",
+                     "Print experts who see jobs like yours every day. If you have a "
+                     "campaign to plan, a size you are not sure about, or a job you "
+                     "have never printed before, send them a message and one of them "
+                     "will come back to you."),
+                CTA=tr("wb.team_cta", "Ping the team a message"), **A)
 
 
-def next_day(P, live, A):
+def next_day(P, live, A, tr):
     """Speed, in the words the product pages actually use.
 
     "Next Day Delivery" is a badge on individual products, so that is what the
@@ -415,24 +424,43 @@ def next_day(P, live, A):
     href = NEXTDAY_URL if live else sc.landing("promotional-printing")
     return ('<div class="{P}-fast">'
             '<img class="{P}-fasticon" src="{ICON_CLOCK}" alt="" width="44" height="44">'
-            '<h2 class="{P}-fasth">In a hurry? We&rsquo;ve got your back</h2>'
-            '<p class="{P}-fastp">Not everything has to take a week. A lot of what '
-            'we print carries a Next Day Delivery badge, so if your date is tight '
-            'there is usually a way to make it. If you cannot see it on the '
-            'product, ask us and we will tell you what can still land in time.</p>'
-            '<a class="{P}-fastcta" href="{HREF}">See what ships next day</a>'
-            '</div>').format(P=P, HREF=href, **A)
+            '<h2 class="{P}-fasth">{H}</h2>'
+            '<p class="{P}-fastp">{B}</p>'
+            '<a class="{P}-fastcta" href="{HREF}">{CTA}</a>'
+            '</div>').format(
+                P=P, HREF=href,
+                H=tr("wb.fast_h", "In a hurry? We&rsquo;ve got your back"),
+                B=tr("wb.fast_b",
+                     "Not everything has to take a week. A lot of what we print "
+                     "carries a Next Day Delivery badge, so if your date is tight "
+                     "there is usually a way to make it. If you cannot see it on "
+                     "the product, ask us and we will tell you what can still land "
+                     "in time."),
+                CTA=tr("wb.fast_cta", "See what ships next day"), **A)
 
 
-def code_block(P, live):
-    return ('<div class="%s-code"><span class="%s-codelbl">YOUR CODE</span>'
+def code_block(P, live, tr=None):
+    # NOT string concatenation around a % format: `%` binds tighter than `+`, so
+    # `'a' + x + 'b' % args` formats only the tail. That has bitten this project
+    # three times now. Every dynamic part goes through the format arguments.
+    t = (lambda k, e: e) if tr is None else tr
+    exp = t("offer.expiry",
+            "%d%% off your next order &middot; expires %d days after this email")
+    # AND UNDOUBLE THE PERCENT. The source string is written for %-formatting, so
+    # it carries "%%" to mean one literal percent sign. Filling the numbers by
+    # replace instead of by % means nothing ever undoubles it, and "10%% off"
+    # ships. Three emails had it before the markup check caught it.
+    exp = (exp.replace("%d", "\x00", 1).replace("%d", "\x01", 1)
+              .replace("\x00", str(PERCENT)).replace("\x01", str(EXPIRY_DAYS))
+              .replace("%%", "%"))
+    return ('<div class="%s-code"><span class="%s-codelbl">%s</span>'
             '<span class="%s-codeval">%s</span>'
-            '<span class="%s-codeexp">%d%% off your next order &middot; expires %d '
-            'days after this email</span></div>'
-            % (P, P, P, (CODE if live else SAMPLE_CODE), P, PERCENT, EXPIRY_DAYS))
+            '<span class="%s-codeexp">%s</span></div>'
+            % (P, P, t("offer.code_label", "YOUR CODE"), P,
+               (CODE if live else SAMPLE_CODE), P, exp))
 
 
-def unsub(P, live):
+def unsub(P, live, tr=None):
     """The opt-out, in John's words.
 
     It used to end "and I will take you off the list", which said what the link
@@ -441,16 +469,21 @@ def unsub(P, live):
     already in the first clause: not hearing from him again is what the sentence is
     about, so the link needs no second explanation.
     """
-    link = ("{% unsubscribe 'just say the word' %}" if live
-            else '<a class="%s-unslink" href="#">just say the word</a>' % P)
-    return "And if you would rather not hear from me again, " + link + "."
+    t = (lambda k, e: e) if tr is None else tr
+    label = t("wb.unsub_label", "just say the word")
+    link = ("{%% unsubscribe '%s' %%}" % label if live
+            else '<a class="%s-unslink" href="#">%s</a>' % (P, label))
+    return t("wb.unsub_sentence",
+             "And if you would rather not hear from me again, ") + link + "."
 
 
-def build(e, live):
+def build(e, live, locale=None):
     P = "hp-" + e["code"]
+    tr = i18n.translator(e["slug"], live, locale)
     A = LIVE_ASSETS if live else SAMPLE_ASSETS
     home, cs = sc.market_url("", live), sc.market_url("cs", live)
-    common = dict(P=P, CSS=CSS % {"P": P}, PRE=e["pre"] if e.get("pre") else "",
+    common = dict(P=P, CSS=CSS % {"P": P},
+                  PRE=tr("pre", e["pre"]) if e.get("pre") else "",
                   CS=cs, UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live
                                 else '<a href="#">Unsubscribe</a>'))
 
@@ -458,9 +491,12 @@ def build(e, live):
         # PLAIN <p> AND NOTHING ELSE. No classes on the paragraphs, no inline
         # styles, no wrapper div with a width. The client renders it the way it
         # renders a message from a colleague, which is the whole point.
-        paras = "".join("<p>%s</p>" % t for t in e["paras"])
-        greet = ("{% if first_name %}Hi {{ first_name }},{% else %}Hi there,{% endif %}"
-                 if live else "Hi Sarah,")
+        paras = "".join("<p>%s</p>" % tr("para.%d" % i, t)
+                        for i, t in enumerate(e["paras"]))
+        _named = tr("greet_named", "Hi {{ first_name }},")
+        _plain = tr("greet_plain", "Hi there,")
+        greet = ("{%% if first_name %%}%s{%% else %%}%s{%% endif %%}" % (_named, _plain)
+                 if live else _plain.replace(",", " Sarah,"))
         # The company identity moves INTO the signature. It is a legal requirement in
         # a commercial message and it is the one thing that cannot go - but a real
         # signature carries an address anyway, so in the signature it stops looking
@@ -474,35 +510,41 @@ def build(e, live):
                'width="62" height="62"></td>'
                '<td class="{P}-smeta" valign="middle">'
                '<span class="{P}-sname">John</span>'
-               '<span class="{P}-srole">PRINT EXPERT TEAM</span>'
+               '<span class="{P}-srole">{ROLE}</span>'
                '<a class="{P}-smail" href="{HOME}">hello@helloprint.com</a>'
-               '</td></tr></table>').format(P=P, HOME=home, **A)
+               '</td></tr></table>').format(
+                   P=P, HOME=home,
+                   ROLE=tr("wb.sig_role", "PRINT EXPERT TEAM"), **A)
         return ('<div><style>%s</style>'
                 '<div class="%s-pre">%s</div>'
-                '<p>%s</p>%s<p>%s</p><p>%s</p><p>Best,</p>%s</div>'
-                % (LETTER_CSS % {"P": P}, P, e["pre"], greet, paras, e["closing"],
-                   unsub(P, live), sig))
+                '<p>%s</p>%s<p>%s</p><p>%s</p><p>%s</p>%s</div>'
+                % (LETTER_CSS % {"P": P}, P, tr("pre", e["pre"]), greet, paras,
+                   tr("closing", e["closing"]), tr("wb.best", "Best,"),
+                   unsub(P, live, tr), sig))
 
     hero = ('<div class="%s-hero"><img src="%s" alt="%s" width="600"></div>'
-            % (P, photo(e["hero"], live), esc(e["hero_alt"]))) if e.get("hero") else ""
+            % (P, photo(e["hero"], live),
+               tr("hero_alt", e["hero_alt"], esc))) if e.get("hero") else ""
     dark = ('<div class="{P}-dark">'
             '<a href="{HOME}"><img class="{P}-mark" src="{IMG_WORDMARK}" alt="Helloprint" width="142"></a>'
             '<span class="{P}-eyebrow">{EYEBROW}</span>'
             '<h1 class="{P}-h1">{H1}</h1><p class="{P}-sub">{SUB}</p>'
             '{CODE}{CTA}{TERMS}</div>').format(
-        P=P, HOME=home, EYEBROW=e["eyebrow"], H1=e["h1"], SUB=e["sub"],
-        CTA=('<a class="%s-cta" href="%s">%s</a>' % (P, home, e["cta"])
+        P=P, HOME=home, EYEBROW=tr("eyebrow", e["eyebrow"]),
+        H1=tr("h1", e["h1"]), SUB=tr("sub", e["sub"]),
+        CTA=('<a class="%s-cta" href="%s">%s</a>' % (P, home, tr("cta", e["cta"]))
              if e.get("cta") else ""),
-        CODE=(code_block(P, live) if e.get("offer") else ""),
-        TERMS=('<span class="%s-terms">One use per customer.</span>' % P
+        CODE=(code_block(P, live, tr) if e.get("offer") else ""),
+        TERMS=('<span class="%s-terms">%s</span>'
+               % (P, tr("offer.terms", "One use per customer."))
                if e.get("offer") else ""),
         **A)
-    news = (products(P, live, e.get("tiles", 4), e.get("across", 2))
+    news = (products(P, live, e.get("tiles", 4), e.get("across", 2), tr)
             if e.get("tiles") else "")
     # Products, then people, then speed: what to print, who helps you decide, and
     # what to do when the date is the problem.
-    news += team_band(P, live, cs, A) if e.get("team") else ""
-    news += next_day(P, live, A) if e.get("nextday") else ""
+    news += team_band(P, live, cs, A, tr) if e.get("team") else ""
+    news += next_day(P, live, A, tr) if e.get("nextday") else ""
     return ('<div class="{P}-root"><style>{CSS}</style><div class="{P}-pre">{PRE}</div>'
             '<div class="{P}-wrap"><div class="{P}-shell">{HERO}{DARK}{NEWS}'
             '<div class="{P}-tail"></div></div>{FOOT}</div></div>').format(
@@ -532,6 +574,12 @@ for e in EMAILS:
     meta = dict(label=e["label"], day=e["day"], branch=e["branch"],
                 bg=("#ffffff" if e["kind"] == "letter" else "#f8f8f8"),
                 pad=("20px" if e["kind"] == "letter" else "0"))
+    for _lg in i18n.LANGS:
+        if _lg == i18n.SOURCE:
+            continue
+        _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+        open(os.path.join(OUT, "%s-%s-proposed.html" % (e["slug"], _lg)), "w",
+             encoding="utf-8").write(DOC % dict(meta, body=build(e, False, _loc)))
     open(os.path.join(OUT, e["slug"] + "-proposed.html"), "w",
          encoding="utf-8").write(DOC % dict(meta, body=prev))
     open(os.path.join(OUT, e["slug"] + "-klaviyo.html"), "w",

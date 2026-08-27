@@ -175,6 +175,150 @@
    "de": "Sagen Sie einem Druckexperten, wofür der Auftrag ist. Er sagt Ihnen, welche Option passt und was sie kostet. Antworten Sie auf diese E-Mail, dann landet sie bei ihm.",
    "es": "Cuéntale a un experto en impresión para qué es el trabajo y te dirá qué opción encaja y cuánto cuesta. Responde a este correo y tu mensaje les llega.",
    "it": "Racconta a un esperto di stampa a cosa serve il lavoro e ti dirà quale opzione va bene e quanto costa. Rispondi a questa email e arriva a loro."
+  },
+  "wb.grid_h3": {
+   "en": "A few worth picking up",
+   "nl": "Een paar om mee te beginnen",
+   "fr": "Quelques-uns à retenir",
+   "de": "Ein paar, die sich lohnen",
+   "es": "Unos cuantos que merecen la pena",
+   "it": "Qualcuno che vale la pena"
+  },
+  "wb.grid_h2": {
+   "en": "Where to pick up",
+   "nl": "Waar je verder kunt",
+   "fr": "Par où reprendre",
+   "de": "Wo Sie weitermachen",
+   "es": "Por dónde seguir",
+   "it": "Da dove riprendere"
+  },
+  "wb.grid_sub3": {
+   "en": "Three we would put in front of you first. No prices attached.",
+   "nl": "Drie die wij je als eerste zouden laten zien. Zonder prijzen.",
+   "fr": "Trois que nous vous montrerions en premier. Sans prix.",
+   "de": "Drei, die wir Ihnen zuerst zeigen würden. Ohne Preise.",
+   "es": "Tres que te enseñaríamos primero. Sin precios.",
+   "it": "Tre che ti mostreremmo per primi. Senza prezzi."
+  },
+  "wb.grid_sub2": {
+   "en": "No prices here on purpose. A starting point, not a shelf.",
+   "nl": "Bewust geen prijzen. Een startpunt, geen schap.",
+   "fr": "Pas de prix ici, volontairement. Un point de départ, pas un rayon.",
+   "de": "Bewusst ohne Preise. Ein Ausgangspunkt, kein Regal.",
+   "es": "Sin precios a propósito. Un punto de partida, no un estante.",
+   "it": "Niente prezzi, di proposito. Un punto di partenza, non uno scaffale."
+  },
+  "wb.team_eyebrow": {
+   "en": "THE PRINT EXPERT TEAM",
+   "nl": "HET PRINTEXPERT-TEAM",
+   "fr": "L'ÉQUIPE D'EXPERTS EN IMPRESSION",
+   "de": "DAS DRUCKEXPERTEN-TEAM",
+   "es": "EL EQUIPO DE EXPERTOS EN IMPRESIÓN",
+   "it": "IL TEAM DI ESPERTI DI STAMPA"
+  },
+  "wb.team_h": {
+   "en": "There is a team behind the website",
+   "nl": "Achter de website zit een team",
+   "fr": "Il y a une équipe derrière le site",
+   "de": "Hinter der Website steht ein Team",
+   "es": "Detrás de la web hay un equipo",
+   "it": "Dietro il sito c'è una squadra"
+  },
+  "wb.team_b": {
+   "en": "Print experts who see jobs like yours every day. If you have a campaign to plan, a size you are not sure about, or a job you have never printed before, send them a message and one of them will come back to you.",
+   "nl": "Printexperts die dagelijks opdrachten als die van jou zien. Heb je een campagne te plannen, twijfel je over een formaat, of gaat het om iets dat je nog nooit hebt laten drukken? Stuur ze een bericht en een van hen komt bij je terug.",
+   "fr": "Des experts qui voient des travaux comme le vôtre tous les jours. Une campagne à préparer, un format dont vous doutez, ou un travail que vous n'avez jamais imprimé : écrivez-leur et l'un d'eux vous répondra.",
+   "de": "Druckexperten, die täglich Aufträge wie Ihren sehen. Wenn Sie eine Kampagne planen, bei einem Format unsicher sind oder etwas drucken, das Sie noch nie gedruckt haben: Schreiben Sie ihnen, einer meldet sich zurück.",
+   "es": "Expertos en impresión que ven trabajos como el tuyo todos los días. Si tienes una campaña que planificar, dudas con un tamaño o es algo que nunca has impreso, escríbeles y uno de ellos te responderá.",
+   "it": "Esperti di stampa che vedono lavori come il tuo ogni giorno. Se hai una campagna da pianificare, un formato su cui hai dubbi o un lavoro che non hai mai stampato, scrivi loro e uno ti risponderà."
+  },
+  "wb.team_cta": {
+   "en": "Ping the team a message",
+   "nl": "Stuur het team een bericht",
+   "fr": "Envoyez un message à l'équipe",
+   "de": "Schreiben Sie dem Team",
+   "es": "Envía un mensaje al equipo",
+   "it": "Manda un messaggio al team"
+  },
+  "wb.team_alt": {
+   "en": "Three of the team at their desks, on headsets",
+   "nl": "Drie teamleden aan hun bureau met een headset op",
+   "fr": "Trois membres de l'équipe à leur bureau, avec un casque",
+   "de": "Drei aus dem Team an ihren Schreibtischen mit Headset",
+   "es": "Tres del equipo en sus escritorios, con auriculares",
+   "it": "Tre del team alle loro scrivanie, con le cuffie"
+  },
+  "wb.fast_h": {
+   "en": "In a hurry? We&rsquo;ve got your back",
+   "nl": "Haast? Wij regelen het",
+   "fr": "Pressé ? On s'en occupe",
+   "de": "Eilig? Wir kriegen das hin",
+   "es": "¿Con prisa? Te cubrimos",
+   "it": "Di fretta? Ci pensiamo noi"
+  },
+  "wb.fast_b": {
+   "en": "Not everything has to take a week. A lot of what we print carries a Next Day Delivery badge, so if your date is tight there is usually a way to make it. If you cannot see it on the product, ask us and we will tell you what can still land in time.",
+   "nl": "Niet alles hoeft een week te duren. Veel van wat wij drukken heeft een Next Day Delivery-label, dus als je datum krap is, is er meestal een manier. Zie je het niet bij het product staan, vraag het ons en wij zeggen wat het nog op tijd haalt.",
+   "fr": "Tout n'a pas besoin d'une semaine. Beaucoup de nos produits portent un badge Next Day Delivery : si votre date est serrée, il y a souvent une solution. Si vous ne le voyez pas sur le produit, demandez-nous et nous vous dirons ce qui peut encore arriver à temps.",
+   "de": "Nicht alles muss eine Woche dauern. Vieles, was wir drucken, trägt ein Next Day Delivery-Kennzeichen, bei knappen Terminen geht also meistens etwas. Wenn Sie es beim Produkt nicht sehen, fragen Sie uns, dann sagen wir Ihnen, was noch rechtzeitig ankommt.",
+   "es": "No todo tiene que tardar una semana. Mucho de lo que imprimimos lleva la etiqueta Next Day Delivery, así que si tu fecha va justa suele haber una forma. Si no la ves en el producto, pregúntanos y te decimos qué llega todavía a tiempo.",
+   "it": "Non tutto deve richiedere una settimana. Molto di ciò che stampiamo ha un badge Next Day Delivery, quindi se la data è stretta di solito una via c'è. Se non lo vedi sul prodotto, chiedicelo e ti diciamo cosa arriva ancora in tempo."
+  },
+  "wb.fast_cta": {
+   "en": "See what ships next day",
+   "nl": "Bekijk wat morgen geleverd wordt",
+   "fr": "Voir ce qui part en 24 h",
+   "de": "Sehen, was morgen geliefert wird",
+   "es": "Ver qué se envía al día siguiente",
+   "it": "Vedi cosa spedisce il giorno dopo"
+  },
+  "wb.sig_role": {
+   "en": "PRINT EXPERT TEAM",
+   "nl": "PRINTEXPERT-TEAM",
+   "fr": "ÉQUIPE D'EXPERTS EN IMPRESSION",
+   "de": "DRUCKEXPERTEN-TEAM",
+   "es": "EQUIPO DE EXPERTOS EN IMPRESIÓN",
+   "it": "TEAM ESPERTI DI STAMPA"
+  },
+  "wb.best": {
+   "en": "Best,",
+   "nl": "Groet,",
+   "fr": "Bien à vous,",
+   "de": "Viele Grüße,",
+   "es": "Un saludo,",
+   "it": "A presto,"
+  },
+  "wb.unsub_sentence": {
+   "en": "And if you would rather not hear from me again, ",
+   "nl": "En als je liever niets meer van me hoort, ",
+   "fr": "Et si vous préférez ne plus avoir de mes nouvelles, ",
+   "de": "Und wenn Sie lieber nichts mehr von mir hören möchten, ",
+   "es": "Y si prefieres no saber más de mí, ",
+   "it": "E se preferisci non sentirmi più, "
+  },
+  "wb.unsub_label": {
+   "en": "just say the word",
+   "nl": "zeg het gerust",
+   "fr": "dites-le simplement",
+   "de": "sagen Sie einfach Bescheid",
+   "es": "dilo sin más",
+   "it": "basta dirlo"
+  },
+  "greet_named": {
+   "en": "Hi {{ first_name }},",
+   "nl": "Hoi {{ first_name }},",
+   "fr": "Bonjour {{ first_name }},",
+   "de": "Hallo {{ first_name }},",
+   "es": "Hola {{ first_name }}:",
+   "it": "Ciao {{ first_name }},"
+  },
+  "greet_plain": {
+   "en": "Hi there,",
+   "nl": "Hoi,",
+   "fr": "Bonjour,",
+   "de": "Hallo,",
+   "es": "Hola:",
+   "it": "Ciao,"
   }
  },
  "commercial-print": {
@@ -1229,6 +1373,200 @@
    "de": "Eine bedruckte Broschüre auf einem dunkelblauen Sofa",
    "es": "Un folleto impreso sobre un sofá azul oscuro",
    "it": "Un opuscolo stampato su un divano blu scuro"
+  }
+ },
+ "winback-01-high": {
+  "pre": {
+   "en": "Tell me the date and I will work back from it.",
+   "nl": "Geef me de datum, dan reken ik terug.",
+   "fr": "Donnez-moi la date et je remonte à partir de là.",
+   "de": "Nennen Sie mir das Datum, dann rechne ich rückwärts.",
+   "es": "Dame la fecha y trabajo hacia atrás desde ahí.",
+   "it": "Dimmi la data e parto da lì a ritroso."
+  },
+  "para.0": {
+   "en": "I am John, one of the print experts here. I noticed your last order with us was about three months ago, which is longer than most of the businesses I work with leave it, so I thought I would write.",
+   "nl": "Ik ben John, een van de printexperts hier. Het viel me op dat je laatste bestelling bij ons zo'n drie maanden geleden was, langer dan de meeste bedrijven waarmee ik werk ertussen laten, dus ik dacht ik schrijf even.",
+   "fr": "Je suis John, un des experts en impression ici. J'ai remarqué que votre dernière commande date d'environ trois mois, soit plus longtemps que la plupart des entreprises avec qui je travaille, alors je me suis dit que j'allais vous écrire.",
+   "de": "Ich bin John, einer der Druckexperten hier. Mir ist aufgefallen, dass Ihre letzte Bestellung etwa drei Monate her ist, länger als bei den meisten Unternehmen, mit denen ich arbeite, also dachte ich, ich schreibe Ihnen.",
+   "es": "Soy John, uno de los expertos en impresión de aquí. Vi que tu último pedido fue hace unos tres meses, más de lo que suelen dejar pasar las empresas con las que trabajo, así que se me ocurrió escribirte.",
+   "it": "Sono John, uno degli esperti di stampa qui. Ho notato che il tuo ultimo ordine risale a circa tre mesi fa, più di quanto lascino passare la maggior parte delle aziende con cui lavoro, così ho pensato di scriverti."
+  },
+  "para.1": {
+   "en": "I am not chasing an order. What I am useful for is the part before one. Is there a date you are printing towards? An event, an opening, a season you print for every year. Tell me the date and what it is for. I will come back with what I would print it on, what it costs at two or three quantities, and when the file has to be with us to hit it.",
+   "nl": "Ik zit niet achter een bestelling aan. Waar ik nuttig voor ben, is het stuk ervoor. Werk je ergens naartoe? Een evenement, een opening, een seizoen waarvoor je elk jaar laat drukken. Geef me de datum en waarvoor het is. Ik kom terug met waarop ik het zou drukken, wat het kost bij twee of drie aantallen, en wanneer het bestand bij ons moet zijn om het te halen.",
+   "fr": "Je ne cours pas après une commande. Là où je suis utile, c'est avant. Avez-vous une date en ligne de mire ? Un événement, une ouverture, une saison pour laquelle vous imprimez chaque année. Donnez-moi la date et à quoi ça sert. Je reviens vers vous avec le support que je choisirais, le prix pour deux ou trois quantités, et la date à laquelle le fichier doit nous parvenir pour tenir le délai.",
+   "de": "Ich bin nicht hinter einer Bestellung her. Nützlich bin ich für den Teil davor. Gibt es einen Termin, auf den Sie hinarbeiten? Ein Event, eine Eröffnung, eine Saison, für die Sie jedes Jahr drucken. Nennen Sie mir das Datum und wofür es ist. Ich melde mich zurück mit dem Material, das ich nehmen würde, was es bei zwei oder drei Mengen kostet, und wann die Datei bei uns sein muss, damit es klappt.",
+   "es": "No voy detrás de un pedido. Donde soy útil es en la parte de antes. ¿Hay una fecha hacia la que estás trabajando? Un evento, una apertura, una temporada para la que imprimes cada año. Dime la fecha y para qué es. Te vuelvo con sobre qué lo imprimiría, cuánto cuesta en dos o tres cantidades, y cuándo tiene que estar el archivo con nosotros para llegar.",
+   "it": "Non sto inseguendo un ordine. Dove sono utile è nella parte prima. C'è una data verso cui stai lavorando? Un evento, un'apertura, una stagione per cui stampi ogni anno. Dimmi la data e a cosa serve. Ti torno con su cosa lo stamperei, quanto costa su due o tre quantità, e quando il file deve essere da noi per farcela."
+  },
+  "para.2": {
+   "en": "If you already have the file, send it over and I will look at it before you order anything. And if something went wrong last time, I would rather hear it than not.",
+   "nl": "Heb je het bestand al, stuur het door dan kijk ik ernaar voordat je iets bestelt. En als er de vorige keer iets misging, hoor ik dat liever wel dan niet.",
+   "fr": "Si vous avez déjà le fichier, envoyez-le et je le regarde avant que vous commandiez quoi que ce soit. Et si quelque chose s'est mal passé la dernière fois, je préfère l'entendre.",
+   "de": "Wenn Sie die Datei schon haben, schicken Sie sie mir, dann sehe ich sie mir an, bevor Sie irgendetwas bestellen. Und wenn beim letzten Mal etwas schiefgegangen ist, höre ich das lieber, als es nicht zu hören.",
+   "es": "Si ya tienes el archivo, envíamelo y le echo un vistazo antes de que pidas nada. Y si algo salió mal la última vez, prefiero saberlo.",
+   "it": "Se hai già il file, mandamelo e ci do un'occhiata prima che ordini qualcosa. E se l'ultima volta è andato storto qualcosa, preferisco saperlo."
+  },
+  "closing": {
+   "en": "Just reply to this email. It comes to me.",
+   "nl": "Antwoord gewoon op deze mail. Hij komt bij mij binnen.",
+   "fr": "Répondez simplement à cet e-mail. Il arrive chez moi.",
+   "de": "Antworten Sie einfach auf diese E-Mail. Sie landet bei mir.",
+   "es": "Responde a este correo sin más. Me llega a mí.",
+   "it": "Rispondi semplicemente a questa email. Arriva a me."
+  }
+ },
+ "winback-02-high": {
+  "eyebrow": {
+   "en": "STILL HERE WHEN YOU NEED US",
+   "nl": "WIJ ZIJN ER ALS JE ONS NODIG HEBT",
+   "fr": "TOUJOURS LÀ QUAND VOUS EN AVEZ BESOIN",
+   "de": "IMMER DA, WENN SIE UNS BRAUCHEN",
+   "es": "AQUÍ CUANDO NOS NECESITES",
+   "it": "SEMPRE QUI QUANDO SERVE"
+  },
+  "h1": {
+   "en": "A few things worth another look",
+   "nl": "Een paar dingen om nog eens te bekijken",
+   "fr": "Quelques idées à revoir",
+   "de": "Ein paar Dinge, die einen zweiten Blick wert sind",
+   "es": "Unas cuantas cosas que merecen otro vistazo",
+   "it": "Qualche cosa che vale un secondo sguardo"
+  },
+  "sub": {
+   "en": "No offer attached. Some print worth picking up, the team who can help you plan it, and what to do when the date is tight.",
+   "nl": "Geen aanbieding eraan vast. Wat drukwerk om mee verder te gaan, het team dat je helpt plannen, en wat je doet als de datum krap is.",
+   "fr": "Aucune offre attachée. Des imprimés à retenir, l'équipe qui peut vous aider à les planifier, et quoi faire quand la date est serrée.",
+   "de": "Kein Angebot dabei. Ein paar Drucksachen, die sich lohnen, das Team, das beim Planen hilft, und was zu tun ist, wenn der Termin knapp wird.",
+   "es": "Sin oferta de por medio. Algo de impresión que merece la pena, el equipo que te ayuda a planificarla, y qué hacer cuando la fecha va justa.",
+   "it": "Nessuna offerta allegata. Un po' di stampa che vale la pena, il team che ti aiuta a pianificarla, e cosa fare quando la data è stretta."
+  },
+  "hero_alt": {
+   "en": "A printed banner on a fence beside a tennis court",
+   "nl": "Een bedrukt spandoek aan een hek naast een tennisbaan",
+   "fr": "Une banderole imprimée sur une clôture au bord d'un court de tennis",
+   "de": "Ein bedrucktes Banner an einem Zaun neben einem Tennisplatz",
+   "es": "Una lona impresa en una valla junto a una pista de tenis",
+   "it": "Uno striscione stampato su una recinzione accanto a un campo da tennis"
+  }
+ },
+ "winback-03-high": {
+  "eyebrow": {
+   "en": "15% OFF YOUR NEXT ORDER",
+   "nl": "15% KORTING OP JE VOLGENDE BESTELLING",
+   "fr": "15% DE REMISE SUR VOTRE PROCHAINE COMMANDE",
+   "de": "15% RABATT AUF IHRE NÄCHSTE BESTELLUNG",
+   "es": "15% DE DESCUENTO EN TU PRÓXIMO PEDIDO",
+   "it": "15% DI SCONTO SUL PROSSIMO ORDINE"
+  },
+  "h1": {
+   "en": "A reason to come back, if you needed one",
+   "nl": "Een reden om terug te komen, mocht je er een nodig hebben",
+   "fr": "Une raison de revenir, s'il vous en fallait une",
+   "de": "Ein Grund zurückzukommen, falls Sie einen brauchten",
+   "es": "Un motivo para volver, por si hacía falta",
+   "it": "Un motivo per tornare, se ne serviva uno"
+  },
+  "sub": {
+   "en": "It has been a few months. The code below takes 15% off whatever you print next.",
+   "nl": "Het is een paar maanden geleden. De code hieronder haalt 15% van je volgende drukwerk af.",
+   "fr": "Cela fait quelques mois. Le code ci-dessous enlève 15% sur votre prochaine impression.",
+   "de": "Es ist ein paar Monate her. Der Code unten nimmt 15% von dem, was Sie als Nächstes drucken.",
+   "es": "Han pasado unos meses. El código de abajo quita un 15% de lo próximo que imprimas.",
+   "it": "Sono passati alcuni mesi. Il codice qui sotto toglie il 15% da quello che stamperai."
+  },
+  "cta": {
+   "en": "Start your next order",
+   "nl": "Begin je volgende bestelling",
+   "fr": "Lancez votre prochaine commande",
+   "de": "Starten Sie Ihre nächste Bestellung",
+   "es": "Empieza tu próximo pedido",
+   "it": "Inizia il tuo prossimo ordine"
+  },
+  "hero_alt": {
+   "en": "A folded leaflet standing on a wooden sideboard",
+   "nl": "Een gevouwen folder op een houten dressoir",
+   "fr": "Un dépliant posé sur un buffet en bois",
+   "de": "Ein Falzflyer auf einer Holzkommode",
+   "es": "Un díptico apoyado en un aparador de madera",
+   "it": "Un pieghevole appoggiato su una credenza di legno"
+  }
+ },
+ "winback-01-low": {
+  "eyebrow": {
+   "en": "15% OFF YOUR NEXT ORDER",
+   "nl": "15% KORTING OP JE VOLGENDE BESTELLING",
+   "fr": "15% DE REMISE SUR VOTRE PROCHAINE COMMANDE",
+   "de": "15% RABATT AUF IHRE NÄCHSTE BESTELLUNG",
+   "es": "15% DE DESCUENTO EN TU PRÓXIMO PEDIDO",
+   "it": "15% DI SCONTO SUL PROSSIMO ORDINE"
+  },
+  "h1": {
+   "en": "Pick up where you left off",
+   "nl": "Ga verder waar je gebleven was",
+   "fr": "Reprenez où vous en étiez",
+   "de": "Machen Sie da weiter, wo Sie aufgehört haben",
+   "es": "Retoma donde lo dejaste",
+   "it": "Riprendi da dove eri rimasto"
+  },
+  "sub": {
+   "en": "It has been about three months. A few things to start from, and a code to make it easier.",
+   "nl": "Het is ongeveer drie maanden geleden. Een paar dingen om mee te beginnen, en een code om het makkelijker te maken.",
+   "fr": "Cela fait environ trois mois. Quelques idées pour repartir, et un code pour vous faciliter les choses.",
+   "de": "Es ist etwa drei Monate her. Ein paar Dinge zum Anfangen und ein Code, der es leichter macht.",
+   "es": "Han pasado unos tres meses. Unas cuantas cosas para empezar, y un código para ponértelo más fácil.",
+   "it": "Sono passati circa tre mesi. Qualche spunto per ripartire, e un codice per rendertelo più facile."
+  },
+  "cta": {
+   "en": "Start your next order",
+   "nl": "Begin je volgende bestelling",
+   "fr": "Lancez votre prochaine commande",
+   "de": "Starten Sie Ihre nächste Bestellung",
+   "es": "Empieza tu próximo pedido",
+   "it": "Inizia il tuo prossimo ordine"
+  },
+  "hero_alt": {
+   "en": "A printed banner on a fence beside a tennis court",
+   "nl": "Een bedrukt spandoek aan een hek naast een tennisbaan",
+   "fr": "Une banderole imprimée sur une clôture au bord d'un court de tennis",
+   "de": "Ein bedrucktes Banner an einem Zaun neben einem Tennisplatz",
+   "es": "Una lona impresa en una valla junto a una pista de tenis",
+   "it": "Uno striscione stampato su una recinzione accanto a un campo da tennis"
+  }
+ },
+ "winback-02-low": {
+  "eyebrow": {
+   "en": "LAST CALL",
+   "nl": "LAATSTE KANS",
+   "fr": "DERNIER APPEL",
+   "de": "LETZTE CHANCE",
+   "es": "ÚLTIMA LLAMADA",
+   "it": "ULTIMA CHIAMATA"
+  },
+  "h1": {
+   "en": "Your 15% is about to go",
+   "nl": "Je 15% loopt bijna af",
+   "fr": "Vos 15% touchent à leur fin",
+   "de": "Ihre 15% laufen gleich aus",
+   "es": "Tu 15% está a punto de irse",
+   "it": "Il tuo 15% sta per scadere"
+  },
+  "sub": {
+   "en": "Whatever you were thinking of printing, this is the cheapest moment to do it.",
+   "nl": "Wat je ook van plan was te laten drukken, dit is het goedkoopste moment.",
+   "fr": "Quoi que vous envisagiez d'imprimer, c'est le moment le moins cher pour le faire.",
+   "de": "Was Sie auch drucken wollten: Jetzt ist der günstigste Moment dafür.",
+   "es": "Sea lo que sea que pensabas imprimir, este es el momento más barato para hacerlo.",
+   "it": "Qualunque cosa pensassi di stampare, questo è il momento più economico per farlo."
+  },
+  "cta": {
+   "en": "Use it before it goes",
+   "nl": "Gebruik hem voor hij weg is",
+   "fr": "Utilisez-le avant qu'il disparaisse",
+   "de": "Nutzen Sie ihn, bevor er weg ist",
+   "es": "Úsalo antes de que se vaya",
+   "it": "Usalo prima che scada"
   }
  }
 }

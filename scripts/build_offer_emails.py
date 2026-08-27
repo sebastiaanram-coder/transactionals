@@ -213,11 +213,14 @@ def code_expiry_line(tr=None):
     t = (lambda k, e: e) if tr is None else tr
     if not EXPIRY_DAYS:
         return t("offer.percent_only", "%d%% off your next order").replace(
-            "%d", str(PERCENT))
+            "%d", str(PERCENT)).replace("%%", "%")
     line = t("offer.expiry",
              "%d%% off your next order &middot; expires %d days after this email")
-    return line.replace("%d", "\x00", 1).replace("%d", "\x01", 1) \
-               .replace("\x00", str(PERCENT)).replace("\x01", str(EXPIRY_DAYS))
+    # undouble the percent: the source is written for %-formatting, so "%%" means
+    # one literal sign and nothing undoubles it when the fill is done by replace
+    return (line.replace("%d", "\x00", 1).replace("%d", "\x01", 1)
+                .replace("\x00", str(PERCENT)).replace("\x01", str(EXPIRY_DAYS))
+                .replace("%%", "%"))
 
 
 def build(e, live, locale=None):
