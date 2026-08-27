@@ -47,7 +47,11 @@ LOCALES = list(MARKET_PATH)
 # gross profit with six subcategories worth showing; the rest have four.
 EMAILS = {
     "commercial-print": dict(
+        # EXCLUDES STATIONERY, which is a sub_category_1 inside it. Without this
+        # every stationery buyer lands here, because their Categories[0] is
+        # "Commercial Print" too.
         label="Commercial Print", match=["Commercial Print"],
+        exclude=["All Stationery"],
         feature=["Booklets & Brochures", "Leaflet Printing & Flyers"],
         grid=["Folded Leaflets", "Poster Printing", "Business Cards", "Cards & Invitations"],
         # 2.10M, 1.04M | 539k, 446k, 355k, 261k
@@ -66,6 +70,42 @@ EMAILS = {
         #
         # Roller Banners stays in Signage & Outdoor, where it started, so it is no
         # longer in two emails.
+    ),
+    # STATIONERY IS A SPLIT OF COMMERCIAL PRINT, not a new category. There is no
+    # Stationery main category in the feed at all - "All Stationery" is a
+    # sub_category_1 inside Commercial Print, worth 1.24M of gross profit on
+    # 34,569 order items in the twelve months to 1 Aug 2026. That would make it
+    # the fourth biggest of the six emails, ahead of Labels at 1.16M and three
+    # times Clothing & Textiles at 421k, both of which already have one.
+    #
+    # It also has its own reason to buy. Everything in Commercial Print advertises
+    # something; stationery gets reordered when it runs out. That is the
+    # replenishment headline that was written for Commercial Print and rejected
+    # there, correctly, as belonging to stationery.
+    #
+    # THE SPLIT IS ON LEVEL TWO, so it must be evaluated BEFORE Commercial Print:
+    # a stationery buyer's Categories[0] is "Commercial Print", so whichever
+    # branch is checked first wins. See match_mode below.
+    "stationery": dict(
+        label="Stationery", match=["All Stationery"], match_mode="contains",
+        feature=["Notepads", "Envelopes"],
+        grid=["Folders & Document Organisers", "Bookmarks"],
+        # 323k, 249k | 235k, and then Bookmarks at 96k standing in for
+        # LETTERHEADS AT 179k, which belongs here and cannot go in yet.
+        #
+        # Letterheads has no `curl` of its own in en-IE or it-IT. field() falls
+        # back, and what it falls back TO is the problem: an Irish or Italian
+        # reader would be sent to https://www.helloprint.com/en-gb/letterhead-
+        # printing, a UK page in the wrong language. A tile that crosses markets
+        # is worse than a tile that is not there.
+        #
+        # Fill those two curls in Contentful and Letterheads replaces Bookmarks,
+        # which is worth 83k of representation. The build refuses to ship a tile
+        # that falls back across locales, so it will hold this honest.
+        #
+        # Letterheads also has the highest item count of the four, 8,182 against
+        # its 179k: small, frequent, repeat, which is the replenishment signature
+        # this whole email is built on.
     ),
     "signage-outdoor": dict(
         label="Signage & Outdoor", match=["Signage & Outdoor"],
@@ -131,6 +171,8 @@ LANDINGS = {
     "labels-packaging": ("all-stickers", "6gAyPHz95YgmAIGUeMKqaU"),
     "clothing-textiles": ("clothing", "25dIwB3hEscqQ0ayu4eywk"),
     "corporate-gifts": ("corporate-gifts-landing", "6NYvEHY1Qk4QMIQSoIUKcu"),
+    # /stationery-and-office-supplies, and in Dutch literally huisstijl-drukwerk.
+    "stationery": ("stationery-landing", "5Bn0HgX9Tye2yYkgSWamwa"),
 }
 
 # Pages that ride along the same per-locale fetch without being any email's
