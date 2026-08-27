@@ -46,26 +46,63 @@ def read(path, resize=None):
         if resize:
             args += ["-z", str(resize[1]), str(resize[0])]
         _sips(*args, path, "--out", bmp)
-        return _read_bmp(bmp)
+        # SIPS SOMETIMES OMITS THE BMP HEADER. On one of the eleven Contentful
+        # sources - a 1200x1000 8-bit RGB PNG, indistinguishable from the others
+        # by every sips -g property - "-s format bmp" writes exactly w*h*3 bytes
+        # of pixel data and no 54-byte header, so the parser read a negative width
+        # and died. Reproducible, and it survives a round trip through png and
+        # tiff and psd; only routing through jpeg produces a valid header, which
+        # would mean a lossy re-encode of a source.
+        #
+        # Row 0 of the headerless payload matches row 0 of a valid BMP of the same
+        # image in the same channel order, so it is the pixel array as written -
+        # and sips writes top-down. Checking that the bytes lined up was not
+        # enough on its own: the reference BMP declares a negative height, and
+        # missing that put the first version of this through the bottom-up reverse
+        # and flipped the image. The check that caught it is below.
+        return _read_bmp(bmp, expect=(resize or size(path)))
 
 
 def crop_to(w, h, rows, box_w, box_h, offset=0.5):
-    """Crop to the aspect of box_w:box_h, keeping the full width.
+    """Crop to the aspect of box_w:box_h, taking it off whichever axis is long.
 
-    offset is where the window sits vertically, 0.0 at the top and 1.0 at the
-    bottom, so it means the same thing whatever size the source is. Expressing it
-    in pixels was the other half of the bug above: 520 is a quarter of the way down
-    a 2048px source and half way down a 1000px one.
+    offset is where the window sits along that axis, 0.0 at the top or left and
+    1.0 at the bottom or right, so it means the same thing whatever size the
+    source is. Expressing it in pixels was the other half of the bug above: 520 is
+    a quarter of the way down a 2048px source and half way down a 1000px one.
+
+    IT USED TO CROP HEIGHT ONLY, and returned the source untouched when the source
+    was WIDER than the box - which quietly handed to_size a mismatched aspect to
+    squash. A 1200x1000 roll-of-labels shot went to a 400x400 tile that way and
+    shipped 20% too narrow. Anything wider than the box now loses width instead.
     """
-    ch = int(round(w * box_h / float(box_w)))
+    want = box_w / float(box_h)
+    o = min(max(offset, 0.0), 1.0)
+    if w / float(h) > want:
+        cw = int(round(h * want))
+        if cw >= w:
+            return w, h, rows
+        left = int(round((w - cw) * o))
+        return cw, h, [r[left * 3:(left + cw) * 3] for r in rows]
+    ch = int(round(w / want))
     if ch >= h:
         return w, h, rows
-    top = int(round((h - ch) * min(max(offset, 0.0), 1.0)))
+    top = int(round((h - ch) * o))
     return w, ch, rows[top:top + ch]
 
 
 def to_size(w, h, rows, tw, th, quality=None):
-    """Resize exactly, via one sips call, and prove it came back the right size."""
+    """Resize exactly, via one sips call, and prove it came back the right size.
+
+    Refuses a non-uniform scale. Everything upstream is supposed to have cropped
+    to the target aspect already, and a silent squash here is invisible in a
+    thumbnail and obvious in an email.
+    """
+    if abs(w / float(h) - tw / float(th)) > 0.01:
+        raise AssertionError(
+            "asked to resize %dx%d (%.3f) to %dx%d (%.3f), which would squash it - "
+            "crop to the target aspect first"
+            % (w, h, w / float(h), tw, th, tw / float(th)))
     with tempfile.TemporaryDirectory() as tmp:
         src, dst = os.path.join(tmp, "a.bmp"), os.path.join(tmp, "b.bmp")
         _write_bmp(w, h, rows, src)
@@ -76,11 +113,24 @@ def to_size(w, h, rows, tw, th, quality=None):
     return ow, oh, orows
 
 
-def _read_bmp(path):
+def _read_bmp(path, expect=None):
     d = open(path, "rb").read()
-    off = struct.unpack_from("<I", d, 10)[0]
-    w, h = struct.unpack_from("<ii", d, 18)
-    n = struct.unpack_from("<H", d, 28)[0] // 8
+    if d[:2] == b"BM":
+        off = struct.unpack_from("<I", d, 10)[0]
+        w, h = struct.unpack_from("<ii", d, 18)
+        n = struct.unpack_from("<H", d, 28)[0] // 8
+    else:
+        # headerless: see read(). Only trust it when the byte count is exactly
+        # what the declared size implies, so a genuinely corrupt file still fails.
+        if not expect:
+            raise ValueError("%s has no BMP header and no expected size" % path)
+        # NEGATIVE HEIGHT, i.e. top-down, which is what sips writes: every BMP it
+        # produces here declares h as -height. Setting it positive sent the rows
+        # through the bottom-up reverse below and the image came out upside down.
+        w, h, n, off = expect[0], -expect[1], 3, 0
+        if len(d) != w * abs(h) * 3:
+            raise ValueError("%s has no BMP header and is %d bytes, not %d for %dx%d"
+                             % (path, len(d), w * abs(h) * 3, w, abs(h)))
     stride = (w * n + 3) // 4 * 4
     rows = []
     for y in range(abs(h)):

@@ -81,9 +81,14 @@ EMAILS = {
     ),
     "clothing-textiles": dict(
         label="Clothing & Textiles", match=["Clothing & Textiles"],
-        feature=["T-shirts", "Polo Shirts"],
+        feature=["T-shirts", "Hoodies & Zip-up Hoodies"],
         grid=["Interior Textiles", "Caps"],
-        # 102k, 22k | 18k, 14k. Falls off a cliff after T-shirts.
+        # 102k, then 18k and 14k. HOODIES REPLACED POLO SHIRTS at Sebastiaan's
+        # request. Polos are 22k and hoodies do not make the top four, so they are
+        # under 14k - the swap costs some gross profit on paper. It buys coherence:
+        # the hero for this email is a hoodie, a beanie and shorts, and an email
+        # whose picture sells a garment none of its tiles offer is worse than one
+        # ranked strictly by contribution.
     ),
     "corporate-gifts": dict(
         label="Corporate Gifts", match=["Corporate Gifts"],
@@ -111,7 +116,21 @@ LANDINGS = {
     # "Signage & Outdoor Products" - the category landing page, not one of the
     # tiles. Found by searchName; the nav calls it Outdoor.
     "signage-outdoor": ("signage-and-outdoor", "19EC3YhE1kLWKXrHIzsJHP"),
+    # THE MERGED EMAIL POINTS AT THE LABELS HALF. No page covers labels AND
+    # packaging: "Labels & Stickers" is /all-stickers and "Packaging" is
+    # /all-packaging. Labels is 490k against packaging's 77k, so the header and
+    # both buttons go to the stickers hub, and the packaging half is reached
+    # through its own two tiles. It coincides with the first feature tile because
+    # Labels & Stickers is both the biggest subcategory and the category hub - a
+    # combined hub is the right long-term fix.
+    "labels-packaging": ("all-stickers", "6gAyPHz95YgmAIGUeMKqaU"),
+    "clothing-textiles": ("clothing", "25dIwB3hEscqQ0ayu4eywk"),
+    "corporate-gifts": ("corporate-gifts-landing", "6NYvEHY1Qk4QMIQSoIUKcu"),
 }
+
+# Pages that ride along the same per-locale fetch without being any email's
+# landing page. The brands band links here rather than to one brand.
+PAGES = {"our-brands": "5HE0GQwek9xCgvr7OKYPyF"}
 
 
 def key_for(name):
@@ -149,13 +168,29 @@ def main():
     # the landing pages ride along in the same per-locale fetch. They are marked
     # so the image check below does not demand a search image from them: nothing
     # renders a landing page as a tile.
+    # A LANDING PAGE CAN BE ONE OF THE TILES. Labels & Stickers is both the
+    # biggest subcategory in its email and the category hub at /all-stickers, one
+    # Contentful entry serving both jobs. Giving it a second record under its own
+    # key repointed byid at that record, so the TILE never received any of its
+    # per-locale names or its image and the build lost eight locales silently.
+    # When the id is already a subcategory, reuse that key instead.
+    landing_key = {}
     for slug, (key, eid) in LANDINGS.items():
+        if eid in byid:
+            landing_key[slug] = byid[eid]
+            continue
+        landing_key[slug] = key
+        subs[key] = {"name_en": key, "id": eid, "image": None,
+                     "landing": True, "by_locale": {}}
+        byid[eid] = key
+    for key, eid in PAGES.items():
         subs[key] = {"name_en": key, "id": eid, "image": None,
                      "landing": True, "by_locale": {}}
         byid[eid] = key
 
     for loc in LOCALES:
-        every = list(ids.values()) + [eid for _, eid in LANDINGS.values()]
+        every = (list(ids.values()) + [eid for _, eid in LANDINGS.values()]
+                 + list(PAGES.values()))
         d = cf.get("/entries", content_type="pageHomeModular", locale=loc, limit=60,
                    **{"sys.id[in]": ",".join(every)})
         assets = {x["sys"]["id"]: x for x in (d.get("includes") or {}).get("Asset", [])}
@@ -184,7 +219,7 @@ def main():
     noimg = [k for k, v in subs.items() if not v["image"] and not v.get("landing")]
     emails = {k: dict(v) for k, v in EMAILS.items()}
     for slug, (key, _) in LANDINGS.items():
-        emails[slug]["landing"] = key
+        emails[slug]["landing"] = landing_key[slug]
     payload = {"fetched": dt.date.today().isoformat(),
                "space": cf.SPACE, "environment": cf.ENVIR,
                "locales": LOCALES, "market_path": MARKET_PATH,

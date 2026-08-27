@@ -3,13 +3,14 @@
   "clothing-textiles": {
    "feature": [
     "T-shirts",
-    "Polo Shirts"
+    "Hoodies & Zip-up Hoodies"
    ],
    "grid": [
     "Interior Textiles",
     "Caps"
    ],
    "label": "Clothing & Textiles",
+   "landing": "clothing",
    "match": [
     "Clothing & Textiles"
    ]
@@ -41,6 +42,7 @@
     "Water Bottles"
    ],
    "label": "Corporate Gifts",
+   "landing": "corporate-gifts-landing",
    "match": [
     "Corporate Gifts"
    ]
@@ -55,6 +57,7 @@
     "Printed Food Packaging"
    ],
    "label": "Labels & Packaging",
+   "landing": "labels-stickers",
    "match": [
     "Labels",
     "Packaging"
@@ -334,6 +337,86 @@
    "image": "https://images.ctfassets.net/wm1n7oady8a5/5geTr5nz3TOtzCTAh2ghws/24e4e657d05a3683589374f28b2e0d8d/menu-image-clothing-caps.png",
    "name_en": "Caps"
   },
+  "clothing": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Clothing & Textiles",
+     "url": "https://www.helloprint.com/en-gb/clothing"
+    },
+    "en-IE": {
+     "name": "Clothing & Textiles",
+     "url": "https://www.helloprint.com/en-ie/clothing"
+    },
+    "es-ES": {
+     "name": "Ropa y textil",
+     "url": "https://www.helloprint.com/es-es/textil-impreso"
+    },
+    "fr-BE": {
+     "name": "Vêtements & Textile",
+     "url": "https://www.helloprint.com/fr-be/vetements"
+    },
+    "fr-FR": {
+     "name": "Vêtements & Textile",
+     "url": "https://www.helloprint.com/fr-fr/vetements"
+    },
+    "it": {
+     "name": "Abbigliamento",
+     "url": "https://www.helloprint.com/it-it/abbigliamento"
+    },
+    "nl": {
+     "name": "Kleding & textiel",
+     "url": "https://www.helloprint.com/nl-nl/textiel-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Kleding & textiel",
+     "url": "https://www.helloprint.com/nl-be/textiel-bedrukken"
+    }
+   },
+   "id": "25dIwB3hEscqQ0ayu4eywk",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/6N1q5RQrdacdmUCtQy8NJL/4d084d9e4acdf1fce6722394adc61500/5.png",
+   "landing": true,
+   "name_en": "clothing"
+  },
+  "corporate-gifts-landing": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Corporate Gifts",
+     "url": "https://www.helloprint.com/en-gb/corporate-gifts"
+    },
+    "en-IE": {
+     "name": "Corporate Gifts",
+     "url": "https://www.helloprint.com/en-ie/corporate-gifts"
+    },
+    "es-ES": {
+     "name": "Regalos de empresa",
+     "url": "https://www.helloprint.com/es-es/regalos-corporativos"
+    },
+    "fr-BE": {
+     "name": "Objets publicitaires",
+     "url": "https://www.helloprint.com/fr-be/cadeau-entreprise"
+    },
+    "fr-FR": {
+     "name": "Objets publicitaires",
+     "url": "https://www.helloprint.com/fr-fr/cadeau-entreprise"
+    },
+    "it": {
+     "name": "Articoli promozionali",
+     "url": "https://www.helloprint.com/it-it/gadget-accessori"
+    },
+    "nl": {
+     "name": "Relatiegeschenken",
+     "url": "https://www.helloprint.com/nl-nl/relatiegeschenken"
+    },
+    "nl-BE": {
+     "name": "Relatiegeschenken",
+     "url": "https://www.helloprint.com/nl-be/relatiegeschenken"
+    }
+   },
+   "id": "6NYvEHY1Qk4QMIQSoIUKcu",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/4m2NP53VJxokc6X4tYi0MF/9a348790de0f53a8a5e3d6c00e695603/CorporateGifts_SearchImage.png",
+   "landing": true,
+   "name_en": "corporate-gifts-landing"
+  },
   "folded-leaflets": {
    "by_locale": {
     "en-GB": {
@@ -372,6 +455,45 @@
    "id": "6QGEe77ZQsJm4dsQRlvzFP",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/3Jf2cBof3W460cAUg2mSGa/eccbf6bb0def971437f73feb504f18ca/new-product-image-folded-leaflet-trifold-transparent.png",
    "name_en": "Folded Leaflets"
+  },
+  "hoodies-zip-up-hoodies": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Hoodies & Zip-up Hoodies",
+     "url": "https://www.helloprint.com/en-gb/personalised-hoodies"
+    },
+    "en-IE": {
+     "name": "Hoodies & Zip-up Hoodies",
+     "url": "https://www.helloprint.com/en-ie/personalised-hoodies"
+    },
+    "es-ES": {
+     "name": "Sudaderas con capucha",
+     "url": "https://www.helloprint.com/es-es/sudaderas-con-capucha-estampadas"
+    },
+    "fr-BE": {
+     "name": "Sweats à capuche",
+     "url": "https://www.helloprint.com/fr-be/sweat-capuche-personnalise"
+    },
+    "fr-FR": {
+     "name": "Sweats à capuche",
+     "url": "https://www.helloprint.com/fr-fr/sweat-capuche-personnalise"
+    },
+    "it": {
+     "name": "Felpe con cappuccio",
+     "url": "https://www.helloprint.com/it-it/felpe-con-cappuccio"
+    },
+    "nl": {
+     "name": "Hoodies",
+     "url": "https://www.helloprint.com/nl-nl/hoodies-bedrukken"
+    },
+    "nl-BE": {
+     "name": "Hoodies",
+     "url": "https://www.helloprint.com/nl-be/hoodies-bedrukken"
+    }
+   },
+   "id": "2t90dQY6va6eEiAyaCKw2Y",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/7KGeOzVUG4veGpDskp74A1/c8c83582bff7a804a240095e924f48cb/Search_image__5_.png",
+   "name_en": "Hoodies & Zip-up Hoodies"
   },
   "interior-textiles": {
    "by_locale": {
@@ -568,6 +690,46 @@
    "image": "https://images.ctfassets.net/wm1n7oady8a5/2I48ifEjqo2yi4ygmyCmS4/e31a9f154ce5006a43407437e09559e3/6.png",
    "name_en": "Notebooks"
   },
+  "our-brands": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Our Brands",
+     "url": "https://www.helloprint.com/en-gb/our-brands"
+    },
+    "en-IE": {
+     "name": "Our Brands",
+     "url": "https://www.helloprint.com/en-ie/our-brands"
+    },
+    "es-ES": {
+     "name": "Nuestras marcas",
+     "url": "https://www.helloprint.com/es-es/nuestras-marcas"
+    },
+    "fr-BE": {
+     "name": "Nos marques",
+     "url": "https://www.helloprint.com/fr-be/nos-marques"
+    },
+    "fr-FR": {
+     "name": "Nos marques",
+     "url": "https://www.helloprint.com/fr-fr/nos-marques"
+    },
+    "it": {
+     "name": "I nostri marchi",
+     "url": "https://www.helloprint.com/it-it/nostri-marchi"
+    },
+    "nl": {
+     "name": "Onze merken",
+     "url": "https://www.helloprint.com/nl-nl/onze-merken"
+    },
+    "nl-BE": {
+     "name": "Onze merken",
+     "url": "https://www.helloprint.com/nl-be/onze-merken"
+    }
+   },
+   "id": "5HE0GQwek9xCgvr7OKYPyF",
+   "image": null,
+   "landing": true,
+   "name_en": "our-brands"
+  },
   "paper-bags": {
    "by_locale": {
     "en-GB": {
@@ -645,45 +807,6 @@
    "id": "2ZnZvOV79eoAK2ug8gEwK2",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/4NXiyPrpvopEq6tHEE4GSg/d518a275698cbef14f2b84aa149f9862/Landingpage-Personalised-Writing-Instruments-Pens-removebg-preview.png",
    "name_en": "Pens"
-  },
-  "polo-shirts": {
-   "by_locale": {
-    "en-GB": {
-     "name": "Polo Shirts",
-     "url": "https://www.helloprint.com/en-gb/personalised-polo-shirts"
-    },
-    "en-IE": {
-     "name": "Polo Shirts",
-     "url": "https://www.helloprint.com/en-ie/personalised-polo-shirts"
-    },
-    "es-ES": {
-     "name": "Polos",
-     "url": "https://www.helloprint.com/es-es/polos-personalizados"
-    },
-    "fr-BE": {
-     "name": "Polos",
-     "url": "https://www.helloprint.com/fr-be/tshirt-polo-personnalise"
-    },
-    "fr-FR": {
-     "name": "Polos",
-     "url": "https://www.helloprint.com/fr-fr/tshirt-polo-personnalise"
-    },
-    "it": {
-     "name": "Polo",
-     "url": "https://www.helloprint.com/it-it/polo-personalizzate"
-    },
-    "nl": {
-     "name": "Polo's",
-     "url": "https://www.helloprint.com/nl-nl/polos-bedrukken"
-    },
-    "nl-BE": {
-     "name": "Polo's",
-     "url": "https://www.helloprint.com/nl-be/polos-bedrukken"
-    }
-   },
-   "id": "4GnXBz3dcAKwCCqmCqwE4g",
-   "image": "https://images.ctfassets.net/wm1n7oady8a5/k7WNLeTJsqHZ4quaY6vT8/4b32ffcdd1289dddcc9842fba8bf1eb6/Search_image__7_.png",
-   "name_en": "Polo Shirts"
   },
   "poster-printing": {
    "by_locale": {

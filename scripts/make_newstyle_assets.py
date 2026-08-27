@@ -43,6 +43,11 @@ OUT = os.path.join(ROOT, "assets", "newstyle")
 HERO = (780, 546)       # displayed at 600 wide, so 1.3x
 FEATURE = (504, 378)    # displayed at 252 wide
 TILE = (400, 400)       # displayed at about 264 wide
+# BRAND tiles sit three across an ink band, displayed at about 168 wide. Every
+# brand source is 1200x1000 (Jack & Jones is 2400x2000), so 1.2 is the source
+# aspect and these are a straight resize with nothing cropped off - which matters,
+# because the subject in a brand shot is the product and it is usually off-centre.
+BRAND = (348, 290)
 
 # An image-led email is heavier than a text one, but not without limit. 1.5x the
 # display size is the point where more pixels stopped being visible in the client
@@ -71,7 +76,9 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
                "hero-review-reminder": 0.30,
                "hero-offer": 0.30, "hero-offer-last": 0.30,
                "hero-winback-news": 0.30, "hero-winback-offer": 0.38,
-               "hero-signage-outdoor": 0.28}
+               "hero-signage-outdoor": 0.28,
+               "hero-labels-packaging": 0.26, "hero-clothing-textiles": 0.30,
+               "hero-corporate-gifts": 0.28}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -127,7 +134,10 @@ HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
                  # product, so the banner wins.
                  "hero-winback-news": 0.75, "hero-winback-offer": 0.35,
                  # flags sit high in a 1200x1000 frame; first pass, checked by eye
-                 "hero-signage-outdoor": 0.85}
+                 "hero-signage-outdoor": 0.85,
+                 # first pass on all three, checked by eye below
+                 "hero-labels-packaging": 0.50, "hero-clothing-textiles": 0.45,
+                 "hero-corporate-gifts": 0.55}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -145,6 +155,44 @@ CONTENTFUL = {
     "flags.webp": ("https://images.ctfassets.net/wm1n7oady8a5/1fyKaG8yk5oEMp4xDLcbPh/"
                    "bd2010d44723e2643b2c555db6f3813b/flags.webp"
                    "?fm=jpg&fl=progressive&q=94&w=1200"),
+    "labels-hero.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/3nuWqSKtaU412ZTYV0HsG8/054d9aa5d66830f9d0b40d3fdc7e3607/Untitled_design__16_.png"),
+    "clothing-hero.webp":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/700AYMUr7xvLmvA85nXphU/67261664ba4675b4fd454f62d4aa89a7/clothing.webp"),
+    "gifts-hero.webp":
+        ("https://images.ctfassets.net/wm1n7oady8a5/6tuxyAn4Y6jUpARo3GbtKX/a7069ece1d9eb01c71975851c47b7717/gifts.webp"),
+    "tote-bags.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/2zdr5iHCcdqnY1AyYAjdnk/ed8617238bdffbc20e40fa78611e0e9f/promocard-totebags.png"),
+    "water-bottles.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/4AClSli3ACPjKjGJxNAVGV/82eb1c164bc64ab61725067c7f528903/Nordvik_RCS_Recycled_Steel_500_ml_PDP_Copy.png"),
+    "brand-sony.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/4flOvtXUx6F5X9KKNuItbI/103239eeaaa664699a6ce78b3974de93/1.png"),
+    "brand-jbl.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/7pQ1FMRdiifeXzEPHR6J94/c423d12ed72f8909ca8c7ff1e56df70c/4.png"),
+    "brand-freshnrebel.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/4PK7xCcd3nKYkw1XwuLeEt/21d8e9df6759745aa944f6321dd9c643/Untitled__1000_x_1000_px___1200_x_1000_px___1000_x_1000_px___1200_x_1000_px___3_.png"),
+    "brand-jackjones.webp":
+        ("https://images.ctfassets.net/wm1n7oady8a5/45mAeCy7whiITbBraKVvbE/944e85e0b355dc5df8deef4ae16f373d/jack_jones_2x.webp"),
+    "brand-iqoniq.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/2ywWhIH2IhV7rRYtlEA60v/2da266aed56a12fbfcb0da1f7e97774c/Untitled__1000_x_1000_px___1200_x_1000_px___1000_x_1000_px___1200_x_1000_px___19_.png"),
+    "tshirts.webp":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/63LMsDN3Ee10MRsHdtS7CT/b390d3788a62ad38c71298e0e1c8e76f/T-Shirts.webp?q=75&h=600&w=1200"),
+    "hoodies.webp":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/lr6P73GCEW0hp4J6RPXXb/5749aae5ca29a262dbf1352238189672/Hoodies.webp?q=75&h=600&w=1200"),
+    "caps.webp":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/2ZQeBV16ByqH54jAzi45mK/c2d4ff1ae331aeb0c6d9924baabafbac/Caps.webp?q=75&h=600&w=1200"),
+    "towels.webp":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/1UoweaLWx8RVU3yXVwdGDb/d8745a1ad6f20e7d49ae7c56c82e4df1/towels_1x.webp"),
+    "labels-stickers.webp":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/4m6lFBSj16Co2cUEQMf12N/7ce70d3fe20689fc430f2a0cd3486b5f/stickers__1_.webp?q=75&h=1000&w=1000&fit=fill"),
+    "paper-bags.png":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/6ylWZ1k8TVz4fphApywlaV/213368def9b1a007df2c727ca45ce8b6/promocard-paperbags.png"),
+    "labels-on-roll.png":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/VqD81nDYqW1HRD1kdpZrD/80fea7baa46323376db7b9a2ebb58f73/Stickers_on_roll.png"),
+    "food-packaging.png":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/65OdbmNa2ukgEBj5rCKxUj/b12b1105cf083a90d60aa5d9c345a554/food_packaging.png"),
+    "brand-bandc.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/6WmPn4SZCTUweNVlxTppyG/3b44c6807809e55c31593170c8dae290/Untitled__1000_x_1000_px___1200_x_1000_px___1000_x_1000_px___1200_x_1000_px___12_.png"),
 }
 SRC_DIR = os.path.join(ROOT, "assets", "sources")
 
@@ -157,7 +205,13 @@ def fetch_sources():
         if os.path.exists(p):
             continue
         print("  fetching %s from Contentful" % fn)
-        with urllib.request.urlopen(url) as r, open(p, "wb") as f:
+        # A USER-AGENT IS NOT OPTIONAL. images.ctfassets.net serves
+        # Python-urllib happily; contentful.helloprint.com answers it with 403,
+        # so one of the eleven sources fails and the other ten look fine.
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"})
+        with urllib.request.urlopen(req) as r, open(p, "wb") as f:
             f.write(r.read())
 
 
@@ -192,6 +246,40 @@ JOBS = [
     # which is a nice photograph and the wrong one for a paragraph about aluminium
     # taking weather.
     ("foamexsigns/foamexsigns_setting1.webp", "feature-signage-panels", "feature", "signage-outdoor"),
+    # LABELS & PACKAGING. A round eco sticker sealing a cardboard box, which is
+    # the premise of the merged email in one picture: a label ON packaging.
+    ("@labels-hero.png", "hero-labels-packaging", "hero", "labels-packaging"),
+    # CLOTHING & TEXTILES. Hoodie, beanie and shorts on tarmac. Worth knowing the
+    # hoodie is not one of this email's four tiles - hoodies do not make the top
+    # four for the category - so it works as a mood shot for branded teamwear
+    # rather than as a picture of what the tiles sell.
+    ("@clothing-hero.webp", "hero-clothing-textiles", "hero", "clothing-textiles"),
+    # CORPORATE GIFTS. A power bank, a bottle and a notebook on a desk, all three
+    # carrying the same logo. Two of those three are tiles in this email.
+    ("@gifts-hero.webp", "hero-corporate-gifts", "hero", "corporate-gifts"),
+    ("@tote-bags.png", "feature-tote-bags", "feature", "corporate-gifts"),
+    ("@water-bottles.png", "tile-water-bottles", "tile", "corporate-gifts"),
+    # THE BRAND BANDS. Tech in the gifts email, garments in the clothing email.
+    # All six are in-setting shots from the carousel on /our-brands; the flat
+    # packshots on that page (Urban Vitamin, SCX Design) are deliberately not here.
+    ("@brand-sony.png", "brand-sony", "brand", "corporate-gifts"),
+    ("@brand-jbl.png", "brand-jbl", "brand", "corporate-gifts"),
+    ("@brand-freshnrebel.png", "brand-freshnrebel", "brand", "corporate-gifts"),
+    ("@brand-jackjones.webp", "brand-jackjones", "brand", "clothing-textiles"),
+    ("@brand-iqoniq.png", "brand-iqoniq", "brand", "clothing-textiles"),
+    ("@brand-bandc.png", "brand-bandc", "brand", "clothing-textiles"),
+    # Labels & Packaging, all four tiles.
+    ("@labels-stickers.webp", "feature-labels-stickers", "feature", "labels-packaging"),
+    ("@paper-bags.png", "feature-paper-bags", "feature", "labels-packaging"),
+    ("@labels-on-roll.png", "tile-labels-on-roll", "tile", "labels-packaging"),
+    ("@food-packaging.png", "tile-food-packaging", "tile", "labels-packaging"),
+    # Clothing & Textiles, all four tiles. The three garment shots come back
+    # 720x600 rather than the 1200x600 the URL asks for - that host caps width -
+    # which is 1.2 and crops to the feature and tile shapes without distortion.
+    ("@tshirts.webp", "feature-tshirts", "feature", "clothing-textiles"),
+    ("@hoodies.webp", "feature-hoodies", "feature", "clothing-textiles"),
+    ("@caps.webp", "tile-caps", "tile", "clothing-textiles"),
+    ("@towels.webp", "tile-interior-textiles", "tile", "clothing-textiles"),
     # Winback. Both bottoms sit higher than the others - 86 and 103 of 255 rather
     # than the 30s - so both get a deeper fade to reach the ink without a visible
     # step. banners_setting2 has its subject high in frame at 0.70-0.85, which is
@@ -227,7 +315,7 @@ def derive(src, name, shape):
     one thing JPEG visibly bands on, and dropping quality is how you get a
     staircase across the fade.
     """
-    w, h = {"hero": HERO, "feature": FEATURE}.get(shape, TILE)
+    w, h = {"hero": HERO, "feature": FEATURE, "brand": BRAND}.get(shape, TILE)
     sw, sh, rows = ri.read(src)
     if shape == "hero":
         sw, sh, rows = ri.crop_to(sw, sh, rows, w, h, HERO_OFFSET_Y[name])
@@ -235,6 +323,21 @@ def derive(src, name, shape):
         # 4:3 rather than 3:2. A square source cropped to 3:2 loses a third of its
         # height, which was taking the subject with it.
         sw, sh, rows = ri.crop_to(sw, sh, rows, w, h, 0.5)
+    elif shape == "tile":
+        # TILES WERE NEVER CROPPED. Every tile source out of the zip happened to be
+        # square, so a straight resize to 400x400 was correct by accident and the
+        # missing branch went unnoticed until a 1200x1000 roll-of-labels shot came
+        # in from Contentful and got squashed 20% narrow.
+        sw, sh, rows = ri.crop_to(sw, sh, rows, w, h, 0.5)
+    elif shape == "brand":
+        # NO CROP. Every brand source is already 1.2, which is what BRAND is, so
+        # crop_to would return the image untouched anyway - and if a future source
+        # is not 1.2, cropping it silently is exactly the failure this file exists
+        # to prevent. Assert instead.
+        if abs(sw / float(sh) - w / float(h)) > 0.02:
+            raise AssertionError("%s is %dx%d (%.3f), and brand tiles are %.3f - "
+                                 "crop it deliberately or give it its own shape"
+                                 % (name, sw, sh, sw / float(sh), w / float(h)))
     ow, oh, rows = ri.to_size(sw, sh, rows, w, h)
     if shape == "hero":
         # bottom only: the top of this image is the top of the email
@@ -297,7 +400,7 @@ def main():
     # intent. The fades passed, the weights passed, the previews looked plausible.
     wrong = []
     for n, (sh_, _sz, _em) in sizes.items():
-        want = {"hero": HERO, "feature": FEATURE}.get(sh_, TILE)
+        want = {"hero": HERO, "feature": FEATURE, "brand": BRAND}.get(sh_, TILE)
         got = ri.size(os.path.join(OUT, n + ".jpg"))
         if got != want:
             wrong.append("%s is %dx%d, asked for %dx%d" % ((n,) + got + want))

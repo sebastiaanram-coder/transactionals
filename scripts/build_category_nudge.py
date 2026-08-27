@@ -201,6 +201,18 @@ CATEGORIES = [
     ),
     dict(
         slug="labels-packaging", code="lp",
+        eyebrow="LABELS &amp; PACKAGING",
+        sect_h="Where most label orders start",
+        sect_sub="The two formats businesses order most: one that goes on the product, one the customer carries out.",
+        hero="hero-labels-packaging",
+        hero_alt="A round eco-friendly sticker sealing a cardboard box",
+        headers=[dict(key="", style="photo", hero="hero-labels-packaging")],
+        photos={
+            "Labels & Stickers": "feature-labels-stickers",
+            "Paper Bags": "feature-paper-bags",
+            "Labels On Roll": "tile-labels-on-roll",
+            "Printed Food Packaging": "tile-food-packaging",
+        },
         h1="Running low on labels, or on bags?",
         sub="Labels and stickers, and the packaging they go on. Both in runs small enough to try first.",
         pre="Labels, stickers and the packaging they go on.",
@@ -221,6 +233,33 @@ CATEGORIES = [
     ),
     dict(
         slug="clothing-textiles", code="ct",
+        eyebrow="CLOTHING &amp; TEXTILES",
+        sect_h="Where most team orders start",
+        sect_sub="The two we print most when a business kits people out.",
+        hero="hero-clothing-textiles",
+        hero_alt="A printed hoodie, beanie and shorts laid out on tarmac",
+        headers=[dict(key="", style="photo", hero="hero-clothing-textiles")],
+        photos={
+            "T-shirts": "feature-tshirts",
+            "Hoodies & Zip-up Hoodies": "feature-hoodies",
+            "Interior Textiles": "tile-interior-textiles",
+            "Caps": "tile-caps",
+        },
+        # Garment brands, because the in-setting shots on /our-brands split
+        # cleanly: the tech ones suit gifts and these three suit this email.
+        brands=dict(
+            eyebrow="BRANDS WE CARRY",
+            h="Or put it on a brand they already know",
+            sub="Not everything has to be a blank. We print on premium garment brands too, from the same file.",
+            link="See all brands",
+            items=[
+                dict(name="Jack &amp; Jones", photo="brand-jackjones",
+                     alt="Three men wearing denim shirts and jackets"),
+                dict(name="Iqoniq", photo="brand-iqoniq",
+                     alt="Four people wearing coloured printed t-shirts"),
+                dict(name="B&amp;C Collection", photo="brand-bandc",
+                     alt="Two people wearing white printed sweatshirts"),
+            ]),
         h1="Kitting out the team?",
         sub="Shirts and textiles, with your logo printed or stitched on.",
         pre="Shirts and textiles with your logo on them.",
@@ -230,9 +269,10 @@ CATEGORIES = [
             "T-shirts":
                 "Printed or embroidered, in the size breakdown you actually need rather than the "
                 "same size throughout. Send your logo and we will say which method suits it.",
-            "Polo Shirts":
-                "A step up from a t-shirt for anyone who meets customers. Embroidery outlasts "
-                "print on a collar and comes out of the wash better.",
+            "Hoodies & Zip-up Hoodies":
+                "Heavier than a t-shirt and worn far longer, which is what makes one worth "
+                "embroidering rather than printing. Zip or pullover, in the size breakdown you "
+                "actually need.",
         },
         block=("Mixed sizes, one order",
                "You do not have to order the same size throughout. Send the breakdown you need "
@@ -241,6 +281,34 @@ CATEGORIES = [
     ),
     dict(
         slug="corporate-gifts", code="cg",
+        eyebrow="CORPORATE GIFTS",
+        sect_h="Where most gift orders start",
+        sect_sub="The two that get handed out most, and kept longest.",
+        hero="hero-corporate-gifts",
+        hero_alt="A branded power bank, water bottle and notebook on a desk",
+        headers=[dict(key="", style="photo", hero="hero-corporate-gifts")],
+        # Two of four. Pens and Notebooks have no shot yet and fall back to their
+        # Contentful packshots, which is the documented behaviour.
+        photos={
+            "Canvas Tote Bags": "feature-tote-bags",
+            "Water Bottles": "tile-water-bottles",
+        },
+        # None of this email's four tiles is a speaker, so the band shows range the
+        # tiles miss rather than repeating them - which matters in the one category
+        # where four tiles cover under half the gross profit.
+        brands=dict(
+            eyebrow="BRANDS WE CARRY",
+            h="Your logo on a name they already know",
+            sub="We personalise premium brands as well as our own ranges. Same file, same process.",
+            link="See all brands",
+            items=[
+                dict(name="Sony", photo="brand-sony",
+                     alt="A Sony speaker held in one hand outdoors"),
+                dict(name="JBL", photo="brand-jbl",
+                     alt="A finger pressing the top of a JBL speaker"),
+                dict(name="Fresh &rsquo;n Rebel", photo="brand-freshnrebel",
+                     alt="A blue speaker clipped to a pair of trousers"),
+            ]),
         h1="Something to hand out at the next event?",
         sub="The things that stay in use long after a flyer is in the bin.",
         pre="Things that stay in use long after a flyer is in the bin.",
@@ -340,6 +408,22 @@ CSS = """
 .%(P)s-brule{display:block;width:34px;height:2px;background:#00b67a;margin:0 auto 13px;font-size:0;line-height:0;}
 .%(P)s-bby{display:block;font-size:12px;line-height:18px;color:#8f8f8f;}
 .%(P)s-bph{display:block;margin:0 auto 13px;max-width:430px;border:2px dashed #3f3f3f;border-radius:10px;padding:16px 18px;font-size:14px;line-height:21px;color:#9a9a9a;background:#212121;}
+/* THE BRANDS BAND. Ink, after the grid, three in-setting shots across. The shots
+   are the point: /our-brands carries a carousel of products in use and a set of
+   flat packshots, and only the in-setting ones are here. It stays three across on
+   a phone rather than stacking - these are small recognisable brand pictures with
+   a name under each, not products to be browsed, and stacking three of them would
+   add a screen of scroll to the end of the email for no gain. */
+.%(P)s-bra{background:#191919;padding:32px 26px 30px;margin:34px 0 0;text-align:center;}
+.%(P)s-braeye{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 10px;}
+.%(P)s-brah{margin:0 auto 8px;max-width:410px;font-size:21px;line-height:28px;font-weight:800;color:#ffffff;letter-spacing:-.014em;}
+.%(P)s-bras{margin:0 auto 20px;max-width:410px;font-size:14px;line-height:21px;color:#b4b4b4;}
+.%(P)s-bratbl{width:100%%;border-collapse:separate;border-spacing:0;table-layout:fixed;}
+.%(P)s-bratd{width:33.33%%;vertical-align:top;padding:0 5px;}
+.%(P)s-bracard{display:block;text-decoration:none;}
+.%(P)s-bracard img{width:100%%;max-width:100%%;height:auto;display:block;border:0;border-radius:10px;}
+.%(P)s-braname{display:block;font-size:13px;line-height:19px;font-weight:800;color:#ffffff;margin:9px 0 0;}
+.%(P)s-bralink{display:inline-block;margin:20px 0 0;font-size:14px;line-height:21px;font-weight:700;color:#9fdbb8;text-decoration:none;}
 /* GOOD TO KNOW, now on white at the bottom. It reads as a footnote to the
    browsing rather than as an interruption of it, which is what it always was. */
 .%(P)s-gk{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}
@@ -391,6 +475,10 @@ CSS = """
   .%(P)s-tile{padding:0 4px 12px;}
   .%(P)s-tname{font-size:14px;line-height:19px;min-height:38px;}
   .%(P)s-gk,.%(P)s-help,.%(P)s-tail{margin-left:14px;margin-right:14px;}
+  .%(P)s-bra{padding:28px 14px 26px;}
+  .%(P)s-brah{font-size:19px;line-height:26px;}
+  .%(P)s-bratd{padding:0 3px;}
+  .%(P)s-braname{font-size:11px;line-height:16px;}
   .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
 """
@@ -424,6 +512,7 @@ BODY = """
       {TILES}
     </div>
 
+{BRANDS}
     <div class="{P}-gk">
       <span class="{P}-gkeye">GOOD TO KNOW</span>
       <p class="{P}-gkh">{B_TITLE}</p>
@@ -577,6 +666,44 @@ def grid(P, cat, subs, live):
             'cellpadding="0" cellspacing="0">%s</table>' % (P, rows))
 
 
+def brands_block(P, cat, live):
+    """Three in-setting brand shots on ink, between the grid and the closing note.
+
+    Only shots of a product in use are here. /our-brands also carries flat
+    packshots on white - Urban Vitamin's earbud cases, an SCX cable beside a
+    laptop - and mixing those in beside a photograph of somebody holding a speaker
+    is the same mismatch a Contentful packshot makes next to art-directed tiles.
+
+    The band links to /our-brands rather than to one brand: it is the page that
+    exists in all eight markets, and picking one brand to link would make the
+    other two decoration.
+    """
+    b = cat.get("brands")
+    if not b:
+        return ""
+    cells = ""
+    for it in b["items"]:
+        cells += ('<td class="%s-bratd" valign="top">'
+                  '<a class="%s-bracard" href="%s">'
+                  '<img src="%s" alt="%s" width="168">'
+                  '<span class="%s-braname">%s</span></a></td>'
+                  # NOT esc() ON THE NAME. These are written with entities on
+                  # purpose - Fresh &rsquo;n Rebel, Jack &amp; Jones, B&amp;C -
+                  # and escaping them again put "&rsquo;" on screen as text. The
+                  # alt text is plain prose, so it still gets escaped.
+                  % (P, P, cat["_brands_url"], photo(it["photo"], live),
+                     esc(it["alt"]), P, it["name"]))
+    return ('    <div class="{P}-bra">\n'
+            '      <span class="{P}-braeye">{EYE}</span>\n'
+            '      <h2 class="{P}-brah">{H}</h2>\n'
+            '      <p class="{P}-bras">{S}</p>\n'
+            '      <table class="{P}-bratbl" role="presentation" width="100%" '
+            'cellpadding="0" cellspacing="0"><tr>{CELLS}</tr></table>\n'
+            '      <a class="{P}-bralink" href="{URL}">{LINK} &rarr;</a>\n'
+            '    </div>\n').format(P=P, EYE=b["eyebrow"], H=b["h"], S=b["sub"],
+                                   CELLS=cells, URL=cat["_brands_url"], LINK=b["link"])
+
+
 def review_block(P, cat, live):
     """A real review per language, or a visible placeholder. Never translated."""
     def quote(r):
@@ -624,11 +751,15 @@ def build(cat, live, hdr=None):
     cat = dict(cat, _first_url=url_of(land, live) if land
                                 else url_of(conf["feature"][0], live),
                _wordmark=assets["IMG_WORDMARK"],
+               # the brands page, per market, for the band's tiles and its link
+               _brands_url=(sc.locale_switch("our-brands", "url") if live
+                            else sc.preview_field("our-brands", "url")),
                _eyebrow=cat.get("eyebrow") or conf["label"].upper())
     vals = dict(
         P=P, CSS=CSS % {"P": P}, LABEL=conf["label"],
         H1=cat["h1"], SUB=cat["sub"], PRE=cat["pre"], CTA=CTA,
         FEATURES=feats, TILES=grid(P, cat, conf["grid"], live),
+        BRANDS=brands_block(P, cat, live),
         HEADER=header_block(P, cat, live, hdr or headers_of(cat)[0], home),
         B_TITLE=cat["block"][0], B_BODY=cat["block"][1],
         GRID_H=cat["grid_h"], GRID_SUB=cat["grid_sub"],
@@ -835,6 +966,12 @@ for cat in CATEGORIES:
     # looks like it points at nothing. Klaviyo renders the template before any
     # HTML parser sees it, so the quotes are gone by the time it is mail; they are
     # only a problem for something reading the template, which is what this is.
+    # DOUBLE-ESCAPED ENTITIES. esc() over a string that already contains one
+    # turns &rsquo; into &amp;rsquo; and prints it as text. It happened to three
+    # brand names at once, and it is invisible in the source and obvious on screen.
+    for m in re.finditer(r"&amp;(?:[a-z]{2,8}|#\d{2,5});", markup):
+        errs.append("%s: double-escaped entity in the copy (%s)" % (t, m.group(0)))
+
     land = sc.landing(cat["slug"])
     tops = re.findall(r'class="%s-hero"><a href="(.*?)">' % P, markup)
     tops += re.findall(r'class="%s-cta2?" href="(.*?)">' % P, markup)
@@ -844,12 +981,22 @@ for cat in CATEGORIES:
                     % (t, expected, "header and " if expected == 3 else "", len(tops)))
     if land:
         want = sc.field(land, "en-GB", "url")
+        # ONE EMAIL IS ALLOWED TO POINT AT A TILE, and only because there is no
+        # other page to point at. Labels & Packaging is a merged email and nothing
+        # covers both halves: Labels & Stickers IS the /all-stickers hub as well as
+        # the biggest subcategory in the email, and Packaging is its own separate
+        # hub. Labels is 490k against packaging's 77k, so the header goes to the
+        # labels hub and the packaging half is reached through its own two tiles.
+        # Leaving the landing unset would send the header to the same URL anyway,
+        # by the fallback below, so this at least makes it deliberate. A combined
+        # hub is the fix; when one exists, delete this.
+        tile_ok = cat["slug"] == "labels-packaging"
         tiles = [sc.field(x, "en-GB", "url") for x in conf["feature"] + conf["grid"]]
         for href in tops:
             if want not in href:
                 errs.append("%s: a header or button link does not go to %s" % (t, land))
             for tile_url in tiles:
-                if tile_url in href:
+                if tile_url in href and not (tile_ok and tile_url == want):
                     errs.append("%s: a header or button link goes to a tile (%s)"
                                 % (t, tile_url))
         for el, cl in sc.LOCALE_MAP.items():
