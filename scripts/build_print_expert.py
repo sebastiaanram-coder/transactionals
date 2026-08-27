@@ -50,6 +50,8 @@ checked in all eight.
 import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import subcategories as sc
+import i18n
+import housestyle
 
 
 def esc(t):
@@ -225,19 +227,22 @@ BODY = """
 """
 
 
-def greeting(live):
+def greeting(live, tr=None):
     """A name where we have one, "Hi there" where we do not.
 
     Klaviyo renders a missing property as an empty string, so "Hi ," is what an
     unguarded greeting produces - and on the one email in the programme that claims
     to be from a person, that is the worst place for it."""
+    t = (lambda k, e: e) if tr is None else tr
+    named = t("greet_named", COPY["greet_named"])
+    plain = t("greet_plain", COPY["greet_plain"])
     if not live:
-        return "Hi Sarah,"
-    return ("{%% if first_name %%}%s{%% else %%}%s{%% endif %%}"
-            % (COPY["greet_named"], COPY["greet_plain"]))
+        # the preview shows a name, so it reads the way the email will
+        return plain.replace(",", " Sarah,") if "{{" not in plain else plain
+    return "{%% if first_name %%}%s{%% else %%}%s{%% endif %%}" % (named, plain)
 
 
-def unsub_line(live):
+def unsub_line(live, tr=None):
     """The unsubscribe, as a sentence John would write.
 
     The label is Klaviyo's to render, so this is a genuine one-click unsubscribe
@@ -246,23 +251,29 @@ def unsub_line(live):
     what it does is both worse for the reader and weaker as a consent mechanism -
     and this is now the only visible unsubscribe in the email.
     """
-    link = ("{%% unsubscribe '%s' %%}" % COPY["unsub_label"] if live
-            else '<a class="%s-unsublink" href="#">%s</a>' % (P, COPY["unsub_label"]))
-    return COPY["unsub_before"] + link + COPY["unsub_after"]
+    t = (lambda k, e: e) if tr is None else tr
+    label = t("unsub_label", COPY["unsub_label"])
+    link = ("{%% unsubscribe '%s' %%}" % label if live
+            else '<a class="%s-unsublink" href="#">%s</a>' % (P, label))
+    return (t("unsub_before", COPY["unsub_before"]) + link
+            + t("unsub_after", COPY["unsub_after"]))
 
 
-def build(live):
+def build(live, locale=None):
+    tr = i18n.translator("post-04-expert", live, locale)
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
-    opening = "".join('<p class="%s-p">%s</p>' % (P, t) for t in COPY["opening"])
-    offers = "".join('<p class="%s-offer"><b>%s</b> %s</p>' % (P, q, a)
-                     for q, a in COPY["offers"])
+    opening = "".join('<p class="%s-p">%s</p>' % (P, tr("opening.%d" % i, t))
+                      for i, t in enumerate(COPY["opening"]))
+    offers = "".join('<p class="%s-offer"><b>%s</b> %s</p>'
+                     % (P, tr("offer.%d.t" % i, q), tr("offer.%d.b" % i, a))
+                     for i, (q, a) in enumerate(COPY["offers"]))
     vals = dict(
-        P=P, CSS=CSS % {"P": P}, PRE=COPY["pre"],
-        GREET=greeting(live), OPENING=opening, OFFERS=offers,
-        CLOSING=COPY["closing"],
-        LINK=COPY["link"],
+        P=P, CSS=CSS % {"P": P}, PRE=tr("pre", COPY["pre"]),
+        GREET=greeting(live, tr), OPENING=opening, OFFERS=offers,
+        CLOSING=tr("closing", COPY["closing"]),
+        LINK=tr("link", COPY["link"]),
         HOME=sc.market_url("", live),
-        UNSUB=unsub_line(live),
+        UNSUB=unsub_line(live, tr),
         LEGAL=("Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, "
                "Netherlands &middot; VAT NL855793302B01"),
     )
@@ -333,6 +344,12 @@ KLAVIYO_DOC = """<!--
 """
 
 prev, livb = build(False), build(True)
+for _lg in i18n.LANGS:
+    if _lg == i18n.SOURCE:
+        continue
+    _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+    open(os.path.join(OUT, "post-04-expert-%s-proposed.html" % _lg), "w",
+         encoding="utf-8").write(PREVIEW_DOC % {"body": build(False, _loc)})
 open(os.path.join(OUT, "post-04-expert-proposed.html"), "w",
      encoding="utf-8").write(PREVIEW_DOC % {"body": prev})
 open(os.path.join(OUT, "post-04-expert-klaviyo.html"), "w",
@@ -411,7 +428,12 @@ for email_loc, cf_loc in sc.LOCALE_MAP.items():
     want = "https://www.helloprint.com/%s/" % sc.market_path(cf_loc)
     if ("event.Locale == '%s' %%}%s" % (email_loc, want)) not in livb:
         errs.append("%s does not point at %s" % (email_loc, want))
-if livb.count("/en-ie/") != livb.count("event.Locale == 'en-IE'"):
+# COUNT ONLY THE en-IE BRANCHES THAT ARE LINKS. This compared every /en-ie/ in
+# the file against every en-IE branch, which balanced while the copy was English
+# and stopped the moment the copy itself became a nine-way switch: the prose adds
+# en-IE branches that contain no link at all.
+_ie_links = livb.count("event.Locale == 'en-IE' %}https://www.helloprint.com/en-ie/")
+if livb.count("/en-ie/") != _ie_links:
     errs.append("an /en-ie/ link is hardcoded rather than switched per market")
 
 # things presta cannot support, and claims nobody has checked
@@ -442,7 +464,10 @@ for phrase in ("a quantity that costs less at the next step up",
     if phrase in vis:
         errs.append("reuses a line from John's Abandoned Order note verbatim")
 
-words = len(vis.split())
+# MEASURED ON THE ENGLISH PREVIEW, not the live build. The live build now carries
+# every language, so counting its words counted the email six times over and
+# reported 1948 for a note that is a little over three hundred.
+words = len(housestyle.visible(prev).split())
 print("post-04-expert            preview %6d  klaviyo %6d  |  %d words of copy"
       % (len(prev), len(livb), words))
 print("links: the market root in %d locales, all checked over HTTP"

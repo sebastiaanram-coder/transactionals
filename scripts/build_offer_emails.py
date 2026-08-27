@@ -34,6 +34,7 @@ the only term stated, because it is the only one presta can currently keep.
 import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import subcategories as sc
+import i18n
 
 
 def esc(t):
@@ -196,34 +197,54 @@ BODY = """
 
 HELP_BLOCK = """
     <div class="{P}-help">
-      <img src="{IMG_AGENTS}" alt="Three Helloprint print experts" width="112" height="44">
-      <span class="{P}-helpttl">Not sure what you need?</span>
-      <p class="{P}-helptx">Tell a print expert what the job is for and they will tell you which option fits and what it costs. Reply to this email and it reaches them.</p>
+      <img src="{IMG_AGENTS}" alt="{T_ALT_AGENTS}" width="112" height="44">
+      <span class="{P}-helpttl">{T_HELP_TITLE}</span>
+      <p class="{P}-helptx">{T_HELP_BODY}</p>
     </div>
 """
 
 
-def code_expiry_line():
+def code_expiry_line(tr=None):
     """The line under the code. Drops the deadline entirely at EXPIRY_DAYS = 0,
     which is the switch to pull if Talon.one has not landed in time."""
-    off = "%d%% off your next order" % PERCENT
+    # THE NUMBERS GO IN AFTER THE SWITCH IS BUILT. The sentence carries two
+    # placeholders and nine branches; filling first would put the numbers into one
+    # language and leave the other eight showing a literal %d.
+    t = (lambda k, e: e) if tr is None else tr
     if not EXPIRY_DAYS:
-        return off
-    return "%s &middot; expires %d days after this email" % (off, EXPIRY_DAYS)
+        return t("offer.percent_only", "%d%% off your next order").replace(
+            "%d", str(PERCENT))
+    line = t("offer.expiry",
+             "%d%% off your next order &middot; expires %d days after this email")
+    return line.replace("%d", "\x00", 1).replace("%d", "\x01", 1) \
+               .replace("\x00", str(PERCENT)).replace("\x01", str(EXPIRY_DAYS))
 
 
-def build(e, live):
+def build(e, live, locale=None):
+    tr = i18n.translator(e["slug"], live, locale)
     P = "hp-" + e["code"]
     assets = LIVE_ASSETS if live else SAMPLE_ASSETS
     vals = dict(
         P=P, CSS=CSS % {"P": P},
-        PRE=e["pre"], EYEBROW=e["eyebrow"], H1=e["h1"], SUB=e["sub"],
-        CODE_LABEL=SHARED["code_label"], CODE=(CODE if live else SAMPLE_CODE),
-        CODE_EXP=code_expiry_line(), CTA=SHARED["cta"], TERMS=SHARED["terms"],
-        HERO_IMG=photo(e["hero"], live), HERO_ALT=esc(e["hero_alt"]),
-        HELP=(HELP_BLOCK.format(P=P, **assets) if e["help"] else ""),
+        PRE=tr("pre", e["pre"]), EYEBROW=tr("eyebrow", e["eyebrow"]),
+        H1=tr("h1", e["h1"]), SUB=tr("sub", e["sub"]),
+        CODE_LABEL=tr("offer.code_label", SHARED["code_label"]),
+        CODE=(CODE if live else SAMPLE_CODE),
+        CODE_EXP=code_expiry_line(tr), CTA=tr("offer.cta", SHARED["cta"]),
+        TERMS=tr("offer.terms", SHARED["terms"]),
+        HERO_IMG=photo(e["hero"], live), HERO_ALT=tr("hero_alt", e["hero_alt"], esc),
+        HELP=(HELP_BLOCK.format(
+            P=P,
+            T_ALT_AGENTS=tr("alt.agents", "Three Helloprint print experts"),
+            T_HELP_TITLE=tr("help.title_short", "Not sure what you need?"),
+            T_HELP_BODY=tr("help.body_short",
+                "Tell a print expert what the job is for and they will tell you "
+                "which option fits and what it costs. Reply to this email and it "
+                "reaches them."),
+            **assets) if e["help"] else ""),
         HOME=sc.market_url("", live), CS=sc.market_url("cs", live),
-        UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live else '<a href="#">Unsubscribe</a>'),
+        UNSUB=(("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe")) if live
+               else '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe")),
     )
     vals.update(assets)
     return BODY.format(**vals)
@@ -289,6 +310,13 @@ for e in EMAILS:
     P = "hp-" + e["code"]
     prev, livb = build(e, False), build(e, True)
     meta = dict(label=e["label"], day=e["day"], step=e["step"])
+    for _lg in i18n.LANGS:
+        if _lg == i18n.SOURCE:
+            continue
+        _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
+        open(os.path.join(OUT, "%s-%s-proposed.html" % (e["slug"], _lg)), "w",
+             encoding="utf-8").write(
+                 PREVIEW_DOC % dict(meta, body=build(e, False, _loc)))
     open(os.path.join(OUT, e["slug"] + "-proposed.html"), "w",
          encoding="utf-8").write(PREVIEW_DOC % dict(meta, body=prev))
     open(os.path.join(OUT, e["slug"] + "-klaviyo.html"), "w",

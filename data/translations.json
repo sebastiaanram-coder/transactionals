@@ -127,6 +127,54 @@
    "de": "Bewertet mit %s von 5 aus mehr als %s Bewertungen auf Trustpilot.",
    "es": "Valorado con %s sobre 5 a partir de más de %s opiniones en Trustpilot.",
    "it": "Valutato %s su 5 su oltre %s recensioni su Trustpilot."
+  },
+  "offer.code_label": {
+   "en": "YOUR CODE",
+   "nl": "JOUW CODE",
+   "fr": "VOTRE CODE",
+   "de": "IHR CODE",
+   "es": "TU CÓDIGO",
+   "it": "IL TUO CODICE"
+  },
+  "offer.terms": {
+   "en": "One use per customer.",
+   "nl": "Eén keer te gebruiken per klant.",
+   "fr": "Une utilisation par client.",
+   "de": "Einmal pro Kunde einlösbar.",
+   "es": "Un uso por cliente.",
+   "it": "Un utilizzo per cliente."
+  },
+  "offer.cta": {
+   "en": "Start your next order",
+   "nl": "Begin je volgende bestelling",
+   "fr": "Lancez votre prochaine commande",
+   "de": "Starten Sie Ihre nächste Bestellung",
+   "es": "Empieza tu próximo pedido",
+   "it": "Inizia il tuo prossimo ordine"
+  },
+  "offer.expiry": {
+   "en": "%d%% off your next order &middot; expires %d days after this email",
+   "nl": "%d%% korting op je volgende bestelling &middot; verloopt %d dagen na deze mail",
+   "fr": "%d%% de remise sur votre prochaine commande &middot; expire %d jours après cet e-mail",
+   "de": "%d%% Rabatt auf Ihre nächste Bestellung &middot; läuft %d Tage nach dieser E-Mail ab",
+   "es": "%d%% de descuento en tu próximo pedido &middot; caduca %d días después de este correo",
+   "it": "%d%% di sconto sul prossimo ordine &middot; scade %d giorni dopo questa email"
+  },
+  "help.title_short": {
+   "en": "Not sure what you need?",
+   "nl": "Weet je niet wat je nodig hebt?",
+   "fr": "Vous ne savez pas ce qu'il vous faut ?",
+   "de": "Nicht sicher, was Sie brauchen?",
+   "es": "¿No sabes qué necesitas?",
+   "it": "Non sai cosa ti serve?"
+  },
+  "help.body_short": {
+   "en": "Tell a print expert what the job is for and they will tell you which option fits and what it costs. Reply to this email and it reaches them.",
+   "nl": "Vertel een printexpert waarvoor het is, dan zeggen zij welke optie past en wat het kost. Antwoord op deze mail en je bericht komt bij hen terecht.",
+   "fr": "Dites à un expert en impression à quoi servira le travail : il vous dira quelle option convient et ce qu'elle coûte. Répondez à cet e-mail et votre message leur parvient.",
+   "de": "Sagen Sie einem Druckexperten, wofür der Auftrag ist. Er sagt Ihnen, welche Option passt und was sie kostet. Antworten Sie auf diese E-Mail, dann landet sie bei ihm.",
+   "es": "Cuéntale a un experto en impresión para qué es el trabajo y te dirá qué opción encaja y cuánto cuesta. Responde a este correo y tu mensaje les llega.",
+   "it": "Racconta a un esperto di stampa a cosa serve il lavoro e ti dirà quale opzione va bene e quanto costa. Rispondi a questa email e arriva a loro."
   }
  },
  "commercial-print": {
@@ -943,6 +991,244 @@
    "de": "Bedruckte Visitenkarten auf einem Ledersessel",
    "es": "Tarjetas de visita impresas sobre un sillón de piel",
    "it": "Biglietti da visita stampati su una poltrona in pelle"
+  }
+ },
+ "post-04-expert": {
+  "pre": {
+   "en": "How did the last job turn out?",
+   "nl": "Hoe is de vorige opdracht geworden?",
+   "fr": "Comment s'est passé le dernier travail ?",
+   "de": "Wie ist der letzte Auftrag geworden?",
+   "es": "¿Cómo salió el último trabajo?",
+   "it": "Com'è venuto l'ultimo lavoro?"
+  },
+  "greet_named": {
+   "en": "Hi {{ first_name }},",
+   "nl": "Hoi {{ first_name }},",
+   "fr": "Bonjour {{ first_name }},",
+   "de": "Hallo {{ first_name }},",
+   "es": "Hola {{ first_name }}:",
+   "it": "Ciao {{ first_name }},"
+  },
+  "greet_plain": {
+   "en": "Hi there,",
+   "nl": "Hoi,",
+   "fr": "Bonjour,",
+   "de": "Hallo,",
+   "es": "Hola:",
+   "it": "Ciao,"
+  },
+  "opening.0": {
+   "en": "I am John, one of the print experts here. I am not selling you anything. I wanted to introduce myself properly, because it is a great deal easier to help before an order than after one.",
+   "nl": "Ik ben John, een van de printexperts hier. Ik verkoop je niets. Ik wilde me even goed voorstellen, want het is een stuk makkelijker om te helpen vóór een bestelling dan erna.",
+   "fr": "Je suis John, un des experts en impression ici. Je ne vous vends rien. Je voulais me présenter correctement, parce qu'il est bien plus simple d'aider avant une commande qu'après.",
+   "de": "Ich bin John, einer der Druckexperten hier. Ich will Ihnen nichts verkaufen. Ich wollte mich richtig vorstellen, weil es sehr viel einfacher ist, vor einer Bestellung zu helfen als danach.",
+   "es": "Soy John, uno de los expertos en impresión de aquí. No te vengo a vender nada. Quería presentarme como es debido, porque ayudar antes de un pedido es mucho más fácil que después.",
+   "it": "Sono John, uno degli esperti di stampa qui. Non ti sto vendendo nulla. Volevo presentarmi come si deve, perché aiutare prima di un ordine è molto più facile che dopo."
+  },
+  "opening.1": {
+   "en": "How did the last job turn out? If something was not right, tell me and I will sort it out.",
+   "nl": "Hoe is de vorige opdracht geworden? Als er iets niet klopte, zeg het me en ik regel het.",
+   "fr": "Comment s'est passé le dernier travail ? Si quelque chose n'allait pas, dites-le-moi et je m'en occupe.",
+   "de": "Wie ist der letzte Auftrag geworden? Wenn etwas nicht gestimmt hat, sagen Sie es mir, dann kläre ich das.",
+   "es": "¿Cómo salió el último trabajo? Si algo no estuvo bien, dímelo y lo soluciono.",
+   "it": "Com'è venuto l'ultimo lavoro? Se qualcosa non andava, dimmelo e me ne occupo."
+  },
+  "opening.2": {
+   "en": "And if you have anything coming up, I would rather hear about it early. Some of what I can take off your hands:",
+   "nl": "En als je iets op de planning hebt staan, hoor ik het liever vroeg. Een paar dingen die ik uit handen kan nemen:",
+   "fr": "Et si vous avez quelque chose de prévu, je préfère l'apprendre tôt. Voici ce dont je peux vous décharger :",
+   "de": "Und wenn bei Ihnen etwas ansteht, höre ich lieber früh davon. Ein paar Dinge, die ich Ihnen abnehmen kann:",
+   "es": "Y si tienes algo en marcha, prefiero saberlo pronto. Algunas cosas de las que puedo encargarme:",
+   "it": "E se hai qualcosa in programma, preferisco saperlo per tempo. Alcune cose di cui posso occuparmi io:"
+  },
+  "offer.0.t": {
+   "en": "Not sure about a file?",
+   "nl": "Twijfel je over een bestand?",
+   "fr": "Un doute sur un fichier ?",
+   "de": "Unsicher bei einer Datei?",
+   "es": "¿Dudas con un archivo?",
+   "it": "Hai dubbi su un file?"
+  },
+  "offer.0.b": {
+   "en": "Send it over and I will look at it before it goes anywhere.",
+   "nl": "Stuur het door, dan kijk ik ernaar voordat het ergens heen gaat.",
+   "fr": "Envoyez-le-moi et je le regarde avant qu'il parte où que ce soit.",
+   "de": "Schicken Sie sie mir, dann sehe ich sie mir an, bevor sie irgendwohin geht.",
+   "es": "Envíamelo y le echo un vistazo antes de que vaya a ninguna parte.",
+   "it": "Mandamelo e ci do un'occhiata prima che vada da qualche parte."
+  },
+  "offer.1.t": {
+   "en": "Need something we do not sell?",
+   "nl": "Zoek je iets dat wij niet verkopen?",
+   "fr": "Besoin de quelque chose que nous ne vendons pas ?",
+   "de": "Brauchen Sie etwas, das wir nicht führen?",
+   "es": "¿Necesitas algo que no vendemos?",
+   "it": "Ti serve qualcosa che non vendiamo?"
+  },
+  "offer.1.b": {
+   "en": "Tell me what it is and I will find out who makes it.",
+   "nl": "Zeg me wat het is, dan zoek ik uit wie het maakt.",
+   "fr": "Dites-moi ce que c'est et je trouverai qui le fabrique.",
+   "de": "Sagen Sie mir, was es ist, dann finde ich heraus, wer es herstellt.",
+   "es": "Dime qué es y averiguo quién lo fabrica.",
+   "it": "Dimmi cos'è e scopro chi lo produce."
+  },
+  "offer.2.t": {
+   "en": "Not sure how many to order?",
+   "nl": "Weet je niet hoeveel je moet bestellen?",
+   "fr": "Vous ne savez pas quelle quantité commander ?",
+   "de": "Unsicher, wie viele Sie bestellen sollen?",
+   "es": "¿No sabes cuántos pedir?",
+   "it": "Non sai quanti ordinarne?"
+  },
+  "offer.2.b": {
+   "en": "I will price it at a few quantities. The step up is usually smaller than people expect.",
+   "nl": "Ik reken het door voor een paar aantallen. De stap omhoog valt meestal kleiner uit dan mensen denken.",
+   "fr": "Je vous chiffre plusieurs quantités. L'écart est en général plus petit qu'on ne l'imagine.",
+   "de": "Ich rechne es Ihnen für mehrere Mengen durch. Der Sprung ist meistens kleiner, als man denkt.",
+   "es": "Te lo calculo para varias cantidades. El salto suele ser menor de lo que la gente espera.",
+   "it": "Te lo quoto su più quantità. Il salto di solito è più piccolo di quanto si pensi."
+  },
+  "offer.3.t": {
+   "en": "Not sure it will last?",
+   "nl": "Twijfel je of het lang meegaat?",
+   "fr": "Vous doutez que ça tienne ?",
+   "de": "Unsicher, ob es hält?",
+   "es": "¿Dudas si aguantará?",
+   "it": "Non sei sicuro che duri?"
+  },
+  "offer.3.b": {
+   "en": "Tell me where it is going and I will tell you what to print it on.",
+   "nl": "Zeg me waar het komt te hangen of staan, dan zeg ik waarop we het moeten drukken.",
+   "fr": "Dites-moi où ça va et je vous dirai sur quoi l'imprimer.",
+   "de": "Sagen Sie mir, wo es hinkommt, dann sage ich Ihnen, worauf wir es drucken.",
+   "es": "Dime dónde va a estar y te digo sobre qué imprimirlo.",
+   "it": "Dimmi dove andrà e ti dico su cosa stamparlo."
+  },
+  "closing": {
+   "en": "Just reply to this email. It comes to me.",
+   "nl": "Antwoord gewoon op deze mail. Hij komt bij mij binnen.",
+   "fr": "Répondez simplement à cet e-mail. Il arrive chez moi.",
+   "de": "Antworten Sie einfach auf diese E-Mail. Sie landet bei mir.",
+   "es": "Responde a este correo sin más. Me llega a mí.",
+   "it": "Rispondi semplicemente a questa email. Arriva a me."
+  },
+  "unsub_before": {
+   "en": "And if you would rather not hear from me again, ",
+   "nl": "En als je liever niets meer van me hoort, ",
+   "fr": "Et si vous préférez ne plus avoir de mes nouvelles, ",
+   "de": "Und wenn Sie lieber nichts mehr von mir hören möchten, ",
+   "es": "Y si prefieres no saber más de mí, ",
+   "it": "E se preferisci non sentirmi più, "
+  },
+  "unsub_label": {
+   "en": "just say the word",
+   "nl": "zeg het gerust",
+   "fr": "dites-le simplement",
+   "de": "sagen Sie einfach Bescheid",
+   "es": "dilo sin más",
+   "it": "basta dirlo"
+  },
+  "unsub_after": {
+   "en": " and I will take you off the list.",
+   "nl": " en ik haal je van de lijst.",
+   "fr": " et je vous retire de la liste.",
+   "de": " und ich nehme Sie von der Liste.",
+   "es": " y te quito de la lista.",
+   "it": " e ti tolgo dalla lista."
+  },
+  "link": {
+   "en": "Or start from the catalogue",
+   "nl": "Of begin bij de catalogus",
+   "fr": "Ou partez du catalogue",
+   "de": "Oder starten Sie im Katalog",
+   "es": "O empieza por el catálogo",
+   "it": "Oppure parti dal catalogo"
+  }
+ },
+ "post-05-offer": {
+  "eyebrow": {
+   "en": "10% OFF YOUR NEXT ORDER",
+   "nl": "10% KORTING OP JE VOLGENDE BESTELLING",
+   "fr": "10% DE REMISE SUR VOTRE PROCHAINE COMMANDE",
+   "de": "10% RABATT AUF IHRE NÄCHSTE BESTELLUNG",
+   "es": "10% DE DESCUENTO EN TU PRÓXIMO PEDIDO",
+   "it": "10% DI SCONTO SUL PROSSIMO ORDINE"
+  },
+  "h1": {
+   "en": "Something coming up? This takes 10% off it",
+   "nl": "Staat er iets op de planning? Hier gaat 10% af",
+   "fr": "Un projet en vue ? Voici 10% de moins dessus",
+   "de": "Steht etwas an? Damit sind es 10% weniger",
+   "es": "¿Tienes algo en marcha? Esto le quita un 10%",
+   "it": "Hai qualcosa in programma? Questo te lo sconta del 10%"
+  },
+  "sub": {
+   "en": "You have not printed with us for a couple of months, so here is a reason to. The code below is yours.",
+   "nl": "Je hebt een paar maanden niets bij ons laten drukken, dus hier is een reden. De code hieronder is van jou.",
+   "fr": "Vous n'avez rien imprimé chez nous depuis quelques mois, alors voici une raison de le faire. Le code ci-dessous est le vôtre.",
+   "de": "Sie haben seit ein paar Monaten nichts bei uns drucken lassen, hier ist also ein Grund dafür. Der Code unten gehört Ihnen.",
+   "es": "Hace un par de meses que no imprimes con nosotros, así que aquí tienes un motivo. El código de abajo es tuyo.",
+   "it": "Non stampi con noi da un paio di mesi, quindi ecco un motivo per farlo. Il codice qui sotto è tuo."
+  },
+  "pre": {
+   "en": "Your code is inside, and it is good for 14 days.",
+   "nl": "Je code zit erin, en hij is 14 dagen geldig.",
+   "fr": "Votre code est à l'intérieur, valable 14 jours.",
+   "de": "Ihr Code steht drin und gilt 14 Tage.",
+   "es": "Tu código está dentro, y vale 14 días.",
+   "it": "Il tuo codice è qui dentro, valido 14 giorni."
+  },
+  "hero_alt": {
+   "en": "A roller banner in an office lobby as somebody walks past",
+   "nl": "Een roll-up banner in een kantoorhal terwijl iemand voorbijloopt",
+   "fr": "Un roll-up dans un hall de bureau pendant que quelqu'un passe",
+   "de": "Ein Roll-up in einer Bürolobby, während jemand vorbeigeht",
+   "es": "Un roll-up en el vestíbulo de una oficina mientras alguien pasa",
+   "it": "Un roll-up nella hall di un ufficio mentre qualcuno passa"
+  }
+ },
+ "post-06-lastday": {
+  "eyebrow": {
+   "en": "LAST DAY",
+   "nl": "LAATSTE DAG",
+   "fr": "DERNIER JOUR",
+   "de": "LETZTER TAG",
+   "es": "ÚLTIMO DÍA",
+   "it": "ULTIMO GIORNO"
+  },
+  "h1": {
+   "en": "Today is the last day for your 10%",
+   "nl": "Vandaag is de laatste dag voor je 10%",
+   "fr": "Aujourd'hui est le dernier jour pour vos 10%",
+   "de": "Heute ist der letzte Tag für Ihre 10%",
+   "es": "Hoy es el último día para tu 10%",
+   "it": "Oggi è l'ultimo giorno per il tuo 10%"
+  },
+  "sub": {
+   "en": "After today the code stops working. Whatever you were thinking of printing, this is the moment it is cheapest.",
+   "nl": "Na vandaag werkt de code niet meer. Wat je ook van plan was te laten drukken, dit is het moment dat het het goedkoopst is.",
+   "fr": "Après aujourd'hui, le code ne fonctionne plus. Quoi que vous envisagiez d'imprimer, c'est le moment où c'est le moins cher.",
+   "de": "Nach heute funktioniert der Code nicht mehr. Was Sie auch drucken wollten: Jetzt ist es am günstigsten.",
+   "es": "Después de hoy el código deja de funcionar. Sea lo que sea que pensabas imprimir, este es el momento más barato.",
+   "it": "Dopo oggi il codice smette di funzionare. Qualunque cosa pensassi di stampare, questo è il momento in cui costa meno."
+  },
+  "pre": {
+   "en": "Last day on your code.",
+   "nl": "Laatste dag voor je code.",
+   "fr": "Dernier jour pour votre code.",
+   "de": "Letzter Tag für Ihren Code.",
+   "es": "Último día para tu código.",
+   "it": "Ultimo giorno per il tuo codice."
+  },
+  "hero_alt": {
+   "en": "A printed booklet resting on a dark blue sofa",
+   "nl": "Een bedrukt boekje op een donkerblauwe bank",
+   "fr": "Un livret imprimé posé sur un canapé bleu foncé",
+   "de": "Eine bedruckte Broschüre auf einem dunkelblauen Sofa",
+   "es": "Un folleto impreso sobre un sofá azul oscuro",
+   "it": "Un opuscolo stampato su un divano blu scuro"
   }
  }
 }
