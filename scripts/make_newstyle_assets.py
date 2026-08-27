@@ -78,7 +78,7 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
                "hero-winback-news": 0.30, "hero-winback-offer": 0.38,
                "hero-signage-outdoor": 0.28,
                "hero-labels-packaging": 0.26, "hero-clothing-textiles": 0.30,
-               "hero-corporate-gifts": 0.28}
+               "hero-corporate-gifts": 0.18}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -137,7 +137,24 @@ HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
                  "hero-signage-outdoor": 0.85,
                  # first pass on all three, checked by eye below
                  "hero-labels-packaging": 0.50, "hero-clothing-textiles": 0.45,
-                 "hero-corporate-gifts": 0.55}
+                 "hero-corporate-gifts": 0.915}
+
+# HOW MUCH OF THE SOURCE WIDTH TO KEEP. 1.0, the default, keeps all of it. Less
+# makes the subject bigger, which is the only lever there is when the subject sits
+# small in the middle of a large frame.
+#
+# The gifts desk shot is the case for it. Measured off a 10% grid, the power bank,
+# bottle and notebook occupy x 0.22-0.73 and y 0.36-0.83 of the source: half the
+# width and under half the height. Worse, at the old full-width crop the fade
+# started at y 0.69, so the bottom of the notebook was being darkened - the same
+# fault as the winback banner, in an email nobody had looked at closely yet.
+#
+# 0.80 makes them 1.25x bigger. With the fade at 0.18 and the window pushed down
+# to 0.915 of its slack, the products sit 0.06 below the top edge and clear the
+# start of the fade by 0.021 of the source. Going further, 0.72, leaves them
+# 0.01 off the top edge, which reads as cropped.
+HERO_ZOOM = {"hero-corporate-gifts": 0.80}
+HERO_OFFSET_X = {"hero-corporate-gifts": 0.375}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -175,6 +192,12 @@ CONTENTFUL = {
         ("https://images.ctfassets.net/wm1n7oady8a5/45mAeCy7whiITbBraKVvbE/944e85e0b355dc5df8deef4ae16f373d/jack_jones_2x.webp"),
     "brand-iqoniq.png":
         ("https://images.ctfassets.net/wm1n7oady8a5/2ywWhIH2IhV7rRYtlEA60v/2da266aed56a12fbfcb0da1f7e97774c/Untitled__1000_x_1000_px___1200_x_1000_px___1000_x_1000_px___1200_x_1000_px___19_.png"),
+    "beach-flags.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/2Wi021Wel4PV3cScm2cftd/e6ee6f4bd740a55e7ec047904cd1a778/beachflags_newsletter.png"),
+    "pens.png":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/5SIYseemDMaBjraiAcI4AA/b0cd053760fe6c8071096ff93462ff57/eco_pens.png?q=75&h=500&w=630&fm=jpg&fit=fill"),
+    "notebooks.png":
+        ("https://images.ctfassets.net/wm1n7oady8a5/6yVJNxt2Fi8hcXfVkq3Mu8/033660ed2c61395039984354b79cc8fa/everwritea5recyclednotebook80lined_Setting2.png"),
     "tshirts.webp":
         ("https://contentful.helloprint.com/wm1n7oady8a5/63LMsDN3Ee10MRsHdtS7CT/b390d3788a62ad38c71298e0e1c8e76f/T-Shirts.webp?q=75&h=600&w=1200"),
     "hoodies.webp":
@@ -280,6 +303,10 @@ JOBS = [
     ("@hoodies.webp", "feature-hoodies", "feature", "clothing-textiles"),
     ("@caps.webp", "tile-caps", "tile", "clothing-textiles"),
     ("@towels.webp", "tile-interior-textiles", "tile", "clothing-textiles"),
+    # The last three outstanding tiles.
+    ("@beach-flags.png", "tile-beach-flags", "tile", "signage-outdoor"),
+    ("@pens.png", "feature-pens", "feature", "corporate-gifts"),
+    ("@notebooks.png", "tile-notebooks", "tile", "corporate-gifts"),
     # Winback. Both bottoms sit higher than the others - 86 and 103 of 255 rather
     # than the 30s - so both get a deeper fade to reach the ink without a visible
     # step. banners_setting2 has its subject high in frame at 0.70-0.85, which is
@@ -318,7 +345,12 @@ def derive(src, name, shape):
     w, h = {"hero": HERO, "feature": FEATURE, "brand": BRAND}.get(shape, TILE)
     sw, sh, rows = ri.read(src)
     if shape == "hero":
-        sw, sh, rows = ri.crop_to(sw, sh, rows, w, h, HERO_OFFSET_Y[name])
+        z = HERO_ZOOM.get(name, 1.0)
+        if z < 1.0:
+            sw, sh, rows = ri.window(sw, sh, rows, w, h, z,
+                                     HERO_OFFSET_X.get(name, 0.5), HERO_OFFSET_Y[name])
+        else:
+            sw, sh, rows = ri.crop_to(sw, sh, rows, w, h, HERO_OFFSET_Y[name])
     elif shape == "feature":
         # 4:3 rather than 3:2. A square source cropped to 3:2 loses a third of its
         # height, which was taking the subject with it.

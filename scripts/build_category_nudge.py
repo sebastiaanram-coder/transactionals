@@ -172,13 +172,13 @@ CATEGORIES = [
         hero="hero-signage-outdoor",
         hero_alt="Three printed flags flying on masts against a bright sky",
         headers=[dict(key="", style="photo", hero="hero-signage-outdoor")],
-        # Three of the four. Beach Flags has no new-style shot, so it falls back
-        # to its Contentful packshot on white - which is the documented behaviour:
-        # a missing photograph costs one tile its picture, not the whole email its
-        # look. It is the one image this email still needs.
         photos={
             "Banners": "feature-banners",
             "Signage & Panels": "feature-signage-panels",
+            # An actual beach flag on a beach. The hero could not have stood in for
+            # this: that shot is mast flags, a different product from a beach flag
+            # on a spike, and using it would have sold the wrong thing.
+            "Beach Flags": "tile-beach-flags",
             "Roller Banners": "tile-rollup",
         },
         h1="For the next event, or the front of the building?",
@@ -287,10 +287,10 @@ CATEGORIES = [
         hero="hero-corporate-gifts",
         hero_alt="A branded power bank, water bottle and notebook on a desk",
         headers=[dict(key="", style="photo", hero="hero-corporate-gifts")],
-        # Two of four. Pens and Notebooks have no shot yet and fall back to their
-        # Contentful packshots, which is the documented behaviour.
         photos={
             "Canvas Tote Bags": "feature-tote-bags",
+            "Pens": "feature-pens",
+            "Notebooks": "tile-notebooks",
             "Water Bottles": "tile-water-bottles",
         },
         # None of this email's four tiles is a speaker, so the band shows range the
@@ -855,6 +855,15 @@ for cat in CATEGORIES:
     for k in stray:
         errs.append("%s: photo mapped to %r, which this email does not show"
                     % (cat["slug"], k))
+    # A MISSING SHOT IS ALLOWED and falls back to the Contentful packshot on white
+    # - that is the design, so it is not an error. But it is visible in the email
+    # and was not visible anywhere else: three of these shipped before anyone
+    # looked at a screenshot. Name them.
+    unshot = [x for x in shown if x not in dict(want)]
+    for x in unshot:
+        warns.append("%s: %s has no new-style photograph, so its tile falls back "
+                     "to a packshot on white and will look out of place"
+                     % (cat["slug"], x))
     if gone or stray:
         continue
 

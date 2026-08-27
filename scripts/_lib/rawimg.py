@@ -91,6 +91,25 @@ def crop_to(w, h, rows, box_w, box_h, offset=0.5):
     return w, ch, rows[top:top + ch]
 
 
+def window(w, h, rows, box_w, box_h, zoom, ox=0.5, oy=0.5):
+    """A sub-rectangle at the aspect of box_w:box_h, `zoom` of the source wide.
+
+    crop_to takes the whole of the short axis, which is right when the subject
+    fills the frame. When it does not, the subject arrives small and the only way
+    to make it bigger is to keep less of the picture. zoom is the fraction of the
+    source WIDTH kept, so 0.8 makes the subject 1.25x bigger, and ox/oy place the
+    window in the slack the same way crop_to's offset does: fractions, not pixels.
+    """
+    cw = int(round(w * min(max(zoom, 0.05), 1.0)))
+    ch = int(round(cw * box_h / float(box_w)))
+    if ch > h:                              # taller than the source: fit height
+        ch = h
+        cw = min(w, int(round(ch * box_w / float(box_h))))
+    left = int(round((w - cw) * min(max(ox, 0.0), 1.0)))
+    top = int(round((h - ch) * min(max(oy, 0.0), 1.0)))
+    return cw, ch, [r[left * 3:(left + cw) * 3] for r in rows[top:top + ch]]
+
+
 def to_size(w, h, rows, tw, th, quality=None):
     """Resize exactly, via one sips call, and prove it came back the right size.
 
