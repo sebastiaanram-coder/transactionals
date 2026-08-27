@@ -56,7 +56,15 @@ LANGUAGES = ["en", "nl", "fr", "es", "it"]
 # slug - a flyers review holds "Commercial Print", "All Flyers", "Flyers" and
 # "standardflyers" together. So matching the top-level category name is exact,
 # and no fuzzy matching is needed.
+#
+# ORDER MATTERS, and it is the same trap as the flow's conditional split. A
+# stationery review carries "Commercial Print", "All Stationery" and its product
+# slug all at once, because the tag holds the whole path. category_of returns the
+# FIRST slug that matches, so stationery has to be tested before commercial-print
+# or every stationery review is filed as commercial print and the stationery
+# email never finds one.
 TAG_MAP = {
+    "stationery":        ["All Stationery"],
     "commercial-print":  ["Commercial Print"],
     "signage-outdoor":   ["Signage & Outdoor"],
     "labels":            ["Labels"],
@@ -88,7 +96,10 @@ def usable(r):
 
 
 def category_of(r):
-    """Which of our six categories this review is tagged for, if any."""
+    """Which of our categories this review is tagged for, if any.
+
+    First match wins, so TAG_MAP's order is significant - see the note on it.
+    """
     values = {(t.get("value") or "").strip().lower() for t in r["tags"]}
     for slug, wanted in TAG_MAP.items():
         if values & {w.lower() for w in wanted}:
@@ -190,6 +201,23 @@ def main():
         "tag_group": TAG_GROUP,
         "reviews": picked,
     }
+    # CARRY THE AGGREGATE SCORE FORWARD. It is written by --score-only, and a full
+    # refresh used to build a fresh payload without it - so refreshing the quotes
+    # silently deleted score, review_total and score_fetched. Two built emails read
+    # review_total and both crashed on None until somebody ran --score-only again.
+    # Nothing about refreshing quotes should touch the score, in either direction.
+    if os.path.exists(OUT):
+        try:
+            prev = json.load(open(OUT, encoding="utf-8"))
+        except ValueError:
+            prev = {}
+        for k in ("score", "review_total", "score_fetched"):
+            if prev.get(k) is not None:
+                payload[k] = prev[k]
+        if payload.get("review_total") is None:
+            print("WARNING: no aggregate score in the cache. Run "
+                  "scripts/fetch_reviews.py --score-only, or the review emails "
+                  "will crash on a missing review_total.")
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=1, sort_keys=True)
 

@@ -88,7 +88,7 @@
    ],
    "grid": [
     "Folders & Document Organisers",
-    "Bookmarks"
+    "Letterheads"
    ],
    "label": "Stationery",
    "landing": "stationery-landing",
@@ -238,45 +238,6 @@
    "id": "5S3q2ijApUeC0AkucCCsse",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/6aN5mDE5DHFCKnOXkhmwVi/37f1d23093388b03a9146cafc53c604c/1.png",
    "name_en": "Booklets & Brochures"
-  },
-  "bookmarks": {
-   "by_locale": {
-    "en-GB": {
-     "name": "Bookmarks",
-     "url": "https://www.helloprint.com/en-gb/bookmark-printing"
-    },
-    "en-IE": {
-     "name": "Bookmarks",
-     "url": "https://www.helloprint.com/en-ie/bookmark-printing"
-    },
-    "es-ES": {
-     "name": "Marcapáginas",
-     "url": "https://www.helloprint.com/es-es/marcapaginas-impresos"
-    },
-    "fr-BE": {
-     "name": "Marque-pages",
-     "url": "https://www.helloprint.com/fr-be/impression-marque-pages"
-    },
-    "fr-FR": {
-     "name": "Marque-pages",
-     "url": "https://www.helloprint.com/fr-fr/impression-marque-pages"
-    },
-    "it": {
-     "name": "Segnalibri",
-     "url": "https://www.helloprint.com/it-it/stampa-segnalibri"
-    },
-    "nl": {
-     "name": "Boekenleggers",
-     "url": "https://www.helloprint.com/nl-nl/boekenleggers-drukken"
-    },
-    "nl-BE": {
-     "name": "Boekenleggers",
-     "url": "https://www.helloprint.com/nl-be/boekenleggers-drukken"
-    }
-   },
-   "id": "4UkdLc55r80lCpH89NDTjy",
-   "image": "https://images.ctfassets.net/wm1n7oady8a5/XiGPAl2o5SraU15W94bMv/b1f08a9b2b1f2c95c47f756269a42270/bookmarks.webp",
-   "name_en": "Bookmarks"
   },
   "business-cards": {
    "by_locale": {
@@ -825,6 +786,47 @@
    "id": "xaky4LcL76FGnnJH7Ih61",
    "image": "https://images.ctfassets.net/wm1n7oady8a5/6UyZ82yNCMz2nkH4C7jfk3/0f80acb4783ec5facc1f974c457542ab/2.png",
    "name_en": "Leaflet Printing & Flyers"
+  },
+  "letterheads": {
+   "by_locale": {
+    "en-GB": {
+     "name": "Letterheads",
+     "url": "https://www.helloprint.com/en-gb/letterhead-printing"
+    },
+    "en-IE": {
+     "curl_overridden": true,
+     "name": "Letterheads",
+     "url": "https://www.helloprint.com/en-ie/letterheads"
+    },
+    "es-ES": {
+     "name": "Papel de carta",
+     "url": "https://www.helloprint.com/es-es/papel-de-carta-impreso"
+    },
+    "fr-BE": {
+     "name": "Papier à en-tête",
+     "url": "https://www.helloprint.com/fr-be/impression-papier-en-tete"
+    },
+    "fr-FR": {
+     "name": "Papier à en-tête",
+     "url": "https://www.helloprint.com/fr-fr/impression-papier-en-tete"
+    },
+    "it": {
+     "curl_overridden": true,
+     "name": "Letterheads",
+     "url": "https://www.helloprint.com/it-it/cartaintestata"
+    },
+    "nl": {
+     "name": "Briefpapier",
+     "url": "https://www.helloprint.com/nl-nl/briefpapier-drukken"
+    },
+    "nl-BE": {
+     "name": "Briefpapier",
+     "url": "https://www.helloprint.com/nl-be/briefpapier-drukken"
+    }
+   },
+   "id": "3C11akMSvaIw0Y1ZXXYar8",
+   "image": "https://images.ctfassets.net/wm1n7oady8a5/7JLuiyGBNFdw4gzASSG2F0/cb3438007d1d193b33a7c77b97152187/Search_image__1_.png",
+   "name_en": "Letterheads"
   },
   "notebooks": {
    "by_locale": {

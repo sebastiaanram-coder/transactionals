@@ -76,7 +76,7 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
                "hero-review-reminder": 0.30,
                "hero-offer": 0.30, "hero-offer-last": 0.30,
                "hero-winback-news": 0.30, "hero-winback-offer": 0.38,
-               "hero-signage-outdoor": 0.28,
+               "hero-signage-outdoor": 0.28, "hero-stationery": 0.20,
                "hero-labels-packaging": 0.26, "hero-clothing-textiles": 0.30,
                "hero-corporate-gifts": 0.18}
 
@@ -137,7 +137,17 @@ HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
                  "hero-signage-outdoor": 0.85,
                  # first pass on all three, checked by eye below
                  "hero-labels-packaging": 0.50, "hero-clothing-textiles": 0.45,
-                 "hero-corporate-gifts": 0.915}
+                 "hero-corporate-gifts": 0.915,
+                 # THE SUBJECT SITS LOW AND THERE IS ALMOST NO ROOM UNDER IT.
+                 # Measured off a 10% grid: the printed items occupy x 0.19-0.78
+                 # and y 0.44-0.87 of the source, so only 13% of its height is
+                 # below them. That 13% is the entire budget for a bottom fade,
+                 # which is why the window sits flush with the bottom of the
+                 # source and the fade is 0.20 rather than the usual 0.28. At zoom
+                 # 0.78 the window is 0.655 of the source tall, so a 0.20 fade
+                 # covers 0.131 of it and the items end at 0.87, right at the top
+                 # of the ramp. Deeper and the letterhead starts going dark.
+                 "hero-stationery": 1.00}
 
 # HOW MUCH OF THE SOURCE WIDTH TO KEEP. 1.0, the default, keeps all of it. Less
 # makes the subject bigger, which is the only lever there is when the subject sits
@@ -153,8 +163,8 @@ HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
 # to 0.915 of its slack, the products sit 0.06 below the top edge and clear the
 # start of the fade by 0.021 of the source. Going further, 0.72, leaves them
 # 0.01 off the top edge, which reads as cropped.
-HERO_ZOOM = {"hero-corporate-gifts": 0.80}
-HERO_OFFSET_X = {"hero-corporate-gifts": 0.375}
+HERO_ZOOM = {"hero-corporate-gifts": 0.80, "hero-stationery": 0.78}
+HERO_OFFSET_X = {"hero-corporate-gifts": 0.375, "hero-stationery": 0.43}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -192,6 +202,8 @@ CONTENTFUL = {
         ("https://images.ctfassets.net/wm1n7oady8a5/45mAeCy7whiITbBraKVvbE/944e85e0b355dc5df8deef4ae16f373d/jack_jones_2x.webp"),
     "brand-iqoniq.png":
         ("https://images.ctfassets.net/wm1n7oady8a5/2ywWhIH2IhV7rRYtlEA60v/2da266aed56a12fbfcb0da1f7e97774c/Untitled__1000_x_1000_px___1200_x_1000_px___1000_x_1000_px___1200_x_1000_px___19_.png"),
+    "stationery-hero.webp":
+        ("https://contentful.helloprint.com/wm1n7oady8a5/6slXaANYbkrFoGT2babhMq/18492192eda0da704f3ec9aff6d5987b/stationery__1_.webp"),
     "cards-invitations.png":
         ("https://contentful.helloprint.com/wm1n7oady8a5/5d2mCZr0zsxxRbCHex6Ou7/eeab2469e4c93f2c74408a61bc5154df/Exclusive_finish_postcards_PDP_Copy_5.png"),
     "beach-flags.png":
@@ -314,6 +326,9 @@ JOBS = [
     # and there is no separate Postcards subcategory - so this represents the tile
     # rather than standing in for it.
     ("@cards-invitations.png", "tile-cards-invitations", "tile", "commercial-print"),
+    # STATIONERY. A letterhead, a leaflet, business cards, a branded envelope and
+    # two pens on a table: the set the email is about, in one shot.
+    ("@stationery-hero.webp", "hero-stationery", "hero", "stationery"),
     # Winback. Both bottoms sit higher than the others - 86 and 103 of 255 rather
     # than the 30s - so both get a deeper fade to reach the ink without a visible
     # step. banners_setting2 has its subject high in frame at 0.70-0.85, which is

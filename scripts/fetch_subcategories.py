@@ -89,23 +89,15 @@ EMAILS = {
     "stationery": dict(
         label="Stationery", match=["All Stationery"], match_mode="contains",
         feature=["Notepads", "Envelopes"],
-        grid=["Folders & Document Organisers", "Bookmarks"],
-        # 323k, 249k | 235k, and then Bookmarks at 96k standing in for
-        # LETTERHEADS AT 179k, which belongs here and cannot go in yet.
+        grid=["Folders & Document Organisers", "Letterheads"],
+        # 323k, 249k | 235k, 179k. Then Bookmarks 96k, NCR 63k, Compliment Cards
+        # 36k. The top four are 986k of the 1.24M, so 80% of it.
         #
-        # Letterheads has no `curl` of its own in en-IE or it-IT. field() falls
-        # back, and what it falls back TO is the problem: an Irish or Italian
-        # reader would be sent to https://www.helloprint.com/en-gb/letterhead-
-        # printing, a UK page in the wrong language. A tile that crosses markets
-        # is worse than a tile that is not there.
-        #
-        # Fill those two curls in Contentful and Letterheads replaces Bookmarks,
-        # which is worth 83k of representation. The build refuses to ship a tile
-        # that falls back across locales, so it will hold this honest.
-        #
-        # Letterheads also has the highest item count of the four, 8,182 against
-        # its 179k: small, frequent, repeat, which is the replenishment signature
-        # this whole email is built on.
+        # Letterheads has the highest item count of the four, 8,182 against its
+        # 179k: small, frequent, repeat, which is the replenishment signature this
+        # whole email is built on. It briefly gave way to Bookmarks because it has
+        # no curl in en-IE or it and the fallback crossed markets; both URLs were
+        # supplied and verified, so it is back. See CURL_OVERRIDE above.
     ),
     "signage-outdoor": dict(
         label="Signage & Outdoor", match=["Signage & Outdoor"],
@@ -173,6 +165,20 @@ LANDINGS = {
     "corporate-gifts": ("corporate-gifts-landing", "6NYvEHY1Qk4QMIQSoIUKcu"),
     # /stationery-and-office-supplies, and in Dutch literally huisstijl-drukwerk.
     "stationery": ("stationery-landing", "5Bn0HgX9Tye2yYkgSWamwa"),
+}
+
+# CURLS WE WERE GIVEN BECAUSE CONTENTFUL DOES NOT HAVE THEM.
+#
+# Letterheads has no `curl` in en-IE or it, and field() falling back would have
+# sent Irish and Italian readers to the UK page. Sebastiaan supplied the correct
+# two; both were checked over HTTP and return 200 directly with no redirect.
+#
+# THIS IS A PATCH OVER A CONTENT GAP, not a feature. The right fix is the field in
+# Contentful. Every run prints what it overrode so this cannot be forgotten, and
+# an override that has become redundant is reported so it can be deleted.
+CURL_OVERRIDE = {
+    ("letterheads", "en-IE"): "letterheads",
+    ("letterheads", "it"): "cartaintestata",
 }
 
 # Pages that ride along the same per-locale fetch without being any email's
@@ -261,6 +267,32 @@ def main():
                         if u:
                             subs[k]["image"] = "https:" + u if u.startswith("//") else u
                             break
+
+    # apply the overrides, and say out loud which ones were used
+    used, stale = [], []
+    for (key, loc), curl in sorted(CURL_OVERRIDE.items()):
+        row = (subs.get(key) or {}).get("by_locale", {}).get(loc)
+        if row and row.get("url"):
+            stale.append("%s/%s" % (key, loc))
+            continue
+        if key not in subs:
+            stale.append("%s/%s (not fetched)" % (key, loc))
+            continue
+        name = next((r["name"] for l, r in subs[key]["by_locale"].items() if r.get("name")), key)
+        subs[key].setdefault("by_locale", {})[loc] = {
+            "name": name,
+            "url": "https://www.helloprint.com/%s/%s" % (MARKET_PATH[loc], curl),
+            "curl_overridden": True,
+        }
+        used.append("%s/%s -> /%s" % (key, loc, curl))
+    if used:
+        print("curl overrides applied (Contentful has no value of its own):")
+        for u in used:
+            print("  " + u)
+    if stale:
+        print("curl overrides NO LONGER NEEDED - delete them from CURL_OVERRIDE:")
+        for u in stale:
+            print("  " + u)
 
     gaps = [(k, l) for k, v in subs.items() for l in LOCALES if l not in v["by_locale"]]
     noimg = [k for k, v in subs.items() if not v["image"] and not v.get("landing")]
