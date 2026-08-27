@@ -1170,6 +1170,33 @@ JS = '''
 const PREVIEWS = __PREVIEWS__;
 const PREVIEW_URLS = __PREVIEW_URLS__;
 const mounted = new Set();
+
+// SIZE A SHELL FROM WHAT IS ACTUALLY ON SCREEN, and never from what was on screen
+// when it mounted. An iframe inside a display:none parent has no measurable width
+// and its document reports no height, so a preview built while its tab was hidden
+// came out 0px tall and stayed that way: mountPreviews skips anything already in
+// `mounted`, so switching to that tab re-showed the same empty box. Four of the
+// five category nudges were invisible in the overview for exactly this reason.
+// Returns false when the shell is still hidden, so callers can leave it alone.
+function sizeShell(shell){
+  const ifr = shell.querySelector('iframe');
+  if (!ifr) return false;
+  const vw = +(shell.dataset.w || 600);
+  const disp = shell.getBoundingClientRect().width;
+  if (!disp) return false;                 // hidden: nothing to measure yet
+  const sc = Math.min(1, disp / vw);
+  ifr.style.transform = 'scale(' + sc + ')';
+  let h = 0;
+  try{
+    const d = ifr.contentDocument;
+    h = Math.max(d.documentElement.scrollHeight, d.body ? d.body.scrollHeight : 0);
+  }catch(e){ h = parseInt(ifr.style.height, 10) || 900; }
+  if (!h) return false;
+  ifr.style.height = h + 'px';
+  shell.style.height = Math.ceil(h * sc) + 'px';
+  return true;
+}
+
 function mountPreviews(pageEl){
   pageEl.querySelectorAll('.pv-shell[data-tpl]').forEach(shell => {
     const id = shell.dataset.tpl;
@@ -1187,12 +1214,10 @@ function mountPreviews(pageEl){
     ifr.style.transform = 'scale(' + sc + ')';
     ifr.addEventListener('load', () => {
       try{
-        const d = ifr.contentDocument;
-        d.querySelectorAll('a').forEach(a=>a.setAttribute('target','_blank'));
-        const h = Math.max(d.documentElement.scrollHeight, d.body ? d.body.scrollHeight : 0);
-        ifr.style.height = h + 'px';
-        shell.style.height = Math.ceil(h * sc) + 'px';
-      }catch(e){ ifr.style.height='900px'; shell.style.height = Math.ceil(900*sc)+'px'; }
+        ifr.contentDocument.querySelectorAll('a').forEach(a=>a.setAttribute('target','_blank'));
+      }catch(e){}
+      // If the shell is hidden this does nothing and switchCat sizes it later.
+      if (!sizeShell(shell)) { ifr.style.height = ifr.style.height || '0px'; }
     });
     shell.innerHTML=''; shell.appendChild(ifr);
     ifr.srcdoc = html;
@@ -1225,7 +1250,12 @@ function switchCat(btn){
     p.classList.toggle('catpane-on', on);
     if (on) shown = p;
   });
-  if (shown) mountPreviews(shown);
+  if (shown) {
+    mountPreviews(shown);
+    // Already-mounted shells are skipped by mountPreviews, so size them here:
+    // this is the call that was missing and left four of the five tabs blank.
+    shown.querySelectorAll('.pv-shell[data-tpl]').forEach(sizeShell);
+  }
 }
 function copyLink(id, el){
   const u = PREVIEW_URLS[id];
@@ -1254,17 +1284,7 @@ let raf;
 window.addEventListener('resize', () => {
   clearTimeout(raf);
   raf = setTimeout(() => {
-    document.querySelectorAll('.pv-shell[data-tpl]').forEach(shell => {
-      const ifr = shell.querySelector('iframe');
-      if (!ifr) return;
-      const vw = +(shell.dataset.w || 600);
-      const disp = shell.getBoundingClientRect().width;
-      if (!disp) return;
-      const sc = Math.min(1, disp / vw);
-      ifr.style.transform = 'scale(' + sc + ')';
-      const h = parseInt(ifr.style.height, 10);
-      if (h) shell.style.height = Math.ceil(h * sc) + 'px';
-    });
+    document.querySelectorAll('.pv-shell[data-tpl]').forEach(sizeShell);
   }, 150);
 });
 '''
@@ -1366,9 +1386,15 @@ for _k, _d in EMAIL_DETAIL.items():
         bad.append("%s: %d things pointed at; four is the most anyone reads"
                    % (_k, len(_d["elements"])))
 
-for fn in ("switchCat", "openFullCat", "copyLinkCat", "activeCatKey"):
+for fn in ("switchCat", "openFullCat", "copyLinkCat", "activeCatKey", "sizeShell"):
     if ("function " + fn) not in doc:
         bad.append("the %s function is missing from the page" % fn)
+# A HIDDEN TAB CANNOT BE MEASURED, so showing one has to size it. Without this
+# call every tab except the one open at load rendered as an empty box.
+_sc_body = doc.split("function switchCat", 1)[-1].split("\nfunction ", 1)[0]
+if "forEach(sizeShell)" not in _sc_body:
+    bad.append("switchCat does not size the pane it just showed, so every tab "
+               "except the first will render blank")
 if bad:
     for b in bad:
         print("  FAIL  " + b)
