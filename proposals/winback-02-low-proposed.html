@@ -8,8 +8,11 @@
      The then-and-now rows are PLACEHOLDERS. They need three checkable changes and
      must not be invented. -->
 <div class="hp-wb2l-root"><style>
-.hp-wb2l-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
-.hp-wb2l-root *{box-sizing:border-box;}
+/* NOT SET ON THE ROOT FOR THE LETTER. The designed emails in this flow want the
+   brand font and the grey ground; the letter wants neither, so the root carries
+   nothing and each designed block sets its own. */
+.hp-wb2l-wrap{font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.hp-wb2l-wrap *{box-sizing:border-box;}
 .hp-wb2l-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
 .hp-wb2l-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
 .hp-wb2l-hero{background:#191919;font-size:0;line-height:0;}
@@ -39,19 +42,6 @@
 .hp-wb2l-codeval{display:block;font-size:25px;line-height:31px;font-weight:800;letter-spacing:.08em;color:#ffffff;}
 .hp-wb2l-codeexp{display:block;font-size:13px;line-height:19px;color:#b4b4b4;margin:9px 0 0;}
 .hp-wb2l-terms{display:block;font-size:12px;line-height:18px;color:#8f8f8f;margin:15px 0 0;}
-/* the letter, for the email a person writes */
-.hp-wb2l-lhead{padding:30px 40px 0;text-align:left;}
-.hp-wb2l-lhead img{width:112px;max-width:38%;height:auto;display:block;border:0;}
-.hp-wb2l-lbody{padding:26px 40px 30px;text-align:left;}
-.hp-wb2l-greet{margin:0 0 18px;font-size:17px;line-height:26px;color:#191919;font-weight:600;}
-.hp-wb2l-p{margin:0 0 18px;font-size:16px;line-height:27px;color:#333333;}
-.hp-wb2l-sigrule{border-top:1px solid #ececec;margin:24px 0 18px;}
-.hp-wb2l-sav{width:76px;vertical-align:middle;padding:0 14px 0 0;}
-.hp-wb2l-sav img{width:62px;height:62px;border-radius:9999px;display:block;border:0;}
-.hp-wb2l-smeta{vertical-align:middle;}
-.hp-wb2l-sname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
-.hp-wb2l-srole{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.12em;color:#767676;margin-top:3px;}
-.hp-wb2l-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 .hp-wb2l-unslink{color:#767676;text-decoration:underline;}
 .hp-wb2l-tail{padding:0 0 30px;}
 .hp-wb2l-foot{max-width:600px;margin:0 auto;padding:24px 24px 0;text-align:center;}

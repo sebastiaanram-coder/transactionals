@@ -271,13 +271,13 @@ EMAIL_DETAIL = {
    ]),
  "WB1H": dict(
    goal="Reopen a conversation with the customers who carry half the value, without spending anything.",
-   why="Day 90, high-value branch. Post-Purchase ended at day 73 with 10% off, so an offer here would sit seventeen days behind one that just failed. This spends a person instead.",
-   variant_label="Why a letter and not a campaign",
-   variant="It reuses the day-45 letter template. At \u20ac150 an order and up, a print expert is worth more than a discount.",
+   why="Day 90. Post-Purchase ended at day 73 with 10% off, so an offer here would sit seventeen days behind one that just failed. This spends a person instead.",
+   variant_label="It is not formatted, and that is the design",
+   variant="No logo, no card, no brand font, no footer, no button \u2014 nine lines of CSS, all on the signature. It renders in whatever the client uses for a normal message, which is the only way an email from a person reads as one.",
    elements=[
-     ("The hook is their own rhythm, not our feelings.", "\u201cI noticed your last order with us was about three months ago, which is longer than most of the businesses I work with leave it.\u201d True by construction, and the build rejects \u201cwe miss you\u201d."),
-     ("It asks for a date and commits to three things back.", "What he would print it on, what it costs at two or three quantities, and when the file has to be with us to make it \u2014 the last being the thing a product page cannot tell them."),
-     ("No season is named.", "\u201cA season you print for every year\u201d rather than end-of-year: the flow fires all year, and a hardcoded season is the \u201cends 3 September\u201d mistake again. The build fails on nine season words."),
+     ("The hook is their own rhythm, not our feelings.", "\u201cI noticed your last order was about three months ago.\u201d True by construction, and the build rejects \u201cwe miss you\u201d."),
+     ("It asks for a date and commits to three things back.", "What to print it on, what it costs at two or three quantities, and when the file has to be with us \u2014 the last being what a product page cannot tell them."),
+     ("The two things that could not just go.", "The opt-out is a sentence John writes, which is the only formatting-free way to carry one. The company identity sits inside the signature \u2014 legally required, and a real signature carries an address anyway, so there it reads as a signature rather than a footer."),
    ]),
  "WB2H": dict(
    goal="Give a lapsed high-value customer a reason to look again that is not a discount.",

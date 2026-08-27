@@ -177,8 +177,11 @@ EMAILS = [
 ]
 
 CSS = """
-.%(P)s-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
-.%(P)s-root *{box-sizing:border-box;}
+/* NOT SET ON THE ROOT FOR THE LETTER. The designed emails in this flow want the
+   brand font and the grey ground; the letter wants neither, so the root carries
+   nothing and each designed block sets its own. */
+.%(P)s-wrap{font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.%(P)s-wrap *{box-sizing:border-box;}
 .%(P)s-wrap{width:100%%;background:#f8f8f8;padding:0 0 32px;}
 .%(P)s-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
 .%(P)s-hero{background:#191919;font-size:0;line-height:0;}
@@ -208,19 +211,6 @@ CSS = """
 .%(P)s-codeval{display:block;font-size:25px;line-height:31px;font-weight:800;letter-spacing:.08em;color:#ffffff;}
 .%(P)s-codeexp{display:block;font-size:13px;line-height:19px;color:#b4b4b4;margin:9px 0 0;}
 .%(P)s-terms{display:block;font-size:12px;line-height:18px;color:#8f8f8f;margin:15px 0 0;}
-/* the letter, for the email a person writes */
-.%(P)s-lhead{padding:30px 40px 0;text-align:left;}
-.%(P)s-lhead img{width:112px;max-width:38%%;height:auto;display:block;border:0;}
-.%(P)s-lbody{padding:26px 40px 30px;text-align:left;}
-.%(P)s-greet{margin:0 0 18px;font-size:17px;line-height:26px;color:#191919;font-weight:600;}
-.%(P)s-p{margin:0 0 18px;font-size:16px;line-height:27px;color:#333333;}
-.%(P)s-sigrule{border-top:1px solid #ececec;margin:24px 0 18px;}
-.%(P)s-sav{width:76px;vertical-align:middle;padding:0 14px 0 0;}
-.%(P)s-sav img{width:62px;height:62px;border-radius:9999px;display:block;border:0;}
-.%(P)s-smeta{vertical-align:middle;}
-.%(P)s-sname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
-.%(P)s-srole{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.12em;color:#767676;margin-top:3px;}
-.%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 .%(P)s-unslink{color:#767676;text-decoration:underline;}
 .%(P)s-tail{padding:0 0 30px;}
 .%(P)s-foot{max-width:600px;margin:0 auto;padding:24px 24px 0;text-align:center;}
@@ -245,6 +235,28 @@ CSS = """
   .%(P)s-codeval{font-size:21px;line-height:27px;}
   .%(P)s-foot{padding-left:18px;padding-right:18px;}
 }
+"""
+
+# THE LETTER GETS ITS OWN STYLESHEET, and it is nine lines.
+#
+# It used to share the one above, which meant every letter shipped two kilobytes of
+# rules for cards, dark blocks and heroes it never used. None of it applied, but all
+# of it was there - and a stylesheet full of design is the thing a plain email must
+# not have if the claim is that it is unformatted. Splitting them is also what makes
+# the checks below mean anything.
+LETTER_CSS = """
+.%(P)s-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#ffffff;}
+/* The only styled thing is the signature, because a real corporate signature IS
+   styled - photo, name, role, address - which is what the reference example does.
+   Everything else inherits the client default, link colour included. */
+.%(P)s-sig{margin-top:22px;}
+.%(P)s-sav{padding-right:14px;vertical-align:top;}
+.%(P)s-sav img{width:64px;height:64px;border-radius:9999px;display:block;border:0;}
+.%(P)s-smeta{vertical-align:top;}
+.%(P)s-sname{display:block;font-weight:bold;}
+.%(P)s-srole{display:block;color:#666666;}
+.%(P)s-sorg{display:block;color:#888888;font-size:12px;line-height:18px;margin-top:8px;}
+.%(P)s-unslink{color:inherit;}
 """
 
 FOOT = """
@@ -333,31 +345,32 @@ def build(e, live):
                                 else '<a href="#">Unsubscribe</a>'))
 
     if e["kind"] == "letter":
-        paras = "".join('<p class="%s-p">%s</p>' % (P, t) for t in e["paras"])
+        # PLAIN <p> AND NOTHING ELSE. No classes on the paragraphs, no inline
+        # styles, no wrapper div with a width. The client renders it the way it
+        # renders a message from a colleague, which is the whole point.
+        paras = "".join("<p>%s</p>" % t for t in e["paras"])
         greet = ("{% if first_name %}Hi {{ first_name }},{% else %}Hi there,{% endif %}"
                  if live else "Hi Sarah,")
-        body = ('<div class="{P}-lhead"><a href="{HOME}"><img src="{IMG_MARK_DARK}" '
-                'alt="Helloprint" width="112"></a></div>'
-                '<div class="{P}-lbody"><p class="{P}-greet">{GREET}</p>{PARAS}'
-                '<p class="{P}-p">{CLOSING}</p>'
-                '<p class="{P}-p">{UNSUBLINE}</p>'
-                '<div class="{P}-sigrule"></div>'
-                '<table role="presentation" cellpadding="0" cellspacing="0"><tr>'
-                '<td class="{P}-sav" valign="middle"><img src="{AV_JOHN}" alt="John" '
-                'width="62" height="62"></td>'
-                '<td class="{P}-smeta" valign="middle"><span class="{P}-sname">John</span>'
-                '<span class="{P}-srole">PRINT EXPERT TEAM</span>'
-                '<a class="{P}-smail" href="mailto:hello@helloprint.com">hello@helloprint.com</a>'
-                '</td></tr></table></div>').format(
-            P=P, HOME=home, GREET=greet, PARAS=paras, CLOSING=e["closing"],
-            UNSUBLINE=unsub(P, live), **A)
-        legal = ('<div class="%s-legal" style="max-width:600px;margin:0 auto;'
-                 'padding:16px 40px 0;text-align:left">Helloprint B.V. &middot; '
-                 'Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; '
-                 'VAT NL855793302B01</div>' % P)
-        return ('<div class="%s-root"><style>%s</style><div class="%s-pre">%s</div>'
-                '<div class="%s-wrap"><div class="%s-shell">%s</div>%s</div></div>'
-                % (P, common["CSS"], P, e["pre"], P, P, body, legal))
+        # The company identity moves INTO the signature. It is a legal requirement in
+        # a commercial message and it is the one thing that cannot go - but a real
+        # signature carries an address anyway, so in the signature it stops looking
+        # like a footer and starts looking like a signature. The reference example
+        # does exactly this.
+        sig = ('<table class="{P}-sig" role="presentation" cellpadding="0" cellspacing="0"><tr>'
+               '<td class="{P}-sav"><img src="{AV_JOHN}" alt="" width="64" height="64"></td>'
+               '<td class="{P}-smeta">'
+               '<span class="{P}-sname">John</span>'
+               '<span class="{P}-srole">Print expert team &middot; Helloprint</span>'
+               '<a href="mailto:hello@helloprint.com">hello@helloprint.com</a><br>'
+               '<a href="{HOME}">helloprint.com</a>'
+               '<span class="{P}-sorg">Helloprint B.V. &middot; Schiedamsevest 89, '
+               '3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01</span>'
+               '</td></tr></table>').format(P=P, HOME=home, **A)
+        return ('<div><style>%s</style>'
+                '<div class="%s-pre">%s</div>'
+                '<p>%s</p>%s<p>%s</p><p>%s</p><p>Best,</p>%s</div>'
+                % (LETTER_CSS % {"P": P}, P, e["pre"], greet, paras, e["closing"],
+                   unsub(P, live), sig))
 
     hero = ('<div class="%s-hero"><img src="%s" alt="%s" width="600"></div>'
             % (P, photo(e["hero"], live), esc(e["hero_alt"]))) if e.get("hero") else ""
@@ -382,7 +395,7 @@ DOC = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Winback - %(label)s - day %(day)d (%(branch)s value)</title></head>
-<body style="margin:0;padding:0;background:#f8f8f8;">
+<body style="margin:0;padding:%(pad)s;background:%(bg)s;">
 <!-- HP - Winback - %(label)s - day %(day)d - %(branch)s value branch
      Generated by scripts/build_winback.py - do not hand-edit.
      The then-and-now rows are PLACEHOLDERS. They need three checkable changes and
@@ -395,7 +408,12 @@ errs, written = [], []
 for e in EMAILS:
     P = "hp-" + e["code"]
     prev, livb = build(e, False), build(e, True)
-    meta = dict(label=e["label"], day=e["day"], branch=e["branch"])
+    # The letter's preview must not add a page background or a gutter: a real
+    # inbox provides white and its own padding, and a grey ground behind a plain
+    # email is the preview lying about what it will look like.
+    meta = dict(label=e["label"], day=e["day"], branch=e["branch"],
+                bg=("#ffffff" if e["kind"] == "letter" else "#f8f8f8"),
+                pad=("20px" if e["kind"] == "letter" else "0"))
     open(os.path.join(OUT, e["slug"] + "-proposed.html"), "w",
          encoding="utf-8").write(DOC % dict(meta, body=prev))
     open(os.path.join(OUT, e["slug"] + "-klaviyo.html"), "w",
@@ -428,7 +446,42 @@ for e in EMAILS:
     #
     # Only the letter needs it. The other four carry a footer link labelled
     # Unsubscribe, which explains itself and needs no sentence around it.
+    # THE LETTER MUST STAY UNFORMATTED. "Looks like a real email" is a property that
+    # is easy to lose one helpful addition at a time - a wordmark for consistency, a
+    # brand font so it matches, a footer because every other email has one - and each
+    # of those is a tell. So the shape is checked rather than trusted.
     if e["kind"] == "letter":
+        body = livb.split("</style>", 1)[1]
+        # comments out first: this check reads the rules, and the comment above them
+        # explains what is deliberately absent, so it names every property here
+        css = re.sub(r"/\*.*?\*/", "", livb.split("</style>", 1)[0], flags=re.S)
+        for tell, what in (
+                ("font-family", "a font declaration; it should inherit the client default"),
+                ("max-width", "a width; a real email does not have one"),
+                ("border-radius:18px", "a card"),
+                ("background:#191919", "a dark block"),
+                ("background:#f8f8f8", "a page background")):
+            if tell in css:
+                errs.append("%s: the letter has %s" % (t, what))
+        for tell, what in (
+                ("IMG_WORDMARK", "a logo"), ("-wrap", "the designed wrapper"),
+                ("-shell", "the card shell"), ("-foot", "a footer"),
+                ("-cta", "a button"), ("-hero", "a hero image")):
+            if tell in body:
+                errs.append("%s: the letter has %s" % (t, what))
+        # the only image is John's face, and the only styled thing is his signature
+        if body.count("<img") != 1:
+            errs.append("%s: the letter has %d images; it should have one, his face"
+                        % (t, body.count("<img")))
+        # paragraphs carry no classes and no inline styles
+        if re.search(r"<p[^>]+>", body):
+            errs.append(t + ": a paragraph in the letter carries an attribute")
+        # and the legal line lives in the signature, not in a footer
+        if "VAT NL855793302B01" not in body:
+            errs.append(t + ": no company identity; required in a commercial message")
+        if body.index("VAT NL855793302B01") < body.index("%s-sig" % P):
+            errs.append(t + ": the company line sits outside the signature")
+
         outcomes = ("not hear from me again", "will not hear from", "i will stop")
         if not any(o in vis for o in outcomes):
             errs.append(t + ": the woven opt-out does not say what clicking it does")
