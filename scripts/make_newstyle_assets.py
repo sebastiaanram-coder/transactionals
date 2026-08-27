@@ -70,7 +70,7 @@ BUDGET_KB = 420
 FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
                "hero-review-reminder": 0.30,
                "hero-offer": 0.30, "hero-offer-last": 0.30,
-               "hero-winback-news": 0.38, "hero-winback-offer": 0.38}
+               "hero-winback-news": 0.30, "hero-winback-offer": 0.38}
 
 # what to derive, and from which source. Commercial Print only for now: the
 # other four emails have almost no coverage in this set, which is written up in
@@ -103,10 +103,28 @@ FADE_BOTTOM = {"hero-commercial-print": 0.18, "hero-review-request": 0.24,
 # window measured in pixels means something different in each. Expressed in pixels
 # this silently cut a 1000x700 window out of a 2048px image and produced a
 # featureless grey rectangle.
+# Heroes whose subject is one solid colour block, so its extent can be measured in
+# the finished file rather than trusted. See the subject check below.
+SUBJECT_GREEN = ("hero-winback-news",)
+
 HERO_OFFSET_Y = {"hero-commercial-print": 0.50, "hero-review-request": 0.85,
                  "hero-review-reminder": 0.80,
                  "hero-offer": 0.45, "hero-offer-last": 1.00,
-                 "hero-winback-news": 0.00, "hero-winback-offer": 0.35}
+                 # MEASURED, NOT EYEBALLED. The banner occupies source rows 285-655 of 1000 - 370px
+                 # of a 700px crop window, 53% of the frame. At the old 0.38 fade the clear
+                 # area is 434px, which leaves 64px of slack for a 370px subject, and at
+                 # offset 0.00 all of that slack sat ABOVE the banner: its bottom third
+                 # was inside the fade. Fade to 0.30 (clear 490px, slack 120px) and offset
+                 # to 0.75 puts 60px above the banner and 60px between its bottom edge and
+                 # the start of the fade.
+                 #
+                 # THE FLOODLIGHTS ARE THE PRICE. They sit in source rows 20-140, and a
+                 # window starting at row 225 cannot contain them. There is no offset that
+                 # keeps them AND clears the banner: holding the lamps means t <= 20, which
+                 # puts the banner bottom at 0.91 of the window and needs a fade under 0.09
+                 # - too short to blend into the ink block underneath. The banner is the
+                 # product, so the banner wins.
+                 "hero-winback-news": 0.75, "hero-winback-offer": 0.35}
 
 # (source, output name, shape, which email loads it). The email key is what makes
 # the weight budget mean anything now that more than one email has a header: the
@@ -280,6 +298,36 @@ def main():
         # the bottom has to meet the ink block under it with no seam
         if not is_ink(edge(h - 1)):
             bad.append("%s: last row is rgb%s, wanted rgb%s" % (name, edge(h - 1), ri.INK))
+        # THE SUBJECT MUST NOT BE INSIDE THE FADE. Crops positioned by eye have put
+        # the subject into the fade twice in this project, and neither time did any
+        # check notice: the flyer went in once, and the banner in this hero had its
+        # bottom third faded out until somebody looked at the email. So measure it.
+        # Only heroes whose subject is a solid colour block are measurable this way,
+        # which for now is the banner.
+        if name in SUBJECT_GREEN:
+            f = FADE_BOTTOM.get(name, 0.0)
+            fade_top = int(round(h * (1 - f)))
+            lo, hi = int(w * .20), int(w * .80)
+            green = []
+            for y in range(h):
+                px = rows[y]
+                n = 0
+                for x in range(lo, hi):
+                    B, G, R = px[x * 3], px[x * 3 + 1], px[x * 3 + 2]
+                    if G > R + 8 and G > B + 8 and G < 200:
+                        n += 1
+                if n / float(hi - lo) > 0.55:
+                    green.append(y)
+            if not green:
+                bad.append("%s: no subject found; the detector or the crop moved" % name)
+            elif green[-1] >= fade_top:
+                bad.append("%s: the subject runs to row %d but the fade starts at %d, "
+                           "so its bottom %d rows are being faded out"
+                           % (name, green[-1], fade_top, green[-1] - fade_top + 1))
+            else:
+                print("  %-30s subject clears the fade by %d px"
+                      % (name, fade_top - green[-1]))
+
         # and the top must NOT, because there is nothing above it to blend into -
         # a faded top here reads as a grey wash across the top of the email
         if is_ink(edge(0)):
