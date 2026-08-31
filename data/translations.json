@@ -4165,12 +4165,12 @@
    "it": "La stampa che stavi guardando"
   },
   "pre.brw1": {
-   "en": "Delivery and VAT are already in the number you saw. Change the quantity and the price moves with it.",
-   "nl": "Bezorging en btw zitten al in het bedrag dat je zag. Pas het aantal aan en de prijs beweegt mee.",
-   "fr": "La livraison et la TVA sont déjà comprises dans le montant affiché. Modifiez la quantité et le prix suit.",
-   "de": "Versand und MwSt. sind im gezeigten Preis schon enthalten. Ändern Sie die Menge und der Preis passt sich an.",
-   "es": "El envío y el IVA ya están en el precio que viste. Cambia la cantidad y el precio se ajusta.",
-   "it": "Spedizione e IVA sono già incluse nel prezzo che hai visto. Cambia la quantità e il prezzo si adegua."
+   "en": "Change the quantity and the price moves with it. You see the full total, with VAT and delivery, before you pay.",
+   "nl": "Pas het aantal aan en de prijs beweegt mee. Je ziet het complete totaal, met btw en verzending, voordat je betaalt.",
+   "fr": "Modifiez la quantité et le prix suit. Vous voyez le total complet, TVA et livraison comprises, avant de payer.",
+   "de": "Ändern Sie die Menge und der Preis passt sich an. Sie sehen den Gesamtbetrag inklusive MwSt. und Versand, bevor Sie bezahlen.",
+   "es": "Cambia la cantidad y el precio se ajusta. Ves el total completo, con IVA y envío, antes de pagar.",
+   "it": "Cambia la quantità e il prezzo si adegua. Vedi il totale completo, IVA e spedizione incluse, prima di pagare."
   },
   "subj.brw2": {
    "en": "You do not need the finished artwork yet",
@@ -4181,12 +4181,12 @@
    "it": "Non ti serve ancora il file definitivo"
   },
   "pre.brw2": {
-   "en": "We check every file for free before it prints. Or our designers can make it for you.",
-   "nl": "We controleren elk bestand gratis voordat het gedrukt wordt. Of onze ontwerpers maken het voor je.",
-   "fr": "Nous vérifions chaque fichier gratuitement avant l'impression. Ou nos graphistes le créent pour vous.",
-   "de": "Wir prüfen jede Datei kostenlos vor dem Druck. Oder unsere Designer erstellen sie für Sie.",
-   "es": "Revisamos cada archivo gratis antes de imprimir. O nuestros diseñadores lo crean por ti.",
-   "it": "Controlliamo ogni file gratuitamente prima della stampa. Oppure i nostri designer lo creano per te."
+   "en": "Order now and send your file later. Nothing goes on press until it has been checked.",
+   "nl": "Bestel nu en stuur je bestand later. Niets gaat naar de pers voordat het is gecontroleerd.",
+   "fr": "Commandez maintenant et envoyez votre fichier plus tard. Rien ne part à l'impression avant d'avoir été vérifié.",
+   "de": "Jetzt bestellen und die Datei später senden. Nichts geht in den Druck, bevor es geprüft ist.",
+   "es": "Pide ahora y envía tu archivo más tarde. Nada entra en imprenta sin haber sido revisado.",
+   "it": "Ordina ora e invia il file più tardi. Niente va in stampa prima di essere controllato."
   },
   "subj.brw3": {
    "en": "Need a price you can forward?",

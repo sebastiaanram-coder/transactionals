@@ -12,9 +12,9 @@
       "name": "BRW-1 The one you were looking at · +1h",
       "next": "116080417",
       "subject": "The print you were looking at",
-      "preview": "Delivery and VAT are already in the number you saw. Change the quantity and the price moves with it.",
+      "preview": "Change the quantity and the price moves with it. You see the full total, with VAT and delivery, before you pay.",
       "template_saved": "Ru6gHW",
-      "template_live": "Ye4LTw",
+      "template_live": "YurMR3",
       "template_name": "BEH-2 BRW-1 The one you were looking at"
     },
     {
@@ -23,9 +23,9 @@
       "name": "BRW-2 You do not need the artwork yet · +24h",
       "next": "116080419",
       "subject": "You do not need the finished artwork yet",
-      "preview": "We check every file for free before it prints. Or our designers can make it for you.",
+      "preview": "Order now and send your file later. Nothing goes on press until it has been checked.",
       "template_saved": "S2u4Zb",
-      "template_live": "WTpriS",
+      "template_live": "TpEayD",
       "template_name": "BEH-2 BRW-2 You do not need the artwork yet"
     },
     {
@@ -36,7 +36,7 @@
       "subject": "Need a price you can forward?",
       "preview": "An odd spec, a tight deadline, or someone else's signature. Our quotation team comes back within 24 hours.",
       "template_saved": "XW9vMR",
-      "template_live": "XTxKvW",
+      "template_live": "XYEfLF",
       "template_name": "BEH-2 BRW-3 Tell us the job, we will price it"
     }
   ],
