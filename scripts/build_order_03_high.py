@@ -47,6 +47,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import klaviyo_assets as ka
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -83,7 +84,7 @@ _A = {
     "IMG_AGENTS":   "cs-agents-ellipse.png",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 # 25 wide where most high-value carts sit, then coarser as the figure grows and
 # a hundred either way stops changing the decision.
@@ -317,7 +318,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="https://www.helloprint.com/en-ie/"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -378,6 +379,7 @@ def build(bindings, assets, lines, live=False, locale=None):
     # is never substituted, because str.format does not recurse.
     vals["SAVE_CLAUSE"] = (clause_live(CUR_LIVE, tr) if live
                            else clause_sample(SAMPLE_TOTAL, "&euro;", tr))
+    vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
     vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
@@ -425,7 +427,7 @@ KLAVIYO_DOC = """<!--
   discounted total. Each band claims 10%%%% of its lower bound, so the figure is
   always less than or equal to the real saving. See _lib/discount.py.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, make the /en-ie/
+  BEFORE SENDING: make the /en-ie/
   links market-aware, and confirm John is still the right name to sign it -
   a signature from someone who has left is worse than no signature.
 

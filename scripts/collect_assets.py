@@ -1,111 +1,118 @@
 #!/usr/bin/env python3
 """
-Collect every image the live blocks reference into one flat folder for upload.
+Collect the images the emails use into one folder, and say what still needs uploading.
 
-WHY A SCRIPT AND NOT A ONE-OFF COPY. The templates reference assets by exact
-filename, so the folder and the templates have to agree. Doing that by hand once
-is fine; doing it again after any email changes is where a typo ships a broken
-image to every recipient. This regenerates the folder and fails if anything is
-referenced but missing, or present but unreferenced.
+WHY THIS CHANGED SHAPE. It used to find assets by looking for the
+REPLACE-WITH-KLAVIYO-ASSET sentinel in the built HTML. That worked until the
+sentinel was replaced with real hosted URLs, at which point it found nothing and
+reported success - a tool that silently stops doing its job.
 
-COMMENTS ARE STRIPPED FIRST. Each block opens with a documentation comment that
-says "every https://REPLACE-WITH-KLAVIYO-ASSET/... becomes the uploaded URL", and
-reading that literally adds an asset called "..." to the list.
+data/klaviyo-assets.json is the manifest now: every asset in use is in it,
+because klaviyo_assets.url() raises on a name it does not know and the build
+fails. So the mapping and the set of assets in use are the same thing, and that
+is asserted below rather than assumed.
 
-WHAT IS NOT COLLECTED, deliberately:
-  - contentful.helloprint.com  our own CDN, already public and already localised
-  - d3k81ch9hvuctc.cloudfront  Klaviyo's own hosted social icons
-  - {{ catalog_item... }}      product imagery from the feed, resolved at send
+WHAT NEEDS UPLOADING is a separate question, answered by scanning the builders
+for image filenames and reporting any that exist in assets/ but have no mapping.
+That scan reads quoted literals, so it cannot see a name built at runtime; the
+build failing on an unmapped name is the real backstop, and this is the
+convenience that tells you before you get there.
 """
-import io, os, re, shutil, sys, collections
+import io, json, os, re, shutil, sys, glob
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-LIVE = os.path.join(ROOT, "proposals")
+sys.path.insert(0, os.path.join(HERE, "_lib"))
+import klaviyo_assets as ka
+
 OUT = os.path.join(ROOT, "klaviyo-assets")
 SRC = os.path.join(ROOT, "assets")
+LIVE = os.path.join(ROOT, "proposals")
 
-SENTINEL = re.compile(r"REPLACE-WITH-KLAVIYO-ASSET/([A-Za-z0-9._-]+)")
-
-# Klaviyo's own limits, worth failing on here rather than discovering at upload.
 MAX_MB = 5.0
 OK_EXT = (".jpg", ".jpeg", ".png", ".gif")
-
-
-def referenced():
-    """{filename: {emails that use it}}, from the live blocks only."""
-    out = collections.defaultdict(set)
-    for f in sorted(os.listdir(LIVE)):
-        if not f.endswith("-klaviyo.html"):
-            continue
-        s = io.open(os.path.join(LIVE, f), encoding="utf-8").read()
-        s = re.sub(r"<!--.*?-->", "", s, flags=re.S)     # see docstring
-        for m in SENTINEL.finditer(s):
-            out[m.group(1)].add(f[: -len("-klaviyo.html")])
-    return out
+IMG_LITERAL = re.compile(r"['\"]([A-Za-z0-9._-]+\.(?:jpg|jpeg|png|gif|svg))['\"]")
 
 
 def on_disk():
-    """{filename: full path} for everything under assets/, recursively."""
     out = {}
     for root, _, files in os.walk(SRC):
         for fn in files:
-            if fn.startswith("."):
-                continue
-            if fn in out:
-                raise SystemExit(
-                    "two files in assets/ are both called %r (%s and %s). The "
-                    "templates reference by name alone, so this is ambiguous."
-                    % (fn, out[fn], os.path.join(root, fn)))
-            out[fn] = os.path.join(root, fn)
+            if not fn.startswith("."):
+                out.setdefault(fn, os.path.join(root, fn))
     return out
 
 
+def referenced_names():
+    """Image filenames named as literals anywhere in the build scripts."""
+    names = set()
+    for p in glob.glob(os.path.join(HERE, "build_*.py")) + \
+             [os.path.join(HERE, "translate_welcome.py")]:
+        if os.path.exists(p):
+            names |= set(IMG_LITERAL.findall(io.open(p, encoding="utf-8").read()))
+    return names
+
+
 def main():
-    ref, have, errs = referenced(), on_disk(), []
+    have, mapped, errs = on_disk(), ka.uploaded(), []
+
+    # 1. the mapping must match what the live blocks actually load
+    known = {v["url"] for v in mapped.values()}
+    used = set()
+    for f in glob.glob(os.path.join(LIVE, "*-klaviyo.html")):
+        s = re.sub(r"<!--.*?-->", "",
+                   io.open(f, encoding="utf-8").read(), flags=re.S)
+        used |= set(re.findall(
+            r'src="(https://d3k81ch9hvuctc\.cloudfront\.net/company/[^"]+)"', s))
+    for u in sorted(used - known):
+        errs.append("a live block loads %s, which is not in the mapping" % u)
+    unused = sorted(n for n, v in mapped.items() if v["url"] not in used)
+    if unused:
+        errs.append("mapped but no longer loaded by any email: %s"
+                    % ", ".join(unused))
+
+    # 2. anything referenced and on disk but never uploaded
+    todo = sorted(n for n in referenced_names()
+                  if n in have and n not in mapped)
+
+    # 3. rebuild the folder from the mapping
     if os.path.isdir(OUT):
         shutil.rmtree(OUT)
     os.makedirs(OUT)
-
     rows, total = [], 0
-    for name in sorted(ref):
+    for name in sorted(mapped):
         src = have.get(name)
         if not src:
-            errs.append("%s is referenced by %s but is not in assets/"
-                        % (name, ", ".join(sorted(ref[name]))))
+            errs.append("%s is mapped but has no file in assets/, so it cannot "
+                        "be re-uploaded or checked" % name)
             continue
-        ext = os.path.splitext(name)[1].lower()
-        size = os.path.getsize(src)
+        ext, size = os.path.splitext(name)[1].lower(), os.path.getsize(src)
         if ext not in OK_EXT:
-            errs.append("%s is a %s. Email clients do not render it reliably; "
-                        "export a PNG or JPG instead." % (name, ext or "no-extension"))
+            errs.append("%s is a %s; email clients do not render it reliably"
+                        % (name, ext))
         if size > MAX_MB * 1024 * 1024:
             errs.append("%s is %.1f MB, over Klaviyo's %.0f MB limit"
                         % (name, size / 1048576.0, MAX_MB))
         shutil.copy2(src, os.path.join(OUT, name))
-        rows.append((name, size, len(ref[name])))
-        total += size
+        rows.append((name, size)); total += size
 
-    print("%-46s %9s  %s" % ("FILE", "SIZE", "USED BY"))
-    for name, size, n in sorted(rows, key=lambda r: -r[2]):
-        print("%-46s %8.1f K  %d email%s" % (name, size / 1024.0, n,
-                                            "" if n == 1 else "s"))
-    print("\n%d files, %.1f MB total -> %s/"
+    print("IN KLAVIYO AND IN USE: %d assets, %.1f MB, copied to %s/"
           % (len(rows), total / 1048576.0, os.path.relpath(OUT, ROOT)))
-
-    unused = sorted(set(have) - set(ref))
-    if unused:
-        print("\nIn assets/ but referenced by no live block (%d). Not copied - "
-              "these are preview-only or superseded:" % len(unused))
-        for u in unused[:40]:
-            print("  %s" % u)
+    if todo:
+        print("\nNEEDS UPLOADING (%d): referenced and present in assets/, but no "
+              "hosted URL recorded." % len(todo))
+        for n in todo:
+            print("  %s" % n)
+        print("  Upload each, then add it to data/klaviyo-assets.json.")
+    else:
+        print("\nNothing awaiting upload.")
 
     if errs:
         print()
         for e in errs:
             print("  FAIL  " + e)
         raise SystemExit(1)
-    print("\nEvery referenced asset is present and within limits.")
+    print("Mapping and built output agree.")
 
 
 if __name__ == "__main__":

@@ -27,6 +27,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import klaviyo_assets as ka
 import reviews as rv
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -79,7 +80,7 @@ _A = {
     "IMG_AGENTS":   "cs-agents-ellipse.png",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 # Bands 5 wide. Above 100 the cap binds, so one band covers 100 upward: every
 # cart there saves exactly 25 and the figure is exact rather than a floor.
@@ -320,7 +321,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="https://www.helloprint.com/en-ie/"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -393,6 +394,7 @@ def build(bindings, assets, lines, live=False, locale=None):
         vals[_k] = vals[_k].replace("{h}", str(HOURS))
     # A REVIEW IS SWAPPED, NEVER TRANSLATED: see reviews.quote_switch.
     vals["REV_Q"], vals["REV_BY"] = rv.quote_switch('stationery', tr, locale, live)
+    vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
     vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
@@ -436,7 +438,7 @@ KLAVIYO_DOC = """<!--
   bound, so the figure is always less than or equal to the real saving. Above
   100 the cap binds and the figure is exact. See _lib/discount.py.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, make the /en-ie/
+  BEFORE SENDING: make the /en-ie/
   links market-aware, and rate-limit entry into this flow per profile - 25%%%%
   reachable in 72 hours is a discoverable pattern.
 

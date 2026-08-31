@@ -67,6 +67,7 @@ import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import reviews as rv
 import i18n
+import klaviyo_assets as ka
 import subcategories as sc          # for LOCALE_MAP only: one list of locales
 
 
@@ -91,7 +92,6 @@ _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
 }
 HERO = "hero-review-request"
-PHOTO_BASE = "https://REPLACE-WITH-KLAVIYO-ASSET/"   # swap at upload, see scripts/collect_assets.py
 PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 
@@ -100,11 +100,11 @@ def photo(name, live):
     category emails. The URL is the published copy of this repo, which is a review
     host and not a production one."""
     if live:
-        return PHOTO_BASE + name + ".jpg"
+        return ka.url(name + ".jpg")
     with open(os.path.join(PHOTO_DIR, name + ".jpg"), "rb") as f:
         return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 SHARED = dict(
     cta="Rate your experience",
@@ -258,7 +258,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="{HOME}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="{HOME}"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -334,6 +334,7 @@ def build(e, live, locale=None):
                      "{score}": lambda lg: i18n.decimal(nums[0], lg),
                      "{total}": lambda lg: i18n.thousands(nums[1], lg)})))
     vals = dict(
+        IMG_WORDMARK_DARK=ka.url('helloprint-wordmark-dark-padded.png'),
         P=P, CSS=CSS % {"P": P},
         EYEBROW=tr("eyebrow", e["eyebrow"]), H1=tr("h1", e["h1"]),
         T_HELP_EMAIL_US=tr("help.email_us", "E-mail us"),
@@ -403,7 +404,7 @@ KLAVIYO_DOC = """<!--
   the Klaviyo profile before this email sends, and a fallback to the link below when
   it is missing. Written up in proposals/post-purchase-proposal.md.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, make the /en-ie/ home
+  BEFORE SENDING: make the /en-ie/ home
   and help-centre links market-aware, and confirm that replies to this email reach
   a monitored inbox in every language it is sent in.
 

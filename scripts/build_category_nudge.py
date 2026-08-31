@@ -49,6 +49,7 @@ import rawimg as ri
 import reviews as rv
 import subcategories as sc
 import i18n
+import klaviyo_assets as ka
 import housestyle
 
 
@@ -78,7 +79,7 @@ _A = {
     "IMG_AGENTS":   "cs-agents-ellipse.png",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 # THE PHOTOGRAPHY FOLLOWS THE SAME RULE AS EVERY OTHER ASSET: inlined in the
 # preview, a URL in the Klaviyo build. The first version of this linked the
@@ -95,13 +96,12 @@ LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items
 # The live build now emits the REPLACE-WITH-KLAVIYO-ASSET sentinel instead, so a
 # send can never depend on GitHub Pages: it has no host at all until the URLs
 # are swapped for uploaded ones. scripts/collect_assets.py gathers the files.
-PHOTO_BASE = "https://REPLACE-WITH-KLAVIYO-ASSET/"   # swap at upload, see scripts/collect_assets.py
 PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 
 def photo(name, live):
     if live:
-        return PHOTO_BASE + name + ".jpg"
+        return ka.url(name + ".jpg")
     with open(os.path.join(PHOTO_DIR, name + ".jpg"), "rb") as f:
         return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 
@@ -572,7 +572,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="{HOME}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="{HOME}"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -865,6 +865,7 @@ def build(cat, live, hdr=None, locale=None):
                             else url_of("our-brands", False, locale)),
                _eyebrow=cat.get("eyebrow") or conf["label"].upper())
     vals = dict(
+        IMG_WORDMARK_DARK=ka.url('helloprint-wordmark-dark-padded.png'),
         P=P, CSS=CSS % {"P": P}, LABEL=conf["label"],
         H1=tr("h1", cat["h1"]), SUB=tr("sub", cat["sub"]),
         PRE=tr("pre", cat["pre"]), CTA=tr("cta.see_range", CTA),
@@ -940,7 +941,7 @@ KLAVIYO_DOC = """<!--
   Images are Contentful assets and are requested padded square on white, so they
   resize properly - unlike most of the product feed.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, and make the /en-ie/
+  BEFORE SENDING: make the /en-ie/
   home and help-centre links market-aware. The category links are already
   per-locale.
 
@@ -1091,7 +1092,9 @@ for cat in CATEGORIES:
             if r and r.get("stars") != 5:
                 errs.append("%s: the %s review is %s stars but the picture is five"
                             % (t, lg, r.get("stars")))
-    if "out of 5 on Trustpilot" in livb and "stars-5-on-ink" not in livb:
+    # same reason as build_browse_02: the hosted URL is a UUID, not the filename
+    if ("out of 5 on Trustpilot" in livb
+            and ka.url("trustpilot-stars-5-on-ink.png") not in livb):
         errs.append(t + ": the review claims a rating but the stars are not the ink five")
 
     # feature copy must exist for exactly the feature subcategories

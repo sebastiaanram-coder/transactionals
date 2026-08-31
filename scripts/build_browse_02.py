@@ -22,6 +22,7 @@ border-radius and most clients strip inline SVG.
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import i18n
+import klaviyo_assets as ka
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -60,7 +61,7 @@ _A = {
     "AV_DESIGNER":  "browse-01-avatar-designer.jpg",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 # The product page's own three options, in its own words and order, so the
 # email matches what they meet when they click through.
@@ -311,7 +312,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="https://www.helloprint.com/en-ie/"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -373,6 +374,7 @@ def build(bindings, assets, live=False, locale=None):
     # is never substituted, because str.format does not recurse.
     # the product name is catalogue data, so it is inserted after translation
     vals["T_GET_ONES"] = vals["T_GET_ONES"].replace("{p}", vals["PROD_TITLE"])
+    vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
     vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
@@ -401,7 +403,7 @@ KLAVIYO_DOC = """<!--
              depend on {%% catalog %%} resolving in a Klaviyo subject line.
 
   BEFORE SENDING:
-    1. every https://REPLACE-WITH-KLAVIYO-ASSET/... becomes the uploaded URL
+    1. DONE - images are uploaded to Klaviyo and the URLs in this block are live (data/klaviyo-assets.json)
     2. the /en-ie/ links become per-market
     3. no phone number is used: it differs per market
 
@@ -480,9 +482,11 @@ if live_body.count('{IMG_TICK}') or live_body.count('{IC_'): errs.append("unreso
 # the premium panel's ticks must use the green-background variant
 if _A["IMG_TICK_G"] not in (live_body if "REPLACE" not in live_body else live_body):
     pass
-if live_body.count("browse-02-tick-green") + prev_body.count("tick-green") == 0:
-    if "REPLACE-WITH-KLAVIYO-ASSET/browse-02-tick-green.jpg" not in live_body:
-        errs.append("premium ticks are not using the green-background variant")
+# Klaviyo hosts by UUID, so the filename no longer appears in the live HTML.
+# Resolve it and look for the URL the reader would actually fetch.
+if (ka.url("browse-02-tick-green.jpg") not in live_body
+        and prev_body.count("tick-green") == 0):
+    errs.append("premium ticks are not using the green-background variant")
 # the banner needs the overlap and the z-index that makes it work
 for need in ("margin-top:-200px", "z-index:2", "min-height:196px"):
     if need not in live_body: errs.append("banner hero missing " + need)

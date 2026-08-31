@@ -27,6 +27,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n
+import klaviyo_assets as ka
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -46,7 +47,7 @@ _A = {
     "AV_JOHN":      "welcome-04-john-avatar.jpg",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 SAMPLE = {
     "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
@@ -223,7 +224,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="https://www.helloprint.com/en-ie/"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -279,6 +280,7 @@ def build(bindings, assets, lines, live=False, locale=None):
     # UNSUB is None in both binding tables on purpose. Its text has to pass
     # through the translator, and a placeholder written into a binding value
     # is never substituted, because str.format does not recurse.
+    vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
     vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
@@ -304,7 +306,7 @@ KLAVIYO_DOC = """<!--
   Branch    HIGH VALUE only. No discount code - that arrives in email 3.
   Subject   Want a print expert to look at it first?
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs and make the /en-ie/
+  BEFORE SENDING: make the /en-ie/
   links market-aware. No phone number is used: it differs per market.
 
   BANNER: the secondary "or speak to a print expert" link sits BELOW the banner

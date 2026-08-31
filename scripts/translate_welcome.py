@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.join(HERE, "_lib"))
 import i18n
 import reviews as rv
 import subcategories as sc
+import klaviyo_assets as ka
 
 OUT = os.path.join(ROOT, "proposals")
 EMAILS = ["welcome-01", "welcome-02", "welcome-03", "welcome-04"]
@@ -80,7 +81,7 @@ def link_assets(html, live):
             errs.append("an embedded %s image (%d bytes) is not in assets/, so it "
                         "has no file to link to" % (m.group(1), len(raw)))
             return m.group(0)
-        return 'src="https://REPLACE-WITH-KLAVIYO-ASSET/%s"' % name
+        return 'src="%s"' % ka.url(name)
 
     return _re.sub(r'src="data:image/(\w+);base64,([^"]+)"', one, html)
 
@@ -301,13 +302,20 @@ for _slug in EMAILS:
         errs.append("%s: %s is hardcoded to Ireland rather than switched per "
                     "market" % (_slug, _m.group(1)))
 
-    # every asset must resolve to a real file in assets/, or the sentinel swap
-    # before sending has nothing to point at
-    for _m in re.finditer(r"REPLACE-WITH-KLAVIYO-ASSET/([^\"]+)", _s):
-        if not any(_m.group(1) in fs
-                   for _, _, fs in os.walk(os.path.join(ROOT, "assets"))):
-            errs.append("%s: references asset %r, which is not in assets/"
-                        % (_slug, _m.group(1)))
+    # no sentinel may survive: every asset resolves to a hosted URL now
+    if "REPLACE-WITH-KLAVIYO-ASSET" in _s:
+        errs.append("%s: still carries an unresolved sentinel asset URL" % _slug)
+    # Every image must come from a host we control and intend.
+    #   d3k81ch9hvuctc  Klaviyo's own CDN - our uploads and its social icons
+    #   contentful      our brand CDN, already public and already localised
+    # Anything else is a mistake: the point of this check is that GitHub Pages,
+    # a designer's Dropbox or a hotlinked stock URL cannot slip into a send.
+    OK_HOSTS = ("https://d3k81ch9hvuctc.cloudfront.net/",
+                "https://contentful.helloprint.com/")
+    for _m in re.finditer(r'src="(https?://[^"]+)"', _s):
+        if not _m.group(1).startswith(OK_HOSTS):
+            errs.append("%s: image served from %s, which is not a host we "
+                        "control" % (_slug, _m.group(1)[:64]))
 
     # a preview must stay self-contained and must NOT carry the sentinel
     _pv = os.path.join(OUT, _slug + "-proposed.html")

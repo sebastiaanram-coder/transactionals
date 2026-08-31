@@ -40,7 +40,7 @@
   both Belgian markets, so it points at the market root instead. All eight roots and
   all eight /cs pages were checked.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URL, set the from-name and
+  BEFORE SENDING: set the from-name and
   reply-to to a monitored John address, and generate the plain-text alternative
   from this rather than letting Klaviyo strip the HTML.
 -->
@@ -107,7 +107,7 @@
   <div class="hp-pex-shell">
 
     <div class="hp-pex-head">
-      <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/{% else %}https://www.helloprint.com/en-gb/{% endif %}"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/helloprint-logo-dark.png" alt="Helloprint" width="112"></a>
+      <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/{% else %}https://www.helloprint.com/en-gb/{% endif %}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/dc88b353-f4b9-46d5-9ec5-9f91f491db63.png" alt="Helloprint" width="112"></a>
     </div>
 
     <div class="hp-pex-body">
@@ -121,7 +121,7 @@
       <div class="hp-pex-sigrule"></div>
       <table class="hp-pex-sigtbl" role="presentation" cellpadding="0" cellspacing="0">
         <tr>
-          <td class="hp-pex-sav" valign="middle"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/welcome-04-john-avatar.jpg" alt="John" width="62" height="62"></td>
+          <td class="hp-pex-sav" valign="middle"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/971fcdfa-efc9-415c-951e-82373532ec9a.jpeg" alt="John" width="62" height="62"></td>
           <td class="hp-pex-smeta" valign="middle">
             <span class="hp-pex-sname">John</span>
             <span class="hp-pex-srole">{% if person.locale == 'en-IE' %}PRINT EXPERT TEAM{% elif person.locale == 'en-GB' %}PRINT EXPERT TEAM{% elif person.locale == 'nl-NL' %}PRINTEXPERT-TEAM{% elif person.locale == 'nl-BE' %}PRINTEXPERT-TEAM{% elif person.locale == 'fr-FR' %}ÉQUIPE D'EXPERTS EN IMPRESSION{% elif person.locale == 'fr-BE' %}ÉQUIPE D'EXPERTS EN IMPRESSION{% elif person.locale == 'de-DE' %}DRUCKEXPERTEN-TEAM{% elif person.locale == 'es-ES' %}EQUIPO DE EXPERTOS EN IMPRESIÓN{% elif person.locale == 'it-IT' %}TEAM ESPERTI DI STAMPA{% else %}PRINT EXPERT TEAM{% endif %}</span>

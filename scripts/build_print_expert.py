@@ -51,6 +51,7 @@ import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import subcategories as sc
 import i18n
+import klaviyo_assets as ka
 import housestyle
 
 
@@ -81,7 +82,7 @@ def datauri(name):
 
 
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 COPY = dict(
     pre="How did the last job turn out?",
@@ -337,7 +338,7 @@ KLAVIYO_DOC = """<!--
   both Belgian markets, so it points at the market root instead. All eight roots and
   all eight /cs pages were checked.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URL, set the from-name and
+  BEFORE SENDING: set the from-name and
   reply-to to a monitored John address, and generate the plain-text alternative
   from this rather than letting Klaviyo strip the HTML.
 -->

@@ -35,6 +35,7 @@ import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import subcategories as sc
 import i18n
+import klaviyo_assets as ka
 
 
 def esc(t):
@@ -46,7 +47,6 @@ ROOT = os.path.dirname(HERE)
 ASSETS = os.path.join(ROOT, "assets")
 OUT = os.path.join(ROOT, "proposals")
 
-PHOTO_BASE = "https://REPLACE-WITH-KLAVIYO-ASSET/"   # swap at upload, see scripts/collect_assets.py
 PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 _A = {"IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
@@ -54,7 +54,7 @@ _A = {"IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
 SAMPLE_ASSETS = {k: base64.b64encode(open(os.path.join(ASSETS, v), "rb").read()).decode()
                  for k, v in _A.items()}
 SAMPLE_ASSETS = {k: "data:image/png;base64," + v for k, v in SAMPLE_ASSETS.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 # The code is per customer once Talon.one is live, so there is nothing to hardcode.
 # The sentinel is deliberately not a working code - see the module docstring.
@@ -66,7 +66,7 @@ PERCENT = 10
 
 def photo(name, live):
     if live:
-        return PHOTO_BASE + name + ".jpg"
+        return ka.url(name + ".jpg")
     with open(os.path.join(PHOTO_DIR, name + ".jpg"), "rb") as f:
         return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 
@@ -296,7 +296,7 @@ KLAVIYO_DOC = """<!--
   email is worse than omitting. "One use per customer" is stated because it is the
   only term presta can currently keep.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, add the terms once they
+  BEFORE SENDING: add the terms once they
   are decided, and confirm the from-name and reply-to.
 -->
 %(body)s

@@ -32,6 +32,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n
+import klaviyo_assets as ka
 import reviews as rv
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -54,7 +55,7 @@ _A = {
     "AV_JOHN":      "welcome-04-john-avatar.jpg",
 }
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 SAMPLE = {
     "CATALOG_OPEN": "", "CATALOG_CLOSE": "",
@@ -260,7 +261,7 @@ BODY = """
 
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="https://www.helloprint.com/en-ie/"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -318,6 +319,7 @@ def build(bindings, assets, lines, high, live=False, locale=None):
     # is never substituted, because str.format does not recurse.
     # A REVIEW IS SWAPPED, NEVER TRANSLATED: see reviews.quote_switch.
     vals["REV_Q"], vals["REV_BY"] = rv.quote_switch('commercial-print', tr, locale, live)
+    vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
     vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
@@ -356,7 +358,7 @@ KLAVIYO_DOC = """<!--
        which disagree on 6%% of events. Note event.$value is invalid django;
        it has to be {{ event|lookup:"$value" }}.
 
-  BEFORE SENDING: swap the REPLACE-WITH-KLAVIYO-ASSET URLs, and make the
+  BEFORE SENDING: make the
   /en-gb/ help and footer links market-aware.
 -->
 %s

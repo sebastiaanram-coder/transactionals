@@ -21,6 +21,7 @@ Notes on what is NOT available (all confirmed by render, do not "fix" these):
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import i18n
+import klaviyo_assets as ka
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -80,7 +81,7 @@ SAMPLE_ASSETS = {
     "IMG_STARS":    datauri("trustpilot-stars-4-5.png"),
     "IMG_AGENTS":   datauri("cs-agents-ellipse.png"),
 }
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in {
+LIVE_ASSETS = {k: ka.url(v) for k, v in {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
     "AV_DESIGNER":  "browse-01-avatar-designer.jpg",
     "AV_EXPERT":    "welcome-04-john-avatar.jpg",
@@ -437,7 +438,7 @@ BODY = """
   <!-- footer -->
   <div class="{P}-foot">
     <div class="{P}-footlogo">
-      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="https://www.helloprint.com/en-ie/"><img src="{IMG_WORDMARK_DARK}" alt="Helloprint" height="30"></a>
     </div>
     <div class="{P}-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -507,6 +508,7 @@ def build(bindings, assets, xsell, live=False, locale=None):
         + tr("px.for_qty", "for {n} units").replace(
             "{n}", "{{ catalog_item.metadata.min_order_quantity|floatformat:0 }}")
         + " {{ catalog_item.metadata.unit }} &middot; {% endif %}")
+    vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
     vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
@@ -545,8 +547,7 @@ KLAVIYO_DOC = """<!--
   Preheader    set in the flow, not here
 
   BEFORE SENDING, three swaps:
-    1. every https://REPLACE-WITH-KLAVIYO-ASSET/... becomes the uploaded
-       Klaviyo image URL (wordmark, Trustpilot stars, CS agents)
+    1. DONE - images are uploaded to Klaviyo and the URLs in this block are live (data/klaviyo-assets.json)
     2. hard-coded /en-ie/ links (Help Centre, Trustpilot, footer logo)
        become per-market, or move to a market-aware snippet
     3. confirm {%% catalog %%} resolves in the SUBJECT line, it could not be

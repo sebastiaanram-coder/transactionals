@@ -61,6 +61,7 @@ import base64, html, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import subcategories as sc
 import i18n
+import klaviyo_assets as ka
 
 
 def esc(t):
@@ -71,7 +72,6 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 ASSETS = os.path.join(ROOT, "assets")
 OUT = os.path.join(ROOT, "proposals")
-PHOTO_BASE = "https://REPLACE-WITH-KLAVIYO-ASSET/"   # swap at upload, see scripts/collect_assets.py
 PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 _A = {"IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
@@ -89,7 +89,7 @@ def datauri(name):
 
 
 SAMPLE_ASSETS = {k: datauri(v) for k, v in _A.items()}
-LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items()}
+LIVE_ASSETS = {k: ka.url(v) for k, v in _A.items()}
 
 CODE = "REPLACE-WITH-TALON-CODE"
 
@@ -129,7 +129,7 @@ PREVIEW_TILES = ["Leaflet Printing & Flyers", "Roller Banners",
 
 def photo(name, live):
     if live:
-        return PHOTO_BASE + name + ".jpg"
+        return ka.url(name + ".jpg")
     with open(os.path.join(PHOTO_DIR, name + ".jpg"), "rb") as f:
         return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 
