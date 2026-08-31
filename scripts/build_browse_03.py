@@ -346,7 +346,8 @@ def build(bindings, assets, live=False, locale=None):
     # through the translator, and a placeholder written into a binding value
     # is never substituted, because str.format does not recurse.
     vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
-    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+    vals["UNSUB"] = (i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                      "foot.unsub", "Unsubscribe", True)
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)

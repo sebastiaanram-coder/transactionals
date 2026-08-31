@@ -380,7 +380,8 @@ def build(bindings, assets, lines, live=False, locale=None):
     vals["SAVE_CLAUSE"] = (clause_live(CUR_LIVE, tr) if live
                            else clause_sample(SAMPLE_TOTAL, "&euro;", tr))
     vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
-    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+    vals["UNSUB"] = (i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                      "foot.unsub", "Unsubscribe", True)
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)

@@ -235,4 +235,34 @@ print("\nSWITCH BALANCE: %s"
       % ("; ".join(open_bad) if open_bad else "every if is closed in all %d blocks"
          % len(glob.glob(os.path.join(OUT, "*-klaviyo.html")))))
 
-raise SystemExit(1 if (rows or fb_bad or open_bad) else 0)
+
+# ---- NO DJANGO TAG MAY CARRY A SWITCH INSIDE ITS QUOTED ARGUMENT
+#
+# This shipped in all 29 emails and would have failed every send. Translating an
+# unsubscribe label the obvious way produces
+#
+#     {% unsubscribe '{% if person.locale == 'en-IE' %}Unsubscribe...' %}
+#
+# and the tag argument is single-quoted while the switch inside it quotes every
+# locale name, so the string ends at the first one. Klaviyo's render API returns
+# 400 and refuses the template outright - verified, along with the fix, on
+# 2026-08-31. The switch has to wrap the tag: see i18n.per_locale.
+NESTED = re.compile(r"\{%\s*\w+\s+'[^']*\{%")
+
+nest_bad = []
+for _f in sorted(glob.glob(os.path.join(OUT, "*-klaviyo.html"))):
+    _s = re.sub(r"<!--.*?-->", "", io.open(_f, encoding="utf-8").read(), flags=re.S)
+    for _m in NESTED.finditer(_s):
+        nest_bad.append("%s: a switch is nested inside a tag argument, which "
+                        "will 400 the render: %s"
+                        % (os.path.basename(_f), _m.group(0)[:60]))
+        break
+
+print("\nNESTED-TAG CHECK: %d blocks scanned" % len(glob.glob(os.path.join(OUT, "*-klaviyo.html"))))
+if nest_bad:
+    for _b in nest_bad[:6]:
+        print("  FAIL  " + _b)
+else:
+    print("  no tag carries a locale switch inside its quoted argument")
+
+raise SystemExit(1 if (rows or fb_bad or open_bad or nest_bad) else 0)

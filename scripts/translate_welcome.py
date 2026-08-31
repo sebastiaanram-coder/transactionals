@@ -96,13 +96,20 @@ def real_unsubscribe(html, live, tr):
     """
     if not live:
         return html
-    label = tr("foot.unsub", "Unsubscribe")
-    n = html.count('<a href="#">%s</a>' % label)
-    if n != 1:
+    # MATCH THE LINK, NOT ITS LABEL. The string substitutions run before this,
+    # so by now the label is already a nine-way switch and looking for the
+    # English word finds nothing. This is the second time the order of these
+    # passes has bitten: the check caught it, the code did not.
+    dead = re.findall(r'<a href="#">.*?</a>', html, re.S)
+    if len(dead) != 1:
         errs.append("expected exactly one dead unsubscribe link to replace, "
-                    "found %d" % n)
-    return html.replace('<a href="#">%s</a>' % label,
-                        "{%% unsubscribe '%s' %%}" % label, 1)
+                    "found %d" % len(dead))
+        return html
+    # The switch goes OUTSIDE the tag: see i18n.per_locale for why.
+    return html.replace(
+        dead[0],
+        i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                        "foot.unsub", "Unsubscribe", True), 1)
 
 
 # Paths these four emails link to. market_url_verified raises on anything not in
@@ -263,7 +270,13 @@ VARIANT_EDITS = {
     ],
     "welcome-02": [
         # the countdown bar
-        (r'<div class="hp-w2-promo">.*?</div>\s*</div>', "</div>"),
+        # MATCH THE BAR ONLY. This used to be
+        #   <div class="hp-w2-promo">.*?</div>\s*</div>  ->  </div>
+        # and the non-greedy run still reached past the bar's own close, taking
+        # the masthead, the hero image, the H1, the call to action and the speech
+        # balloon with it and leaving three orphaned </div> tags. The variant
+        # looked plausible in a byte count and was a broken email.
+        (r'<div class="hp-w2-promo">.*?</div>', ""),
     ],
     # In 03 and 04 the discount is ONLY the green bar. Everything else stands on
     # its own: 03 is three real Trustpilot reviews and a 4.5 rating, 04 is John
@@ -373,11 +386,17 @@ for _slug in EMAILS:
         errs.append("%s: %d KB, over Gmail's ~%d KB clip, so the end of the "
                     "email is truncated with a 'View entire message' link"
                     % (_slug, _kb, GMAIL_CLIP_KB))
-    if _s.count("{% unsubscribe") != 1:
-        errs.append("%s: %d {%% unsubscribe %%} tags, expected exactly one. A "
-                    "dead unsubscribe link is legally required to work and "
-                    "Klaviyo will refuse to send without it."
-                    % (_slug, _s.count("{% unsubscribe")))
+    # ONE TAG PER LOCALE BRANCH, plus the else: the switch wraps the tag rather
+    # than sitting inside its argument, so ten tags are correct and exactly one
+    # renders. Expecting one was right for the old form, which did not render at
+    # all - the API returned 400 on it.
+    _want = len(i18n.LOCALES) + 1
+    _got = _s.count("{% unsubscribe")
+    if _got != _want:
+        errs.append("%s: %d {%% unsubscribe %%} tags, expected %d (one per "
+                    "locale branch plus the else). A dead or missing "
+                    "unsubscribe link is legally required to work and Klaviyo "
+                    "will refuse to send without it." % (_slug, _got, _want))
     if '<a href="#"' in _s:
         errs.append("%s: a link still points at '#'" % _slug)
 

@@ -375,7 +375,8 @@ def build(bindings, assets, live=False, locale=None):
     # the product name is catalogue data, so it is inserted after translation
     vals["T_GET_ONES"] = vals["T_GET_ONES"].replace("{p}", vals["PROD_TITLE"])
     vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
-    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+    vals["UNSUB"] = (i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                      "foot.unsub", "Unsubscribe", True)
                      if live else
                      '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)

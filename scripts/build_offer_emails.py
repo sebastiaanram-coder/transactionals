@@ -248,7 +248,8 @@ def build(e, live, locale=None):
                 "reaches them."),
             **assets) if e["help"] else ""),
         HOME=sc.market_url("", live), CS=sc.market_url("cs", live),
-        UNSUB=(("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe")) if live
+        UNSUB=(i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                               "foot.unsub", "Unsubscribe", True) if live
                else '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe")),
     )
     vals.update(assets)

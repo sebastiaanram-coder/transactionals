@@ -249,6 +249,44 @@ def translator(scope, live, locale=None):
     return tr
 
 
+def per_locale(fmt, scope, key, english, live, locale=None, escape=None):
+    """Put the locale switch OUTSIDE a Django tag, not inside its argument.
+
+    THE BUG THIS EXISTS TO PREVENT, which shipped in all 29 emails. The obvious
+    way to translate an unsubscribe label is:
+
+        "{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe")
+
+    In live mode tr() returns a nine-way switch, so that produces
+
+        {%% unsubscribe '{%% if person.locale == 'en-IE' %%}Unsubscribe...' %%}
+
+    and the tag argument is single-quoted while the switch inside it contains
+    single-quoted locale names, so the string terminates at the first one. It is
+    invalid Django: the render API returns 400 and refuses the whole template.
+    Verified 2026-08-31, both the failure and this fix.
+
+    The switch has to wrap the whole tag instead, once per locale:
+
+        {%% if person.locale == 'en-IE' %%}{%% unsubscribe 'Unsubscribe' %%}
+        {%% elif person.locale == 'nl-NL' %%}{%% unsubscribe 'Afmelden' %%}...
+
+    `fmt` is the tag with one %s where the translated text goes.
+    """
+    e = escape or (lambda x: x)
+    if not live:
+        return fmt % e(get(scope, key, locale or FALLBACK_LOCALE, english))
+    texts = [(loc, e(get(scope, key, loc, english))) for loc in LOCALES]
+    if len({t for _, t in texts}) == 1:
+        return fmt % texts[0][1]
+    out = ""
+    for i, (loc, txt) in enumerate(texts):
+        out += "{%% %s %s == '%s' %%}%s" % (
+            "if" if i == 0 else "elif", LOCALE_EXPR, loc, fmt % txt)
+    return out + "{%% else %%}%s{%% endif %%}" % (
+        fmt % e(get(scope, key, FALLBACK_LOCALE, english)))
+
+
 def report(errs, warns=None):
     """Drift is an error, missing translations are a count. Call from a builder."""
     seen = set()

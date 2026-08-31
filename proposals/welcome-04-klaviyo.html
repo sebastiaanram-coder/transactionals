@@ -228,7 +228,7 @@
     <div class="hp-w4-legal">
       Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
     </div>
-    <div class="hp-w4-unsub">{% unsubscribe '{% if person.locale == 'en-IE' %}Unsubscribe{% elif person.locale == 'en-GB' %}Unsubscribe{% elif person.locale == 'nl-NL' %}Afmelden{% elif person.locale == 'nl-BE' %}Afmelden{% elif person.locale == 'fr-FR' %}Se désabonner{% elif person.locale == 'fr-BE' %}Se désabonner{% elif person.locale == 'de-DE' %}Abmelden{% elif person.locale == 'es-ES' %}Darse de baja{% elif person.locale == 'it-IT' %}Annulla iscrizione{% else %}Unsubscribe{% endif %}' %}</div>
+    <div class="hp-w4-unsub">{% if person.locale == 'en-IE' %}{% unsubscribe 'Unsubscribe' %}{% elif person.locale == 'en-GB' %}{% unsubscribe 'Unsubscribe' %}{% elif person.locale == 'nl-NL' %}{% unsubscribe 'Afmelden' %}{% elif person.locale == 'nl-BE' %}{% unsubscribe 'Afmelden' %}{% elif person.locale == 'fr-FR' %}{% unsubscribe 'Se désabonner' %}{% elif person.locale == 'fr-BE' %}{% unsubscribe 'Se désabonner' %}{% elif person.locale == 'de-DE' %}{% unsubscribe 'Abmelden' %}{% elif person.locale == 'es-ES' %}{% unsubscribe 'Darse de baja' %}{% elif person.locale == 'it-IT' %}{% unsubscribe 'Annulla iscrizione' %}{% else %}{% unsubscribe 'Unsubscribe' %}{% endif %}</div>
   </div>
 </div>
 </div>

@@ -254,7 +254,8 @@ def unsub_line(live, tr=None):
     """
     t = (lambda k, e: e) if tr is None else tr
     label = t("unsub_label", COPY["unsub_label"])
-    link = ("{%% unsubscribe '%s' %%}" % label if live
+    link = (i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                            "foot.unsub", "Unsubscribe", True) if live
             else '<a class="%s-unsublink" href="#">%s</a>' % (P, label))
     return (t("unsub_before", COPY["unsub_before"]) + link
             + t("unsub_after", COPY["unsub_after"]))

@@ -474,7 +474,8 @@ def unsub(P, live, tr=None):
     """
     t = (lambda k, e: e) if tr is None else tr
     label = t("wb.unsub_label", "just say the word")
-    link = ("{%% unsubscribe '%s' %%}" % label if live
+    link = (i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                            "foot.unsub", "Unsubscribe", True) if live
             else '<a class="%s-unslink" href="#">%s</a>' % (P, label))
     return t("wb.unsub_sentence",
              "And if you would rather not hear from me again, ") + link + "."
@@ -489,7 +490,8 @@ def build(e, live, locale=None):
                   T_HELP_CENTRE=tr("help.centre", "Help Centre"),
                   T_FOOT_UNSUB=tr("foot.unsub", "Unsubscribe"),
                   PRE=tr("pre", e["pre"]) if e.get("pre") else "",
-                  CS=cs, UNSUB=("{% unsubscribe 'Unsubscribe' %}" if live
+                  CS=cs, UNSUB=(i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                                         "foot.unsub", "Unsubscribe", True) if live
                                 else '<a href="#">%s</a>'
                                 % tr("foot.unsub", "Unsubscribe")))
 

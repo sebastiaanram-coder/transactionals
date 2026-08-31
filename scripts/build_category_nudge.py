@@ -894,7 +894,8 @@ def build(cat, live, hdr=None, locale=None):
         T_HELP_MAIL=tr("help.email", "E-mail us"),
         T_HELP_CHAT=tr("help.chat", "Chat with us"),
         T_HELP_CENTRE=tr("help.centre", "Help Centre"),
-        UNSUB=(("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe")) if live
+        UNSUB=(i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
+                               "foot.unsub", "Unsubscribe", True) if live
                else '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe")),
     )
     vals.update(assets)
