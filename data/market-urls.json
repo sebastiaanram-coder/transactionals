@@ -1,0 +1,294 @@
+{
+ "fetched": "2026-08-31",
+ "markets": {
+  "en-IE": "en-ie",
+  "en-GB": "en-gb",
+  "nl-NL": "nl-nl",
+  "nl-BE": "nl-be",
+  "fr-FR": "fr-fr",
+  "fr-BE": "fr-be",
+  "es-ES": "es-es",
+  "it-IT": "it-it",
+  "de-DE": "de-de"
+ },
+ "paths": {
+  "": [
+   "en-IE",
+   "en-GB",
+   "nl-NL",
+   "nl-BE",
+   "fr-FR",
+   "fr-BE",
+   "es-ES",
+   "it-IT",
+   "de-DE"
+  ],
+  "all-products": [
+   "en-IE",
+   "en-GB",
+   "nl-NL",
+   "fr-FR",
+   "es-ES",
+   "it-IT",
+   "de-DE"
+  ],
+  "cs": [
+   "en-IE",
+   "en-GB",
+   "nl-NL",
+   "nl-BE",
+   "fr-FR",
+   "fr-BE",
+   "es-ES",
+   "it-IT",
+   "de-DE"
+  ],
+  "about-us": [
+   "en-IE",
+   "en-GB",
+   "it-IT"
+  ],
+  "sustainability": [
+   "en-IE",
+   "en-GB",
+   "it-IT"
+  ],
+  "our-promises": [
+   "en-IE",
+   "en-GB",
+   "it-IT"
+  ],
+  "contact": [
+   "en-IE",
+   "en-GB",
+   "nl-NL",
+   "nl-BE",
+   "fr-FR",
+   "fr-BE",
+   "es-ES",
+   "it-IT",
+   "de-DE"
+  ],
+  "quote": [
+   "en-IE",
+   "en-GB",
+   "fr-FR",
+   "fr-BE",
+   "es-ES",
+   "it-IT",
+   "de-DE"
+  ],
+  "budgetrollupbanners": [
+   "en-IE",
+   "en-GB",
+   "nl-NL",
+   "nl-BE",
+   "fr-FR",
+   "es-ES",
+   "de-DE"
+  ],
+  "posters": [
+   "en-IE",
+   "en-GB",
+   "nl-NL",
+   "nl-BE",
+   "it-IT",
+   "de-DE"
+  ],
+  "standardbusinesscards": [
+   "en-IE",
+   "en-GB",
+   "es-ES"
+  ],
+  "standardflyers": [
+   "en-IE",
+   "en-GB",
+   "nl-NL",
+   "nl-BE",
+   "it-IT",
+   "de-DE"
+  ]
+ },
+ "not_found": [
+  {
+   "path": "all-products",
+   "locale": "nl-BE",
+   "status": 404
+  },
+  {
+   "path": "all-products",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "about-us",
+   "locale": "nl-NL",
+   "status": 404
+  },
+  {
+   "path": "about-us",
+   "locale": "nl-BE",
+   "status": 404
+  },
+  {
+   "path": "about-us",
+   "locale": "fr-FR",
+   "status": 404
+  },
+  {
+   "path": "about-us",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "about-us",
+   "locale": "es-ES",
+   "status": 404
+  },
+  {
+   "path": "about-us",
+   "locale": "de-DE",
+   "status": 404
+  },
+  {
+   "path": "sustainability",
+   "locale": "nl-NL",
+   "status": 404
+  },
+  {
+   "path": "sustainability",
+   "locale": "nl-BE",
+   "status": 404
+  },
+  {
+   "path": "sustainability",
+   "locale": "fr-FR",
+   "status": 404
+  },
+  {
+   "path": "sustainability",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "sustainability",
+   "locale": "es-ES",
+   "status": 404
+  },
+  {
+   "path": "sustainability",
+   "locale": "de-DE",
+   "status": 404
+  },
+  {
+   "path": "our-promises",
+   "locale": "nl-NL",
+   "status": 404
+  },
+  {
+   "path": "our-promises",
+   "locale": "nl-BE",
+   "status": 404
+  },
+  {
+   "path": "our-promises",
+   "locale": "fr-FR",
+   "status": 404
+  },
+  {
+   "path": "our-promises",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "our-promises",
+   "locale": "es-ES",
+   "status": 404
+  },
+  {
+   "path": "our-promises",
+   "locale": "de-DE",
+   "status": 404
+  },
+  {
+   "path": "quote",
+   "locale": "nl-NL",
+   "status": 404
+  },
+  {
+   "path": "quote",
+   "locale": "nl-BE",
+   "status": 404
+  },
+  {
+   "path": "budgetrollupbanners",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "budgetrollupbanners",
+   "locale": "it-IT",
+   "status": 404
+  },
+  {
+   "path": "posters",
+   "locale": "fr-FR",
+   "status": 404
+  },
+  {
+   "path": "posters",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "posters",
+   "locale": "es-ES",
+   "status": 404
+  },
+  {
+   "path": "standardbusinesscards",
+   "locale": "nl-NL",
+   "status": 404
+  },
+  {
+   "path": "standardbusinesscards",
+   "locale": "nl-BE",
+   "status": 404
+  },
+  {
+   "path": "standardbusinesscards",
+   "locale": "fr-FR",
+   "status": 404
+  },
+  {
+   "path": "standardbusinesscards",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "standardbusinesscards",
+   "locale": "it-IT",
+   "status": 404
+  },
+  {
+   "path": "standardbusinesscards",
+   "locale": "de-DE",
+   "status": 404
+  },
+  {
+   "path": "standardflyers",
+   "locale": "fr-FR",
+   "status": 404
+  },
+  {
+   "path": "standardflyers",
+   "locale": "fr-BE",
+   "status": 404
+  },
+  {
+   "path": "standardflyers",
+   "locale": "es-ES",
+   "status": 404
+  }
+ ]
+}

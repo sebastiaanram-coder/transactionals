@@ -174,3 +174,58 @@ def missing():
             if not row or not row.get("name") or not row.get("url"):
                 out.append((k, cl))
     return out
+
+# ---- verified market URLs -------------------------------------------------
+# ROOT is already the repo root; deriving it again with one dirname too few
+# pointed this at scripts/data/ and every lookup raised.
+_MU_CACHE = os.path.join(ROOT, "data", "market-urls.json")
+try:
+    with open(_MU_CACHE, encoding="utf-8") as _f:
+        _MU = json.load(_f)
+except FileNotFoundError:
+    _MU = {"paths": {}, "not_found": []}
+
+MU_FALLBACK = "en-GB"
+
+
+def market_url_verified(path, live, esc=lambda x: x):
+    """Like market_url, but only switches to markets where the URL RESOLVES.
+
+    market_url swaps the market segment and keeps the path, which assumes the
+    slug is the same everywhere. It is not: /en-ie/about-us is a page and
+    /nl-nl/about-us is a 404, and six of nine markets 404 on
+    /en-ie/standardbusinesscards. Emitting those would put a dead link in a
+    customer's inbox, which is worse than the Irish link it replaced.
+
+    A locale with no working URL for this path falls back to en-GB rather than to
+    the market home page: the right page in the wrong language beats the wrong
+    page in the right language, and it can never 404.
+
+    Refresh the data with scripts/fetch_market_urls.py.
+    """
+    good = (_MU.get("paths") or {}).get(path)
+    if good is None:
+        raise KeyError(
+            "%r is not in data/market-urls.json, so no locale has been verified "
+            "for it. Add it to PATHS in scripts/fetch_market_urls.py and re-run "
+            "rather than shipping an unverified link." % path)
+    fb = "https://www.helloprint.com/%s/%s" % (market_path(LOCALE_MAP[MU_FALLBACK]), path)
+    if not live:
+        return "https://www.helloprint.com/%s/%s" % (market_path("en-IE"), path)
+    out = ""
+    for email_loc in LOCALE_MAP:
+        seg = market_path(LOCALE_MAP[email_loc])
+        if not seg:
+            continue
+        url = ("https://www.helloprint.com/%s/%s" % (seg, path)
+               if email_loc in good else fb)
+        out += "{%% %s %s == '%s' %%}%s" % (
+            "if" if not out else "elif", LOCALE_EXPR, email_loc, esc(url))
+    return out + "{%% else %%}%s{%% endif %%}" % esc(fb)
+
+
+def market_url_gaps(paths):
+    """Which (path, locale) pairs fall back, so a builder can report them."""
+    good = _MU.get("paths") or {}
+    return [(p, l) for p in paths for l in LOCALE_MAP
+            if p in good and l not in good[p]]

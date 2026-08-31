@@ -23,6 +23,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(HERE, "_lib"))
 import i18n
 import reviews as rv
+import subcategories as sc
 
 OUT = os.path.join(ROOT, "proposals")
 EMAILS = ["welcome-01", "welcome-02", "welcome-03", "welcome-04"]
@@ -43,6 +44,108 @@ SHARED_IN_FILE = [
 ]
 
 errs = []
+
+# ---------------------------------------------------------------- go-live fixes
+#
+# Three defects the hand-written Welcome files carried that no generated email
+# has, because these four never went through a builder. All three are invisible
+# in a browser preview and all three break a real send.
+
+
+def link_assets(html, live):
+    """Swap embedded base64 images for the sentinel URL the other emails use.
+
+    A data: URI is right for the PREVIEW - it makes the file self-contained, and
+    every generated email does the same. It is wrong for the send: Gmail and
+    Outlook do not render data: images at all, and the bytes pushed these four
+    emails to 220-451KB against Gmail's ~102KB clipping threshold, so the images
+    were broken AND the email was truncated.
+
+    Matched by CONTENT HASH against assets/, not by position or filename, so a
+    reordered or renamed image cannot silently pair with the wrong file.
+    """
+    if not live:
+        return html
+    import base64, hashlib, re as _re
+    have = {}
+    for root, _, files in os.walk(os.path.join(ROOT, "assets")):
+        for fn in files:
+            fp = os.path.join(root, fn)
+            have[hashlib.sha1(open(fp, "rb").read()).hexdigest()] = fn
+
+    def one(m):
+        raw = base64.b64decode(m.group(2))
+        name = have.get(hashlib.sha1(raw).hexdigest())
+        if not name:
+            errs.append("an embedded %s image (%d bytes) is not in assets/, so it "
+                        "has no file to link to" % (m.group(1), len(raw)))
+            return m.group(0)
+        return 'src="https://REPLACE-WITH-KLAVIYO-ASSET/%s"' % name
+
+    return _re.sub(r'src="data:image/(\w+);base64,([^"]+)"', one, html)
+
+
+def real_unsubscribe(html, live, tr):
+    """Give the unsubscribe link somewhere to go.
+
+    The LABEL was translated into nine locales and the HREF was left as "#". A
+    dead unsubscribe link is not a cosmetic problem: it is legally required, and
+    Klaviyo will not let the template send without one. Every generated email
+    emits {% unsubscribe %}; these four never did.
+    """
+    if not live:
+        return html
+    label = tr("foot.unsub", "Unsubscribe")
+    n = html.count('<a href="#">%s</a>' % label)
+    if n != 1:
+        errs.append("expected exactly one dead unsubscribe link to replace, "
+                    "found %d" % n)
+    return html.replace('<a href="#">%s</a>' % label,
+                        "{%% unsubscribe '%s' %%}" % label, 1)
+
+
+# Paths these four emails link to. market_url_verified raises on anything not in
+# data/market-urls.json rather than emitting an unverified link.
+WC_PATHS = ["", "all-products", "cs", "about-us", "sustainability",
+            "our-promises", "contact", "quote", "budgetrollupbanners",
+            "posters", "standardbusinesscards", "standardflyers"]
+
+
+def market_links(html, live):
+    """Point each link at the reader's own market, where that URL exists.
+
+    /en-ie/ was hardcoded 6-10 times per email, so a Dutch or German reader was
+    sent to the Irish site. Swapping the market segment blindly would be worse:
+    the slugs are localised too, so /nl-nl/about-us is a 404 and six of nine
+    markets 404 on /en-ie/standardbusinesscards. Only verified URLs are switched;
+    the rest fall back to en-GB, which always resolves.
+    """
+    if not live:
+        return html
+
+    # ONE REGEX PASS, NOT A LOOP OF str.replace.
+    #
+    # Replacing longest-path-first looks like it handles the overlap and does
+    # not. The bare home path makes `old` "https://www.helloprint.com/en-ie/",
+    # which is a PREFIX of every other link - and of the en-IE branch of every
+    # switch already emitted. So the last iteration reached back into finished
+    # switches and nested a home switch inside each one. All 30 links across the
+    # four emails came out pointing at the home page with the path stranded
+    # outside the conditional.
+    #
+    # A single pass cannot do that: each match is replaced once and the
+    # replacement is never re-scanned.
+    import re as _re
+
+    def one(m):
+        path = m.group(1)
+        if path not in WC_PATHS:
+            errs.append("%r is linked but not in WC_PATHS, so no locale has been "
+                        "verified for it" % path)
+            return m.group(0)
+        return sc.market_url_verified(path, True)
+
+    return _re.sub(r"https://www\.helloprint\.com/en-ie/([a-z0-9-]*)", one, html)
 
 # A REVIEW IS SWAPPED, NEVER TRANSLATED. welcome-03 shipped three English
 # Trustpilot quotes to every locale, so a Dutch reader got three English
@@ -131,7 +234,10 @@ def render(html, slug, locale=None, live=False):
                         % (slug, eng[:56]))
             continue
         html = html.replace(eng, tr(key, eng))
-    return swap_reviews(html, slug, tr, locale, live)
+    html = swap_reviews(html, slug, tr, locale, live)
+    html = real_unsubscribe(html, live, tr)
+    html = market_links(html, live)
+    return link_assets(html, live)
 
 
 for slug in EMAILS:
@@ -159,6 +265,80 @@ for f in sorted(glob.glob(os.path.join(OUT, "welcome-0*-*-proposed.html"))):
     for p in i18n.leaks(f, lg, LEAKS):
         errs.append("%s: English left in the %s preview (%r)"
                     % (os.path.basename(f), lg, p))
+
+
+# ---- the three go-live defects must not come back --------------------------
+#
+# Every one of these was invisible in a browser preview and broke a real send,
+# which is exactly the class of fault a check has to hold.
+GMAIL_CLIP_KB = 102
+
+for _slug in EMAILS:
+    _lv = os.path.join(OUT, _slug + "-klaviyo.html")
+    if not os.path.exists(_lv):
+        continue
+    _s = io.open(_lv, encoding="utf-8").read()
+    _kb = len(_s.encode("utf-8")) // 1024
+
+    if "data:image" in _s:
+        errs.append("%s: still embeds a base64 image. Gmail and Outlook do not "
+                    "render data: URIs, so it would arrive blank." % _slug)
+    if _kb > GMAIL_CLIP_KB:
+        errs.append("%s: %d KB, over Gmail's ~%d KB clip, so the end of the "
+                    "email is truncated with a 'View entire message' link"
+                    % (_slug, _kb, GMAIL_CLIP_KB))
+    if _s.count("{% unsubscribe") != 1:
+        errs.append("%s: %d {%% unsubscribe %%} tags, expected exactly one. A "
+                    "dead unsubscribe link is legally required to work and "
+                    "Klaviyo will refuse to send without it."
+                    % (_slug, _s.count("{% unsubscribe")))
+    if '<a href="#"' in _s:
+        errs.append("%s: a link still points at '#'" % _slug)
+
+    # an /en-ie/ URL is only allowed as the en-IE BRANCH of a switch, never as
+    # the whole href
+    for _m in re.finditer(r'(?:href|src)="(https://www\.helloprint\.com/en-ie/[^"]*)"', _s):
+        errs.append("%s: %s is hardcoded to Ireland rather than switched per "
+                    "market" % (_slug, _m.group(1)))
+
+    # every asset must resolve to a real file in assets/, or the sentinel swap
+    # before sending has nothing to point at
+    for _m in re.finditer(r"REPLACE-WITH-KLAVIYO-ASSET/([^\"]+)", _s):
+        if not any(_m.group(1) in fs
+                   for _, _, fs in os.walk(os.path.join(ROOT, "assets"))):
+            errs.append("%s: references asset %r, which is not in assets/"
+                        % (_slug, _m.group(1)))
+
+    # a preview must stay self-contained and must NOT carry the sentinel
+    _pv = os.path.join(OUT, _slug + "-proposed.html")
+    _p = io.open(_pv, encoding="utf-8").read()
+    if "REPLACE-WITH-KLAVIYO-ASSET" in _p:
+        errs.append("%s: the preview leaked a sentinel asset URL, so it will "
+                    "show broken images to a proofreader" % _slug)
+    if "{% unsubscribe" in _p:
+        errs.append("%s: the preview leaked a Django tag" % _slug)
+
+print("\nGO-LIVE CHECKS on the four live blocks:")
+for _slug in EMAILS:
+    _lv = os.path.join(OUT, _slug + "-klaviyo.html")
+    if os.path.exists(_lv):
+        print("  %-12s %3d KB  assets linked, unsubscribe wired, links per market"
+              % (_slug, len(io.open(_lv, encoding="utf-8").read().encode("utf-8")) // 1024))
+
+# which market/path pairs could not be localised, so the gap is visible rather
+# than quietly absorbed by the en-GB fallback
+_gaps = sc.market_url_gaps(WC_PATHS)
+if _gaps:
+    import collections as _c
+    _by = _c.defaultdict(list)
+    for _pth, _loc in _gaps:
+        _by[_pth].append(_loc)
+    print("\n  NOT LOCALISED, falling back to en-GB (the slug 404s in that "
+          "market, verified %s):" % (sc._MU.get("fetched") or "?"))
+    for _pth in sorted(_by):
+        print("    /%-24s %s" % (_pth or "<home>", " ".join(sorted(_by[_pth]))))
+    print("    Fix by finding the real localised slug and re-running "
+          "scripts/fetch_market_urls.py.")
 
 need = i18n.report(errs)
 if need:
