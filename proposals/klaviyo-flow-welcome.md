@@ -458,3 +458,24 @@ now the most visible thing in the inbox. **Confirm the coupon's real terms.** If
 the window is different, the figures live in one place per email
 (`welcome-0N/expires`, `flow-welcome/subj.wel*`, `welcome-0N/pre`) and one edit
 plus `push_templates.py` changes all of it.
+
+---
+
+## Test-phase BCC — 2026-08-31
+
+All 14 messages blind-copy `behavioral-email-tests@helloprint.com`. Verified from
+the API: 14 of 14, no cc on any of them.
+
+It is set in `scripts/push_templates.py` as `TEST_BCC`, not by hand in the UI.
+Re-attaching rewrites the whole message object, so a bcc typed into Klaviyo would
+be silently dropped by the next push — the push has to own it or it does not
+survive.
+
+**REMOVE BEFORE GO-LIVE.** A bcc on a live flow copies every customer's email to
+an internal mailbox, which is a data-minimisation problem rather than just noise.
+Set `TEST_BCC = None` and re-run the push to clear all fourteen.
+
+Note the spelling: the address is **behavioral** (US), while everything else in
+this repo is *behavioural* (UK). That is what was asked for, but a BCC to an
+address that does not exist fails quietly, so it is worth one test send to
+confirm the mailbox receives.

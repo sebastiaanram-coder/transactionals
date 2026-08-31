@@ -60,6 +60,18 @@ BASE = "https://a.klaviyo.com/api"
 
 # Strings that must appear in the stored HTML after a push, chosen because they
 # are NEW in this version and contain no HTML entity for Klaviyo to rewrite.
+# TEST-PHASE BCC. Every Welcome message blind-copies this address so the team can
+# read what actually landed, in every locale, without being on the list.
+#
+# IT LIVES HERE, NOT ONLY IN KLAVIYO. re-attach rewrites the whole message
+# object, so a bcc set by hand in the UI is silently dropped by the next push.
+# Setting it here means the push preserves it instead of removing it.
+#
+# REMOVE BEFORE GO-LIVE. A bcc on a live flow copies every customer email to an
+# internal mailbox, which is a data-minimisation problem, not just noise. Set it
+# to None and re-run to clear it from all fourteen.
+TEST_BCC = "behavioral-email-tests@helloprint.com"
+
 CANARIES = ["34.000+", "/nl-nl/offerte-aanvragen", "fr.trustpilot.com",
             "/fr-fr/flyersdigital", "/de-de/standardvisitenkarten",
             # Welcome 02 matched none of the above, so its push was being
@@ -202,6 +214,7 @@ def reattach(key, master, rows, subj, dry):
                         "from_email": "hello@helloprint.com",
                         "from_label": "HelloPrint",
                         "reply_to_email": "hello@helloprint.com",
+                        "bcc_email": TEST_BCC,
                         "template_id": master,
                         "smart_sending_enabled": True, "transactional": False,
                         "add_tracking_params": False}}}}}})
@@ -215,10 +228,12 @@ def reattach(key, master, rows, subj, dry):
               or {}).get("data") or {}).get("message") or {}
         new = m.get("template_id")
         fresh[msg_id] = new
-        print("   attach %-34s copy %s  subject %s  preview %s"
+        print("   attach %-34s copy %s  subj %s  prev %s  bcc %s"
               % (name[:34], new,
                  "kept" if m.get("subject_line") == src else "CHANGED",
-                 "empty" if m.get("preview_text") == "" else "NOT EMPTY"))
+                 "empty" if m.get("preview_text") == "" else "NOT EMPTY",
+                 "set" if m.get("bcc_email") == TEST_BCC
+                 else ("none" if not m.get("bcc_email") else "OTHER")))
         time.sleep(0.4)
     return fresh
 
