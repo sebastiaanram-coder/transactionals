@@ -77,7 +77,15 @@ def _row(P, thumb, name, qty_line, cur, price, href):
             '<td class="%s-lip">%s%s</td></tr>' % (P, thumb, P, nm, q, P, cur, price))
 
 def sample_lines(P, assets, items, cur, tr=None):
-    """items: (kind, name, qty_int, price, img, href)"""
+    """items: (kind, name, qty_int, price, img, href)
+
+    A PRODUCT NAME IS DATA, A SERVICE NAME IS COPY. The product line shows what
+    the customer configured, which arrives from the catalogue already in their
+    language, so the sample name is a placeholder and stays as written. A service
+    line like the design check is our own wording, so it is a translation key and
+    gets resolved here. Passing the key straight through printed the literal
+    string "prod.design_check" in ten previews.
+    """
     out = ""
     for kind, name, qty, price, img, href in items:
         if kind == "product":
@@ -87,6 +95,7 @@ def sample_lines(P, assets, items, cur, tr=None):
             thumb = ('<td class="%s-limsvc"><img src="%s" alt="" width="24" height="24"></td>'
                      % (P, assets["IMG_TICK"]))
             qline = _t(tr, "bk.added", "Added at checkout")
+            name = _t(tr, name, name)
         out += _row(P, thumb, name, qline, cur, price, href)
     return out
 
@@ -116,7 +125,7 @@ def block(P, lines, num, cur, total, tr=None):
             '<table class="%(P)s-bhd" role="presentation" cellpadding="0" cellspacing="0"><tr>'
             '<td valign="middle">'
             '<table role="presentation" cellpadding="0" cellspacing="0" align="left"><tr>'
-            '<td class="%(P)s-bhdl">Your basket</td>'
+            '<td class="%(P)s-bhdl">%(BHDL)s</td>'
             '<td class="%(P)s-bhdb">'
             '<table role="presentation" cellpadding="0" cellspacing="0" width="26"><tr>'
             '<td width="26" height="26" bgcolor="#008539" align="center" valign="middle" '
@@ -133,6 +142,7 @@ def block(P, lines, num, cur, total, tr=None):
             # TOTAL_LBL is the word, TOTAL is the amount. They were briefly the
             # same key, which put the word "Total" in the price column.
             % {"P": P, "SAVED": _t(tr, "bk.saved", "Saved for you"),
+               "BHDL": _t(tr, "bk.your_basket", "Your basket"),
                "TOTAL_LBL": _t(tr, "bk.total", "Total"),
                "NOTE": _t(tr, "bk.note", "Delivery and VAT are confirmed at checkout."),
                "LINES": lines, "NUM": num, "CUR": cur, "TOTAL": total})

@@ -16,12 +16,13 @@ English in a translated email and looks exactly like a translation nobody wrote,
 which is the failure this whole programme keeps hitting. If a string is not in the
 file, this fails and names it.
 """
-import io, json, os, sys
+import io, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(HERE, "_lib"))
 import i18n
+import reviews as rv
 
 OUT = os.path.join(ROOT, "proposals")
 EMAILS = ["welcome-01", "welcome-02", "welcome-03", "welcome-04"]
@@ -35,12 +36,71 @@ SHARED_IN_FILE = [
     ("wc.waiting", "Your 10% is still waiting"),
     ("wc.expires5", "&nbsp;&middot;&nbsp;Valid only 5 days"),
     ("wc.help", "Do you need help?"),
+    ("alt.cs_agents", "Three Helloprint customer service agents"),
     ("help.chat", "Chat with us"),
     ("help.centre", "Help Centre"),
     ("foot.unsub", "Unsubscribe"),
 ]
 
 errs = []
+
+# A REVIEW IS SWAPPED, NEVER TRANSLATED. welcome-03 shipped three English
+# Trustpilot quotes to every locale, so a Dutch reader got three English
+# strangers. Running them through a translator instead would be worse: it
+# would put words in a named person's mouth that they never said.
+#
+# Three DIFFERENT category pools, because the cache holds one review per
+# category per language and this block shows three at once. Pulling all three
+# from one pool would repeat the same quote three times.
+REVIEW_POOLS = ["commercial-print", "signage-outdoor", "stationery"]
+QUOTE_RE = re.compile(
+    r'(<span class="hp-w3-quote">)&ldquo;(.*?)&rdquo;(</span>'
+    r'<span class="hp-w3-who">)(.*?)(</span>)', re.S)
+
+
+def swap_reviews(html, slug, tr, locale=None, live=False):
+    """Replace each hardcoded English review with one written in the reader's
+    own language."""
+    if slug != "welcome-03":
+        return html
+    byline = tr("rev.by", "verified Trustpilot review")
+
+    def one(lang, i):
+        r = rv.get(REVIEW_POOLS[i], lang)
+        return r if r else None
+
+    def cell(m, i):
+        open_q, _q, mid, _who, close = m.groups()
+        if not live:
+            r = one(i18n.LOCALE_LANG.get(locale or "en-GB", "en"), i)
+            if not r:
+                return m.group(0)
+            return "%s&ldquo;%s&rdquo;%s%s &middot; %s%s" % (
+                open_q, r["text"], mid, r["author"], byline, close)
+        # live: one branch per locale, exact match, English in the else
+        out = ""
+        for n, loc in enumerate(i18n.LOCALES):
+            r = one(i18n.LOCALE_LANG[loc], i)
+            if not r:
+                continue
+            out += "{%% %s event.Locale == '%s' %%}&ldquo;%s&rdquo;%s%s &middot; %s" % (
+                "if" if not out else "elif", loc, r["text"], mid,
+                r["author"], byline)
+        if not out:
+            return m.group(0)
+        en = one("en", i)
+        out += "{%% else %%}&ldquo;%s&rdquo;%s%s &middot; %s{%% endif %%}" % (
+            en["text"], mid, en["author"], byline)
+        return open_q + out + close
+
+    idx = [0]
+
+    def repl(m):
+        i = idx[0]
+        idx[0] += 1
+        return cell(m, i)
+
+    return QUOTE_RE.sub(repl, html)
 
 
 def strings_for(slug):
@@ -71,7 +131,7 @@ def render(html, slug, locale=None, live=False):
                         % (slug, eng[:56]))
             continue
         html = html.replace(eng, tr(key, eng))
-    return html
+    return swap_reviews(html, slug, tr, locale, live)
 
 
 for slug in EMAILS:

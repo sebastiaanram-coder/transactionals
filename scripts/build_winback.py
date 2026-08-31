@@ -318,7 +318,7 @@ FOOT = """
 """
 
 
-def products(P, live, n=4, across=2, tr=None):
+def products(P, live, n=4, across=2, tr=None, locale=None):
     """A grid of things to come back to.
 
     Live: Klaviyo's recommendation engine. Preview: real Contentful subcategories,
@@ -366,7 +366,8 @@ def products(P, live, n=4, across=2, tr=None):
                        sc.locale_switch(name, "url"))
         else:
             nm = url = None
-            nm, url = esc(sc.preview_field(name, "name")), sc.preview_field(name, "url")
+            nm, url = (esc(sc.preview_field(name, "name", locale)),
+                       sc.preview_field(name, "url", locale))
         cells += ('<td class="%s%s" valign="top"><a class="%s-card" href="%s">'
                   '<img src="%s" alt="%s"><span class="%s-tname">%s</span>'
                   '<span class="%s-tlink">%s &rarr;</span></a></td>'
@@ -544,7 +545,7 @@ def build(e, live, locale=None):
                % (P, tr("offer.terms", "One use per customer."))
                if e.get("offer") else ""),
         **A)
-    news = (products(P, live, e.get("tiles", 4), e.get("across", 2), tr)
+    news = (products(P, live, e.get("tiles", 4), e.get("across", 2), tr, locale)
             if e.get("tiles") else "")
     # Products, then people, then speed: what to print, who helps you decide, and
     # what to do when the date is the problem.

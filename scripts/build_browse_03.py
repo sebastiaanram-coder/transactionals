@@ -52,7 +52,7 @@ LIVE = {
     "PROD_URL":   "{{ catalog_item.url }}",
     "PROD_TITLE": "{{ catalog_item.title }}",
     "PROD_IMG":   "{{ catalog_item.featured_image.full.src }}",
-    "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
+    "UNSUB": None,
 }
 _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
@@ -243,7 +243,7 @@ BODY = """
         <p class="{P}-sub">{T_SUB}</p>
         <a class="{P}-cta" href="{QUOTE_URL}">{T_CTA}</a>
       </div>
-      <img class="{P}-heroimg" src="{IMG_HERO}" alt="The Helloprint team who price the unusual jobs" width="600">
+      <img class="{P}-heroimg" src="{IMG_HERO}" alt="{T_ALT_TEAM}" width="600">
     </div>
 
     <a class="{P}-anchor" href="{PROD_URL}">
@@ -253,7 +253,7 @@ BODY = """
           <span class="{P}-anlbl">{T_BR_JOBTITLE}</span>
           <span class="{P}-anname">{PROD_TITLE}</span>
         </td>
-        <td class="{P}-anlink" valign="middle">View product &rarr;</td>
+        <td class="{P}-anlink" valign="middle">{T_CTA_VIEW_PROD} &rarr;</td>
       </tr></table>
     </a>
 
@@ -276,13 +276,13 @@ BODY = """
       <img class="{P}-johnav" src="{AV_JOHN}" alt="" width="76" height="76">
       <span class="{P}-johnname">John</span>
       <span class="{P}-johnrole">{T_TEAM_EYEBROW}</span>
-      <p class="{P}-johntx">That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.</p>
+      <p class="{P}-johntx">{T_JOHN_BODY}</p>
     </div>
 
     <div class="{P}-close">
       <span class="{P}-closettl">{T_TEAM_H}</span>
-      <span class="{P}-closetxt">A standard run or something nobody has printed before. Either way you get a price within 24 hours and a straight answer on what is possible.</span>
-      <a class="{P}-cta-g" href="{QUOTE_URL}">Request a quote</a>
+      <span class="{P}-closetxt">{T_QUOTE_BODY}</span>
+      <a class="{P}-cta-g" href="{QUOTE_URL}">{T_CTA_QUOTE}</a>
       <span class="{P}-closealt">{T_BR_REPLY}</span>
     </div>
 
@@ -311,6 +311,11 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('john_body', 'That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.'),
+    ('quote_body', 'A standard run or something nobody has printed before. Either way you get a price within 24 hours and a straight answer on what is possible.'),
+    ('cta.quote', 'Request a quote'),
+    ('alt_team', 'The Helloprint team who price the unusual jobs'),
+    ('cta.view_prod', 'View product'),
     ('foot.unsub', 'Unsubscribe'),
     ('pre', 'Tell the quote desk what the job is. A tailored price back within 24 hours.'),
     ('eyebrow', 'GET A QUOTE'),
@@ -336,6 +341,12 @@ def build(bindings, assets, live=False, locale=None):
     for _k, _e in TRANSLATED:
         vals["T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper())] = tr(_k, _e)
     vals.update(bindings); vals.update(assets)
+    # UNSUB is None in both binding tables on purpose. Its text has to pass
+    # through the translator, and a placeholder written into a binding value
+    # is never substituted, because str.format does not recurse.
+    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+                     if live else
+                     '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>

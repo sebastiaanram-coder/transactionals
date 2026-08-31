@@ -136,3 +136,49 @@ def write_url(cf_locale):
 
 def count():
     return len(_DATA.get("reviews") or {})
+
+
+def quote_switch(pool, tr, locale=None, live=False, byline_en="verified Trustpilot review"):
+    """One review as (quote, byline), in the reader's own language.
+
+    WHY THIS EXISTS. Three of the abandoned-order emails carried a hardcoded
+    English quote, so a Dutch or German reader was shown an English stranger
+    vouching for us. Translating that quote would have been worse: it would put
+    words in a named person's mouth that they never said. The quote is SWAPPED
+    for one a customer in that language actually wrote.
+
+    In live mode both halves come back as one exact-match switch on
+    event.Locale, English in the {% else %}, matching every other switch in
+    these templates.
+    """
+    by = tr("rev.by", byline_en)
+
+    def pair(lang):
+        r = get(pool, lang)
+        return None if not r else ("&ldquo;%s&rdquo;" % r["text"],
+                                   "%s &middot; %s" % (r["author"], by))
+
+    if not live:
+        p = pair(LOCALE_LANG_LOCAL.get(locale or "en-GB", "en"))
+        return p or pair("en") or ("", by)
+
+    qs, bs = "", ""
+    for loc in LOCALES_LOCAL:
+        p = pair(LOCALE_LANG_LOCAL[loc])
+        if not p:
+            continue
+        kw = "if" if not qs else "elif"
+        qs += "{%% %s event.Locale == '%s' %%}%s" % (kw, loc, p[0])
+        bs += "{%% %s event.Locale == '%s' %%}%s" % (kw, loc, p[1])
+    en = pair("en")
+    if not qs or not en:
+        return (en[0] if en else "", en[1] if en else by)
+    return (qs + "{%% else %%}%s{%% endif %%}" % en[0],
+            bs + "{%% else %%}%s{%% endif %%}" % en[1])
+
+
+# kept local so reviews.py does not import i18n and create a cycle
+LOCALE_LANG_LOCAL = {"en-IE": "en", "en-GB": "en", "nl-NL": "nl", "nl-BE": "nl",
+                     "fr-FR": "fr", "fr-BE": "fr", "de-DE": "de", "es-ES": "es",
+                     "it-IT": "it"}
+LOCALES_LOCAL = list(LOCALE_LANG_LOCAL)

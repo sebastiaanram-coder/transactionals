@@ -32,6 +32,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n
+import reviews as rv
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -69,7 +70,7 @@ LIVE = {
     "CUR": '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}',
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
     "NUM": "{{ event.Items|length }}",
-    "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
+    "UNSUB": None,
 }
 
 # the four products from the Welcome email, at their undiscounted prices, so the
@@ -90,11 +91,10 @@ SAMPLE_LINES = [
      "https://www.helloprint.com/en-ie/budgetrollupbanners"),
 ]
 
-REASSURE = [
-    "Everything you configured is saved, down to the paper and the finish",
-    "Every file gets checked before it goes on press",
-    "Nothing is charged until you confirm at checkout",
-]
+# keys, not slots: reassure() returns a value substituted into BODY, and
+# str.format does not recurse into what it substitutes
+REASSURE = ["kept_saved", "file_checked", "charged_checkout"]
+EN = {k: v["en"] for k, v in i18n.data()["order-01"].items()}
 
 CSS = """
 .%(P)s-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
@@ -183,11 +183,11 @@ CSS = """
 """ % {"P": P}
 CSS = CSS.replace("@@BASKET_CSS@@", basket.css(P)).replace("@@BASKET_CSS_M@@", basket.css_mobile(P))
 
-def reassure(a):
+def reassure(a, tr):
     rows = "".join(
         '<tr><td class="%s-rstick" valign="top"><img src="%s" alt="" width="20" height="20"></td>'
         '<td class="%s-rstx" valign="top">%s</td></tr>' % (P, a["IMG_TICK"], P, t)
-        for t in REASSURE)
+        for t in (tr(k, EN[k]) for k in REASSURE))
     return ('<table class="%s-rstbl" role="presentation" cellpadding="0" cellspacing="0" '
             'align="center">%s</table>' % (P, rows))
 
@@ -197,9 +197,9 @@ EXPERT = """
       <table class="{P}-exptbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
         <td class="{P}-expav" valign="top"><img src="{AV_JOHN}" alt="" width="68" height="68"></td>
         <td class="{P}-exptx" valign="top">
-          <span class="{P}-explbl">ON AN ORDER THIS SIZE</span>
-          <p class="{P}-expttl">Want someone to check it first?</p>
-          <p class="{P}-expbody">John and the Print Expert Team can go through the spec with you, confirm the delivery date, and tell you if anything will not print well. Before you pay for it, not after.</p>
+          <span class="{P}-explbl">{T_EYEBROW_SIZE}</span>
+          <p class="{P}-expttl">{T_CHECK_H}</p>
+          <p class="{P}-expbody">{T_CHECK_BODY}</p>
           <span class="{P}-explink"><a href="mailto:hello@helloprint.com">{T_ORD_ASK}</a></span>
         </td>
       </tr></table>
@@ -244,15 +244,15 @@ BODY = """
 
     <div class="{P}-rev">
       <img class="{P}-revstars" src="{IMG_STARS}" alt="{T_TP_ALT}" width="120" height="25">
-      <p class="{P}-revq">&ldquo;Good quality, super fast and they checked my work. Really lovely.&rdquo;</p>
-      <span class="{P}-revby">{T_TP_VERIFIED_LINE}</span>
+      <p class="{P}-revq">{REV_Q}</p>
+      <span class="{P}-revby">{REV_BY}</span>
     </div>
 
     <div class="{P}-help">
-      <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
+      <img src="{IMG_AGENTS}" alt="{T_ALT_CS_AGENTS}" width="112" height="44">
       <span class="{P}-helpttl">{T_HELP_H}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">{T_HELP_EMAIL_SHORT}</a>
       </span>
     </div>
 
@@ -279,6 +279,14 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('eyebrow_size', 'ON AN ORDER THIS SIZE'),
+    ('check_h', 'Want someone to check it first?'),
+    ('check_body', 'John and the Print Expert Team can go through the spec with you, confirm the delivery date, and tell you if anything will not print well. Before you pay for it, not after.'),
+    ('kept_saved', 'Everything you configured is saved, down to the paper and the finish'),
+    ('file_checked', 'Every file gets checked before it goes on press'),
+    ('charged_checkout', 'Nothing is charged until you confirm at checkout'),
+    ('help.email_short', 'E-mail'),
+    ('alt.cs_agents', 'Three Helloprint customer service agents'),
     ('tp.alt', 'Rated 4.5 out of 5 on Trustpilot'),
     ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000'),
     ('foot.unsub', 'Unsubscribe'),
@@ -300,11 +308,19 @@ def build(bindings, assets, lines, high, live=False, locale=None):
     tr = i18n.translator('order-01', live, locale)
     vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
             for _k, _e in TRANSLATED}
-    vals.update({"P": P, "CSS": CSS, "REASSURE": reassure(assets),
+    vals.update({"P": P, "CSS": CSS, "REASSURE": reassure(assets, tr),
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
                                  bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
     vals["EXPERT_BLOCK"] = EXPERT.format(**vals) if high else ""
+    # UNSUB is None in both binding tables on purpose. Its text has to pass
+    # through the translator, and a placeholder written into a binding value
+    # is never substituted, because str.format does not recurse.
+    # A REVIEW IS SWAPPED, NEVER TRANSLATED: see reviews.quote_switch.
+    vals["REV_Q"], vals["REV_BY"] = rv.quote_switch('commercial-print', tr, locale, live)
+    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+                     if live else
+                     '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>

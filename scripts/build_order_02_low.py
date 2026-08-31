@@ -21,6 +21,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import reviews as rv
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -52,36 +53,47 @@ LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items
 # first two were about to keep separate copies of it.
 BANDS = discount.Bands(0.10, discount.every(10, 10, 140))
 
+# the English translator, for the self-checks below, which assert on the
+# English wording rather than on any one translation
+_EN_TR = i18n.translator('order-02-low', False, 'en-GB')
+
 def save_num_live(cur):
     return BANDS.figure_live(cur)
 
 def save_num_sample(total, cur):
     return BANDS.figure_sample(total, cur)
 
-def clause_live(cur):
+def clause_live(cur, tr):
     """The phrase appears once and only the figure branches, so translators see
     one string rather than one per band."""
-    return BANDS.wrap_live(" and save at least " + save_num_live(cur))
+    return BANDS.wrap_live(
+        tr("ord.and_save", " and save at least {amt}").replace(
+            "{amt}", save_num_live(cur)))
 
-def clause_sample(total, cur):
+def clause_sample(total, cur, tr):
     n = save_num_sample(total, cur)
-    return "" if n is None else " and save at least " + n
+    return "" if n is None else tr(
+        "ord.and_save", " and save at least {amt}").replace("{amt}", n)
 
-def band_live(cur):
-    return ('{%% if %s >= %d %%}That is at least %s off.'
-            '{%% else %%}Your 10%% comes off at checkout.{%% endif %%}'
-            % (discount.VALUE, BANDS.min_floor, save_num_live(cur)))
+def band_live(cur, tr):
+    return ("{%% if %s >= %d %%}%s{%% else %%}%s{%% endif %%}"
+            % (discount.VALUE, BANDS.min_floor,
+               tr("ord.at_least_off", "That is at least {amt} off.").replace(
+                   "{amt}", save_num_live(cur)),
+               tr("ord.comes_off_10", "Your 10% comes off at checkout.")))
 
-def band_sample(total, cur):
+def band_sample(total, cur, tr):
     n = save_num_sample(total, cur)
-    return "Your 10% comes off at checkout." if n is None else "That is at least %s off." % n
+    if n is None:
+        return tr("ord.comes_off_10", "Your 10% comes off at checkout.")
+    return tr("ord.at_least_off", "That is at least {amt} off.").replace("{amt}", n)
 
 SAMPLE_TOTAL = 70.77
 SAMPLE = {
     "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
     "CUR": "&euro;", "TOTAL": "70.77", "NUM": "3",
-    "BAND": band_sample(SAMPLE_TOTAL, "&euro;"),
-    "SAVE_CLAUSE": clause_sample(SAMPLE_TOTAL, "&euro;"),
+    "BAND": None,  # build()
+    "SAVE_CLAUSE": None,  # build()
     "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
@@ -89,9 +101,9 @@ LIVE = {
     "CUR": '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}',
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
     "NUM": "{{ event.Items|length }}",
-    "BAND": band_live('{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'),
-    "SAVE_CLAUSE": clause_live('{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'),
-    "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
+    "BAND": None,  # build()
+    "SAVE_CLAUSE": None,  # build()
+    "UNSUB": None,
 }
 
 # a low-value basket: two of the Welcome products plus the Premium check, so it
@@ -104,17 +116,14 @@ SAMPLE_LINES = [
     ("product", "Classic Business Cards", 1, "25.82",
      "https://contentful.helloprint.com/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80",
      "https://www.helloprint.com/en-ie/standardbusinesscards"),
-    ("service", "Premium Design Check", 1, "4.99", None, None),
+    ("service", "prod.design_check", 1, "4.99", None, None),
 ]
 
-QUICK = [
-    ("Change the quantity, watch the price move",
-     "The number on the page is where the product starts, not a minimum you are stuck with."),
-    ("Send your file now or after you order",
-     "You do not need finished artwork to place it. Order first and upload when you are ready."),
-    ("Nothing is charged until you confirm",
-     "The basket is saved either way, and the code applies at the last step."),
-]
+# keys, not slots: quick() returns a value substituted into BODY, and
+# str.format does not recurse into what it substitutes
+QUICK = [("q0h", "q0b"), ("q1h", "q1b"), ("ord.nothing_charged", "q2b")]
+EN = dict({k: v["en"] for k, v in i18n.data()["order-02-low"].items()},
+          **{k: v["en"] for k, v in i18n.data()["_shared"].items()})
 
 CSS = """
 .%(P)s-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
@@ -182,9 +191,10 @@ CSS = """
 """ % {"P": P}
 CSS = CSS.replace("@@BASKET_CSS@@", basket.css(P)).replace("@@BASKET_CSS_M@@", basket.css_mobile(P))
 
-def quick(a):
+def quick(a, tr):
     rows = ""
-    for t, b in QUICK:
+    for tk, bk in QUICK:
+        t, b = tr(tk, EN[tk]), tr(bk, EN[bk])
         rows += ('<tr><td class="%s-qtick" valign="top">'
                  '<img src="%s" alt="" width="22" height="22"></td>'
                  '<td class="%s-qtx" valign="top">'
@@ -197,12 +207,12 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">10% off the basket you saved. The code comes off at checkout.</div>
+<div class="{P}-pre">{T_PRE}</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
 
-    <div class="{P}-promo">10% off your basket <span class="{P}-ends">&middot; ends in 72 hours</span></div>
+    <div class="{P}-promo">{T_BAR} <span class="{P}-ends">&middot; {T_ENDS}</span></div>
 
     <div class="{P}-logobar">
       <a href="{CHECKOUT_URL}"><img src="{IMG_WORDMARK}" alt="Helloprint" width="150"></a>
@@ -210,8 +220,8 @@ BODY = """
 
     <div class="{P}-hero">
       <span class="{P}-eyebrow">{T_ORD_STILL}</span>
-      <h1 class="{P}-h1">10% off the basket you saved</h1>
-      <p class="{P}-sub">Use code <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. Everything is still configured exactly as you left it, and the code runs for 72 hours.</p>
+      <h1 class="{P}-h1">{T_H1}</h1>
+      <p class="{P}-sub">{T_ORD_USE_CODE} <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. Everything is still configured exactly as you left it, and the code runs for 72 hours.</p>
       <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
@@ -219,7 +229,7 @@ BODY = """
     <p class="{P}-band">{BAND}</p>
 
     <div class="{P}-mid">
-      <span class="{P}-code">Use code <strong>{CODE}</strong></span><br>
+      <span class="{P}-code">{T_ORD_USE_CODE} <strong>{CODE}</strong></span><br>
       <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
@@ -227,15 +237,15 @@ BODY = """
 
     <div class="{P}-rev">
       <img class="{P}-revstars" src="{IMG_STARS}" alt="{T_TP_ALT}" width="120" height="25">
-      <p class="{P}-revq">&ldquo;Good quality, super fast and they checked my work. Really lovely.&rdquo;</p>
-      <span class="{P}-revby">{T_TP_VERIFIED_LINE}</span>
+      <p class="{P}-revq">{REV_Q}</p>
+      <span class="{P}-revby">{REV_BY}</span>
     </div>
 
     <div class="{P}-help">
-      <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
-      <span class="{P}-helpttl">{T_STUCK_H}</span>
+      <img src="{IMG_AGENTS}" alt="{T_ALT_CS_AGENTS}" width="112" height="44">
+      <span class="{P}-helpttl">{T_ORD_STUCK}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">{T_HELP_EMAIL_SHORT}</a>
       </span>
     </div>
 
@@ -262,12 +272,26 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('pre', '10% off the basket you saved. The code comes off at checkout.'),
+    ('bar', '10% off your basket'),
+    ('ends', 'ends in 72 hours'),
+    ('h1', '10% off the basket you saved'),
+    ('q0h', 'Change the quantity, watch the price move'),
+    ('q0b', 'The number on the page is where the product starts, not a minimum you are stuck with.'),
+    ('q1h', 'Send your file now or after you order'),
+    ('q1b', 'You do not need finished artwork to place it. Order first and upload when you are ready.'),
+    ('q2b', 'The basket is saved either way, and the code applies at the last step.'),
+    ('ord.use_code', 'Use code'),
+    ('ord.stuck', 'Stuck on something?'),
+    ('ord.nothing_charged', 'Nothing is charged until you confirm'),
+    ('prod.design_check', 'Premium Design Check'),
+    ('help.email_short', 'E-mail'),
+    ('alt.cs_agents', 'Three Helloprint customer service agents'),
     ('tp.alt', 'Rated 4.5 out of 5 on Trustpilot'),
     ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000'),
     ('review.outof', 'out of 5 on Trustpilot'),
     ('ord.still', 'STILL IN YOUR BASKET'),
     ('ord.finish', 'Finish the job'),
-    ('stuck_h', 'Stuck on something?'),
     ('help.chat', 'Chat with us'),
     ('help.centre', 'Help Centre'),
     ('foot.unsub', 'Unsubscribe'),
@@ -279,10 +303,23 @@ def build(bindings, assets, lines, live=False, locale=None):
     tr = i18n.translator('order-02-low', live, locale)
     vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
             for _k, _e in TRANSLATED}
-    vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE,
+    vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets, tr), "CODE": CODE,
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
                                  bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
+    # UNSUB is None in both binding tables on purpose. Its text has to pass
+    # through the translator, and a placeholder written into a binding value
+    # is never substituted, because str.format does not recurse.
+    _cur = '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}' if live else "&euro;"
+    vals["BAND"] = (band_live(_cur, tr) if live
+                    else band_sample(SAMPLE_TOTAL, "&euro;", tr))
+    vals["SAVE_CLAUSE"] = (clause_live(_cur, tr) if live
+                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr))
+    # A REVIEW IS SWAPPED, NEVER TRANSLATED: see reviews.quote_switch.
+    vals["REV_Q"], vals["REV_BY"] = rv.quote_switch('commercial-print', tr, locale, live)
+    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+                     if live else
+                     '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>
@@ -361,9 +398,9 @@ if len(BANDS.table) < 12: errs.append("bands got wider, the saving will understa
 # fails if someone splits them apart later.
 for t in (9.99, 10.0, 70.77, 74.99, 149.99):
     n = save_num_sample(t, "E")
-    inside = (n is not None and n in clause_sample(t, "E") and n in band_sample(t, "E"))
+    inside = (n is not None and n in clause_sample(t, "E", _EN_TR) and n in band_sample(t, "E", _EN_TR))
     if n is None:
-        if clause_sample(t, "E") != "" or "at least" in band_sample(t, "E"):
+        if clause_sample(t, "E", _EN_TR) != "" or "at least" in band_sample(t, "E", _EN_TR):
             errs.append("no figure is safe at %.2f but one was printed" % t)
     elif not inside:
         errs.append("subtext and basket figures disagree at %.2f" % t)
@@ -374,12 +411,12 @@ if save_num_sample(9.99, "E") is not None:
 # the live template. A stray %-escape in either is invisible until it renders,
 # so compare the two literally. This caught "Your 10%% comes off".
 # the LAST else is the outer one: the band chain has its own else nested inside
-live_else = band_live("E").rsplit("{% else %}", 1)[1].split("{% endif %}")[0]
-if live_else != band_sample(0.0, "E"):
+live_else = band_live("E", _EN_TR).rsplit("{% else %}", 1)[1].split("{% endif %}")[0]
+if live_else != band_sample(0.0, "E", _EN_TR):
     errs.append("fallback copy differs: live says %r, preview says %r"
-                % (live_else, band_sample(0.0, "E")))
+                % (live_else, band_sample(0.0, "E", _EN_TR)))
 for frag in ("%%", "&&", "{{ {{"):
-    if frag in band_live("E") + clause_live("E"):
+    if frag in band_live("E", _EN_TR) + clause_live("E", _EN_TR):
         errs.append("double-escape leaked into the live template: " + frag)
 if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused here")
 if CODE not in live_body: errs.append("the code is missing from the body")
@@ -391,7 +428,9 @@ if sum(float(l[3]) for l in SAMPLE_LINES) - SAMPLE_TOTAL > 0.005:
 
 print("preview: %6d bytes  ->  proposals/order-02-low-proposed.html" % len(PREVIEW_DOC % prev_body))
 print("klaviyo: %6d bytes  ->  proposals/order-02-low-klaviyo.html" % len(KLAVIYO_DOC % (CODE, live_body)))
-print("band shown for the %.2f sample: %s" % (SAMPLE_TOTAL, SAMPLE["BAND"]))
+print("band shown for the %.2f sample: %s"
+      % (SAMPLE_TOTAL, band_sample(SAMPLE_TOTAL, "&euro;",
+                                   _EN_TR)))
 # 150 is the flow split, so no cart above it reaches this branch
 print("worst the figure undershoots, for carts up to 150: %.2f" % BANDS.worst_undershoot(150))
 if errs:

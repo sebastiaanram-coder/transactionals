@@ -766,7 +766,8 @@ def brands_block(P, cat, live, tr=None):
                   # and escaping them again put "&rsquo;" on screen as text. The
                   # alt text is plain prose, so it still gets escaped.
                   % (P, P, cat["_brands_url"], photo(it["photo"], live),
-                     esc(it["alt"]), P, it["name"]))
+                     esc(t("alt_brand_%s" % it["photo"].split("-", 1)[1],
+                           it["alt"])), P, it["name"]))
     return ('    <div class="{P}-bra">\n'
             '      <span class="{P}-braeye">{EYE}</span>\n'
             '      <h2 class="{P}-brah">{H}</h2>\n'

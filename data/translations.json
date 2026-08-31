@@ -82,9 +82,9 @@
   },
   "alt.agents": {
    "en": "Three Helloprint print experts",
-   "nl": "Drie printexperts van Helloprint",
+   "nl": "Drie Helloprint-printexperts",
    "fr": "Trois experts en impression Helloprint",
-   "de": "Drei Druckexperten von Helloprint",
+   "de": "Drei Helloprint-Druckexperten",
    "es": "Tres expertos en impresión de Helloprint",
    "it": "Tre esperti di stampa Helloprint"
   },
@@ -519,6 +519,222 @@
    "de": "Bewertet mit 4,5 von 5 Sternen auf Trustpilot",
    "es": "Valorado con 4,5 de 5 estrellas en Trustpilot",
    "it": "Valutato 4,5 stelle su 5 su Trustpilot"
+  },
+  "rev.by": {
+   "en": "verified Trustpilot review",
+   "nl": "geverifieerde Trustpilot-review",
+   "fr": "avis Trustpilot vérifié",
+   "de": "verifizierte Trustpilot-Bewertung",
+   "es": "opinión verificada de Trustpilot",
+   "it": "recensione Trustpilot verificata"
+  },
+  "px.from": {
+   "en": "From",
+   "nl": "Vanaf",
+   "fr": "À partir de",
+   "de": "Ab",
+   "es": "Desde",
+   "it": "Da"
+  },
+  "px.exvat": {
+   "en": "excl. VAT and delivery",
+   "nl": "excl. btw en verzending",
+   "fr": "hors TVA et livraison",
+   "de": "zzgl. MwSt. und Versand",
+   "es": "IVA y envío no incluidos",
+   "it": "IVA e spedizione esclusi"
+  },
+  "px.exvat_note": {
+   "en": "Prices exclude VAT and delivery.",
+   "nl": "Prijzen zijn excl. btw en verzending.",
+   "fr": "Les prix s'entendent hors TVA et livraison.",
+   "de": "Preise zzgl. MwSt. und Versand.",
+   "es": "Los precios no incluyen IVA ni envío.",
+   "it": "I prezzi non includono IVA e spedizione."
+  },
+  "px.for_qty": {
+   "en": "for {n} units",
+   "nl": "voor {n} stuks",
+   "fr": "pour {n} unités",
+   "de": "für {n} Stück",
+   "es": "para {n} unidades",
+   "it": "per {n} pezzi"
+  },
+  "cta.view_prod": {
+   "en": "View product",
+   "nl": "Bekijk product",
+   "fr": "Voir le produit",
+   "de": "Produkt ansehen",
+   "es": "Ver producto",
+   "it": "Vedi prodotto"
+  },
+  "xs.sizes": {
+   "en": "Other sizes and folds",
+   "nl": "Andere formaten en vouwen",
+   "fr": "Autres formats et pliages",
+   "de": "Andere Formate und Falzungen",
+   "es": "Otros tamaños y plegados",
+   "it": "Altri formati e pieghe"
+  },
+  "xs.also": {
+   "en": "You might also need",
+   "nl": "Dit heb je misschien ook nodig",
+   "fr": "Vous pourriez aussi avoir besoin de",
+   "de": "Das brauchen Sie vielleicht auch",
+   "es": "También podrías necesitar",
+   "it": "Potrebbe servirti anche"
+  },
+  "cta.quote": {
+   "en": "Request a quote",
+   "nl": "Vraag een offerte aan",
+   "fr": "Demander un devis",
+   "de": "Angebot anfordern",
+   "es": "Solicita un presupuesto",
+   "it": "Richiedi un preventivo"
+  },
+  "cta.back_prod": {
+   "en": "Back to your product",
+   "nl": "Terug naar je product",
+   "fr": "Retour à votre produit",
+   "de": "Zurück zu Ihrem Produkt",
+   "es": "Volver a tu producto",
+   "it": "Torna al tuo prodotto"
+  },
+  "ord.nothing_charged": {
+   "en": "Nothing is charged until you confirm",
+   "nl": "Er wordt niets afgeschreven totdat je bevestigt",
+   "fr": "Rien n'est débité tant que vous n'avez pas confirmé",
+   "de": "Es wird nichts abgebucht, bis Sie bestätigen",
+   "es": "No se cobra nada hasta que confirmas",
+   "it": "Non viene addebitato nulla finché non confermi"
+  },
+  "ord.use_code": {
+   "en": "Use code",
+   "nl": "Gebruik code",
+   "fr": "Utilisez le code",
+   "de": "Code verwenden",
+   "es": "Usa el código",
+   "it": "Usa il codice"
+  },
+  "ord.stuck": {
+   "en": "Stuck on something?",
+   "nl": "Loop je ergens op vast?",
+   "fr": "Vous bloquez sur quelque chose ?",
+   "de": "Hängen Sie irgendwo fest?",
+   "es": "¿Te has atascado con algo?",
+   "it": "Ti sei bloccato su qualcosa?"
+  },
+  "ord.or_expert": {
+   "en": "or speak to a print expert",
+   "nl": "of spreek een printexpert",
+   "fr": "ou parlez à un expert en impression",
+   "de": "oder sprechen Sie mit einem Druckexperten",
+   "es": "o habla con un experto en impresión",
+   "it": "oppure parla con un esperto di stampa"
+  },
+  "prod.design_check": {
+   "en": "Premium Design Check",
+   "nl": "Premium ontwerpcontrole",
+   "fr": "Contrôle de fichier Premium",
+   "de": "Premium-Designprüfung",
+   "es": "Revisión de diseño Premium",
+   "it": "Controllo file Premium"
+  },
+  "ord.and_save": {
+   "en": " and save at least {amt}",
+   "nl": " en bespaar minstens {amt}",
+   "fr": " et économisez au moins {amt}",
+   "de": " und sparen Sie mindestens {amt}",
+   "es": " y ahorra al menos {amt}",
+   "it": " e risparmia almeno {amt}"
+  },
+  "ord.at_least_off": {
+   "en": "That is at least {amt} off.",
+   "nl": "Dat is minstens {amt} korting.",
+   "fr": "Cela fait au moins {amt} de remise.",
+   "de": "Das sind mindestens {amt} Rabatt.",
+   "es": "Eso son al menos {amt} de descuento.",
+   "it": "Sono almeno {amt} di sconto."
+  },
+  "ord.comes_off_10": {
+   "en": "Your 10% comes off at checkout.",
+   "nl": "Je 10% gaat er bij het afrekenen af.",
+   "fr": "Vos 10% s'appliquent au paiement.",
+   "de": "Ihre 10% werden beim Checkout abgezogen.",
+   "es": "Tu 10% se aplica en el pago.",
+   "it": "Il tuo 10% viene applicato al checkout."
+  },
+  "ord.comes_off_25": {
+   "en": "Your 25% comes off at checkout.",
+   "nl": "Je 25% gaat er bij het afrekenen af.",
+   "fr": "Vos 25% s'appliquent au paiement.",
+   "de": "Ihre 25% werden beim Checkout abgezogen.",
+   "es": "Tu 25% se aplica en el pago.",
+   "it": "Il tuo 25% viene applicato al checkout."
+  },
+  "ord.worth_at_least": {
+   "en": "Worth at least {amt} on this basket &middot; ",
+   "nl": "Minstens {amt} waard op dit mandje &middot; ",
+   "fr": "Vaut au moins {amt} sur ce panier &middot; ",
+   "de": "Mindestens {amt} wert auf diesen Warenkorb &middot; ",
+   "es": "Vale al menos {amt} en esta cesta &middot; ",
+   "it": "Vale almeno {amt} su questo carrello &middot; "
+  },
+  "ord.ends_in_h": {
+   "en": "&middot; ends in {h}&nbsp;hours",
+   "nl": "&middot; verloopt over {h}&nbsp;uur",
+   "fr": "&middot; expire dans {h}&nbsp;heures",
+   "de": "&middot; läuft in {h}&nbsp;Stunden ab",
+   "es": "&middot; caduca en {h}&nbsp;horas",
+   "it": "&middot; scade tra {h}&nbsp;ore"
+  },
+  "ord.off25_next_h": {
+   "en": "25% off, for the next {h}&nbsp;hours",
+   "nl": "25% korting, de komende {h}&nbsp;uur",
+   "fr": "25% de remise, pendant les {h}&nbsp;prochaines heures",
+   "de": "25% Rabatt, für die nächsten {h}&nbsp;Stunden",
+   "es": "25% de descuento, durante las próximas {h}&nbsp;horas",
+   "it": "25% di sconto, per le prossime {h}&nbsp;ore"
+  },
+  "ord.code_runs_out": {
+   "en": "The code runs out in {h} hours",
+   "nl": "De code verloopt over {h} uur",
+   "fr": "Le code expire dans {h} heures",
+   "de": "Der Code läuft in {h} Stunden ab",
+   "es": "El código caduca en {h} horas",
+   "it": "Il codice scade tra {h} ore"
+  },
+  "bk.your_basket": {
+   "en": "Your basket",
+   "nl": "Je mandje",
+   "fr": "Votre panier",
+   "de": "Ihr Warenkorb",
+   "es": "Tu cesta",
+   "it": "Il tuo carrello"
+  },
+  "help.email_short": {
+   "en": "E-mail",
+   "nl": "E-mail",
+   "fr": "E-mail",
+   "de": "E-Mail",
+   "es": "Correo",
+   "it": "E-mail"
+  },
+  "alt.cs_agents": {
+   "en": "Three Helloprint customer service agents",
+   "nl": "Drie Helloprint-klantenservicemedewerkers",
+   "fr": "Trois conseillers du service client Helloprint",
+   "de": "Drei Helloprint-Kundenservicemitarbeiter",
+   "es": "Tres agentes de atención al cliente de Helloprint",
+   "it": "Tre operatori del servizio clienti Helloprint"
+  },
+  "help.email_us": {
+   "en": "E-mail us",
+   "nl": "Mail ons",
+   "fr": "Écrivez-nous",
+   "de": "Schreiben Sie uns",
+   "es": "Escríbenos",
+   "it": "Scrivici"
   }
  },
  "commercial-print": {
@@ -1081,6 +1297,30 @@
    "de": "Alle Marken ansehen",
    "es": "Ver todas las marcas",
    "it": "Vedi tutti i marchi"
+  },
+  "alt_brand_jackjones": {
+   "en": "Three men wearing denim shirts and jackets",
+   "nl": "Drie mannen in denim shirts en jassen",
+   "fr": "Trois hommes en chemises et vestes en denim",
+   "de": "Drei Männer in Jeanshemden und -jacken",
+   "es": "Tres hombres con camisas y chaquetas de denim",
+   "it": "Tre uomini con camicie e giacche in denim"
+  },
+  "alt_brand_iqoniq": {
+   "en": "Four people wearing coloured printed t-shirts",
+   "nl": "Vier mensen in gekleurde bedrukte T-shirts",
+   "fr": "Quatre personnes en t-shirts imprimés colorés",
+   "de": "Vier Personen in farbig bedruckten T-Shirts",
+   "es": "Cuatro personas con camisetas impresas de colores",
+   "it": "Quattro persone con t-shirt stampate colorate"
+  },
+  "alt_brand_bandc": {
+   "en": "Two people wearing white printed sweatshirts",
+   "nl": "Twee mensen in witte bedrukte sweaters",
+   "fr": "Deux personnes en sweat-shirts blancs imprimés",
+   "de": "Zwei Personen in weißen bedruckten Sweatshirts",
+   "es": "Dos personas con sudaderas blancas impresas",
+   "it": "Due persone con felpe bianche stampate"
   }
  },
  "corporate-gifts": {
@@ -1219,6 +1459,30 @@
    "de": "Alle Marken ansehen",
    "es": "Ver todas las marcas",
    "it": "Vedi tutti i marchi"
+  },
+  "alt_brand_sony": {
+   "en": "A Sony speaker held in one hand outdoors",
+   "nl": "Een Sony-speaker in één hand, buiten",
+   "fr": "Une enceinte Sony tenue d'une main en extérieur",
+   "de": "Ein Sony-Lautsprecher in einer Hand im Freien",
+   "es": "Un altavoz Sony sostenido con una mano al aire libre",
+   "it": "Uno speaker Sony tenuto in una mano all'aperto"
+  },
+  "alt_brand_jbl": {
+   "en": "A finger pressing the top of a JBL speaker",
+   "nl": "Een vinger die op de bovenkant van een JBL-speaker drukt",
+   "fr": "Un doigt appuyant sur le dessus d'une enceinte JBL",
+   "de": "Ein Finger drückt auf die Oberseite eines JBL-Lautsprechers",
+   "es": "Un dedo presionando la parte superior de un altavoz JBL",
+   "it": "Un dito che premo la parte superiore di uno speaker JBL"
+  },
+  "alt_brand_freshnrebel": {
+   "en": "A blue speaker clipped to a pair of trousers",
+   "nl": "Een blauwe speaker vastgeklikt aan een broek",
+   "fr": "Une enceinte bleue accrochée à un pantalon",
+   "de": "Ein blauer Lautsprecher an einer Hose befestigt",
+   "es": "Un altavoz azul enganchado a un pantalón",
+   "it": "Uno speaker blu agganciato a un pantalone"
   }
  },
  "post-01-review": {
@@ -2123,6 +2387,38 @@
    "de": "Wie der Dateicheck funktioniert",
    "es": "Cómo funciona la revisión",
    "it": "Come funziona il controllo"
+  },
+  "check_body": {
+   "en": "Every file gets an automatic check at no cost. For a little extra at checkout, one of our print experts goes through it by hand as well.",
+   "nl": "Elk bestand krijgt gratis een automatische controle. Voor een kleine meerprijs bij het afrekenen loopt een van onze printexperts het er ook nog met de hand doorheen.",
+   "fr": "Chaque fichier passe un contrôle automatique gratuit. Pour un petit supplément au paiement, un de nos experts en impression le vérifie aussi à la main.",
+   "de": "Jede Datei wird kostenlos automatisch geprüft. Für einen kleinen Aufpreis beim Checkout geht zusätzlich einer unserer Druckexperten sie von Hand durch.",
+   "es": "Cada archivo pasa una revisión automática sin coste. Por un pequeño extra en el pago, uno de nuestros expertos en impresión también lo revisa a mano.",
+   "it": "Ogni file passa un controllo automatico gratuito. Con un piccolo extra al checkout, uno dei nostri esperti di stampa lo controlla anche a mano."
+  },
+  "design_body": {
+   "en": "Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.",
+   "nl": "Stuur ons het bestand, of een ruw idee van wat je wilt, en een designer vertelt je wat er nodig is voordat je je ergens aan vastlegt.",
+   "fr": "Envoyez-nous le fichier, ou juste une idée de ce que vous voulez, et un graphiste vous dira ce qu'il faut avant que vous ne vous engagiez.",
+   "de": "Schicken Sie uns die Datei oder eine grobe Idee, und ein Designer sagt Ihnen, was nötig ist, bevor Sie sich festlegen.",
+   "es": "Envíanos el archivo, o una idea aproximada de lo que quieres, y un diseñador te dirá qué hace falta antes de que te comprometas a nada.",
+   "it": "Mandaci il file, o anche solo un'idea di massima, e un designer ti dirà cosa serve prima che tu ti impegni."
+  },
+  "get_ones": {
+   "en": "Get the ones for {p}",
+   "nl": "Haal die voor {p}",
+   "fr": "Obtenir ceux pour {p}",
+   "de": "Die passenden für {p} holen",
+   "es": "Consíguelas para {p}",
+   "it": "Prendi quelli per {p}"
+  },
+  "alt_checking": {
+   "en": "Helloprint colleagues checking customer print files on screen",
+   "nl": "Helloprint-collega's die drukbestanden van klanten op het scherm controleren",
+   "fr": "Des collègues Helloprint vérifiant des fichiers clients à l'écran",
+   "de": "Helloprint-Kollegen prüfen Kundendruckdaten am Bildschirm",
+   "es": "Compañeros de Helloprint revisando archivos de clientes en pantalla",
+   "it": "Colleghi Helloprint che controllano i file dei clienti a schermo"
   }
  },
  "browse-03": {
@@ -2309,6 +2605,30 @@
    "de": "Schicken Sie ihnen den kniffligen Auftrag",
    "es": "Mándales el trabajo complicado",
    "it": "Manda loro il lavoro difficile"
+  },
+  "john_body": {
+   "en": "That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.",
+   "nl": "Dat is John in het roze poloshirt hierboven. Hij specificeert al ruim twintig jaar drukwerk, en zijn team pakt alles op, van een simpele herdruk tot de klussen die andere drukkers afwijzen. Stuur ze gerust de lastige.",
+   "fr": "C'est John, en polo rose là-haut. Il définit des travaux d'impression depuis plus de vingt ans, et son équipe gère tout, de la simple réimpression aux commandes que d'autres imprimeurs refusent. Envoyez-leur la plus compliquée.",
+   "de": "Das ist John im rosa Poloshirt da oben. Er kalkuliert seit über zwanzig Jahren Druckaufträge, und sein Team übernimmt alles, vom einfachen Nachdruck bis zu den Aufträgen, die andere Druckereien ablehnen. Schicken Sie ihnen den kniffligen.",
+   "es": "Ese es John, el del polo rosa de arriba. Lleva más de veinte años definiendo trabajos de impresión, y su equipo se ocupa de todo, desde una reimpresión sencilla hasta los encargos que otras imprentas rechazan. Mándales el complicado.",
+   "it": "Quello è John, con la polo rosa lì sopra. Definisce lavori di stampa da più di vent'anni, e il suo team gestisce tutto, dalla semplice ristampa ai lavori che altre tipografie rifiutano. Mandategli quello difficile."
+  },
+  "quote_body": {
+   "en": "A standard run or something nobody has printed before. Either way you get a price within 24 hours and a straight answer on what is possible.",
+   "nl": "Een standaardoplage of iets wat nog nooit iemand heeft gedrukt. In beide gevallen krijg je binnen 24 uur een prijs en een eerlijk antwoord over wat er kan.",
+   "fr": "Un tirage standard ou quelque chose que personne n'a jamais imprimé. Dans les deux cas, vous avez un prix sous 24 heures et une réponse franche sur ce qui est possible.",
+   "de": "Eine Standardauflage oder etwas, das noch nie jemand gedruckt hat. In beiden Fällen bekommen Sie innerhalb von 24 Stunden einen Preis und eine klare Antwort, was möglich ist.",
+   "es": "Una tirada estándar o algo que nadie ha impreso antes. En cualquier caso tienes un precio en 24 horas y una respuesta clara sobre lo que es posible.",
+   "it": "Una tiratura standard o qualcosa che nessuno ha mai stampato. In entrambi i casi hai un prezzo entro 24 ore e una risposta chiara su cosa è possibile."
+  },
+  "alt_team": {
+   "en": "The Helloprint team who price the unusual jobs",
+   "nl": "Het Helloprint-team dat de bijzondere klussen prijst",
+   "fr": "L'équipe Helloprint qui chiffre les travaux hors norme",
+   "de": "Das Helloprint-Team, das die ungewöhnlichen Aufträge kalkuliert",
+   "es": "El equipo de Helloprint que presupuesta los trabajos poco habituales",
+   "it": "Il team Helloprint che quota i lavori insoliti"
   }
  },
  "order-01": {
@@ -2367,6 +2687,54 @@
    "de": "Stimmt da etwas nicht?",
    "es": "¿Algo no cuadra?",
    "it": "Qualcosa non va?"
+  },
+  "eyebrow_size": {
+   "en": "ON AN ORDER THIS SIZE",
+   "nl": "BIJ EEN ORDER VAN DEZE OMVANG",
+   "fr": "POUR UNE COMMANDE DE CETTE TAILLE",
+   "de": "BEI EINEM AUFTRAG DIESER GRÖSSE",
+   "es": "EN UN PEDIDO DE ESTE TAMAÑO",
+   "it": "PER UN ORDINE DI QUESTE DIMENSIONI"
+  },
+  "check_h": {
+   "en": "Want someone to check it first?",
+   "nl": "Wil je dat iemand er eerst naar kijkt?",
+   "fr": "Vous voulez que quelqu'un vérifie d'abord ?",
+   "de": "Soll jemand erst darüber schauen?",
+   "es": "¿Quieres que alguien lo revise antes?",
+   "it": "Vuoi che qualcuno lo controlli prima?"
+  },
+  "check_body": {
+   "en": "John and the Print Expert Team can go through the spec with you, confirm the delivery date, and tell you if anything will not print well. Before you pay for it, not after.",
+   "nl": "John en het printexpert-team kunnen de specificatie met je doornemen, de leverdatum bevestigen en je vertellen of er iets niet goed zal drukken. Voordat je betaalt, niet erna.",
+   "fr": "John et l'équipe d'experts peuvent revoir les specs avec vous, confirmer la date de livraison et vous dire si quelque chose s'imprimera mal. Avant que vous ne payiez, pas après.",
+   "de": "John und das Druckexperten-Team können die Spezifikation mit Ihnen durchgehen, den Liefertermin bestätigen und Ihnen sagen, ob etwas nicht gut druckt. Bevor Sie zahlen, nicht danach.",
+   "es": "John y el equipo de expertos pueden repasar contigo las especificaciones, confirmar la fecha de entrega y decirte si algo no va a imprimir bien. Antes de que pagues, no después.",
+   "it": "John e il team di esperti possono rivedere con te le specifiche, confermare la data di consegna e dirti se qualcosa non verrà bene in stampa. Prima che tu paghi, non dopo."
+  },
+  "kept_saved": {
+   "en": "Everything you configured is saved, down to the paper and the finish",
+   "nl": "Alles wat je hebt ingesteld is bewaard, tot en met het papier en de afwerking",
+   "fr": "Tout ce que vous avez configuré est enregistré, jusqu'au papier et à la finition",
+   "de": "Alles, was Sie konfiguriert haben, ist gespeichert, bis hin zu Papier und Veredelung",
+   "es": "Todo lo que configuraste está guardado, hasta el papel y el acabado",
+   "it": "Tutto quello che hai configurato è salvato, fino alla carta e alla finitura"
+  },
+  "file_checked": {
+   "en": "Every file gets checked before it goes on press",
+   "nl": "Elk bestand wordt gecontroleerd voordat het op de pers gaat",
+   "fr": "Chaque fichier est vérifié avant de partir en impression",
+   "de": "Jede Datei wird geprüft, bevor sie in den Druck geht",
+   "es": "Cada archivo se revisa antes de entrar en máquina",
+   "it": "Ogni file viene controllato prima di andare in stampa"
+  },
+  "charged_checkout": {
+   "en": "Nothing is charged until you confirm at checkout",
+   "nl": "Er wordt niets afgeschreven totdat je bij het afrekenen bevestigt",
+   "fr": "Rien n'est débité tant que vous n'avez pas confirmé au paiement",
+   "de": "Es wird nichts abgebucht, bis Sie beim Checkout bestätigen",
+   "es": "No se cobra nada hasta que confirmas en el pago",
+   "it": "Non viene addebitato nulla finché non confermi al checkout"
   }
  },
  "order-02-high": {
@@ -2497,16 +2865,88 @@
    "de": "Der Warenkorb ist gespeichert und es wird nichts abgebucht, bis Sie bestätigen. Wenn Sie lieber erst ein zweites Paar Augen darauf hätten, sagen Sie Bescheid.",
    "es": "La cesta está guardada y no se cobra nada hasta que confirmes. Si prefieres que alguien más le eche un ojo antes, dilo.",
    "it": "Il carrello è salvato e non viene addebitato nulla finché non confermi. Se preferisci prima un secondo parere, basta dirlo."
+  },
+  "spec_h": {
+   "en": "Check the spec suits the job",
+   "nl": "Controleren of de specificatie bij de klus past",
+   "fr": "Vérifier que les specs conviennent au travail",
+   "de": "Prüfen, ob die Spezifikation zum Auftrag passt",
+   "es": "Comprobar que las especificaciones encajan con el trabajo",
+   "it": "Controllare che le specifiche siano adatte al lavoro"
+  },
+  "spec_body": {
+   "en": "Forty years in the graphic trade sits behind the desk. Not the artwork check, but whether the paper, size and finish are right for what it is actually for.",
+   "nl": "Achter het bureau zit veertig jaar ervaring in het grafische vak. Niet de bestandscontrole, maar de vraag of papier, formaat en afwerking kloppen voor waar het echt voor is.",
+   "fr": "Quarante ans de métier dans les arts graphiques sont assis derrière le bureau. Pas le contrôle du fichier, mais la question de savoir si le papier, le format et la finition conviennent à l'usage réel.",
+   "de": "Hinter dem Schreibtisch sitzen vierzig Jahre grafisches Gewerbe. Nicht die Dateiprüfung, sondern die Frage, ob Papier, Format und Veredelung zum tatsächlichen Zweck passen.",
+   "es": "Detrás de la mesa hay cuarenta años de oficio gráfico. No la revisión del archivo, sino si el papel, el tamaño y el acabado encajan con el uso real.",
+   "it": "Dietro la scrivania ci sono quarant'anni di mestiere grafico. Non il controllo del file, ma se carta, formato e finitura sono giusti per l'uso reale."
+  },
+  "date_h": {
+   "en": "Confirm the delivery date",
+   "nl": "De leverdatum bevestigen",
+   "fr": "Confirmer la date de livraison",
+   "de": "Den Liefertermin bestätigen",
+   "es": "Confirmar la fecha de entrega",
+   "it": "Confermare la data di consegna"
+  },
+  "date_body": {
+   "en": "Most products go out for next-day delivery where possible. If a date cannot be met you will be told plainly, rather than find out later.",
+   "nl": "De meeste producten gaan waar mogelijk mee met levering de volgende dag. Kan een datum niet gehaald worden, dan hoor je dat gewoon, in plaats van dat je er later achter komt.",
+   "fr": "La plupart des produits partent en livraison le lendemain quand c'est possible. Si une date ne peut pas être tenue, on vous le dit franchement, plutôt que vous le découvriez plus tard.",
+   "de": "Die meisten Produkte gehen, wo möglich, mit Lieferung am nächsten Tag raus. Kann ein Termin nicht gehalten werden, sagen wir es klar, statt dass Sie es später merken.",
+   "es": "La mayoría de productos salen con entrega al día siguiente cuando es posible. Si una fecha no se puede cumplir, te lo decimos claramente en vez de que lo descubras después.",
+   "it": "La maggior parte dei prodotti parte con consegna il giorno dopo quando è possibile. Se una data non è rispettabile te lo diciamo chiaramente, invece di fartelo scoprire dopo."
+  },
+  "inv_h": {
+   "en": "Pay on invoice, not by card",
+   "nl": "Betalen op factuur, niet met een kaart",
+   "fr": "Payer sur facture, pas par carte",
+   "de": "Auf Rechnung zahlen, nicht per Karte",
+   "es": "Pagar por factura, no con tarjeta",
+   "it": "Pagare con fattura, non con carta"
+  },
+  "inv_body": {
+   "en": "Plenty of our business customers pay on invoice rather than putting it on a card. If that is not switched on for your account yet, the team can look at it for you.",
+   "nl": "Veel van onze zakelijke klanten betalen op factuur in plaats van met een kaart. Staat dat nog niet aan voor jouw account, dan kan het team ernaar kijken.",
+   "fr": "Beaucoup de nos clients professionnels paient sur facture plutôt que par carte. Si ce n'est pas encore activé sur votre compte, l'équipe peut s'en occuper.",
+   "de": "Viele unserer Geschäftskunden zahlen auf Rechnung statt per Karte. Ist das für Ihr Konto noch nicht freigeschaltet, kann das Team sich das ansehen.",
+   "es": "Muchos de nuestros clientes de empresa pagan por factura en vez de con tarjeta. Si aún no lo tienes activado en tu cuenta, el equipo puede revisarlo.",
+   "it": "Molti nostri clienti business pagano con fattura invece che con carta. Se non è ancora attivo sul tuo account, il team può occuparsene."
+  },
+  "qty_h": {
+   "en": "Tell you if the quantity is wrong",
+   "nl": "Je vertellen of het aantal niet klopt",
+   "fr": "Vous dire si la quantité ne va pas",
+   "de": "Ihnen sagen, wenn die Menge nicht stimmt",
+   "es": "Decirte si la cantidad no cuadra",
+   "it": "Dirti se la quantità non va"
+  },
+  "qty_body": {
+   "en": "Print gets cheaper per unit as the run grows. On an order this size the next quantity break may cost less than what is in the basket now.",
+   "nl": "Drukwerk wordt per stuk goedkoper naarmate de oplage groeit. Bij een order van deze omvang kan de volgende staffel minder kosten dan wat er nu in je mandje ligt.",
+   "fr": "L'impression coûte moins cher à l'unité quand le tirage augmente. Sur une commande de cette taille, le palier de quantité suivant peut coûter moins que ce qu'il y a dans le panier.",
+   "de": "Druck wird pro Stück günstiger, je größer die Auflage. Bei einem Auftrag dieser Größe kann die nächste Staffel weniger kosten als das, was jetzt im Warenkorb liegt.",
+   "es": "La impresión sale más barata por unidad cuanto mayor es la tirada. En un pedido de este tamaño, el siguiente tramo de cantidad puede costar menos que lo que hay ahora en la cesta.",
+   "it": "La stampa costa meno al pezzo man mano che la tiratura cresce. Su un ordine di queste dimensioni, lo scaglione di quantità successivo può costare meno di quello che c'è ora nel carrello."
+  },
+  "alt_team": {
+   "en": "The Helloprint print expert team",
+   "nl": "Het Helloprint printexpert-team",
+   "fr": "L'équipe d'experts en impression Helloprint",
+   "de": "Das Helloprint-Druckexperten-Team",
+   "es": "El equipo de expertos en impresión de Helloprint",
+   "it": "Il team di esperti di stampa Helloprint"
   }
  },
  "order-03-high": {
   "pre": {
    "en": "John can still go through this with you, and he has put 10% off on your basket.",
-   "nl": "John kan het nog steeds met je doornemen, en hij heeft 10% korting op je winkelwagen gezet.",
-   "fr": "John peut encore le passer en revue avec vous, et il a mis 10% de remise sur votre panier.",
-   "de": "John kann es weiterhin mit Ihnen durchgehen, und er hat 10% Rabatt auf Ihren Warenkorb gelegt.",
+   "nl": "John kan dit nog steeds met je doornemen, en hij heeft 10% korting op je mandje gezet.",
+   "fr": "John peut encore revoir tout ça avec vous, et il a mis 10% de remise sur votre panier.",
+   "de": "John kann das noch mit Ihnen durchgehen, und er hat 10% Rabatt auf Ihren Warenkorb gelegt.",
    "es": "John todavía puede repasarlo contigo, y te ha puesto un 10% de descuento en la cesta.",
-   "it": "John può ancora vederlo con te, e ha messo il 10% di sconto sul tuo carrello."
+   "it": "John può ancora rivederlo con te, e ti ha messo il 10% di sconto sul carrello."
   },
   "eyebrow": {
    "en": "LAST ONE FROM US",
@@ -2517,12 +2957,12 @@
    "it": "L'ULTIMA DA PARTE NOSTRA"
   },
   "h1": {
-   "en": "Still happy to go through this with you",
-   "nl": "Nog steeds bereid het met je door te nemen",
-   "fr": "Toujours prêt à le passer en revue avec vous",
-   "de": "Ich gehe es weiterhin gern mit Ihnen durch",
-   "es": "Sigo encantado de repasarlo contigo",
-   "it": "Sono ancora felice di vederlo con te"
+   "en": "An order this size is worth ten minutes of someone else&rsquo;s time before you pay for it.",
+   "nl": "Een order van deze omvang is tien minuten van iemand anders zijn tijd waard voordat je ervoor betaalt.",
+   "fr": "Une commande de cette taille mérite dix minutes du temps de quelqu'un d'autre avant que vous ne la payiez.",
+   "de": "Ein Auftrag dieser Größe ist zehn Minuten der Zeit eines anderen wert, bevor Sie dafür zahlen.",
+   "es": "Un pedido de este tamaño merece diez minutos del tiempo de otra persona antes de que lo pagues.",
+   "it": "Un ordine di queste dimensioni vale dieci minuti del tempo di qualcun altro prima che tu lo paghi."
   },
   "sub": {
    "en": "An order this size is worth ten minutes of someone else&rsquo;s time before you pay for it.",
@@ -2603,10 +3043,276 @@
    "de": "Irgendwo hängen geblieben?",
    "es": "¿Atascado en algo?",
    "it": "Bloccato su qualcosa?"
+  },
+  "john_quote": {
+   "en": "I have specced print for over twenty years, and on orders around this size there is nearly always one detail worth a second look: a quantity that costs less at the next step up, a finish that will not survive the job, a date that is tighter than it needs to be.",
+   "nl": "Ik specificeer al ruim twintig jaar drukwerk, en bij orders rond deze omvang is er bijna altijd één detail dat een tweede blik verdient: een aantal dat bij de volgende staffel minder kost, een afwerking die de klus niet overleeft, een datum die krapper is dan nodig.",
+   "fr": "Je définis des travaux d'impression depuis plus de vingt ans, et sur des commandes de cet ordre il y a presque toujours un détail qui mérite un second regard : une quantité moins chère au palier suivant, une finition qui ne tiendra pas, une date plus serrée que nécessaire.",
+   "de": "Ich kalkuliere seit über zwanzig Jahren Druckaufträge, und bei Aufträgen dieser Größenordnung gibt es fast immer ein Detail, das einen zweiten Blick verdient: eine Menge, die eine Staffel höher weniger kostet, eine Veredelung, die den Einsatz nicht übersteht, ein Termin, der enger ist als nötig.",
+   "es": "Llevo más de veinte años definiendo trabajos de impresión, y en pedidos de este orden casi siempre hay un detalle que merece una segunda mirada: una cantidad que sale más barata en el siguiente tramo, un acabado que no aguantará el uso, una fecha más ajustada de lo necesario.",
+   "it": "Definisco lavori di stampa da più di vent'anni, e su ordini di questo ordine di grandezza c'è quasi sempre un dettaglio che merita una seconda occhiata: una quantità che costa meno allo scaglione successivo, una finitura che non reggerà, una data più stretta del necessario."
+  },
+  "john_offer": {
+   "en": "Send it over before you order and I will go through it. And to make the decision a bit easier, here is 10% off from me:",
+   "nl": "Stuur het door voordat je bestelt, dan neem ik het door. En om de keuze wat makkelijker te maken, hier is 10% korting van mij:",
+   "fr": "Envoyez-le-moi avant de commander et je le regarde. Et pour faciliter un peu la décision, voici 10% de remise de ma part :",
+   "de": "Schicken Sie es mir vor der Bestellung und ich gehe es durch. Und damit die Entscheidung etwas leichter fällt, hier 10% Rabatt von mir:",
+   "es": "Mándamelo antes de pedir y lo reviso. Y para que la decisión sea un poco más fácil, aquí tienes un 10% de descuento de mi parte:",
+   "it": "Mandamelo prima di ordinare e lo controllo. E per rendere la decisione un po' più facile, ecco il 10% di sconto da parte mia:"
+  },
+  "worth": {
+   "en": "Worth at least {amt} on this basket &middot; expires 72&nbsp;hours after this email",
+   "nl": "Minstens {amt} waard op dit mandje &middot; verloopt 72&nbsp;uur na deze mail",
+   "fr": "Vaut au moins {amt} sur ce panier &middot; expire 72&nbsp;heures après cet e-mail",
+   "de": "Mindestens {amt} wert auf diesen Warenkorb &middot; läuft 72&nbsp;Stunden nach dieser E-Mail ab",
+   "es": "Vale al menos {amt} en esta cesta &middot; caduca 72&nbsp;horas después de este correo",
+   "it": "Vale almeno {amt} su questo carrello &middot; scade 72&nbsp;ore dopo questa email"
+  },
+  "or_john": {
+   "en": "or send it to John first",
+   "nl": "of stuur het eerst naar John",
+   "fr": "ou envoyez-le d'abord à John",
+   "de": "oder schicken Sie es zuerst an John",
+   "es": "o mándaselo antes a John",
+   "it": "oppure mandalo prima a John"
+  },
+  "q0h": {
+   "en": "A print expert can still go through it with you",
+   "nl": "Een printexpert kan het nog met je doornemen",
+   "fr": "Un expert en impression peut encore le revoir avec vous",
+   "de": "Ein Druckexperte kann es noch mit Ihnen durchgehen",
+   "es": "Un experto en impresión todavía puede repasarlo contigo",
+   "it": "Un esperto di stampa può ancora rivederlo con te"
+  },
+  "q0b": {
+   "en": "Reply to this email, or use the chat. Nothing about the order changes while you wait for an answer.",
+   "nl": "Antwoord op deze mail, of gebruik de chat. Er verandert niets aan de bestelling terwijl je op antwoord wacht.",
+   "fr": "Répondez à cet e-mail, ou passez par le chat. Rien ne change dans la commande pendant que vous attendez une réponse.",
+   "de": "Antworten Sie auf diese E-Mail oder nutzen Sie den Chat. An der Bestellung ändert sich nichts, während Sie auf eine Antwort warten.",
+   "es": "Responde a este correo o usa el chat. Nada del pedido cambia mientras esperas respuesta.",
+   "it": "Rispondi a questa email, oppure usa la chat. Nulla dell'ordine cambia mentre aspetti una risposta."
+  },
+  "q1b": {
+   "en": "The code comes off at the last step, so you see the final number before you commit to it.",
+   "nl": "De code gaat er bij de laatste stap af, zodat je het eindbedrag ziet voordat je je eraan vastlegt.",
+   "fr": "Le code s'applique à la dernière étape, vous voyez donc le montant final avant de vous engager.",
+   "de": "Der Code wird im letzten Schritt abgezogen, so sehen Sie die Endsumme, bevor Sie sich festlegen.",
+   "es": "El código se aplica en el último paso, así ves el importe final antes de comprometerte.",
+   "it": "Il codice si applica all'ultimo passaggio, così vedi l'importo finale prima di impegnarti."
+  },
+  "last_note": {
+   "en": "This is the last email we will send about this basket. It stays saved for whenever the job comes back around, and the offer to look at it with you does not expire.",
+   "nl": "Dit is de laatste mail die we over dit mandje sturen. Het blijft bewaard voor wanneer de klus terugkomt, en het aanbod om er samen naar te kijken verloopt niet.",
+   "fr": "C'est le dernier e-mail que nous enverrons à propos de ce panier. Il reste enregistré pour quand le projet reviendra, et la proposition de le regarder avec vous n'expire pas.",
+   "de": "Das ist die letzte E-Mail, die wir zu diesem Warenkorb schicken. Er bleibt gespeichert, falls der Auftrag wiederkommt, und das Angebot, ihn mit Ihnen durchzugehen, läuft nicht ab.",
+   "es": "Este es el último correo que enviaremos sobre esta cesta. Se queda guardada para cuando el trabajo vuelva, y la oferta de revisarla contigo no caduca.",
+   "it": "Questa è l'ultima email che manderemo su questo carrello. Resta salvato per quando il lavoro tornerà, e l'offerta di guardarlo insieme non scade."
   }
  },
- "order-02-low": {},
- "order-03-low": {},
+ "order-02-low": {
+  "pre": {
+   "en": "10% off the basket you saved. The code comes off at checkout.",
+   "nl": "10% korting op het mandje dat je bewaarde. De code gaat er bij het afrekenen af.",
+   "fr": "10% de remise sur le panier que vous avez laissé. Le code s'applique au paiement.",
+   "de": "10% Rabatt auf den gespeicherten Warenkorb. Der Code wird beim Checkout abgezogen.",
+   "es": "10% de descuento en la cesta que guardaste. El código se aplica en el pago.",
+   "it": "10% di sconto sul carrello che hai salvato. Il codice viene applicato al checkout."
+  },
+  "bar": {
+   "en": "10% off your basket",
+   "nl": "10% korting op je mandje",
+   "fr": "10% de remise sur votre panier",
+   "de": "10% Rabatt auf Ihren Warenkorb",
+   "es": "10% de descuento en tu cesta",
+   "it": "10% di sconto sul tuo carrello"
+  },
+  "ends": {
+   "en": "ends in 72 hours",
+   "nl": "verloopt over 72 uur",
+   "fr": "expire dans 72 heures",
+   "de": "läuft in 72 Stunden ab",
+   "es": "caduca en 72 horas",
+   "it": "scade tra 72 ore"
+  },
+  "h1": {
+   "en": "10% off the basket you saved",
+   "nl": "10% korting op het mandje dat je bewaarde",
+   "fr": "10% de remise sur le panier que vous avez laissé",
+   "de": "10% Rabatt auf den gespeicherten Warenkorb",
+   "es": "10% de descuento en la cesta que guardaste",
+   "it": "10% di sconto sul carrello che hai salvato"
+  },
+  "sub": {
+   "en": "at checkout and save at least {amt}. Everything is still configured exactly as you left it, and the code runs for 72 hours.",
+   "nl": "bij het afrekenen en bespaar minstens {amt}. Alles staat nog precies zoals je het achterliet, en de code is 72 uur geldig.",
+   "fr": "au paiement et économisez au moins {amt}. Tout est encore configuré exactement comme vous l'aviez laissé, et le code est valable 72 heures.",
+   "de": "beim Checkout und sparen Sie mindestens {amt}. Alles ist noch genau so konfiguriert, wie Sie es verlassen haben, und der Code gilt 72 Stunden.",
+   "es": "en el pago y ahorra al menos {amt}. Todo sigue configurado exactamente como lo dejaste, y el código dura 72 horas.",
+   "it": "al checkout e risparmia almeno {amt}. È tutto ancora configurato esattamente come l'hai lasciato, e il codice vale 72 ore."
+  },
+  "saving": {
+   "en": "That is at least {amt} off.",
+   "nl": "Dat is minstens {amt} korting.",
+   "fr": "Cela fait au moins {amt} de remise.",
+   "de": "Das sind mindestens {amt} Rabatt.",
+   "es": "Eso son al menos {amt} de descuento.",
+   "it": "Sono almeno {amt} di sconto."
+  },
+  "q0h": {
+   "en": "Change the quantity, watch the price move",
+   "nl": "Pas het aantal aan en zie de prijs bewegen",
+   "fr": "Changez la quantité, regardez le prix bouger",
+   "de": "Ändern Sie die Menge und sehen Sie den Preis mitgehen",
+   "es": "Cambia la cantidad y mira cómo se mueve el precio",
+   "it": "Cambia la quantità e guarda il prezzo muoversi"
+  },
+  "q0b": {
+   "en": "The number on the page is where the product starts, not a minimum you are stuck with.",
+   "nl": "Het aantal op de pagina is waar het product begint, niet een minimum waar je aan vastzit.",
+   "fr": "Le chiffre sur la page est le point de départ du produit, pas un minimum imposé.",
+   "de": "Die Zahl auf der Seite ist der Einstieg des Produkts, kein Mindestwert, an den Sie gebunden sind.",
+   "es": "El número de la página es donde empieza el producto, no un mínimo al que estés atado.",
+   "it": "Il numero sulla pagina è il punto di partenza del prodotto, non un minimo a cui sei vincolato."
+  },
+  "q1h": {
+   "en": "Send your file now or after you order",
+   "nl": "Stuur je bestand nu of na je bestelling",
+   "fr": "Envoyez votre fichier maintenant ou après la commande",
+   "de": "Schicken Sie Ihre Datei jetzt oder nach der Bestellung",
+   "es": "Envía tu archivo ahora o después de pedir",
+   "it": "Manda il file ora o dopo l'ordine"
+  },
+  "q1b": {
+   "en": "You do not need finished artwork to place it. Order first and upload when you are ready.",
+   "nl": "Je hebt geen afgerond ontwerp nodig om te bestellen. Bestel eerst en upload wanneer je zover bent.",
+   "fr": "Vous n'avez pas besoin d'un visuel finalisé pour commander. Commandez d'abord et envoyez le fichier quand vous êtes prêt.",
+   "de": "Sie brauchen keine fertige Datei, um zu bestellen. Bestellen Sie zuerst und laden Sie hoch, wenn Sie so weit sind.",
+   "es": "No necesitas el diseño terminado para pedir. Pide primero y sube el archivo cuando estés listo.",
+   "it": "Non ti serve un file finito per ordinare. Ordina prima e carica quando sei pronto."
+  },
+  "q2b": {
+   "en": "The basket is saved either way, and the code applies at the last step.",
+   "nl": "Het mandje blijft hoe dan ook bewaard, en de code wordt bij de laatste stap toegepast.",
+   "fr": "Le panier est enregistré dans tous les cas, et le code s'applique à la dernière étape.",
+   "de": "Der Warenkorb bleibt so oder so gespeichert, und der Code greift im letzten Schritt.",
+   "es": "La cesta se guarda igualmente, y el código se aplica en el último paso.",
+   "it": "Il carrello resta salvato comunque, e il codice si applica all'ultimo passaggio."
+  }
+ },
+ "order-03-low": {
+  "pre": {
+   "en": "25% off, and then we will leave your basket alone.",
+   "nl": "25% korting, en daarna laten we je mandje met rust.",
+   "fr": "25% de remise, et ensuite nous laisserons votre panier tranquille.",
+   "de": "25% Rabatt, und danach lassen wir Ihren Warenkorb in Ruhe.",
+   "es": "25% de descuento, y después dejaremos tu cesta en paz.",
+   "it": "25% di sconto, e poi lasceremo in pace il tuo carrello."
+  },
+  "bar": {
+   "en": "25% off your basket",
+   "nl": "25% korting op je mandje",
+   "fr": "25% de remise sur votre panier",
+   "de": "25% Rabatt auf Ihren Warenkorb",
+   "es": "25% de descuento en tu cesta",
+   "it": "25% di sconto sul tuo carrello"
+  },
+  "ends": {
+   "en": "ends in 24&nbsp;hours",
+   "nl": "verloopt over 24&nbsp;uur",
+   "fr": "expire dans 24&nbsp;heures",
+   "de": "läuft in 24&nbsp;Stunden ab",
+   "es": "caduca en 24&nbsp;horas",
+   "it": "scade tra 24&nbsp;ore"
+  },
+  "eyebrow": {
+   "en": "LAST CALL",
+   "nl": "LAATSTE KANS",
+   "fr": "DERNIER APPEL",
+   "de": "LETZTER AUFRUF",
+   "es": "ÚLTIMA LLAMADA",
+   "it": "ULTIMA CHIAMATA"
+  },
+  "h1": {
+   "en": "25% off, for the next 24&nbsp;hours",
+   "nl": "25% korting, de komende 24&nbsp;uur",
+   "fr": "25% de remise, pendant les 24&nbsp;prochaines heures",
+   "de": "25% Rabatt, für die nächsten 24&nbsp;Stunden",
+   "es": "25% de descuento, durante las próximas 24&nbsp;horas",
+   "it": "25% di sconto, per le prossime 24&nbsp;ore"
+  },
+  "sub": {
+   "en": "at checkout and save at least {amt}. This is the last email we will send about this basket.",
+   "nl": "bij het afrekenen en bespaar minstens {amt}. Dit is de laatste mail die we over dit mandje sturen.",
+   "fr": "au paiement et économisez au moins {amt}. C'est le dernier e-mail que nous enverrons à propos de ce panier.",
+   "de": "beim Checkout und sparen Sie mindestens {amt}. Das ist die letzte E-Mail, die wir zu diesem Warenkorb schicken.",
+   "es": "en el pago y ahorra al menos {amt}. Este es el último correo que enviaremos sobre esta cesta.",
+   "it": "al checkout e risparmia almeno {amt}. Questa è l'ultima email che manderemo su questo carrello."
+  },
+  "runs_out": {
+   "en": "The code runs out in 24&nbsp;hours",
+   "nl": "De code verloopt over 24&nbsp;uur",
+   "fr": "Le code expire dans 24&nbsp;heures",
+   "de": "Der Code läuft in 24&nbsp;Stunden ab",
+   "es": "El código caduca en 24&nbsp;horas",
+   "it": "Il codice scade tra 24&nbsp;ore"
+  },
+  "saving": {
+   "en": "That is at least {amt} off.",
+   "nl": "Dat is minstens {amt} korting.",
+   "fr": "Cela fait au moins {amt} de remise.",
+   "de": "Das sind mindestens {amt} Rabatt.",
+   "es": "Eso son al menos {amt} de descuento.",
+   "it": "Sono almeno {amt} di sconto."
+  },
+  "terms": {
+   "en": "25% off your basket, up to &euro;25 off. One use per customer, and it cannot be combined with another code.",
+   "nl": "25% korting op je mandje, tot &euro;25 korting. Eén keer per klant te gebruiken, en niet te combineren met een andere code.",
+   "fr": "25% de remise sur votre panier, jusqu'à &euro;25 de remise. Une utilisation par client, non cumulable avec un autre code.",
+   "de": "25% Rabatt auf Ihren Warenkorb, bis zu &euro;25 Rabatt. Eine Verwendung pro Kunde, nicht mit einem anderen Code kombinierbar.",
+   "es": "25% de descuento en tu cesta, hasta &euro;25 de descuento. Un uso por cliente, y no se puede combinar con otro código.",
+   "it": "25% di sconto sul tuo carrello, fino a &euro;25 di sconto. Un utilizzo per cliente, non cumulabile con altri codici."
+  },
+  "q0b": {
+   "en": "The code comes off at the last step, so you can look at the final number before you commit to it.",
+   "nl": "De code gaat er bij de laatste stap af, zodat je naar het eindbedrag kunt kijken voordat je je eraan vastlegt.",
+   "fr": "Le code s'applique à la dernière étape, vous pouvez donc regarder le montant final avant de vous engager.",
+   "de": "Der Code wird im letzten Schritt abgezogen, so können Sie die Endsumme ansehen, bevor Sie sich festlegen.",
+   "es": "El código se aplica en el último paso, así puedes ver el importe final antes de comprometerte.",
+   "it": "Il codice si applica all'ultimo passaggio, così puoi vedere l'importo finale prima di impegnarti."
+  },
+  "q1h": {
+   "en": "Anything in the order can still change",
+   "nl": "Alles in de bestelling kan nog veranderen",
+   "fr": "Tout dans la commande peut encore changer",
+   "de": "Alles an der Bestellung kann sich noch ändern",
+   "es": "Todo en el pedido puede cambiar aún",
+   "it": "Tutto nell'ordine può ancora cambiare"
+  },
+  "q1b": {
+   "en": "Quantity, delivery date, artwork. Placing it now does not lock the details.",
+   "nl": "Aantal, leverdatum, ontwerp. Nu bestellen zet de details niet vast.",
+   "fr": "Quantité, date de livraison, visuel. Commander maintenant ne fige pas les détails.",
+   "de": "Menge, Liefertermin, Druckdatei. Jetzt zu bestellen legt die Details nicht fest.",
+   "es": "Cantidad, fecha de entrega, diseño. Pedir ahora no bloquea los detalles.",
+   "it": "Quantità, data di consegna, file. Ordinare ora non blocca i dettagli."
+  },
+  "done_h": {
+   "en": "And that is us done",
+   "nl": "En daarmee zijn wij klaar",
+   "fr": "Et voilà, c'est terminé de notre côté",
+   "de": "Und damit sind wir durch",
+   "es": "Y con esto terminamos",
+   "it": "E con questo abbiamo finito"
+  },
+  "done_b": {
+   "en": "If the timing is wrong, no harm done, and we will stop emailing you about it. Your basket stays where it is for whenever the job comes back around.",
+   "nl": "Als het moment niet klopt, geen probleem, dan stoppen we met mailen hierover. Je mandje blijft staan voor wanneer de klus terugkomt.",
+   "fr": "Si le moment n'est pas le bon, pas de souci, nous arrêterons de vous écrire à ce sujet. Votre panier reste en place pour quand le projet reviendra.",
+   "de": "Wenn der Zeitpunkt nicht passt, kein Problem, dann hören wir damit auf. Ihr Warenkorb bleibt stehen, falls der Auftrag wiederkommt.",
+   "es": "Si no es el momento, no pasa nada, dejaremos de escribirte sobre esto. Tu cesta se queda donde está para cuando el trabajo vuelva.",
+   "it": "Se il momento non è quello giusto, nessun problema, smetteremo di scriverti. Il tuo carrello resta lì per quando il lavoro tornerà."
+  }
+ },
  "welcome-01": {
   "pre": {
    "en": "Your 10% code is inside, and the prints most businesses start with.",
@@ -2743,6 +3449,46 @@
    "de": "Bewertet mit 4,5 von 5 Sternen auf Trustpilot",
    "es": "Valorado con 4,5 de 5 estrellas en Trustpilot",
    "it": "Valutato 4,5 stelle su 5 su Trustpilot"
+  },
+  "alt_office": {
+   "en": "The Helloprint team in the office",
+   "nl": "Het Helloprint-team op kantoor",
+   "fr": "L'équipe Helloprint au bureau",
+   "de": "Das Helloprint-Team im Büro",
+   "es": "El equipo de Helloprint en la oficina",
+   "it": "Il team Helloprint in ufficio"
+  },
+  "u1000": {
+   "en": "1,000 units",
+   "nl": "1.000 stuks",
+   "fr": "1 000 unités",
+   "de": "1.000 Stück",
+   "es": "1.000 unidades",
+   "it": "1.000 pezzi"
+  },
+  "u500": {
+   "en": "500 units",
+   "nl": "500 stuks",
+   "fr": "500 unités",
+   "de": "500 Stück",
+   "es": "500 unidades",
+   "it": "500 pezzi"
+  },
+  "u50": {
+   "en": "50 units",
+   "nl": "50 stuks",
+   "fr": "50 unités",
+   "de": "50 Stück",
+   "es": "50 unidades",
+   "it": "50 pezzi"
+  },
+  "u1": {
+   "en": "1 unit",
+   "nl": "1 stuk",
+   "fr": "1 unité",
+   "de": "1 Stück",
+   "es": "1 unidad",
+   "it": "1 pezzo"
   }
  },
  "welcome-02": {
@@ -2873,6 +3619,62 @@
    "de": "Alles ansehen",
    "es": "Ver todo",
    "it": "Sfoglia tutto"
+  },
+  "ship_body": {
+   "en": "Your order goes to a print partner near your delivery address, so it travels less and arrives sooner. In Ireland that means delivery via An Post and DPD, backed by a network of 300+ production partners.",
+   "nl": "Je bestelling gaat naar een drukpartner bij je bezorgadres in de buurt, dus hij reist minder ver en is er sneller. De bezorging loopt via lokale vervoerders, met een netwerk van 300+ productiepartners erachter.",
+   "fr": "Votre commande part chez un partenaire imprimeur proche de votre adresse de livraison : elle voyage moins et arrive plus vite. La livraison passe par des transporteurs locaux, avec un réseau de plus de 300 partenaires de production derrière.",
+   "de": "Ihr Auftrag geht an einen Druckpartner in der Nähe Ihrer Lieferadresse, so reist er kürzer und kommt schneller an. Die Zustellung läuft über lokale Zusteller, gestützt auf ein Netz von über 300 Produktionspartnern.",
+   "es": "Tu pedido va a un socio de impresión cerca de tu dirección de entrega, así viaja menos y llega antes. La entrega se hace con transportistas locales, respaldada por una red de más de 300 socios de producción.",
+   "it": "Il tuo ordine va a un partner di stampa vicino al tuo indirizzo di consegna, così viaggia meno e arriva prima. La consegna passa da corrieri locali, con dietro una rete di oltre 300 partner di produzione."
+  },
+  "eco_body": {
+   "en": "Print should not cost the earth. Being a certified B Corp keeps us honest about that, and it is why we work with partners who produce closer to you and materials that ask less of the planet. Our impact report shows where we stand and where we are heading.",
+   "nl": "Drukwerk hoeft de aarde niet te kosten. Als gecertificeerde B Corp houden we onszelf daaraan, en daarom werken we met partners die dichter bij je produceren en met materialen die minder van de planeet vragen. Ons impactrapport laat zien waar we staan en waar we naartoe gaan.",
+   "fr": "L'impression ne devrait pas coûter la planète. Être une B Corp certifiée nous oblige à rester honnêtes là-dessus, et c'est pourquoi nous travaillons avec des partenaires qui produisent plus près de vous et des matériaux qui demandent moins à la planète. Notre rapport d'impact montre où nous en sommes et où nous allons.",
+   "de": "Drucken darf die Erde nicht kosten. Als zertifizierte B Corp bleiben wir dabei ehrlich, und deshalb arbeiten wir mit Partnern, die näher bei Ihnen produzieren, und mit Materialien, die den Planeten weniger belasten. Unser Impact-Report zeigt, wo wir stehen und wohin wir gehen.",
+   "es": "Imprimir no debería costar el planeta. Ser una B Corp certificada nos obliga a ser honestos con eso, y por eso trabajamos con socios que producen más cerca de ti y con materiales que piden menos al planeta. Nuestro informe de impacto muestra dónde estamos y hacia dónde vamos.",
+   "it": "Stampare non deve costare il pianeta. Essere una B Corp certificata ci tiene onesti su questo, ed è il motivo per cui lavoriamo con partner che producono più vicino a te e con materiali che chiedono meno al pianeta. Il nostro report di impatto mostra dove siamo e dove stiamo andando."
+  },
+  "range_body": {
+   "en": "More than 100 million product combinations. Business cards, flyers, brochures, posters, banners, textiles, packaging and branded gifts. Configure what you need and the platform finds a partner who can make it.",
+   "nl": "Meer dan 100 miljoen productcombinaties. Visitekaartjes, flyers, brochures, posters, banners, textiel, verpakkingen en relatiegeschenken. Stel samen wat je nodig hebt en het platform vindt een partner die het kan maken.",
+   "fr": "Plus de 100 millions de combinaisons de produits. Cartes de visite, flyers, brochures, affiches, banderoles, textiles, emballages et cadeaux personnalisés. Configurez ce dont vous avez besoin et la plateforme trouve un partenaire capable de le produire.",
+   "de": "Mehr als 100 Millionen Produktkombinationen. Visitenkarten, Flyer, Broschüren, Poster, Banner, Textilien, Verpackungen und Werbegeschenke. Konfigurieren Sie, was Sie brauchen, und die Plattform findet einen Partner, der es herstellen kann.",
+   "es": "Más de 100 millones de combinaciones de producto. Tarjetas de visita, flyers, folletos, pósters, lonas, textil, packaging y regalos de empresa. Configura lo que necesitas y la plataforma encuentra un socio que pueda fabricarlo.",
+   "it": "Più di 100 milioni di combinazioni di prodotto. Biglietti da visita, volantini, brochure, poster, striscioni, tessili, packaging e gadget personalizzati. Configura quello che ti serve e la piattaforma trova un partner in grado di produrlo."
+  },
+  "alt_beach": {
+   "en": "The Helloprint team at a beach clean-up",
+   "nl": "Het Helloprint-team bij een strandopruiming",
+   "fr": "L'équipe Helloprint lors d'un nettoyage de plage",
+   "de": "Das Helloprint-Team bei einer Strandreinigung",
+   "es": "El equipo de Helloprint en una limpieza de playa",
+   "it": "Il team Helloprint a una pulizia della spiaggia"
+  },
+  "alt_advisers": {
+   "en": "Helloprint customer advisers at work",
+   "nl": "Helloprint-klantadviseurs aan het werk",
+   "fr": "Des conseillers clients Helloprint au travail",
+   "de": "Helloprint-Kundenberater bei der Arbeit",
+   "es": "Asesores de clientes de Helloprint trabajando",
+   "it": "Consulenti clienti Helloprint al lavoro"
+  },
+  "alt_eco": {
+   "en": "Eco flyers printed on recycled paper",
+   "nl": "Eco-flyers gedrukt op gerecycled papier",
+   "fr": "Des flyers éco imprimés sur papier recyclé",
+   "de": "Öko-Flyer auf Recyclingpapier gedruckt",
+   "es": "Flyers ecológicos impresos en papel reciclado",
+   "it": "Volantini eco stampati su carta riciclata"
+  },
+  "alt_range": {
+   "en": "Flyers, business cards, posters and roller banners",
+   "nl": "Flyers, visitekaartjes, posters en roll-upbanners",
+   "fr": "Flyers, cartes de visite, affiches et roll-ups",
+   "de": "Flyer, Visitenkarten, Poster und Roll-up-Banner",
+   "es": "Flyers, tarjetas de visita, pósters y roll-ups",
+   "it": "Volantini, biglietti da visita, poster e roll-up"
   }
  },
  "welcome-03": {
@@ -2980,14 +3782,6 @@
    "es": "&nbsp;&middot;&nbsp;Quedan 2 días",
    "it": "&nbsp;&middot;&nbsp;Ancora 2 giorni"
   },
-  "tp_outof": {
-   "en": "out of 5 from more than 34,000 reviews",
-   "nl": "uit 5 op basis van meer dan 34.000 reviews",
-   "fr": "sur 5 sur plus de 34 000 avis",
-   "de": "von 5 aus mehr als 34.000 Bewertungen",
-   "es": "sobre 5 de más de 34.000 opiniones",
-   "it": "su 5 su oltre 34.000 recensioni"
-  },
   "tp_alt": {
    "en": "Rated 4.5 out of 5 on Trustpilot",
    "nl": "Beoordeeld met 4,5 uit 5 op Trustpilot",
@@ -3011,6 +3805,22 @@
    "de": "Visitenkarten mit Goldfolienveredelung",
    "es": "Tarjetas de visita con acabado en foil dorado",
    "it": "Biglietti da visita con finitura in lamina oro"
+  },
+  "reviews_h": {
+   "en": "What <em>real customers</em> tell us",
+   "nl": "Wat <em>echte klanten</em> zeggen",
+   "fr": "Ce que disent <em>de vrais clients</em>",
+   "de": "Was <em>echte Kunden</em> sagen",
+   "es": "Lo que dicen <em>clientes reales</em>",
+   "it": "Cosa dicono <em>i clienti veri</em>"
+  },
+  "score_line": {
+   "en": "4.5 out of 5 from more than 34,000 reviews by businesses like yours.",
+   "nl": "4,5 uit 5 op basis van meer dan 34.000 reviews van bedrijven zoals dat van jou.",
+   "fr": "4,5 sur 5 sur plus de 34 000 avis d'entreprises comme la vôtre.",
+   "de": "4,5 von 5 aus mehr als 34.000 Bewertungen von Unternehmen wie Ihrem.",
+   "es": "4,5 sobre 5 de más de 34.000 opiniones de empresas como la tuya.",
+   "it": "4,5 su 5 su oltre 34.000 recensioni di aziende come la tua."
   }
  },
  "welcome-04": {
@@ -3189,6 +3999,22 @@
    "de": "Oder antworten Sie einfach auf diese E-Mail. Sie erreicht das Team.",
    "es": "O responde a este correo. Le llega al equipo.",
    "it": "Oppure rispondi a questa email. Arriva al team."
+  },
+  "alt_desks": {
+   "en": "Helloprint advisers at their desks",
+   "nl": "Helloprint-adviseurs aan hun bureau",
+   "fr": "Des conseillers Helloprint à leur poste",
+   "de": "Helloprint-Berater an ihren Schreibtischen",
+   "es": "Asesores de Helloprint en sus puestos",
+   "it": "Consulenti Helloprint alle loro scrivanie"
+  },
+  "alt_john": {
+   "en": "John, print expert at Helloprint",
+   "nl": "John, printexpert bij Helloprint",
+   "fr": "John, expert en impression chez Helloprint",
+   "de": "John, Druckexperte bei Helloprint",
+   "es": "John, experto en impresión en Helloprint",
+   "it": "John, esperto di stampa in Helloprint"
   }
  }
 }

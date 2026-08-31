@@ -94,14 +94,19 @@ BANDS = discount.Bands(RATE, discount.every(25, SPLIT, 1000)
 def figure_live(cur):
     return BANDS.figure_live(cur)
 
-def clause_live(cur):
+_EN_TR = i18n.translator('order-03-high', False, 'en-GB')
+
+def clause_live(cur, tr):
     # a fragment, closed by the expiry in the gift panel. Empty below the split,
     # which this branch never sees, but the sentence still reads if it happens.
-    return BANDS.wrap_live("Worth at least " + figure_live(cur) + " on this basket &middot; ")
+    return BANDS.wrap_live(
+        tr("ord.worth_at_least", "Worth at least {amt} on this basket &middot; ")
+        .replace("{amt}", figure_live(cur)))
 
-def clause_sample(total, cur):
+def clause_sample(total, cur, tr):
     n = BANDS.figure_sample(total, cur)
-    return "" if n is None else "Worth at least " + n + " on this basket &middot; "
+    return "" if n is None else tr(
+        "ord.worth_at_least", "Worth at least {amt} on this basket &middot; ").replace("{amt}", n)
 
 CUR_LIVE = '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}'
 
@@ -109,7 +114,7 @@ SAMPLE_TOTAL = 237.33
 SAMPLE = {
     "CHECKOUT_URL": "https://www.helloprint.com/en-ie/basket",
     "CUR": "&euro;", "TOTAL": "237.33", "NUM": "4",
-    "SAVE_CLAUSE": clause_sample(SAMPLE_TOTAL, "&euro;"),
+    "SAVE_CLAUSE": None,  # build()
     "UNSUB": '<a href="#">{T_FOOT_UNSUB}</a>',
 }
 LIVE = {
@@ -119,8 +124,8 @@ LIVE = {
     "CUR": CUR_LIVE,
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
     "NUM": "{{ event.Items|length }}",
-    "SAVE_CLAUSE": clause_live(CUR_LIVE),
-    "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
+    "SAVE_CLAUSE": None,  # build()
+    "UNSUB": None,
 }
 
 # the four Welcome products at undiscounted prices, posters doubled, so the
@@ -140,12 +145,10 @@ SAMPLE_LINES = [
      "https://www.helloprint.com/en-ie/budgetrollupbanners"),
 ]
 
-QUICK = [
-    ("A print expert can still go through it with you",
-     "Reply to this email, or use the chat. Nothing about the order changes while you wait for an answer."),
-    ("Nothing is charged until you confirm",
-     "The code comes off at the last step, so you see the final number before you commit to it."),
-]
+# keys, not slots: see the note in build_order_02_low.py
+QUICK = [("q0h", "q0b"), ("ord.nothing_charged", "q1b")]
+EN = dict({k: v["en"] for k, v in i18n.data()["order-03-high"].items()},
+          **{k: v["en"] for k, v in i18n.data()["_shared"].items()})
 
 CSS = """
 .%(P)s-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
@@ -234,9 +237,10 @@ _lines[_lines.index("@@BASKET_CSS@@")] = basket.css(P)
 _lines[_lines.index("@@BASKET_CSS_M@@")] = basket.css_mobile(P)
 CSS = "\n".join(_lines)
 
-def quick(a):
+def quick(a, tr):
     rows = ""
-    for t, b in QUICK:
+    for tk, bk in QUICK:
+        t, b = tr(tk, EN[tk]), tr(bk, EN[bk])
         rows += ('<tr><td class="%s-qtick" valign="top"><img src="%s" alt="" width="22" height="22"></td>'
                  '<td class="%s-qtx" valign="top">'
                  '<p class="%s-qttl">%s</p><p class="%s-qbody">%s</p></td></tr>'
@@ -248,7 +252,7 @@ BODY = """
 <div class="{P}-root">
 <style>{CSS}</style>
 
-<div class="{P}-pre">John can still go through this with you, and he has put 10% off on your basket.</div>
+<div class="{P}-pre">{T_PRE}</div>
 
 <div class="{P}-wrap">
   <div class="{P}-shell">
@@ -260,9 +264,9 @@ BODY = """
     <div class="{P}-hero">
       <span class="{P}-eyebrow">{T_EYEBROW}</span>
       <h1 class="{P}-h1">{T_H1}</h1>
-      <p class="{P}-sub">An order this size is worth ten minutes of someone else&rsquo;s time before you pay for it.</p>
+      <p class="{P}-sub">{T_H1}</p>
       <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
-      <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">or speak to a print expert</a></p>
+      <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">{T_ORD_OR_EXPERT}</a></p>
     </div>
 
     <div class="{P}-note">
@@ -275,12 +279,12 @@ BODY = """
           </td>
         </tr>
       </table>
-      <p class="{P}-ntx">I have specced print for over twenty years, and on orders around this size there is nearly always one detail worth a second look: a quantity that costs less at the next step up, a finish that will not survive the job, a date that is tighter than it needs to be.</p>
-      <p class="{P}-ntx">Send it over before you order and I will go through it. And to make the decision a bit easier, here is 10% off from me:</p>
+      <p class="{P}-ntx">{T_JOHN_QUOTE}</p>
+      <p class="{P}-ntx">{T_JOHN_OFFER}</p>
 
       <div class="{P}-gift">
         <span class="{P}-giftlbl">{T_CODE_LABEL}</span>
-        <span class="{P}-code">Use code <strong>{CODE}</strong></span>
+        <span class="{P}-code">{T_ORD_USE_CODE} <strong>{CODE}</strong></span>
         <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="13" height="13">{SAVE_CLAUSE}expires {HOURS}&nbsp;hours after this email</span>
       </div>
 
@@ -291,21 +295,21 @@ BODY = """
 
     <div class="{P}-mid">
       <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
-      <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">or send it to John first</a></p>
+      <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">{T_OR_JOHN}</a></p>
     </div>
 
     <div class="{P}-q">{QUICK}</div>
 
     <div class="{P}-last">
       <span class="{P}-lastttl">{T_DONE_H}</span>
-      <p class="{P}-lasttx">This is the last email we will send about this basket. It stays saved for whenever the job comes back around, and the offer to look at it with you does not expire.</p>
+      <p class="{P}-lasttx">{T_LAST_NOTE}</p>
     </div>
 
     <div class="{P}-help">
-      <img src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
+      <img src="{IMG_AGENTS}" alt="{T_ALT_CS_AGENTS}" width="112" height="44">
       <span class="{P}-helpttl">{T_STUCK_H}</span>
       <span class="{P}-helplinks">
-        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+        <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">{T_HELP_EMAIL_SHORT}</a>
       </span>
     </div>
 
@@ -332,6 +336,20 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('pre', 'John can still go through this with you, and he has put 10% off on your basket.'),
+    ('h1', 'An order this size is worth ten minutes of someone else&rsquo;s time before you pay for it.'),
+    ('john_quote', 'I have specced print for over twenty years, and on orders around this size there is nearly always one detail worth a second look: a quantity that costs less at the next step up, a finish that will not survive the job, a date that is tighter than it needs to be.'),
+    ('john_offer', 'Send it over before you order and I will go through it. And to make the decision a bit easier, here is 10% off from me:'),
+    ('or_john', 'or send it to John first'),
+    ('q0h', 'A print expert can still go through it with you'),
+    ('q0b', 'Reply to this email, or use the chat. Nothing about the order changes while you wait for an answer.'),
+    ('q1b', 'The code comes off at the last step, so you see the final number before you commit to it.'),
+    ('last_note', 'This is the last email we will send about this basket. It stays saved for whenever the job comes back around, and the offer to look at it with you does not expire.'),
+    ('ord.use_code', 'Use code'),
+    ('ord.nothing_charged', 'Nothing is charged until you confirm'),
+    ('ord.or_expert', 'or speak to a print expert'),
+    ('help.email_short', 'E-mail'),
+    ('alt.cs_agents', 'Three Helloprint customer service agents'),
     ('ord.finish', 'Finish the job'),
     ('foot.unsub', 'Unsubscribe'),
     ('eyebrow', 'LAST ONE FROM US'),
@@ -351,10 +369,18 @@ def build(bindings, assets, lines, live=False, locale=None):
     tr = i18n.translator('order-03-high', live, locale)
     vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
             for _k, _e in TRANSLATED}
-    vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets), "CODE": CODE, "HOURS": HOURS,
+    vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets, tr), "CODE": CODE, "HOURS": HOURS,
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
                                  bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
+    # UNSUB is None in both binding tables on purpose. Its text has to pass
+    # through the translator, and a placeholder written into a binding value
+    # is never substituted, because str.format does not recurse.
+    vals["SAVE_CLAUSE"] = (clause_live(CUR_LIVE, tr) if live
+                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr))
+    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+                     if live else
+                     '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>
@@ -450,7 +476,7 @@ if not BANDS.covers(SPLIT):
     errs.append("a cart exactly on the split would get no figure")
 for t in (150.0, 237.33, 1000.0):
     n = BANDS.figure_sample(t, "E")
-    if n is None or n not in clause_sample(t, "E"):
+    if n is None or n not in clause_sample(t, "E", _EN_TR):
         errs.append("no saving figure at %.2f" % t)
 
 # THE CODE IS JOHN'S TO GIVE. It must sit inside his note - between his opening

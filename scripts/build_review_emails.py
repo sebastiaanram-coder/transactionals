@@ -248,7 +248,7 @@ BODY = """
       <p class="{P}-bandh">{BAND_H}</p>
       <p class="{P}-bandb">{BAND_B}</p>
       <span class="{P}-bandlinks">
-        <a href="mailto:hello@helloprint.com">E-mail us</a><span>&middot;</span><a href="{CS}">{BAND_LINK}</a>
+        <a href="mailto:hello@helloprint.com">{T_HELP_EMAIL_US}</a><span>&middot;</span><a href="{CS}">{BAND_LINK}</a>
       </span>
     </div>
 
@@ -327,6 +327,7 @@ def build(e, live, locale=None):
     vals = dict(
         P=P, CSS=CSS % {"P": P},
         EYEBROW=tr("eyebrow", e["eyebrow"]), H1=tr("h1", e["h1"]),
+        T_HELP_EMAIL_US=tr("help.email_us", "E-mail us"),
         SUB=tr("sub", e["sub"]), PRE=tr("pre", e["pre"]),
         CTA=tr("review.cta", SHARED["cta"]),
         HERO_IMG=photo(e["hero"], live),

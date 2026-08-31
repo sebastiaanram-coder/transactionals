@@ -114,9 +114,19 @@ def locale_switch(name, which, esc=lambda x: x):
     return out + "{%% else %%}%s{%% endif %%}" % esc(fb or "")
 
 
-def preview_field(name, which):
-    """What the preview shows: the Irish English version."""
-    return field(name, "en-IE", which) or field(name, FALLBACK, which) or ""
+def preview_field(name, which, locale=None):
+    """What the preview shows, in the locale being previewed.
+
+    Defaulting to en-IE is what made every translated preview show English
+    product names under translated headings: the copy around the tile was
+    translated and the tile itself was not.
+    """
+    # LOCALE_MAP, not the raw locale: the store keys Dutch as "nl" and Italian
+    # as "it", so passing "nl-NL" straight through missed every record and fell
+    # back to English, which is exactly the bug this argument exists to fix.
+    loc = LOCALE_MAP.get(locale or "en-IE", locale or "en-IE")
+    return (field(name, loc, which) or field(name, "en-IE", which)
+            or field(name, FALLBACK, which) or "")
 
 
 def market_path(cf_locale):

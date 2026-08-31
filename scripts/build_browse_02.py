@@ -47,7 +47,7 @@ LIVE = {
     "PROD_URL":   "{{ catalog_item.url }}",
     "PROD_TITLE": "{{ catalog_item.title }}",
     "PROD_IMG":   "{{ catalog_item.featured_image.full.src }}",
-    "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
+    "UNSUB": None,
 }
 _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
@@ -252,7 +252,7 @@ BODY = """
         <p class="{P}-sub">{T_SUB}</p>
         <a class="{P}-cta" href="{PROD_URL}">{T_BR_BACK}</a>
       </div>
-      <img class="{P}-heroimg" src="{IMG_HERO}" alt="Helloprint colleagues checking customer print files on screen" width="600">
+      <img class="{P}-heroimg" src="{IMG_HERO}" alt="{T_ALT_CHECKING}" width="600">
     </div>
 
     <a class="{P}-anchor" href="{PROD_URL}">
@@ -262,7 +262,7 @@ BODY = """
           <span class="{P}-anlbl">{T_BR_JOBTITLE}</span>
           <span class="{P}-anname">{PROD_TITLE}</span>
         </td>
-        <td class="{P}-anlink" valign="middle">View product &rarr;</td>
+        <td class="{P}-anlink" valign="middle">{T_CTA_VIEW_PROD} &rarr;</td>
       </tr></table>
     </a>
 
@@ -271,7 +271,7 @@ BODY = """
       <h2 class="{P}-secttl">{T_SECT_H}</h2>
       <p class="{P}-sectsub">{T_SECT_SUB}</p>
       {ROUTES}
-      <p class="{P}-tplline">{T_TEMPLATES}<br><a href="{PROD_URL}">Get the ones for {PROD_TITLE} &rarr;</a></p>
+      <p class="{P}-tplline">{T_TEMPLATES}<br><a href="{PROD_URL}">{T_GET_ONES} &rarr;</a></p>
     </div>
 
     <!-- plain language on purpose: no bleed, no dpi, no CMYK -->
@@ -286,7 +286,7 @@ BODY = """
     <div class="{P}-prem">
       <span class="{P}-premlbl">{T_PREMIUM_EYEBROW}</span>
       <h2 class="{P}-premttl">{T_PREMIUM_H}</h2>
-      <p class="{P}-premtx">Every file gets an automatic check at no cost. For a little extra at checkout, one of our print experts goes through it by hand as well.</p>
+      <p class="{P}-premtx">{T_CHECK_BODY}</p>
       {PREMIUM}
       <p class="{P}-premnote">{T_PREMIUM_SUB}</p>
     </div>
@@ -294,14 +294,14 @@ BODY = """
     <div class="{P}-help">
       <img class="{P}-helpav" src="{AV_DESIGNER}" alt="" width="64" height="64">
       <span class="{P}-helpttl">{T_ASK_H}</span>
-      <p class="{P}-helptx">Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.</p>
+      <p class="{P}-helptx">{T_DESIGN_BODY}</p>
       <span class="{P}-helplinks">
         <a href="mailto:hello@helloprint.com">{T_ASK_MAIL}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/always-a-perfect-design">{T_ASK_HOW}</a>
       </span>
     </div>
 
     <div class="{P}-mid">
-      <a class="{P}-cta-g" href="{PROD_URL}">Back to your product</a>
+      <a class="{P}-cta-g" href="{PROD_URL}">{T_CTA_BACK_PROD}</a>
       <p class="{P}-midnote">{T_BR_REPLY}</p>
     </div>
 
@@ -331,6 +331,12 @@ BODY = """
 
 
 TRANSLATED = [
+    ('get_ones', 'Get the ones for {p}'),
+    ('check_body', 'Every file gets an automatic check at no cost. For a little extra at checkout, one of our print experts goes through it by hand as well.'),
+    ('design_body', 'Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.'),
+    ('cta.back_prod', 'Back to your product'),
+    ('alt_checking', 'Helloprint colleagues checking customer print files on screen'),
+    ('cta.view_prod', 'View product'),
     ('foot.unsub', 'Unsubscribe'),
     ('eyebrow', 'ARTWORK'),
     ('pre', 'Order now and send your file later. Nothing goes on press until it has been checked.'),
@@ -362,6 +368,14 @@ def build(bindings, assets, live=False, locale=None):
     for _k, _e in TRANSLATED:
         vals["T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper())] = tr(_k, _e)
     vals.update(bindings); vals.update(assets)
+    # UNSUB is None in both binding tables on purpose. Its text has to pass
+    # through the translator, and a placeholder written into a binding value
+    # is never substituted, because str.format does not recurse.
+    # the product name is catalogue data, so it is inserted after translation
+    vals["T_GET_ONES"] = vals["T_GET_ONES"].replace("{p}", vals["PROD_TITLE"])
+    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+                     if live else
+                     '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>

@@ -60,7 +60,7 @@ LIVE = {
     "CUR": '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}',
     "TOTAL": '{{ event|lookup:"$value"|floatformat:2 }}',
     "NUM": "{{ event.Items|length }}",
-    "UNSUB": "{% unsubscribe 'Unsubscribe' %}",
+    "UNSUB": None,
 }
 
 # the four Welcome products at undiscounted prices, so the example basket is one
@@ -80,15 +80,13 @@ SAMPLE_LINES = [
      "https://www.helloprint.com/en-ie/budgetrollupbanners"),
 ]
 
+EN = {k: v['en'] for k, v in i18n.data()['order-02-high'].items()}
+
 EXPERT_ROWS = [
-    ("Check the spec suits the job",
-     "Forty years in the graphic trade sits behind the desk. Not the artwork check, but whether the paper, size and finish are right for what it is actually for."),
-    ("Confirm the delivery date",
-     "Most products go out for next-day delivery where possible. If a date cannot be met you will be told plainly, rather than find out later."),
-    ("Pay on invoice, not by card",
-     "Plenty of our business customers pay on invoice rather than putting it on a card. If that is not switched on for your account yet, the team can look at it for you."),
-    ("Tell you if the quantity is wrong",
-     "Print gets cheaper per unit as the run grows. On an order this size the next quantity break may cost less than what is in the basket now."),
+    ("spec_h", "spec_body"),
+    ("date_h", "date_body"),
+    ("inv_h", "inv_body"),
+    ("qty_h", "qty_body"),
 ]
 
 CSS = """
@@ -159,9 +157,10 @@ CSS = """
 """ % {"P": P}
 CSS = CSS.replace("@@BASKET_CSS@@", basket.css(P)).replace("@@BASKET_CSS_M@@", basket.css_mobile(P))
 
-def expert_rows(a):
+def expert_rows(a, tr):
     rows = ""
-    for t, b in EXPERT_ROWS:
+    for tk, bk in EXPERT_ROWS:
+        t, b = tr(tk, EN[tk]), tr(bk, EN[bk])
         rows += ('<tr><td class="%s-rstick" valign="top">'
                  '<img src="%s" alt="" width="22" height="22"></td>'
                  '<td class="%s-rstx" valign="top">'
@@ -190,10 +189,10 @@ BODY = """
         <p class="{P}-sub">{T_SUB}</p>
         <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
       </div>
-      <img class="{P}-heroimg" src="{IMG_HERO}" alt="The Helloprint print expert team" width="600">
+      <img class="{P}-heroimg" src="{IMG_HERO}" alt="{T_ALT_TEAM}" width="600">
     </div>
 
-    <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">or speak to a print expert</a></p>
+    <p class="{P}-subcta"><a href="mailto:hello@helloprint.com">{T_ORD_OR_EXPERT}</a></p>
 
     {BASKET}
 
@@ -243,6 +242,16 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('spec_h', 'Check the spec suits the job'),
+    ('spec_body', 'Forty years in the graphic trade sits behind the desk. Not the artwork check, but whether the paper, size and finish are right for what it is actually for.'),
+    ('date_h', 'Confirm the delivery date'),
+    ('date_body', 'Most products go out for next-day delivery where possible. If a date cannot be met you will be told plainly, rather than find out later.'),
+    ('inv_h', 'Pay on invoice, not by card'),
+    ('inv_body', 'Plenty of our business customers pay on invoice rather than putting it on a card. If that is not switched on for your account yet, the team can look at it for you.'),
+    ('qty_h', 'Tell you if the quantity is wrong'),
+    ('qty_body', 'Print gets cheaper per unit as the run grows. On an order this size the next quantity break may cost less than what is in the basket now.'),
+    ('alt_team', 'The Helloprint print expert team'),
+    ('ord.or_expert', 'or speak to a print expert'),
     ('ord.finish', 'Finish the job'),
     ('foot.unsub', 'Unsubscribe'),
     ('pre', 'A print expert can check the spec, confirm the date, and sort invoicing before you pay.'),
@@ -263,10 +272,16 @@ def build(bindings, assets, lines, live=False, locale=None):
     tr = i18n.translator('order-02-high', live, locale)
     vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
             for _k, _e in TRANSLATED}
-    vals.update({"P": P, "CSS": CSS, "ROWS": expert_rows(assets),
+    vals.update({"P": P, "CSS": CSS, "ROWS": expert_rows(assets, tr),
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
                                  bindings["TOTAL"], tr)})
     vals.update(bindings); vals.update(assets)
+    # UNSUB is None in both binding tables on purpose. Its text has to pass
+    # through the translator, and a placeholder written into a binding value
+    # is never substituted, because str.format does not recurse.
+    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+                     if live else
+                     '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>

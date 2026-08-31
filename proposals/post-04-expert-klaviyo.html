@@ -124,7 +124,7 @@
           <td class="hp-pex-sav" valign="middle"><img src="https://REPLACE-WITH-KLAVIYO-ASSET/welcome-04-john-avatar.jpg" alt="John" width="62" height="62"></td>
           <td class="hp-pex-smeta" valign="middle">
             <span class="hp-pex-sname">John</span>
-            <span class="hp-pex-srole">PRINT EXPERT TEAM</span>
+            <span class="hp-pex-srole">{% if event.Locale == 'en-IE' %}PRINT EXPERT TEAM{% elif event.Locale == 'en-GB' %}PRINT EXPERT TEAM{% elif event.Locale == 'nl-NL' %}PRINTEXPERT-TEAM{% elif event.Locale == 'nl-BE' %}PRINTEXPERT-TEAM{% elif event.Locale == 'fr-FR' %}ÉQUIPE D'EXPERTS EN IMPRESSION{% elif event.Locale == 'fr-BE' %}ÉQUIPE D'EXPERTS EN IMPRESSION{% elif event.Locale == 'de-DE' %}DRUCKEXPERTEN-TEAM{% elif event.Locale == 'es-ES' %}EQUIPO DE EXPERTOS EN IMPRESIÓN{% elif event.Locale == 'it-IT' %}TEAM ESPERTI DI STAMPA{% else %}PRINT EXPERT TEAM{% endif %}</span>
             <a class="hp-pex-smail" href="mailto:hello@helloprint.com">hello@helloprint.com</a>
           </td>
         </tr>

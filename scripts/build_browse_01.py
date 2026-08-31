@@ -47,8 +47,11 @@ SAMPLE = {
     "PROD_UNIT":  "units",
     # preset quantity of 1 is common (all the banners), and "for 1 units" is
     # wrong, so the whole phrase is conditional and drops out at qty 1
-    "QTY_PHRASE": "for 1000 units &middot; ",
-    "UNSUB":      '<a href="#">{T_FOOT_UNSUB}</a>',
+    "QTY_PHRASE": None,  # filled in build(), see UNSUB
+    # filled in build(): a placeholder left inside a PREVIEW value
+    # never gets substituted, because str.format does not recurse into the
+    # text it just inserted. It shipped as literal {T_FOOT_UNSUB} in 54 files.
+    "UNSUB":      None,
     "XSELL":      None,  # filled in build()
 }
 
@@ -62,10 +65,8 @@ LIVE = {
     "PROD_PRICE": "{{ catalog_item.metadata.from_price|floatformat:2 }}",
     "PROD_QTY":   "{{ catalog_item.metadata.min_order_quantity|floatformat:0 }}",
     "PROD_UNIT":  "{{ catalog_item.metadata.unit }}",
-    "QTY_PHRASE": ("{% if catalog_item.metadata.min_order_quantity > 1 %}"
-                   "for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} "
-                   "{{ catalog_item.metadata.unit }} &middot; {% endif %}"),
-    "UNSUB":      "{% unsubscribe 'Unsubscribe' %}",
+    "QTY_PHRASE": None,  # filled in build(), see UNSUB
+    "UNSUB":      None,
     "XSELL":      None,  # filled in build()
 }
 
@@ -142,36 +143,47 @@ TILE = ('<a class="{P}-tile" href="{url}">'
         '<span class="{P}-tilebody">'
         '<span class="{P}-tiname">{title}</span>'
         '<span class="{P}-tiqty">{qty}</span>'
-        '<span class="{P}-tiprice">From {cur}{price}</span>'
+        '<span class="{P}-tiprice">{frm} {cur}{price}</span>'
         '</span></a>')
 
-def section(heading, cells):
+def section(heading, cells, tr):
     rows = "".join(
         '<tr><td class="%s-cellpad">%s</td><td class="%s-cellpad">%s</td></tr>'
         % (P, cells[i], P, cells[i + 1]) for i in (0, 2))
     return ('<div class="%s-xs">'
             '<h2 class="%s-xsttl">%s</h2>'
-            '<p class="%s-xssub">Prices exclude VAT and delivery.</p>'
+            '<p class="%s-xssub">%s</p>'
             '<table class="%s-grid" role="presentation" cellpadding="0" cellspacing="0">%s</table>'
-            '</div>' % (P, P, heading, P, P, rows))
+            '</div>' % (P, P, heading, P,
+                        tr("px.exvat_note", "Prices exclude VAT and delivery."),
+                        P, rows))
 
-def sample_xsell():
-    cells = [TILE.format(P=P, url=u, img=im, title=t, qty=q, cur="&euro;", price=pr)
+def sample_xsell(tr):
+    frm = tr("px.from", "From")
+    cells = [TILE.format(P=P, url=u, img=im, title=t,
+                         qty=tr("px.for_qty", "for {n} units").replace("{n}", "1000"),
+                         cur="&euro;", price=pr, frm=frm)
              for (t, u, im, q, pr) in SAMPLE_TILES]
-    return section(SAMPLE_XSELL_HEADING, cells)
+    return section(tr("xs.sizes", SAMPLE_XSELL_HEADING), cells, tr)
 
-LIVE_TILE = TILE.format(
+def live_tile(tr):
+  return TILE.format(
     P=P,
+    frm=tr("px.from", "From"),
     url="{{ catalog_item.url }}",
     img="{{ catalog_item.featured_image.full.src }}",
     title="{{ catalog_item.title }}",
+    # The unit word itself comes from the catalogue, which is already
+    # localised; only the "for N" scaffolding around it is ours to translate.
     qty=("{% if catalog_item.metadata.min_order_quantity > 1 %}"
-         "for {{ catalog_item.metadata.min_order_quantity|floatformat:0 }} "
-         "{{ catalog_item.metadata.unit }}{% else %}&nbsp;{% endif %}"),
+         + tr("px.for_qty", "for {n} units").replace(
+             "{n}", "{{ catalog_item.metadata.min_order_quantity|floatformat:0 }}")
+         + " {{ catalog_item.metadata.unit }}"
+         + "{% else %}&nbsp;{% endif %}"),
     cur="{% if catalog_item.metadata.currency == 'GBP' %}&pound;{% else %}&euro;{% endif %}",
     price="{{ catalog_item.metadata.from_price|floatformat:2 }}")
 
-def live_cell(slug):
+def live_cell(slug, tr):
     """Build the id from the recipient's own market prefix, and swap in the
     fallback if this tile would show the product they were just looking at."""
     mk = 'event.ProductID|slice:":3"|add:"%s"'
@@ -180,13 +192,16 @@ def live_cell(slug):
             '{%% else %%}'
             '{%% catalog %s %%}%s{%% endcatalog %%}'
             '{%% endif %%}'
-            % (slug, mk % XSELL_FALLBACK, LIVE_TILE, mk % slug, LIVE_TILE))
+            % (slug, mk % XSELL_FALLBACK, live_tile(tr), mk % slug, live_tile(tr)))
 
-def live_xsell():
+def live_xsell(tr):
     out = ""
     for cond, heading, slugs in XSELL_SETS:
-        out += "{%% if %s %%}%s{%% else %%}" % (cond, section(heading, [live_cell(x) for x in slugs]))
-    out += section(XSELL_DEFAULT[0], [live_cell(x) for x in XSELL_DEFAULT[1]])
+        out += "{%% if %s %%}%s{%% else %%}" % (
+            cond, section(tr("xs.sizes", heading),
+                          [live_cell(x, tr) for x in slugs], tr))
+    out += section(tr("xs.also", XSELL_DEFAULT[0]),
+                   [live_cell(x, tr) for x in XSELL_DEFAULT[1]], tr)
     out += "{% endif %}" * len(XSELL_SETS)
     return out
 
@@ -341,9 +356,9 @@ BODY = """
         <td class="{P}-pimgcell" valign="middle"><img class="{P}-pimg" src="{PROD_IMG}" alt="{PROD_TITLE}" width="126"></td>
         <td class="{P}-pbody" valign="middle">
           <span class="{P}-pname">{PROD_TITLE}</span>
-          <span class="{P}-pprice">From {CUR}{PROD_PRICE}</span>
-          <span class="{P}-pqty">{QTY_PHRASE}excl. VAT and delivery</span>
-          <span class="{P}-plink">View product &rarr;</span>
+          <span class="{P}-pprice">{T_PX_FROM} {CUR}{PROD_PRICE}</span>
+          <span class="{P}-pqty">{QTY_PHRASE}{T_PX_EXVAT}</span>
+          <span class="{P}-plink">{T_CTA_VIEW_PROD} &rarr;</span>
         </td>
       </tr></table>
     </a>
@@ -410,7 +425,7 @@ BODY = """
 
     <!-- help -->
     <div class="{P}-help">
-      <img class="{P}-help-agents" src="{IMG_AGENTS}" alt="Three Helloprint customer service agents" width="112" height="44">
+      <img class="{P}-help-agents" src="{IMG_AGENTS}" alt="{T_ALT_CS_AGENTS}" width="112" height="44">
       <span class="{P}-helpttl">{T_SECT2_H}</span>
       <span class="{P}-helplinks">
         <a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CHAT}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/cs">{T_HELP_CENTRE}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
@@ -444,6 +459,10 @@ BODY = """
 # the source of record: i18n compares it against data/translations.json and fails
 # the build if the two have drifted apart.
 TRANSLATED = [
+    ('alt.cs_agents', 'Three Helloprint customer service agents'),
+    ('px.from', 'From'),
+    ('px.exvat', 'excl. VAT and delivery'),
+    ('cta.view_prod', 'View product'),
     ('tp.alt_stars', 'Rated 4.5 out of 5 stars on Trustpilot'),
     ('tp.score_line', '<em>4.5</em> out of 5 on Trustpilot'),
     ('help.chat', 'Chat with us'),
@@ -478,6 +497,19 @@ def build(bindings, assets, xsell, live=False, locale=None):
     vals.update(bindings)
     vals.update(assets)
     vals["XSELL"] = xsell
+    # UNSUB is None in both binding tables on purpose. Its text has to pass
+    # through the translator, and a placeholder written into a binding value
+    # is never substituted, because str.format does not recurse.
+    vals["QTY_PHRASE"] = (
+        tr("px.for_qty", "for {n} units").replace("{n}", "1000") + " &middot; "
+        if not live else
+        "{% if catalog_item.metadata.min_order_quantity > 1 %}"
+        + tr("px.for_qty", "for {n} units").replace(
+            "{n}", "{{ catalog_item.metadata.min_order_quantity|floatformat:0 }}")
+        + " {{ catalog_item.metadata.unit }} &middot; {% endif %}")
+    vals["UNSUB"] = (("{%% unsubscribe '%s' %%}" % tr("foot.unsub", "Unsubscribe"))
+                     if live else
+                     '<a href="#">%s</a>' % tr("foot.unsub", "Unsubscribe"))
     return BODY.format(**vals)
 
 PREVIEW_DOC = """<!DOCTYPE html>
@@ -533,15 +565,15 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS, sample_xsell(), False)
+prev_body = build(SAMPLE, SAMPLE_ASSETS, sample_xsell(i18n.translator('browse-01', False, None)), False)
 for _lg in i18n.LANGS:
     if _lg == i18n.SOURCE:
         continue
     _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
     open(os.path.join(OUT, "browse-01-%s-proposed.html" % _lg), "w",
          encoding="utf-8").write(
-             PREVIEW_DOC % build(SAMPLE, SAMPLE_ASSETS, sample_xsell(), False, _loc))
-live_body = build(LIVE, LIVE_ASSETS, live_xsell(), True)
+             PREVIEW_DOC % build(SAMPLE, SAMPLE_ASSETS, sample_xsell(i18n.translator('browse-01', False, _loc)), False, _loc))
+live_body = build(LIVE, LIVE_ASSETS, live_xsell(i18n.translator('browse-01', True)), True)
 prev = PREVIEW_DOC % prev_body
 live = KLAVIYO_DOC % live_body
 

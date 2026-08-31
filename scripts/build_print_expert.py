@@ -212,7 +212,7 @@ BODY = """
           <td class="{P}-sav" valign="middle"><img src="{AV_JOHN}" alt="John" width="62" height="62"></td>
           <td class="{P}-smeta" valign="middle">
             <span class="{P}-sname">John</span>
-            <span class="{P}-srole">PRINT EXPERT TEAM</span>
+            <span class="{P}-srole">{T_ORD_ROLE}</span>
             <a class="{P}-smail" href="mailto:hello@helloprint.com">hello@helloprint.com</a>
           </td>
         </tr>
@@ -269,6 +269,7 @@ def build(live, locale=None):
                      for i, (q, a) in enumerate(COPY["offers"]))
     vals = dict(
         P=P, CSS=CSS % {"P": P}, PRE=tr("pre", COPY["pre"]),
+        T_ORD_ROLE=tr("ord.role", "PRINT EXPERT TEAM"),
         GREET=greeting(live, tr), OPENING=opening, OFFERS=offers,
         CLOSING=tr("closing", COPY["closing"]),
         LINK=tr("link", COPY["link"]),
@@ -417,7 +418,9 @@ if "{% if first_name %}" not in livb: errs.append("the greeting is not guarded")
 if "Hi there" not in livb: errs.append("no fallback greeting")
 # and the signature has to be there, in both builds
 for name, doc in (("preview", prev), ("klaviyo", livb)):
-    for part in ("%s-sigrule" % P, "%s-sname" % P, ">John<", "PRINT EXPERT TEAM"):
+    # the role is a nine-way switch now, so check the English branch of it
+    for part in ("%s-sigrule" % P, "%s-sname" % P, ">John<",
+                 i18n.data()["_shared"]["ord.role"]["en"]):
         if part not in doc:
             errs.append("%s: signature is missing %s" % (name, part))
 
