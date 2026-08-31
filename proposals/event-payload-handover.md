@@ -2,8 +2,9 @@
 
 **For:** whoever owns the Klaviyo event payloads on presta and on v4 / Helloprint One.
 **From:** Sebastiaan Ram, behavioural email programme.
-**Date:** 27 August 2026.
-**Status:** three asks, and two fixes on our own side. Two of the asks block
+**Date:** 27 August 2026. Ask 1 rewritten 31 August 2026.
+**Status:** three asks, and two fixes on our own side. Ask 1 has been replaced
+with a smaller one that covers more; Asks 2 and 3 are unchanged and still block
 emails that are otherwise finished.
 
 ---
@@ -101,7 +102,7 @@ n=100: presta 87, v4 13.
 
 | Field | Overall | presta | v4 | Needed for |
 |---|---|---|---|---|
-| `Locale` | **100/100** | 87/87 | 13/13 | translating all 10 emails |
+| `Locale` | **100/100** | 87/87 | 13/13 | nothing now — see Ask 1. Kept as a record: this event was the reason the event route looked viable |
 | `Categories` | **61/100** | 61/87 (70%) | **0/13** | choosing which of the 5 category nudges |
 | `Items` | 13/100 | 0/87 | 13/13 | not used by these emails |
 
@@ -122,7 +123,7 @@ n=100: presta 96, unattributed 4.
 | `CheckoutURL` | **100/100** | the link back to the basket |
 | `Items` | **100/100** | the basket contents |
 | `Categories` | 75/100 | copy angle only, not routing |
-| `Locale` | **0/100** | translating |
+| `Locale` | **0/100** | nothing now — see Ask 1, the locale comes from the profile |
 
 `Items` entries, measured across all 150 item lines in the 100 events:
 
@@ -143,24 +144,72 @@ n=100: presta 88, unattributed 12.
 | `ProductID` | **100/100** | catalogue lookup |
 | `Categories` | **100/100** | copy angle |
 | `ProductName` | **100/100** | fallback label |
-| `Locale` | **0/100** | translating |
+| `Locale` | **0/100** | nothing now — see Ask 1, the locale comes from the profile |
 
 ---
 
 ## 5. The asks
 
-### Ask 1 — `Locale` on `Started Checkout` and `Viewed Product`
-**Blocks 9 of 24 emails from leaving Ireland.**
+### Ask 1 — one locale on the PROFILE, and unset the custom one
+**WITHDRAWN AND REPLACED, 31 August 2026.** This used to ask for `Locale` on
+`Started Checkout` and `Viewed Product`. It is a smaller ask now and it covers
+more: all 24 emails instead of nine.
 
-It is absent from both events entirely, 0 of 100 each. Those nine emails
-therefore carry hardcoded `/en-ie/` links and no locale conditionals at all,
-against 24 conditionals in a Post-Purchase email that does have `Locale`. They
-can run in Ireland and nowhere else.
+**Why it changed.** Every email now reads the locale from the profile
+(`person.locale`) rather than from the triggering event. The event was never the
+right source: a list-triggered flow has no event at all, so the Welcome emails
+resolved every one of their conditionals to nothing and would have sent in
+English to all nine locales, silently. Reading the profile fixes that, works for
+every trigger type, and can be backfilled onto existing customers where an event
+never can.
 
-- **Field:** `Locale`
-- **Format:** the same values `Placed Order` already sends, exactly:
-  `en-IE, en-GB, nl-NL, nl-BE, fr-FR, fr-BE, es-ES, it-IT`
-- **Done when:** 100% of both events carry one of those eight values.
+So `Locale` on `Started Checkout` and `Viewed Product` is **no longer needed**.
+
+**What is needed instead, and it is one field.**
+
+- **Write** the native Klaviyo profile field `locale` — the first-class field,
+  set via `attributes.locale`, not a custom property.
+- **Format:** `en-IE, en-GB, nl-NL, nl-BE, fr-FR, fr-BE, de-DE, es-ES, it-IT`.
+  Note `de-DE` is included now; DACH was added to the programme.
+- **When:** at registration AND refreshed on every order. It has to be
+  maintained, not set once: someone who signs up on nl-NL and then buys only on
+  fr-BE would otherwise keep getting Dutch forever.
+- **AND unset the custom `locale` property in the same pass. This part is not
+  optional.**
+
+**Why the custom property has to go, and why the order matters.**
+
+A custom property named `locale` **shadows** the native field. Verified by
+preview send on 31 August against a profile deliberately set to native `nl-NL`
+with a custom `properties.locale` of `it-IT`: the email rendered **Italian**.
+With the custom property unset and native unchanged, the same template rendered
+**Dutch**.
+
+Of 82 real profiles created on 31 August, **51 carried both fields**, and one
+already disagreed with itself — native `fr-FR` against custom `en-GB`. So if
+native is written first and the custom property lingers, the backfill has **no
+effect on exactly the profiles that already look correct**, and nothing errors.
+It has to be one pass.
+
+**Use `unset`, not an empty string.** An empty value is still a value and still
+shadows the native field. Via the API:
+
+```
+PATCH /api/profiles/{id}
+{ "data": { "type": "profile", "id": "...",
+    "attributes": { "locale": "nl-NL" },
+    "meta": { "patch_properties": { "unset": "locale" } } } }
+```
+
+- **Done when:** every profile that can receive marketing has a native `locale`
+  from the list above, and no profile has a custom property called `locale`.
+- **Today:** native 80% populated, custom 70%, 12% have neither. Profiles with
+  neither fall through to English, which is correct and needs no fix.
+
+**One thing to know before switching writers:** three separate systems currently
+write these fields, and they disagree about which. Registration path A writes
+both native and custom; registration path B writes only the custom one; the
+order/customer sync writes only native. All three need to write native only.
 
 ### Ask 2 — `Categories` on `Placed Order` from v4, and on the missing presta share
 **Blocks the 5 category nudges from being routed.**
@@ -243,14 +292,19 @@ before quoting a figure externally.
 Extracted from the built Klaviyo templates in `proposals/*-klaviyo.html`, so this
 is what the HTML actually references rather than what anyone intended.
 
+**Updated 31 August 2026: no email reads a locale from its event any more.** All
+24 read `person.locale` from the profile, which is why Ask 1 changed shape. What
+is listed below is what each email still needs from the EVENT.
+
 | Emails | Reads from the event |
 |---|---|
-| 5 category nudges | `Locale` — plus `Categories` in the flow's conditional split, not in the HTML |
-| post-01, post-02 | `Locale` |
-| post-04, post-05, post-06 | `Locale` |
-| 5 winback | `Locale`; three also use Klaviyo's `{% catalog person %}` recommendation engine, which needs no event data |
+| 5 category nudges | `Categories`, in the flow's conditional split rather than in the HTML |
+| post-01, post-02 | nothing |
+| post-04, post-05, post-06 | nothing |
+| 5 winback | nothing; three also use Klaviyo's `{% catalog person %}` recommendation engine, which needs no event data |
 | 6 abandoned order | `CheckoutURL`, `Items[ProductID, ProductName, Quantity, RowTotal]`, and `Items[ProductURL]` which is 5% populated and being removed from the templates see below |
 | 3 browse | `ProductID`; browse-01 also `Categories` |
 
-The winback flow reads nothing from any event and is not affected by anything in
-this document.
+Which means Asks 2 and 3 are the only event-payload work left: `Categories` on
+`Placed Order` for routing the category nudges, and `ProductID` on every
+`Started Checkout` item line. Ask 1 is now profile work, not event work.
