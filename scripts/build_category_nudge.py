@@ -92,9 +92,10 @@ LIVE_ASSETS = {k: "https://REPLACE-WITH-KLAVIYO-ASSET/" + v for k, v in _A.items
 #
 # The URL side is the published copy of this repo, which means the Klaviyo
 # template renders the moment it is pasted, before anyone uploads anything. IT IS
-# NOT A PRODUCTION HOST - move these into Klaviyo's asset library before the flow
-# is switched on. A live send should not depend on GitHub Pages.
-PHOTO_BASE = "https://sebastiaanram-coder.github.io/transactionals/assets/newstyle/"
+# The live build now emits the REPLACE-WITH-KLAVIYO-ASSET sentinel instead, so a
+# send can never depend on GitHub Pages: it has no host at all until the URLs
+# are swapped for uploaded ones. scripts/collect_assets.py gathers the files.
+PHOTO_BASE = "https://REPLACE-WITH-KLAVIYO-ASSET/"   # swap at upload, see scripts/collect_assets.py
 PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 

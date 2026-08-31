@@ -71,11 +71,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 ASSETS = os.path.join(ROOT, "assets")
 OUT = os.path.join(ROOT, "proposals")
-PHOTO_BASE = "https://sebastiaanram-coder.github.io/transactionals/assets/newstyle/"
+PHOTO_BASE = "https://REPLACE-WITH-KLAVIYO-ASSET/"   # swap at upload, see scripts/collect_assets.py
 PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 _A = {"IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
-      "IMG_MARK_DARK": "helloprint-logo-dark.svg",
+      "IMG_MARK_DARK": "helloprint-logo-dark.png",  # SVG does not render in email
       "AV_JOHN": "welcome-04-john-avatar.jpg",
       "IMG_TEAM": "browse-02-hero-team-checking.jpg",
       "ICON_CLOCK": "icon-clock.png"}

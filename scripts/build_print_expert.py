@@ -65,7 +65,7 @@ OUT = os.path.join(ROOT, "proposals")
 P = "hp-pex"
 
 _A = {
-    "IMG_WORDMARK": "helloprint-logo-dark.svg",
+    "IMG_WORDMARK": "helloprint-logo-dark.png",  # SVG does not render in email
     # John's avatar, the same file the high-value Abandoned Order note uses, so
     # this is recognisably the same person across the programme
     "AV_JOHN": "welcome-04-john-avatar.jpg",

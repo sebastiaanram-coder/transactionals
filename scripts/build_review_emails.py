@@ -91,7 +91,7 @@ _A = {
     "IMG_WORDMARK": "helloprint-wordmark-white-on-ink.png",
 }
 HERO = "hero-review-request"
-PHOTO_BASE = "https://sebastiaanram-coder.github.io/transactionals/assets/newstyle/"
+PHOTO_BASE = "https://REPLACE-WITH-KLAVIYO-ASSET/"   # swap at upload, see scripts/collect_assets.py
 PHOTO_DIR = os.path.join(ASSETS, "newstyle")
 
 
