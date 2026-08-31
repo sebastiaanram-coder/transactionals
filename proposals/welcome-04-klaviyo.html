@@ -24,6 +24,7 @@
 .hp-w4-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
 .hp-w4-promo{background:#008539;color:#ffffff;text-align:center;padding:11px 20px;font-size:15px;line-height:21px;font-weight:700;letter-spacing:.01em;}
 .hp-w4-promo .hp-w4-ends{font-weight:800;}
+.hp-w4-promo .hp-w4-code{font-weight:800;letter-spacing:.06em;white-space:nowrap;}
 .hp-w4-logobar{background:#191919;padding:15px 24px 13px;text-align:center;}
 .hp-w4-logobar img{width:170px;max-width:56%;height:auto;display:inline-block;border:0;}
 .hp-w4-hero{background:#191919;text-align:center;}
@@ -103,7 +104,7 @@
   <div class="hp-w4-shell">
 
     <div class="hp-w4-promo">
-      {% if person.locale == 'en-IE' %}Your 10% welcome discount{% elif person.locale == 'en-GB' %}Your 10% welcome discount{% elif person.locale == 'nl-NL' %}Je 10% welkomstkorting{% elif person.locale == 'nl-BE' %}Je 10% welkomstkorting{% elif person.locale == 'fr-FR' %}Vos 10% de bienvenue{% elif person.locale == 'fr-BE' %}Vos 10% de bienvenue{% elif person.locale == 'de-DE' %}Ihre 10% Willkommensrabatt{% elif person.locale == 'es-ES' %}Tu 10% de bienvenida{% elif person.locale == 'it-IT' %}Il tuo 10% di benvenuto{% else %}Your 10% welcome discount{% endif %} <span class="hp-w4-ends">{% if person.locale == 'en-IE' %}&nbsp;&middot;&nbsp;Last day!{% elif person.locale == 'en-GB' %}&nbsp;&middot;&nbsp;Last day!{% elif person.locale == 'nl-NL' %}&nbsp;&middot;&nbsp;Laatste dag!{% elif person.locale == 'nl-BE' %}&nbsp;&middot;&nbsp;Laatste dag!{% elif person.locale == 'fr-FR' %}&nbsp;&middot;&nbsp;Dernier jour !{% elif person.locale == 'fr-BE' %}&nbsp;&middot;&nbsp;Dernier jour !{% elif person.locale == 'de-DE' %}&nbsp;&middot;&nbsp;Letzter Tag!{% elif person.locale == 'es-ES' %}&nbsp;&middot;&nbsp;¡Último día!{% elif person.locale == 'it-IT' %}&nbsp;&middot;&nbsp;Ultimo giorno!{% else %}&nbsp;&middot;&nbsp;Last day!{% endif %}</span>
+      {% if person.locale == 'en-IE' %}Your 10% welcome discount{% elif person.locale == 'en-GB' %}Your 10% welcome discount{% elif person.locale == 'nl-NL' %}Je 10% welkomstkorting{% elif person.locale == 'nl-BE' %}Je 10% welkomstkorting{% elif person.locale == 'fr-FR' %}Vos 10% de bienvenue{% elif person.locale == 'fr-BE' %}Vos 10% de bienvenue{% elif person.locale == 'de-DE' %}Ihre 10% Willkommensrabatt{% elif person.locale == 'es-ES' %}Tu 10% de bienvenida{% elif person.locale == 'it-IT' %}Il tuo 10% di benvenuto{% else %}Your 10% welcome discount{% endif %} <strong class="hp-w4-code">HELLO-8DS2-10</strong> <span class="hp-w4-ends">{% if person.locale == 'en-IE' %}&nbsp;&middot;&nbsp;Last day!{% elif person.locale == 'en-GB' %}&nbsp;&middot;&nbsp;Last day!{% elif person.locale == 'nl-NL' %}&nbsp;&middot;&nbsp;Laatste dag!{% elif person.locale == 'nl-BE' %}&nbsp;&middot;&nbsp;Laatste dag!{% elif person.locale == 'fr-FR' %}&nbsp;&middot;&nbsp;Dernier jour !{% elif person.locale == 'fr-BE' %}&nbsp;&middot;&nbsp;Dernier jour !{% elif person.locale == 'de-DE' %}&nbsp;&middot;&nbsp;Letzter Tag!{% elif person.locale == 'es-ES' %}&nbsp;&middot;&nbsp;¡Último día!{% elif person.locale == 'it-IT' %}&nbsp;&middot;&nbsp;Ultimo giorno!{% else %}&nbsp;&middot;&nbsp;Last day!{% endif %}</span>
     </div>
 
     <div class="hp-w4-logobar">

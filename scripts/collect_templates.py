@@ -28,6 +28,8 @@ accepts these directly then nothing needs pasting at all, and this folder is the
 set of files to hand it.
 """
 import io, json, os, re, shutil, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
+import offers
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -94,7 +96,7 @@ def audit(name, html):
             break
     # the no-discount variants must not mention the offer
     if "no discount" in name:
-        for w in ("10%", "HELLO10"):
+        for w in ("10%", offers.WELCOME_CODE):
             if w in html:
                 out.append("is a no-discount variant but still says %r" % w)
     return out

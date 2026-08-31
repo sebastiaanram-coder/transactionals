@@ -51,6 +51,6 @@ if __name__ == '__main__':
     s = open(src, encoding='utf-8').read()
     t = strip_discount(s)
     open(out, 'w', encoding='utf-8').write(t)
-    left = len(re.findall(r'10%|HELLO10|Expires in|days left|Last day|Valid only', t))
+    left = len(re.findall(r'10%%|%s|Expires in|days left|Last day|Valid only' % re.escape(offers.WELCOME_CODE), t))
     print(f"wrote {out}")
     print(f"  discount references remaining: {left}")

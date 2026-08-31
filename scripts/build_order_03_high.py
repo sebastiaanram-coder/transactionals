@@ -47,6 +47,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import offers
 import klaviyo_assets as ka
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -417,7 +418,7 @@ KLAVIYO_DOC = """<!--
   the LOW branch: same depth, same expiry, same programme. The cost of sharing
   is that a report grouped by coupon cannot separate the two messages; grouping
   by message still can. Split it if that reporting cut is wanted. It must never
-  be HELLO10, which belongs to Welcome and carries a first-order restriction.
+  be the Welcome code, which belongs to Welcome and carries a first-order restriction.
 
   *** THE %(hours)d-HOUR EXPIRY MUST BE REAL. *** The email states it.
 
@@ -508,7 +509,8 @@ if "from me" not in live_body:
 if "%s-promo" % P in markup:
     errs.append("this branch must not carry a green offer bar above the masthead")
 
-if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused")
+if offers.WELCOME_CODE in live_body: errs.append(
+    "%s belongs to Welcome and must not be reused" % offers.WELCOME_CODE)
 if "BASKET25" in live_body: errs.append("BASKET25 is the low branch's deep offer, not this one")
 if CODE not in live_body: errs.append("the code is missing from the body")
 if "%d&nbsp;hours" % HOURS not in live_body:

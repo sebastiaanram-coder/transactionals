@@ -479,3 +479,59 @@ Note the spelling: the address is **behavioral** (US), while everything else in
 this repo is *behavioural* (UK). That is what was asked for, but a BCC to an
 address that does not exist fails quietly, so it is worth one test send to
 confirm the mailbox receives.
+
+---
+
+## The code, and the redesigned code block — 2026-08-31
+
+**`HELLO-8DS2-10`** replaces `HELLO10`. Same string in every market, one use per
+customer enforced in the commerce system, so the email does not claim it.
+
+**It is defined once**, in `scripts/_lib/offers.py`, and reaches the templates
+through an `@@CODE@@` sentinel. It is deliberately NOT in the translation store:
+a code is identical in every language, so putting it there would have meant six
+copies per email and a 24-place edit on the next rename. Changing the code is now
+one line plus `push_templates.py`.
+
+The guards moved with it. `build_order_02_low`, `build_order_03_high` and
+`build_order_03_low` each asserted the literal string `"HELLO10"` must not appear
+in their body. A guard naming a retired code protects nothing, so all three now
+assert on `offers.WELCOME_CODE`, as do `translate_welcome.DISCOUNT_WORDS`,
+`collect_templates`'s paste audit and `make-nodiscount`.
+
+### Welcome 01's hero, rebuilt on the post-purchase email 5 pattern
+
+| | before | after |
+|---|---|---|
+| eyebrow | – | `10% OFF YOUR FIRST ORDER`, green caps, letterspaced |
+| code | inline pill, code inside a sentence | labelled card: `YOUR CODE` / 26px letterspaced value / grey note line |
+| card | transparent, 8px radius, 13px text | `#212121`, 2px dashed `#9fdbb8`, 12px radius, 400px max-width |
+| under CTA | – | `Use it at checkout on anything in the range.` |
+
+**The CTA stays white, not green.** Post-purchase 05 uses a green pill because
+nothing green sits near it. In welcome-01 the green USP speech balloon sits
+directly beneath the button, and two greens stacked was the thing this layout was
+built to avoid. Everything else from that block is adopted.
+
+**The eyebrow and the CTA note sit OUTSIDE the code card**, so the no-discount
+variant had to strip all three. Stripping only the card left "10% OFF YOUR FIRST
+ORDER" as the first line of an email with no offer in it. Verified after the
+push: no code, no eyebrow, no note and no "YOUR CODE" label in any B-branch
+email.
+
+### The code now rides the green banner in emails 2, 3 and 4
+
+Has-not-ordered only — the banner is what the no-discount variant strips, so this
+cannot reach the ordered branch:
+
+```
+WEL-2  Je 10% staat nog klaar HELLO-8DS2-10 · Verloopt over 4 dagen
+WEL-3  Je 10% staat nog klaar HELLO-8DS2-10 · Nog 2 dagen
+WEL-4  Je 10% welkomstkorting HELLO-8DS2-10 · Laatste dag!
+```
+
+Email 1's banner does NOT repeat it — the code has a 26px card of its own three
+lines below, and saying it twice in one screen reads like a mistake.
+
+The code is a plain literal in the banner rather than part of the translated
+string, for the same reason as above: one place per file, not six.

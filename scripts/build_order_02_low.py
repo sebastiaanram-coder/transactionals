@@ -21,6 +21,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import offers
 import klaviyo_assets as ka
 import reviews as rv
 
@@ -30,7 +31,7 @@ ASSETS = os.path.join(ROOT, "assets")
 OUT = os.path.join(ROOT, "proposals")
 P = "hp-ao2l"
 
-# NOT YET CREATED. HELLO10 belongs to Welcome and cannot be reused here: a
+# NOT YET CREATED. the Welcome code belongs to Welcome and cannot be reused here: a
 # Welcome recipient would meet one code twice, attribution would be unusable,
 # and a first-order restriction would fail silently for returning customers.
 CODE = "BASKET10"
@@ -346,7 +347,7 @@ KLAVIYO_DOC = """<!--
   Subject   10%% off, for the next 72 hours
 
   *** THE CODE %s DOES NOT EXIST YET. *** It must be created before this
-  sends, and it must NOT be HELLO10: that belongs to Welcome, so a Welcome
+  sends, and it must NOT be the Welcome code: that belongs to Welcome, so a Welcome
   recipient would meet one code twice, attribution would be unusable, and a
   first-order restriction would fail silently for returning customers.
 
@@ -421,7 +422,8 @@ if live_else != band_sample(0.0, "E", _EN_TR):
 for frag in ("%%", "&&", "{{ {{"):
     if frag in band_live("E", _EN_TR) + clause_live("E", _EN_TR):
         errs.append("double-escape leaked into the live template: " + frag)
-if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused here")
+if offers.WELCOME_CODE in live_body: errs.append(
+    "%s belongs to Welcome and must not be reused here" % offers.WELCOME_CODE)
 if CODE not in live_body: errs.append("the code is missing from the body")
 # this branch is defined by being under the split
 if SAMPLE_TOTAL >= 150: errs.append("the sample basket must sit below the 150 split")

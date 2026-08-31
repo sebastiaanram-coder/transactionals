@@ -27,6 +27,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import offers
 import klaviyo_assets as ka
 import reviews as rv
 
@@ -38,7 +39,7 @@ P = "hp-ao3l"
 
 # NOT YET CREATED, and deliberately not BASKET10: this is a different offer at a
 # different depth, and sharing one code would make the two indistinguishable in
-# reporting. HELLO10 belongs to Welcome and must never appear here.
+# reporting. the Welcome code belongs to Welcome and must never appear here.
 CODE = "BASKET25"
 
 # The deadline panel title. Kept short on purpose: it is 15px bold in a box that
@@ -425,7 +426,7 @@ KLAVIYO_DOC = """<!--
   *** THE CODE %(code)s DOES NOT EXIST YET. *** It must be a capped percentage:
   25%%%% off up to %(cap)d off. Talon.one can express that. It must NOT be
   BASKET10 (a different offer, and reporting could not tell them apart) and must
-  never be HELLO10, which belongs to Welcome.
+  never be the Welcome code, which belongs to Welcome.
 
   *** THE %(hours)d-HOUR EXPIRY MUST BE REAL. *** The email states it twice. If
   the code outlives the sentence, the next one is not believed.
@@ -528,7 +529,8 @@ for _lg in i18n.LANGS:
     if len(_t) > MOBILE_TITLE_LIMIT:
         errs.append("the %s deadline title is %d characters, over the %d that fit "
                     "one mobile line: %r" % (_lg, len(_t), MOBILE_TITLE_LIMIT, _t))
-if "HELLO10" in live_body: errs.append("HELLO10 belongs to Welcome and must not be reused")
+if offers.WELCOME_CODE in live_body: errs.append(
+    "%s belongs to Welcome and must not be reused" % offers.WELCOME_CODE)
 if "BASKET10" in live_body: errs.append("BASKET10 is email 2's offer, not this one")
 if CODE not in live_body: errs.append("the code is missing from the body")
 if SAMPLE_TOTAL >= SPLIT: errs.append("the sample basket must sit below the %d split" % SPLIT)

@@ -3371,12 +3371,12 @@
    "it": "La stampa resa semplice, da persone che ti sostengono."
   },
   "code_line": {
-   "en": "10% off your first order with code",
-   "nl": "10% korting op je eerste bestelling met code",
-   "fr": "10% sur votre première commande avec le code",
-   "de": "10% Rabatt auf Ihre erste Bestellung mit dem Code",
-   "es": "10% en tu primer pedido con el código",
-   "it": "10% sul primo ordine con il codice"
+   "en": "10% off your first order &middot; expires in 5 days",
+   "nl": "10% korting op je eerste order &middot; verloopt over 5 dagen",
+   "fr": "10% sur votre première commande &middot; expire dans 5 jours",
+   "de": "10% auf Ihre erste Bestellung &middot; läuft in 5 Tagen ab",
+   "es": "10% en tu primer pedido &middot; caduca en 5 días",
+   "it": "10% sul tuo primo ordine &middot; scade tra 5 giorni"
   },
   "cta": {
    "en": "Start your first order",
@@ -3529,6 +3529,30 @@
    "de": "Ihr 10%-Code steht drin, dazu die Drucksachen, mit denen die meisten Unternehmen anfangen.",
    "es": "Tu código del 10% está dentro, y lo que imprimen primero la mayoría de las empresas.",
    "it": "Il tuo codice 10% è qui dentro, insieme alle stampe da cui parte la maggior parte delle aziende."
+  },
+  "eyebrow": {
+   "en": "10% OFF YOUR FIRST ORDER",
+   "nl": "10% KORTING OP JE EERSTE ORDER",
+   "fr": "10% SUR VOTRE PREMIÈRE COMMANDE",
+   "de": "10% AUF IHRE ERSTE BESTELLUNG",
+   "es": "10% EN TU PRIMER PEDIDO",
+   "it": "10% SUL TUO PRIMO ORDINE"
+  },
+  "codelbl": {
+   "en": "YOUR CODE",
+   "nl": "JOUW CODE",
+   "fr": "VOTRE CODE",
+   "de": "IHR CODE",
+   "es": "TU CÓDIGO",
+   "it": "IL TUO CODICE"
+  },
+  "ctanote": {
+   "en": "Use it at checkout on anything in the range.",
+   "nl": "Gebruik hem bij het afrekenen, op alles in het assortiment.",
+   "fr": "Utilisez-le au paiement, sur tout le catalogue.",
+   "de": "Beim Bezahlen einlösen, für alles im Sortiment.",
+   "es": "Úsalo al pagar, en todo el catálogo.",
+   "it": "Usalo al pagamento, su tutto il catalogo."
   }
  },
  "welcome-02": {

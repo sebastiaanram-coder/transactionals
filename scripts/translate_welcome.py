@@ -26,6 +26,7 @@ import reviews as rv
 import subcategories as sc
 import klaviyo_assets as ka
 import catalog as cat
+import offers
 
 OUT = os.path.join(ROOT, "proposals")
 EMAILS = ["welcome-01", "welcome-02", "welcome-03", "welcome-04"]
@@ -254,6 +255,19 @@ def trustpilot_link(html, slug, live, locale=None):
     return out
 
 
+def offer_code(html):
+    """Put the welcome code in, from the one place it is defined.
+
+    NOT A TRANSLATED STRING. A code is the same in every market, so putting it in
+    the store would have meant six copies per email and 24 places to edit on a
+    rename. It is a sentinel in the source instead, filled from
+    offers.WELCOME_CODE - so the code lives in exactly one file.
+    """
+    if "@@CODE@@" not in html:
+        return html
+    return html.replace("@@CODE@@", offers.WELCOME_CODE)
+
+
 def market_links(html, live):
     """Point each link at the reader's own market, where that URL exists.
 
@@ -411,6 +425,7 @@ def render(html, slug, locale=None, live=False):
     html = real_unsubscribe(html, live, tr)
     html = market_links(html, live)
     html = catalog_tiles(html, slug, live, locale)
+    html = offer_code(html)
     html = trustpilot_link(html, slug, live, locale)
     html = html_lang(html, live, locale)
     return link_assets(html, live)
@@ -425,8 +440,14 @@ VARIANT_EDITS = {
     # the preheader and a section subtitle all still promising 10%. The check at
     # the bottom of this file exists because of that.
     "welcome-01": [
-        # the dashed code box, switch and all
-        (r'<div class="hp-w1-code">.*?</div><br>', ""),
+        # the code card, switches and all. It is a block now, not an
+        # inline pill, so there is no trailing <br> to match any more.
+        (r'<div class="hp-w1-code">.*?</div>\s*', ""),
+        # THE EYEBROW AND THE CTA NOTE SIT OUTSIDE THE CARD. Stripping only the
+        # card left "10% OFF YOUR FIRST ORDER" as the first line of an email
+        # with no offer in it, and "Use it at checkout" under the button.
+        (r'<span class="hp-w1-eyebrow">.*?</span>\s*', ""),
+        (r'<span class="hp-w1-ctanote">.*?</span>\s*', ""),
         # the green promo bar above the logo
         (r'<div class="hp-w1-promo">.*?</div>', ""),
         # the preheader, which is what shows in the inbox list
@@ -680,7 +701,8 @@ if _gaps:
 # diffing the CSS too, for no benefit. What matters is that no ELEMENT and no
 # WORD remains. This project has tripped on counting class names in a stylesheet
 # more than once.
-DISCOUNT_WORDS = ["10%", "HELLO10", 'class="hp-w1-code"', '-promo">']
+DISCOUNT_WORDS = ["10%", offers.WELCOME_CODE, 'class="hp-w1-code"',
+                  'class="hp-w1-eyebrow"', 'class="hp-w1-ctanote"', '-promo">']
 
 for _slug in EMAILS:
     _vp = os.path.join(OUT, _slug + "-nocode-klaviyo.html")
