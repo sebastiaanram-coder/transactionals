@@ -245,15 +245,37 @@ def render(html, slug, locale=None, live=False):
 # are string-substituted rather than templated: by the time a live block exists
 # its locale switches are already resolved, so there is no slot left to target.
 VARIANT_EDITS = {
+    # welcome-01 is the discount email, so it names the offer in FOUR places, not
+    # one. A first pass removed only the dashed code box and left the promo bar,
+    # the preheader and a section subtitle all still promising 10%. The check at
+    # the bottom of this file exists because of that.
     "welcome-01": [
         # the dashed code box, switch and all
         (r'<div class="hp-w1-code">.*?</div><br>', ""),
+        # the green promo bar above the logo
+        (r'<div class="hp-w1-promo">.*?</div>', ""),
+        # the preheader, which is what shows in the inbox list
+        (r'(<div class="hp-w1-pre">)(.*?)(</div>)', r"\1@@PRE@@\3"),
+        # "Pick one and your 10% comes off at checkout."
+        (r'(<p class="hp-w1-sectsub">)(.*?)(</p>)', r"\1@@SECTSUB@@\3"),
         # "Start your first order" is wrong for someone who just ordered
         (r'(<a class="hp-w1-cta" href="[^"]*">)(.*?)(</a>)', r"\1@@CTA@@\3"),
     ],
     "welcome-02": [
         # the countdown bar
         (r'<div class="hp-w2-promo">.*?</div>\s*</div>', "</div>"),
+    ],
+    # In 03 and 04 the discount is ONLY the green bar. Everything else stands on
+    # its own: 03 is three real Trustpilot reviews and a 4.5 rating, 04 is John
+    # and the print expert team with the how-it-works steps. An earlier version
+    # of this build dropped both emails from the ordered path on the grounds that
+    # they "were" the discount reminder. They are not. Strip the bar and each is
+    # still a complete email.
+    "welcome-03": [
+        (r'<div class="hp-w3-promo">.*?</div>', ""),
+    ],
+    "welcome-04": [
+        (r'<div class="hp-w4-promo">.*?</div>', ""),
     ],
 }
 
@@ -270,7 +292,14 @@ def variant(html, slug, tr):
                         "not removed" % (slug, pattern[:54]))
             continue
         html = new
-    return html.replace("@@CTA@@", tr("cta.browse_range", "Browse the full range"))
+    for token, key, english in (
+            ("@@CTA@@", "cta.browse_range", "Browse the full range"),
+            ("@@PRE@@", "wc.pre_nocode",
+             "The prints most businesses start with, and the people behind them."),
+            ("@@SECTSUB@@", "wc.sectsub_nocode",
+             "Pick one and see what it comes to.")):
+        html = html.replace(token, tr(key, english))
+    return html
 
 
 for slug in EMAILS:
@@ -403,6 +432,37 @@ if _gaps:
         print("    /%-24s %s" % (_pth or "<home>", " ".join(sorted(_by[_pth]))))
     print("    Fix by finding the real localised slug and re-running "
           "scripts/fetch_market_urls.py.")
+
+
+# ---- NO VARIANT MAY MENTION THE DISCOUNT, ANYWHERE
+#
+# welcome-01 names the offer in four places: the dashed code box, the green promo
+# bar, the preheader that shows in the inbox list, and a section subtitle. A
+# first pass removed one of them and the other three still promised 10% off to
+# people who had already ordered. Removing "the discount block" is not a single
+# edit, so this asserts on the rendered result instead of trusting the edits.
+# MARKUP AND VISIBLE TEXT, NOT CSS. An unused ".hp-w1-code{...}" rule is left
+# behind by design - deleting stylesheet rules for removed elements would mean
+# diffing the CSS too, for no benefit. What matters is that no ELEMENT and no
+# WORD remains. This project has tripped on counting class names in a stylesheet
+# more than once.
+DISCOUNT_WORDS = ["10%", "HELLO10", 'class="hp-w1-code"', '-promo">']
+
+for _slug in EMAILS:
+    _vp = os.path.join(OUT, _slug + "-nocode-klaviyo.html")
+    if not os.path.exists(_vp):
+        continue
+    _v = io.open(_vp, encoding="utf-8").read()
+    for _w in DISCOUNT_WORDS:
+        if _w in _v:
+            _i = _v.index(_w)
+            errs.append("%s-nocode still mentions the discount (%r): ...%s..."
+                        % (_slug, _w,
+                           re.sub(r"\s+", " ", _v[max(0, _i - 70):_i + 40])))
+
+print("\nNO-DISCOUNT VARIANTS: %d built, none mentioning the offer"
+      % len([1 for e in EMAILS
+             if os.path.exists(os.path.join(OUT, e + "-nocode-klaviyo.html"))]))
 
 need = i18n.report(errs)
 if need:

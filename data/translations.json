@@ -751,6 +751,22 @@
    "de": "Danke für Ihre Bestellung. Hier kurz, wer wir sind.",
    "es": "Gracias por tu pedido. Esto es, en resumen, quiénes somos.",
    "it": "Grazie per il tuo ordine. Ecco in breve chi siamo."
+  },
+  "wc.pre_nocode": {
+   "en": "The prints most businesses start with, and the people behind them.",
+   "nl": "Het drukwerk waar de meeste bedrijven mee beginnen, en de mensen erachter.",
+   "fr": "Les imprimés par lesquels commencent la plupart des entreprises, et les gens derrière.",
+   "de": "Die Drucksachen, mit denen die meisten Unternehmen anfangen, und die Menschen dahinter.",
+   "es": "Lo que imprimen primero la mayoría de las empresas, y las personas detrás.",
+   "it": "Le stampe da cui parte la maggior parte delle aziende, e le persone dietro."
+  },
+  "wc.sectsub_nocode": {
+   "en": "Pick one and see what it comes to.",
+   "nl": "Kies er een en kijk wat het wordt.",
+   "fr": "Choisissez-en un et voyez ce que cela donne.",
+   "de": "Wählen Sie eines und sehen Sie, was es kostet.",
+   "es": "Elige uno y mira en cuánto sale.",
+   "it": "Scegline uno e guarda quanto viene."
   }
  },
  "commercial-print": {
