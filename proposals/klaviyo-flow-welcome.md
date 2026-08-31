@@ -363,3 +363,34 @@ actions and 27 links with nothing dangling.
 
 **So the flow is now serving every fix in this document.** A promo-code change
 from here is: edit the source, run the builder, run this script.
+
+### The overview doc regenerates too
+
+`scripts/refresh_overview.py`. The overview's preview panel renders a snapshot of
+each finished email held in a `const PREVIEWS = {...}` object, so every builder
+change left it quietly wrong while still looking finished — it was still showing
+"33,000+ reviews" hours after that was fixed everywhere else.
+
+Two wrong attempts before the right artifact, both worth recording:
+
+- **Not the live Klaviyo block.** It carries all nine locales as `{% if %}`
+  switches. Embedding it doubled the file to 1.8MB and would have shown readers
+  literal `{% if person.locale == 'en-IE' %}` text in the preview panel.
+- **Not `-proposed.html` as it sits on disk.** English and Django-free, which is
+  right, but its images are base64 data URIs — which is why those files are
+  30KB–650KB against a 3–21KB snapshot.
+
+The right artifact is the English preview with its data URIs swapped for hosted
+CDN URLs, matched by content hash against `assets/`.
+
+**Deriving the key→file mapping at run time was also wrong.** By CSS class prefix
+it looked clean and resolved all 29 — but prefix `w2` matches both `welcome-02`
+and `welcome-02-nocode`, so glob order decided, and welcome-02 and welcome-03
+came out pointing at the no-discount build. Every old snapshot contains the green
+promo bar, so all four welcome keys are the discount version. The mapping is now
+written out explicitly and the prefix is asserted on each run, so a renamed class
+fails loudly instead of putting the wrong email under a heading.
+
+RFB's twelve originals are the "before" half of the comparison and are left
+byte-for-byte alone. Thirteen `33,000` references remain in them, correctly —
+that is what RFB built.
