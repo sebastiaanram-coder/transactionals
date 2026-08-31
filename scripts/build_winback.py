@@ -211,7 +211,7 @@ CSS = """
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .%(P)s-h1{margin:0 auto 12px;max-width:430px;font-size:29px;line-height:36px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .%(P)s-sub{margin:0 auto 24px;max-width:415px;font-size:16px;line-height:25px;color:#b4b4b4;}
-.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
+a.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
 /* THE PRODUCT GRID. Two per row on every screen - no stacking, because two-up is
    the point of it - and no prices, following the category nudge: a browse
    invitation reading "from EUR300.11 for 100 units" argues against itself. */
@@ -243,7 +243,7 @@ CSS = """
 .%(P)s-fasticon{width:44px;height:44px;display:block;border:0;margin:0 auto 14px;}
 .%(P)s-fasth{margin:0 0 9px;font-size:20px;line-height:27px;font-weight:800;color:#191919;letter-spacing:-.012em;}
 .%(P)s-fastp{margin:0 auto 18px;max-width:410px;font-size:15px;line-height:23px;color:#4a4a4a;}
-.%(P)s-fastcta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:19px;font-weight:700;padding:13px 28px;border-radius:9999px;}
+a.%(P)s-fastcta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:19px;font-weight:700;padding:13px 28px;border-radius:9999px;}
 .%(P)s-code{margin:0 auto 22px;max-width:400px;border:2px dashed #9fdbb8;border-radius:12px;padding:18px 20px 16px;background:#212121;}
 .%(P)s-codelbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.18em;color:#9fdbb8;margin:0 0 8px;}
 .%(P)s-codeval{display:block;font-size:25px;line-height:31px;font-weight:800;letter-spacing:.08em;color:#ffffff;}
@@ -300,7 +300,7 @@ LETTER_CSS = """
 .%(P)s-smeta{vertical-align:middle;}
 .%(P)s-sname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
 .%(P)s-srole{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.12em;color:#767676;margin-top:3px;}
-.%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
+a.%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 .%(P)s-unslink{color:inherit;}
 """
 

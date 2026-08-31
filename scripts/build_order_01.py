@@ -117,8 +117,8 @@ CSS = """
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#9fdbb8;margin:0 0 10px;}
 .%(P)s-h1{margin:0 0 10px;font-size:30px;line-height:37px;font-weight:800;color:#f4ece2;letter-spacing:-.015em;}
 .%(P)s-sub{margin:0 auto 18px;max-width:440px;font-size:17px;line-height:25px;color:#f4ece2;opacity:.88;}
-.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#f7f1e9;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
-.%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+a.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#f7f1e9;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+a.%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 @@BASKET_CSS@@
 .%(P)s-mid{padding:24px 24px 0;text-align:center;}

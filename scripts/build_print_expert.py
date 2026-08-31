@@ -165,9 +165,9 @@ CSS = """
 .%(P)s-smeta{vertical-align:middle;}
 .%(P)s-sname{display:block;font-size:17px;line-height:23px;font-weight:800;color:#191919;}
 .%(P)s-srole{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.12em;color:#767676;margin-top:3px;}
-.%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
+a.%(P)s-smail{display:block;font-size:13px;line-height:19px;color:#008539;text-decoration:none;font-weight:600;margin-top:5px;}
 /* a text link, not a pill. A personal note with a green button on it is a campaign */
-.%(P)s-catlink{font-size:16px;line-height:26px;font-weight:700;color:#008539;text-decoration:none;}
+a.%(P)s-catlink{font-size:16px;line-height:26px;font-weight:700;color:#008539;text-decoration:none;}
 /* NO FOOTER. There is no help-centre bar, no social row and no second wordmark -
    a letter does not have one. What survives is a single line of company identity
    outside the card: Helloprint B.V. is a Dutch company writing to businesses in

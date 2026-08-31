@@ -123,7 +123,7 @@ CSS = """
 .%(P)s-codelbl{display:block;font-size:10px;line-height:15px;font-weight:800;letter-spacing:.18em;color:#9fdbb8;margin:0 0 8px;}
 .%(P)s-codeval{display:block;font-size:26px;line-height:32px;font-weight:800;letter-spacing:.08em;color:#ffffff;}
 .%(P)s-codeexp{display:block;font-size:13px;line-height:19px;color:#b4b4b4;margin:9px 0 0;}
-.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
+a.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
 .%(P)s-terms{display:block;font-size:12px;line-height:18px;color:#8f8f8f;margin:16px 0 0;}
 .%(P)s-help{margin:28px 24px 0;background:#f1f8f4;border-radius:14px;padding:22px 22px 20px;text-align:center;}
 .%(P)s-help img{display:block;margin:0 auto 11px;border:0;}

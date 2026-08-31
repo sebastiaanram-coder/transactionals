@@ -172,7 +172,7 @@ CSS = """
 /* the number is the headline on the last email, so it gets to be big */
 .%(P)s-h1{margin:0 0 10px;font-size:34px;line-height:40px;font-weight:800;color:#191919;letter-spacing:-.02em;}
 .%(P)s-sub{margin:0 auto 20px;max-width:450px;font-size:17px;line-height:25px;color:#555555;}
-.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+a.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 /* the deadline, stated once and plainly. No fake countdown: a rendered clock
    time would be wrong the moment the mail sits unread. */
 .%(P)s-dl{margin:24px 24px 0;background:#f1f8f4;border:1px solid #cfe8db;border-radius:12px;padding:14px 18px;}

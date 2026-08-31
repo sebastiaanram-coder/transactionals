@@ -535,3 +535,53 @@ lines below, and saying it twice in one screen reads like a mistake.
 
 The code is a plain literal in the banner rather than part of the translated
 string, for the same reason as above: one place per file, not six.
+
+---
+
+## Blue links in Gmail, and the timing change — 2026-08-31
+
+### Why two links rendered Gmail blue
+
+Not a Klaviyo problem — a CSS specificity one, and it affected **every call to
+action in the programme**, 77 anchors across all 33 blocks.
+
+Gmail's own stylesheet colours links with `a:link`, specificity **0-1-1**. A rule
+like `.hp-w1-cta{background:#fff;color:#191919;padding:15px 34px}` is **0-1-0**,
+so Gmail wins on `color` while everything else in the same rule still applies —
+the white pill renders correctly and the label inside it comes out blue. That is
+exactly what the screenshot showed.
+
+The proof sits in the same email: `.hp-w1-helplinks a` is 0-1-1, ties with
+Gmail's rule, wins on document order, and renders green — while `.hp-w1-cta` a
+few lines above it does not. Same stylesheet, same client, one character of
+specificity between them.
+
+**Fix:** `scripts/fix_link_specificity.py` prefixed the element onto all 34
+affected rules — `.hp-w1-cta` → `a.hp-w1-cta` — which is 0-1-1 and behaves like
+the descendant rule that already worked. No markup changed, so nothing can shift
+in layout, and it lives in the source CSS so a rebuild keeps it. Every one of the
+53 classes was first verified to appear **only** on `<a>` elements; prefixing a
+selector whose class also sat on a div would have silently dropped that div's
+styling. Re-ran the detector afterwards: **0 anchors still vulnerable.**
+
+Worth noting this was worse than cosmetic on the green pills: white text repainted
+Gmail blue on `#008539` is close to unreadable, and that is most of the CTAs in
+the abandoned-order, category and winback emails.
+
+### First email now sends immediately
+
+The entry delay went from 1 hour to 0 (`116031814`). Flow tree re-checked
+afterwards: 28 actions, no dangling links.
+
+**This reverses the reason the delay was there.** It was set to 1 hour precisely
+because signup happens inside the checkout, so many people order within minutes —
+the delay let the split catch them and send the no-discount version. Sending
+immediately means someone who is mid-checkout gets a 10% code they can apply to
+the order they are already placing.
+
+That is only a problem if the discount is meant to *win* an order rather than
+reward a signup. Paired with putting "10% off your first order" on the signup
+form, it is the opposite of a leak: it is the deal being honoured promptly, and
+the immediate send is what makes that promise credible. Recorded here because the
+two decisions only make sense together — reinstating the delay while the form
+advertises the discount would break the promise.

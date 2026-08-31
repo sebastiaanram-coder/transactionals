@@ -108,8 +108,8 @@ CSS = """
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.14em;color:#9fdbb8;margin:0 0 10px;}
 .%(P)s-h1{margin:0 0 10px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.015em;}
 .%(P)s-sub{margin:0 auto 18px;max-width:466px;font-size:17px;line-height:25px;color:#ffffff;opacity:.9;}
-.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
-.%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+a.%(P)s-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+a.%(P)s-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 
 .%(P)s-anchor{margin:22px 24px 0;border:1px solid #e5e5e5;border-radius:12px;padding:11px 14px;text-decoration:none;display:block;}
 .%(P)s-antbl{width:100%%;border-collapse:collapse;}

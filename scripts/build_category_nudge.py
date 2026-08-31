@@ -401,8 +401,8 @@ CSS = """
 .%(P)s-eyebrow{display:block;font-size:11px;line-height:16px;font-weight:800;letter-spacing:.16em;color:#9fdbb8;margin:0 0 12px;}
 .%(P)s-h1{margin:0 auto 12px;max-width:440px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.018em;}
 .%(P)s-sub{margin:0 auto 24px;max-width:420px;font-size:16px;line-height:25px;color:#b4b4b4;}
-.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
-.%(P)s-cta2{display:inline-block;background:#191919;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+a.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
+a.%(P)s-cta2{display:inline-block;background:#191919;color:#ffffff;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 32px;border-radius:9999px;}
 .%(P)s-sect{margin:32px 24px 0;}
 .%(P)s-sh{margin:0 0 4px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .%(P)s-ss{margin:0 0 20px;font-size:14px;line-height:21px;color:#767676;}
@@ -416,7 +416,7 @@ CSS = """
 .%(P)s-ftx{vertical-align:top;}
 .%(P)s-fh{margin:0 0 6px;font-size:19px;line-height:26px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .%(P)s-fb{margin:0 0 10px;font-size:15px;line-height:23px;color:#555555;}
-.%(P)s-fl{font-size:14px;line-height:21px;font-weight:700;color:#008539;text-decoration:none;}
+a.%(P)s-fl{font-size:14px;line-height:21px;font-weight:700;color:#008539;text-decoration:none;}
 /* GRID: two per row on every screen, no media query needed for the structure */
 .%(P)s-tiles{width:100%%;border-collapse:separate;border-spacing:0;table-layout:fixed;}
 .%(P)s-tile{width:50%%;vertical-align:top;padding:0 6px 14px;}
@@ -459,7 +459,7 @@ CSS = """
 .%(P)s-bracard{display:block;text-decoration:none;}
 .%(P)s-bracard img{width:100%%;max-width:100%%;height:auto;display:block;border:0;border-radius:10px;}
 .%(P)s-braname{display:block;font-size:13px;line-height:19px;font-weight:800;color:#ffffff;margin:9px 0 0;}
-.%(P)s-bralink{display:inline-block;margin:20px 0 0;font-size:14px;line-height:21px;font-weight:700;color:#9fdbb8;text-decoration:none;}
+a.%(P)s-bralink{display:inline-block;margin:20px 0 0;font-size:14px;line-height:21px;font-weight:700;color:#9fdbb8;text-decoration:none;}
 /* GOOD TO KNOW, now on white at the bottom. It reads as a footnote to the
    browsing rather than as an interruption of it, which is what it always was. */
 .%(P)s-gk{margin:30px 24px 0;padding:26px 0 0;border-top:1px solid #e5e5e5;text-align:center;}

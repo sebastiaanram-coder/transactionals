@@ -174,7 +174,7 @@ CSS = """
 /* WHITE, NOT GREEN. Helloprint green next to Trustpilot green is two greens
    arguing; Trustpilot's stays on the stars, where it is theirs to use. White on
    ink is the highest contrast available and borrows nobody's colour. */
-.%(P)s-cta{display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
+a.%(P)s-cta{display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
 .%(P)s-scoretx{margin:18px 0 0;font-size:13px;line-height:20px;color:#8f8f8f;}
 /* THE STARS, DRAWN. Five cells with a bgcolor and a glyph rather than a bitmap:
    crisp at any size, no image to fail to load, and bgcolor on a td is about the
