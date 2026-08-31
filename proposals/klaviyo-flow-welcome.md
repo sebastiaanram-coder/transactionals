@@ -661,15 +661,58 @@ Nothing about the offer. What remains:
    thing the whole programme was rebuilt around. Requested; not done.
 2. **Remove the test BCC.** `TEST_BCC = None` in `push_templates.py` and re-run.
    A bcc on a live flow copies every customer email to an internal mailbox.
-3. **Decide what `store` means for the trigger.** `Completed Signup` arrived
-   carrying `store: "drukzo.nl"`. If that event fires for more than one brand, the
-   flow needs a trigger filter or the brands need separate flows, or Drukzo
-   signups will receive Helloprint email.
+3. ~~Decide what `store` means for the trigger.~~ **Settled 2026-08-31.**
+   `drukzo.nl` and `drukzo.be` are the LEGACY names for Helloprint in NL and
+   nl-BE. The front end was rebranded to Helloprint in November 2025; the back
+   end still emits the old store. Same brand, same customers, so no trigger
+   filter and no per-brand flows are needed. Not a risk, and not to be raised
+   again.
 4. **A native speaker has still read none of the translations** — including the
    two subject lines, the four preview texts and the terms block, all of which I
    wrote today.
 5. The signup form copy needs implementing on the website, with the GB form
    showing GBP25 rather than EUR25.
 
-Items 1 and 3 are the two that can put the wrong email in front of the wrong
-person. 2 is a privacy obligation. 4 is quality. 5 is outside Klaviyo.
+Item 1 is the one that can still put the wrong LANGUAGE in front of someone. 2
+is a privacy obligation before go-live. 4 is now in progress - see below. 5 is
+outside Klaviyo.
+
+---
+
+## Translations out for review — 2026-08-31
+
+`scripts/translations_csv.py` exports the strings for the translation team and
+reads their edits back.
+
+```bash
+python3 scripts/translations_csv.py export              # welcome, 107 strings
+python3 scripts/translations_csv.py export --all        # whole programme, 511
+python3 scripts/translations_csv.py import FILE.csv --dry-run
+python3 scripts/translations_csv.py import FILE.csv
+```
+
+One row per string, one column per language, plus `scope` and `key` which are the
+string's identity and how the import finds it again, and a `where` column so a
+translator who cannot see the template knows what they are editing.
+
+### What the import refuses, and why each one is a real risk
+
+- **A lost token.** `@@CAP@@` becomes the discount cap in the market's own
+  currency at build time. A translator who translates or drops it silently
+  removes the cap from that language - the one condition a reader can be
+  materially misled by. Refused.
+- **A bare `&`.** Entities like `&middot;` are markup. A stray ampersand breaks
+  the HTML rather than showing as text. Refused.
+- **An empty cell.** Refused, rather than shipping a blank line.
+- **A lost non-breaking space.** French groups thousands with U+00A0 - "34 000+".
+  It is invisible in a spreadsheet, so a translator retyping the number uses a
+  normal space and the number can then wrap across two lines. Repaired
+  automatically, and reported.
+- **Formula injection.** A cell starting `= + - @` is read as a formula by Sheets
+  and Excel. Guarded on export, stripped on import.
+
+Nothing is written unless every row passes, so one bad cell cannot leave the
+store half-updated. Tested five ways before use: an unedited round trip changes
+0 of 107 strings, a legitimate edit is picked up, a deleted token is refused, a
+lost French space is repaired, and no dry run touches the file.
+
