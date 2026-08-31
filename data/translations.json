@@ -767,6 +767,14 @@
    "de": "Wählen Sie eines und sehen Sie, was es kostet.",
    "es": "Elige uno y mira en cuánto sale.",
    "it": "Scegline uno e guarda quanto viene."
+  },
+  "wc.terms": {
+   "en": "Offer terms: 10% off your first order, up to @@CAP@@ maximum discount. One use per customer. The code expires 5 days after you sign up. It cannot be combined with other codes, is not valid on bespoke quotes, and applies to products only, excluding services and delivery.",
+   "nl": "Voorwaarden: 10% korting op je eerste order, maximaal @@CAP@@ korting. Eén keer per klant. De code verloopt 5 dagen na je aanmelding. Niet te combineren met andere codes, niet geldig op maatwerkaanvragen, en geldt alleen op producten, niet op diensten en bezorging.",
+   "fr": "Conditions : 10% sur votre première commande, remise maximale de @@CAP@@. Une utilisation par client. Le code expire 5 jours après votre inscription. Non cumulable avec d'autres codes, non valable sur les devis sur mesure, et applicable aux produits uniquement, hors services et livraison.",
+   "de": "Bedingungen: 10% auf Ihre erste Bestellung, maximal @@CAP@@ Rabatt. Eine Verwendung pro Kunde. Der Code läuft 5 Tage nach Ihrer Anmeldung ab. Nicht mit anderen Codes kombinierbar, nicht gültig für individuelle Angebote, und gilt nur für Produkte, ausgenommen Dienstleistungen und Versand.",
+   "es": "Condiciones: 10% en tu primer pedido, con un descuento máximo de @@CAP@@. Un uso por cliente. El código caduca 5 días después de tu registro. No se puede combinar con otros códigos, no es válido en presupuestos personalizados y se aplica solo a productos, excluyendo servicios y envío.",
+   "it": "Condizioni: 10% sul tuo primo ordine, sconto massimo di @@CAP@@. Un utilizzo per cliente. Il codice scade 5 giorni dopo la registrazione. Non cumulabile con altri codici, non valido su preventivi personalizzati, e si applica solo ai prodotti, esclusi servizi e spedizione."
   }
  },
  "commercial-print": {
@@ -3364,19 +3372,19 @@
   },
   "sub": {
    "en": "Print made simple, by people who have your back.",
-   "nl": "Drukwerk eenvoudig gemaakt, door échte print liefhebbers.",
+   "nl": "Drukwerk eenvoudig gemaakt, door échte printliefhebbers.",
    "fr": "L'impression simplifiée, par des gens qui vous soutiennent.",
    "de": "Druck einfach gemacht, von Menschen, die hinter Ihnen stehen.",
    "es": "La impresión hecha fácil, por gente que te respalda.",
    "it": "La stampa resa semplice, da persone che ti sostengono."
   },
   "code_line": {
-   "en": "10% off your first order &middot; expires in 5 days",
-   "nl": "10% korting op je eerste order &middot; verloopt over 5 dagen",
-   "fr": "10% sur votre première commande &middot; expire dans 5 jours",
-   "de": "10% auf Ihre erste Bestellung &middot; läuft in 5 Tagen ab",
-   "es": "10% en tu primer pedido &middot; caduca en 5 días",
-   "it": "10% sul tuo primo ordine &middot; scade tra 5 giorni"
+   "en": "10% off your first order, up to @@CAP@@ &middot; expires in 5 days",
+   "nl": "10% korting op je eerste order, tot @@CAP@@ &middot; verloopt over 5 dagen",
+   "fr": "10% sur votre première commande, jusqu'à @@CAP@@ &middot; expire dans 5 jours",
+   "de": "10% auf Ihre erste Bestellung, bis zu @@CAP@@ &middot; läuft in 5 Tagen ab",
+   "es": "10% en tu primer pedido, hasta @@CAP@@ &middot; caduca en 5 días",
+   "it": "10% sul tuo primo ordine, fino a @@CAP@@ &middot; scade tra 5 giorni"
   },
   "cta": {
    "en": "Start your first order",

@@ -44,6 +44,13 @@ SHARED_IN_FILE = [
     ("help.chat", "Chat with us"),
     ("help.centre", "Help Centre"),
     ("foot.unsub", "Unsubscribe"),
+    # The offer conditions. Shared, because all four has-not-ordered emails
+    # carry the same ones, and stripped by the variant for the ordered branch.
+    ("wc.terms",
+     "Offer terms: 10% off your first order, up to @@CAP@@ maximum discount. "
+     "One use per customer. The code expires 5 days after you sign up. It cannot "
+     "be combined with other codes, is not valid on bespoke quotes, and applies "
+     "to products only, excluding services and delivery."),
 ]
 
 errs = []
@@ -255,6 +262,19 @@ def trustpilot_link(html, slug, live, locale=None):
     return out
 
 
+# THE DISCOUNT CAP IS FILLED PER LOCALE, NOT PER LANGUAGE. en-GB and en-IE share
+# every word of English but one market is GBP and the other EUR, so a fill keyed
+# on language writes the wrong currency into one of them. i18n.tr grew fills_loc
+# for exactly this.
+def _cap(locale):
+    lang = i18n.LOCALE_LANG[locale]
+    cur = cat.item("standardflyers", locale)["currency"]
+    return cat.money(offers.WELCOME_CAP, cur, lang, whole=True)
+
+
+CAP_FILL = {"@@CAP@@": _cap}
+
+
 def offer_code(html):
     """Put the welcome code in, from the one place it is defined.
 
@@ -418,9 +438,11 @@ def render(html, slug, locale=None, live=False):
         subs.append((token, key, eng))
         html = html.replace(eng, token)
     for token, key, eng in subs:
-        html = html.replace(token, tr(key, eng))
+        html = html.replace(token, tr(key, eng, fills_loc=CAP_FILL))
     if "\x00" in html:
         errs.append("%s: a substitution token survived into the output" % slug)
+    if "@@CAP@@" in html:
+        errs.append("%s: @@CAP@@ survived - the cap was never filled" % slug)
     html = swap_reviews(html, slug, tr, locale, live)
     html = real_unsubscribe(html, live, tr)
     html = market_links(html, live)
@@ -456,6 +478,9 @@ VARIANT_EDITS = {
         (r'(<p class="hp-w1-sectsub">)(.*?)(</p>)', r"\1@@SECTSUB@@\3"),
         # "Start your first order" is wrong for someone who just ordered
         (r'(<a class="hp-w1-cta" href="[^"]*">)(.*?)(</a>)', r"\1@@CTA@@\3"),
+        # THE OFFER TERMS. They name the discount, the cap and the expiry, so
+        # they have no business in an email that carries no offer.
+        (r'<div class="hp-w1-terms">.*?</div>\s*', ""),
     ],
     "welcome-02": [
         # the countdown bar
@@ -472,6 +497,8 @@ VARIANT_EDITS = {
         # ordered would get an inbox snippet pushing an offer they
         # cannot use - the exact thing this variant exists to avoid.
         (r'(<div class="hp-w2-pre">)(.*?)(</div>)', r"\1@@PRE@@\3"),
+        # the offer terms, for the same reason as the promo bar above
+        (r'<div class="hp-w2-terms">.*?</div>\s*', ""),
     ],
     # In 03 and 04 the discount is ONLY the green bar. Everything else stands on
     # its own: 03 is three real Trustpilot reviews and a 4.5 rating, 04 is John
@@ -487,6 +514,8 @@ VARIANT_EDITS = {
         # ordered would get an inbox snippet pushing an offer they
         # cannot use - the exact thing this variant exists to avoid.
         (r'(<div class="hp-w3-pre">)(.*?)(</div>)', r"\1@@PRE@@\3"),
+        # the offer terms, for the same reason as the promo bar above
+        (r'<div class="hp-w3-terms">.*?</div>\s*', ""),
     ],
     "welcome-04": [
         (r'<div class="hp-w4-promo">.*?</div>', ""),
@@ -496,6 +525,8 @@ VARIANT_EDITS = {
         # ordered would get an inbox snippet pushing an offer they
         # cannot use - the exact thing this variant exists to avoid.
         (r'(<div class="hp-w4-pre">)(.*?)(</div>)', r"\1@@PRE@@\3"),
+        # the offer terms, for the same reason as the promo bar above
+        (r'<div class="hp-w4-terms">.*?</div>\s*', ""),
     ],
 }
 

@@ -109,10 +109,14 @@ def _amount(value, lang):
     return whole + sep + frac
 
 
-def money(value, currency, lang):
-    """A price written the way that language writes money, with its currency."""
+def money(value, currency, lang, whole=False):
+    """A price written the way that language writes money, with its currency.
+
+    whole=True drops the decimals, for a round figure like a discount cap where
+    "25 EUR" reads better than "25,00 EUR".
+    """
     sym = SYMBOL.get(currency, currency + NB)
-    amt = _amount(value, lang)
+    amt = ("%d" % int(round(float(value)))) if whole else _amount(value, lang)
     style = _MONEY_STYLE.get(lang, "before")
     if style == "after":
         return amt + NB + sym

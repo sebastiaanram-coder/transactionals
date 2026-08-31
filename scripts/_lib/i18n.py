@@ -240,18 +240,25 @@ def translator(scope, live, locale=None):
     drift check compare an escaped string against the raw one on file, and it
     cannot be done afterwards because by then the string is a Django switch.
     """
-    def tr(key, english, escape=None, fills=None):
+    def tr(key, english, escape=None, fills=None, fills_loc=None):
         """fills: {token: callable(lang) -> str}, applied PER BRANCH.
 
         A number formatted once and substituted into every branch carries one
         language's conventions into all of them. Anything whose rendering depends
         on the language has to be filled while we still know which branch we are
         writing.
+
+        fills_loc: {token: callable(LOCALE) -> str}, for anything that varies by
+        MARKET rather than by language. The discount cap is the case that forced
+        this: en-GB and en-IE share every word of English but one is GBP and the
+        other EUR, so a lang-keyed fill writes GBP25 into the Irish branch.
         """
         e = escape or (lambda x: x)
-        def _fill(text, lang):
+        def _fill(text, lang, loc):
             for token, fn in (fills or {}).items():
                 text = text.replace(token, fn(lang))
+            for token, fn in (fills_loc or {}).items():
+                text = text.replace(token, fn(loc))
             return text
         miss = missing(scope, key)
         if miss:
@@ -261,8 +268,8 @@ def translator(scope, live, locale=None):
             DRIFT.append((scope, key, english, drifted))
         if not live:
             _loc = locale or "en-GB"
-            return _fill(e(get(scope, key, _loc, english)), LOCALE_LANG[_loc])
-        texts = [(loc, _fill(e(get(scope, key, loc, english)), LOCALE_LANG[loc]))
+            return _fill(e(get(scope, key, _loc, english)), LOCALE_LANG[_loc], _loc)
+        texts = [(loc, _fill(e(get(scope, key, loc, english)), LOCALE_LANG[loc], loc))
                  for loc in LOCALES]
         if len({t for _, t in texts}) == 1:
             return texts[0][1]
@@ -272,7 +279,7 @@ def translator(scope, live, locale=None):
                 "if" if i == 0 else "elif", LOCALE_EXPR, loc, txt)
         return out + "{%% else %%}%s{%% endif %%}" % _fill(
             e(get(scope, key, FALLBACK_LOCALE, english)),
-            LOCALE_LANG[FALLBACK_LOCALE])
+            LOCALE_LANG[FALLBACK_LOCALE], FALLBACK_LOCALE)
     return tr
 
 

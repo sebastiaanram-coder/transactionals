@@ -585,3 +585,41 @@ form, it is the opposite of a leak: it is the deal being honoured promptly, and
 the immediate send is what makes that promise credible. Recorded here because the
 two decisions only make sense together — reinstating the delay while the form
 advertises the discount would break the promise.
+
+---
+
+## Offer conditions in the email — 2026-08-31
+
+Six conditions to carry: max 25 off, one per customer, 5-day expiry, no stacking,
+not on bespoke quotes, products only excluding services and delivery.
+
+**Bottom: the full terms.** A `hp-wN-terms` block in the footer of all four
+has-not-ordered emails, above the company legal line, six languages. Stripped by
+the no-discount variant — terms that name a discount have no business in an email
+that carries none, and the build check caught it when they first survived.
+
+**Top: one addition, the cap.** The note under the code went from
+
+    10% off your first order · expires in 5 days
+    10% off your first order, up to £25 · expires in 5 days
+
+This is the one place I did not keep to "as little as possible at the top", and
+the reason is narrow: a **cap is the single condition a reader can be materially
+misled by**. "10% off" next to a €600 basket implies €60. Disclosing that only in
+footer small print is the textbook misleading-omission shape under the UCPD.
+Everything else — stacking, bespoke quotes, services and delivery — genuinely can
+live at the bottom, because none of them changes what the headline number appears
+to be worth. Remove it if legal disagrees; it is one key, `welcome-01/code_line`.
+
+**The cap is per MARKET, not per language.** £25 in GB, €25 everywhere else, and
+written the way each language writes money: `£25`, `€25`, `€ 25`, `25 €`. That
+needed a new mechanism — `i18n.tr` grew `fills_loc`, keyed on locale rather than
+language, because en-GB and en-IE share every word of English while one is GBP
+and the other EUR. A language-keyed fill wrote sterling into the Irish branch.
+
+Verified live: `en-GB` renders `up to £25`, `en-IE` renders `up to €25`, and the
+ordered branch carries no terms block and no "10%" at all.
+
+**The green banner in emails 2-4 does NOT repeat the cap.** It already carries
+the offer, the code and the countdown; a fourth clause would not fit on one line
+on mobile. The terms at the foot of those same emails state it.
