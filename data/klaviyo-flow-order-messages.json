@@ -1,0 +1,78 @@
+{
+  "flow": "BEH-3 Abandoned Order · Started Checkout",
+  "flow_id": "YhfMdM",
+  "status": "draft",
+  "created": "2026-08-31",
+  "url": "https://www.klaviyo.com/flow/YhfMdM/edit",
+  "note": "Klaviyo clones a saved template per flow message on attach. 'template_saved' is the library master, which scripts/push_templates.py patches; 'template_live' is the per-message copy the flow actually sends. A copy is NOT patchable - /api/templates/{id} returns 404 for it - so the master is pushed and the message re-attached, which mints a fresh copy. Copy ids therefore CHANGE on every push.",
+  "messages": [
+    {
+      "action": "116080423",
+      "message": "RDW3t6",
+      "name": "ORD-1H Basket restored · high · +1h",
+      "next": "116080426",
+      "subject": "Left something behind?",
+      "preview": "Every line exactly as you configured it, and a link straight back into your basket.",
+      "template_saved": "RiPL3a",
+      "template_live": "XuptLY",
+      "template_name": "BEH-3 ORD-1H Basket restored, high value"
+    },
+    {
+      "action": "116080425",
+      "message": "VeMNu4",
+      "name": "ORD-1L Basket restored · low · +1h",
+      "next": "116080427",
+      "subject": "Left something behind?",
+      "preview": "Every line exactly as you configured it, and a link straight back into your basket.",
+      "template_saved": "W56mVY",
+      "template_live": "T2CT7d",
+      "template_name": "BEH-3 ORD-1L Basket restored, low value"
+    },
+    {
+      "action": "116080428",
+      "message": "WqcDmU",
+      "name": "ORD-2H Print expert · high · +24h",
+      "next": "116080431",
+      "subject": "Want a print expert to look at it first?",
+      "preview": "Someone checks the spec, confirms the delivery date, and can invoice instead of taking a card.",
+      "template_saved": "YpU3HG",
+      "template_live": "S9J5sq",
+      "template_name": "BEH-3 ORD-2H Print expert, high value"
+    },
+    {
+      "action": "116080430",
+      "message": "VMbAKh",
+      "name": "ORD-2L 10 percent off · low · +24h",
+      "next": "116080432",
+      "subject": "10% off, for the next 72 hours",
+      "preview": "Change the quantity, watch the price move, and order in three clicks.",
+      "template_saved": "RLAhWZ",
+      "template_live": "TBCVzj",
+      "template_name": "BEH-3 ORD-2L 10 percent off, low value"
+    },
+    {
+      "action": "116080433",
+      "message": "Vaay8E",
+      "name": "ORD-3H Expert plus 10 percent · high · +72h",
+      "next": null,
+      "subject": "Still happy to go through this with you",
+      "preview": "The offer of a print expert stands, and there is 10% off for the next 72 hours.",
+      "template_saved": "SiY6ee",
+      "template_live": "UBMfLp",
+      "template_name": "BEH-3 ORD-3H Expert plus 10 percent, high value"
+    },
+    {
+      "action": "116080434",
+      "message": "QWhJv5",
+      "name": "ORD-3L 25 percent capped · low · +72h",
+      "next": null,
+      "subject": "25% off, for the next 24 hours",
+      "preview": "Your basket is still here, and the code runs out tomorrow.",
+      "template_saved": "R4VYYY",
+      "template_live": "SWASNb",
+      "template_name": "BEH-3 ORD-3L 25 percent capped, low value"
+    }
+  ],
+  "pushed": "2026-08-31",
+  "subjects_pushed": "2026-08-31"
+}

@@ -1,7 +1,18 @@
 # Browse Abandonment — flow proposal
 
-Status: proposal, awaiting sign-off. Nothing built in Klaviyo yet.
-RFB flow being replaced: `Wzhp2m` (5 emails, all draft).
+**Status: BUILT in Klaviyo 31 August 2026, draft, awaiting review.**
+Flow [`SLJCa5`](https://www.klaviyo.com/flow/SLJCa5/edit), 3 emails.
+The build record - what was actually created, what changed from this proposal,
+and what is still open - is **proposals/klaviyo-flows-beh23.md**. Read that
+first; this document is the reasoning behind it and is kept as written.
+
+Two things here were superseded by measurement during the build: the market
+filter is IE, GB, NL, BE, FR and DE rather than IE and GB (the other feeds were
+checked and six carry every id the cross-sell can build), and the flow ships
+with three emails rather than the two in section 2.
+
+RFB flow being replaced: `Wzhp2m` (5 emails, all draft) - still present, and it
+must be switched off before this one is activated.
 
 ---
 

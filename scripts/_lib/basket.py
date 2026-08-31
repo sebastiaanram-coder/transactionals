@@ -110,9 +110,22 @@ def live_lines(P, assets, cur, tr=None):
              % _t(tr, "bk.qty", "Quantity"))
     product = ('{% catalog it.ProductID %}'
                + _row(P, prod_thumb, "{{ catalog_item.title }}", qline, cur,
-                      "{{ it.RowTotal|floatformat:2 }}", "{{ it.ProductURL }}")
+                      # NOT it.ProductURL. That field is present on 8 of 150
+                      # measured basket lines, so the product link was empty for
+                      # about 95% of rows. We are already inside {% catalog %}
+                      # for the image and the title, so the URL comes from the
+                      # same lookup - and catalog_item.url is also the only
+                      # market-correct source, since ids carry a market prefix
+                      # (IE-rollupbannersv2 lives at /en-ie/budgetrollupbanners).
+                      "{{ it.RowTotal|floatformat:2 }}", "{{ catalog_item.url }}")
                + '{% endcatalog %}')
-    service = _row(P, svc_thumb, "{{ it.ProductName }}",
+    # SOME LINES HAVE NEITHER AN ID NOR A NAME. A live fr-fr Mugs cart had both
+    # missing. Anything without a market-prefixed id is treated as a service
+    # line, so such a row rendered with a blank name. Fall back to a translated
+    # label rather than printing nothing.
+    svc_name = ('{% if it.ProductName %}{{ it.ProductName }}{% else %}'
+                + _t(tr, "bk.service", "Additional service") + '{% endif %}')
+    service = _row(P, svc_thumb, svc_name,
                    _t(tr, "bk.added", "Added at checkout"), cur,
                    "{{ it.RowTotal|floatformat:2 }}", None)
     return ('{% for it in event.Items %}'

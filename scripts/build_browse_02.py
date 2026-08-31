@@ -22,6 +22,8 @@ border-radius and most clients strip inline SVG.
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import i18n
+import doc
+import subcategories as sc
 import klaviyo_assets as ka
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -426,8 +428,18 @@ for _lg in i18n.LANGS:
          encoding="utf-8").write(
              PREVIEW_DOC % build(SAMPLE, SAMPLE_ASSETS, False, _loc))
 live_body = build(LIVE, LIVE_ASSETS, True)
+# Point the hardcoded /en-ie/ links at the reader's own market. These bodies
+# carried the Irish home page, help centre, quote form and artwork-check page
+# for every locale, which is why this flow was described as Ireland-only.
+_link_errs = []
+live_body = sc.swap_market_links(live_body, _link_errs)
+# An unverified path is a build error, not a warning: shipping it would put
+# a dead link in a customer's inbox. errs[] is declared further down in
+# these files, so this fails on the spot instead.
+if _link_errs:
+    raise SystemExit('market link: ' + '; '.join(_link_errs))
 prev = PREVIEW_DOC % prev_body
-live = KLAVIYO_DOC % live_body
+live = doc.shell(KLAVIYO_DOC % live_body, title='Browse abandonment 02')
 open(os.path.join(OUT, "browse-02-proposed.html"), "w", encoding="utf-8").write(prev)
 open(os.path.join(OUT, "browse-02-klaviyo.html"), "w", encoding="utf-8").write(live)
 

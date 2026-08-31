@@ -5,6 +5,7 @@ Export the translations to a CSV for the translation team, and read it back.
 
   python3 scripts/translations_csv.py export            # welcome flow
   python3 scripts/translations_csv.py export --all      # whole programme
+  python3 scripts/translations_csv.py export --beh23    # BEH-2 + BEH-3 only
   python3 scripts/translations_csv.py import FILE.csv   # apply their edits
   python3 scripts/translations_csv.py import FILE.csv --dry-run
 
@@ -47,6 +48,12 @@ HEADER = ["scope", "key", "where", "keep_exactly"] + LANGS
 
 WELCOME_SCOPES = ["welcome-01", "welcome-02", "welcome-03", "welcome-04",
                   "flow-welcome"]
+
+# BEH-2 Browse Abandonment and BEH-3 Abandoned Order, exported as one batch
+# because they were built together and share most of their shared strings.
+BEH23_SCOPES = ["flow-browse", "browse-01", "browse-02", "browse-03",
+                "flow-order", "order-01", "order-02-high", "order-02-low",
+                "order-03-high", "order-03-low"]
 # the _shared strings these four emails actually substitute
 WELCOME_SHARED = ["wc.discount", "wc.waiting", "wc.expires5", "wc.help",
                   "wc.terms", "alt.cs_agents", "help.chat", "help.centre",
@@ -59,6 +66,16 @@ EMAIL_NAME = {
     "welcome-04": "Welcome 4 - day 5, send it over",
     "flow-welcome": "Subject lines (Klaviyo flow message)",
     "_shared": "Shared across the four welcome emails",
+    "flow-browse": "SUBJECTS + PREVIEWS - Browse Abandonment (Klaviyo flow)",
+    "browse-01": "Browse 1 - +1h, the product you viewed",
+    "browse-02": "Browse 2 - +24h, you do not need the artwork yet",
+    "browse-03": "Browse 3 - +3d, tell us the job and we price it",
+    "flow-order": "SUBJECTS + PREVIEWS - Abandoned Order (Klaviyo flow)",
+    "order-01": "Abandoned order 1 - +1h, the basket restored (both branches)",
+    "order-02-high": "Abandoned order 2 HIGH value - +24h, the print expert",
+    "order-02-low": "Abandoned order 2 LOW value - +24h, 10% off",
+    "order-03-high": "Abandoned order 3 HIGH value - +72h, expert plus 10%",
+    "order-03-low": "Abandoned order 3 LOW value - +72h, 25% capped",
 }
 # what a key is, for a translator with no access to the template
 WHERE = {
@@ -85,6 +102,19 @@ WHERE = {
     "foot.unsub": "unsubscribe link label",
     "subj.wel1": "SUBJECT day 0", "subj.wel2": "SUBJECT day 1",
     "subj.wel3": "SUBJECT day 3", "subj.wel4": "SUBJECT day 5",
+    "subj.brw1": "SUBJECT browse +1h", "pre.brw1": "PREVIEW browse +1h",
+    "subj.brw2": "SUBJECT browse +24h", "pre.brw2": "PREVIEW browse +24h",
+    "subj.brw3": "SUBJECT browse +3d", "pre.brw3": "PREVIEW browse +3d",
+    "subj.ord1": "SUBJECT abandoned order +1h, both branches",
+    "pre.ord1": "PREVIEW abandoned order +1h, both branches",
+    "subj.ord2h": "SUBJECT abandoned order +24h high value",
+    "pre.ord2h": "PREVIEW abandoned order +24h high value",
+    "subj.ord2l": "SUBJECT abandoned order +24h low value",
+    "pre.ord2l": "PREVIEW abandoned order +24h low value",
+    "subj.ord3h": "SUBJECT abandoned order +72h high value",
+    "pre.ord3h": "PREVIEW abandoned order +72h high value",
+    "subj.ord3l": "SUBJECT abandoned order +72h low value",
+    "pre.ord3l": "PREVIEW abandoned order +72h low value",
 }
 
 
@@ -92,10 +122,13 @@ def load():
     return json.loads(io.open(STORE, encoding="utf-8").read())
 
 
-def rows(d, everything):
+def rows(d, mode):
+    """mode is "all", "beh23" or "welcome"."""
     out = []
-    if everything:
+    if mode == "all":
         pairs = [(sc, k) for sc in sorted(d) for k in sorted(d[sc])]
+    elif mode == "beh23":
+        pairs = [(sc, k) for sc in BEH23_SCOPES for k in sorted(d.get(sc) or {})]
     else:
         pairs = [(sc, k) for sc in WELCOME_SCOPES for k in sorted(d.get(sc) or {})]
         pairs += [("_shared", k) for k in WELCOME_SHARED if k in (d.get("_shared") or {})]
@@ -124,10 +157,15 @@ def unguard(v):
     return v[1:] if v[:1] == "'" and v[1:2] in ("=", "+", "-", "@") else v
 
 
-def do_export(everything):
+NAMES = {"all": "translations-all.csv",
+         "beh23": "translations-browse-order.csv",
+         "welcome": "translations-welcome.csv"}
+
+
+def do_export(mode):
     d = load()
-    rs = rows(d, everything)
-    name = "translations-all.csv" if everything else "translations-welcome.csv"
+    rs = rows(d, mode)
+    name = NAMES[mode]
     path = os.path.join(ROOT, name)
     with io.open(path, "w", encoding="utf-8-sig", newline="") as f:
         w = csv.DictWriter(f, fieldnames=HEADER)
@@ -223,7 +261,9 @@ def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ("export", "import"):
         print(__doc__); return 1
     if sys.argv[1] == "export":
-        return do_export("--all" in sys.argv)
+        mode = ("all" if "--all" in sys.argv else
+                "beh23" if "--beh23" in sys.argv else "welcome")
+        return do_export(mode)
     if len(sys.argv) < 3:
         print("import needs a CSV path"); return 1
     return do_import(sys.argv[2], "--dry-run" in sys.argv)

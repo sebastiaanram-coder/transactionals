@@ -1,0 +1,45 @@
+{
+  "flow": "BEH-2 Browse Abandonment · Viewed Product",
+  "flow_id": "SLJCa5",
+  "status": "draft",
+  "created": "2026-08-31",
+  "url": "https://www.klaviyo.com/flow/SLJCa5/edit",
+  "note": "Klaviyo clones a saved template per flow message on attach. 'template_saved' is the library master, which scripts/push_templates.py patches; 'template_live' is the per-message copy the flow actually sends. A copy is NOT patchable - /api/templates/{id} returns 404 for it - so the master is pushed and the message re-attached, which mints a fresh copy. Copy ids therefore CHANGE on every push.",
+  "messages": [
+    {
+      "action": "116080416",
+      "message": "WmApb3",
+      "name": "BRW-1 The one you were looking at · +1h",
+      "next": "116080417",
+      "subject": "The print you were looking at",
+      "preview": "Delivery and VAT are already in the number you saw. Change the quantity and the price moves with it.",
+      "template_saved": "Ru6gHW",
+      "template_live": "Ye4LTw",
+      "template_name": "BEH-2 BRW-1 The one you were looking at"
+    },
+    {
+      "action": "116080418",
+      "message": "S9Hzxs",
+      "name": "BRW-2 You do not need the artwork yet · +24h",
+      "next": "116080419",
+      "subject": "You do not need the finished artwork yet",
+      "preview": "We check every file for free before it prints. Or our designers can make it for you.",
+      "template_saved": "S2u4Zb",
+      "template_live": "WTpriS",
+      "template_name": "BEH-2 BRW-2 You do not need the artwork yet"
+    },
+    {
+      "action": "116080420",
+      "message": "VJzkyq",
+      "name": "BRW-3 Tell us the job, we will price it · +3d",
+      "next": null,
+      "subject": "Need a price you can forward?",
+      "preview": "An odd spec, a tight deadline, or someone else's signature. Our quotation team comes back within 24 hours.",
+      "template_saved": "XW9vMR",
+      "template_live": "XTxKvW",
+      "template_name": "BEH-2 BRW-3 Tell us the job, we will price it"
+    }
+  ],
+  "pushed": "2026-08-31",
+  "subjects_pushed": "2026-08-31"
+}

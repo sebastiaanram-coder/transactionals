@@ -47,6 +47,8 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import doc
+import subcategories as sc
 import offers
 import klaviyo_assets as ka
 
@@ -61,7 +63,7 @@ P = "hp-ao3h"
 # gain. Klaviyo attributes revenue to the message that was clicked either way.
 # The cost is that a report grouped by COUPON cannot separate the two messages -
 # if that reporting cut is wanted, split this into its own code first.
-CODE = "BASKET10"
+CODE = offers.ORDER_CODE_10
 
 RATE = 0.10
 SPLIT = 150         # this branch is carts at or above the split
@@ -442,6 +444,13 @@ prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, S
                               i18n.translator('order-03-high', False)))
 live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
                             i18n.translator('order-03-high', True)), True)
+_link_errs = []
+live_body = sc.swap_market_links(live_body, _link_errs)
+# An unverified path is a build error, not a warning: it would put a dead
+# link in a customer's inbox. These bodies carried the Irish home page,
+# help centre and quote form for every locale.
+if _link_errs:
+    raise SystemExit('market link: ' + '; '.join(_link_errs))
 prev_doc = PREVIEW_DOC % prev_body
 live_doc = KLAVIYO_DOC % {"split": SPLIT, "hours": HOURS, "code": CODE, "ceiling": CEILING,
                           "deepest": int(CEILING * RATE), "body": live_body}
@@ -455,7 +464,8 @@ for _lg in i18n.LANGS:
     open(os.path.join(OUT, "order-03-high-%s-proposed.html" % _lg), "w",
          encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-03-high-proposed.html"), "w", encoding="utf-8").write(prev_doc)
-open(os.path.join(OUT, "order-03-high-klaviyo.html"), "w", encoding="utf-8").write(live_doc)
+open(os.path.join(OUT, "order-03-high-klaviyo.html"), "w", encoding="utf-8").write(
+    doc.shell(live_doc, title="Abandoned order 03 high"))
 
 errs = []
 if "REPLACE-WITH-KLAVIYO-ASSET" in prev_body: errs.append("preview leaked a sentinel URL")
@@ -511,7 +521,8 @@ if "%s-promo" % P in markup:
 
 if offers.WELCOME_CODE in live_body: errs.append(
     "%s belongs to Welcome and must not be reused" % offers.WELCOME_CODE)
-if "BASKET25" in live_body: errs.append("BASKET25 is the low branch's deep offer, not this one")
+if offers.ORDER_CODE_25 in live_body: errs.append(
+    "%s is the low branch's deep offer, not this one" % offers.ORDER_CODE_25)
 if CODE not in live_body: errs.append("the code is missing from the body")
 if "%d&nbsp;hours" % HOURS not in live_body:
     errs.append("the expiry is not stated in the body")

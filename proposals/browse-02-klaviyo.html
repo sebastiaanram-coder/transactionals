@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="{% if person.locale == 'en-IE' %}en-IE{% elif person.locale == 'en-GB' %}en-GB{% elif person.locale == 'nl-NL' %}nl-NL{% elif person.locale == 'nl-BE' %}nl-BE{% elif person.locale == 'fr-FR' %}fr-FR{% elif person.locale == 'fr-BE' %}fr-BE{% elif person.locale == 'de-DE' %}de-DE{% elif person.locale == 'es-ES' %}es-ES{% elif person.locale == 'it-IT' %}it-IT{% else %}en-GB{% endif %}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Browse abandonment 02</title>
+</head>
+<body style="margin:0;padding:0;background:#f8f8f8;">
+{% comment %}
 <!--
   HP - Browse abandonment - 02 - The artwork email
   Klaviyo build. Paste as ONE custom HTML / universal block.
@@ -20,7 +29,7 @@
     - no prices. Premium is EUR 4.99 in Ireland but Design Check is not a
       catalog item, so there is no GB figure to bind.
 -->
-
+{% endcomment %}
 <div class="hp-b2-root">
 <style>
 .hp-b2-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
@@ -193,7 +202,7 @@ a.hp-b2-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decorat
       <span class="hp-b2-helpttl">{% if person.locale == 'en-IE' %}Rather just ask someone?{% elif person.locale == 'en-GB' %}Rather just ask someone?{% elif person.locale == 'nl-NL' %}Vraag je het liever gewoon aan iemand?{% elif person.locale == 'nl-BE' %}Vraag je het liever gewoon aan iemand?{% elif person.locale == 'fr-FR' %}Vous préférez simplement demander ?{% elif person.locale == 'fr-BE' %}Vous préférez simplement demander ?{% elif person.locale == 'de-DE' %}Lieber einfach jemanden fragen?{% elif person.locale == 'es-ES' %}¿Prefieres preguntar a alguien?{% elif person.locale == 'it-IT' %}Preferisci semplicemente chiedere?{% else %}Rather just ask someone?{% endif %}</span>
       <p class="hp-b2-helptx">{% if person.locale == 'en-IE' %}Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.{% elif person.locale == 'en-GB' %}Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.{% elif person.locale == 'nl-NL' %}Stuur ons het bestand, of een ruw idee van wat je wilt, en een designer vertelt je wat er nodig is voordat je je ergens aan vastlegt.{% elif person.locale == 'nl-BE' %}Stuur ons het bestand, of een ruw idee van wat je wilt, en een designer vertelt je wat er nodig is voordat je je ergens aan vastlegt.{% elif person.locale == 'fr-FR' %}Envoyez-nous le fichier, ou juste une idée de ce que vous voulez, et un graphiste vous dira ce qu'il faut avant que vous ne vous engagiez.{% elif person.locale == 'fr-BE' %}Envoyez-nous le fichier, ou juste une idée de ce que vous voulez, et un graphiste vous dira ce qu'il faut avant que vous ne vous engagiez.{% elif person.locale == 'de-DE' %}Schicken Sie uns die Datei oder eine grobe Idee, und ein Designer sagt Ihnen, was nötig ist, bevor Sie sich festlegen.{% elif person.locale == 'es-ES' %}Envíanos el archivo, o una idea aproximada de lo que quieres, y un diseñador te dirá qué hace falta antes de que te comprometas a nada.{% elif person.locale == 'it-IT' %}Mandaci il file, o anche solo un'idea di massima, e un designer ti dirà cosa serve prima che tu ti impegni.{% else %}Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.{% endif %}</p>
       <span class="hp-b2-helplinks">
-        <a href="mailto:hello@helloprint.com">{% if person.locale == 'en-IE' %}E-mail us your file{% elif person.locale == 'en-GB' %}E-mail us your file{% elif person.locale == 'nl-NL' %}Mail ons je bestand{% elif person.locale == 'nl-BE' %}Mail ons je bestand{% elif person.locale == 'fr-FR' %}Envoyez-nous votre fichier{% elif person.locale == 'fr-BE' %}Envoyez-nous votre fichier{% elif person.locale == 'de-DE' %}Schicken Sie uns Ihre Datei{% elif person.locale == 'es-ES' %}Envíanos tu archivo{% elif person.locale == 'it-IT' %}Mandaci il tuo file{% else %}E-mail us your file{% endif %}</a><span>&middot;</span><a href="https://www.helloprint.com/en-ie/always-a-perfect-design">{% if person.locale == 'en-IE' %}How the design check works{% elif person.locale == 'en-GB' %}How the design check works{% elif person.locale == 'nl-NL' %}Hoe de ontwerpcontrole werkt{% elif person.locale == 'nl-BE' %}Hoe de ontwerpcontrole werkt{% elif person.locale == 'fr-FR' %}Comment fonctionne la vérification{% elif person.locale == 'fr-BE' %}Comment fonctionne la vérification{% elif person.locale == 'de-DE' %}Wie der Dateicheck funktioniert{% elif person.locale == 'es-ES' %}Cómo funciona la revisión{% elif person.locale == 'it-IT' %}Come funziona il controllo{% else %}How the design check works{% endif %}</a>
+        <a href="mailto:hello@helloprint.com">{% if person.locale == 'en-IE' %}E-mail us your file{% elif person.locale == 'en-GB' %}E-mail us your file{% elif person.locale == 'nl-NL' %}Mail ons je bestand{% elif person.locale == 'nl-BE' %}Mail ons je bestand{% elif person.locale == 'fr-FR' %}Envoyez-nous votre fichier{% elif person.locale == 'fr-BE' %}Envoyez-nous votre fichier{% elif person.locale == 'de-DE' %}Schicken Sie uns Ihre Datei{% elif person.locale == 'es-ES' %}Envíanos tu archivo{% elif person.locale == 'it-IT' %}Mandaci il tuo file{% else %}E-mail us your file{% endif %}</a><span>&middot;</span><a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/always-a-perfect-design{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/always-a-perfect-design{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/altijd-een-perfect-ontwerp{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/altijd-een-perfect-ontwerp{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/nos-promesses{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/nos-promesses{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/nuestras-promesas{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/un-design-sempre-perfetto{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/immer-ein-perfektes-design{% else %}https://www.helloprint.com/en-gb/always-a-perfect-design{% endif %}">{% if person.locale == 'en-IE' %}How the design check works{% elif person.locale == 'en-GB' %}How the design check works{% elif person.locale == 'nl-NL' %}Hoe de ontwerpcontrole werkt{% elif person.locale == 'nl-BE' %}Hoe de ontwerpcontrole werkt{% elif person.locale == 'fr-FR' %}Comment fonctionne la vérification{% elif person.locale == 'fr-BE' %}Comment fonctionne la vérification{% elif person.locale == 'de-DE' %}Wie der Dateicheck funktioniert{% elif person.locale == 'es-ES' %}Cómo funciona la revisión{% elif person.locale == 'it-IT' %}Come funziona il controllo{% else %}How the design check works{% endif %}</a>
       </span>
     </div>
 
@@ -208,7 +217,7 @@ a.hp-b2-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decorat
 
   <div class="hp-b2-foot">
     <div class="hp-b2-footlogo">
-      <a href="https://www.helloprint.com/en-ie/"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+      <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/{% else %}https://www.helloprint.com/en-gb/{% endif %}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
     </div>
     <div class="hp-b2-soc">
       <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
@@ -224,4 +233,5 @@ a.hp-b2-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decorat
   </div>
 </div>
 </div>
-
+</body>
+</html>

@@ -27,6 +27,8 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import doc
+import subcategories as sc
 import offers
 import klaviyo_assets as ka
 import reviews as rv
@@ -40,7 +42,7 @@ P = "hp-ao3l"
 # NOT YET CREATED, and deliberately not BASKET10: this is a different offer at a
 # different depth, and sharing one code would make the two indistinguishable in
 # reporting. the Welcome code belongs to Welcome and must never appear here.
-CODE = "BASKET25"
+CODE = offers.ORDER_CODE_25
 
 # The deadline panel title. Kept short on purpose: it is 15px bold in a box that
 # is only about 277px wide once the icon and padding are taken out on a phone, so
@@ -425,7 +427,7 @@ KLAVIYO_DOC = """<!--
 
   *** THE CODE %(code)s DOES NOT EXIST YET. *** It must be a capped percentage:
   25%%%% off up to %(cap)d off. Talon.one can express that. It must NOT be
-  BASKET10 (a different offer, and reporting could not tell them apart) and must
+  %(code10)s (a different offer, and reporting could not tell them apart) and must
   never be the Welcome code, which belongs to Welcome.
 
   *** THE %(hours)d-HOUR EXPIRY MUST BE REAL. *** The email states it twice. If
@@ -453,8 +455,17 @@ prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, S
                               i18n.translator('order-03-low', False)))
 live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
                             i18n.translator('order-03-low', True)), True)
+_link_errs = []
+live_body = sc.swap_market_links(live_body, _link_errs)
+# An unverified path is a build error, not a warning: it would put a dead
+# link in a customer's inbox. These bodies carried the Irish home page,
+# help centre and quote form for every locale.
+if _link_errs:
+    raise SystemExit('market link: ' + '; '.join(_link_errs))
 prev_doc = PREVIEW_DOC % prev_body
-live_doc = KLAVIYO_DOC % {"split": SPLIT, "cap": CAP, "hours": HOURS, "code": CODE, "body": live_body}
+live_doc = KLAVIYO_DOC % {"split": SPLIT, "cap": CAP, "hours": HOURS,
+                          "code": CODE, "code10": offers.ORDER_CODE_10,
+                          "body": live_body}
 for _lg in i18n.LANGS:
     if _lg == i18n.SOURCE:
         continue
@@ -465,7 +476,8 @@ for _lg in i18n.LANGS:
     open(os.path.join(OUT, "order-03-low-%s-proposed.html" % _lg), "w",
          encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-03-low-proposed.html"), "w", encoding="utf-8").write(prev_doc)
-open(os.path.join(OUT, "order-03-low-klaviyo.html"), "w", encoding="utf-8").write(live_doc)
+open(os.path.join(OUT, "order-03-low-klaviyo.html"), "w", encoding="utf-8").write(
+    doc.shell(live_doc, title="Abandoned order 03 low"))
 
 errs = []
 if "REPLACE-WITH-KLAVIYO-ASSET" in prev_body: errs.append("preview leaked a sentinel URL")
@@ -531,7 +543,8 @@ for _lg in i18n.LANGS:
                     "one mobile line: %r" % (_lg, len(_t), MOBILE_TITLE_LIMIT, _t))
 if offers.WELCOME_CODE in live_body: errs.append(
     "%s belongs to Welcome and must not be reused" % offers.WELCOME_CODE)
-if "BASKET10" in live_body: errs.append("BASKET10 is email 2's offer, not this one")
+if offers.ORDER_CODE_10 in live_body: errs.append(
+    "%s is email 2's offer, not this one" % offers.ORDER_CODE_10)
 if CODE not in live_body: errs.append("the code is missing from the body")
 if SAMPLE_TOTAL >= SPLIT: errs.append("the sample basket must sit below the %d split" % SPLIT)
 if float(SAMPLE["TOTAL"]) != SAMPLE_TOTAL: errs.append("sample total disagrees with the band input")

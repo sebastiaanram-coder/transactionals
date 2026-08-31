@@ -27,6 +27,8 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n
+import doc
+import subcategories as sc
 import klaviyo_assets as ka
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -326,6 +328,13 @@ prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, S
                               i18n.translator('order-02-high', False)))
 live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
                             i18n.translator('order-02-high', True)), True)
+_link_errs = []
+live_body = sc.swap_market_links(live_body, _link_errs)
+# An unverified path is a build error, not a warning: it would put a dead
+# link in a customer's inbox. These bodies carried the Irish home page,
+# help centre and quote form for every locale.
+if _link_errs:
+    raise SystemExit('market link: ' + '; '.join(_link_errs))
 for _lg in i18n.LANGS:
     if _lg == i18n.SOURCE:
         continue
@@ -336,7 +345,7 @@ for _lg in i18n.LANGS:
     open(os.path.join(OUT, "order-02-high-%s-proposed.html" % _lg), "w",
          encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-02-high-proposed.html"), "w", encoding="utf-8").write(PREVIEW_DOC % prev_body)
-open(os.path.join(OUT, "order-02-high-klaviyo.html"), "w", encoding="utf-8").write(KLAVIYO_DOC % live_body)
+open(os.path.join(OUT, "order-02-high-klaviyo.html"), "w", encoding="utf-8").write(doc.shell(KLAVIYO_DOC % live_body, title='Abandoned order 02 high'))
 
 errs = []
 if "REPLACE-WITH-KLAVIYO-ASSET" in prev_body: errs.append("preview leaked a sentinel URL")

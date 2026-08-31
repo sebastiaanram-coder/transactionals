@@ -1,8 +1,18 @@
 # Abandoned Order — flow groundwork
 
-Status: technical groundwork done and verified. No emails designed yet.
-Replaces RFB's `Abandoned Cart` (VCVzm6) and `Abandoned Checkout`, which had near-identical
-copy differing only by trigger.
+**Status: BUILT in Klaviyo 31 August 2026, draft, awaiting review.**
+Flow [`YhfMdM`](https://www.klaviyo.com/flow/YhfMdM/edit), 6 emails across two branches.
+The build record - what was actually created, what changed from this proposal,
+and what is still open - is **proposals/klaviyo-flows-beh23.md**. Read that
+first; this document is the reasoning behind it and is kept as written.
+
+One thing here was superseded during the build: email 1 is NOT a single shared
+template. The high and low branches diverged enough in copy to be two, so the
+flow has six templates and six message nodes rather than five and six.
+
+Replaces RFB's `Abandoned Cart` (VCVzm6) and `Abandoned Checkout`, which had
+near-identical copy differing only by trigger. Both are still present, and must
+be switched off before this one is activated.
 
 ---
 

@@ -775,6 +775,14 @@
    "de": "Bedingungen: 10% auf Ihre erste Bestellung, maximal @@CAP@@ Rabatt. Eine Verwendung pro Kunde. Der Code läuft 5 Tage nach Ihrer Anmeldung ab. Nicht mit anderen Codes kombinierbar, nicht gültig für individuelle Angebote, und gilt nur für Produkte, ausgenommen Dienstleistungen und Versand.",
    "es": "Condiciones: 10% en tu primer pedido, con un descuento máximo de @@CAP@@. Un uso por cliente. El código caduca 5 días después de tu registro. No se puede combinar con otros códigos, no es válido en presupuestos personalizados y se aplica solo a productos, excluyendo servicios y envío.",
    "it": "Condizioni: 10% sul tuo primo ordine, sconto massimo di @@CAP@@. Un utilizzo per cliente. Il codice scade 5 giorni dopo la registrazione. Non cumulabile con altri codici, non valido su preventivi personalizzati, e si applica solo ai prodotti, esclusi servizi e spedizione."
+  },
+  "bk.service": {
+   "en": "Additional service",
+   "nl": "Aanvullende service",
+   "fr": "Service supplémentaire",
+   "de": "Zusätzliche Leistung",
+   "es": "Servicio adicional",
+   "it": "Servizio aggiuntivo"
   }
  },
  "commercial-print": {
@@ -4145,6 +4153,138 @@
    "de": "Nur noch 2 Tage für Ihre 10%",
    "es": "Solo quedan 2 días para tu 10%",
    "it": "Solo 2 giorni per il tuo 10%"
+  }
+ },
+ "flow-browse": {
+  "subj.brw1": {
+   "en": "The print you were looking at",
+   "nl": "Het drukwerk dat je bekeek",
+   "fr": "L'impression que vous regardiez",
+   "de": "Das Druckprodukt, das Sie sich angesehen haben",
+   "es": "La impresión que estabas viendo",
+   "it": "La stampa che stavi guardando"
+  },
+  "pre.brw1": {
+   "en": "Delivery and VAT are already in the number you saw. Change the quantity and the price moves with it.",
+   "nl": "Bezorging en btw zitten al in het bedrag dat je zag. Pas het aantal aan en de prijs beweegt mee.",
+   "fr": "La livraison et la TVA sont déjà comprises dans le montant affiché. Modifiez la quantité et le prix suit.",
+   "de": "Versand und MwSt. sind im gezeigten Preis schon enthalten. Ändern Sie die Menge und der Preis passt sich an.",
+   "es": "El envío y el IVA ya están en el precio que viste. Cambia la cantidad y el precio se ajusta.",
+   "it": "Spedizione e IVA sono già incluse nel prezzo che hai visto. Cambia la quantità e il prezzo si adegua."
+  },
+  "subj.brw2": {
+   "en": "You do not need the finished artwork yet",
+   "nl": "Je hebt het definitieve ontwerp nog niet nodig",
+   "fr": "Vous n'avez pas encore besoin du fichier final",
+   "de": "Sie brauchen die fertige Druckdatei noch nicht",
+   "es": "Todavía no necesitas el diseño definitivo",
+   "it": "Non ti serve ancora il file definitivo"
+  },
+  "pre.brw2": {
+   "en": "We check every file for free before it prints. Or our designers can make it for you.",
+   "nl": "We controleren elk bestand gratis voordat het gedrukt wordt. Of onze ontwerpers maken het voor je.",
+   "fr": "Nous vérifions chaque fichier gratuitement avant l'impression. Ou nos graphistes le créent pour vous.",
+   "de": "Wir prüfen jede Datei kostenlos vor dem Druck. Oder unsere Designer erstellen sie für Sie.",
+   "es": "Revisamos cada archivo gratis antes de imprimir. O nuestros diseñadores lo crean por ti.",
+   "it": "Controlliamo ogni file gratuitamente prima della stampa. Oppure i nostri designer lo creano per te."
+  },
+  "subj.brw3": {
+   "en": "Need a price you can forward?",
+   "nl": "Een prijs nodig die je kunt doorsturen?",
+   "fr": "Besoin d'un prix que vous pouvez transmettre ?",
+   "de": "Brauchen Sie ein Angebot, das Sie weiterleiten können?",
+   "es": "¿Necesitas un precio que puedas reenviar?",
+   "it": "Ti serve un prezzo da inoltrare?"
+  },
+  "pre.brw3": {
+   "en": "An odd spec, a tight deadline, or someone else's signature. Our quotation team comes back within 24 hours.",
+   "nl": "Een afwijkende specificatie, een krappe deadline of iemand die moet goedkeuren. Ons calculatieteam reageert binnen 24 uur.",
+   "fr": "Une spécification inhabituelle, un délai serré ou une signature à obtenir. Notre équipe devis répond sous 24 heures.",
+   "de": "Eine ungewöhnliche Spezifikation, ein knapper Termin oder eine Unterschrift, die noch fehlt. Unser Angebotsteam antwortet innerhalb von 24 Stunden.",
+   "es": "Una especificación poco habitual, un plazo ajustado o una firma que falta. Nuestro equipo de presupuestos responde en 24 horas.",
+   "it": "Una specifica insolita, una scadenza stretta o una firma che manca. Il nostro team preventivi risponde entro 24 ore."
+  }
+ },
+ "flow-order": {
+  "subj.ord1": {
+   "en": "Left something behind?",
+   "nl": "Iets laten staan?",
+   "fr": "Vous avez oublié quelque chose ?",
+   "de": "Etwas liegen gelassen?",
+   "es": "¿Te has dejado algo?",
+   "it": "Hai lasciato qualcosa?"
+  },
+  "pre.ord1": {
+   "en": "Every line exactly as you configured it, and a link straight back into your basket.",
+   "nl": "Elke regel precies zoals je die had ingesteld, met een link direct terug naar je mandje.",
+   "fr": "Chaque ligne exactement comme vous l'avez configurée, avec un lien direct vers votre panier.",
+   "de": "Jede Position genau so, wie Sie sie konfiguriert haben, mit einem Link direkt zurück in den Warenkorb.",
+   "es": "Cada línea exactamente como la configuraste, con un enlace directo a tu cesta.",
+   "it": "Ogni riga esattamente come l'hai configurata, con un link diretto al tuo carrello."
+  },
+  "subj.ord2h": {
+   "en": "Want a print expert to look at it first?",
+   "nl": "Wil je dat een printexpert er eerst naar kijkt?",
+   "fr": "Vous voulez qu'un expert en impression y jette un œil ?",
+   "de": "Soll ein Druckexperte es zuerst prüfen?",
+   "es": "¿Quieres que un experto en impresión lo revise primero?",
+   "it": "Vuoi che un esperto di stampa lo controlli prima?"
+  },
+  "pre.ord2h": {
+   "en": "Someone checks the spec, confirms the delivery date, and can invoice instead of taking a card.",
+   "nl": "Iemand controleert de specificatie, bevestigt de leverdatum en kan op factuur leveren in plaats van via kaart.",
+   "fr": "Quelqu'un vérifie la spécification, confirme la date de livraison et peut facturer au lieu de prendre une carte.",
+   "de": "Jemand prüft die Spezifikation, bestätigt den Liefertermin und kann auf Rechnung statt per Karte abrechnen.",
+   "es": "Alguien revisa la especificación, confirma la fecha de entrega y puede facturar en lugar de cobrar con tarjeta.",
+   "it": "Qualcuno controlla la specifica, conferma la data di consegna e può fatturare invece di usare la carta."
+  },
+  "subj.ord2l": {
+   "en": "10% off, for the next 72 hours",
+   "nl": "10% korting, de komende 72 uur",
+   "fr": "10 % de remise, pendant les 72 prochaines heures",
+   "de": "10% Rabatt, für die nächsten 72 Stunden",
+   "es": "10% de descuento, durante las próximas 72 horas",
+   "it": "10% di sconto, per le prossime 72 ore"
+  },
+  "pre.ord2l": {
+   "en": "Change the quantity, watch the price move, and order in three clicks.",
+   "nl": "Pas het aantal aan, zie de prijs meebewegen en bestel in drie klikken.",
+   "fr": "Modifiez la quantité, voyez le prix suivre et commandez en trois clics.",
+   "de": "Ändern Sie die Menge, sehen Sie den Preis mitgehen und bestellen Sie in drei Klicks.",
+   "es": "Cambia la cantidad, mira cómo se ajusta el precio y pide en tres clics.",
+   "it": "Cambia la quantità, guarda il prezzo adeguarsi e ordina in tre clic."
+  },
+  "subj.ord3h": {
+   "en": "Still happy to go through this with you",
+   "nl": "We nemen het nog steeds graag met je door",
+   "fr": "Nous restons disponibles pour en discuter avec vous",
+   "de": "Wir gehen es weiterhin gern mit Ihnen durch",
+   "es": "Seguimos encantados de repasarlo contigo",
+   "it": "Siamo ancora qui per esaminarlo con te"
+  },
+  "pre.ord3h": {
+   "en": "The offer of a print expert stands, and there is 10% off for the next 72 hours.",
+   "nl": "Het aanbod van een printexpert staat nog, en er is 10% korting de komende 72 uur.",
+   "fr": "L'offre d'un expert en impression tient toujours, et il y a 10 % de remise pendant 72 heures.",
+   "de": "Das Angebot eines Druckexperten steht weiterhin, und es gibt 10% Rabatt für die nächsten 72 Stunden.",
+   "es": "La oferta de un experto en impresión sigue en pie, y hay un 10% de descuento durante 72 horas.",
+   "it": "L'offerta di un esperto di stampa resta valida, e c'è il 10% di sconto per le prossime 72 ore."
+  },
+  "subj.ord3l": {
+   "en": "25% off, for the next 24 hours",
+   "nl": "25% korting, de komende 24 uur",
+   "fr": "25 % de remise, pendant les 24 prochaines heures",
+   "de": "25% Rabatt, für die nächsten 24 Stunden",
+   "es": "25% de descuento, durante las próximas 24 horas",
+   "it": "25% di sconto, per le prossime 24 ore"
+  },
+  "pre.ord3l": {
+   "en": "Your basket is still here, and the code runs out tomorrow.",
+   "nl": "Je mandje staat er nog, en de code verloopt morgen.",
+   "fr": "Votre panier est toujours là, et le code expire demain.",
+   "de": "Ihr Warenkorb ist noch da, und der Code läuft morgen ab.",
+   "es": "Tu cesta sigue ahí, y el código caduca mañana.",
+   "it": "Il tuo carrello è ancora qui, e il codice scade domani."
   }
  }
 }

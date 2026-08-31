@@ -204,11 +204,19 @@ def market_url_verified(path, live, esc=lambda x: x):
     Refresh the data with scripts/fetch_market_urls.py.
     """
     good = (_MU.get("paths") or {}).get(path)
-    if good is None:
+    exact_check = (_MU.get("urls") or {}).get(path) or {}
+    # EITHER SOURCE IS ENOUGH. "paths" records where the SAME slug resolves;
+    # "urls" records a market's own localised URL. A path that only has explicit
+    # per-market URLs - always-a-perfect-design, whose slug differs in every
+    # market - used to raise here even though it was fully verified.
+    if good is None and not exact_check:
         raise KeyError(
             "%r is not in data/market-urls.json, so no locale has been verified "
-            "for it. Add it to PATHS in scripts/fetch_market_urls.py and re-run "
-            "rather than shipping an unverified link." % path)
+            "for it. Add it to CONTENT_SLUGS in "
+            "scripts/build_market_urls_from_feeds.py (or PATHS in "
+            "scripts/fetch_market_urls.py) and re-run rather than shipping an "
+            "unverified link." % path)
+    good = good or []
 
     # THE FEED'S OWN URL WINS. "paths" only records whether /{market}/{path}
     # resolved, which assumes one slug for every market. It is not one slug:
@@ -240,6 +248,37 @@ def market_url_verified(path, live, esc=lambda x: x):
             "if" if not out else "elif", LOCALE_EXPR, email_loc,
             esc(for_locale(email_loc) or fb))
     return out + "{%% else %%}%s{%% endif %%}" % esc(fb)
+
+
+# WHAT A LITERAL /en-ie/ LINK IN A BODY MEANS, when the slug is not the path key.
+# en-IE spells the quote page "request-a-quote"; every other market spells it
+# differently, so market-urls.json keys it as "quote".
+_LINK_ALIAS = {"request-a-quote": "quote"}
+
+
+def swap_market_links(html, errs=None, live=True):
+    """Point every hardcoded /en-ie/ link at the reader's own market.
+
+    ONE REGEX PASS, NOT A LOOP OF str.replace. The bare home path
+    "https://www.helloprint.com/en-ie/" is a PREFIX of every other link here and
+    of the en-IE branch of every switch this emits, so a replace loop reaches
+    back into finished switches and nests a home switch inside each one. That
+    exact bug once turned all 30 links in the Welcome emails into home-page
+    switches. A single pass never re-scans its own output.
+    """
+    import re as _re
+
+    def one(m):
+        path = _LINK_ALIAS.get(m.group(1), m.group(1))
+        try:
+            return market_url_verified(path, live)
+        except KeyError:
+            if errs is not None:
+                errs.append("%r is linked but is not in data/market-urls.json, "
+                            "so no locale has been verified for it" % path)
+            return m.group(0)
+
+    return _re.sub(r"https://www\.helloprint\.com/en-ie/([a-z0-9-]*)", one, html)
 
 
 def market_url_gaps(paths):

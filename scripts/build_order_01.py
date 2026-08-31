@@ -32,6 +32,8 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n
+import doc
+import subcategories as sc
 import klaviyo_assets as ka
 import reviews as rv
 
@@ -373,6 +375,10 @@ def emit(high):
                               i18n.translator('order-01', False)), high)
     lb = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
                             i18n.translator('order-01', True)), high, True)
+    _link_errs = []
+    lb = sc.swap_market_links(lb, _link_errs)
+    if _link_errs:
+        raise SystemExit('market link: ' + '; '.join(_link_errs))
     for _lg in i18n.LANGS:
         if _lg == i18n.SOURCE:
             continue
@@ -387,7 +393,8 @@ def emit(high):
     open(os.path.join(OUT, "order-01-%s-proposed.html" % tag), "w", encoding="utf-8").write(
         PREVIEW_DOC % (tag, pb))
     open(os.path.join(OUT, "order-01-%s-klaviyo.html" % tag), "w", encoding="utf-8").write(
-        KLAVIYO_DOC % (tag.upper(), pb and lb))
+        doc.shell(KLAVIYO_DOC % (tag.upper(), pb and lb),
+                  title="Abandoned order 01 " + tag))
     check(lb, pb, high, tag)
     print("%-4s  preview %6d  klaviyo %6d" % (tag, len(pb), len(lb)))
 

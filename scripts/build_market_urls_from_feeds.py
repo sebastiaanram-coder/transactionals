@@ -77,6 +77,17 @@ CONTENT_SLUGS = {
         "nl-NL": "duurzaamheid", "nl-BE": "duurzaamheid",
         "fr-FR": "durabilite", "fr-BE": "durabilite",
         "de-DE": "nachhaltigkeit", "es-ES": "sostenibilidad"},
+    # The artwork-check promise page. Six markets have their own; fr-FR, fr-BE
+    # and es-ES have no equivalent, so they point at that market's OWN
+    # our-promises page instead of an English one - same language, and the
+    # artwork-check promise is stated there. es-ES has /soluciones-diseno, which
+    # resolves but is a design-SERVICES page, not the promise, so it is not used.
+    "always-a-perfect-design": {
+        "en-IE": "always-a-perfect-design", "en-GB": "always-a-perfect-design",
+        "nl-NL": "altijd-een-perfect-ontwerp", "nl-BE": "altijd-een-perfect-ontwerp",
+        "de-DE": "immer-ein-perfektes-design", "it-IT": "un-design-sempre-perfetto",
+        "fr-FR": "nos-promesses", "fr-BE": "nos-promesses",
+        "es-ES": "nuestras-promesas"},
     "quote": {
         "en-IE": "request-a-quote", "en-GB": "quote",
         "nl-NL": "offerte-aanvragen", "nl-BE": "offerte-aanvragen",

@@ -21,6 +21,7 @@ Notes on what is NOT available (all confirmed by render, do not "fix" these):
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import i18n
+import doc
 import klaviyo_assets as ka
 import reviews as rv
 import subcategories as sc
@@ -586,9 +587,19 @@ for _lg in i18n.LANGS:
                  "body": build(SAMPLE, SAMPLE_ASSETS, sample_xsell(
                      i18n.translator('browse-01', False, _loc)), False, _loc)})
 live_body = build(LIVE, LIVE_ASSETS, live_xsell(i18n.translator('browse-01', True)), True)
+# Point the hardcoded /en-ie/ links at the reader's own market. These bodies
+# carried the Irish home page, help centre, quote form and artwork-check page
+# for every locale, which is why this flow was described as Ireland-only.
+_link_errs = []
+live_body = sc.swap_market_links(live_body, _link_errs)
+# An unverified path is a build error, not a warning: shipping it would put
+# a dead link in a customer's inbox. errs[] is declared further down in
+# these files, so this fails on the spot instead.
+if _link_errs:
+    raise SystemExit('market link: ' + '; '.join(_link_errs))
 prev = PREVIEW_DOC % {"lang": i18n.html_lang(False),
                       "body": prev_body}
-live = KLAVIYO_DOC % live_body
+live = doc.shell(KLAVIYO_DOC % live_body, title='Browse abandonment 01')
 
 open(os.path.join(OUT, "browse-01-proposed.html"), "w", encoding="utf-8").write(prev)
 open(os.path.join(OUT, "browse-01-klaviyo.html"), "w", encoding="utf-8").write(live)
