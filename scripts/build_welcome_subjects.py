@@ -55,15 +55,24 @@ KLAVIYO_LOCALE_LANG = {"en-GB": "en", "en-IE": "en", "nl": "nl", "nl-BE": "nl",
                        "fr": "fr", "fr-BE": "fr", "de": "de", "es": "es",
                        "it": "it"}
 
-# flow message id -> (name, scope, key). Five of the seven subjects are already a
-# translated headline, so they are reused rather than translated twice.
+# flow message id -> (name, scope, key).
+#
+# THE TWO BRANCHES GET DIFFERENT SUBJECTS ON PURPOSE. The has-not-ordered path
+# (WEL-1..4) is conversion copy that names the discount and counts it down, and
+# escalates: day 0 names the offer, day 1 adds "4 days left", day 3 leads with
+# "only 2 days left", day 5 is "last day". The has-ordered path (the B messages)
+# keeps the neutral headline - pushing a first-order discount at someone who has
+# already ordered is what the B branch exists to avoid.
+#
+# The countdown figures are the ones the email BODY already asserts (5/4/2/last
+# day, matching the 0/1/3/5 cadence), so a subject cannot contradict its email.
 SUBJECTS = {
     "WC7XqJ": ("WEL-1 Welcome · day 0 (1h)",       "flow-welcome", "subj.wel1"),
     "T3gcpL": ("WEL-1B Welcome · ord@S1",          "welcome-01", "h1"),
-    "SWCW4n": ("WEL-2 Behind the print · day 1",   "welcome-02", "h1"),
+    "SWCW4n": ("WEL-2 Behind the print · day 1",   "flow-welcome", "subj.wel2"),
     "VZ6UN7": ("WEL-2B Behind the print · ord@S1", "welcome-02", "h1"),
     "TzDYEZ": ("WEL-2B Behind the print · ord@S2", "welcome-02", "h1"),
-    "XCghBN": ("WEL-3 Rated excellent · day 3",    "_shared", "wc.waiting"),
+    "XCghBN": ("WEL-3 Rated excellent · day 3",    "flow-welcome", "subj.wel3"),
     "YjUAzP": ("WEL-3B Rated excellent · ord@S1",  "welcome-03", "h1"),
     "Tv2JjB": ("WEL-3B Rated excellent · ord@S2",  "welcome-03", "h1"),
     "VPQq7j": ("WEL-3B Rated excellent · ord@S3",  "welcome-03", "h1"),

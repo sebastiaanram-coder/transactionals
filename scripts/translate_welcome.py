@@ -349,10 +349,19 @@ def swap_reviews(html, slug, tr, locale=None, live=False):
     return QUOTE_RE.sub(repl, html)
 
 
+# Keys that exist ONLY to be swapped into a no-discount variant, so their
+# English is deliberately not in the source file. Without this exclusion the main
+# substitution loop hunts for `pre_ordered` in the file, fails to find it, and
+# reports six failures per email for a key that is working correctly.
+VARIANT_ONLY_KEYS = {"pre_ordered"}
+
+
 def strings_for(slug):
     """Every (key, English) this email substitutes, from the translation file."""
     d = i18n.data()
-    keys = [(k, (d.get(slug) or {})[k]["en"]) for k in sorted((d.get(slug) or {}))]
+    keys = [(k, (d.get(slug) or {})[k]["en"])
+            for k in sorted((d.get(slug) or {}))
+            if k not in VARIANT_ONLY_KEYS]
     return keys + [(k, e) for k, e in SHARED_IN_FILE]
 
 
@@ -436,6 +445,12 @@ VARIANT_EDITS = {
         # balloon with it and leaving three orphaned </div> tags. The variant
         # looked plausible in a byte count and was a broken email.
         (r'<div class="hp-w2-promo">.*?</div>', ""),
+        # ALSO REPLACE THE PREHEADER. This email shares one preheader
+        # between both branches, and the has-not-ordered version now
+        # counts down the discount. Left alone, someone who had just
+        # ordered would get an inbox snippet pushing an offer they
+        # cannot use - the exact thing this variant exists to avoid.
+        (r'(<div class="hp-w2-pre">)(.*?)(</div>)', r"\1@@PRE@@\3"),
     ],
     # In 03 and 04 the discount is ONLY the green bar. Everything else stands on
     # its own: 03 is three real Trustpilot reviews and a 4.5 rating, 04 is John
@@ -445,9 +460,21 @@ VARIANT_EDITS = {
     # still a complete email.
     "welcome-03": [
         (r'<div class="hp-w3-promo">.*?</div>', ""),
+        # ALSO REPLACE THE PREHEADER. This email shares one preheader
+        # between both branches, and the has-not-ordered version now
+        # counts down the discount. Left alone, someone who had just
+        # ordered would get an inbox snippet pushing an offer they
+        # cannot use - the exact thing this variant exists to avoid.
+        (r'(<div class="hp-w3-pre">)(.*?)(</div>)', r"\1@@PRE@@\3"),
     ],
     "welcome-04": [
         (r'<div class="hp-w4-promo">.*?</div>', ""),
+        # ALSO REPLACE THE PREHEADER. This email shares one preheader
+        # between both branches, and the has-not-ordered version now
+        # counts down the discount. Left alone, someone who had just
+        # ordered would get an inbox snippet pushing an offer they
+        # cannot use - the exact thing this variant exists to avoid.
+        (r'(<div class="hp-w4-pre">)(.*?)(</div>)', r"\1@@PRE@@\3"),
     ],
 }
 
@@ -464,14 +491,43 @@ def variant(html, slug, tr):
                         "not removed" % (slug, pattern[:54]))
             continue
         html = new
-    for token, key, english in (
-            ("@@CTA@@", "cta.browse_range", "Browse the full range"),
-            ("@@PRE@@", "wc.pre_nocode",
-             "The prints most businesses start with, and the people behind them."),
-            ("@@SECTSUB@@", "wc.sectsub_nocode",
-             "Pick one and see what it comes to.")):
+    for token, key, english in VARIANT_TOKENS.get(slug, ()):
+        if token not in html:
+            errs.append("%s variant: %s was never inserted, so %s is unused"
+                        % (slug, token, key))
+            continue
         html = html.replace(token, tr(key, english))
+    left = re.findall(r"@@[A-Z]+@@", html)
+    if left:
+        errs.append("%s variant: %s survived into the output"
+                    % (slug, sorted(set(left))))
     return html
+
+
+# WHICH NEUTRAL STRING EACH TOKEN RESOLVES TO, per email.
+#
+# This used to be one shared list, so every email's @@PRE@@ resolved to
+# wc.pre_nocode - which is welcome-01's line about "the prints most businesses
+# start with". Correct for 01 and wrong for the other three, which now each keep
+# their own former preheader as `pre_ordered`.
+VARIANT_TOKENS = {
+    "welcome-01": (
+        ("@@CTA@@", "cta.browse_range", "Browse the full range"),
+        ("@@PRE@@", "wc.pre_nocode",
+         "The prints most businesses start with, and the people behind them."),
+        ("@@SECTSUB@@", "wc.sectsub_nocode",
+         "Pick one and see what it comes to."),
+    ),
+    "welcome-02": (("@@PRE@@", "pre_ordered",
+                    "Printed closer to you, a B Corp certification, and over "
+                    "10,000 products."),),
+    "welcome-03": (("@@PRE@@", "pre_ordered",
+                    "Rated 4.5 on Trustpilot from 34,000+ reviews. Here is what "
+                    "a few of them say."),),
+    "welcome-04": (("@@PRE@@", "pre_ordered",
+                    "Artwork or just an idea. Send either and John&rsquo;s team "
+                    "takes it from there."),),
+}
 
 
 for slug in EMAILS:

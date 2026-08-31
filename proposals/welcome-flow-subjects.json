@@ -35,19 +35,19 @@
  },
  "SWCW4n": {
   "name": "WEL-2 Behind the print · day 1",
-  "scope": "welcome-02",
-  "key": "h1",
-  "source": "Meet the people behind your print",
+  "scope": "flow-welcome",
+  "key": "subj.wel2",
+  "source": "Your 10% is waiting, and 4 days left to use it",
   "translations": {
-   "en-GB": "Meet the people behind your print",
-   "en-IE": "Meet the people behind your print",
-   "nl": "Maak kennis met de mensen achter je drukwerk",
-   "nl-BE": "Maak kennis met de mensen achter je drukwerk",
-   "fr": "Rencontrez les gens derrière vos imprimés",
-   "fr-BE": "Rencontrez les gens derrière vos imprimés",
-   "de": "Lernen Sie die Menschen hinter Ihrem Druck kennen",
-   "es": "Conoce a la gente detrás de tu impresión",
-   "it": "Conosci le persone dietro le tue stampe"
+   "en-GB": "Your 10% is waiting, and 4 days left to use it",
+   "en-IE": "Your 10% is waiting, and 4 days left to use it",
+   "nl": "Je 10% staat klaar, en je hebt nog 4 dagen",
+   "nl-BE": "Je 10% staat klaar, en je hebt nog 4 dagen",
+   "fr": "Vos 10% vous attendent, et il reste 4 jours",
+   "fr-BE": "Vos 10% vous attendent, et il reste 4 jours",
+   "de": "Ihre 10% warten, und Sie haben noch 4 Tage",
+   "es": "Tu 10% te espera, y quedan 4 días",
+   "it": "Il tuo 10% ti aspetta, e restano 4 giorni"
   }
  },
  "VZ6UN7": {
@@ -86,19 +86,19 @@
  },
  "XCghBN": {
   "name": "WEL-3 Rated excellent · day 3",
-  "scope": "_shared",
-  "key": "wc.waiting",
-  "source": "Your 10% is still waiting",
+  "scope": "flow-welcome",
+  "key": "subj.wel3",
+  "source": "Only 2 days left on your 10%",
   "translations": {
-   "en-GB": "Your 10% is still waiting",
-   "en-IE": "Your 10% is still waiting",
-   "nl": "Je 10% staat nog klaar",
-   "nl-BE": "Je 10% staat nog klaar",
-   "fr": "Vos 10% vous attendent toujours",
-   "fr-BE": "Vos 10% vous attendent toujours",
-   "de": "Ihre 10% warten noch",
-   "es": "Tu 10% sigue esperando",
-   "it": "Il tuo 10% ti aspetta ancora"
+   "en-GB": "Only 2 days left on your 10%",
+   "en-IE": "Only 2 days left on your 10%",
+   "nl": "Nog maar 2 dagen voor je 10%",
+   "nl-BE": "Nog maar 2 dagen voor je 10%",
+   "fr": "Plus que 2 jours pour vos 10%",
+   "fr-BE": "Plus que 2 jours pour vos 10%",
+   "de": "Nur noch 2 Tage für Ihre 10%",
+   "es": "Solo quedan 2 días para tu 10%",
+   "it": "Solo 2 giorni per il tuo 10%"
   }
  },
  "YjUAzP": {

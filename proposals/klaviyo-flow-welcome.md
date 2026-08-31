@@ -394,3 +394,67 @@ fails loudly instead of putting the wrong email under a heading.
 RFB's twelve originals are the "before" half of the comparison and are left
 byte-for-byte alone. Thirteen `33,000` references remain in them, correctly —
 that is what RFB built.
+
+---
+
+## Conversion copy on the has-not-ordered branch — 2026-08-31
+
+Subjects and preview text on the four has-not-ordered emails now name the
+discount and count it down, and the pressure **builds** rather than starting at
+maximum:
+
+| | subject | preview text |
+|---|---|---|
+| day 0 | Welcome to Helloprint, and your 10% code | Your 10% code is inside, and you have 5 days to use it. |
+| day 1 | Your 10% is waiting, and 4 days left to use it | Printed closer to you by a certified B Corp. Your 10% has 4 days left. |
+| day 3 | Only 2 days left on your 10% | Rated 4.5 from 34,000+ reviews. Only 2 days left to use your 10%. |
+| day 5 | Last day for your 10% | Artwork or just an idea, we take it from there. Last day for your 10%. |
+
+Day 0 names the offer without a countdown — opening the relationship with a
+deadline is pressure, not persuasion. Day 1 adds the countdown, day 3 promotes it
+to the whole subject, day 5 is the final call. All six languages.
+
+**The countdown figures are not invented.** Each email's BODY already carried a
+day-accurate countdown — welcome-01 "Expires in 5 days", 02 "Expires in 4 days",
+03 "2 days left", 04 "Last day!" — matching the 0/1/3/5 cadence. The subjects
+reuse those exact figures, so a subject cannot contradict the email it opens.
+
+**No coupon code in this copy, deliberately.** "HELLO10" in four preheaders across
+six languages would be 24 more places to edit when the code changes. The literal
+code stays in one place, the code box in welcome-01. This copy says "your 10%".
+
+### The has-ordered branch had to be protected first
+
+welcome-02, 03 and 04 shared ONE preheader between both branches — only
+welcome-01 replaced its own in the no-discount variant. Making the shared one
+count down the discount would have given someone who had just ordered an inbox
+snippet pushing an offer they cannot use, which is precisely what the B branch
+exists to avoid. So each of those three now keeps its former neutral preheader as
+`pre_ordered`, and the variant swaps it in. Verified after the push: no discount
+or urgency wording in any B-branch subject or preview text.
+
+The per-token map also had to become per-email. It was one shared list, so every
+`@@PRE@@` resolved to `wc.pre_nocode` — welcome-01's line about "the prints most
+businesses start with". Right for 01, wrong for the other three.
+
+### Two API details found doing this
+
+- **The translations endpoint is BETA and needs a `.pre` revision.** `2025-10-15`
+  says "before the earliest available, use a date after 2026-04-15"; `2026-04-15`
+  and `2026-07-15` say "no valid revisions found for method"; `2026-10-15` says
+  "unable to specify a future revision date". The one that works is
+  **`2026-07-15.pre`**. Flow actions and templates still use `2025-10-15`.
+- **Re-attaching with the message's CURRENT copy id is a no-op** — it does not
+  re-clone. Only pointing at the master mints a fresh copy. Useful when changing
+  a subject without wanting new copy ids.
+
+### Still unverified, and now more prominent
+
+The 5-day expiry is asserted in the **subject line of three of the four** emails
+and in all four preview texts. It was already in every body with a day-accurate
+countdown, so this amplifies an existing claim rather than introducing one — but
+if HELLO10 is not actually configured to expire five days after signup, this is
+now the most visible thing in the inbox. **Confirm the coupon's real terms.** If
+the window is different, the figures live in one place per email
+(`welcome-0N/expires`, `flow-welcome/subj.wel*`, `welcome-0N/pre`) and one edit
+plus `push_templates.py` changes all of it.

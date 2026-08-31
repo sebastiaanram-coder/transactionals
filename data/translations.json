@@ -3347,12 +3347,12 @@
  },
  "welcome-01": {
   "pre": {
-   "en": "Your 10% code is inside, and the prints most businesses start with.",
-   "nl": "Je 10%-code zit erin, plus het drukwerk waar de meeste bedrijven mee beginnen.",
-   "fr": "Votre code 10% est à l'intérieur, avec les imprimés par lesquels commencent la plupart des entreprises.",
-   "de": "Ihr 10%-Code steht drin, dazu die Drucksachen, mit denen die meisten Unternehmen anfangen.",
-   "es": "Tu código del 10% está dentro, y lo que imprimen primero la mayoría de las empresas.",
-   "it": "Il tuo codice 10% è qui dentro, insieme alle stampe da cui parte la maggior parte delle aziende."
+   "en": "Your 10% code is inside, and you have 5 days to use it.",
+   "nl": "Je 10%-code zit erin, en je hebt 5 dagen om hem te gebruiken.",
+   "fr": "Votre code 10% est à l'intérieur, et vous avez 5 jours pour l'utiliser.",
+   "de": "Ihr 10%-Code ist enthalten, und Sie haben 5 Tage Zeit.",
+   "es": "Tu código del 10% está dentro, y tienes 5 días para usarlo.",
+   "it": "Il tuo codice 10% è dentro, e hai 5 giorni per usarlo."
   },
   "h1": {
    "en": "Welcome to Helloprint",
@@ -3521,16 +3521,24 @@
    "de": "1 Stück",
    "es": "1 unidad",
    "it": "1 pezzo"
+  },
+  "pre_ordered": {
+   "en": "Your 10% code is inside, and the prints most businesses start with.",
+   "nl": "Je 10%-code zit erin, plus het drukwerk waar de meeste bedrijven mee beginnen.",
+   "fr": "Votre code 10% est à l'intérieur, avec les imprimés par lesquels commencent la plupart des entreprises.",
+   "de": "Ihr 10%-Code steht drin, dazu die Drucksachen, mit denen die meisten Unternehmen anfangen.",
+   "es": "Tu código del 10% está dentro, y lo que imprimen primero la mayoría de las empresas.",
+   "it": "Il tuo codice 10% è qui dentro, insieme alle stampe da cui parte la maggior parte delle aziende."
   }
  },
  "welcome-02": {
   "pre": {
-   "en": "Printed closer to you, a B Corp certification, and over 10,000 products.",
-   "nl": "Dichter bij je gedrukt, een B Corp-certificering en meer dan 10.000 producten.",
-   "fr": "Imprimé plus près de chez vous, une certification B Corp et plus de 10 000 produits.",
-   "de": "Näher bei Ihnen gedruckt, eine B Corp-Zertifizierung und über 10.000 Produkte.",
-   "es": "Impreso más cerca de ti, una certificación B Corp y más de 10.000 productos.",
-   "it": "Stampato più vicino a te, una certificazione B Corp e oltre 10.000 prodotti."
+   "en": "Printed closer to you by a certified B Corp. Your 10% has 4 days left.",
+   "nl": "Gedrukt dichter bij jou door een gecertificeerde B Corp. Je 10% is nog 4 dagen geldig.",
+   "fr": "Imprimé plus près de vous par une B Corp certifiée. Vos 10% sont valables encore 4 jours.",
+   "de": "Näher bei Ihnen gedruckt von einer zertifizierten B Corp. Ihre 10% gelten noch 4 Tage.",
+   "es": "Impreso más cerca de ti por una B Corp certificada. Tu 10% vale 4 días más.",
+   "it": "Stampato più vicino a te da una B Corp certificata. Il tuo 10% vale altri 4 giorni."
   },
   "expires": {
    "en": "&nbsp;&middot;&nbsp;Expires in 4 days",
@@ -3707,16 +3715,24 @@
    "de": "Flyer, Visitenkarten, Poster und Roll-up-Banner",
    "es": "Flyers, tarjetas de visita, pósters y roll-ups",
    "it": "Volantini, biglietti da visita, poster e roll-up"
+  },
+  "pre_ordered": {
+   "en": "Printed closer to you, a B Corp certification, and over 10,000 products.",
+   "nl": "Dichter bij je gedrukt, een B Corp-certificering en meer dan 10.000 producten.",
+   "fr": "Imprimé plus près de chez vous, une certification B Corp et plus de 10 000 produits.",
+   "de": "Näher bei Ihnen gedruckt, eine B Corp-Zertifizierung und über 10.000 Produkte.",
+   "es": "Impreso más cerca de ti, una certificación B Corp y más de 10.000 productos.",
+   "it": "Stampato più vicino a te, una certificazione B Corp e oltre 10.000 prodotti."
   }
  },
  "welcome-03": {
   "pre": {
-   "en": "Rated 4.5 on Trustpilot from 34,000+ reviews. Here is what a few of them say.",
-   "nl": "Beoordeeld met 4,5 op Trustpilot uit 34.000+ reviews. Dit zeggen er een paar.",
-   "fr": "Noté 4,5 sur Trustpilot sur 34 000+ avis. Voici ce qu'en disent quelques-uns.",
-   "de": "Bewertet mit 4,5 auf Trustpilot aus 34.000+ Bewertungen. Das sagen einige davon.",
-   "es": "Valorado con 4,5 en Trustpilot a partir de 34.000+ opiniones. Esto dicen algunas.",
-   "it": "Valutato 4,5 su Trustpilot su 34.000+ recensioni. Ecco cosa dicono alcune."
+   "en": "Rated 4.5 from 34,000+ reviews. Only 2 days left to use your 10%.",
+   "nl": "Beoordeeld met 4,5 uit 34.000+ reviews. Nog maar 2 dagen om je 10% te gebruiken.",
+   "fr": "Noté 4,5 sur 34 000+ avis. Plus que 2 jours pour utiliser vos 10%.",
+   "de": "Bewertet mit 4,5 aus 34.000+ Bewertungen. Nur noch 2 Tage für Ihre 10%.",
+   "es": "Valorado con 4,5 de 34.000+ opiniones. Solo 2 días para usar tu 10%.",
+   "it": "Valutato 4,5 su 34.000+ recensioni. Solo 2 giorni per usare il tuo 10%."
   },
   "h1": {
    "en": "Rated Excellent on Trustpilot",
@@ -3853,16 +3869,24 @@
    "de": "4,5 von 5 aus 34.000+ Bewertungen von Unternehmen wie Ihrem.",
    "es": "4,5 sobre 5 de 34.000+ opiniones de empresas como la tuya.",
    "it": "4,5 su 5 su 34.000+ recensioni di aziende come la tua."
+  },
+  "pre_ordered": {
+   "en": "Rated 4.5 on Trustpilot from 34,000+ reviews. Here is what a few of them say.",
+   "nl": "Beoordeeld met 4,5 op Trustpilot uit 34.000+ reviews. Dit zeggen er een paar.",
+   "fr": "Noté 4,5 sur Trustpilot sur 34 000+ avis. Voici ce qu'en disent quelques-uns.",
+   "de": "Bewertet mit 4,5 auf Trustpilot aus 34.000+ Bewertungen. Das sagen einige davon.",
+   "es": "Valorado con 4,5 en Trustpilot a partir de 34.000+ opiniones. Esto dicen algunas.",
+   "it": "Valutato 4,5 su Trustpilot su 34.000+ recensioni. Ecco cosa dicono alcune."
   }
  },
  "welcome-04": {
   "pre": {
-   "en": "Artwork or just an idea. Send either and John&rsquo;s team takes it from there.",
-   "nl": "Een ontwerp of alleen een idee. Stuur allebei gerust, John&rsquo;s team pakt het vanaf daar op.",
-   "fr": "Un visuel ou juste une idée. Envoyez l'un ou l'autre et l'équipe de John prend le relais.",
-   "de": "Eine Druckdatei oder nur eine Idee. Schicken Sie beides, Johns Team übernimmt ab da.",
-   "es": "Un diseño o solo una idea. Envía cualquiera de los dos y el equipo de John se encarga.",
-   "it": "Un file o solo un'idea. Manda l'uno o l'altro e il team di John prende in mano la cosa."
+   "en": "Artwork or just an idea, we take it from there. Last day for your 10%.",
+   "nl": "Een ontwerp of alleen een idee, wij nemen het over. Laatste dag voor je 10%.",
+   "fr": "Un visuel ou juste une idée, on prend le relais. Dernier jour pour vos 10%.",
+   "de": "Eine Druckdatei oder nur eine Idee, wir übernehmen. Letzter Tag für Ihre 10%.",
+   "es": "Un diseño o solo una idea, nos encargamos. Último día para tu 10%.",
+   "it": "Un file o solo un'idea, ci pensiamo noi. Ultimo giorno per il tuo 10%."
   },
   "lastday": {
    "en": "&nbsp;&middot;&nbsp;Last day!",
@@ -4047,6 +4071,14 @@
    "de": "John, Druckexperte bei Helloprint",
    "es": "John, experto en impresión en Helloprint",
    "it": "John, esperto di stampa in Helloprint"
+  },
+  "pre_ordered": {
+   "en": "Artwork or just an idea. Send either and John&rsquo;s team takes it from there.",
+   "nl": "Een ontwerp of alleen een idee. Stuur allebei gerust, John&rsquo;s team pakt het vanaf daar op.",
+   "fr": "Un visuel ou juste une idée. Envoyez l'un ou l'autre et l'équipe de John prend le relais.",
+   "de": "Eine Druckdatei oder nur eine Idee. Schicken Sie beides, Johns Team übernimmt ab da.",
+   "es": "Un diseño o solo una idea. Envía cualquiera de los dos y el equipo de John se encarga.",
+   "it": "Un file o solo un'idea. Manda l'uno o l'altro e il team di John prende in mano la cosa."
   }
  },
  "flow-welcome": {
@@ -4065,6 +4097,22 @@
    "de": "Letzter Tag für Ihre 10%",
    "es": "Último día para tu 10%",
    "it": "Ultimo giorno per il tuo 10%"
+  },
+  "subj.wel2": {
+   "en": "Your 10% is waiting, and 4 days left to use it",
+   "nl": "Je 10% staat klaar, en je hebt nog 4 dagen",
+   "fr": "Vos 10% vous attendent, et il reste 4 jours",
+   "de": "Ihre 10% warten, und Sie haben noch 4 Tage",
+   "es": "Tu 10% te espera, y quedan 4 días",
+   "it": "Il tuo 10% ti aspetta, e restano 4 giorni"
+  },
+  "subj.wel3": {
+   "en": "Only 2 days left on your 10%",
+   "nl": "Nog maar 2 dagen voor je 10%",
+   "fr": "Plus que 2 jours pour vos 10%",
+   "de": "Nur noch 2 Tage für Ihre 10%",
+   "es": "Solo quedan 2 días para tu 10%",
+   "it": "Solo 2 giorni per il tuo 10%"
   }
  }
 }
