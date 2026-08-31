@@ -48,7 +48,9 @@ CACHE = os.path.join(os.path.dirname(os.path.dirname(HERE)), "data",
 # {% else %} and every email shows the placeholder instead of a review. That is a
 # silent failure, so the switch moved to exact matches on event.Locale, which is
 # what every other switch in these templates uses and has been rendered.
-LANG_EXPR = 'person.locale|slice:":2"'  # unverified in an {% if %}; do not branch on it
+# VERIFIED 2026-08-31 (template VTHUJw): |slice does work inside an {% if %}.
+# Kept unused anyway - the exact-match chain is clearer about Belgium.
+LANG_EXPR = 'person.locale|slice:":2"' 
 
 # The reader's locale comes from the PROFILE, not the event: a list-triggered
 # flow has no event, so event.Locale silently served English. Kept in step with

@@ -24,6 +24,18 @@ it can be backfilled onto existing customers where an event never can, and it is
 the field Klaviyo itself uses to localise the hosted preference and unsubscribe
 pages, so it has to be right regardless of what these templates do.
 
+A CUSTOM PROPERTY NAMED `locale` SHADOWS THE NATIVE FIELD. Verified by preview
+send on 2026-08-31 against a profile deliberately set to native nl-NL with a
+custom properties.locale of it-IT: the email rendered ITALIAN. With the custom
+property unset and native unchanged, the same template rendered DUTCH.
+
+So `person.locale` does resolve to the native field, but only when nothing
+shadows it. That makes retiring the custom property mandatory rather than tidy,
+and it has to happen in the SAME pass that populates native: 51 of 82 real
+profiles sampled that day carried both, so writing native first would have had
+no effect on precisely the profiles that already looked correct - silently, with
+nothing erroring.
+
 NATIVE `person.locale`, NOT A CUSTOM PROPERTY. A custom property named `locale`
 also existed on some profiles, which made `person.locale` ambiguous between the
 two - and the two genuinely diverged, one profile carrying native fr-FR against
@@ -36,12 +48,24 @@ half the size:
 
     {% if person.locale|slice:":2" == 'nl' %}
 
-but `|slice` inside an `{% if %}` comparison has never been rendered in this
-account, whereas an exact-match elif chain is what every template
-here already uses and an 83-branch chain has been rendered successfully. The
-translation programme is not the place to introduce an unverified mechanism. The
-duplication is free: Klaviyo renders before it sends, so exactly one branch
-reaches the reader.
+This was avoided for the whole project because `|slice` inside an `{% if %}`
+had never been rendered in this account, and the same for `or`. BOTH ARE NOW
+VERIFIED (template VTHUJw, 2026-08-31, render API): with person.locale set to
+"nl-NL", `|slice:":2" == 'nl'` matched and
+`person.locale == 'nl-NL' or person.locale == 'nl-BE'` matched. Neither errored
+on a profile with no locale at all; both simply did not match, which is the
+behaviour the fallback depends on.
+
+So the flat chain is now a CHOICE, not a constraint. It is kept because the
+duplication costs nothing at send time - Klaviyo renders before it sends, so
+exactly one branch reaches the reader - and because an exact-match chain says
+plainly which locale gets which string, where a prefix test hides the Belgian
+cases. Switching to prefixes would roughly halve the block sizes, which is worth
+revisiting if any email approaches Gmail's 102KB clip.
+
+WHAT THE RENDER TEST ALSO CONFIRMED, and it is the one that mattered: a profile
+with NO locale falls to {% else %} and gets English, and so does a locale we do
+not translate (en-US, which 5 of 82 real profiles carried on 2026-08-31).
 
 Prose is chosen by LANGUAGE, links and product names by MARKET, and both are
 resolved per locale, so a Flemish or Belgian-French exception is a one-line
