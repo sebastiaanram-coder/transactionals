@@ -136,6 +136,41 @@ TP_BY_LANG = {"en-IE": "ie", "en-GB": "uk", "nl": "nl", "nl-BE": "nl",
               "de-DE": "de"}
 TP_URL = "https://%s.trustpilot.com/evaluate/helloprint.com"
 
+# WHERE A READER GOES TO READ THE REVIEWS. Same per-language reasoning as
+# TP_URL above, and the same map, because the read page is served in the
+# subdomain's language exactly as the write form is. This used to be hardcoded
+# to ie.trustpilot.com in 24 places, so a French reader was sent to the Irish
+# site. Every subdomain in TP_BY_LANG resolves; a made-up one does not, which
+# is how the map was checked.
+TP_READ_URL = "https://%s.trustpilot.com/review/helloprint.com"
+
+
+def read_url(cf_locale):
+    return TP_READ_URL % TP_BY_LANG.get(cf_locale, "uk")
+
+
+def url_switch(url_for, locale_map, locale_expr, live, locale=None,
+               fallback_cf="en-GB"):
+    """One Trustpilot link, as a Django switch when live and one URL when not.
+
+    url_for is read_url or write_url. locale_map is subcategories.LOCALE_MAP and
+    locale_expr is i18n.LOCALE_EXPR; they are passed in rather than imported so
+    this module keeps having no dependencies of its own.
+
+    In preview mode this returns the link for the locale being previewed, NOT a
+    fixed one. The previous version always returned the Irish link, which is why
+    every non-English preview showed ie.trustpilot.com.
+    """
+    if not live:
+        return url_for(locale_map.get(locale, fallback_cf) if locale
+                       else fallback_cf)
+    out = ""
+    for email_loc, cf_loc in locale_map.items():
+        out += "{%% %s %s == '%s' %%}%s" % (
+            "if" if not out else "elif", locale_expr, email_loc,
+            url_for(cf_loc))
+    return out + "{%% else %%}%s{%% endif %%}" % url_for(fallback_cf)
+
 
 def write_url(cf_locale):
     return TP_URL % TP_BY_LANG.get(cf_locale, "uk")

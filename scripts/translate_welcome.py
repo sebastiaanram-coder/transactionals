@@ -25,6 +25,7 @@ import i18n
 import reviews as rv
 import subcategories as sc
 import klaviyo_assets as ka
+import catalog as cat
 
 OUT = os.path.join(ROOT, "proposals")
 EMAILS = ["welcome-01", "welcome-02", "welcome-03", "welcome-04"]
@@ -117,6 +118,140 @@ def real_unsubscribe(html, live, tr):
 WC_PATHS = ["", "all-products", "cs", "about-us", "sustainability",
             "our-promises", "contact", "quote", "budgetrollupbanners",
             "posters", "standardbusinesscards", "standardflyers"]
+
+
+# --------------------------------------------------------------- product tiles
+#
+# The four tiles in Welcome 01 were the last hardcoded thing in these emails: an
+# English name, an Irish euro price written with an English decimal point, an
+# English quantity, and a link to /en-ie/. All four of those are per market in
+# the catalog feed, so all four now come from it. See _lib/catalog.py.
+
+# which tile is which, recognised by the slug in its (still Irish) href
+TILE_PRODUCT = [("standardflyers", "standardflyers"),
+                ("standardbusinesscards", "businesscardsstandard"),
+                ("budgetrollupbanners", "rollupbannersv2"),
+                # LAST, and not "posters": "posters" is a substring of nothing
+                # here but "standardflyers" would match before it if the order
+                # were reversed for a slug like "posterflyers". Matching the
+                # longest slugs first keeps this from depending on luck.
+                ("posters", "posters")]
+
+TILE_EMAILS = ("welcome-01",)
+
+TILE_RE = re.compile(r'(<a class="hp-w1-tile" href=")([^"]*)(">)(.*?)(</a>)', re.S)
+
+
+def _locale_switch(value_for, live, locale=None):
+    """value_for(locale) -> text. One locale's value, or a nine-branch switch.
+
+    Collapses to a bare string when every locale agrees, which is common for the
+    English pair and saves the KB that nine identical branches would cost.
+    """
+    if not live:
+        return value_for(locale or i18n.FALLBACK_LOCALE)
+    vals = [(loc, value_for(loc)) for loc in i18n.LOCALES]
+    if len({v for _, v in vals}) == 1:
+        return vals[0][1]
+    out = ""
+    for i, (loc, v) in enumerate(vals):
+        out += "{%% %s %s == '%s' %%}%s" % (
+            "if" if i == 0 else "elif", i18n.LOCALE_EXPR, loc, v)
+    return out + "{%% else %%}%s{%% endif %%}" % value_for(i18n.FALLBACK_LOCALE)
+
+
+def catalog_tiles(html, slug, live, locale=None):
+    """Name, quantity, price and link for each tile, from the market's feed.
+
+    RUNS AFTER market_links, NOT BEFORE. market_links rewrites every
+    https://www.helloprint.com/en-ie/<slug> it can see, and the en-IE branch of
+    a switch emitted here still contains exactly that. Running first meant
+    market_links reached inside these switches and nested a second one in each -
+    the same overlap that once turned all 30 links into home-page switches. By
+    running afterwards and matching on the tile's own markup instead of on its
+    URL, there is nothing left for either pass to re-scan.
+    """
+    # Only Welcome 01 has a product grid. The other three have no tiles, so
+    # running here at all would report four missing ones for each of them.
+    if slug not in TILE_EMAILS:
+        return html
+
+    seen = []
+
+    def one(m):
+        open_a, href, close_a, body, end = m.groups()
+        product = next((p for slug, p in TILE_PRODUCT if slug in href), None)
+        if product is None:
+            errs.append("a product tile links to %r, which matches no known "
+                        "product, so its figures were left in English" % href[:70])
+            return m.group(0)
+        seen.append(product)
+
+        def price_pair(loc):
+            it = cat.item(product, loc)
+            lang = i18n.LOCALE_LANG[loc]
+            was = cat.money(it["price"], it["currency"], lang)
+            now = cat.money(cat.discounted(it["price"]), it["currency"], lang)
+            return ('<s class="hp-w1-tiwas">%s</s>&nbsp;'
+                    '<span class="hp-w1-tinow">%s</span>' % (was, now))
+
+        name = _locale_switch(lambda l: cat.item(product, l)["title"], live, locale)
+        qty = _locale_switch(
+            lambda l: cat.qty_label(l, product, i18n.LOCALE_LANG[l]), live, locale)
+        price = _locale_switch(price_pair, live, locale)
+        url = _locale_switch(lambda l: cat.item(product, l)["url"], live, locale)
+
+        body = re.sub(r'(<span class="hp-w1-tiname">)[^<]*(</span>)',
+                      lambda x: x.group(1) + name + x.group(2), body, count=1)
+        body = re.sub(r'(<span class="hp-w1-tiqty">).*?(</span>)',
+                      lambda x: x.group(1) + qty + x.group(2), body, count=1, flags=re.S)
+        body = re.sub(r'(<span class="hp-w1-tiprice">).*?(</span></span>)',
+                      lambda x: x.group(1) + price + "</span>", body, count=1, flags=re.S)
+        # The alt text too. Outlook blocks images by default, so for a good
+        # number of readers the alt IS the product name they see.
+        body = re.sub(r'( alt=")[^"]*(")',
+                      lambda x: x.group(1) + name + x.group(2), body, count=1)
+        return open_a + url + close_a + body + end
+
+    out = TILE_RE.sub(one, html)
+    want = [p for _, p in TILE_PRODUCT]
+    if sorted(seen) != sorted(want):
+        errs.append("%s: expected the four product tiles %s, matched %s"
+                    % (slug, sorted(want), sorted(seen)))
+    return out
+
+
+def html_lang(html, live, locale=None):
+    """Set <html lang> to the reader's locale instead of a hardcoded "en"."""
+    want = '<html lang="%s">' % i18n.html_lang(live, locale)
+    out, n = re.subn(r'<html lang="[^"]*">', lambda _: want, html, count=1)
+    if not n:
+        errs.append("no <html lang> attribute to set")
+    return out
+
+
+# Only these two carry a Trustpilot block. Welcome 02 and 04 have none, so
+# demanding a link in all four reported eight failures that were not faults.
+TP_EMAILS = ("welcome-01", "welcome-03")
+
+
+def trustpilot_link(html, slug, live, locale=None):
+    """The "read the reviews" link per language, not hardcoded to Ireland.
+
+    Trustpilot serves its review page in the subdomain's language, so this uses
+    the same language-keyed map as the review-request link in the post-purchase
+    emails - see reviews.TP_BY_LANG. It was ie.trustpilot.com in every locale,
+    which put an Irish page in front of a French reader.
+    """
+    if slug not in TP_EMAILS:
+        return html
+    want = rv.url_switch(rv.read_url, sc.LOCALE_MAP, i18n.LOCALE_EXPR,
+                         live, locale)
+    out, n = re.subn(r'https://[a-z]{2}\.trustpilot\.com/review/helloprint\.com',
+                     lambda _: want, html)
+    if not n:
+        errs.append("%s: no Trustpilot review link to localise" % slug)
+    return out
 
 
 def market_links(html, live):
@@ -231,6 +366,21 @@ def render(html, slug, locale=None, live=False):
     """
     tr = i18n.translator(slug, live, locale)
     pairs = sorted(strings_for(slug), key=lambda kv: -len(kv[1]))
+
+    # TWO PASSES, VIA A TOKEN. Replacing English straight with its switch lets a
+    # LATER, SHORTER string match inside a switch already emitted. welcome-04's
+    # headline is "Send it over, we'll handle it" and step one of its timeline is
+    # "Send it over", so the short one was found inside the en-IE and en-GB
+    # branches of the long one and a whole nine-branch switch was nested inside
+    # each. The h1 came out 1,952 characters with four nested {% if %} in it. It
+    # rendered correctly - the inner switch resolves to the same locale - so this
+    # was invisible, just 1.5KB of waste against Gmail's clipping threshold.
+    #
+    # Longest-first ordering does not prevent it; it CAUSES it, because the long
+    # string is the one that becomes a switch first. Substituting an opaque token
+    # first and expanding every token at the end does prevent it: by the time the
+    # short string is looked for, the long one's text is a token, not prose.
+    subs = []
     for key, eng in pairs:
         if eng not in html:
             # a _shared string need not be in every file: welcome-01 has the
@@ -241,10 +391,19 @@ def render(html, slug, locale=None, live=False):
             errs.append("%s: %r is not in the file, so nothing was translated for it"
                         % (slug, eng[:56]))
             continue
-        html = html.replace(eng, tr(key, eng))
+        token = "\x00T%d\x00" % len(subs)
+        subs.append((token, key, eng))
+        html = html.replace(eng, token)
+    for token, key, eng in subs:
+        html = html.replace(token, tr(key, eng))
+    if "\x00" in html:
+        errs.append("%s: a substitution token survived into the output" % slug)
     html = swap_reviews(html, slug, tr, locale, live)
     html = real_unsubscribe(html, live, tr)
     html = market_links(html, live)
+    html = catalog_tiles(html, slug, live, locale)
+    html = trustpilot_link(html, slug, live, locale)
+    html = html_lang(html, live, locale)
     return link_assets(html, live)
 
 

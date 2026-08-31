@@ -194,10 +194,37 @@ def thousands(n, lang):
     """A thousands-grouped integer written the way that language writes it."""
     grouped = format(int(n), ",")
     if lang == "fr":
-        return grouped.replace(",", "\u202f")   # narrow no-break space
+        # U+00A0, not the typographically-correct U+202F narrow no-break space.
+        # U+202F has no glyph in several of the font stacks Outlook and older
+        # Android mail fall back to, and renders as a box. A plain space is not
+        # an option either: it lets a client wrap "34" and "000+" onto separate
+        # lines. This is the separator the review counts in the store use too.
+        return grouped.replace(",", "\u00a0")
     if lang in _COMMA_DECIMAL:
         return grouped.replace(",", ".")
     return grouped
+
+
+def html_lang(live, locale=None):
+    """The <html lang> value: one BCP 47 tag, or a switch over all nine.
+
+    Every email shipped lang="en" in all nine languages. It is not cosmetic:
+    screen readers pick their pronunciation rules from it, so a Dutch email was
+    read aloud in an English accent, and Gmail and Outlook use it as one signal
+    when deciding whether to offer to translate a message.
+
+    person.locale is already a BCP 47 tag, so {{ person.locale }} would almost
+    work - but it renders empty for a profile whose locale is unset, and
+    lang="" is invalid. The switch guarantees a real tag in every branch, and
+    matches how every other locale-dependent value in these emails is built.
+    """
+    if not live:
+        return locale or FALLBACK_LOCALE
+    out = ""
+    for loc in LOCALES:
+        out += "{%% %s %s == '%s' %%}%s" % (
+            "if" if not out else "elif", LOCALE_EXPR, loc, loc)
+    return out + "{%% else %%}%s{%% endif %%}" % FALLBACK_LOCALE
 
 
 def translator(scope, live, locale=None):

@@ -179,3 +179,122 @@ Verified by render, not by assumption:
 Subject lines and preview text remain English-only across all 14 messages —
 they live on the flow message, not the template, and Django in a subject line
 is still unverified.
+
+---
+
+## The six fixes — 2026-08-31
+
+### 1. Trustpilot count is one number, written per language
+Welcome 01 said 33,000 and Welcome 03 said 34,000. The live Trustpilot total is
+**34,394**, so both are now "34,000+" and the "+" carries the "at least" the old
+"more than" wording carried. Written the way each language writes it:
+`34,000+` / `34.000+` / `34 000+` (French, with a NON-BREAKING space so a client
+cannot wrap "34" and "000+" onto separate lines). Six keys × six languages,
+plus `review.score`, which stays driven off `rv.review_total()` rather than
+frozen. `i18n.thousands` was switched from U+202F to U+00A0 for the same reason:
+U+202F has no glyph in several Outlook and Android fallback fonts.
+
+### 2. Prices and product names come from the market's own feed
+New `data/catalog-welcome-tiles.json` + `scripts/_lib/catalog.py`. Every tile's
+name, price, currency, quantity and link is the market's own catalog entry.
+
+- **Currency is per market, not assumed.** GB is GBP; everyone else EUR.
+- **Money is written per language**: `£43.49`, `€ 46,62` (nl, it), `31,99 €`
+  (fr, de, es).
+- **Quantity comes from the market, the unit word from the language.** Belgium's
+  flyer minimum is 500 where the Netherlands' is 1,000. The feed's unit is only
+  ever plural, which produced "1 units" for a roll-up banner, and it left an
+  Italian reader with English "units" — so the number is the market's and the
+  word is ours: "1 stuk", "1.000 pezzi".
+- **The fallback keeps the CURRENCY, not the language.** Falling gaps through to
+  GB showed a Spanish reader "21,99 GBP", which is not payable in Spain. Gaps
+  fall to IE instead — English name, euro price, working link.
+
+Gaps, checked rather than assumed: **Italy has no catalog items at all** (no
+`biglietti`, no `striscioni`), and Spain has no standard business card or
+roll-up banner. Those six tiles fall back and `catalog.fell_back()` lists them
+at build time. **Belgium's catalog mixes languages** — flyers and roll-ups are
+French, cards and posters Dutch — so two of four tiles carry the other national
+language whichever Belgian locale reads them. Kept as-is: the price and market
+are right, and substituting the NL or FR item would show a price the Belgian
+checkout does not charge.
+
+### 3. Trustpilot links are per language
+`ie.trustpilot.com` was hardcoded in 24 places, so a French reader was sent to
+Ireland. Now `reviews.read_url` over the same language-keyed map the
+review-request links already used. Every subdomain was checked by DNS with a
+deliberate control (`zz.trustpilot.com` has no DNS; all nine country hosts do).
+The preview default was also Irish for every language; it now follows the locale
+being previewed.
+
+### 4. Market URLs come from the feeds, verified over HTTP
+`market-urls.json` only recorded whether `/{market}/{path}` resolved, which
+assumes one slug everywhere. It is not one slug: the Dutch flyer page is
+`/nl-nl/standaardflyers`, the French `/fr-fr/flyersdigital`, the Belgian
+`/fr-be/flyersclassiques`. A new `urls` map holds the market's real localised
+URL, taken from the catalog feed for products and from each market's own home
+page for the company pages, and **all 72 verified 200** by
+`scripts/build_market_urls_from_feeds.py`.
+
+Gaps went from nine paths across up to six markets each, down to two paths in
+Italy only. Three are genuine absences, established by listing each market's own
+links rather than guessing: Italy has no all-products and no sustainability
+page, and Spain has no request-a-quote page — only `mis-presupuestos`, the
+reader's own saved quotes, which is the wrong page, so it is left to fall back.
+
+### 5. `<html lang>` is the reader's locale
+Was `lang="en"` in all nine languages, in 13 full documents and 174 previews.
+Not cosmetic: screen readers take their pronunciation from it, so a Dutch email
+was read aloud in an English accent.
+
+### 6. Subject lines and preview text
+
+**Preview text is fixed by REMOVING it.** Every template already carries a
+hidden preheader div that is locale-switched and translated. The flow message
+also carried an English `preview_text`, so a Dutch reader got the English field
+followed by the translated div. The field is now empty on all 14 messages and
+the translated div does the job it exists for.
+
+**Subject lines could not be done with Django.** Measured, not assumed:
+
+| test | result |
+|---|---|
+| 96-char `{% if person.locale %}` switch | stored verbatim — Django **is** accepted |
+| 255 plain characters | stored |
+| 500 plain characters | **400** "An invalid field type was passed in" |
+| the real 747-char nine-branch switch | **400** |
+
+`subject_line` caps at 255 characters. A nine-locale chain is 560–747, and a
+six-language `|slice` version spends 274 on the conditions alone. Two languages
+plus English is the most that fits, which is not a localisation.
+
+So subjects use **Klaviyo's own Translations feature**, which this account
+already runs on dozens of RFB templates and messages. Verified before the other
+thirteen were touched: a collection exposes four value blocks (subject,
+preview_text, from_label, template body), and writing subject translations left
+the body block's 47,972-character source untouched with every body translation
+empty. An empty translation falls back to the source, so the template's Django
+switches keep control of the body. The two mechanisms do not collide.
+
+Five of the seven subjects reuse an existing translated headline rather than
+being translated a second time; only `subj.wel1` and `subj.wel4` are new. All
+are unescaped — `we&rsquo;ll` would have reached the inbox as those literal
+characters.
+
+### Also fixed: nested locale switches
+Welcome 04's `<h1>` was **1,952 characters with four nested switches**, because
+`render()` replaced English with its switch directly and a later, shorter string
+("Send it over") matched inside the en-IE and en-GB branches of a longer one
+("Send it over, we'll handle it"). Longest-first ordering does not prevent that,
+it causes it. `render()` now substitutes an opaque token first and expands every
+token at the end. The h1 is 641 characters and welcome-04 is 3KB smaller.
+
+### THE TEMPLATES IN KLAVIYO ARE NOW STALE
+
+Every fix above is in the repo. The 8 templates imported into Klaviyo earlier
+today, and the 14 per-message copies cloned from them, still carry the OLD body
+— the live copy of WEL-4 still links a Dutch reader to `/en-gb/quote` where the
+repo now has `/nl-nl/offerte-aanvragen`. The 8 files in `klaviyo-templates/` must
+be re-imported and re-attached (attaching re-clones) before any of items 2, 3, 4
+or 5 reaches a reader. The subject and preview-text fixes in item 6 are on the
+flow message, not the template, and are already live in the draft.

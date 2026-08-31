@@ -289,7 +289,7 @@ TRANSLATED = [
     ('help.email_short', 'E-mail'),
     ('alt.cs_agents', 'Three Helloprint customer service agents'),
     ('tp.alt', 'Rated 4.5 out of 5 on Trustpilot'),
-    ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000'),
+    ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from 34,000+'),
     ('foot.unsub', 'Unsubscribe'),
     ('review.outof', 'out of 5 on Trustpilot'),
     ('pre', 'Everything you configured is saved. Pick up where you left off.'),

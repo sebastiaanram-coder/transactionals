@@ -357,7 +357,7 @@ TRANSLATED = [
     ('help.email_short', 'E-mail'),
     ('alt.cs_agents', 'Three Helloprint customer service agents'),
     ('tp.alt', 'Rated 4.5 out of 5 on Trustpilot'),
-    ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000'),
+    ('tp.verified_line', 'Verified Trustpilot review &middot; 4.5 out of 5 from 34,000+'),
     ('review.outof', 'out of 5 on Trustpilot'),
     ('ord.finish', 'Finish the job'),
     ('ord.saved_either', 'Your basket stays saved either way. It is the discount that expires, not the order.'),

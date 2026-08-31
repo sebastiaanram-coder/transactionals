@@ -560,7 +560,7 @@ def build(e, live, locale=None):
 
 
 DOC = """<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="%(lang)s"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Winback - %(label)s - day %(day)d (%(branch)s value)</title></head>
 <body style="margin:0;padding:%(pad)s;background:%(bg)s;">
@@ -587,11 +587,15 @@ for e in EMAILS:
             continue
         _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
         open(os.path.join(OUT, "%s-%s-proposed.html" % (e["slug"], _lg)), "w",
-             encoding="utf-8").write(DOC % dict(meta, body=build(e, False, _loc)))
+             encoding="utf-8").write(DOC % dict(
+                 meta, body=build(e, False, _loc),
+                 lang=i18n.html_lang(False, _loc)))
     open(os.path.join(OUT, e["slug"] + "-proposed.html"), "w",
-         encoding="utf-8").write(DOC % dict(meta, body=prev))
+         encoding="utf-8").write(DOC % dict(
+             meta, body=prev, lang=i18n.html_lang(False)))
     open(os.path.join(OUT, e["slug"] + "-klaviyo.html"), "w",
-         encoding="utf-8").write(DOC % dict(meta, body=livb))
+         encoding="utf-8").write(DOC % dict(
+             meta, body=livb, lang=i18n.html_lang(True)))
     written.append((e["slug"], e["branch"], e["day"], e["kind"], len(prev), len(livb)))
 
     t = e["slug"]

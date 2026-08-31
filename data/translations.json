@@ -121,12 +121,12 @@
    "it": "Lascia la tua opinione su Trustpilot"
   },
   "review.score": {
-   "en": "Rated {score} out of 5 from more than {total} reviews on Trustpilot.",
-   "nl": "Beoordeeld met {score} uit 5 op basis van meer dan {total} reviews op Trustpilot.",
-   "fr": "Note de {score} sur 5 sur plus de {total} avis Trustpilot.",
-   "de": "Bewertet mit {score} von 5 aus mehr als {total} Bewertungen auf Trustpilot.",
-   "es": "Valorado con {score} sobre 5 a partir de más de {total} opiniones en Trustpilot.",
-   "it": "Valutato {score} su 5 su oltre {total} recensioni su Trustpilot."
+   "en": "Rated {score} out of 5 from {total}+ reviews on Trustpilot.",
+   "nl": "Beoordeeld met {score} uit 5 op basis van {total}+ reviews op Trustpilot.",
+   "fr": "Note de {score} sur 5 sur {total}+ avis Trustpilot.",
+   "de": "Bewertet mit {score} von 5 aus {total}+ Bewertungen auf Trustpilot.",
+   "es": "Valorado con {score} sobre 5 a partir de {total}+ opiniones en Trustpilot.",
+   "it": "Valutato {score} su 5 su {total}+ recensioni su Trustpilot."
   },
   "offer.code_label": {
    "en": "YOUR CODE",
@@ -505,12 +505,12 @@
    "it": "Valutato 4,5 su 5 su Trustpilot"
   },
   "tp.verified_line": {
-   "en": "Verified Trustpilot review &middot; 4.5 out of 5 from more than 34,000",
-   "nl": "Geverifieerde Trustpilot-review &middot; 4,5 uit 5 op basis van meer dan 34.000",
-   "fr": "Avis Trustpilot vérifié &middot; 4,5 sur 5 sur plus de 34 000",
-   "de": "Verifizierte Trustpilot-Bewertung &middot; 4,5 von 5 aus mehr als 34.000",
-   "es": "Opinión verificada de Trustpilot &middot; 4,5 sobre 5 de más de 34.000",
-   "it": "Recensione Trustpilot verificata &middot; 4,5 su 5 su oltre 34.000"
+   "en": "Verified Trustpilot review &middot; 4.5 out of 5 from 34,000+",
+   "nl": "Geverifieerde Trustpilot-review &middot; 4,5 uit 5 op basis van 34.000+",
+   "fr": "Avis Trustpilot vérifié &middot; 4,5 sur 5 sur 34 000+",
+   "de": "Verifizierte Trustpilot-Bewertung &middot; 4,5 von 5 aus 34.000+",
+   "es": "Opinión verificada de Trustpilot &middot; 4,5 sobre 5 de 34.000+",
+   "it": "Recensione Trustpilot verificata &middot; 4,5 su 5 su 34.000+"
   },
   "tp.alt_stars": {
    "en": "Rated 4.5 out of 5 stars on Trustpilot",
@@ -2171,12 +2171,12 @@
    "it": "Continua sulla pagina del prodotto"
   },
   "reviews_note": {
-   "en": "Based on more than 34,000 reviews",
-   "nl": "Op basis van meer dan 34.000 reviews",
-   "fr": "Sur la base de plus de 34 000 avis",
-   "de": "Auf Basis von mehr als 34.000 Bewertungen",
-   "es": "A partir de más de 34.000 opiniones",
-   "it": "Sulla base di oltre 34.000 recensioni"
+   "en": "Based on 34,000+ reviews",
+   "nl": "Op basis van 34.000+ reviews",
+   "fr": "Sur la base de 34 000+ avis",
+   "de": "Auf Basis von 34.000+ Bewertungen",
+   "es": "A partir de 34.000+ opiniones",
+   "it": "Sulla base di 34.000+ recensioni"
   },
   "xsell_h": {
    "en": "Other sizes and folds",
@@ -3459,12 +3459,12 @@
    "it": "Scopri come funziona il controllo file"
   },
   "reviews_note": {
-   "en": "Based on more than 33,000 reviews",
-   "nl": "Op basis van meer dan 33.000 reviews",
-   "fr": "Sur la base de plus de 33 000 avis",
-   "de": "Auf Basis von mehr als 33.000 Bewertungen",
-   "es": "A partir de más de 33.000 opiniones",
-   "it": "Sulla base di oltre 33.000 recensioni"
+   "en": "Based on 34,000+ reviews",
+   "nl": "Op basis van 34.000+ reviews",
+   "fr": "Sur la base de 34 000+ avis",
+   "de": "Auf Basis von 34.000+ Bewertungen",
+   "es": "A partir de 34.000+ opiniones",
+   "it": "Sulla base di 34.000+ recensioni"
   },
   "tp_outof": {
    "en": "out of 5 on Trustpilot",
@@ -3711,12 +3711,12 @@
  },
  "welcome-03": {
   "pre": {
-   "en": "Rated 4.5 on Trustpilot from more than 34,000 reviews. Here is what a few of them say.",
-   "nl": "Beoordeeld met 4,5 op Trustpilot uit meer dan 34.000 reviews. Dit zeggen er een paar.",
-   "fr": "Noté 4,5 sur Trustpilot sur plus de 34 000 avis. Voici ce qu'en disent quelques-uns.",
-   "de": "Bewertet mit 4,5 auf Trustpilot aus mehr als 34.000 Bewertungen. Das sagen einige davon.",
-   "es": "Valorado con 4,5 en Trustpilot a partir de más de 34.000 opiniones. Esto dicen algunas.",
-   "it": "Valutato 4,5 su Trustpilot su oltre 34.000 recensioni. Ecco cosa dicono alcune."
+   "en": "Rated 4.5 on Trustpilot from 34,000+ reviews. Here is what a few of them say.",
+   "nl": "Beoordeeld met 4,5 op Trustpilot uit 34.000+ reviews. Dit zeggen er een paar.",
+   "fr": "Noté 4,5 sur Trustpilot sur 34 000+ avis. Voici ce qu'en disent quelques-uns.",
+   "de": "Bewertet mit 4,5 auf Trustpilot aus 34.000+ Bewertungen. Das sagen einige davon.",
+   "es": "Valorado con 4,5 en Trustpilot a partir de 34.000+ opiniones. Esto dicen algunas.",
+   "it": "Valutato 4,5 su Trustpilot su 34.000+ recensioni. Ecco cosa dicono alcune."
   },
   "h1": {
    "en": "Rated Excellent on Trustpilot",
@@ -3847,12 +3847,12 @@
    "it": "Cosa dicono <em>i clienti veri</em>"
   },
   "score_line": {
-   "en": "4.5 out of 5 from more than 34,000 reviews by businesses like yours.",
-   "nl": "4,5 uit 5 op basis van meer dan 34.000 reviews van bedrijven zoals dat van jou.",
-   "fr": "4,5 sur 5 sur plus de 34 000 avis d'entreprises comme la vôtre.",
-   "de": "4,5 von 5 aus mehr als 34.000 Bewertungen von Unternehmen wie Ihrem.",
-   "es": "4,5 sobre 5 de más de 34.000 opiniones de empresas como la tuya.",
-   "it": "4,5 su 5 su oltre 34.000 recensioni di aziende come la tua."
+   "en": "4.5 out of 5 from 34,000+ reviews by businesses like yours.",
+   "nl": "4,5 uit 5 op basis van 34.000+ reviews van bedrijven zoals dat van jou.",
+   "fr": "4,5 sur 5 sur 34 000+ avis d'entreprises comme la vôtre.",
+   "de": "4,5 von 5 aus 34.000+ Bewertungen von Unternehmen wie Ihrem.",
+   "es": "4,5 sobre 5 de 34.000+ opiniones de empresas como la tuya.",
+   "it": "4,5 su 5 su 34.000+ recensioni di aziende come la tua."
   }
  },
  "welcome-04": {
@@ -4047,6 +4047,24 @@
    "de": "John, Druckexperte bei Helloprint",
    "es": "John, experto en impresión en Helloprint",
    "it": "John, esperto di stampa in Helloprint"
+  }
+ },
+ "flow-welcome": {
+  "subj.wel1": {
+   "en": "Welcome to Helloprint, and your 10% code",
+   "nl": "Welkom bij Helloprint, en je 10%-code",
+   "fr": "Bienvenue chez Helloprint, et votre code 10%",
+   "de": "Willkommen bei Helloprint, und Ihr 10%-Code",
+   "es": "Bienvenido a Helloprint, y tu código del 10%",
+   "it": "Benvenuto in Helloprint, e il tuo codice 10%"
+  },
+  "subj.wel4": {
+   "en": "Last day for your 10%",
+   "nl": "Laatste dag voor je 10%",
+   "fr": "Dernier jour pour vos 10%",
+   "de": "Letzter Tag für Ihre 10%",
+   "es": "Último día para tu 10%",
+   "it": "Ultimo giorno per il tuo 10%"
   }
  }
 }

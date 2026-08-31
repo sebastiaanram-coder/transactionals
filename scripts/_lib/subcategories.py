@@ -209,23 +209,42 @@ def market_url_verified(path, live, esc=lambda x: x):
             "%r is not in data/market-urls.json, so no locale has been verified "
             "for it. Add it to PATHS in scripts/fetch_market_urls.py and re-run "
             "rather than shipping an unverified link." % path)
-    fb = "https://www.helloprint.com/%s/%s" % (market_path(LOCALE_MAP[MU_FALLBACK]), path)
+
+    # THE FEED'S OWN URL WINS. "paths" only records whether /{market}/{path}
+    # resolved, which assumes one slug for every market. It is not one slug:
+    # the Dutch flyer page is /nl-nl/standaardflyers and the French one is
+    # /fr-fr/flyersdigital, so the same-slug test failed for both and sent each
+    # reader to en-GB. "urls" holds the market's real localised URL out of the
+    # catalog feed, HTTP-verified by scripts/build_market_urls_from_feeds.py.
+    exact = (_MU.get("urls") or {}).get(path) or {}
+
+    def for_locale(email_loc):
+        if email_loc in exact:
+            return exact[email_loc]
+        seg = market_path(LOCALE_MAP[email_loc])
+        if seg and email_loc in good:
+            return "https://www.helloprint.com/%s/%s" % (seg, path)
+        return None
+
+    fb = (exact.get(MU_FALLBACK)
+          or "https://www.helloprint.com/%s/%s"
+          % (market_path(LOCALE_MAP[MU_FALLBACK]), path))
     if not live:
-        return "https://www.helloprint.com/%s/%s" % (market_path("en-IE"), path)
+        return exact.get("en-IE") or (
+            "https://www.helloprint.com/%s/%s" % (market_path("en-IE"), path))
     out = ""
     for email_loc in LOCALE_MAP:
-        seg = market_path(LOCALE_MAP[email_loc])
-        if not seg:
+        if not market_path(LOCALE_MAP[email_loc]):
             continue
-        url = ("https://www.helloprint.com/%s/%s" % (seg, path)
-               if email_loc in good else fb)
         out += "{%% %s %s == '%s' %%}%s" % (
-            "if" if not out else "elif", LOCALE_EXPR, email_loc, esc(url))
+            "if" if not out else "elif", LOCALE_EXPR, email_loc,
+            esc(for_locale(email_loc) or fb))
     return out + "{%% else %%}%s{%% endif %%}" % esc(fb)
 
 
 def market_url_gaps(paths):
     """Which (path, locale) pairs fall back, so a builder can report them."""
     good = _MU.get("paths") or {}
+    exact = _MU.get("urls") or {}
     return [(p, l) for p in paths for l in LOCALE_MAP
-            if p in good and l not in good[p]]
+            if p in good and l not in good[p] and l not in (exact.get(p) or {})]

@@ -290,5 +290,98 @@
    "locale": "es-ES",
    "status": 404
   }
- ]
+ ],
+ "urls": {
+  "about-us": {
+   "de-DE": "https://www.helloprint.com/de-de/uber-uns",
+   "en-GB": "https://www.helloprint.com/en-gb/about-us",
+   "en-IE": "https://www.helloprint.com/en-ie/about-us",
+   "es-ES": "https://www.helloprint.com/es-es/sobre-nosotros",
+   "fr-BE": "https://www.helloprint.com/fr-be/a-propos-de-nous",
+   "fr-FR": "https://www.helloprint.com/fr-fr/a-propos-de-nous",
+   "it-IT": "https://www.helloprint.com/it-it/chi-siamo",
+   "nl-BE": "https://www.helloprint.com/nl-be/over-ons",
+   "nl-NL": "https://www.helloprint.com/nl-nl/over-ons"
+  },
+  "all-products": {
+   "de-DE": "https://www.helloprint.com/de-de/alle-produkte",
+   "en-GB": "https://www.helloprint.com/en-gb/all-products",
+   "en-IE": "https://www.helloprint.com/en-ie/all-products",
+   "es-ES": "https://www.helloprint.com/es-es/todos-los-productos",
+   "fr-BE": "https://www.helloprint.com/fr-be/tous-nos-produits",
+   "fr-FR": "https://www.helloprint.com/fr-fr/tous-nos-produits",
+   "nl-BE": "https://www.helloprint.com/nl-be/alle-producten",
+   "nl-NL": "https://www.helloprint.com/nl-nl/alle-producten"
+  },
+  "budgetrollupbanners": {
+   "de-DE": "https://www.helloprint.com/de-de/rollbannersbudget",
+   "en-GB": "https://www.helloprint.com/en-gb/budgetrollupbanners",
+   "en-IE": "https://www.helloprint.com/en-ie/budgetrollupbanners",
+   "fr-BE": "https://www.helloprint.com/fr-be/kakemonorollupbudget",
+   "fr-FR": "https://www.helloprint.com/fr-fr/kakemonorollupbudget",
+   "nl-BE": "https://www.helloprint.com/fr-be/kakemonorollupbudget",
+   "nl-NL": "https://www.helloprint.com/nl-nl/budgetrollupbanners"
+  },
+  "our-promises": {
+   "de-DE": "https://www.helloprint.com/de-de/unsere-versprechen",
+   "en-GB": "https://www.helloprint.com/en-gb/our-promises",
+   "en-IE": "https://www.helloprint.com/en-ie/our-promises",
+   "es-ES": "https://www.helloprint.com/es-es/nuestras-promesas",
+   "fr-BE": "https://www.helloprint.com/fr-be/nos-promesses",
+   "fr-FR": "https://www.helloprint.com/fr-fr/nos-promesses",
+   "it-IT": "https://www.helloprint.com/it-it/le-nostre-promesse",
+   "nl-BE": "https://www.helloprint.com/nl-be/onze-beloftes",
+   "nl-NL": "https://www.helloprint.com/nl-nl/onze-beloftes"
+  },
+  "posters": {
+   "de-DE": "https://www.helloprint.com/de-de/posters",
+   "en-GB": "https://www.helloprint.com/en-gb/posters",
+   "en-IE": "https://www.helloprint.com/en-ie/posters",
+   "es-ES": "https://www.helloprint.com/es-es/posterpublicitario",
+   "fr-BE": "https://www.helloprint.com/nl-be/posters",
+   "fr-FR": "https://www.helloprint.com/fr-fr/affiches",
+   "nl-BE": "https://www.helloprint.com/nl-be/posters",
+   "nl-NL": "https://www.helloprint.com/nl-nl/posters"
+  },
+  "quote": {
+   "de-DE": "https://www.helloprint.com/de-de/angebot-anfragen",
+   "en-GB": "https://www.helloprint.com/en-gb/quote",
+   "en-IE": "https://www.helloprint.com/en-ie/request-a-quote",
+   "fr-BE": "https://www.helloprint.com/fr-be/quote",
+   "fr-FR": "https://www.helloprint.com/fr-fr/quote",
+   "it-IT": "https://www.helloprint.com/it-it/richiedi-un-preventivo",
+   "nl-BE": "https://www.helloprint.com/nl-be/offerte-aanvragen",
+   "nl-NL": "https://www.helloprint.com/nl-nl/offerte-aanvragen"
+  },
+  "standardbusinesscards": {
+   "de-DE": "https://www.helloprint.com/de-de/standardvisitenkarten",
+   "en-GB": "https://www.helloprint.com/en-gb/standardbusinesscards",
+   "en-IE": "https://www.helloprint.com/en-ie/standardbusinesscards",
+   "fr-BE": "https://www.helloprint.com/nl-be/standaardvisitekaartjes",
+   "fr-FR": "https://www.helloprint.com/fr-fr/cartedevisiteclassique",
+   "nl-BE": "https://www.helloprint.com/nl-be/standaardvisitekaartjes",
+   "nl-NL": "https://www.helloprint.com/nl-nl/standaardvisitekaartjes"
+  },
+  "standardflyers": {
+   "de-DE": "https://www.helloprint.com/de-de/standardflyers",
+   "en-GB": "https://www.helloprint.com/en-gb/standardflyers",
+   "en-IE": "https://www.helloprint.com/en-ie/standardflyers",
+   "es-ES": "https://www.helloprint.com/es-es/flyersdigital",
+   "fr-BE": "https://www.helloprint.com/fr-be/flyersclassiques",
+   "fr-FR": "https://www.helloprint.com/fr-fr/flyersdigital",
+   "nl-BE": "https://www.helloprint.com/fr-be/flyersclassiques",
+   "nl-NL": "https://www.helloprint.com/nl-nl/standaardflyers"
+  },
+  "sustainability": {
+   "de-DE": "https://www.helloprint.com/de-de/nachhaltigkeit",
+   "en-GB": "https://www.helloprint.com/en-gb/sustainability",
+   "en-IE": "https://www.helloprint.com/en-ie/sustainability",
+   "es-ES": "https://www.helloprint.com/es-es/sostenibilidad",
+   "fr-BE": "https://www.helloprint.com/fr-be/durabilite",
+   "fr-FR": "https://www.helloprint.com/fr-fr/durabilite",
+   "nl-BE": "https://www.helloprint.com/nl-be/duurzaamheid",
+   "nl-NL": "https://www.helloprint.com/nl-nl/duurzaamheid"
+  }
+ },
+ "urls_note": "path -> locale -> the market's real localised URL, taken from the catalog feed and HTTP-verified. Preferred over the same-slug assumption in 'paths'. Belgium keeps the feed's own market segment; see data/catalog-welcome-tiles.json gaps."
 }

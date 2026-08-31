@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="{% if person.locale == 'en-IE' %}en-IE{% elif person.locale == 'en-GB' %}en-GB{% elif person.locale == 'nl-NL' %}nl-NL{% elif person.locale == 'nl-BE' %}nl-BE{% elif person.locale == 'fr-FR' %}fr-FR{% elif person.locale == 'fr-BE' %}fr-BE{% elif person.locale == 'de-DE' %}de-DE{% elif person.locale == 'es-ES' %}es-ES{% elif person.locale == 'it-IT' %}it-IT{% else %}en-GB{% endif %}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Winback - worth another look - day 111 (high value)</title></head>
 <body style="margin:0;padding:0;background:#f8f8f8;">
