@@ -4,7 +4,7 @@ Serve the Contentful category snapshot to the email builders.
 Reads data/subcategories.json, written by scripts/fetch_subcategories.py. No
 network, no credentials, so every preview rebuilds from a clean checkout.
 
-THE EMAIL LOCALE IS NOT THE CONTENTFUL LOCALE. event.Locale is "nl-NL" and
+THE EMAIL LOCALE IS NOT THE CONTENTFUL LOCALE. person.locale is "nl-NL" and
 "it-IT"; Contentful calls those "nl" and "it". Belgium keeps both halves in both
 systems because it is genuinely two languages in one market. LOCALE_MAP is the
 translation, and it is the only place that mapping should live.
@@ -30,7 +30,10 @@ LOCALE_MAP = {"en-IE": "en-IE", "en-GB": "en-GB", "nl-NL": "nl", "nl-BE": "nl-BE
               # 3,075 orders and EUR46k does not pay for a language.
               "de-DE": "de-DE"}
 FALLBACK = "en-GB"
-LOCALE_EXPR = "event.Locale"
+# THE PROFILE, NOT THE EVENT. A list-triggered flow has no event, so this used
+# to fall through to English for every reader. See i18n.LOCALE_EXPR, which is the
+# canonical definition; this is kept in step with it.
+LOCALE_EXPR = "person.locale"
 
 
 def _load():

@@ -83,9 +83,9 @@ def swap_reviews(html, slug, tr, locale=None, live=False):
             r = one(i18n.LOCALE_LANG[loc], i)
             if not r:
                 continue
-            out += "{%% %s event.Locale == '%s' %%}&ldquo;%s&rdquo;%s%s &middot; %s" % (
-                "if" if not out else "elif", loc, r["text"], mid,
-                r["author"], byline)
+            out += "{%% %s %s == '%s' %%}&ldquo;%s&rdquo;%s%s &middot; %s" % (
+                "if" if not out else "elif", i18n.LOCALE_EXPR, loc,
+                r["text"], mid, r["author"], byline)
         if not out:
             return m.group(0)
         en = one("en", i)

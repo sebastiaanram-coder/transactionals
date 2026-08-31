@@ -163,4 +163,76 @@ if singles:
     print("\nSINGLE WORDS identical across languages (often a product name, check):")
     for s, where in sorted(singles.items(), key=lambda kv: -len(kv[1]))[:25]:
         print("  %-28s %d places" % (s[:28], len(where)))
-raise SystemExit(1 if rows else 0)
+
+# ---- THE FALLBACK MUST BE ENGLISH, IN EVERY SWITCH, IN EVERY EMAIL.
+#
+# This is the check that matters most while person.locale is being backfilled.
+# Until that lands - and afterwards for the profiles that have no locale at all,
+# plus en-US and any market we have not translated - readers fall through to
+# {% else %}. If an else branch carried anything other than English, those
+# readers would get a language chosen by accident rather than by decision.
+#
+# It compares the FIRST branch (en-IE, which resolves to the English text) with
+# the else branch of the same switch. They must be identical.
+# THE ELSE MUST EQUAL THE en-GB BRANCH, not the en-IE one.
+#
+# en-GB is i18n.FALLBACK_LOCALE, so that is literally what the builder puts in
+# the else - and asserting it that way is both correct and tight. Comparing
+# against en-IE looked equivalent and is not: URL switches point en-IE at
+# /en-ie/ and the fallback at /en-gb/ on purpose, so eight healthy switches
+# reported as broken.
+#
+# Match the WHOLE switch and split it. Matching "first branch up to the first
+# {% else %}" swallowed the entire elif chain into the first branch, which
+# reported a mismatch on every switch that has one - all of them.
+SWITCH = re.compile(
+    r"\{%\s*if\s+person\.locale\s*==\s*'en-IE'\s*%\}(.*?)\{%\s*endif\s*%\}",
+    re.S)
+
+fb_bad, fb_n = [], 0
+for _f in sorted(glob.glob(os.path.join(OUT, "*-klaviyo.html"))):
+    _doc = re.sub(r"<!--.*?-->", "", io.open(_f, encoding="utf-8").read(), flags=re.S)
+    for _body in SWITCH.findall(_doc):
+        # A NESTED CONDITIONAL BREAKS THE PAIRING, so skip those rather than
+        # report them: the non-greedy {% endif %} belongs to the innermost open
+        # if, so a currency switch inside a locale switch splits the wrong
+        # halves. The flat switches are the overwhelming majority.
+        if "{% if " in _body or "{% else %}" not in _body:
+            continue
+        _gb = re.search(r"\{%\s*elif\s+person\.locale\s*==\s*'en-GB'\s*%\}"
+                        r"(.*?)\{%\s*el(?:if|se)\b", _body, re.S)
+        if not _gb:
+            continue
+        _els = _body.rsplit("{% else %}", 1)[1]
+        fb_n += 1
+        if _gb.group(1).strip() != _els.strip():
+            fb_bad.append("%s: the else branch does not match en-GB, so a reader "
+                          "with no locale gets something other than English\n"
+                          "        en-GB: %r\n        else : %r"
+                          % (os.path.basename(_f), _gb.group(1).strip()[:64],
+                             _els.strip()[:64]))
+
+print("\nENGLISH-FALLBACK CHECK: %d flat switches compared" % fb_n)
+if fb_bad:
+    for _b in fb_bad[:8]:
+        print("  FAIL  " + _b)
+else:
+    print("  every else branch carries the English text")
+
+# every switch must also be closed, or Klaviyo refuses the template outright
+open_bad = []
+for _f in sorted(glob.glob(os.path.join(OUT, "*-klaviyo.html"))):
+    # COMMENTS STRIPPED FIRST. Each block carries a documentation comment that
+    # shows example Django, and counting those found a one-tag "imbalance" in
+    # browse-01 that does not exist in the template Klaviyo would parse.
+    _s = re.sub(r"<!--.*?-->", "", io.open(_f, encoding="utf-8").read(), flags=re.S)
+    _if = len(re.findall(r"\{%\s*if\s", _s))
+    _en = len(re.findall(r"\{%\s*endif\s*%\}", _s))
+    if _if != _en:
+        open_bad.append("%s: %d {%% if %%} against %d {%% endif %%}"
+                        % (os.path.basename(_f), _if, _en))
+print("\nSWITCH BALANCE: %s"
+      % ("; ".join(open_bad) if open_bad else "every if is closed in all %d blocks"
+         % len(glob.glob(os.path.join(OUT, "*-klaviyo.html")))))
+
+raise SystemExit(1 if (rows or fb_bad or open_bad) else 0)

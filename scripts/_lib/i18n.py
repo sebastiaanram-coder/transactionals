@@ -6,13 +6,38 @@ carrying every language means one thing to edit when copy changes, it is version
 controlled here, and nothing has to be relinked when a template is copied into a
 flow message - which is the failure that made the inherited flows unmaintainable.
 
-WHY A FLAT NINE-WAY SWITCH ON event.Locale, and not a language prefix. A prefix
-test would be half the size:
+WHERE THE READER'S LOCALE COMES FROM: THE PROFILE, NOT THE EVENT.
 
-    {% if event.Locale|slice:":2" == 'nl' %}
+Every switch reads `person.locale`, Klaviyo's native profile field. It used to
+read `event.Locale`, and that was wrong for a reason worth recording, because it
+fails silently rather than loudly.
+
+A list-triggered flow has no event at all. Welcome fires on "Added to list", so
+`event.Locale` resolved to nothing, every branch fell through to {% else %}, and
+all nine locales received English. Nothing errors, no template breaks - the
+translation layer just quietly does not happen. Started Checkout and Viewed
+Product were a milder version of the same thing: Locale measured 0/100 on both,
+which is why nine emails were Ireland-only.
+
+The profile does not have that problem: it is there whatever triggered the flow,
+it can be backfilled onto existing customers where an event never can, and it is
+the field Klaviyo itself uses to localise the hosted preference and unsubscribe
+pages, so it has to be right regardless of what these templates do.
+
+NATIVE `person.locale`, NOT A CUSTOM PROPERTY. A custom property named `locale`
+also existed on some profiles, which made `person.locale` ambiguous between the
+two - and the two genuinely diverged, one profile carrying native fr-FR against
+custom en-GB. The custom one is being retired; the native field is the single
+source. Measured 2026-08-31: native 80% populated against custom 70%, three
+separate writers between them, neither covering all of the base.
+
+WHY A FLAT NINE-WAY SWITCH, and not a language prefix. A prefix test would be
+half the size:
+
+    {% if person.locale|slice:":2" == 'nl' %}
 
 but `|slice` inside an `{% if %}` comparison has never been rendered in this
-account, whereas an exact-match elif chain on event.Locale is what every template
+account, whereas an exact-match elif chain is what every template
 here already uses and an 83-branch chain has been rendered successfully. The
 translation programme is not the place to introduce an unverified mechanism. The
 duplication is free: Klaviyo renders before it sends, so exactly one branch
@@ -28,6 +53,11 @@ refuses to run if the two have drifted, so editing English copy without revisiti
 its translations fails the build instead of silently shipping a stale sentence.
 """
 import json, os
+
+# THE ONE PLACE THE LOCALE EXPRESSION IS WRITTEN. Everything that emits a locale
+# switch reads it from here, so moving off the profile again is a one-line change
+# rather than a hunt through eight builders.
+LOCALE_EXPR = "person.locale"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -123,6 +153,29 @@ def shared_keys():
 MISSING, DRIFT = [], []
 
 
+# HOW EACH LANGUAGE WRITES A NUMBER. "4.5 out of 5 from more than 34,000" is
+# correct English and wrong in every other language we send: Dutch, German,
+# Spanish and Italian swap the separators to "4,5" and "34.000", and French uses
+# a thin space for thousands. The score line was showing English formatting to
+# five of six languages.
+_COMMA_DECIMAL = ("nl", "de", "es", "it", "fr")
+
+
+def decimal(value, lang):
+    """A decimal number written the way that language writes it."""
+    return str(value).replace(".", ",") if lang in _COMMA_DECIMAL else str(value)
+
+
+def thousands(n, lang):
+    """A thousands-grouped integer written the way that language writes it."""
+    grouped = format(int(n), ",")
+    if lang == "fr":
+        return grouped.replace(",", "\u202f")   # narrow no-break space
+    if lang in _COMMA_DECIMAL:
+        return grouped.replace(",", ".")
+    return grouped
+
+
 def translator(scope, live, locale=None):
     """tr(key, english, escape=None) -> one locale's text, or a nine-way switch.
 
@@ -136,8 +189,19 @@ def translator(scope, live, locale=None):
     drift check compare an escaped string against the raw one on file, and it
     cannot be done afterwards because by then the string is a Django switch.
     """
-    def tr(key, english, escape=None):
+    def tr(key, english, escape=None, fills=None):
+        """fills: {token: callable(lang) -> str}, applied PER BRANCH.
+
+        A number formatted once and substituted into every branch carries one
+        language's conventions into all of them. Anything whose rendering depends
+        on the language has to be filled while we still know which branch we are
+        writing.
+        """
         e = escape or (lambda x: x)
+        def _fill(text, lang):
+            for token, fn in (fills or {}).items():
+                text = text.replace(token, fn(lang))
+            return text
         miss = missing(scope, key)
         if miss:
             MISSING.append((scope, key, miss))
@@ -145,16 +209,19 @@ def translator(scope, live, locale=None):
         if drifted:
             DRIFT.append((scope, key, english, drifted))
         if not live:
-            return e(get(scope, key, locale or "en-GB", english))
-        texts = [(loc, e(get(scope, key, loc, english))) for loc in LOCALES]
+            _loc = locale or "en-GB"
+            return _fill(e(get(scope, key, _loc, english)), LOCALE_LANG[_loc])
+        texts = [(loc, _fill(e(get(scope, key, loc, english)), LOCALE_LANG[loc]))
+                 for loc in LOCALES]
         if len({t for _, t in texts}) == 1:
             return texts[0][1]
         out = ""
         for i, (loc, txt) in enumerate(texts):
-            out += "{%% %s event.Locale == '%s' %%}%s" % (
-                "if" if i == 0 else "elif", loc, txt)
-        return out + "{%% else %%}%s{%% endif %%}" % e(
-            get(scope, key, FALLBACK_LOCALE, english))
+            out += "{%% %s %s == '%s' %%}%s" % (
+                "if" if i == 0 else "elif", LOCALE_EXPR, loc, txt)
+        return out + "{%% else %%}%s{%% endif %%}" % _fill(
+            e(get(scope, key, FALLBACK_LOCALE, english)),
+            LOCALE_LANG[FALLBACK_LOCALE])
     return tr
 
 

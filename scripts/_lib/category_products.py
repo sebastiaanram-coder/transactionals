@@ -36,11 +36,16 @@ review rather than in a customer's inbox. Refresh by re-querying the catalogue
 and updating this file.
 
 MARKET IS DERIVED FROM THE LOCALE, which is the whole reason one template can
-serve every market. event.Locale is "nl-NL", "fr-BE", "es-ES" and so on, so
+serve every market. The locale is "nl-NL", "fr-BE", "es-ES" and so on, so
 Locale|slice:"3:5" gives NL, BE, ES - exactly the market prefix the catalogue
 uses. One catalog expression, no per-market duplication:
 
-    {% catalog event.Locale|slice:"3:5"|add:"-standardflyers" %}
+    {% catalog event.ProductID|slice:":3"|add:"standardflyers" %}
+
+NOTE this keys off ProductID, not the locale. Nothing in the built emails derives
+a catalogue id from the locale, which matters: a {% catalog %} naming an id that
+does not exist returns 400 and kills the whole send, so the catalogue must never
+depend on a field that can be empty.
 
 Note fr-BE and nl-BE both resolve to BE, which is correct - Belgium is one
 catalogue market with two languages.

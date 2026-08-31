@@ -121,12 +121,12 @@
    "it": "Lascia la tua opinione su Trustpilot"
   },
   "review.score": {
-   "en": "Rated %s out of 5 from more than %s reviews on Trustpilot.",
-   "nl": "Beoordeeld met %s uit 5 op basis van meer dan %s reviews op Trustpilot.",
-   "fr": "Note de %s sur 5 sur plus de %s avis Trustpilot.",
-   "de": "Bewertet mit %s von 5 aus mehr als %s Bewertungen auf Trustpilot.",
-   "es": "Valorado con %s sobre 5 a partir de más de %s opiniones en Trustpilot.",
-   "it": "Valutato %s su 5 su oltre %s recensioni su Trustpilot."
+   "en": "Rated {score} out of 5 from more than {total} reviews on Trustpilot.",
+   "nl": "Beoordeeld met {score} uit 5 op basis van meer dan {total} reviews op Trustpilot.",
+   "fr": "Note de {score} sur 5 sur plus de {total} avis Trustpilot.",
+   "de": "Bewertet mit {score} von 5 aus mehr als {total} Bewertungen auf Trustpilot.",
+   "es": "Valorado con {score} sobre 5 a partir de más de {total} opiniones en Trustpilot.",
+   "it": "Valutato {score} su 5 su oltre {total} recensioni su Trustpilot."
   },
   "offer.code_label": {
    "en": "YOUR CODE",

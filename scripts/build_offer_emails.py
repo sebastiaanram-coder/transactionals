@@ -370,7 +370,8 @@ for e in EMAILS:
     for email_loc, cf_loc in sc.LOCALE_MAP.items():
         for path in ("", "cs"):
             want = "https://www.helloprint.com/%s/%s" % (sc.market_path(cf_loc), path)
-            if ("event.Locale == '%s' %%}%s" % (email_loc, want)) not in livb:
+            if (("%s == '%s' %%}%s" % (i18n.LOCALE_EXPR, email_loc, want))
+                not in livb):
                 errs.append("%s: %s does not point at %s" % (t, email_loc, want))
 
 # the pair has to differ, and the last day has to be the shorter of the two

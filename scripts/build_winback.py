@@ -740,7 +740,8 @@ for e in EMAILS:
             errs.append("%s: says %r — that is a sentence about us" % (t, bad))
     for email_loc, cf_loc in sc.LOCALE_MAP.items():
         want = "https://www.helloprint.com/%s/" % sc.market_path(cf_loc)
-        if ("event.Locale == '%s' %%}%s" % (email_loc, want)) not in livb:
+        if (("%s == '%s' %%}%s" % (i18n.LOCALE_EXPR, email_loc, want))
+                not in livb):
             errs.append("%s: %s does not point at %s" % (t, email_loc, want))
 
 # branch shapes

@@ -21,8 +21,8 @@ yet - see the note in build_category_nudge.py.
 The language branch is emitted as a Django conditional on the locale, the same
 mechanism the product tiles already use and which is render-verified:
 
-    {% if event.Locale|slice:":2" == "nl" %} <a real Dutch review>
-    {% elif event.Locale|slice:":2" == "fr" %} <a real French review>
+    {% if person.locale == "nl-NL" %} <a real Dutch review>
+    {% elif person.locale == "nl-BE" %} <a real Dutch review>
     ...
     {% else %} <the placeholder, visibly marked>
     {% endif %}
@@ -48,7 +48,12 @@ CACHE = os.path.join(os.path.dirname(os.path.dirname(HERE)), "data",
 # {% else %} and every email shows the placeholder instead of a review. That is a
 # silent failure, so the switch moved to exact matches on event.Locale, which is
 # what every other switch in these templates uses and has been rendered.
-LANG_EXPR = 'event.Locale|slice:":2"'   # unverified in an {% if %}; do not branch on it
+LANG_EXPR = 'person.locale|slice:":2"'  # unverified in an {% if %}; do not branch on it
+
+# The reader's locale comes from the PROFILE, not the event: a list-triggered
+# flow has no event, so event.Locale silently served English. Kept in step with
+# i18n.LOCALE_EXPR, which is the canonical definition.
+LOCALE_EXPR = "person.locale"
 
 
 def _load():
@@ -148,7 +153,7 @@ def quote_switch(pool, tr, locale=None, live=False, byline_en="verified Trustpil
     for one a customer in that language actually wrote.
 
     In live mode both halves come back as one exact-match switch on
-    event.Locale, English in the {% else %}, matching every other switch in
+    person.locale, English in the {% else %}, matching every other switch in
     these templates.
     """
     by = tr("rev.by", byline_en)
@@ -168,8 +173,8 @@ def quote_switch(pool, tr, locale=None, live=False, byline_en="verified Trustpil
         if not p:
             continue
         kw = "if" if not qs else "elif"
-        qs += "{%% %s event.Locale == '%s' %%}%s" % (kw, loc, p[0])
-        bs += "{%% %s event.Locale == '%s' %%}%s" % (kw, loc, p[1])
+        qs += "{%% %s %s == '%s' %%}%s" % (kw, LOCALE_EXPR, loc, p[0])
+        bs += "{%% %s %s == '%s' %%}%s" % (kw, LOCALE_EXPR, loc, p[1])
     en = pair("en")
     if not qs or not en:
         return (en[0] if en else "", en[1] if en else by)
