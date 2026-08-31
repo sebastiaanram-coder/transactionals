@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Welcome 01 proposed</title>
+</head>
+<body style="margin:0;padding:0;background:#f8f8f8;">
+
+<!-- ============================================================
+     HP - Welcome - 01 - {% if person.locale == 'en-IE' %}Start your first order{% elif person.locale == 'en-GB' %}Start your first order{% elif person.locale == 'nl-NL' %}Begin je eerste bestelling{% elif person.locale == 'nl-BE' %}Begin je eerste bestelling{% elif person.locale == 'fr-FR' %}Passez votre première commande{% elif person.locale == 'fr-BE' %}Passez votre première commande{% elif person.locale == 'de-DE' %}Starten Sie Ihre erste Bestellung{% elif person.locale == 'es-ES' %}Haz tu primer pedido{% elif person.locale == 'it-IT' %}Fai il tuo primo ordine{% else %}Start your first order{% endif %} - Full email HTML
+     Draft v1 for team review. One universal HTML block.
+     Data bindings are documented in the overview doc, not inline.
+     ============================================================ -->
+
+<div class="hp-w1-root">
+<style>
+.hp-w1-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.hp-w1-root *{box-sizing:border-box;}
+.hp-w1-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
+.hp-w1-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
+.hp-w1-promo{background:#008539;color:#ffffff;text-align:center;padding:11px 20px;font-size:15px;line-height:21px;font-weight:700;letter-spacing:.01em;}
+.hp-w1-promo strong{font-weight:800;letter-spacing:.04em;}
+.hp-w1-promo .hp-w1-ends{font-weight:800;}
+.hp-w1-logobar{background:#191919;padding:15px 24px 13px;text-align:center;}
+.hp-w1-logobar img{width:170px;max-width:56%;height:auto;display:inline-block;border:0;}
+/* hero: fade is BAKED INTO THE IMAGE PIXELS. No CSS gradient here on purpose,
+   the Klaviyo editor strips linear-gradient. background-color matches the
+   image's top band so an images-off client still reads white text. */
+.hp-w1-hero{background:#191919;text-align:center;}
+.hp-w1-heroimg{display:block;width:100%;height:auto;border:0;margin-top:-50px;}
+.hp-w1-hero-ov{padding:20px 24px 0;text-align:center;}
+.hp-w1-h1{margin:0 0 8px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.01em;}
+.hp-w1-sub{margin:0 auto 14px;max-width:440px;font-size:17px;line-height:25px;color:#ffffff;}
+.hp-w1-code{display:inline-block;background:transparent;border:2px dashed #9fdbb8;border-radius:8px;color:#ffffff;padding:9px 16px;font-size:13px;line-height:18px;font-weight:700;margin:0 0 13px;}
+.hp-w1-code strong{font-weight:800;letter-spacing:.06em;font-size:15px;}
+.hp-w1-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
+.hp-w1-uspwrap{position:relative;z-index:2;margin:-76px 100px 0;padding:0 0 22px;}
+.hp-w1-usp{background:#008539;border-radius:9999px;height:46px;overflow:hidden;}
+.hp-w1-usp-tail{width:0;height:0;margin:0 auto;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:12px solid #008539;}
+.hp-w1-usp-track{white-space:nowrap;font-size:0;line-height:0;animation:hpw1usp 12s ease-in-out infinite;}
+.hp-w1-usp-item{display:inline-block;width:100%;height:46px;line-height:46px;text-align:center;font-size:15px;font-weight:700;color:#ffffff;letter-spacing:.01em;white-space:nowrap;vertical-align:top;}
+.hp-w1-usp-mso{background:#008539;text-align:center;padding:13px 20px;font-size:15px;line-height:20px;font-weight:700;color:#ffffff;}
+@keyframes hpw1usp{
+  0%,26%{transform:translateX(0)}
+  33%,59%{transform:translateX(-100%)}
+  66%,92%{transform:translateX(-200%)}
+  100%{transform:translateX(0)}
+}
+.hp-w1-sect{padding:24px 24px 0;}
+.hp-w1-secttl{margin:0 0 6px;font-size:24px;line-height:31px;font-weight:800;color:#191919;text-align:center;letter-spacing:-.01em;}
+.hp-w1-sectsub{margin:0 0 22px;font-size:15px;line-height:22px;color:#555555;text-align:center;}
+.hp-w1-grid{width:100%;border-collapse:separate;border-spacing:0;}
+.hp-w1-cellpad{padding:0 6px 12px;vertical-align:top;}
+.hp-w1-tile{display:block;height:100%;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;background:#ffffff;text-decoration:none;}
+.hp-w1-tile img{display:block;width:100%;height:auto;border:0;background:#f8f8f8;}
+.hp-w1-tilebody{display:block;padding:14px 18px 16px;}
+.hp-w1-tiname{display:block;font-size:15px;line-height:20px;min-height:40px;font-weight:700;color:#191919;margin:0 0 6px;}
+.hp-w1-tiqty{display:block;font-size:12px;line-height:16px;color:#555555;margin:0 0 6px;}
+.hp-w1-tiprice{display:block;font-size:17px;line-height:22px;font-weight:800;color:#191919;}
+.hp-w1-tiwas{text-decoration:line-through;color:#191919;}
+.hp-w1-tinow{color:#008539;margin-left:3px;}
+.hp-w1-tiexp{display:block;font-size:12px;line-height:16px;font-weight:700;color:#191919;margin-top:3px;}
+.hp-w1-card{margin:20px 24px 0;border:1px solid #e5e5e5;border-radius:16px;padding:22px 24px;background:#f8f8f8;}
+.hp-w1-cardttl{margin:0 0 8px;font-size:18px;line-height:25px;font-weight:700;color:#191919;}
+.hp-w1-cardtxt{margin:0 0 14px;font-size:14px;line-height:22px;color:#333333;}
+.hp-w1-link{color:#008539;text-decoration:none;font-weight:700;font-size:14px;line-height:20px;}
+.hp-w1-trust{margin:26px 24px 0;border-top:1px solid #e5e5e5;padding:24px 0 4px;text-align:center;}
+.hp-w1-tp-link{display:inline-block;text-decoration:none;}
+.hp-w1-tp-stars{display:block;margin:0 auto 9px;border:0;width:135px;height:28px;}
+.hp-w1-tp-score{display:block;font-size:15px;line-height:21px;font-weight:800;color:#191919;}
+.hp-w1-tp-score em{font-style:normal;color:#00b67a;}
+.hp-w1-tp-sub{display:block;font-size:12px;line-height:18px;color:#555555;margin-top:3px;}
+.hp-w1-divider{border-top:1px solid #e5e5e5;margin:24px 24px 0;}
+.hp-w1-help{margin:0 24px;padding:24px 0 30px;text-align:center;}
+.hp-w1-help-agents{display:block;margin:0 auto 12px;border:0;}
+.hp-w1-helpttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin-bottom:7px;}
+.hp-w1-helplinks{font-size:14px;line-height:21px;}
+.hp-w1-helplinks a{color:#008539;text-decoration:none;font-weight:700;}
+.hp-w1-helplinks span{color:#aaaaaa;padding:0 7px;}
+.hp-w1-foot{max-width:600px;margin:0 auto;padding:28px 24px 0;text-align:center;}
+.hp-w1-footlogo img{height:30px;width:auto;display:inline-block;border:0;}
+.hp-w1-soc{padding:18px 0 12px;}
+.hp-w1-soc a{display:inline-block;margin:0 5px;text-decoration:none;}
+.hp-w1-soc img{width:28px;height:28px;display:block;border:0;}
+.hp-w1-legal{font-size:11px;line-height:17px;color:#767676;padding:6px 0 0;}
+.hp-w1-unsub{padding:8px 0 26px;}
+.hp-w1-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
+.hp-w1-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
+@media only screen and (max-width:480px){
+  .hp-w1-logobar{padding:13px 20px 11px;}
+  .hp-w1-logobar img{width:148px;}
+  .hp-w1-uspwrap{margin:-70px 30px 0;padding:0 0 16px;}
+  .hp-w1-hero-ov{padding:16px 18px 0;}
+  .hp-w1-h1{font-size:27px;line-height:34px;}
+  .hp-w1-sub{font-size:16px;line-height:25px;max-width:none;}
+  .hp-w1-code{font-size:13px;padding:9px 14px;}
+  .hp-w1-cta{display:inline-block;padding:15px 30px;}
+  .hp-w1-sect{padding:28px 14px 0;}
+  .hp-w1-cellpad{padding:0 4px 10px!important;}
+  .hp-w1-tilebody{padding:11px 12px 13px;}
+  .hp-w1-tiname{font-size:13px;line-height:17px;min-height:34px;margin:0 0 4px;}
+  .hp-w1-tiqty{font-size:11px;line-height:15px;margin:0 0 4px;}
+  .hp-w1-tiprice{font-size:15px;line-height:20px;}
+  .hp-w1-tiexp{font-size:11px;line-height:15px;margin-top:2px;}
+  .hp-w1-usp-item{font-size:13px;}
+  .hp-w1-card{margin:18px 14px 0;padding:18px 18px;}
+  .hp-w1-trust,.hp-w1-help{margin:18px 14px 0;}
+}
+</style>
+
+<!-- preheader: real text, absent from the original template -->
+<div class="hp-w1-pre">{% if person.locale == 'en-IE' %}Your 10% code is inside, and the prints most businesses start with.{% elif person.locale == 'en-GB' %}Your 10% code is inside, and the prints most businesses start with.{% elif person.locale == 'nl-NL' %}Je 10%-code zit erin, plus het drukwerk waar de meeste bedrijven mee beginnen.{% elif person.locale == 'nl-BE' %}Je 10%-code zit erin, plus het drukwerk waar de meeste bedrijven mee beginnen.{% elif person.locale == 'fr-FR' %}Votre code 10% est à l'intérieur, avec les imprimés par lesquels commencent la plupart des entreprises.{% elif person.locale == 'fr-BE' %}Votre code 10% est à l'intérieur, avec les imprimés par lesquels commencent la plupart des entreprises.{% elif person.locale == 'de-DE' %}Ihr 10%-Code steht drin, dazu die Drucksachen, mit denen die meisten Unternehmen anfangen.{% elif person.locale == 'es-ES' %}Tu código del 10% está dentro, y lo que imprimen primero la mayoría de las empresas.{% elif person.locale == 'it-IT' %}Il tuo codice 10% è qui dentro, insieme alle stampe da cui parte la maggior parte delle aziende.{% else %}Your 10% code is inside, and the prints most businesses start with.{% endif %}</div>
+
+<div class="hp-w1-wrap">
+  <div class="hp-w1-shell">
+
+    <!-- promo bar : discount + expiry -->
+    <div class="hp-w1-promo">
+      {% if person.locale == 'en-IE' %}Your 10% welcome discount{% elif person.locale == 'en-GB' %}Your 10% welcome discount{% elif person.locale == 'nl-NL' %}Je 10% welkomstkorting{% elif person.locale == 'nl-BE' %}Je 10% welkomstkorting{% elif person.locale == 'fr-FR' %}Vos 10% de bienvenue{% elif person.locale == 'fr-BE' %}Vos 10% de bienvenue{% elif person.locale == 'de-DE' %}Ihre 10% Willkommensrabatt{% elif person.locale == 'es-ES' %}Tu 10% de bienvenida{% elif person.locale == 'it-IT' %}Il tuo 10% di benvenuto{% else %}Your 10% welcome discount{% endif %} <span class="hp-w1-ends">{% if person.locale == 'en-IE' %}&nbsp;&middot;&nbsp;Valid only 5 days{% elif person.locale == 'en-GB' %}&nbsp;&middot;&nbsp;Valid only 5 days{% elif person.locale == 'nl-NL' %}&nbsp;&middot;&nbsp;Slechts 5 dagen geldig{% elif person.locale == 'nl-BE' %}&nbsp;&middot;&nbsp;Slechts 5 dagen geldig{% elif person.locale == 'fr-FR' %}&nbsp;&middot;&nbsp;Valable 5 jours seulement{% elif person.locale == 'fr-BE' %}&nbsp;&middot;&nbsp;Valable 5 jours seulement{% elif person.locale == 'de-DE' %}&nbsp;&middot;&nbsp;Nur 5 Tage gültig{% elif person.locale == 'es-ES' %}&nbsp;&middot;&nbsp;Solo 5 días{% elif person.locale == 'it-IT' %}&nbsp;&middot;&nbsp;Valido solo 5 giorni{% else %}&nbsp;&middot;&nbsp;Valid only 5 days{% endif %}</span>
+    </div>
+
+    <!-- logo -->
+    <div class="hp-w1-logobar">
+      <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/{% else %}https://www.helloprint.com/en-gb/{% endif %}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/ec84e87e-10bf-4d01-a44d-e2dff5fa743e.png" alt="Helloprint" width="190"></a>
+    </div>
+
+    <!-- hero : real text over a pre-faded team photo -->
+    <div class="hp-w1-hero">
+      <div class="hp-w1-hero-ov">
+        <h1 class="hp-w1-h1">{% if person.locale == 'en-IE' %}Welcome to Helloprint{% elif person.locale == 'en-GB' %}Welcome to Helloprint{% elif person.locale == 'nl-NL' %}Welkom bij Helloprint{% elif person.locale == 'nl-BE' %}Welkom bij Helloprint{% elif person.locale == 'fr-FR' %}Bienvenue chez Helloprint{% elif person.locale == 'fr-BE' %}Bienvenue chez Helloprint{% elif person.locale == 'de-DE' %}Willkommen bei Helloprint{% elif person.locale == 'es-ES' %}Bienvenido a Helloprint{% elif person.locale == 'it-IT' %}Benvenuto in Helloprint{% else %}Welcome to Helloprint{% endif %}</h1>
+        <p class="hp-w1-sub">{% if person.locale == 'en-IE' %}Print made simple, by people who have your back.{% elif person.locale == 'en-GB' %}Print made simple, by people who have your back.{% elif person.locale == 'nl-NL' %}Drukwerk eenvoudig gemaakt, door mensen die achter je staan.{% elif person.locale == 'nl-BE' %}Drukwerk eenvoudig gemaakt, door mensen die achter je staan.{% elif person.locale == 'fr-FR' %}L'impression simplifiée, par des gens qui vous soutiennent.{% elif person.locale == 'fr-BE' %}L'impression simplifiée, par des gens qui vous soutiennent.{% elif person.locale == 'de-DE' %}Druck einfach gemacht, von Menschen, die hinter Ihnen stehen.{% elif person.locale == 'es-ES' %}La impresión hecha fácil, por gente que te respalda.{% elif person.locale == 'it-IT' %}La stampa resa semplice, da persone che ti sostengono.{% else %}Print made simple, by people who have your back.{% endif %}</p>
+        
+        <a class="hp-w1-cta" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/all-products{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/all-products{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/all-products{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/en-gb/all-products{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/all-products{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/all-products{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/all-products{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/all-products{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/all-products{% else %}https://www.helloprint.com/en-gb/all-products{% endif %}">{% if person.locale == 'en-IE' %}Browse the full range{% elif person.locale == 'en-GB' %}Browse the full range{% elif person.locale == 'nl-NL' %}Bekijk het hele assortiment{% elif person.locale == 'nl-BE' %}Bekijk het hele assortiment{% elif person.locale == 'fr-FR' %}Voir toute la gamme{% elif person.locale == 'fr-BE' %}Voir toute la gamme{% elif person.locale == 'de-DE' %}Das ganze Sortiment ansehen{% elif person.locale == 'es-ES' %}Ver todo el catálogo{% elif person.locale == 'it-IT' %}Vedi tutta la gamma{% else %}Browse the full range{% endif %}</a>
+      </div>
+      <img class="hp-w1-heroimg" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/14b8030e-1f15-4dc8-b96f-17afbe3ee26d.jpeg" alt="{% if person.locale == 'en-IE' %}The Helloprint team in the office{% elif person.locale == 'en-GB' %}The Helloprint team in the office{% elif person.locale == 'nl-NL' %}Het Helloprint-team op kantoor{% elif person.locale == 'nl-BE' %}Het Helloprint-team op kantoor{% elif person.locale == 'fr-FR' %}L'équipe Helloprint au bureau{% elif person.locale == 'fr-BE' %}L'équipe Helloprint au bureau{% elif person.locale == 'de-DE' %}Das Helloprint-Team im Büro{% elif person.locale == 'es-ES' %}El equipo de Helloprint en la oficina{% elif person.locale == 'it-IT' %}Il team Helloprint in ufficio{% else %}The Helloprint team in the office{% endif %}" width="600">
+    </div>
+
+    <!-- USP strip. Horizontal filmstrip: rotates where animation is supported,
+         falls back to USP 1. Outlook gets a static bar via the MSO conditional,
+         because it ignores both overflow and transform. -->
+    <!--[if mso]>
+    <div class="hp-w1-usp-mso">{% if person.locale == 'en-IE' %}&ldquo;Every price includes delivery and VAT&rdquo;{% elif person.locale == 'en-GB' %}&ldquo;Every price includes delivery and VAT&rdquo;{% elif person.locale == 'nl-NL' %}&ldquo;Elke prijs is inclusief verzending en btw&rdquo;{% elif person.locale == 'nl-BE' %}&ldquo;Elke prijs is inclusief verzending en btw&rdquo;{% elif person.locale == 'fr-FR' %}&ldquo;Chaque prix inclut la livraison et la TVA&rdquo;{% elif person.locale == 'fr-BE' %}&ldquo;Chaque prix inclut la livraison et la TVA&rdquo;{% elif person.locale == 'de-DE' %}&ldquo;Jeder Preis enthält Versand und Steuer&rdquo;{% elif person.locale == 'es-ES' %}&ldquo;Cada precio incluye envío e IVA&rdquo;{% elif person.locale == 'it-IT' %}&ldquo;Ogni prezzo include spedizione e IVA&rdquo;{% else %}&ldquo;Every price includes delivery and VAT&rdquo;{% endif %}</div>
+    <![endif]-->
+    <!--[if !mso]><!-->
+    <div class="hp-w1-uspwrap">
+    <div class="hp-w1-usp-tail"></div>
+    <div class="hp-w1-usp">
+      <div class="hp-w1-usp-track">
+        <div class="hp-w1-usp-item">{% if person.locale == 'en-IE' %}&ldquo;Every price includes delivery and VAT&rdquo;{% elif person.locale == 'en-GB' %}&ldquo;Every price includes delivery and VAT&rdquo;{% elif person.locale == 'nl-NL' %}&ldquo;Elke prijs is inclusief verzending en btw&rdquo;{% elif person.locale == 'nl-BE' %}&ldquo;Elke prijs is inclusief verzending en btw&rdquo;{% elif person.locale == 'fr-FR' %}&ldquo;Chaque prix inclut la livraison et la TVA&rdquo;{% elif person.locale == 'fr-BE' %}&ldquo;Chaque prix inclut la livraison et la TVA&rdquo;{% elif person.locale == 'de-DE' %}&ldquo;Jeder Preis enthält Versand und Steuer&rdquo;{% elif person.locale == 'es-ES' %}&ldquo;Cada precio incluye envío e IVA&rdquo;{% elif person.locale == 'it-IT' %}&ldquo;Ogni prezzo include spedizione e IVA&rdquo;{% else %}&ldquo;Every price includes delivery and VAT&rdquo;{% endif %}</div>
+        <div class="hp-w1-usp-item">{% if person.locale == 'en-IE' %}&ldquo;We check every file before it prints&rdquo;{% elif person.locale == 'en-GB' %}&ldquo;We check every file before it prints&rdquo;{% elif person.locale == 'nl-NL' %}&ldquo;Wij controleren elk bestand voordat het gedrukt wordt&rdquo;{% elif person.locale == 'nl-BE' %}&ldquo;Wij controleren elk bestand voordat het gedrukt wordt&rdquo;{% elif person.locale == 'fr-FR' %}&ldquo;Nous vérifions chaque fichier avant impression&rdquo;{% elif person.locale == 'fr-BE' %}&ldquo;Nous vérifions chaque fichier avant impression&rdquo;{% elif person.locale == 'de-DE' %}&ldquo;Wir prüfen jede Datei vor dem Druck&rdquo;{% elif person.locale == 'es-ES' %}&ldquo;Revisamos cada archivo antes de imprimirlo&rdquo;{% elif person.locale == 'it-IT' %}&ldquo;Controlliamo ogni file prima di stamparlo&rdquo;{% else %}&ldquo;We check every file before it prints&rdquo;{% endif %}</div>
+        <div class="hp-w1-usp-item">{% if person.locale == 'en-IE' %}&ldquo;Backed by our 100% satisfaction guarantee&rdquo;{% elif person.locale == 'en-GB' %}&ldquo;Backed by our 100% satisfaction guarantee&rdquo;{% elif person.locale == 'nl-NL' %}&ldquo;Met onze 100% tevredenheidsgarantie&rdquo;{% elif person.locale == 'nl-BE' %}&ldquo;Met onze 100% tevredenheidsgarantie&rdquo;{% elif person.locale == 'fr-FR' %}&ldquo;Couvert par notre garantie satisfaction 100%&rdquo;{% elif person.locale == 'fr-BE' %}&ldquo;Couvert par notre garantie satisfaction 100%&rdquo;{% elif person.locale == 'de-DE' %}&ldquo;Abgesichert durch unsere 100% Zufriedenheitsgarantie&rdquo;{% elif person.locale == 'es-ES' %}&ldquo;Con nuestra garantía de satisfacción del 100%&rdquo;{% elif person.locale == 'it-IT' %}&ldquo;Con la nostra garanzia di soddisfazione 100%&rdquo;{% else %}&ldquo;Backed by our 100% satisfaction guarantee&rdquo;{% endif %}</div>
+      </div>
+    </div>
+    </div>
+    <!--<![endif]-->
+
+    <!-- product grid : image, title, quantity, price -->
+    <div class="hp-w1-sect">
+      <h2 class="hp-w1-secttl">{% if person.locale == 'en-IE' %}What businesses order first{% elif person.locale == 'en-GB' %}What businesses order first{% elif person.locale == 'nl-NL' %}Waar bedrijven mee beginnen{% elif person.locale == 'nl-BE' %}Waar bedrijven mee beginnen{% elif person.locale == 'fr-FR' %}Ce que les entreprises commandent en premier{% elif person.locale == 'fr-BE' %}Ce que les entreprises commandent en premier{% elif person.locale == 'de-DE' %}Womit Unternehmen anfangen{% elif person.locale == 'es-ES' %}Lo que piden primero las empresas{% elif person.locale == 'it-IT' %}Cosa ordinano per prime le aziende{% else %}What businesses order first{% endif %}</h2>
+      <p class="hp-w1-sectsub">{% if person.locale == 'en-IE' %}Pick one and your 10% comes off at checkout.{% elif person.locale == 'en-GB' %}Pick one and your 10% comes off at checkout.{% elif person.locale == 'nl-NL' %}Kies er een en je 10% gaat er bij het afrekenen af.{% elif person.locale == 'nl-BE' %}Kies er een en je 10% gaat er bij het afrekenen af.{% elif person.locale == 'fr-FR' %}Choisissez-en un et vos 10% sont déduits au paiement.{% elif person.locale == 'fr-BE' %}Choisissez-en un et vos 10% sont déduits au paiement.{% elif person.locale == 'de-DE' %}Wählen Sie eines, und Ihre 10% werden beim Bezahlen abgezogen.{% elif person.locale == 'es-ES' %}Elige uno y tu 10% se descuenta al pagar.{% elif person.locale == 'it-IT' %}Scegline uno e il tuo 10% viene tolto al pagamento.{% else %}Pick one and your 10% comes off at checkout.{% endif %}</p>
+
+      <table class="hp-w1-grid" role="presentation" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td class="hp-w1-cellpad hp-w1-stack" width="50%">
+            <a class="hp-w1-tile" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/standardflyers{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/standardflyers{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/standardflyers{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/standardflyers{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/en-gb/standardflyers{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/standardflyers{% elif person.locale == 'es-ES' %}https://www.helloprint.com/en-gb/standardflyers{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/standardflyers{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/standardflyers{% else %}https://www.helloprint.com/en-gb/standardflyers{% endif %}">
+              <img src="https://contentful.helloprint.com/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80" alt="Flyers" width="270">
+              <span class="hp-w1-tilebody">
+                <span class="hp-w1-tiname">Flyers</span>
+                <span class="hp-w1-tiqty">{% if person.locale == 'en-IE' %}1,000 units{% elif person.locale == 'en-GB' %}1,000 units{% elif person.locale == 'nl-NL' %}1.000 stuks{% elif person.locale == 'nl-BE' %}1.000 stuks{% elif person.locale == 'fr-FR' %}1 000 unités{% elif person.locale == 'fr-BE' %}1 000 unités{% elif person.locale == 'de-DE' %}1.000 Stück{% elif person.locale == 'es-ES' %}1.000 unidades{% elif person.locale == 'it-IT' %}1.000 pezzi{% else %}1,000 units{% endif %}</span>
+                <span class="hp-w1-tiprice"><s class="hp-w1-tiwas">&euro;39.96</s>&nbsp;<span class="hp-w1-tinow">&euro;35.96</span></span>
+                <span class="hp-w1-tiexp">{% if person.locale == 'en-IE' %}Expires in 5 days{% elif person.locale == 'en-GB' %}Expires in 5 days{% elif person.locale == 'nl-NL' %}Verloopt over 5 dagen{% elif person.locale == 'nl-BE' %}Verloopt over 5 dagen{% elif person.locale == 'fr-FR' %}Expire dans 5 jours{% elif person.locale == 'fr-BE' %}Expire dans 5 jours{% elif person.locale == 'de-DE' %}Läuft in 5 Tagen ab{% elif person.locale == 'es-ES' %}Caduca en 5 días{% elif person.locale == 'it-IT' %}Scade tra 5 giorni{% else %}Expires in 5 days{% endif %}</span>
+              </span>
+            </a>
+          </td>
+          <td class="hp-w1-cellpad hp-w1-stack" width="50%">
+            <a class="hp-w1-tile" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/standardbusinesscards{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/standardbusinesscards{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/en-gb/standardbusinesscards{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/en-gb/standardbusinesscards{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/en-gb/standardbusinesscards{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/standardbusinesscards{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/standardbusinesscards{% elif person.locale == 'it-IT' %}https://www.helloprint.com/en-gb/standardbusinesscards{% elif person.locale == 'de-DE' %}https://www.helloprint.com/en-gb/standardbusinesscards{% else %}https://www.helloprint.com/en-gb/standardbusinesscards{% endif %}">
+              <img src="https://contentful.helloprint.com/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80" alt="Classic Business Cards" width="270">
+              <span class="hp-w1-tilebody">
+                <span class="hp-w1-tiname">Classic Business Cards</span>
+                <span class="hp-w1-tiqty">{% if person.locale == 'en-IE' %}500 units{% elif person.locale == 'en-GB' %}500 units{% elif person.locale == 'nl-NL' %}500 stuks{% elif person.locale == 'nl-BE' %}500 stuks{% elif person.locale == 'fr-FR' %}500 unités{% elif person.locale == 'fr-BE' %}500 unités{% elif person.locale == 'de-DE' %}500 Stück{% elif person.locale == 'es-ES' %}500 unidades{% elif person.locale == 'it-IT' %}500 pezzi{% else %}500 units{% endif %}</span>
+                <span class="hp-w1-tiprice"><s class="hp-w1-tiwas">&euro;25.82</s>&nbsp;<span class="hp-w1-tinow">&euro;23.24</span></span>
+                <span class="hp-w1-tiexp">{% if person.locale == 'en-IE' %}Expires in 5 days{% elif person.locale == 'en-GB' %}Expires in 5 days{% elif person.locale == 'nl-NL' %}Verloopt over 5 dagen{% elif person.locale == 'nl-BE' %}Verloopt over 5 dagen{% elif person.locale == 'fr-FR' %}Expire dans 5 jours{% elif person.locale == 'fr-BE' %}Expire dans 5 jours{% elif person.locale == 'de-DE' %}Läuft in 5 Tagen ab{% elif person.locale == 'es-ES' %}Caduca en 5 días{% elif person.locale == 'it-IT' %}Scade tra 5 giorni{% else %}Expires in 5 days{% endif %}</span>
+              </span>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td class="hp-w1-cellpad hp-w1-stack" width="50%">
+            <a class="hp-w1-tile" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/posters{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/posters{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/posters{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/posters{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/en-gb/posters{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/posters{% elif person.locale == 'es-ES' %}https://www.helloprint.com/en-gb/posters{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/posters{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/posters{% else %}https://www.helloprint.com/en-gb/posters{% endif %}">
+              <img src="https://contentful.helloprint.com/wm1n7oady8a5/2nY7LuhmSnZjFgcBTaIW49/ab602a96f1dc04cb4fd0929b330711ba/poster.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80" alt="Standard Posters" width="270">
+              <span class="hp-w1-tilebody">
+                <span class="hp-w1-tiname">Standard Posters</span>
+                <span class="hp-w1-tiqty">{% if person.locale == 'en-IE' %}50 units{% elif person.locale == 'en-GB' %}50 units{% elif person.locale == 'nl-NL' %}50 stuks{% elif person.locale == 'nl-BE' %}50 stuks{% elif person.locale == 'fr-FR' %}50 unités{% elif person.locale == 'fr-BE' %}50 unités{% elif person.locale == 'de-DE' %}50 Stück{% elif person.locale == 'es-ES' %}50 unidades{% elif person.locale == 'it-IT' %}50 pezzi{% else %}50 units{% endif %}</span>
+                <span class="hp-w1-tiprice"><s class="hp-w1-tiwas">&euro;55.34</s>&nbsp;<span class="hp-w1-tinow">&euro;49.81</span></span>
+                <span class="hp-w1-tiexp">{% if person.locale == 'en-IE' %}Expires in 5 days{% elif person.locale == 'en-GB' %}Expires in 5 days{% elif person.locale == 'nl-NL' %}Verloopt over 5 dagen{% elif person.locale == 'nl-BE' %}Verloopt over 5 dagen{% elif person.locale == 'fr-FR' %}Expire dans 5 jours{% elif person.locale == 'fr-BE' %}Expire dans 5 jours{% elif person.locale == 'de-DE' %}Läuft in 5 Tagen ab{% elif person.locale == 'es-ES' %}Caduca en 5 días{% elif person.locale == 'it-IT' %}Scade tra 5 giorni{% else %}Expires in 5 days{% endif %}</span>
+              </span>
+            </a>
+          </td>
+          <td class="hp-w1-cellpad hp-w1-stack" width="50%">
+            <a class="hp-w1-tile" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/budgetrollupbanners{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/budgetrollupbanners{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/budgetrollupbanners{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/budgetrollupbanners{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/budgetrollupbanners{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/budgetrollupbanners{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/budgetrollupbanners{% elif person.locale == 'it-IT' %}https://www.helloprint.com/en-gb/budgetrollupbanners{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/budgetrollupbanners{% else %}https://www.helloprint.com/en-gb/budgetrollupbanners{% endif %}">
+              <img src="https://contentful.helloprint.com/wm1n7oady8a5/41Y1y3jMop3QZACNSW5h7g/57b1c68acebbea0a04a384908da64759/banners_retractable_banners__1_.png?fm=jpg&fl=progressive&fit=pad&bg=rgb:ffffff&w=600&h=600&q=80" alt="Roller Banners" width="270">
+              <span class="hp-w1-tilebody">
+                <span class="hp-w1-tiname">Roller Banners</span>
+                <span class="hp-w1-tiqty">{% if person.locale == 'en-IE' %}1 unit{% elif person.locale == 'en-GB' %}1 unit{% elif person.locale == 'nl-NL' %}1 stuk{% elif person.locale == 'nl-BE' %}1 stuk{% elif person.locale == 'fr-FR' %}1 unité{% elif person.locale == 'fr-BE' %}1 unité{% elif person.locale == 'de-DE' %}1 Stück{% elif person.locale == 'es-ES' %}1 unidad{% elif person.locale == 'it-IT' %}1 pezzo{% else %}1 unit{% endif %}</span>
+                <span class="hp-w1-tiprice"><s class="hp-w1-tiwas">&euro;60.87</s>&nbsp;<span class="hp-w1-tinow">&euro;54.78</span></span>
+                <span class="hp-w1-tiexp">{% if person.locale == 'en-IE' %}Expires in 5 days{% elif person.locale == 'en-GB' %}Expires in 5 days{% elif person.locale == 'nl-NL' %}Verloopt over 5 dagen{% elif person.locale == 'nl-BE' %}Verloopt over 5 dagen{% elif person.locale == 'fr-FR' %}Expire dans 5 jours{% elif person.locale == 'fr-BE' %}Expire dans 5 jours{% elif person.locale == 'de-DE' %}Läuft in 5 Tagen ab{% elif person.locale == 'es-ES' %}Caduca en 5 días{% elif person.locale == 'it-IT' %}Scade tra 5 giorni{% else %}Expires in 5 days{% endif %}</span>
+              </span>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- artwork reassurance : links to {% if person.locale == 'en-IE' %}Help Centre{% elif person.locale == 'en-GB' %}Help Centre{% elif person.locale == 'nl-NL' %}Helpcentrum{% elif person.locale == 'nl-BE' %}Helpcentrum{% elif person.locale == 'fr-FR' %}Centre d'aide{% elif person.locale == 'fr-BE' %}Centre d'aide{% elif person.locale == 'de-DE' %}Hilfe-Center{% elif person.locale == 'es-ES' %}Centro de ayuda{% elif person.locale == 'it-IT' %}Centro assistenza{% else %}Help Centre{% endif %}, not mailto -->
+    <div class="hp-w1-card">
+      <h3 class="hp-w1-cardttl">{% if person.locale == 'en-IE' %}Not sure your file will work?{% elif person.locale == 'en-GB' %}Not sure your file will work?{% elif person.locale == 'nl-NL' %}Twijfel je of je bestand goed is?{% elif person.locale == 'nl-BE' %}Twijfel je of je bestand goed is?{% elif person.locale == 'fr-FR' %}Vous doutez que votre fichier convienne ?{% elif person.locale == 'fr-BE' %}Vous doutez que votre fichier convienne ?{% elif person.locale == 'de-DE' %}Unsicher, ob Ihre Datei funktioniert?{% elif person.locale == 'es-ES' %}¿No sabes si tu archivo servirá?{% elif person.locale == 'it-IT' %}Non sei sicuro che il tuo file vada bene?{% else %}Not sure your file will work?{% endif %}</h3>
+      <p class="hp-w1-cardtxt">{% if person.locale == 'en-IE' %}Send us whatever you have. We check every file before anything goes to print, and we tell you if something needs fixing.{% elif person.locale == 'en-GB' %}Send us whatever you have. We check every file before anything goes to print, and we tell you if something needs fixing.{% elif person.locale == 'nl-NL' %}Stuur ons wat je hebt. Wij controleren elk bestand voordat er iets gedrukt wordt, en we zeggen het als er iets moet worden aangepast.{% elif person.locale == 'nl-BE' %}Stuur ons wat je hebt. Wij controleren elk bestand voordat er iets gedrukt wordt, en we zeggen het als er iets moet worden aangepast.{% elif person.locale == 'fr-FR' %}Envoyez-nous ce que vous avez. Nous vérifions chaque fichier avant toute impression et vous disons si quelque chose doit être corrigé.{% elif person.locale == 'fr-BE' %}Envoyez-nous ce que vous avez. Nous vérifions chaque fichier avant toute impression et vous disons si quelque chose doit être corrigé.{% elif person.locale == 'de-DE' %}Schicken Sie uns, was Sie haben. Wir prüfen jede Datei, bevor etwas gedruckt wird, und sagen Ihnen, wenn etwas angepasst werden muss.{% elif person.locale == 'es-ES' %}Envíanos lo que tengas. Revisamos cada archivo antes de imprimir nada, y te decimos si hay que arreglar algo.{% elif person.locale == 'it-IT' %}Mandaci quello che hai. Controlliamo ogni file prima di stampare qualsiasi cosa, e ti diciamo se qualcosa va sistemato.{% else %}Send us whatever you have. We check every file before anything goes to print, and we tell you if something needs fixing.{% endif %}</p>
+      <a class="hp-w1-link" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/cs{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/cs{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/cs{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/cs{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/cs{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/cs{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/cs{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/cs{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/cs{% else %}https://www.helloprint.com/en-gb/cs{% endif %}">{% if person.locale == 'en-IE' %}See how file checking works{% elif person.locale == 'en-GB' %}See how file checking works{% elif person.locale == 'nl-NL' %}Bekijk hoe de bestandscontrole werkt{% elif person.locale == 'nl-BE' %}Bekijk hoe de bestandscontrole werkt{% elif person.locale == 'fr-FR' %}Voir comment fonctionne la vérification{% elif person.locale == 'fr-BE' %}Voir comment fonctionne la vérification{% elif person.locale == 'de-DE' %}So funktioniert die Dateiprüfung{% elif person.locale == 'es-ES' %}Mira cómo funciona la revisión de archivos{% elif person.locale == 'it-IT' %}Scopri come funziona il controllo file{% else %}See how file checking works{% endif %}</a>
+    </div>
+
+    <!-- trustpilot : real stars graphic, real text -->
+    <div class="hp-w1-trust">
+      <a class="hp-w1-tp-link" href="https://ie.trustpilot.com/review/helloprint.com">
+        <img class="hp-w1-tp-stars" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/4baf03ec-1cd3-4724-a89e-5a17b2fb0fb7.png" alt="{% if person.locale == 'en-IE' %}Rated 4.5 out of 5 stars on Trustpilot{% elif person.locale == 'en-GB' %}Rated 4.5 out of 5 stars on Trustpilot{% elif person.locale == 'nl-NL' %}Beoordeeld met 4,5 van de 5 sterren op Trustpilot{% elif person.locale == 'nl-BE' %}Beoordeeld met 4,5 van de 5 sterren op Trustpilot{% elif person.locale == 'fr-FR' %}Noté 4,5 étoiles sur 5 sur Trustpilot{% elif person.locale == 'fr-BE' %}Noté 4,5 étoiles sur 5 sur Trustpilot{% elif person.locale == 'de-DE' %}Bewertet mit 4,5 von 5 Sternen auf Trustpilot{% elif person.locale == 'es-ES' %}Valorado con 4,5 de 5 estrellas en Trustpilot{% elif person.locale == 'it-IT' %}Valutato 4,5 stelle su 5 su Trustpilot{% else %}Rated 4.5 out of 5 stars on Trustpilot{% endif %}" width="135" height="28">
+        <span class="hp-w1-tp-score"><em>4.5</em> {% if person.locale == 'en-IE' %}out of 5 on Trustpilot{% elif person.locale == 'en-GB' %}out of 5 on Trustpilot{% elif person.locale == 'nl-NL' %}uit 5 op Trustpilot{% elif person.locale == 'nl-BE' %}uit 5 op Trustpilot{% elif person.locale == 'fr-FR' %}sur 5 sur Trustpilot{% elif person.locale == 'fr-BE' %}sur 5 sur Trustpilot{% elif person.locale == 'de-DE' %}von 5 auf Trustpilot{% elif person.locale == 'es-ES' %}de 5 en Trustpilot{% elif person.locale == 'it-IT' %}su 5 su Trustpilot{% else %}out of 5 on Trustpilot{% endif %}</span>
+        <span class="hp-w1-tp-sub">{% if person.locale == 'en-IE' %}Based on more than 33,000 reviews{% elif person.locale == 'en-GB' %}Based on more than 33,000 reviews{% elif person.locale == 'nl-NL' %}Op basis van meer dan 33.000 reviews{% elif person.locale == 'nl-BE' %}Op basis van meer dan 33.000 reviews{% elif person.locale == 'fr-FR' %}Sur la base de plus de 33 000 avis{% elif person.locale == 'fr-BE' %}Sur la base de plus de 33 000 avis{% elif person.locale == 'de-DE' %}Auf Basis von mehr als 33.000 Bewertungen{% elif person.locale == 'es-ES' %}A partir de más de 33.000 opiniones{% elif person.locale == 'it-IT' %}Sulla base di oltre 33.000 recensioni{% else %}Based on more than 33,000 reviews{% endif %}</span>
+      </a>
+    </div>
+
+    <div class="hp-w1-divider"></div>
+
+    <!-- help : real people, three real routes -->
+    <div class="hp-w1-help">
+      <img class="hp-w1-help-agents" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/1921bcd9-4e80-4899-9f97-41ad6a6ced5e.png" alt="{% if person.locale == 'en-IE' %}Three Helloprint customer service agents{% elif person.locale == 'en-GB' %}Three Helloprint customer service agents{% elif person.locale == 'nl-NL' %}Drie Helloprint-klantenservicemedewerkers{% elif person.locale == 'nl-BE' %}Drie Helloprint-klantenservicemedewerkers{% elif person.locale == 'fr-FR' %}Trois conseillers du service client Helloprint{% elif person.locale == 'fr-BE' %}Trois conseillers du service client Helloprint{% elif person.locale == 'de-DE' %}Drei Helloprint-Kundenservicemitarbeiter{% elif person.locale == 'es-ES' %}Tres agentes de atención al cliente de Helloprint{% elif person.locale == 'it-IT' %}Tre operatori del servizio clienti Helloprint{% else %}Three Helloprint customer service agents{% endif %}" width="112" height="44">
+      <span class="hp-w1-helpttl">{% if person.locale == 'en-IE' %}Do you need help?{% elif person.locale == 'en-GB' %}Do you need help?{% elif person.locale == 'nl-NL' %}Hulp nodig?{% elif person.locale == 'nl-BE' %}Hulp nodig?{% elif person.locale == 'fr-FR' %}Besoin d'aide ?{% elif person.locale == 'fr-BE' %}Besoin d'aide ?{% elif person.locale == 'de-DE' %}Brauchen Sie Hilfe?{% elif person.locale == 'es-ES' %}¿Necesitas ayuda?{% elif person.locale == 'it-IT' %}Ti serve aiuto?{% else %}Do you need help?{% endif %}</span>
+      <span class="hp-w1-helplinks">
+        <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/cs{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/cs{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/cs{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/cs{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/cs{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/cs{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/cs{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/cs{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/cs{% else %}https://www.helloprint.com/en-gb/cs{% endif %}">{% if person.locale == 'en-IE' %}Chat with us{% elif person.locale == 'en-GB' %}Chat with us{% elif person.locale == 'nl-NL' %}Chat met ons{% elif person.locale == 'nl-BE' %}Chat met ons{% elif person.locale == 'fr-FR' %}Chattez avec nous{% elif person.locale == 'fr-BE' %}Chattez avec nous{% elif person.locale == 'de-DE' %}Chatten Sie mit uns{% elif person.locale == 'es-ES' %}Chatea con nosotros{% elif person.locale == 'it-IT' %}Chatta con noi{% else %}Chat with us{% endif %}</a><span>&middot;</span><a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/cs{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/cs{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/cs{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/cs{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/cs{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/cs{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/cs{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/cs{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/cs{% else %}https://www.helloprint.com/en-gb/cs{% endif %}">{% if person.locale == 'en-IE' %}Help Centre{% elif person.locale == 'en-GB' %}Help Centre{% elif person.locale == 'nl-NL' %}Helpcentrum{% elif person.locale == 'nl-BE' %}Helpcentrum{% elif person.locale == 'fr-FR' %}Centre d'aide{% elif person.locale == 'fr-BE' %}Centre d'aide{% elif person.locale == 'de-DE' %}Hilfe-Center{% elif person.locale == 'es-ES' %}Centro de ayuda{% elif person.locale == 'it-IT' %}Centro assistenza{% else %}Help Centre{% endif %}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+      </span>
+    </div>
+
+  </div>
+
+  <!-- footer -->
+  <div class="hp-w1-foot">
+    <div class="hp-w1-footlogo">
+      <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/{% else %}https://www.helloprint.com/en-gb/{% endif %}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+    </div>
+    <div class="hp-w1-soc">
+      <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
+      <a href="https://x.com/helloprintuk"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/x_twitter_96.png" alt="X" width="28" height="28"></a>
+      <a href="https://www.instagram.com/helloprint/"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/instagram_96.png" alt="Instagram" width="28" height="28"></a>
+      <a href="https://www.youtube.com/channel/UC6YYBCdSDMFa9jYFJ3IpMsA"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/youtube_96.png" alt="YouTube" width="28" height="28"></a>
+      <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
+    </div>
+    <div class="hp-w1-legal">
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+    </div>
+    <div class="hp-w1-unsub">
+      {% unsubscribe '{% if person.locale == 'en-IE' %}Unsubscribe{% elif person.locale == 'en-GB' %}Unsubscribe{% elif person.locale == 'nl-NL' %}Afmelden{% elif person.locale == 'nl-BE' %}Afmelden{% elif person.locale == 'fr-FR' %}Se désabonner{% elif person.locale == 'fr-BE' %}Se désabonner{% elif person.locale == 'de-DE' %}Abmelden{% elif person.locale == 'es-ES' %}Darse de baja{% elif person.locale == 'it-IT' %}Annulla iscrizione{% else %}Unsubscribe{% endif %}' %}
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

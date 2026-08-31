@@ -735,6 +735,22 @@
    "de": "Schreiben Sie uns",
    "es": "Escríbenos",
    "it": "Scrivici"
+  },
+  "cta.browse_range": {
+   "en": "Browse the full range",
+   "nl": "Bekijk het hele assortiment",
+   "fr": "Voir toute la gamme",
+   "de": "Das ganze Sortiment ansehen",
+   "es": "Ver todo el catálogo",
+   "it": "Vedi tutta la gamma"
+  },
+  "wc.ordered_line": {
+   "en": "Thanks for your order. Here is what we are, in short.",
+   "nl": "Bedankt voor je bestelling. Hier is in het kort wie we zijn.",
+   "fr": "Merci pour votre commande. Voici en bref qui nous sommes.",
+   "de": "Danke für Ihre Bestellung. Hier kurz, wer wir sind.",
+   "es": "Gracias por tu pedido. Esto es, en resumen, quiénes somos.",
+   "it": "Grazie per il tuo ordine. Ecco in breve chi siamo."
   }
  },
  "commercial-print": {

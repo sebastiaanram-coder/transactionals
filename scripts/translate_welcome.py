@@ -241,6 +241,38 @@ def render(html, slug, locale=None, live=False):
     return link_assets(html, live)
 
 
+# The edits are expressed as regexes over the BUILT block, because these files
+# are string-substituted rather than templated: by the time a live block exists
+# its locale switches are already resolved, so there is no slot left to target.
+VARIANT_EDITS = {
+    "welcome-01": [
+        # the dashed code box, switch and all
+        (r'<div class="hp-w1-code">.*?</div><br>', ""),
+        # "Start your first order" is wrong for someone who just ordered
+        (r'(<a class="hp-w1-cta" href="[^"]*">)(.*?)(</a>)', r"\1@@CTA@@\3"),
+    ],
+    "welcome-02": [
+        # the countdown bar
+        (r'<div class="hp-w2-promo">.*?</div>\s*</div>', "</div>"),
+    ],
+}
+
+
+def variant(html, slug, tr):
+    """Strip the discount from a built live block. Every edit must land."""
+    edits = VARIANT_EDITS.get(slug)
+    if not edits:
+        return None
+    for pattern, repl in edits:
+        new, n = re.subn(pattern, repl, html, flags=re.S)
+        if not n:
+            errs.append("%s variant: %r matched nothing, so the discount was "
+                        "not removed" % (slug, pattern[:54]))
+            continue
+        html = new
+    return html.replace("@@CTA@@", tr("cta.browse_range", "Browse the full range"))
+
+
 for slug in EMAILS:
     src = os.path.join(OUT, slug + "-proposed.html")
     if not os.path.exists(src):
@@ -253,9 +285,16 @@ for slug in EMAILS:
         loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == lg)
         io.open(os.path.join(OUT, "%s-%s-proposed.html" % (slug, lg)), "w",
                 encoding="utf-8").write(render(english, slug, loc))
+    _live = render(english, slug, None, True)
     io.open(os.path.join(OUT, slug + "-klaviyo.html"), "w",
-            encoding="utf-8").write(render(english, slug, None, True))
-    print("  %-12s -> 5 language previews + 1 Klaviyo block" % slug)
+            encoding="utf-8").write(_live)
+    _var = variant(_live, slug, i18n.translator(slug, True))
+    _extra = ""
+    if _var:
+        io.open(os.path.join(OUT, slug + "-nocode-klaviyo.html"), "w",
+                encoding="utf-8").write(_var)
+        _extra = " + 1 no-discount variant"
+    print("  %-12s -> 5 language previews + 1 Klaviyo block%s" % (slug, _extra))
 
 # ---- nothing English may survive in a translated preview
 LEAKS = ["Do you need help?", "Chat with us", "Help Centre",
@@ -273,6 +312,23 @@ for f in sorted(glob.glob(os.path.join(OUT, "welcome-0*-*-proposed.html"))):
 # Every one of these was invisible in a browser preview and broke a real send,
 # which is exactly the class of fault a check has to hold.
 GMAIL_CLIP_KB = 102
+
+# ---- the no-discount variants, for readers who ordered before the first email
+#
+# WHY THESE EXIST. The Welcome flow waits an hour before its first email,
+# because signup happens inside checkout and many people order straight after.
+# Anyone who has ordered in that hour must not be handed a first-order discount:
+# they would either use it on a second order we were not discounting, or read it
+# as an offer they just missed. So the flow splits and this is the other side.
+#
+# ONLY THE DISCOUNT IS REMOVED. Same design, same translations, same images -
+# the code line and the countdown bar come out, and welcome-01's call to action
+# stops saying "Start your first order" to someone who just did.
+#
+# Emails 3 and 4 have no variant on purpose: they ARE the discount reminder and
+# the last-day nudge. With the discount gone there is no email left, so that path
+# ends after two and Post-Purchase picks the customer up from their order.
+
 
 for _slug in EMAILS:
     _lv = os.path.join(OUT, _slug + "-klaviyo.html")

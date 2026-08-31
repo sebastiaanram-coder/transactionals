@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Welcome 02 proposed</title>
+</head>
+<body style="margin:0;padding:0;background:#f8f8f8;">
+
+<!-- ============================================================
+     HP - Welcome - 02 - The people behind your print - Full email HTML
+     Draft v1 for team review. One universal HTML block.
+     Same component set as Welcome 01: black masthead, pre-faded hero
+     with the CTA on the image top, speech balloon, Trustpilot stars,
+     agents help row, rounded shell bottom.
+     ============================================================ -->
+
+<div class="hp-w2-root">
+<style>
+.hp-w2-root{margin:0;padding:0;background:#f8f8f8;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.hp-w2-root *{box-sizing:border-box;}
+.hp-w2-wrap{width:100%;background:#f8f8f8;padding:0 0 32px;}
+.hp-w2-shell{max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;}
+.hp-w2-promo{background:#008539;color:#ffffff;text-align:center;padding:11px 20px;font-size:15px;line-height:21px;font-weight:700;letter-spacing:.01em;}
+.hp-w2-promo .hp-w2-ends{font-weight:800;}
+.hp-w2-logobar{background:#191919;padding:15px 24px 13px;text-align:center;}
+.hp-w2-logobar img{width:170px;max-width:56%;height:auto;display:inline-block;border:0;}
+/* hero: fade baked into the image pixels, no CSS gradient, no background-image */
+.hp-w2-hero{background:#191919;text-align:center;}
+.hp-w2-hero-ov{padding:20px 24px 22px;text-align:center;}
+.hp-w2-h1{margin:0 0 8px;font-size:31px;line-height:38px;font-weight:800;color:#ffffff;letter-spacing:-.01em;}
+.hp-w2-sub{margin:0 auto 14px;max-width:440px;font-size:17px;line-height:25px;color:#ffffff;}
+.hp-w2-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;color:#191919;text-decoration:none;font-size:16px;line-height:20px;font-weight:700;padding:15px 34px;border-radius:9999px;}
+.hp-w2-heroimg{display:block;width:100%;height:auto;border:0;margin-top:0;}
+/* speech balloon, lifted onto the photo */
+.hp-w2-uspwrap{position:relative;z-index:2;margin:-76px 100px 0;padding:0 0 22px;}
+.hp-w2-usp-tail{width:0;height:0;margin:0 auto;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:12px solid #008539;}
+.hp-w2-usp{background:#008539;border-radius:9999px;height:46px;overflow:hidden;}
+.hp-w2-usp-track{white-space:nowrap;font-size:0;line-height:0;animation:hpw2usp 12s ease-in-out infinite;}
+.hp-w2-usp-item{display:inline-block;width:100%;height:46px;line-height:46px;text-align:center;font-size:15px;font-weight:700;color:#ffffff;white-space:nowrap;vertical-align:top;}
+.hp-w2-usp-mso{background:#008539;text-align:center;padding:13px 20px;font-size:15px;line-height:20px;font-weight:700;color:#ffffff;}
+@keyframes hpw2usp{
+  0%,26%{transform:translateX(0)}
+  33%,59%{transform:translateX(-100%)}
+  66%,92%{transform:translateX(-200%)}
+  100%{transform:translateX(0)}
+}
+.hp-w2-sect{padding:24px 24px 0;}
+.hp-w2-secttl{margin:0 0 6px;font-size:24px;line-height:31px;font-weight:800;color:#191919;text-align:center;letter-spacing:-.01em;}
+.hp-w2-sectsub{margin:0 0 22px;font-size:15px;line-height:22px;color:#555555;text-align:center;}
+.hp-w2-row{width:100%;border-collapse:separate;border-spacing:0;margin:0 0 10px;}
+.hp-w2-row-alt{direction:rtl;}
+.hp-w2-row td{direction:ltr;}
+.hp-w2-rimg{padding:0 0 14px;vertical-align:top;}
+.hp-w2-rimg img{display:block;width:100%;height:auto;border:0;border-radius:12px;background:#f8f8f8;}
+.hp-w2-rtxt{padding:0 0 14px 20px;vertical-align:middle;}
+.hp-w2-row-alt .hp-w2-rtxt{padding:0 20px 14px 0;}
+.hp-w2-rttl{display:block;font-size:19px;line-height:25px;font-weight:800;color:#191919;margin:0 0 7px;letter-spacing:-.01em;}
+.hp-w2-rbody{display:block;font-size:14px;line-height:22px;color:#555555;margin:0 0 10px;}
+.hp-w2-rlink{display:inline-block;font-size:14px;line-height:19px;font-weight:700;color:#008539;text-decoration:none;}
+.hp-w2-divider{border-top:1px solid #e5e5e5;margin:24px 24px 0;}
+.hp-w2-help{margin:0 24px;padding:24px 0 30px;text-align:center;}
+.hp-w2-help-agents{display:block;margin:0 auto 12px;border:0;}
+.hp-w2-helpttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin-bottom:7px;}
+.hp-w2-helplinks{font-size:14px;line-height:21px;}
+.hp-w2-helplinks a{color:#008539;text-decoration:none;font-weight:700;}
+.hp-w2-helplinks span{color:#aaaaaa;padding:0 7px;}
+.hp-w2-foot{max-width:600px;margin:0 auto;padding:28px 24px 0;text-align:center;}
+.hp-w2-footlogo img{height:30px;width:auto;display:inline-block;border:0;}
+.hp-w2-soc{padding:18px 0 12px;}
+.hp-w2-soc a{display:inline-block;margin:0 5px;text-decoration:none;}
+.hp-w2-soc img{width:28px;height:28px;display:block;border:0;}
+.hp-w2-legal{font-size:11px;line-height:17px;color:#767676;padding:6px 0 0;}
+.hp-w2-unsub{padding:8px 0 26px;}
+.hp-w2-unsub a{color:#767676;text-decoration:underline;font-size:11px;line-height:17px;}
+.hp-w2-pre{display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8f8f8;}
+@media only screen and (max-width:480px){
+  .hp-w2-logobar{padding:13px 20px 11px;}
+  .hp-w2-logobar img{width:148px;}
+  .hp-w2-hero-ov{padding:16px 18px 18px;}
+  .hp-w2-h1{font-size:27px;line-height:34px;}
+  .hp-w2-sub{font-size:16px;line-height:24px;max-width:none;}
+  .hp-w2-cta{display:inline-block;padding:15px 30px;}
+  .hp-w2-uspwrap{margin:-70px 30px 0;padding:0 0 16px;}
+  .hp-w2-usp-item{font-size:13px;}
+  .hp-w2-sect{padding:28px 14px 0;}
+  .hp-w2-stack{display:block!important;width:100%!important;}
+  .hp-w2-rtxt,.hp-w2-row-alt .hp-w2-rtxt{padding:12px 0 20px!important;}
+  .hp-w2-rimg{padding:0!important;}
+  .hp-w2-rttl{font-size:18px;line-height:24px;}
+  .hp-w2-help{margin:18px 14px 0;}
+  .hp-w2-divider{margin:20px 14px 0;}
+}
+</style>
+
+<div class="hp-w2-pre">{% if person.locale == 'en-IE' %}Printed closer to you, a B Corp certification, and over 10,000 products.{% elif person.locale == 'en-GB' %}Printed closer to you, a B Corp certification, and over 10,000 products.{% elif person.locale == 'nl-NL' %}Dichter bij je gedrukt, een B Corp-certificering en meer dan 10.000 producten.{% elif person.locale == 'nl-BE' %}Dichter bij je gedrukt, een B Corp-certificering en meer dan 10.000 producten.{% elif person.locale == 'fr-FR' %}Imprimé plus près de chez vous, une certification B Corp et plus de 10 000 produits.{% elif person.locale == 'fr-BE' %}Imprimé plus près de chez vous, une certification B Corp et plus de 10 000 produits.{% elif person.locale == 'de-DE' %}Näher bei Ihnen gedruckt, eine B Corp-Zertifizierung und über 10.000 Produkte.{% elif person.locale == 'es-ES' %}Impreso más cerca de ti, una certificación B Corp y más de 10.000 productos.{% elif person.locale == 'it-IT' %}Stampato più vicino a te, una certificazione B Corp e oltre 10.000 prodotti.{% else %}Printed closer to you, a B Corp certification, and over 10,000 products.{% endif %}</div>
+
+<div class="hp-w2-wrap">
+  <div class="hp-w2-shell">
+
+    <!-- promo bar: soft reminder, not the headline. The offer led email 1. -->
+    </div>
+    </div>
+    </div>
+    <!--<![endif]-->
+
+    <!-- two trust cards, each linking to a page that actually exists -->
+    <div class="hp-w2-sect">
+      <h2 class="hp-w2-secttl">{% if person.locale == 'en-IE' %}Three things worth knowing{% elif person.locale == 'en-GB' %}Three things worth knowing{% elif person.locale == 'nl-NL' %}Drie dingen die het weten waard zijn{% elif person.locale == 'nl-BE' %}Drie dingen die het weten waard zijn{% elif person.locale == 'fr-FR' %}Trois choses à savoir{% elif person.locale == 'fr-BE' %}Trois choses à savoir{% elif person.locale == 'de-DE' %}Drei Dinge, die man wissen sollte{% elif person.locale == 'es-ES' %}Tres cosas que conviene saber{% elif person.locale == 'it-IT' %}Tre cose che vale la pena sapere{% else %}Three things worth knowing{% endif %}</h2>
+      <p class="hp-w2-sectsub">{% if person.locale == 'en-IE' %}Not slogans. Things you can check.{% elif person.locale == 'en-GB' %}Not slogans. Things you can check.{% elif person.locale == 'nl-NL' %}Geen slogans. Dingen die je kunt nagaan.{% elif person.locale == 'nl-BE' %}Geen slogans. Dingen die je kunt nagaan.{% elif person.locale == 'fr-FR' %}Pas des slogans. Des choses vérifiables.{% elif person.locale == 'fr-BE' %}Pas des slogans. Des choses vérifiables.{% elif person.locale == 'de-DE' %}Keine Slogans. Dinge, die Sie nachprüfen können.{% elif person.locale == 'es-ES' %}No son eslóganes. Son cosas que puedes comprobar.{% elif person.locale == 'it-IT' %}Non slogan. Cose che puoi verificare.{% else %}Not slogans. Things you can check.{% endif %}</p>
+
+      <table class="hp-w2-row" role="presentation" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td class="hp-w2-rimg hp-w2-stack" width="45%"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/215281dc-0b54-4b64-911d-ff641f91a147.jpeg" alt="{% if person.locale == 'en-IE' %}Helloprint customer advisers at work{% elif person.locale == 'en-GB' %}Helloprint customer advisers at work{% elif person.locale == 'nl-NL' %}Helloprint-klantadviseurs aan het werk{% elif person.locale == 'nl-BE' %}Helloprint-klantadviseurs aan het werk{% elif person.locale == 'fr-FR' %}Des conseillers clients Helloprint au travail{% elif person.locale == 'fr-BE' %}Des conseillers clients Helloprint au travail{% elif person.locale == 'de-DE' %}Helloprint-Kundenberater bei der Arbeit{% elif person.locale == 'es-ES' %}Asesores de clientes de Helloprint trabajando{% elif person.locale == 'it-IT' %}Consulenti clienti Helloprint al lavoro{% else %}Helloprint customer advisers at work{% endif %}" width="248"></td>
+          <td class="hp-w2-rtxt hp-w2-stack" width="55%">
+            <span class="hp-w2-rttl">{% if person.locale == 'en-IE' %}Printed close to you{% elif person.locale == 'en-GB' %}Printed close to you{% elif person.locale == 'nl-NL' %}Dicht bij je gedrukt{% elif person.locale == 'nl-BE' %}Dicht bij je gedrukt{% elif person.locale == 'fr-FR' %}Imprimé près de chez vous{% elif person.locale == 'fr-BE' %}Imprimé près de chez vous{% elif person.locale == 'de-DE' %}In Ihrer Nähe gedruckt{% elif person.locale == 'es-ES' %}Impreso cerca de ti{% elif person.locale == 'it-IT' %}Stampato vicino a te{% else %}Printed close to you{% endif %}</span>
+            <span class="hp-w2-rbody">{% if person.locale == 'en-IE' %}Your order goes to a print partner near your delivery address, so it travels less and arrives sooner. In Ireland that means delivery via An Post and DPD, backed by a network of 300+ production partners.{% elif person.locale == 'en-GB' %}Your order goes to a print partner near your delivery address, so it travels less and arrives sooner. In Ireland that means delivery via An Post and DPD, backed by a network of 300+ production partners.{% elif person.locale == 'nl-NL' %}Je bestelling gaat naar een drukpartner bij je bezorgadres in de buurt, dus hij reist minder ver en is er sneller. De bezorging loopt via lokale vervoerders, met een netwerk van 300+ productiepartners erachter.{% elif person.locale == 'nl-BE' %}Je bestelling gaat naar een drukpartner bij je bezorgadres in de buurt, dus hij reist minder ver en is er sneller. De bezorging loopt via lokale vervoerders, met een netwerk van 300+ productiepartners erachter.{% elif person.locale == 'fr-FR' %}Votre commande part chez un partenaire imprimeur proche de votre adresse de livraison : elle voyage moins et arrive plus vite. La livraison passe par des transporteurs locaux, avec un réseau de plus de 300 partenaires de production derrière.{% elif person.locale == 'fr-BE' %}Votre commande part chez un partenaire imprimeur proche de votre adresse de livraison : elle voyage moins et arrive plus vite. La livraison passe par des transporteurs locaux, avec un réseau de plus de 300 partenaires de production derrière.{% elif person.locale == 'de-DE' %}Ihr Auftrag geht an einen Druckpartner in der Nähe Ihrer Lieferadresse, so reist er kürzer und kommt schneller an. Die Zustellung läuft über lokale Zusteller, gestützt auf ein Netz von über 300 Produktionspartnern.{% elif person.locale == 'es-ES' %}Tu pedido va a un socio de impresión cerca de tu dirección de entrega, así viaja menos y llega antes. La entrega se hace con transportistas locales, respaldada por una red de más de 300 socios de producción.{% elif person.locale == 'it-IT' %}Il tuo ordine va a un partner di stampa vicino al tuo indirizzo di consegna, così viaggia meno e arriva prima. La consegna passa da corrieri locali, con dietro una rete di oltre 300 partner di produzione.{% else %}Your order goes to a print partner near your delivery address, so it travels less and arrives sooner. In Ireland that means delivery via An Post and DPD, backed by a network of 300+ production partners.{% endif %}</span>
+            <a class="hp-w2-rlink" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/about-us{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/about-us{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/en-gb/about-us{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/en-gb/about-us{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/en-gb/about-us{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/about-us{% elif person.locale == 'es-ES' %}https://www.helloprint.com/en-gb/about-us{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/about-us{% elif person.locale == 'de-DE' %}https://www.helloprint.com/en-gb/about-us{% else %}https://www.helloprint.com/en-gb/about-us{% endif %}">{% if person.locale == 'en-IE' %}How the platform works{% elif person.locale == 'en-GB' %}How the platform works{% elif person.locale == 'nl-NL' %}Hoe het platform werkt{% elif person.locale == 'nl-BE' %}Hoe het platform werkt{% elif person.locale == 'fr-FR' %}Comment fonctionne la plateforme{% elif person.locale == 'fr-BE' %}Comment fonctionne la plateforme{% elif person.locale == 'de-DE' %}So funktioniert die Plattform{% elif person.locale == 'es-ES' %}Cómo funciona la plataforma{% elif person.locale == 'it-IT' %}Come funziona la piattaforma{% else %}How the platform works{% endif %}</a>
+          </td>
+        </tr>
+      </table>
+      <table class="hp-w2-row hp-w2-row-alt" role="presentation" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td class="hp-w2-rimg hp-w2-stack" width="45%"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/fbd7b362-6800-45b2-8cc0-de31f839274a.jpeg" alt="{% if person.locale == 'en-IE' %}Eco flyers printed on recycled paper{% elif person.locale == 'en-GB' %}Eco flyers printed on recycled paper{% elif person.locale == 'nl-NL' %}Eco-flyers gedrukt op gerecycled papier{% elif person.locale == 'nl-BE' %}Eco-flyers gedrukt op gerecycled papier{% elif person.locale == 'fr-FR' %}Des flyers éco imprimés sur papier recyclé{% elif person.locale == 'fr-BE' %}Des flyers éco imprimés sur papier recyclé{% elif person.locale == 'de-DE' %}Öko-Flyer auf Recyclingpapier gedruckt{% elif person.locale == 'es-ES' %}Flyers ecológicos impresos en papel reciclado{% elif person.locale == 'it-IT' %}Volantini eco stampati su carta riciclata{% else %}Eco flyers printed on recycled paper{% endif %}" width="248"></td>
+          <td class="hp-w2-rtxt hp-w2-stack" width="55%">
+            <span class="hp-w2-rttl">{% if person.locale == 'en-IE' %}Better print, less impact{% elif person.locale == 'en-GB' %}Better print, less impact{% elif person.locale == 'nl-NL' %}Beter drukwerk, minder impact{% elif person.locale == 'nl-BE' %}Beter drukwerk, minder impact{% elif person.locale == 'fr-FR' %}Mieux imprimer, moins d'impact{% elif person.locale == 'fr-BE' %}Mieux imprimer, moins d'impact{% elif person.locale == 'de-DE' %}Besser drucken, weniger Auswirkung{% elif person.locale == 'es-ES' %}Mejor impresión, menos impacto{% elif person.locale == 'it-IT' %}Stampa migliore, meno impatto{% else %}Better print, less impact{% endif %}</span>
+            <span class="hp-w2-rbody">{% if person.locale == 'en-IE' %}Print should not cost the earth. Being a certified B Corp keeps us honest about that, and it is why we work with partners who produce closer to you and materials that ask less of the planet. Our impact report shows where we stand and where we are heading.{% elif person.locale == 'en-GB' %}Print should not cost the earth. Being a certified B Corp keeps us honest about that, and it is why we work with partners who produce closer to you and materials that ask less of the planet. Our impact report shows where we stand and where we are heading.{% elif person.locale == 'nl-NL' %}Drukwerk hoeft de aarde niet te kosten. Als gecertificeerde B Corp houden we onszelf daaraan, en daarom werken we met partners die dichter bij je produceren en met materialen die minder van de planeet vragen. Ons impactrapport laat zien waar we staan en waar we naartoe gaan.{% elif person.locale == 'nl-BE' %}Drukwerk hoeft de aarde niet te kosten. Als gecertificeerde B Corp houden we onszelf daaraan, en daarom werken we met partners die dichter bij je produceren en met materialen die minder van de planeet vragen. Ons impactrapport laat zien waar we staan en waar we naartoe gaan.{% elif person.locale == 'fr-FR' %}L'impression ne devrait pas coûter la planète. Être une B Corp certifiée nous oblige à rester honnêtes là-dessus, et c'est pourquoi nous travaillons avec des partenaires qui produisent plus près de vous et des matériaux qui demandent moins à la planète. Notre rapport d'impact montre où nous en sommes et où nous allons.{% elif person.locale == 'fr-BE' %}L'impression ne devrait pas coûter la planète. Être une B Corp certifiée nous oblige à rester honnêtes là-dessus, et c'est pourquoi nous travaillons avec des partenaires qui produisent plus près de vous et des matériaux qui demandent moins à la planète. Notre rapport d'impact montre où nous en sommes et où nous allons.{% elif person.locale == 'de-DE' %}Drucken darf die Erde nicht kosten. Als zertifizierte B Corp bleiben wir dabei ehrlich, und deshalb arbeiten wir mit Partnern, die näher bei Ihnen produzieren, und mit Materialien, die den Planeten weniger belasten. Unser Impact-Report zeigt, wo wir stehen und wohin wir gehen.{% elif person.locale == 'es-ES' %}Imprimir no debería costar el planeta. Ser una B Corp certificada nos obliga a ser honestos con eso, y por eso trabajamos con socios que producen más cerca de ti y con materiales que piden menos al planeta. Nuestro informe de impacto muestra dónde estamos y hacia dónde vamos.{% elif person.locale == 'it-IT' %}Stampare non deve costare il pianeta. Essere una B Corp certificata ci tiene onesti su questo, ed è il motivo per cui lavoriamo con partner che producono più vicino a te e con materiali che chiedono meno al pianeta. Il nostro report di impatto mostra dove siamo e dove stiamo andando.{% else %}Print should not cost the earth. Being a certified B Corp keeps us honest about that, and it is why we work with partners who produce closer to you and materials that ask less of the planet. Our impact report shows where we stand and where we are heading.{% endif %}</span>
+            <a class="hp-w2-rlink" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/sustainability{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/sustainability{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/en-gb/sustainability{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/en-gb/sustainability{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/en-gb/sustainability{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/sustainability{% elif person.locale == 'es-ES' %}https://www.helloprint.com/en-gb/sustainability{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/sustainability{% elif person.locale == 'de-DE' %}https://www.helloprint.com/en-gb/sustainability{% else %}https://www.helloprint.com/en-gb/sustainability{% endif %}">{% if person.locale == 'en-IE' %}Read our impact report{% elif person.locale == 'en-GB' %}Read our impact report{% elif person.locale == 'nl-NL' %}Lees ons impactrapport{% elif person.locale == 'nl-BE' %}Lees ons impactrapport{% elif person.locale == 'fr-FR' %}Lire notre rapport d'impact{% elif person.locale == 'fr-BE' %}Lire notre rapport d'impact{% elif person.locale == 'de-DE' %}Unseren Impact-Bericht lesen{% elif person.locale == 'es-ES' %}Lee nuestro informe de impacto{% elif person.locale == 'it-IT' %}Leggi il nostro report d'impatto{% else %}Read our impact report{% endif %}</a>
+          </td>
+        </tr>
+      </table>
+      <table class="hp-w2-row" role="presentation" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td class="hp-w2-rimg hp-w2-stack" width="45%"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/8ac7effe-9791-468a-97e8-7703ad802020.jpeg" alt="{% if person.locale == 'en-IE' %}Flyers, business cards, posters and roller banners{% elif person.locale == 'en-GB' %}Flyers, business cards, posters and roller banners{% elif person.locale == 'nl-NL' %}Flyers, visitekaartjes, posters en roll-upbanners{% elif person.locale == 'nl-BE' %}Flyers, visitekaartjes, posters en roll-upbanners{% elif person.locale == 'fr-FR' %}Flyers, cartes de visite, affiches et roll-ups{% elif person.locale == 'fr-BE' %}Flyers, cartes de visite, affiches et roll-ups{% elif person.locale == 'de-DE' %}Flyer, Visitenkarten, Poster und Roll-up-Banner{% elif person.locale == 'es-ES' %}Flyers, tarjetas de visita, pósters y roll-ups{% elif person.locale == 'it-IT' %}Volantini, biglietti da visita, poster e roll-up{% else %}Flyers, business cards, posters and roller banners{% endif %}" width="248"></td>
+          <td class="hp-w2-rtxt hp-w2-stack" width="55%">
+            <span class="hp-w2-rttl">{% if person.locale == 'en-IE' %}Over 10,000 products{% elif person.locale == 'en-GB' %}Over 10,000 products{% elif person.locale == 'nl-NL' %}Meer dan 10.000 producten{% elif person.locale == 'nl-BE' %}Meer dan 10.000 producten{% elif person.locale == 'fr-FR' %}Plus de 10 000 produits{% elif person.locale == 'fr-BE' %}Plus de 10 000 produits{% elif person.locale == 'de-DE' %}Über 10.000 Produkte{% elif person.locale == 'es-ES' %}Más de 10.000 productos{% elif person.locale == 'it-IT' %}Oltre 10.000 prodotti{% else %}Over 10,000 products{% endif %}</span>
+            <span class="hp-w2-rbody">{% if person.locale == 'en-IE' %}More than 100 million product combinations. Business cards, flyers, brochures, posters, banners, textiles, packaging and branded gifts. Configure what you need and the platform finds a partner who can make it.{% elif person.locale == 'en-GB' %}More than 100 million product combinations. Business cards, flyers, brochures, posters, banners, textiles, packaging and branded gifts. Configure what you need and the platform finds a partner who can make it.{% elif person.locale == 'nl-NL' %}Meer dan 100 miljoen productcombinaties. Visitekaartjes, flyers, brochures, posters, banners, textiel, verpakkingen en relatiegeschenken. Stel samen wat je nodig hebt en het platform vindt een partner die het kan maken.{% elif person.locale == 'nl-BE' %}Meer dan 100 miljoen productcombinaties. Visitekaartjes, flyers, brochures, posters, banners, textiel, verpakkingen en relatiegeschenken. Stel samen wat je nodig hebt en het platform vindt een partner die het kan maken.{% elif person.locale == 'fr-FR' %}Plus de 100 millions de combinaisons de produits. Cartes de visite, flyers, brochures, affiches, banderoles, textiles, emballages et cadeaux personnalisés. Configurez ce dont vous avez besoin et la plateforme trouve un partenaire capable de le produire.{% elif person.locale == 'fr-BE' %}Plus de 100 millions de combinaisons de produits. Cartes de visite, flyers, brochures, affiches, banderoles, textiles, emballages et cadeaux personnalisés. Configurez ce dont vous avez besoin et la plateforme trouve un partenaire capable de le produire.{% elif person.locale == 'de-DE' %}Mehr als 100 Millionen Produktkombinationen. Visitenkarten, Flyer, Broschüren, Poster, Banner, Textilien, Verpackungen und Werbegeschenke. Konfigurieren Sie, was Sie brauchen, und die Plattform findet einen Partner, der es herstellen kann.{% elif person.locale == 'es-ES' %}Más de 100 millones de combinaciones de producto. Tarjetas de visita, flyers, folletos, pósters, lonas, textil, packaging y regalos de empresa. Configura lo que necesitas y la plataforma encuentra un socio que pueda fabricarlo.{% elif person.locale == 'it-IT' %}Più di 100 milioni di combinazioni di prodotto. Biglietti da visita, volantini, brochure, poster, striscioni, tessili, packaging e gadget personalizzati. Configura quello che ti serve e la piattaforma trova un partner in grado di produrlo.{% else %}More than 100 million product combinations. Business cards, flyers, brochures, posters, banners, textiles, packaging and branded gifts. Configure what you need and the platform finds a partner who can make it.{% endif %}</span>
+            <a class="hp-w2-rlink" href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/all-products{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/all-products{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/all-products{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/en-gb/all-products{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/all-products{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/en-gb/all-products{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/all-products{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/all-products{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/all-products{% else %}https://www.helloprint.com/en-gb/all-products{% endif %}">{% if person.locale == 'en-IE' %}Browse everything{% elif person.locale == 'en-GB' %}Browse everything{% elif person.locale == 'nl-NL' %}Bekijk alles{% elif person.locale == 'nl-BE' %}Bekijk alles{% elif person.locale == 'fr-FR' %}Tout parcourir{% elif person.locale == 'fr-BE' %}Tout parcourir{% elif person.locale == 'de-DE' %}Alles ansehen{% elif person.locale == 'es-ES' %}Ver todo{% elif person.locale == 'it-IT' %}Sfoglia tutto{% else %}Browse everything{% endif %}</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="hp-w2-divider"></div>
+
+    <div class="hp-w2-help">
+      <img class="hp-w2-help-agents" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/1921bcd9-4e80-4899-9f97-41ad6a6ced5e.png" alt="{% if person.locale == 'en-IE' %}Three Helloprint customer service agents{% elif person.locale == 'en-GB' %}Three Helloprint customer service agents{% elif person.locale == 'nl-NL' %}Drie Helloprint-klantenservicemedewerkers{% elif person.locale == 'nl-BE' %}Drie Helloprint-klantenservicemedewerkers{% elif person.locale == 'fr-FR' %}Trois conseillers du service client Helloprint{% elif person.locale == 'fr-BE' %}Trois conseillers du service client Helloprint{% elif person.locale == 'de-DE' %}Drei Helloprint-Kundenservicemitarbeiter{% elif person.locale == 'es-ES' %}Tres agentes de atención al cliente de Helloprint{% elif person.locale == 'it-IT' %}Tre operatori del servizio clienti Helloprint{% else %}Three Helloprint customer service agents{% endif %}" width="112" height="44">
+      <span class="hp-w2-helpttl">{% if person.locale == 'en-IE' %}Do you need help?{% elif person.locale == 'en-GB' %}Do you need help?{% elif person.locale == 'nl-NL' %}Hulp nodig?{% elif person.locale == 'nl-BE' %}Hulp nodig?{% elif person.locale == 'fr-FR' %}Besoin d'aide ?{% elif person.locale == 'fr-BE' %}Besoin d'aide ?{% elif person.locale == 'de-DE' %}Brauchen Sie Hilfe?{% elif person.locale == 'es-ES' %}¿Necesitas ayuda?{% elif person.locale == 'it-IT' %}Ti serve aiuto?{% else %}Do you need help?{% endif %}</span>
+      <span class="hp-w2-helplinks">
+        <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/cs{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/cs{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/cs{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/cs{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/cs{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/cs{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/cs{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/cs{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/cs{% else %}https://www.helloprint.com/en-gb/cs{% endif %}">{% if person.locale == 'en-IE' %}Chat with us{% elif person.locale == 'en-GB' %}Chat with us{% elif person.locale == 'nl-NL' %}Chat met ons{% elif person.locale == 'nl-BE' %}Chat met ons{% elif person.locale == 'fr-FR' %}Chattez avec nous{% elif person.locale == 'fr-BE' %}Chattez avec nous{% elif person.locale == 'de-DE' %}Chatten Sie mit uns{% elif person.locale == 'es-ES' %}Chatea con nosotros{% elif person.locale == 'it-IT' %}Chatta con noi{% else %}Chat with us{% endif %}</a><span>&middot;</span><a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/cs{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/cs{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/cs{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/cs{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/cs{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/cs{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/cs{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/cs{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/cs{% else %}https://www.helloprint.com/en-gb/cs{% endif %}">{% if person.locale == 'en-IE' %}Help Centre{% elif person.locale == 'en-GB' %}Help Centre{% elif person.locale == 'nl-NL' %}Helpcentrum{% elif person.locale == 'nl-BE' %}Helpcentrum{% elif person.locale == 'fr-FR' %}Centre d'aide{% elif person.locale == 'fr-BE' %}Centre d'aide{% elif person.locale == 'de-DE' %}Hilfe-Center{% elif person.locale == 'es-ES' %}Centro de ayuda{% elif person.locale == 'it-IT' %}Centro assistenza{% else %}Help Centre{% endif %}</a><span>&middot;</span><a href="mailto:hello@helloprint.com">E-mail</a>
+      </span>
+    </div>
+
+  </div>
+
+  <div class="hp-w2-foot">
+    <div class="hp-w2-footlogo">
+      <a href="{% if person.locale == 'en-IE' %}https://www.helloprint.com/en-ie/{% elif person.locale == 'en-GB' %}https://www.helloprint.com/en-gb/{% elif person.locale == 'nl-NL' %}https://www.helloprint.com/nl-nl/{% elif person.locale == 'nl-BE' %}https://www.helloprint.com/nl-be/{% elif person.locale == 'fr-FR' %}https://www.helloprint.com/fr-fr/{% elif person.locale == 'fr-BE' %}https://www.helloprint.com/fr-be/{% elif person.locale == 'es-ES' %}https://www.helloprint.com/es-es/{% elif person.locale == 'it-IT' %}https://www.helloprint.com/it-it/{% elif person.locale == 'de-DE' %}https://www.helloprint.com/de-de/{% else %}https://www.helloprint.com/en-gb/{% endif %}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint" height="30"></a>
+    </div>
+    <div class="hp-w2-soc">
+      <a href="https://www.facebook.com/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/facebook_96.png" alt="Facebook" width="28" height="28"></a>
+      <a href="https://x.com/helloprintuk"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/x_twitter_96.png" alt="X" width="28" height="28"></a>
+      <a href="https://www.instagram.com/helloprint/"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/instagram_96.png" alt="Instagram" width="28" height="28"></a>
+      <a href="https://www.youtube.com/channel/UC6YYBCdSDMFa9jYFJ3IpMsA"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/youtube_96.png" alt="YouTube" width="28" height="28"></a>
+      <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
+    </div>
+    <div class="hp-w2-legal">
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+    </div>
+    <div class="hp-w2-unsub">{% unsubscribe '{% if person.locale == 'en-IE' %}Unsubscribe{% elif person.locale == 'en-GB' %}Unsubscribe{% elif person.locale == 'nl-NL' %}Afmelden{% elif person.locale == 'nl-BE' %}Afmelden{% elif person.locale == 'fr-FR' %}Se désabonner{% elif person.locale == 'fr-BE' %}Se désabonner{% elif person.locale == 'de-DE' %}Abmelden{% elif person.locale == 'es-ES' %}Darse de baja{% elif person.locale == 'it-IT' %}Annulla iscrizione{% else %}Unsubscribe{% endif %}' %}</div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>
