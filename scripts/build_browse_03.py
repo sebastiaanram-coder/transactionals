@@ -305,7 +305,7 @@ BODY = """
       <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
     </div>
     <div class="{P}-legal">
-      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; {T_FOOT_VAT} NL855793302B01
     </div>
     <div class="{P}-unsub">{UNSUB}</div>
   </div>
@@ -314,6 +314,7 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('foot.vat', 'VAT'),
     ('john_body', 'That is John in the pink polo up there. He has specced print for over twenty years, and his team handles everything from a straightforward reprint to the jobs other printers turn down. Send them the awkward one.'),
     ('quote_body', 'A standard run or something nobody has printed before. Either way you get a price within 24 hours and a straight answer on what is possible.'),
     ('cta.quote', 'Request a quote'),

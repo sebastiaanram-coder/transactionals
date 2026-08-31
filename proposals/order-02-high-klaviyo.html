@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
-<title>Abandoned order 02 high</title>
+<title>Helloprint</title>
 </head>
 <body style="margin:0;padding:0;background:#f8f8f8;">
 {% comment %}
@@ -195,7 +195,7 @@ a.hp-ao2-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decora
       <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
     </div>
     <div class="hp-ao2-legal">
-      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; {% if person.locale == 'en-IE' %}VAT{% elif person.locale == 'en-GB' %}VAT{% elif person.locale == 'nl-NL' %}BTW-nr.{% elif person.locale == 'nl-BE' %}BTW-nr.{% elif person.locale == 'fr-FR' %}TVA{% elif person.locale == 'fr-BE' %}TVA{% elif person.locale == 'de-DE' %}USt-IdNr.{% elif person.locale == 'es-ES' %}NIF-IVA{% elif person.locale == 'it-IT' %}P. IVA{% else %}VAT{% endif %} NL855793302B01
     </div>
     <div class="hp-ao2-unsub">{% if person.locale == 'en-IE' %}{% unsubscribe 'Unsubscribe' %}{% elif person.locale == 'en-GB' %}{% unsubscribe 'Unsubscribe' %}{% elif person.locale == 'nl-NL' %}{% unsubscribe 'Afmelden' %}{% elif person.locale == 'nl-BE' %}{% unsubscribe 'Afmelden' %}{% elif person.locale == 'fr-FR' %}{% unsubscribe 'Se désabonner' %}{% elif person.locale == 'fr-BE' %}{% unsubscribe 'Se désabonner' %}{% elif person.locale == 'de-DE' %}{% unsubscribe 'Abmelden' %}{% elif person.locale == 'es-ES' %}{% unsubscribe 'Darse de baja' %}{% elif person.locale == 'it-IT' %}{% unsubscribe 'Annulla iscrizione' %}{% else %}{% unsubscribe 'Unsubscribe' %}{% endif %}</div>
   </div>

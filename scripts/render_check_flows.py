@@ -33,6 +33,33 @@ BROWSE_LOCALES = ["en-IE", "en-GB", "nl-NL", "nl-BE", "fr-FR", "fr-BE", "de-DE"]
 ORDER_LOCALES = BROWSE_LOCALES + ["es-ES"]
 
 
+
+# ------------------------------------------------------------------ money shape
+NB = "\u00a0"
+MONEY_RX = re.compile("[\u20ac\u00a3][" + NB + " ]?\\d[\\d.,]*"
+                      "|\\d[\\d.,]*[" + NB + " ]?[\u20ac\u00a3]")
+
+# symbol first with no gap / symbol then a non-break space / amount then symbol.
+# Grouping is a dot in every comma-decimal language except French, which uses a
+# non-break space; English groups with a comma and uses a dot for the decimal.
+_EN = r"\d{1,3}(?:,\d{3})*(?:\.\d\d)?"
+_DOT = r"\d{1,3}(?:\.\d{3})*(?:,\d\d)?"
+_FR = r"\d{1,3}(?:" + NB + r"\d{3})*(?:,\d\d)?"
+_SHAPE = {
+    "en-IE": "S" + _EN, "en-GB": "S" + _EN,
+    "nl-NL": "S" + NB + _DOT, "nl-BE": "S" + NB + _DOT, "it-IT": "S" + NB + _DOT,
+    "fr-FR": _FR + NB + "S", "fr-BE": _FR + NB + "S",
+    "de-DE": _DOT + NB + "S", "es-ES": _DOT + NB + "S",
+}
+
+
+def money_ok(text, locale):
+    pat = _SHAPE.get(locale)
+    if not pat:
+        return True
+    return re.fullmatch(pat.replace("S", "[\u20ac\u00a3]"), text) is not None
+
+
 def browse_ctx(locale):
     mk = MARKETS[locale]
     return {"event": {"ProductID": "%s-flyera5" % mk,
@@ -118,14 +145,19 @@ def main():
             #     the nine fixed cross-sell slugs over 1,000 (the measured
             #     maximum today is 117.36, which is why they omit the grouping)
             vis = re.sub(r"<style[^>]*>.*?</style>", "", html, flags=re.S)
-            vis = re.sub(r"<[^>]+>", " ", vis).replace("\u00a0", " ")
-            if loc not in ("en-IE", "en-GB"):
-                dotted = re.findall(r"[€£]\s?\d+\.\d\d(?!\d)|\d+\.\d\d\s?[€£]", vis)
-                if dotted:
-                    bad.append("dot decimal in %s: %s" % (loc, dotted[:2]))
-            ungrouped = re.findall(r"[€£]\s?\d{4,}[.,]\d\d|\d{4,}[.,]\d\d\s?[€£]", vis)
-            if ungrouped:
-                bad.append("thousands not grouped: %s" % ungrouped[:2])
+            # THE NON-BREAK SPACE IS THE THING BEING CHECKED, so it must not be
+            # flattened here. Dutch writes "EUR<nbsp>46,62" and French
+            # "31,99<nbsp>EUR"; an earlier version normalised nbsp to a plain
+            # space and then asked whether the nbsp was there.
+            vis = re.sub(r"<[^>]+>", " ", vis).replace("&nbsp;", NB)
+            # EVERY money string is checked against the convention for this
+            # locale, not just the decimal mark. The looser version of this
+            # check passed a discount band that rendered "EUR 7" as "EUR7":
+            # the band figure is a whole number built by a different code path,
+            # so it never went through the decimal logic at all.
+            for m in set(x.rstrip(".") for x in MONEY_RX.findall(vis)):
+                if not money_ok(m, loc):
+                    bad.append("money %r is not how %s writes it" % (m, loc))
             if code and code not in html:
                 bad.append("missing code %s" % code)
             for other in offers.NOT_WELCOME:

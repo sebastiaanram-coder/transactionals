@@ -154,3 +154,44 @@ def composer(live, locale=None, sym_live=CUR_CATALOG, currency="EUR",
     def m(v):
         return catalog.money(float(v), currency, lang)
     return m
+
+
+# ------------------------------------------------- symbol placement only
+#
+# WHERE THE NUMBER IS ALREADY A LONG DJANGO CHAIN. The discount bands build a
+# figure as an elif chain over the cart value - 83 branches in the high-value
+# email - so wrapping the whole thing in a four-way language switch would
+# quadruple it. Only the SYMBOL's position and spacing depend on the language,
+# so only those are switched, and the chain appears once:
+#
+#     {prefix}{the chain}{suffix}
+#
+# This is also why the amount and the symbol were glued in the first place:
+# `cur + chain` is the cheap thing to write, and it is correct in exactly one
+# language.
+_AFTER = ["fr-FR", "fr-BE", "de-DE", "es-ES"]     # 31,99 EUR
+_BEFORE_SP = ["nl-NL", "nl-BE", "it-IT"]          # EUR 46,62
+# everything else, including the fallback, is `before`: EUR 43.49
+
+
+def _any(locales, locale_expr):
+    return " or ".join("%s == '%s'" % (locale_expr, l) for l in locales)
+
+
+def affix(number, lang, sym=CUR_CATALOG):
+    """Put the symbol around an already-formatted number, for one language."""
+    style = _STYLE.get(lang, "before")
+    if style == "after":
+        return number + NB + sym
+    if style == "before_sp":
+        return sym + NB + number
+    return sym + number
+
+
+def affix_switch(number, sym=CUR_CATALOG, locale_expr="person.locale"):
+    """Same, for a live build: two small switches around one unchanged number."""
+    pre = ("{%% if %s %%}{%% elif %s %%}%s%s{%% else %%}%s{%% endif %%}"
+           % (_any(_AFTER, locale_expr), _any(_BEFORE_SP, locale_expr),
+              sym, NB, sym))
+    suf = "{%% if %s %%}%s%s{%% endif %%}" % (_any(_AFTER, locale_expr), NB, sym)
+    return pre + number + suf

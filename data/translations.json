@@ -783,6 +783,22 @@
    "de": "Zusätzliche Leistung",
    "es": "Servicio adicional",
    "it": "Servizio aggiuntivo"
+  },
+  "ord.at_checkout": {
+   "en": "at checkout",
+   "nl": "bij het afrekenen",
+   "fr": "lors du paiement",
+   "de": "beim Bezahlen",
+   "es": "al pagar",
+   "it": "al momento del pagamento"
+  },
+  "foot.vat": {
+   "en": "VAT",
+   "nl": "BTW-nr.",
+   "fr": "TVA",
+   "de": "USt-IdNr.",
+   "es": "NIF-IVA",
+   "it": "P. IVA"
   }
  },
  "commercial-print": {
@@ -3155,6 +3171,14 @@
    "de": "Das ist die letzte E-Mail, die wir zu diesem Warenkorb schicken. Er bleibt gespeichert, falls der Auftrag wiederkommt, und das Angebot, ihn mit Ihnen durchzugehen, läuft nicht ab.",
    "es": "Este es el último correo que enviaremos sobre esta cesta. Se queda guardada para cuando el trabajo vuelva, y la oferta de revisarla contigo no caduca.",
    "it": "Questa è l'ultima email che manderemo su questo carrello. Resta salvato per quando il lavoro tornerà, e l'offerta di guardarlo insieme non scade."
+  },
+  "ord.expires_after": {
+   "en": "expires {h} hours after this email",
+   "nl": "verloopt {h} uur na deze e-mail",
+   "fr": "expire {h} heures après cet e-mail",
+   "de": "läuft {h} Stunden nach dieser E-Mail ab",
+   "es": "caduca {h} horas después de este correo",
+   "it": "scade {h} ore dopo questa email"
   }
  },
  "order-02-low": {
@@ -3245,6 +3269,14 @@
    "de": "Der Warenkorb bleibt so oder so gespeichert, und der Code greift im letzten Schritt.",
    "es": "La cesta se guarda igualmente, y el código se aplica en el último paso.",
    "it": "Il carrello resta salvato comunque, e il codice si applica all'ultimo passaggio."
+  },
+  "ord.still_configured": {
+   "en": "Everything is still configured exactly as you left it, and the code runs for {h} hours.",
+   "nl": "Alles staat nog precies zoals je het achterliet, en de code is {h} uur geldig.",
+   "fr": "Tout est encore configuré exactement comme vous l'avez laissé, et le code est valable {h} heures.",
+   "de": "Alles ist noch genau so konfiguriert, wie Sie es verlassen haben, und der Code gilt {h} Stunden.",
+   "es": "Todo sigue configurado exactamente como lo dejaste, y el código es válido {h} horas.",
+   "it": "Tutto è ancora configurato esattamente come l'hai lasciato, e il codice è valido {h} ore."
   }
  },
  "order-03-low": {
@@ -3359,6 +3391,22 @@
    "de": "Wenn der Zeitpunkt nicht passt, kein Problem, dann hören wir damit auf. Ihr Warenkorb bleibt stehen, falls der Auftrag wiederkommt.",
    "es": "Si no es el momento, no pasa nada, dejaremos de escribirte sobre esto. Tu cesta se queda donde está para cuando el trabajo vuelva.",
    "it": "Se il momento non è quello giusto, nessun problema, smetteremo di scriverti. Il tuo carrello resta lì per quando il lavoro tornerà."
+  },
+  "ord.last_email_basket": {
+   "en": "This is the last email we will send about this basket.",
+   "nl": "Dit is de laatste e-mail die we over dit mandje sturen.",
+   "fr": "C'est le dernier e-mail que nous enverrons au sujet de ce panier.",
+   "de": "Das ist die letzte E-Mail, die wir zu diesem Warenkorb senden.",
+   "es": "Este es el último correo que enviaremos sobre esta cesta.",
+   "it": "Questa è l'ultima email che invieremo su questo carrello."
+  },
+  "ord.terms_capped": {
+   "en": "{bar}, up to @@CAP@@ off. One use per customer, and it cannot be combined with another code.",
+   "nl": "{bar}, tot maximaal @@CAP@@ korting. Eén keer te gebruiken per klant, en niet te combineren met een andere code.",
+   "fr": "{bar}, jusqu'à @@CAP@@ de remise. Une seule utilisation par client, et non cumulable avec un autre code.",
+   "de": "{bar}, bis maximal @@CAP@@ Rabatt. Einmal pro Kunde einlösbar und nicht mit einem anderen Code kombinierbar.",
+   "es": "{bar}, hasta @@CAP@@ de descuento. Un solo uso por cliente, y no combinable con otro código.",
+   "it": "{bar}, fino a @@CAP@@ di sconto. Un solo utilizzo per cliente, e non cumulabile con un altro codice."
   }
  },
  "welcome-01": {

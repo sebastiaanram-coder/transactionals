@@ -108,8 +108,8 @@ def clause_live(cur, tr):
         tr("ord.worth_at_least", "Worth at least {amt} on this basket &middot; ")
         .replace("{amt}", figure_live(cur)))
 
-def clause_sample(total, cur, tr):
-    n = BANDS.figure_sample(total, cur)
+def clause_sample(total, cur, tr, lang="en"):
+    n = BANDS.figure_sample(total, cur, lang)
     return "" if n is None else tr(
         "ord.worth_at_least", "Worth at least {amt} on this basket &middot; ").replace("{amt}", n)
 
@@ -297,7 +297,7 @@ BODY = """
       <div class="{P}-gift">
         <span class="{P}-giftlbl">{T_CODE_LABEL}</span>
         <span class="{P}-code">{T_ORD_USE_CODE} <strong>{CODE}</strong></span>
-        <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="13" height="13">{SAVE_CLAUSE}expires {HOURS}&nbsp;hours after this email</span>
+        <span class="{P}-exp"><img src="{IMG_CLOCK}" alt="" width="13" height="13">{SAVE_CLAUSE}{T_ORD_EXPIRES_AFTER}</span>
       </div>
 
       <p class="{P}-nsig">{T_SIG}</p>
@@ -339,7 +339,7 @@ BODY = """
       <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
     </div>
     <div class="{P}-legal">
-      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; {T_FOOT_VAT} NL855793302B01
     </div>
     <div class="{P}-unsub">{UNSUB}</div>
   </div>
@@ -348,6 +348,8 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('foot.vat', 'VAT'),
+    ('ord.expires_after', 'expires {h} hours after this email'),
     ('pre', 'John can still go through this with you, and he has put 10% off on your basket.'),
     ('h1', 'An order this size is worth ten minutes of someone else&rsquo;s time before you pay for it.'),
     ('john_quote', 'I have specced print for over twenty years, and on orders around this size there is nearly always one detail worth a second look: a quantity that costs less at the next step up, a finish that will not survive the job, a date that is tighter than it needs to be.'),
@@ -381,6 +383,18 @@ def build(bindings, assets, lines, live=False, locale=None):
     tr = i18n.translator('order-03-high', live, locale)
     vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
             for _k, _e in TRANSLATED}
+    # The preview build formats its money for ONE language; the live build
+    # switches. i18n.SOURCE is the fallback for the un-suffixed preview.
+    _lang = i18n.LOCALE_LANG.get(locale, i18n.SOURCE) if locale else i18n.SOURCE
+    # THE FIGURE IS GLUED TO ITS UNIT WORD. "72 hours" breaking across two
+    # lines splits the number from what it counts, which is the one place a
+    # line break actually costs the reader something - and this builder's own
+    # check refuses to emit it. Replacing "{h} " rather than "{h}" glues the
+    # number to whatever word follows, so it works for uur, heures, Stunden,
+    # horas and ore without this code knowing any of them.
+    for _k in [k for k in vals if "{h}" in str(vals[k])]:
+        vals[_k] = (vals[_k].replace("{h} ", str(HOURS) + "&nbsp;")
+                            .replace("{h}", str(HOURS)))
     vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets, tr), "CODE": CODE, "HOURS": HOURS,
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
                                  TOTAL_VALUE if not live else 'event|lookup:"$value"', tr,
@@ -390,7 +404,7 @@ def build(bindings, assets, lines, live=False, locale=None):
     # through the translator, and a placeholder written into a binding value
     # is never substituted, because str.format does not recurse.
     vals["SAVE_CLAUSE"] = (clause_live(CUR_LIVE, tr) if live
-                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr))
+                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr, _lang))
     vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')
     vals["UNSUB"] = (i18n.per_locale("{%% unsubscribe '%s' %%}", "_shared",
                       "foot.unsub", "Unsubscribe", True)
@@ -536,7 +550,9 @@ if offers.WELCOME_CODE in live_body: errs.append(
 if offers.ORDER_CODE_25 in live_body: errs.append(
     "%s is the low branch's deep offer, not this one" % offers.ORDER_CODE_25)
 if CODE not in live_body: errs.append("the code is missing from the body")
-if "%d&nbsp;hours" % HOURS not in live_body:
+# The expiry is stated in nine languages now, so this looks for the FIGURE glued
+# to whatever word follows it, not for the English sentence it used to be.
+if "%d&nbsp;" % HOURS not in live_body:
     errs.append("the expiry is not stated in the body")
 for body, where in ((prev_body, "preview"), (live_body, "live")):
     loose = re.findall(r"\d+ (?:hours?|days?)", re.sub(r"<!--.*?-->", "", body, flags=re.S))

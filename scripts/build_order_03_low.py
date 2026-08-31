@@ -26,6 +26,7 @@ Flip CAP to None here if the decision is to run it uncapped.
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
+import catalog as cat
 import i18n, discount
 import money_dj
 import doc
@@ -71,6 +72,19 @@ CAP = 25            # set to None to run it uncapped; read the docstring first
 SPLIT = 150         # the flow's value split, so no cart above this reaches here
 HOURS = 24
 
+
+# THE CAP IS FILLED PER LOCALE, NOT PER LANGUAGE - the same reason the welcome
+# terms needed it: en-GB and en-IE share every word of English but one market is
+# GBP and the other EUR, so a fill keyed on language writes the wrong currency
+# into one of them.
+def _cap(locale):
+    lang = i18n.LOCALE_LANG[locale]
+    cur = cat.item("standardflyers", locale)["currency"]
+    return cat.money(CAP, cur, lang, whole=True)
+
+
+CAP_FILL = {"@@CAP@@": _cap}
+
 def datauri(name):
     mime = "image/png" if name.endswith(".png") else "image/jpeg"
     with open(os.path.join(ASSETS, name), "rb") as f:
@@ -104,8 +118,8 @@ def clause_live(cur, tr):
         tr("ord.and_save", " and save at least {amt}").replace(
             "{amt}", figure_live(cur)))
 
-def clause_sample(total, cur, tr):
-    n = BANDS.figure_sample(total, cur)
+def clause_sample(total, cur, tr, lang="en"):
+    n = BANDS.figure_sample(total, cur, lang)
     return "" if n is None else tr(
         "ord.and_save", " and save at least {amt}").replace("{amt}", n)
 
@@ -116,8 +130,8 @@ def band_live(cur, tr):
                    "{amt}", figure_live(cur)),
                tr("ord.comes_off_25", "Your 25% comes off at checkout.")))
 
-def band_sample(total, cur, tr):
-    n = BANDS.figure_sample(total, cur)
+def band_sample(total, cur, tr, lang="en"):
+    n = BANDS.figure_sample(total, cur, lang)
     if n is None:
         return tr("ord.comes_off_25", "Your 25% comes off at checkout.")
     return tr("ord.at_least_off", "That is at least {amt} off.").replace("{amt}", n)
@@ -282,7 +296,7 @@ BODY = """
     <div class="{P}-hero">
       <span class="{P}-eyebrow">{T_EYEBROW}</span>
       <h1 class="{P}-h1">{T_ORD_OFF25_NEXT_H}</h1>
-      <p class="{P}-sub">{T_ORD_USE_CODE} <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. This is the last email we will send about this basket.</p>
+      <p class="{P}-sub">{T_ORD_USE_CODE} <strong>{CODE}</strong> {T_ORD_AT_CHECKOUT}{SAVE_CLAUSE}. {T_ORD_LAST_EMAIL_BASKET}</p>
       <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
@@ -303,7 +317,7 @@ BODY = """
 
     <div class="{P}-mid">
       <span class="{P}-code">{T_ORD_USE_CODE} <strong>{CODE}</strong></span><br>
-      <span class="{P}-terms">{T_BAR}, up to {CUR}25 off. One use per customer, and it cannot be combined with another code.</span>
+      <span class="{P}-terms">{T_ORD_TERMS_CAPPED}</span>
       <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
@@ -342,7 +356,7 @@ BODY = """
       <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
     </div>
     <div class="{P}-legal">
-      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; {T_FOOT_VAT} NL855793302B01
     </div>
     <div class="{P}-unsub">{UNSUB}</div>
   </div>
@@ -351,6 +365,10 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('ord.terms_capped', '{bar}, up to @@CAP@@ off. One use per customer, and it cannot be combined with another code.'),
+    ('foot.vat', 'VAT'),
+    ('ord.at_checkout', 'at checkout'),
+    ('ord.last_email_basket', 'This is the last email we will send about this basket.'),
     ('ord.ends_in_h', '&middot; ends in {h}&nbsp;hours'),
     ('ord.off25_next_h', '25% off, for the next {h}&nbsp;hours'),
     ('pre', '25% off, and then we will leave your basket alone.'),
@@ -384,6 +402,14 @@ def build(bindings, assets, lines, live=False, locale=None):
     tr = i18n.translator('order-03-low', live, locale)
     vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
             for _k, _e in TRANSLATED}
+    # The preview build formats its money for ONE language; the live build
+    # switches. i18n.SOURCE is the fallback for the un-suffixed preview.
+    _lang = i18n.LOCALE_LANG.get(locale, i18n.SOURCE) if locale else i18n.SOURCE
+    vals["T_ORD_TERMS_CAPPED"] = tr(
+        "ord.terms_capped",
+        "{bar}, up to @@CAP@@ off. One use per customer, and it cannot be "
+        "combined with another code.", fills_loc=CAP_FILL).replace(
+            "{bar}", vals["T_BAR"])
     vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets, tr), "CODE": CODE, "HOURS": HOURS,
             "DEADLINE_TITLE_HTML": nb(
                 tr("ord.code_runs_out", DEADLINE_TITLE_EN).replace(
@@ -397,9 +423,9 @@ def build(bindings, assets, lines, live=False, locale=None):
     # is never substituted, because str.format does not recurse.
     _cur = CUR_LIVE if live else "&euro;"
     vals["BAND"] = (band_live(_cur, tr) if live
-                    else band_sample(SAMPLE_TOTAL, "&euro;", tr))
+                    else band_sample(SAMPLE_TOTAL, "&euro;", tr, _lang))
     vals["SAVE_CLAUSE"] = (clause_live(_cur, tr) if live
-                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr))
+                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr, _lang))
     # {h} is a token, not %-formatting: in live mode the translated string is
     # a nine-branch switch and %s would need nine arguments.
     for _k in ("T_ORD_ENDS_IN_H", "T_ORD_OFF25_NEXT_H"):

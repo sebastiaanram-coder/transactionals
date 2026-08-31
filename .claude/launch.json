@@ -2,13 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "overview",
+      "name": "email-preview",
       "runtimeExecutable": "python3",
-      "runtimeArgs": [
-        "-m",
-        "http.server",
-        "8765"
-      ],
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", ".preview"],
       "port": 8765
     }
   ]

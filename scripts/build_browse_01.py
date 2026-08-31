@@ -18,7 +18,7 @@ Notes on what is NOT available (all confirmed by render, do not "fix" these):
   - {% with %} is NOT supported
   - a missing catalog item fails the WHOLE render with a 400
 """
-import base64, os, re, sys
+import base64, io, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import i18n
 import money_dj
@@ -178,12 +178,16 @@ def live_tile(tr):
     url="{{ catalog_item.url }}",
     img="{{ catalog_item.featured_image.full.src }}",
     title="{{ catalog_item.title }}",
-    # The unit word itself comes from the catalogue, which is already
-    # localised; only the "for N" scaffolding around it is ours to translate.
+    # THE UNIT WORD IS OURS, THE NUMBER IS THE MARKET'S - the same rule
+    # catalog.qty_label() states, and this is where it was broken. The comment
+    # here used to claim the unit word "comes from the catalogue", so the feed's
+    # `unit` was appended on top of a translation that ALREADY ends in the unit
+    # word: px.for_qty is "voor {n} stuks", so every tile read
+    # "voor 1000 stuks stuks". The feed's unit is not used at all - it only ever
+    # carries the plural, which is what produced "1 units" on the banners.
     qty=("{% if catalog_item.metadata.min_order_quantity > 1 %}"
          + tr("px.for_qty", "for {n} units").replace(
              "{n}", "{{ catalog_item.metadata.min_order_quantity|floatformat:0 }}")
-         + " {{ catalog_item.metadata.unit }}"
          + "{% else %}&nbsp;{% endif %}"),
     cur="",
     # NO THOUSANDS SEPARATOR ON THE TILES, and this is measured rather than
@@ -463,7 +467,7 @@ BODY = """
       <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
     </div>
     <div class="{P}-legal">
-      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; {T_FOOT_VAT} NL855793302B01
     </div>
     <div class="{P}-unsub">{UNSUB}</div>
   </div>
@@ -475,6 +479,7 @@ BODY = """
 # the source of record: i18n compares it against data/translations.json and fails
 # the build if the two have drifted apart.
 TRANSLATED = [
+    ('foot.vat', 'VAT'),
     ('alt.cs_agents', 'Three Helloprint customer service agents'),
     ('px.from', 'From'),
     ('px.exvat', 'excl. VAT and delivery'),
@@ -527,7 +532,7 @@ def build(bindings, assets, xsell, live=False, locale=None):
         "{% if catalog_item.metadata.min_order_quantity > 1 %}"
         + tr("px.for_qty", "for {n} units").replace(
             "{n}", "{{ catalog_item.metadata.min_order_quantity|floatformat:0 }}")
-        + " {{ catalog_item.metadata.unit }} &middot; {% endif %}")
+        + " &middot; {% endif %}")
     # Trustpilot serves the review page in the subdomain's language, so this
     # switches on language exactly as the review-request link does. It was
     # hardcoded to ie.trustpilot.com, which sent a French reader to Ireland.
@@ -653,6 +658,23 @@ for claim in ("VAT included", "delivery and VAT", "all-inclusive", "includes del
               "already included", "in the number you saw", "VAT and delivery included"):
     if claim.lower() in price_region.lower():
         errs.append("price-inclusion claim is not true of from_price: " + claim)
+
+# THE UNIT WORD MUST APPEAR ONCE. px.for_qty already ends in it, so appending the
+# feed's `unit` produced "voor 1000 stuks stuks" on the product card and on all
+# four tiles. Checked against the rendered PREVIEW, where the switch is resolved.
+for _lg, _word in (("nl", "stuks"), ("de", "St\u00fcck"), ("it", "pezzi"),
+                   ("es", "unidades"), ("fr", "unit\u00e9s")):
+    _f = os.path.join(OUT, "browse-01-%s-proposed.html" % _lg)
+    if not os.path.exists(_f):
+        continue
+    _t = io.open(_f, encoding="utf-8").read()
+    if "%s %s" % (_word, _word) in _t:
+        errs.append("%s: the unit word is doubled (%r) - px.for_qty already "
+                    "carries it, do not append catalog_item.metadata.unit"
+                    % (_lg, _word + " " + _word))
+if "metadata.unit" in live_body:
+    errs.append("the feed's unit word is in the live body; it only carries the "
+                "plural, so it reads '1 units' at a preset quantity of one")
 import re as _re
 # MEASURED ON THE PREVIEW, not the live build. The live build carries nine
 # languages per answer, so the lengths it reports are nine answers glued together

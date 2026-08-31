@@ -81,7 +81,17 @@ def _guard_body_comments(block):
 
 
 def shell(block, live=True, locale=None, title="Helloprint"):
-    """Wrap one scoped block in a full document. Idempotent."""
+    """Wrap one scoped block in a full document. Idempotent.
+
+    THE TITLE IS ALWAYS THE BRAND, never the build label. `title` is kept in the
+    signature because the builders pass one and it reads as documentation, but
+    the document that reaches a customer said "Abandoned order 03 low" - the
+    only English string left in an otherwise fully Dutch email, since the doc
+    comment it belongs with is inside {% comment %} and never renders. It is not
+    shown in the body, but it is what a screen reader announces and what a
+    "view in browser" tab shows.
+    """
+    title = "Helloprint"
     if "<html" in block[:2000]:
         return block                      # already a document, leave it alone
     lead = ""

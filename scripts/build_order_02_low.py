@@ -38,6 +38,9 @@ P = "hp-ao2l"
 # Welcome recipient would meet one code twice, attribution would be unusable,
 # and a first-order restriction would fail silently for returning customers.
 CODE = offers.ORDER_CODE_10
+# How long this code lives, from scripts/_lib/offers.py rather than a
+# literal, so the body, the subject and the coupon cannot disagree.
+HOURS = offers.ORDER_HOURS_10
 
 def datauri(name):
     mime = "image/png" if name.endswith(".png") else "image/jpeg"
@@ -75,7 +78,7 @@ def clause_live(cur, tr):
         tr("ord.and_save", " and save at least {amt}").replace(
             "{amt}", save_num_live(cur)))
 
-def clause_sample(total, cur, tr):
+def clause_sample(total, cur, tr, lang="en"):
     n = save_num_sample(total, cur)
     return "" if n is None else tr(
         "ord.and_save", " and save at least {amt}").replace("{amt}", n)
@@ -87,7 +90,7 @@ def band_live(cur, tr):
                    "{amt}", save_num_live(cur)),
                tr("ord.comes_off_10", "Your 10% comes off at checkout.")))
 
-def band_sample(total, cur, tr):
+def band_sample(total, cur, tr, lang="en"):
     n = save_num_sample(total, cur)
     if n is None:
         return tr("ord.comes_off_10", "Your 10% comes off at checkout.")
@@ -233,7 +236,7 @@ BODY = """
     <div class="{P}-hero">
       <span class="{P}-eyebrow">{T_ORD_STILL}</span>
       <h1 class="{P}-h1">{T_H1}</h1>
-      <p class="{P}-sub">{T_ORD_USE_CODE} <strong>{CODE}</strong> at checkout{SAVE_CLAUSE}. Everything is still configured exactly as you left it, and the code runs for 72 hours.</p>
+      <p class="{P}-sub">{T_ORD_USE_CODE} <strong>{CODE}</strong> {T_ORD_AT_CHECKOUT}{SAVE_CLAUSE}. {T_ORD_STILL_CONFIGURED}</p>
       <a class="{P}-cta" href="{CHECKOUT_URL}">{T_ORD_FINISH}</a>
     </div>
 
@@ -275,7 +278,7 @@ BODY = """
       <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
     </div>
     <div class="{P}-legal">
-      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; {T_FOOT_VAT} NL855793302B01
     </div>
     <div class="{P}-unsub">{UNSUB}</div>
   </div>
@@ -284,6 +287,9 @@ BODY = """
 """
 
 TRANSLATED = [
+    ('foot.vat', 'VAT'),
+    ('ord.at_checkout', 'at checkout'),
+    ('ord.still_configured', 'Everything is still configured exactly as you left it, and the code runs for {h} hours.'),
     ('pre', '10% off the basket you saved. The code comes off at checkout.'),
     ('bar', '10% off your basket'),
     ('ends', 'ends in 72 hours'),
@@ -315,6 +321,18 @@ def build(bindings, assets, lines, live=False, locale=None):
     tr = i18n.translator('order-02-low', live, locale)
     vals = {"T_" + _r.sub(r"[^A-Z0-9]", "_", _k.upper()): tr(_k, _e)
             for _k, _e in TRANSLATED}
+    # The preview build formats its money for ONE language; the live build
+    # switches. i18n.SOURCE is the fallback for the un-suffixed preview.
+    _lang = i18n.LOCALE_LANG.get(locale, i18n.SOURCE) if locale else i18n.SOURCE
+    # THE FIGURE IS GLUED TO ITS UNIT WORD. "72 hours" breaking across two
+    # lines splits the number from what it counts, which is the one place a
+    # line break actually costs the reader something - and this builder's own
+    # check refuses to emit it. Replacing "{h} " rather than "{h}" glues the
+    # number to whatever word follows, so it works for uur, heures, Stunden,
+    # horas and ore without this code knowing any of them.
+    for _k in [k for k in vals if "{h}" in str(vals[k])]:
+        vals[_k] = (vals[_k].replace("{h} ", str(HOURS) + "&nbsp;")
+                            .replace("{h}", str(HOURS)))
     vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets, tr), "CODE": CODE,
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
                                  TOTAL_VALUE if not live else 'event|lookup:"$value"', tr,
@@ -325,9 +343,9 @@ def build(bindings, assets, lines, live=False, locale=None):
     # is never substituted, because str.format does not recurse.
     _cur = '{% if event.Items.0.ProductID|slice:":3" == "GB-" %}&pound;{% else %}&euro;{% endif %}' if live else "&euro;"
     vals["BAND"] = (band_live(_cur, tr) if live
-                    else band_sample(SAMPLE_TOTAL, "&euro;", tr))
+                    else band_sample(SAMPLE_TOTAL, "&euro;", tr, _lang))
     vals["SAVE_CLAUSE"] = (clause_live(_cur, tr) if live
-                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr))
+                           else clause_sample(SAMPLE_TOTAL, "&euro;", tr, _lang))
     # A REVIEW IS SWAPPED, NEVER TRANSLATED: see reviews.quote_switch.
     vals["REV_Q"], vals["REV_BY"] = rv.quote_switch('commercial-print', tr, locale, live)
     vals["IMG_WORDMARK_DARK"] = ka.url('helloprint-wordmark-dark-padded.png')

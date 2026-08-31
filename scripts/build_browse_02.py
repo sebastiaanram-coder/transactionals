@@ -324,7 +324,7 @@ BODY = """
       <a href="https://www.linkedin.com/company/helloprint"><img src="https://d3k81ch9hvuctc.cloudfront.net/assets/email/buttons/black/linkedin_96.png" alt="LinkedIn" width="28" height="28"></a>
     </div>
     <div class="{P}-legal">
-      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; VAT NL855793302B01
+      Helloprint B.V. &middot; Schiedamsevest 89, 3012 BG Rotterdam, Netherlands &middot; {T_FOOT_VAT} NL855793302B01
     </div>
     <div class="{P}-unsub">{UNSUB}</div>
   </div>
@@ -334,6 +334,7 @@ BODY = """
 
 
 TRANSLATED = [
+    ('foot.vat', 'VAT'),
     ('get_ones', 'Get the ones for {p}'),
     ('check_body', 'Every file gets an automatic check at no cost. For a little extra at checkout, one of our print experts goes through it by hand as well.'),
     ('design_body', 'Send us the file, or a rough idea of what you want, and a designer will tell you what is needed before you commit to anything.'),

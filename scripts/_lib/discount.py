@@ -26,6 +26,8 @@ files.
 # The total lives on the event as "$value". It cannot be written
 # event.$value - the $ is not valid in a Django variable path - so every
 # reference goes through the lookup filter.
+import money_dj
+
 VALUE = 'event|lookup:"$value"'
 
 
@@ -63,19 +65,31 @@ class Bands:
 
     def figure_live(self, cur):
         """The currency symbol sits OUTSIDE the chain. It is a conditional in
-        its own right, and repeating it inside every band buys nothing."""
+        its own right, and repeating it inside every band buys nothing.
+
+        AND ITS POSITION IS PER LANGUAGE. `cur + chain` put the symbol in front
+        with no gap, which is the English convention only: Dutch writes
+        "EUR 7" and French "7 EUR". money_dj.affix_switch wraps the chain in two
+        small switches rather than repeating the chain once per language - which
+        matters here, because the high-value table is 83 bands long.
+        """
         out = ""
         for i, (floor, saving) in enumerate(self.table):
             kw = "if" if i == 0 else "elif"
             out += '{%% %s %s >= %d %%}%d' % (kw, VALUE, floor, saving)
         # unreachable: callers wrap this in wrap_live, which guards on >= min_floor
-        return cur + out + "{%% else %%}%d{%% endif %%}" % self.table[-1][1]
+        chain = out + "{%% else %%}%d{%% endif %%}" % self.table[-1][1]
+        return money_dj.affix_switch(chain, sym=cur)
 
-    def figure_sample(self, total, cur):
-        """None means no figure is safe to claim for a cart this small."""
+    def figure_sample(self, total, cur, lang="en"):
+        """None means no figure is safe to claim for a cart this small.
+
+        `lang` defaults to English because the build's self-checks compare these
+        figures by substring and were written against the English form.
+        """
         for floor, saving in self.table:
             if total >= floor:
-                return "%s%d" % (cur, saving)
+                return money_dj.affix(str(saving), lang, cur)
         return None
 
     # ---- guarding the too-small cart ------------------------------------
