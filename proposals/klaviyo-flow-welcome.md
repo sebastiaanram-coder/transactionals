@@ -289,7 +289,7 @@ Welcome 04's `<h1>` was **1,952 characters with four nested switches**, because
 it causes it. `render()` now substitutes an opaque token first and expands every
 token at the end. The h1 is 641 characters and welcome-04 is 3KB smaller.
 
-### THE TEMPLATES IN KLAVIYO ARE NOW STALE
+### ~~THE TEMPLATES IN KLAVIYO ARE NOW STALE~~ — resolved, see below
 
 Every fix above is in the repo. The 8 templates imported into Klaviyo earlier
 today, and the 14 per-message copies cloned from them, still carry the OLD body
@@ -298,3 +298,68 @@ repo now has `/nl-nl/offerte-aanvragen`. The 8 files in `klaviyo-templates/` mus
 be re-imported and re-attached (attaching re-clones) before any of items 2, 3, 4
 or 5 reaches a reader. The subject and preview-text fixes in item 6 are on the
 flow message, not the template, and are already live in the draft.
+
+---
+
+## Getting a change live is now one command — 2026-08-31
+
+`scripts/push_templates.py`. No hand-importing, no clicking, no re-attaching.
+
+```bash
+python3 scripts/push_templates.py
+```
+
+It needs `KLAVIYO_PRIVATE_KEY` in `.env` (gitignored, alongside the Trustpilot
+and Contentful credentials) with the **Templates** and **Flows** scopes. The key
+is read from the file and never printed.
+
+### What it does, and why it has to work this way
+
+Attaching a saved template to a flow message makes a **private copy** owned by
+that message, and the copy is what sends. The first attempt patched those copies
+directly, so nothing would need re-attaching. **Every one returned 404** —
+`Template with id 'WeqrBR' does not exist`. A per-message copy is not addressable
+on `/api/templates/{id}`, even though `template-render` renders it happily. It is
+readable and not writable.
+
+What works, measured: push the **master**, then re-attach the message to it.
+Re-attaching mints a fresh copy from the master's current content. WEL-1 went
+from copy `WeqrBR` to `UtFxSQ`, and the new copy carried the new tiles,
+`34.000+`, `nl.trustpilot.com` and `lang="nl-NL"` where the old one carried none
+of them. Subject line and preview text survive untouched.
+
+So: **push 8 masters → re-attach 14 messages → 14 fresh copies.** Both phases are
+automatic. **Copy ids change on every run**, which is why the script writes them
+back into `data/klaviyo-flow-welcome-messages.json` rather than anyone tracking
+them by hand.
+
+### Verification is semantic, not byte-for-byte
+
+Klaviyo rewrites HTML on save — pretty-prints CSS, `#ffffff` → `#fff`,
+`&middot;` → the character, reorders and self-closes attributes. A byte compare
+would fail on every push and prove nothing. Each push is instead verified by
+reading the template back and checking the locale-switch count, that every switch
+is closed, the unsubscribe count, and a **canary** string present only in the new
+version. A canary must contain no HTML entity, because Klaviyo converts those.
+Welcome 02 matched none of the first five canaries, so its push was being
+verified on switch counts alone; the localised company-page URLs were added to
+cover it.
+
+### Two API details worth keeping
+
+- **Revisions differ by endpoint.** `/templates` accepts `2024-10-15`, but
+  `flow-actions` on that revision has no `definition` field at all and 400s
+  listing what it does have. `definition` appears at `2025-10-15`.
+- **These endpoints throttle bursts.** A plain loop hits 429; the script retries
+  with a backoff and paces itself.
+
+### First run, 2026-08-31
+
+8 masters pushed and verified, 14 copies re-cloned, subjects kept, preview text
+empty on all 14. Then all 14 live copies rendered in nl-NL and fr-FR: **28 clean
+renders** — no raw Django, correct `html lang`, no Irish Trustpilot link, no
+`/en-ie/` link, unsubscribe present in every one. Flow tree unchanged at 28
+actions and 27 links with nothing dangling.
+
+**So the flow is now serving every fix in this document.** A promo-code change
+from here is: edit the source, run the builder, run this script.

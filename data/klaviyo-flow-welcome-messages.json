@@ -2,26 +2,134 @@
   "flow": "BEH-1 Welcome · Completed Signup",
   "flow_id": "TEhf2p",
   "status": "draft",
-  "note": "Klaviyo clones a saved template per flow message on attach. 'template_saved' is the library template that was imported; 'template_live' is the per-message copy the flow actually sends. Edits to the saved template do NOT propagate to the live copy.",
+  "note": "Klaviyo clones a saved template per flow message on attach. 'template_saved' is the library master, which scripts/push_templates.py patches; 'template_live' is the per-message copy the flow actually sends. A copy is NOT patchable - /api/templates/{id} returns 404 for it - so the master is pushed and the message re-attached, which mints a fresh copy. Copy ids therefore CHANGE on every push.",
   "attached": "2026-08-31",
   "messages": [
-    {"action": "116031817", "message": "WC7XqJ", "name": "WEL-1 Welcome · day 0 (1h)",            "branch": "not-ordered", "template_saved": "UCriVp", "template_live": "WeqrBR", "next": "116031819"},
-    {"action": "116031824", "message": "SWCW4n", "name": "WEL-2 Behind the print · day 1",         "branch": "not-ordered", "template_saved": "WRbYfy", "template_live": "RPg78X", "next": "116031827"},
-    {"action": "116031835", "message": "XCghBN", "name": "WEL-3 Rated excellent · day 3",          "branch": "not-ordered", "template_saved": "XuNgUx", "template_live": "WZgeP7", "next": "116031839"},
-    {"action": "116031843", "message": "XxD3gq", "name": "WEL-4 Send it over · day 5",             "branch": "not-ordered", "template_saved": "Ykhktb", "template_live": "VKPpCd", "next": null},
-
-    {"action": "116031816", "message": "T3gcpL", "name": "WEL-1B Welcome · ord@S1",                "branch": "ordered", "template_saved": "QXxxBp", "template_live": "WJMdJz", "next": "116031818"},
-    {"action": "116031820", "message": "VZ6UN7", "name": "WEL-2B Behind the print · ord@S1",       "branch": "ordered", "template_saved": "Tejd65", "template_live": "VMf9Jn", "next": "116031822"},
-    {"action": "116031825", "message": "YjUAzP", "name": "WEL-3B Rated excellent · ord@S1",        "branch": "ordered", "template_saved": "VjQmRX", "template_live": "WcYFvG", "next": "116031828"},
-    {"action": "116031832", "message": "Yfhker", "name": "WEL-4B Send it over · ord@S1",           "branch": "ordered", "template_saved": "T6fctZ", "template_live": "YtLkYn", "next": null},
-
-    {"action": "116031823", "message": "TzDYEZ", "name": "WEL-2B Behind the print · ord@S2",       "branch": "ordered", "template_saved": "Tejd65", "template_live": "VGBTnY", "next": "116031826"},
-    {"action": "116031829", "message": "Tv2JjB", "name": "WEL-3B Rated excellent · ord@S2",        "branch": "ordered", "template_saved": "VjQmRX", "template_live": "RUuBwH", "next": "116031833"},
-    {"action": "116031836", "message": "RBXAtJ", "name": "WEL-4B Send it over · ord@S2",           "branch": "ordered", "template_saved": "T6fctZ", "template_live": "TnYHFY", "next": null},
-
-    {"action": "116031834", "message": "VPQq7j", "name": "WEL-3B Rated excellent · ord@S3",        "branch": "ordered", "template_saved": "VjQmRX", "template_live": "WvuGJK", "next": "116031838"},
-    {"action": "116031840", "message": "SMnrmA", "name": "WEL-4B Send it over · ord@S3",           "branch": "ordered", "template_saved": "T6fctZ", "template_live": "TL7Zgr", "next": null},
-
-    {"action": "116031842", "message": "SamnJX", "name": "WEL-4B Send it over · ord@S4",           "branch": "ordered", "template_saved": "T6fctZ", "template_live": "SXQrX2", "next": null}
+    {
+      "action": "116031817",
+      "message": "WC7XqJ",
+      "name": "WEL-1 Welcome · day 0 (1h)",
+      "branch": "not-ordered",
+      "template_saved": "UCriVp",
+      "template_live": "YgL5Nn",
+      "next": "116031819"
+    },
+    {
+      "action": "116031824",
+      "message": "SWCW4n",
+      "name": "WEL-2 Behind the print · day 1",
+      "branch": "not-ordered",
+      "template_saved": "WRbYfy",
+      "template_live": "RBrjTa",
+      "next": "116031827"
+    },
+    {
+      "action": "116031835",
+      "message": "XCghBN",
+      "name": "WEL-3 Rated excellent · day 3",
+      "branch": "not-ordered",
+      "template_saved": "XuNgUx",
+      "template_live": "UYZA4P",
+      "next": "116031839"
+    },
+    {
+      "action": "116031843",
+      "message": "XxD3gq",
+      "name": "WEL-4 Send it over · day 5",
+      "branch": "not-ordered",
+      "template_saved": "Ykhktb",
+      "template_live": "WqTs3d",
+      "next": null
+    },
+    {
+      "action": "116031816",
+      "message": "T3gcpL",
+      "name": "WEL-1B Welcome · ord@S1",
+      "branch": "ordered",
+      "template_saved": "QXxxBp",
+      "template_live": "UmphpQ",
+      "next": "116031818"
+    },
+    {
+      "action": "116031820",
+      "message": "VZ6UN7",
+      "name": "WEL-2B Behind the print · ord@S1",
+      "branch": "ordered",
+      "template_saved": "Tejd65",
+      "template_live": "UeK2TV",
+      "next": "116031822"
+    },
+    {
+      "action": "116031825",
+      "message": "YjUAzP",
+      "name": "WEL-3B Rated excellent · ord@S1",
+      "branch": "ordered",
+      "template_saved": "VjQmRX",
+      "template_live": "WZiesX",
+      "next": "116031828"
+    },
+    {
+      "action": "116031832",
+      "message": "Yfhker",
+      "name": "WEL-4B Send it over · ord@S1",
+      "branch": "ordered",
+      "template_saved": "T6fctZ",
+      "template_live": "WN2HBE",
+      "next": null
+    },
+    {
+      "action": "116031823",
+      "message": "TzDYEZ",
+      "name": "WEL-2B Behind the print · ord@S2",
+      "branch": "ordered",
+      "template_saved": "Tejd65",
+      "template_live": "RJEQrr",
+      "next": "116031826"
+    },
+    {
+      "action": "116031829",
+      "message": "Tv2JjB",
+      "name": "WEL-3B Rated excellent · ord@S2",
+      "branch": "ordered",
+      "template_saved": "VjQmRX",
+      "template_live": "QUngXv",
+      "next": "116031833"
+    },
+    {
+      "action": "116031836",
+      "message": "RBXAtJ",
+      "name": "WEL-4B Send it over · ord@S2",
+      "branch": "ordered",
+      "template_saved": "T6fctZ",
+      "template_live": "XSNia8",
+      "next": null
+    },
+    {
+      "action": "116031834",
+      "message": "VPQq7j",
+      "name": "WEL-3B Rated excellent · ord@S3",
+      "branch": "ordered",
+      "template_saved": "VjQmRX",
+      "template_live": "SxxDMc",
+      "next": "116031838"
+    },
+    {
+      "action": "116031840",
+      "message": "SMnrmA",
+      "name": "WEL-4B Send it over · ord@S3",
+      "branch": "ordered",
+      "template_saved": "T6fctZ",
+      "template_live": "XHxMtk",
+      "next": null
+    },
+    {
+      "action": "116031842",
+      "message": "SamnJX",
+      "name": "WEL-4B Send it over · ord@S4",
+      "branch": "ordered",
+      "template_saved": "T6fctZ",
+      "template_live": "QZAMmf",
+      "next": null
+    }
   ]
 }
