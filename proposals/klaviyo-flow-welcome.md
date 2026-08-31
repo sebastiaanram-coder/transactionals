@@ -716,3 +716,21 @@ store half-updated. Tested five ways before use: an unedited round trip changes
 0 of 107 strings, a legitimate edit is picked up, a deleted token is refused, a
 lost French space is repaired, and no dry run touches the file.
 
+
+---
+
+## Translation sheet linked — 2026-08-31
+
+https://docs.google.com/spreadsheets/d/13Z2nfCpZbEU-qWmGxdslWzzaY2_le976aWExfX97Zko/edit
+
+Linked from the Translations fact box in the overview's Welcome Flow section.
+
+**One thing to be aware of.** `behavioural-email-overview.html` sits at the root
+of a PUBLIC GitHub repo and is served by GitHub Pages, and the sheet is shared
+with "anyone with the link". So the overview now hands that link to anyone who
+finds the page. The contents are marketing copy in six languages, not customer
+data, so the exposure is low - but it is a public page pointing at an internal
+working document, and if the sheet is later reused for anything less harmless
+that inherits the same exposure. Two ways to close it if you would rather:
+restrict the sheet to named people in the Helloprint workspace, or keep the link
+in this repo and out of the published page.
