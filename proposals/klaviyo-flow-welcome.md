@@ -125,3 +125,57 @@ it would either leak or silently send to nobody.
 
 **Marketing consent is no longer a blocker.** The signup event writes
 `$consent: ["email"]`, which the old list-add trigger did not.
+
+---
+
+## Templates attached — 2026-08-31
+
+All 14 flow messages now carry a template. Flow `TEhf2p`, still `draft`.
+
+**Klaviyo clones on attach.** Pointing a flow message at a saved library
+template makes a private copy owned by that message. The 8 imported
+templates are the masters; the 14 copies are what actually sends. Editing a
+master does **not** update the copies — a content fix means re-attaching, or
+editing all copies. Mapping is in `data/klaviyo-flow-welcome-messages.json`.
+
+Verified by render, not by assumption:
+
+- `Tejd65` (imported master, WEL-2B) rendered against `nl-NL` → Dutch, and
+  against `de-DE` → German. Different locales produce different output, so the
+  nine-branch `{% if person.locale %}` switches survived Klaviyo's importer.
+  The importer does rewrite the HTML — CSS pretty-printed, `#ffffff` → `#fff`,
+  entities to characters, attributes reordered and self-closed — all cosmetic.
+- `WeqrBR` (live copy of WEL-1, discount version) rendered against `fr-FR` →
+  French, with all four discount surfaces present (promo bar, HELLO10 code box,
+  preheader, grid subtitle) and `Se désabonner`. So cloning preserves the
+  switches too.
+
+### Found during the render checks — not yet fixed
+
+1. **The 5-day expiry is an unverified factual claim.** `wc.expires5`
+   ("Valid only 5 days") plus "Expires in 5 days" on every product tile, plus
+   the WEL-4 subject "Last day for your 10%". That asserts HELLO10 expires 5
+   days after signup, in 9 languages, several times per email. If the coupon is
+   not actually configured to expire, this is a false limited-time claim
+   (UCPD Annex I point 7) — the same issue that stopped the 14-day version.
+   **Confirm HELLO10's real terms before this flow goes live.**
+2. **Review count disagrees between emails.** welcome-01 says 33,000 reviews;
+   welcome-03 says 34,000. Consistent inside each email, contradictory across
+   the sequence a recipient receives 3 days apart. Should come from one number.
+3. **Prices are not localised.** Tiles render `€39.96` in French; it should be
+   `39,96 €`. `i18n.decimal()` exists and is used for review scores, but tile
+   prices are emitted as literal text and never pass through it. Affects
+   fr, de, es, it, nl.
+4. **Product names stay English.** The French email shows "Classic Business
+   Cards", "Standard Posters", "Roller Banners". Allowlisted in
+   `check_translations.py` as `SAMPLE_PRODUCTS`, so the audit passes, but it is
+   still English body copy in a French email.
+5. **Trustpilot link is the Irish domain.** `ie.trustpilot.com` in the French
+   render; should be the market's own Trustpilot domain.
+6. **Market-URL fallback is visible.** Three of four French tiles link to
+   `/en-gb/...`. Known: 36 of 108 path × market pairs do not resolve.
+7. `<html lang="en">` on every locale.
+
+Subject lines and preview text remain English-only across all 14 messages —
+they live on the flow message, not the template, and Django in a subject line
+is still unverified.
