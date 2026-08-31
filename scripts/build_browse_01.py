@@ -21,6 +21,7 @@ Notes on what is NOT available (all confirmed by render, do not "fix" these):
 import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import i18n
+import money_dj
 import doc
 import klaviyo_assets as ka
 import reviews as rv
@@ -147,7 +148,7 @@ TILE = ('<a class="{P}-tile" href="{url}">'
         '<span class="{P}-tilebody">'
         '<span class="{P}-tiname">{title}</span>'
         '<span class="{P}-tiqty">{qty}</span>'
-        '<span class="{P}-tiprice">{frm} {cur}{price}</span>'
+        '<span class="{P}-tiprice">{frm} {price}</span>'
         '</span></a>')
 
 def section(heading, cells, tr):
@@ -162,11 +163,11 @@ def section(heading, cells, tr):
                         tr("px.exvat_note", "Prices exclude VAT and delivery."),
                         P, rows))
 
-def sample_xsell(tr):
+def sample_xsell(tr, mny):
     frm = tr("px.from", "From")
     cells = [TILE.format(P=P, url=u, img=im, title=t,
                          qty=tr("px.for_qty", "for {n} units").replace("{n}", "1000"),
-                         cur="&euro;", price=pr, frm=frm)
+                         cur="", price=mny(pr), frm=frm)
              for (t, u, im, q, pr) in SAMPLE_TILES]
     return section(tr("xs.sizes", SAMPLE_XSELL_HEADING), cells, tr)
 
@@ -184,8 +185,19 @@ def live_tile(tr):
              "{n}", "{{ catalog_item.metadata.min_order_quantity|floatformat:0 }}")
          + " {{ catalog_item.metadata.unit }}"
          + "{% else %}&nbsp;{% endif %}"),
-    cur="{% if catalog_item.metadata.currency == 'GBP' %}&pound;{% else %}&euro;{% endif %}",
-    price="{{ catalog_item.metadata.from_price|floatformat:2 }}")
+    cur="",
+    # NO THOUSANDS SEPARATOR ON THE TILES, and this is measured rather than
+    # assumed. The tiles are a FIXED set of nine slugs, and the highest
+    # from_price across all nine in all six allowed markets is 117.36 - so the
+    # grouping branch could never fire. Leaving it out halves the expression
+    # (two references to the value instead of four, and no comparison), which
+    # matters because these tiles repeat and browse-01 is the largest email in
+    # the programme against Gmail's ~102 KB clip. The MAIN product below keeps
+    # the grouping: it can be any product the customer viewed, and 17% of the
+    # catalog is over 1,000 (the highest is 56,426.24).
+    # render_check_flows.py fails if a rendered figure ever comes out ungrouped
+    # and four digits long, so a feed change cannot slip past this.
+    price=money_dj.switch("catalog_item.metadata.from_price", thousands=False))
 
 def live_cell(slug, tr):
     """Build the id from the recipient's own market prefix, and swap in the
@@ -360,7 +372,7 @@ BODY = """
         <td class="{P}-pimgcell" valign="middle"><img class="{P}-pimg" src="{PROD_IMG}" alt="{PROD_TITLE}" width="126"></td>
         <td class="{P}-pbody" valign="middle">
           <span class="{P}-pname">{PROD_TITLE}</span>
-          <span class="{P}-pprice">{T_PX_FROM} {CUR}{PROD_PRICE}</span>
+          <span class="{P}-pprice">{T_PX_FROM} {MONEY}</span>
           <span class="{P}-pqty">{QTY_PHRASE}{T_PX_EXVAT}</span>
           <span class="{P}-plink">{T_CTA_VIEW_PROD} &rarr;</span>
         </td>
@@ -500,6 +512,11 @@ def build(bindings, assets, xsell, live=False, locale=None):
         vals["T_" + re.sub(r"[^A-Z0-9]", "_", _k.upper())] = tr(_k, _e)
     vals.update(bindings)
     vals.update(assets)
+    # The viewed product can be ANY product, and 17% of the catalog is priced
+    # over 1,000, so this one keeps the thousands grouping.
+    vals["MONEY"] = (money_dj.switch("catalog_item.metadata.from_price")
+                     if live else
+                     money_dj.composer(False, locale)(bindings["PROD_PRICE"]))
     vals["XSELL"] = xsell
     # UNSUB is None in both binding tables on purpose. Its text has to pass
     # through the translator, and a placeholder written into a binding value
@@ -575,7 +592,8 @@ KLAVIYO_DOC = """<!--
 %s
 """
 
-prev_body = build(SAMPLE, SAMPLE_ASSETS, sample_xsell(i18n.translator('browse-01', False, None)), False)
+prev_body = build(SAMPLE, SAMPLE_ASSETS, sample_xsell(i18n.translator('browse-01', False, None),
+                                             money_dj.composer(False)), False)
 for _lg in i18n.LANGS:
     if _lg == i18n.SOURCE:
         continue
@@ -585,7 +603,8 @@ for _lg in i18n.LANGS:
              PREVIEW_DOC % {
                  "lang": i18n.html_lang(False, _loc),
                  "body": build(SAMPLE, SAMPLE_ASSETS, sample_xsell(
-                     i18n.translator('browse-01', False, _loc)), False, _loc)})
+                     i18n.translator('browse-01', False, _loc),
+                     money_dj.composer(False, _loc)), False, _loc)})
 live_body = build(LIVE, LIVE_ASSETS, live_xsell(i18n.translator('browse-01', True)), True)
 # Point the hardcoded /en-ie/ links at the reader's own market. These bodies
 # carried the Irish home page, help centre, quote form and artwork-check page

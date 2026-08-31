@@ -21,6 +21,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n, discount
+import money_dj
 import doc
 import subcategories as sc
 import offers
@@ -109,6 +110,13 @@ LIVE = {
     "SAVE_CLAUSE": None,  # build()
     "UNSUB": None,
 }
+
+# The two things the money composer needs, taken from the binding tables
+# rather than restated, so a change to either cannot get out of step.
+# CUR_SYM is the SYMBOL only: its position is decided per language by
+# money_dj, which is the whole reason this is separated out.
+CUR_SYM = LIVE["CUR"]
+TOTAL_VALUE = float(SAMPLE["TOTAL"])
 
 # a low-value basket: two of the Welcome products plus the Premium check, so it
 # exercises the service line too. 39.96 + 25.82 + 4.99 = 70.77, under the 150
@@ -309,7 +317,8 @@ def build(bindings, assets, lines, live=False, locale=None):
             for _k, _e in TRANSLATED}
     vals.update({"P": P, "CSS": CSS, "QUICK": quick(assets, tr), "CODE": CODE,
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
-                                 bindings["TOTAL"], tr)})
+                                 TOTAL_VALUE if not live else 'event|lookup:"$value"', tr,
+                                 money_dj.composer(live, locale, CUR_SYM))})
     vals.update(bindings); vals.update(assets)
     # UNSUB is None in both binding tables on purpose. Its text has to pass
     # through the translator, and a placeholder written into a binding value
@@ -369,9 +378,11 @@ KLAVIYO_DOC = """<!--
 """
 
 prev_body = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
-                              i18n.translator('order-02-low', False)))
+                              i18n.translator('order-02-low', False),
+                              money_dj.composer(False)))
 live_body = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
-                            i18n.translator('order-02-low', True)), True)
+                            i18n.translator('order-02-low', True),
+                            money_dj.composer(True, None, CUR_SYM)), True)
 _link_errs = []
 live_body = sc.swap_market_links(live_body, _link_errs)
 # An unverified path is a build error, not a warning: it would put a dead
@@ -385,7 +396,8 @@ for _lg in i18n.LANGS:
     _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
     _b = build(SAMPLE, SAMPLE_ASSETS,
                basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
-                                   i18n.translator('order-02-low', False, _loc)), False, _loc)
+                                   i18n.translator('order-02-low', False, _loc),
+                                   money_dj.composer(False, _loc)), False, _loc)
     open(os.path.join(OUT, "order-02-low-%s-proposed.html" % _lg), "w",
          encoding="utf-8").write(PREVIEW_DOC % _b)
 open(os.path.join(OUT, "order-02-low-proposed.html"), "w", encoding="utf-8").write(PREVIEW_DOC % prev_body)

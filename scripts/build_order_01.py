@@ -32,6 +32,7 @@ import base64, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_lib"))
 import basket
 import i18n
+import money_dj
 import doc
 import subcategories as sc
 import klaviyo_assets as ka
@@ -75,6 +76,13 @@ LIVE = {
     "NUM": "{{ event.Items|length }}",
     "UNSUB": None,
 }
+
+# The two things the money composer needs, taken from the binding tables
+# rather than restated, so a change to either cannot get out of step.
+# CUR_SYM is the SYMBOL only: its position is decided per language by
+# money_dj, which is the whole reason this is separated out.
+CUR_SYM = LIVE["CUR"]
+TOTAL_VALUE = float(SAMPLE["TOTAL"])
 
 # the four products from the Welcome email, at their undiscounted prices, so the
 # example basket is one a reviewer already recognises. Replaced by live event
@@ -313,7 +321,8 @@ def build(bindings, assets, lines, high, live=False, locale=None):
             for _k, _e in TRANSLATED}
     vals.update({"P": P, "CSS": CSS, "REASSURE": reassure(assets, tr),
             "BASKET": basket.block(P, lines, bindings["NUM"], bindings["CUR"],
-                                 bindings["TOTAL"], tr)})
+                                 TOTAL_VALUE if not live else 'event|lookup:"$value"', tr,
+                                 money_dj.composer(live, locale, CUR_SYM))})
     vals.update(bindings); vals.update(assets)
     vals["EXPERT_BLOCK"] = EXPERT.format(**vals) if high else ""
     # UNSUB is None in both binding tables on purpose. Its text has to pass
@@ -372,9 +381,11 @@ errs = []
 def emit(high):
     tag = "high" if high else "low"
     pb = build(SAMPLE, SAMPLE_ASSETS, basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
-                              i18n.translator('order-01', False)), high)
+                              i18n.translator('order-01', False),
+                              money_dj.composer(False)), high)
     lb = build(LIVE, LIVE_ASSETS, basket.live_lines(P, LIVE_ASSETS, LIVE["CUR"],
-                            i18n.translator('order-01', True)), high, True)
+                            i18n.translator('order-01', True),
+                            money_dj.composer(True, None, CUR_SYM)), high, True)
     _link_errs = []
     lb = sc.swap_market_links(lb, _link_errs)
     if _link_errs:
@@ -385,7 +396,8 @@ def emit(high):
         _loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == _lg)
         _b = build(SAMPLE, SAMPLE_ASSETS,
                    basket.sample_lines(P, SAMPLE_ASSETS, SAMPLE_LINES, SAMPLE["CUR"],
-                                       i18n.translator("order-01", False, _loc)),
+                                       i18n.translator("order-01", False, _loc),
+                                       money_dj.composer(False, _loc)),
                    high, False, _loc)
         open(os.path.join(OUT, "order-01-%s-%s-proposed.html" % (tag, _lg)), "w",
              encoding="utf-8").write(PREVIEW_DOC % (tag, _b))

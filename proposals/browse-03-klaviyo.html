@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
 <title>Browse abandonment 03</title>
 </head>
 <body style="margin:0;padding:0;background:#f8f8f8;">
@@ -130,18 +132,20 @@ a.hp-b3-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decorat
   .hp-b3-john{margin:26px 14px 0;padding:20px 16px;}
   .hp-b3-close{padding:24px 18px 26px;}
 }
+
+[data-ogsc] .hp-b3-logobar,[data-ogsb] .hp-b3-logobar{background:#191919 !important;background-color:#191919 !important;}
 </style>
 
 <div class="hp-b3-pre">{% if person.locale == 'en-IE' %}Tell the quote desk what the job is. A tailored price back within 24 hours.{% elif person.locale == 'en-GB' %}Tell the quote desk what the job is. A tailored price back within 24 hours.{% elif person.locale == 'nl-NL' %}Vertel de offertebalie wat de opdracht is. Een prijs op maat binnen 24 uur terug.{% elif person.locale == 'nl-BE' %}Vertel de offertebalie wat de opdracht is. Een prijs op maat binnen 24 uur terug.{% elif person.locale == 'fr-FR' %}Dites au service devis en quoi consiste le travail. Un prix sur mesure sous 24 heures.{% elif person.locale == 'fr-BE' %}Dites au service devis en quoi consiste le travail. Un prix sur mesure sous 24 heures.{% elif person.locale == 'de-DE' %}Sagen Sie dem Angebotsteam, worum es geht. Ein Preis auf Maß innerhalb von 24 Stunden.{% elif person.locale == 'es-ES' %}Cuéntale al equipo de presupuestos cuál es el trabajo. Un precio a medida en 24 horas.{% elif person.locale == 'it-IT' %}Racconta al team preventivi qual è il lavoro. Un prezzo su misura entro 24 ore.{% else %}Tell the quote desk what the job is. A tailored price back within 24 hours.{% endif %}</div>
 
 <div class="hp-b3-wrap">
-  <div class="hp-b3-shell">
+  <div bgcolor="#ffffff" class="hp-b3-shell">
 
     {% catalog event.ProductID %}
 
-    <div class="hp-b3-logobar">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#191919" style="background-color:#191919;"><tr><td align="center" bgcolor="#191919" class="hp-b3-logobar" style="background-color:#191919;">
       <a href="{{ catalog_item.url }}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/ec84e87e-10bf-4d01-a44d-e2dff5fa743e.png" alt="Helloprint" width="150"></a>
-    </div>
+    </td></tr></table>
 
     <div class="hp-b3-hero">
       <div class="hp-b3-heroov">
@@ -155,7 +159,7 @@ a.hp-b3-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decorat
 
     <a class="hp-b3-anchor" href="{{ catalog_item.url }}">
       <table class="hp-b3-antbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
-        <td class="hp-b3-anim" valign="middle"><img src="{{ catalog_item.featured_image.full.src }}" alt="" width="52"></td>
+        <td class="hp-b3-anim" valign="middle"><img src="{{ catalog_item.featured_image.full.src }}" alt="" width="52" style="background-color:#ffffff;"></td>
         <td class="hp-b3-antx" valign="middle">
           <span class="hp-b3-anlbl">{% if person.locale == 'en-IE' %}YOUR PRINT JOB{% elif person.locale == 'en-GB' %}YOUR PRINT JOB{% elif person.locale == 'nl-NL' %}JOUW DRUKOPDRACHT{% elif person.locale == 'nl-BE' %}JOUW DRUKOPDRACHT{% elif person.locale == 'fr-FR' %}VOTRE TRAVAIL D'IMPRESSION{% elif person.locale == 'fr-BE' %}VOTRE TRAVAIL D'IMPRESSION{% elif person.locale == 'de-DE' %}IHR DRUCKAUFTRAG{% elif person.locale == 'es-ES' %}TU TRABAJO DE IMPRESIÓN{% elif person.locale == 'it-IT' %}IL TUO LAVORO DI STAMPA{% else %}YOUR PRINT JOB{% endif %}</span>
           <span class="hp-b3-anname">{{ catalog_item.title }}</span>

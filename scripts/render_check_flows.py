@@ -111,6 +111,21 @@ def main():
                 bad.append("catalog did not resolve, slug shown as a title")
             if frag.startswith("ORD") and "artwork-check-premium" in html:
                 bad.append("raw service-line id leaked into the copy")
+            # MONEY, as the reader's language writes it. Two failures to catch:
+            #   a dot decimal in a comma-decimal language - the original bug
+            #   a four-figure amount with no thousands separator, which is what
+            #     browse-01's tiles would produce if the feed ever priced one of
+            #     the nine fixed cross-sell slugs over 1,000 (the measured
+            #     maximum today is 117.36, which is why they omit the grouping)
+            vis = re.sub(r"<style[^>]*>.*?</style>", "", html, flags=re.S)
+            vis = re.sub(r"<[^>]+>", " ", vis).replace("\u00a0", " ")
+            if loc not in ("en-IE", "en-GB"):
+                dotted = re.findall(r"[€£]\s?\d+\.\d\d(?!\d)|\d+\.\d\d\s?[€£]", vis)
+                if dotted:
+                    bad.append("dot decimal in %s: %s" % (loc, dotted[:2]))
+            ungrouped = re.findall(r"[€£]\s?\d{4,}[.,]\d\d|\d{4,}[.,]\d\d\s?[€£]", vis)
+            if ungrouped:
+                bad.append("thousands not grouped: %s" % ungrouped[:2])
             if code and code not in html:
                 bad.append("missing code %s" % code)
             for other in offers.NOT_WELCOME:

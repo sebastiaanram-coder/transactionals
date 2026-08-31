@@ -51,6 +51,7 @@ Outlook conditional comment, and those have to survive into the output.
 """
 import re
 
+import darkmode
 import i18n
 
 # Same body attributes as the Welcome documents. The page background shows in the
@@ -92,8 +93,14 @@ def shell(block, live=True, locale=None, title="Helloprint"):
         lead = "{%% comment %%}\n%s\n{%% endcomment %%}\n" % m.group(1)
         block = block[m.end():]
     block = _guard_body_comments(block)
+    # Dark mode is hardened HERE, for every email at once - see darkmode.py.
+    # Gmail rewrites colours that come from CSS, which turned the black masthead
+    # light grey and would have put transparent feed packshots on a dark panel.
+    block, _counts = darkmode.harden(block)
     return ('<!DOCTYPE html>\n<html lang="%s">\n<head>\n'
             '<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
+            '%s'
             '<title>%s</title>\n</head>\n<body %s>\n%s%s\n</body>\n</html>\n'
-            % (i18n.html_lang(live, locale), title, BODY, lead, block.rstrip()))
+            % (i18n.html_lang(live, locale), darkmode.metas(), title, BODY,
+               lead, block.rstrip()))

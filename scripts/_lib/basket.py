@@ -69,14 +69,38 @@ def css_mobile(P):
   .%(P)s-tnote{margin:9px 14px 0;}
 """ % {"P": P}
 
+
+def _m(mny, cur, value):
+    """Composed money. There is deliberately NO fallback.
+
+    The first version of this fell back to the old `cur + value` when no
+    composer was passed, so an un-migrated caller would keep working. That was
+    wrong in the worst way: the callers now hand over a bare EXPRESSION
+    ("it.RowTotal") where they used to hand over finished markup
+    ("{{ it.RowTotal|floatformat:2 }}"), so the fallback printed the literal
+    text "it.RowTotal" into the basket where the price belongs - a plausible
+    looking build that shipped a broken email. Failing here is the whole point.
+    """
+    if mny is None:
+        raise TypeError(
+            "basket money needs a composer: pass mny=money_dj.composer(live, "
+            "locale, sym) from the builder. Called with cur=%r value=%r"
+            % (cur, value))
+    return mny(value)
+
+
 def _row(P, thumb, name, qty_line, cur, price, href):
+    """`cur` is kept in the signature and is normally "": the money arrives
+    pre-composed in `price`, because the symbol's POSITION depends on the
+    reader's language (EUR 46,62 in Dutch, 31,99 EUR in French) and gluing a
+    symbol in front here could only ever produce the English order."""
     nm = ('<a href="%s"><span class="%s-liname">%s</span></a>' % (href, P, name)) if href \
          else ('<span class="%s-liname">%s</span>' % (P, name))
     q = ('<span class="%s-liqty">%s</span>' % (P, qty_line)) if qty_line else ""
     return ('<tr class="%s-brow">%s<td class="%s-litx">%s%s</td>'
             '<td class="%s-lip">%s%s</td></tr>' % (P, thumb, P, nm, q, P, cur, price))
 
-def sample_lines(P, assets, items, cur, tr=None):
+def sample_lines(P, assets, items, cur, tr=None, mny=None):
     """items: (kind, name, qty_int, price, img, href)
 
     A PRODUCT NAME IS DATA, A SERVICE NAME IS COPY. The product line shows what
@@ -96,10 +120,10 @@ def sample_lines(P, assets, items, cur, tr=None):
                      % (P, assets["IMG_TICK"]))
             qline = _t(tr, "bk.added", "Added at checkout")
             name = _t(tr, name, name)
-        out += _row(P, thumb, name, qline, cur, price, href)
+        out += _row(P, thumb, name, qline, "", _m(mny, cur, price), href)
     return out
 
-def live_lines(P, assets, cur, tr=None):
+def live_lines(P, assets, cur, tr=None, mny=None):
     prod_thumb = ('<td class="%s-lim"><img src="{{ catalog_item.featured_image.full.src }}" '
                   'alt="" width="80"></td>' % P)
     svc_thumb = ('<td class="%s-limsvc"><img src="%s" alt="" width="24" height="24"></td>'
@@ -109,7 +133,7 @@ def live_lines(P, assets, cur, tr=None):
     qline = ('{%% if it.Quantity > 1 %%}%s {{ it.Quantity }}{%% endif %%}'
              % _t(tr, "bk.qty", "Quantity"))
     product = ('{% catalog it.ProductID %}'
-               + _row(P, prod_thumb, "{{ catalog_item.title }}", qline, cur,
+               + _row(P, prod_thumb, "{{ catalog_item.title }}", qline, "",
                       # NOT it.ProductURL. That field is present on 8 of 150
                       # measured basket lines, so the product link was empty for
                       # about 95% of rows. We are already inside {% catalog %}
@@ -117,7 +141,7 @@ def live_lines(P, assets, cur, tr=None):
                       # same lookup - and catalog_item.url is also the only
                       # market-correct source, since ids carry a market prefix
                       # (IE-rollupbannersv2 lives at /en-ie/budgetrollupbanners).
-                      "{{ it.RowTotal|floatformat:2 }}", "{{ catalog_item.url }}")
+                      _m(mny, cur, "it.RowTotal"), "{{ catalog_item.url }}")
                + '{% endcatalog %}')
     # SOME LINES HAVE NEITHER AN ID NOR A NAME. A live fr-fr Mugs cart had both
     # missing. Anything without a market-prefixed id is treated as a service
@@ -126,14 +150,14 @@ def live_lines(P, assets, cur, tr=None):
     svc_name = ('{% if it.ProductName %}{{ it.ProductName }}{% else %}'
                 + _t(tr, "bk.service", "Additional service") + '{% endif %}')
     service = _row(P, svc_thumb, svc_name,
-                   _t(tr, "bk.added", "Added at checkout"), cur,
-                   "{{ it.RowTotal|floatformat:2 }}", None)
+                   _t(tr, "bk.added", "Added at checkout"), "",
+                   _m(mny, cur, "it.RowTotal"), None)
     return ('{% for it in event.Items %}'
             '{% if it.ProductID|slice:"2:3" == "-" %}' + product +
             '{% else %}' + service + '{% endif %}'
             '{% endfor %}')
 
-def block(P, lines, num, cur, total, tr=None):
+def block(P, lines, num, cur, total, tr=None, mny=None):
     return ('<div class="%(P)s-bwrap">'
             '<table class="%(P)s-bhd" role="presentation" cellpadding="0" cellspacing="0"><tr>'
             '<td valign="middle">'
@@ -158,7 +182,8 @@ def block(P, lines, num, cur, total, tr=None):
                "BHDL": _t(tr, "bk.your_basket", "Your basket"),
                "TOTAL_LBL": _t(tr, "bk.total", "Total"),
                "NOTE": _t(tr, "bk.note", "Delivery and VAT are confirmed at checkout."),
-               "LINES": lines, "NUM": num, "CUR": cur, "TOTAL": total})
+               "LINES": lines, "NUM": num, "CUR": "",
+               "TOTAL": _m(mny, cur, total)})
 
 def checks(live_body, P, tag, errs):
     if live_body.count('{% if it.ProductID|slice:"2:3" == "-" %}') != 1:

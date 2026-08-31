@@ -43,7 +43,10 @@ SRC = {name: fname for name, fname in TEMPLATES}
 # Strings that must be in the stored HTML after a push. Each is NEW in this
 # version and contains no HTML entity for Klaviyo to rewrite. {% comment %} is
 # the fix that made five of these nine render at all - see scripts/_lib/doc.py.
-CANARIES = ["{% comment %}", '<html lang="{% if person.locale']
+CANARIES = ["{% comment %}", '<html lang="{% if person.locale',
+            # The dark-mode hardening: the masthead colour has to arrive as an
+            # HTML attribute, because Gmail rewrites it when it comes from CSS.
+            'bgcolor="#191919"', 'name="color-scheme"']
 
 
 _COMMENT_BLOCK = re.compile(r"\{%\s*comment\s*%\}.*?\{%\s*endcomment\s*%\}", re.S)

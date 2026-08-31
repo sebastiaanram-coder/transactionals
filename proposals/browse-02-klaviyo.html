@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
 <title>Browse abandonment 02</title>
 </head>
 <body style="margin:0;padding:0;background:#f8f8f8;">
@@ -136,18 +138,20 @@ a.hp-b2-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decorat
   .hp-b2-help{margin:26px 14px 0;}
   .hp-b2-mid{padding:22px 14px 4px;}
 }
+
+[data-ogsc] .hp-b2-logobar,[data-ogsb] .hp-b2-logobar{background:#191919 !important;background-color:#191919 !important;}
 </style>
 
 <div class="hp-b2-pre">{% if person.locale == 'en-IE' %}Order now and send your file later. Nothing goes on press until it has been checked.{% elif person.locale == 'en-GB' %}Order now and send your file later. Nothing goes on press until it has been checked.{% elif person.locale == 'nl-NL' %}Bestel nu en stuur je bestand later. Er gaat niets op de pers voordat het is gecontroleerd.{% elif person.locale == 'nl-BE' %}Bestel nu en stuur je bestand later. Er gaat niets op de pers voordat het is gecontroleerd.{% elif person.locale == 'fr-FR' %}Commandez maintenant et envoyez votre fichier plus tard. Rien ne part en impression avant vérification.{% elif person.locale == 'fr-BE' %}Commandez maintenant et envoyez votre fichier plus tard. Rien ne part en impression avant vérification.{% elif person.locale == 'de-DE' %}Jetzt bestellen und die Datei später schicken. Nichts geht in den Druck, bevor es geprüft wurde.{% elif person.locale == 'es-ES' %}Pide ahora y envía tu archivo después. Nada entra en máquina sin haberse revisado.{% elif person.locale == 'it-IT' %}Ordina ora e manda il file dopo. Niente va in stampa prima di essere controllato.{% else %}Order now and send your file later. Nothing goes on press until it has been checked.{% endif %}</div>
 
 <div class="hp-b2-wrap">
-  <div class="hp-b2-shell">
+  <div bgcolor="#ffffff" class="hp-b2-shell">
 
     {% catalog event.ProductID %}
 
-    <div class="hp-b2-logobar">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#191919" style="background-color:#191919;"><tr><td align="center" bgcolor="#191919" class="hp-b2-logobar" style="background-color:#191919;">
       <a href="{{ catalog_item.url }}"><img src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/ec84e87e-10bf-4d01-a44d-e2dff5fa743e.png" alt="Helloprint" width="150"></a>
-    </div>
+    </td></tr></table>
 
     <!-- The permission the product page buries inside its upload component.
          Most people never find it, so it leads here, set over the photograph. -->
@@ -163,7 +167,7 @@ a.hp-b2-cta-g{display:inline-block;background:#008539;color:#ffffff;text-decorat
 
     <a class="hp-b2-anchor" href="{{ catalog_item.url }}">
       <table class="hp-b2-antbl" role="presentation" cellpadding="0" cellspacing="0"><tr>
-        <td class="hp-b2-anim" valign="middle"><img src="{{ catalog_item.featured_image.full.src }}" alt="" width="52"></td>
+        <td class="hp-b2-anim" valign="middle"><img src="{{ catalog_item.featured_image.full.src }}" alt="" width="52" style="background-color:#ffffff;"></td>
         <td class="hp-b2-antx" valign="middle">
           <span class="hp-b2-anlbl">{% if person.locale == 'en-IE' %}YOUR PRINT JOB{% elif person.locale == 'en-GB' %}YOUR PRINT JOB{% elif person.locale == 'nl-NL' %}JOUW DRUKOPDRACHT{% elif person.locale == 'nl-BE' %}JOUW DRUKOPDRACHT{% elif person.locale == 'fr-FR' %}VOTRE TRAVAIL D'IMPRESSION{% elif person.locale == 'fr-BE' %}VOTRE TRAVAIL D'IMPRESSION{% elif person.locale == 'de-DE' %}IHR DRUCKAUFTRAG{% elif person.locale == 'es-ES' %}TU TRABAJO DE IMPRESIÓN{% elif person.locale == 'it-IT' %}IL TUO LAVORO DI STAMPA{% else %}YOUR PRINT JOB{% endif %}</span>
           <span class="hp-b2-anname">{{ catalog_item.title }}</span>

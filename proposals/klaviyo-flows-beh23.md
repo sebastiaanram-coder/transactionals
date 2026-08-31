@@ -218,6 +218,80 @@ Subject or preview text changed? `python3 scripts/push_flow_subjects.py`. It rea
 locales through Translations, and **fails rather than shipping** if a subject's
 stated percentage or deadline disagrees with `scripts/_lib/offers.py`.
 
+## Money is written the way each language writes it
+
+Every figure the builders know at build time already went through
+`catalog.money()`, which gets "EUR 46,62" for Dutch and "31,99 EUR" for French
+right. But a catalog price and a basket total are not known at build time - they
+arrive when Klaviyo renders - so they were emitted as a currency symbol glued to
+`{{ x|floatformat:2 }}`. That composition can only ever produce the English
+convention, and it was applied to five languages that do not use it: a Dutch
+reader saw **EUR 60.49** three lines from **EUR 46,62** in the same email.
+
+Nothing was inconsistent between the preview and the live build - both were wrong
+the same way - so every check that compares them passed.
+
+Klaviyo has no locale-aware number filter and no way to add one, but
+`floatformat:2` always returns exactly two decimals, so the string can be taken
+apart by position and reassembled:
+
+    {{ p|floatformat:2|slice:":-3" }}    integer part     1234.56 -> "1234"
+    {{ p|floatformat:2|slice:"-2:" }}    decimals         1234.56 -> "56"
+    {% if p >= 1000 %}...|slice:":-6" }}.{{ ...|slice:"-6:-3" }}   grouping
+
+All three verified against the live render API on 60.49, 999.99, 1234.56,
+6088.00, 12345.67 and 4.99. `scripts/_lib/money_dj.py` holds it, mirroring
+`catalog.money()`'s tables, and the row builders now take a composer function
+instead of a symbol and a number - so the language rule lives in one place and a
+caller cannot reassemble it wrongly. The ceiling is 999,999.99, about two hundred
+times the largest basket ever sampled.
+
+**Four branches, not nine.** Nine locales share only four money formats
+(en / nl+it / fr / de+es), and each branch repeats the value expression up to
+four times, so grouping by format rather than locale roughly halves it.
+
+**Grouping is on everywhere except the cross-sell tiles.** 17 per cent of the
+catalog is priced over 1,000 and the highest is 56,426.24, so the viewed product
+needs it. The tiles are a fixed set of nine slugs whose highest price across all
+six allowed markets is 117.36, so the branch could never fire there.
+`render_check_flows.py` now fails on a dot decimal in a comma-decimal locale, and
+on any four-figure amount that comes out ungrouped - so a feed change cannot make
+that assumption quietly wrong.
+
+## Dark mode
+
+Reported from Gmail on iOS: the black masthead arrived light grey with the
+wordmark sitting in it as a black rectangle.
+
+Nothing was wrong with the email. **Gmail's dark mode rewrites colours that come
+from CSS**, and the masthead's `#191919` lived in a `<style>` rule on a `<div>`.
+The wordmark kept its black because that black is part of the PNG rather than the
+CSS - which is exactly why it ended up as a black box on a lightened band.
+
+The same rewrite is what would have made the product look broken: feed packshots
+are PNGs with no background, sitting on cells coloured from CSS classes. Invert
+those and the product floats on a dark panel it was never cut out for.
+
+`scripts/_lib/darkmode.py` hardens every built body, applied from `doc.shell` so
+all nine get it and a tenth gets it for free:
+
+1. **`bgcolor` is an HTML attribute, not CSS**, and Gmail's inverter leaves it
+   alone. The masthead `<div>` becomes a table with `bgcolor="#191919"` on both
+   the table and the cell. The class stays on the CELL, because the existing rule
+   carries the padding and padding on a `<table>` is unreliable in Outlook.
+2. **`background-color` inline on the `<img>`** travels with the image, so a
+   transparent packshot keeps a white card behind it whatever happens to its
+   container - square, because a rounded corner would show the inverted
+   container through the corner, which is the artefact being removed.
+3. **`<meta name="color-scheme" content="light">`** stops Apple Mail and Outlook
+   auto-inverting. Gmail ignores it; 1 and 2 are what cover Gmail.
+4. **`[data-ogsc]` / `[data-ogsb]` rules** put the masthead colour back if the
+   Gmail app recolours it anyway. Support varies by Gmail version, so this is the
+   backstop rather than the primary fix.
+
+Verified in the rendered output, not just the source: every one of the nine sends
+`bgcolor="#191919"` twice and both `color-scheme` metas.
+
 ## Open, and needing someone else
 
 1. **Neither discount code exists.** `CART-5H9N-10` (10 per cent, 72h) and `CART-9M4T-25`
@@ -254,8 +328,13 @@ stated percentage or deadline disagrees with `scripts/_lib/offers.py`.
    `push_flows.py`.
 8. **Translations need a native-speaker pass.** `translations-browse-order.csv`,
    174 strings, same format and round-trip guarantees as the welcome sheet.
-9. **Gmail clips at about 102 KB.** `ORD-3H` is 81 KB and `BRW-1` is 76 KB — under
-   the limit, but not by much, and the feed-image fix would not help since images
-   are fetched rather than embedded. Worth watching if either grows.
+9. ~~Gmail clips at about 102 KB and ORD-3H is 81 KB~~ **— corrected. That
+   measured the wrong thing.** The stored TEMPLATE is 46 to 100 KB, but a
+   template is nine locales of Django and Gmail never sees it: what is sent is
+   one rendered locale, measured at **16 to 20 KB, at most 20 per cent of the
+   clip**. There is no size problem in either flow, and this was the reason
+   given for not grouping thousands on the cross-sell tiles - that decision now
+   rests only on those nine slugs topping out at 117.36, which is enough on its
+   own.
 10. **UTM tracking is off** (`add_tracking_params: false`) and Smart Sending is on,
     matching BEH-1. Confirm that is what reporting expects.
