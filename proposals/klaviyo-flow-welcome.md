@@ -152,7 +152,7 @@ Verified by render, not by assumption:
 
 ### Found during the render checks — not yet fixed
 
-1. **The 5-day expiry is an unverified factual claim.** `wc.expires5`
+1. ~~**The 5-day expiry is an unverified factual claim.**~~ **RESOLVED 2026-08-31 — see the bottom of this document.** `wc.expires5`
    ("Valid only 5 days") plus "Expires in 5 days" on every product tile, plus
    the WEL-4 subject "Last day for your 10%". That asserts HELLO10 expires 5
    days after signup, in 9 languages, several times per email. If the coupon is
@@ -448,7 +448,7 @@ businesses start with". Right for 01, wrong for the other three.
   re-clone. Only pointing at the master mints a fresh copy. Useful when changing
   a subject without wanting new copy ids.
 
-### Still unverified, and now more prominent
+### ~~Still unverified, and now more prominent~~ — resolved, see below
 
 The 5-day expiry is asserted in the **subject line of three of the four** emails
 and in all four preview texts. It was already in every body with a day-accurate
@@ -623,3 +623,53 @@ ordered branch carries no terms block and no "10%" at all.
 **The green banner in emails 2-4 does NOT repeat the cap.** It already carries
 the offer, the code and the countdown; a fourth clause would not fit on one line
 on mobile. The terms at the foot of those same emails state it.
+
+---
+
+## The offer terms are confirmed — 2026-08-31
+
+Sebastiaan confirmed both figures against the coupon as created in the commerce
+system:
+
+| | |
+|---|---|
+| Code | `HELLO-8DS2-10`, same in every market |
+| Discount | 10% |
+| Cap | **25** in the market's own currency (GBP in GB, EUR elsewhere) |
+| Validity | **5 days** from signup |
+| Redemption | one use per customer, enforced in the commerce system |
+
+**This closes the one blocker that had been open all day.** It was not a
+formality: "expires in 5 days" is asserted in three subject lines, four preview
+texts, four email bodies, the terms block and now the signup form, and "up to
+25" sits next to the discount claim itself. Had the coupon not actually been
+time-limited and capped, every one of those would have been a false limited-time
+claim under UCPD Annex I point 7 — which is why the first version of this
+programme refused to write a 14-day expiry that nobody had verified.
+
+Both numbers are single-sourced in `scripts/_lib/offers.py` as `WELCOME_CAP` and
+`WELCOME_DAYS`. If the coupon is ever reconfigured, change them there and re-run
+the builders plus `push_templates.py`; nothing else needs touching.
+
+### What is still open before this flow can be turned on
+
+Nothing about the offer. What remains:
+
+1. **The custom `locale` profile property must be unset.** It shadows the native
+   field, and 51 of 82 profiles carry both. Until the data team removes it, a
+   reader's language is decided by the wrong field — and the native locale is the
+   thing the whole programme was rebuilt around. Requested; not done.
+2. **Remove the test BCC.** `TEST_BCC = None` in `push_templates.py` and re-run.
+   A bcc on a live flow copies every customer email to an internal mailbox.
+3. **Decide what `store` means for the trigger.** `Completed Signup` arrived
+   carrying `store: "drukzo.nl"`. If that event fires for more than one brand, the
+   flow needs a trigger filter or the brands need separate flows, or Drukzo
+   signups will receive Helloprint email.
+4. **A native speaker has still read none of the translations** — including the
+   two subject lines, the four preview texts and the terms block, all of which I
+   wrote today.
+5. The signup form copy needs implementing on the website, with the GB form
+   showing GBP25 rather than EUR25.
+
+Items 1 and 3 are the two that can put the wrong email in front of the wrong
+person. 2 is a privacy obligation. 4 is quality. 5 is outside Klaviyo.
