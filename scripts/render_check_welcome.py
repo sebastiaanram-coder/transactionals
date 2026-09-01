@@ -51,9 +51,10 @@ TOTAL_VALIDITY = 5
 # the flow as patched: WEL-1 at T+3h, WEL-2 at day 1, WEL-3 at day 3, WEL-4 at
 # day 5. WEL-4's countdown is "Last day", which carries no number, so it asserts
 # only that nothing OTHER than the validity appears.
+# WEL-1B is gone: email 1 now goes out on entry with the code for everyone, so
+# there is no split before it and nobody can have ordered first.
 EXPECT = {"WEL-1 ": 5, "WEL-2 ": 4, "WEL-3 ": 2, "WEL-4 ": None,
-          "WEL-1B": "nocode", "WEL-2B": "nocode", "WEL-3B": "nocode",
-          "WEL-4B": "nocode"}
+          "WEL-2B": "nocode", "WEL-3B": "nocode", "WEL-4B": "nocode"}
 
 # How the offer shows up on welcome-01's product tiles. None of these contains
 # "10%" or the code, which is how a visibly discounted no-code variant passed

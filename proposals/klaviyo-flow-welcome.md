@@ -1,7 +1,129 @@
-# BEH-1 Welcome · Completed Signup
+# BEH-1 Welcome · Newsletter subscribers
 
-Built in Klaviyo 31 August 2026. Flow `TEhf2p`, **draft**.
-https://www.klaviyo.com/flow/TEhf2p/edit
+Rebuilt 1 September 2026 as a subscriber flow. Flow `YzcnqL`, **draft**.
+https://www.klaviyo.com/flow/YzcnqL/edit
+
+`TEhf2p` was the 31 August build and is superseded — delete it.
+
+## Rebuilt as a subscriber flow, 1 September 2026
+
+Flow [`YzcnqL`](https://www.klaviyo.com/flow/YzcnqL/edit) — **BEH-1 Welcome ·
+Newsletter subscribers**, draft. Supersedes `TEhf2p`, which is still in the
+account and should be deleted: a flow cannot be renamed through the API, and two
+draft flows called BEH-1 Welcome is exactly the confusion the naming convention
+was written to prevent.
+
+**The 10% is now what the tick-box buys.** Anyone who does not subscribe never
+enters the flow.
+
+### Why a rebuild rather than a patch
+
+Three of the four changes live on the flow's `definition`, and `PATCH /flows/{id}`
+accepts `status` and nothing else — it rejects `definition`, `name` and
+`profile_filter` outright. Individual actions *are* patchable, which is how the
+retention-analysis changes went in without a rebuild, but a flow's **trigger**,
+its **flow-level filter** and the **removal of an action** are all unreachable.
+
+### 1 · The trigger is the Newsletter list, not the sign-up event
+
+Subscribing *is* the entry condition, so the trigger says so directly: joined
+list `VAh232` (Newsletter).
+
+**Measured, not assumed.** The tick-box already writes to that list — 1 of the 14
+most recent sign-ups is in it, so the wiring works and roughly 7% tick it today.
+Marketing consent on the profile is **not** usable: `subscriptions.email.
+marketing.consent` is unset on all 14, so list membership is the only reliable
+signal.
+
+**Why not "Completed Signup + a filter on list membership":** a race. The tick-box
+write and the sign-up event are independent, and a flow filter is evaluated at
+entry — if the event lands first, the filter sees no membership and the person
+never enters at all. A list trigger cannot have that bug.
+
+**Side effect worth knowing.** Anyone who subscribes by another route — footer
+form, pop-up — now also enters. That is consistent with the offer (they ticked a
+box promising 10%) but it is wider than "account sign-up".
+
+### 2 · Email 1 is the entry action, immediate, with the code for everyone
+
+This deliberately gives back yesterday's 3-hour delay and open-checkout
+suppression, and the reason is that the retention analysis's objection no longer
+applies in the same form. That objection was that the code discounted an order
+already in flight. The code is now the **consideration for subscribing**:
+withholding it from someone who ticked the box and then bought the same day is
+not a saving, it is a broken promise.
+
+The exposure also shrinks with the audience. The analysis costed the leak across
+*all* registrants; only subscribers enter now — about 7% of sign-ups.
+
+### 3 · The split moves to day 1 and only decides whether to remind
+
+No split before email 1 means the four "ordered at S1" messages disappear with
+it: nobody can have ordered before an email that goes out on entry. **Ten
+messages instead of fourteen**, and the WEL-1B template — the no-discount welcome
+— is no longer used by any flow message. It is still built, so reverting is a
+matter of putting the entry back, not rebuilding a template.
+
+From day 1 on, each split asks one question — *has this person ordered since
+entering the flow* — and routes to a variant that does not mention the code.
+
+**The open-checkout condition is gone from these splits, on purpose.** It existed
+to stop a *second* paid lever landing on someone mid-checkout. But the code is
+already in their hands from email 1, so a reminder costs nothing that has not
+already been committed — suppressing it would only make the email less useful.
+
+### 4 · Connect is excluded at the flow level, not routed
+
+28.7% of Placed Order events in this account are Connect, and those buyers must
+never receive a consumer discount ladder. Yesterday's version could only *route*
+them to a no-code branch because a trigger filter was unreachable; a rebuild
+excludes them outright, as *no Completed Signup from a store containing
+`connect.` in the last 30 days*.
+
+### 5 · Re-entry is 365 days, and the API forced that
+
+On a **list-triggered** flow, `{"duration": 1, "unit": "alltime"}` — the form the
+old metric-triggered flow used for "never" — is accepted with a 201 and then
+**stored as `null`**. A concrete duration is stored faithfully, verified by
+reading it back.
+
+`null` is not good enough here: this flow hands out a discount on joining a list,
+so "what happens if someone unsubscribes and resubscribes" needs a stated answer
+rather than a default nobody has checked. At most once a year is that answer.
+
+### Shape
+
+    joined Newsletter (VAh232) · not a Connect sign-up
+      └─ WEL-1  day 0, immediate, 10% code for everyone
+          └─ day 1 · ordered since entering?
+              ├─ YES  WEL-2B day 1 · WEL-3B day 6 · WEL-4B day 11
+              └─ NO   WEL-2  day 1
+                  └─ day 3 · ordered?
+                      ├─ YES  WEL-3B day 3 · WEL-4B day 8
+                      └─ NO   WEL-3  day 3
+                          └─ day 5 · ordered?
+                              ├─ YES  WEL-4B day 5
+                              └─ NO   WEL-4  day 5
+
+Every countdown claim is unchanged and still exact: emails at day 0, 1, 3 and 5
+against a code valid five days from sign-up, and the coupon expires **after** day
+5, so email 4's "last day" lands inside the window. Verified by
+`scripts/render_check_welcome.py` — 90 renders, all ten messages in all nine
+locales, 0 problems.
+
+### Still open
+
+- **Delete `TEhf2p`.** It cannot be renamed through the API. Note the Slack draft
+  and any link already shared point at it.
+- **The 10% holdout** is still not buildable: no random-split action type exists,
+  and a census of all 29 flows found only `send-email`, `time-delay`,
+  `conditional-split`, `send-sms`, `send-whatsapp`, `send-internal-alert` and
+  `update-profile`. Needs Klaviyo's experiment feature or a random bucket on the
+  profile.
+- **`TEST_BCC` is on all ten messages.** Remove before go-live.
+- **Volume drops to the subscribe rate** — about 7% of sign-ups until the 10% on
+  the form lifts it. Worth watching, because it is also the measure of whether
+  the incentive works.
 
 ## Retention analysis applied, 1 September 2026
 

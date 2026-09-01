@@ -38,24 +38,27 @@ OUT = os.path.join(ROOT, "klaviyo-templates")
 
 # (source block, Klaviyo template name, which flow messages use it)
 TEMPLATES = [
+    # THE FLOW IS NOW TRIGGERED BY THE NEWSLETTER LIST and email 1 goes out on
+    # entry with the code for everyone, so there is no split before it - and
+    # therefore no "ordered at S1" branch. Four messages went with it, and the
+    # WEL-1B template (the no-discount welcome) is no longer used by any flow
+    # message. It is still built by scripts/translate_welcome.py, so reverting
+    # is a matter of putting the entry back, not rebuilding a template.
     ("welcome-01-klaviyo.html", "BEH-1 WEL-1 Welcome + 10%",
-     ["WEL-1 Welcome · day 0 (3h)"]),
-    ("welcome-01-nocode-klaviyo.html", "BEH-1 WEL-1B Welcome, no discount",
-     ["WEL-1B Welcome · ord@S1"]),
+     ["WEL-1 Welcome · day 0"]),
     ("welcome-02-klaviyo.html", "BEH-1 WEL-2 Behind the print",
      ["WEL-2 Behind the print · day 1"]),
     ("welcome-02-nocode-klaviyo.html", "BEH-1 WEL-2B Behind the print, no discount",
-     ["WEL-2B Behind the print · ord@S1", "WEL-2B Behind the print · ord@S2"]),
+     ["WEL-2B Behind the print · ord@S2"]),
     ("welcome-03-klaviyo.html", "BEH-1 WEL-3 Rated excellent",
      ["WEL-3 Rated excellent · day 3"]),
     ("welcome-03-nocode-klaviyo.html", "BEH-1 WEL-3B Rated excellent, no discount",
-     ["WEL-3B Rated excellent · ord@S1", "WEL-3B Rated excellent · ord@S2",
-      "WEL-3B Rated excellent · ord@S3"]),
+     ["WEL-3B Rated excellent · ord@S2", "WEL-3B Rated excellent · ord@S3"]),
     ("welcome-04-klaviyo.html", "BEH-1 WEL-4 Send it over",
      ["WEL-4 Send it over · day 5"]),
     ("welcome-04-nocode-klaviyo.html", "BEH-1 WEL-4B Send it over, no discount",
-     ["WEL-4B Send it over · ord@S1", "WEL-4B Send it over · ord@S2",
-      "WEL-4B Send it over · ord@S3", "WEL-4B Send it over · ord@S4"]),
+     ["WEL-4B Send it over · ord@S2", "WEL-4B Send it over · ord@S3",
+      "WEL-4B Send it over · ord@S4"]),
 ]
 
 GMAIL_CLIP_KB = 102

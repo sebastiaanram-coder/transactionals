@@ -31,21 +31,26 @@ sys.path.insert(0, os.path.join(ROOT, "scripts", "_lib"))
 import offers  # noqa: E402
 
 DOC = os.path.join(ROOT, "behavioural-email-overview.html")
-FLOW = "TEhf2p"
+# FROM THE RECORD, NOT A LITERAL. The flow was rebuilt when it moved to a
+# Newsletter-list trigger, and a flow id cannot be preserved across a rebuild -
+# the definition is not patchable, so the trigger and the entry action can only
+# change by creating a new flow.
+FLOW = json.load(io.open(os.path.join(ROOT, "data",
+    "klaviyo-flow-welcome-messages.json"), encoding="utf-8"))["flow_id"]
 FLOW_URL = "https://www.klaviyo.com/flow/%s/edit" % FLOW
 TPL = "https://www.klaviyo.com/templates/%s"
 
 # has-not-ordered email -> (timing, subject, preview, purpose, master template)
 EMAILS = [
- ("Day 0 &middot; 3 hours after sign-up",
+ ("Day 0 &middot; immediately on subscribing",
   "Welcome to Helloprint, and your 10% code",
   "Your 10% code is inside, and you have 5 days to use it.",
-  "Get the code in front of them while the sign-up is still fresh - but not "
-  "before the order they are already placing. Sign-up is account creation inside "
-  "the checkout, and 46.7% of registrants order the same day, so an immediate "
-  "send discounts an order in flight. The three-hour delay plus the "
-  "open-checkout condition moves those buyers to the no-discount branch instead: "
-  "about EUR 16k of margin a month at pilot volume.",
+  "The code is what the tick-box buys, so it goes out on entry and every "
+  "subscriber gets it. That is a deliberate reversal of the three-hour delay "
+  "added for the retention analysis: withholding the code from someone who "
+  "ticked the box and then ordered the same day is not a saving, it is a broken "
+  "promise. The exposure shrinks with the audience instead - only subscribers "
+  "enter, about 7% of sign-ups today.",
   "UCriVp", "BEH-1 WEL-1 Welcome + 10%"),
  ("Day 1",
   "Your 10% is waiting, and 4 days left to use it",
@@ -69,26 +74,29 @@ EMAILS = [
 
 FACTS = {
  "Trigger": (
-   "<strong>Completed Signup</strong><br><span class=\"muted\">Fires on account "
-   "creation, which happens inside the checkout. The event carries "
-   "<code>store: drukzo.nl</code> or <code>drukzo.be</code> - the legacy names "
-   "for Helloprint in NL and nl-BE, rebranded on the front end in November 2025. "
-   "Consumer storefronts only today: the metric is new, and all 75 events so far "
-   "are drukzo.nl. A sign-up from a <code>connect.*</code> storefront is routed "
-   "to the no-discount branch, so a B2B buyer can never receive the consumer "
-   "discount ladder.</span>"),
+   "<strong>Joined the Newsletter list</strong><br><span class=\"muted\">The "
+   "sign-up form's subscribe tick-box writes to this list, so subscribing IS the "
+   "entry condition - someone who does not tick it never enters. Measured: 1 of "
+   "the 14 most recent sign-ups is in the list, and marketing consent on the "
+   "profile is unset on all of them, so list membership is the only reliable "
+   "signal. Anyone who subscribes by another route - footer, pop-up - also "
+   "enters, which is consistent with the offer. A sign-up from a "
+   "<code>connect.*</code> storefront is excluded from the flow "
+   "entirely.</span>"),
  "Audience": (
-   "Everyone who completes sign-up, in all nine locales.<br><span class=\"muted\">"
-   "Before every email the flow asks three questions, and any one of them moves "
-   "the reader to the no-discount branch: has this person ordered since entering "
-   "the flow, do they have a checkout open from the last 12 hours, and did they "
-   "sign up on a Connect storefront. They still finish the series, without the "
-   "offer. Language comes from the profile's native <code>locale</code>, with "
-   "en-GB as the fallback.</span>"),
+   "Newsletter subscribers, in all nine locales.<br><span class=\"muted\">"
+   "Email 1 goes to everyone with the code. From day 1 on, each split asks one "
+   "question - has this person ordered since entering the flow - and routes them "
+   "to a variant that does not mention the code. They still finish the series, "
+   "without the reminder. Language comes from the profile's native "
+   "<code>locale</code>, with en-GB as the fallback.</span>"),
  "Cadence &amp; re-entry": (
-   "Has not ordered: day 0 (+3h), 1, 3, 5<br>Has ordered: day 0 (+3h), 5, 10, 15"
-   "<br><span class=\"muted\">The slower ordered cadence keeps this clear of "
-   "Post-Purchase, which starts at day 18. Re-entry: once only.</span>"),
+   "Has not ordered: day 0, 1, 3, 5<br>Ordered mid-sequence: the remaining "
+   "emails move to 5-day gaps"
+   "<br><span class=\"muted\">The slower cadence after an order keeps this clear of "
+   "Post-Purchase, which starts at day 18. Re-entry: at most once a year - a "
+   "list-triggered flow cannot store \"never\", so the window is stated "
+   "explicitly rather than left to a default.</span>"),
  # Concatenated, not %-formatted: these strings contain "10%" and "%s" would
  # not be the only thing the % operator tried to read.
  "Incentive": (
