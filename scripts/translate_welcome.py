@@ -481,6 +481,30 @@ VARIANT_EDITS = {
         # THE OFFER TERMS. They name the discount, the cap and the expiry, so
         # they have no business in an email that carries no offer.
         (r'<div class="hp-w1-terms">.*?</div>\s*', ""),
+        # THE PRODUCT TILES WERE STILL PRICED AS IF THE CODE APPLIED. Each of the
+        # four tiles carried the list price struck through beside the discounted
+        # one - <s>EUR 39.96</s> EUR 35.96 - and a countdown under it, in an
+        # email with no code anywhere in it. Forty was/now pairs and four
+        # countdowns, in nine locales.
+        #
+        # WHY IT SURVIVED EVERY CHECK. scripts/make-nodiscount.py has rules for
+        # exactly this, written against the English source where a tile price is
+        # one literal. By the time the variant is built the price is a
+        # nine-branch locale switch, so those regexes matched nothing - and the
+        # nocode guard below looked for "10%", the code and a few class names,
+        # none of which appear in a struck-out price.
+        #
+        # THE STRIKE TAG GOES WITH IT. Keeping the <s> wrapper would have left
+        # the surviving price line-through, which reads as "no longer available"
+        # rather than "this is the price".
+        (r'<s class="hp-w1-tiwas">(.*?)</s>&nbsp;'
+         r'<span class="hp-w1-tinow">.*?</span>', r"\1"),
+        (r'<span class="hp-w1-tiexp">(?:(?!</span>).)*</span>', ""),
+        # the price reclaims the brand green now that nothing competes with it
+        (r'\.hp-w1-tiprice\{display:block;font-size:17px;line-height:22px;'
+         r'font-weight:800;color:#191919;\}',
+         ".hp-w1-tiprice{display:block;font-size:17px;line-height:22px;"
+         "font-weight:800;color:#008539;}"),
     ],
     "welcome-02": [
         # the countdown bar
@@ -733,7 +757,15 @@ if _gaps:
 # WORD remains. This project has tripped on counting class names in a stylesheet
 # more than once.
 DISCOUNT_WORDS = ["10%", offers.WELCOME_CODE, 'class="hp-w1-code"',
-                  'class="hp-w1-eyebrow"', 'class="hp-w1-ctanote"', '-promo">']
+                  'class="hp-w1-eyebrow"', 'class="hp-w1-ctanote"', '-promo">',
+                  # A DISCOUNT SHOWS UP AS A NUMBER, NOT ONLY AS A WORD. These
+                  # three are how the offer appeared on the product tiles - a
+                  # struck-out list price, a discounted price beside it, and a
+                  # countdown - none of which contain "10%" or the code, so the
+                  # list above passed a variant that was still visibly
+                  # discounted.
+                  'class="hp-w1-tiwas"', 'class="hp-w1-tinow"',
+                  'class="hp-w1-tiexp"']
 
 for _slug in EMAILS:
     _vp = os.path.join(OUT, _slug + "-nocode-klaviyo.html")

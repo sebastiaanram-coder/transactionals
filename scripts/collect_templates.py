@@ -39,7 +39,7 @@ OUT = os.path.join(ROOT, "klaviyo-templates")
 # (source block, Klaviyo template name, which flow messages use it)
 TEMPLATES = [
     ("welcome-01-klaviyo.html", "BEH-1 WEL-1 Welcome + 10%",
-     ["WEL-1 Welcome · day 0 (1h)"]),
+     ["WEL-1 Welcome · day 0 (3h)"]),
     ("welcome-01-nocode-klaviyo.html", "BEH-1 WEL-1B Welcome, no discount",
      ["WEL-1B Welcome · ord@S1"]),
     ("welcome-02-klaviyo.html", "BEH-1 WEL-2 Behind the print",

@@ -3,6 +3,122 @@
 Built in Klaviyo 31 August 2026. Flow `TEhf2p`, **draft**.
 https://www.klaviyo.com/flow/TEhf2p/edit
 
+## Retention analysis applied, 1 September 2026
+
+Source: *Behavioural Emails, Re-priced* — the cohort analysis of 171,512 first-time
+customers, June 2024 to May 2026, Endlabel isolated. Three of its changes touch
+this flow. All three are applied; the flow is still **draft**.
+
+### 1 · The minute-zero code — the largest margin exposure in the programme
+
+**What was wrong.** The flow entered, waited **zero days**, and then asked "has
+this person ordered since the flow started?". At t=0 nobody has, so every profile
+fell to the FALSE branch and received WEL-1 **with** the 10% code — including the
+**46.7% of registrants who order the same day**, because sign-up is account
+creation *inside the checkout*. The split was not wrong; it was evaluated before
+it could ever be true. Roughly **€16k of margin a month at pilot volume, €77k at
+full rollout**.
+
+**This reverses an earlier decision, deliberately.** The zero delay was set on
+purpose, with the reasoning *"technically everyone gets the discount in the first
+email, because nobody places an order in such a short timeframe."* The analysis
+measured that premise and it is false.
+
+**What changed.** The entry delay is **3 hours**, and the split now also asks
+whether the profile has **a checkout open in the last 12 hours**. The checkout
+condition is what does the real work: sign-up happens *inside* checkout, so
+Started Checkout has already fired when the flow starts, and it catches the buyer
+whether or not the order has completed by hour three.
+
+**Why 3 hours and not 6.** The analysis sanctions 3–6. The countdown copy is
+load-bearing — the code is valid five days **from sign-up** and email 1 says
+"expires in 5 days" in six languages — so every hour of delay makes that claim an
+hour optimistic. Three hours is 2.5% of the window instead of 5%, and the
+open-checkout condition, not the length of the delay, is what catches the
+in-checkout cohort.
+
+**Why not the other sanctioned option.** The analysis also offers "send email 1
+immediately without the code and introduce the code in email 2". It is cheaper to
+build and catches *every* same-day buyer rather than a three-hour slice — but the
+sign-up form now promises *"Ja, ik wil 10% korting op mijn eerste bestelling"*, so
+an email 1 that does not mention the code contradicts the promise the customer
+just accepted. That is a complaint, not a saving.
+
+### 2 · Connect and the other B2B storefronts
+
+Connect is **28.7% of Placed Order events** in this account, and those buyers must
+never receive a consumer discount ladder. Every split now also asks whether the
+profile signed up on a store whose name contains `connect.` — measured, not
+assumed: Completed Signup carries exactly one usable property, `store`, and every
+Connect storefront in the account matches (`connect.helloprint.nl`, `.co.uk`,
+`.be`, `.es`, `connect.fr.helloprint.be`).
+
+**This routes rather than excludes.** A Connect sign-up now goes to the no-code
+branch, so no discount can leak, but it would still receive four consumer emails.
+Full exclusion belongs on the flow's **trigger filter**, which is not reachable
+from the API — see the constraint below. Not urgent: the Completed Signup metric
+is one day old, has 75 events, and every one is `drukzo.nl`.
+
+### 3 · The timing, and why the copy is still true in every country
+
+The three hours were taken out of the **email 1 → email 2** interval (1 day → 21
+hours) rather than added to the front of the sequence. That matters: pushing every
+later email three hours late would have put email 4 — *"Last day for your 10%"* —
+three hours **past** the expiry it announces.
+
+| Email | Lands at | Claims | True? |
+|---|---|---|---|
+| WEL-1 | T+3h | "expires in 5 days" | 3h optimistic — 4d21h actually remain |
+| WEL-2 | T+1.00d | "4 days left" | exact |
+| WEL-3 | T+3.00d | "2 days left" | exact |
+| WEL-4 | T+5.00d | "Last day" | lands within validity |
+
+Verified by `scripts/render_check_welcome.py`, which renders all 14 messages in
+all nine locales and checks each one's day claim against its own send offset — so
+a future retiming cannot silently falsify a countdown in six languages.
+
+### What could not be done, and what it costs to finish
+
+**A flow's `definition` is not patchable.** `PATCH /flows/{id}` accepts `status`
+and nothing else, and rejects `definition` outright. Individual **actions** are
+patchable, so a delay's value and a split's conditions can both be changed in
+place — which is how all of the above was applied without rebuilding. What cannot
+be done is **adding an action**, or setting the flow's `trigger_filter` or
+`profile_filter`. Two consequences:
+
+1. **Full Connect exclusion** needs the trigger filter: one field in the Klaviyo
+   UI (`store` **not-contains** `connect.` — the operator is `not-contains`,
+   verified against the API), or a flow rebuild.
+2. **The 10% holdout cannot be built here at all**, and the analysis calls it the
+   one change that is not optional. There is no random-split action type in the
+   flow API, and a census of all 29 flows in this account found only
+   `send-email`, `time-delay`, `conditional-split`, `send-sms`, `send-whatsapp`,
+   `send-internal-alert` and `update-profile`. It needs either Klaviyo's own
+   experiment feature in the UI, or a random bucket written onto the profile by
+   the data team, which a conditional split could then read.
+
+### Unchanged, and endorsed by the analysis
+
+The 10% itself and the €25 cap stay: at a 32.5% gross margin a 10% code needs a
++44% relative lift, which the analysis calls *"right at the ceiling — defensible
+only because it is an acquisition cost, not a retention one."* The two-branch
+split on Placed Order, the countdown mechanic and the fixed-hour delays are all
+endorsed. The analysis also notes that newsletter-signup codes produce the
+weakest retaining cohort in the dataset (−4.3pp), so this flow should be judged on
+**first-order incrementality alone** and not expected to produce downstream
+loyalty.
+
+### Still open
+
+- **The coupon's expiry semantics.** Email 4 lands exactly five days after
+  sign-up. If the coupon expires at *end of day* five it is fine; if it expires
+  exactly 120 hours after issue, the "last day" email arrives as the code dies.
+  This pre-dates the retiming and needs a one-line answer from the commerce
+  system.
+- **"API" and "print stores"** are named in the analysis's exclusion list, but no
+  `store` value observed in this account identifies them. The Connect pattern is
+  built; the other two need their identifiers before a filter can be written.
+
 ## Naming convention
 
 One line per flow, one per message, both sortable and both saying what the thing

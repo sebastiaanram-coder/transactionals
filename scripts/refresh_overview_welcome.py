@@ -37,12 +37,15 @@ TPL = "https://www.klaviyo.com/templates/%s"
 
 # has-not-ordered email -> (timing, subject, preview, purpose, master template)
 EMAILS = [
- ("Day 0 &middot; immediately on sign-up",
+ ("Day 0 &middot; 3 hours after sign-up",
   "Welcome to Helloprint, and your 10% code",
   "Your 10% code is inside, and you have 5 days to use it.",
-  "Get the code in front of them while the sign-up is still on screen. Sign-up "
-  "is account creation inside the checkout, so this can land before the order is "
-  "placed - which is the point of sending it immediately rather than after an hour.",
+  "Get the code in front of them while the sign-up is still fresh - but not "
+  "before the order they are already placing. Sign-up is account creation inside "
+  "the checkout, and 46.7% of registrants order the same day, so an immediate "
+  "send discounts an order in flight. The three-hour delay plus the "
+  "open-checkout condition moves those buyers to the no-discount branch instead: "
+  "about EUR 16k of margin a month at pilot volume.",
   "UCriVp", "BEH-1 WEL-1 Welcome + 10%"),
  ("Day 1",
   "Your 10% is waiting, and 4 days left to use it",
@@ -70,15 +73,20 @@ FACTS = {
    "creation, which happens inside the checkout. The event carries "
    "<code>store: drukzo.nl</code> or <code>drukzo.be</code> - the legacy names "
    "for Helloprint in NL and nl-BE, rebranded on the front end in November 2025. "
-   "Same brand, so no trigger filter is needed.</span>"),
+   "Consumer storefronts only today: the metric is new, and all 75 events so far "
+   "are drukzo.nl. A sign-up from a <code>connect.*</code> storefront is routed "
+   "to the no-discount branch, so a B2B buyer can never receive the consumer "
+   "discount ladder.</span>"),
  "Audience": (
    "Everyone who completes sign-up, in all nine locales.<br><span class=\"muted\">"
-   "The flow splits on Placed Order since entering it, and re-checks before every "
-   "email, so anyone who orders mid-sequence moves to the no-discount branch and "
-   "still finishes the series. Language comes from the profile's native "
-   "<code>locale</code>, with en-GB as the fallback.</span>"),
+   "Before every email the flow asks three questions, and any one of them moves "
+   "the reader to the no-discount branch: has this person ordered since entering "
+   "the flow, do they have a checkout open from the last 12 hours, and did they "
+   "sign up on a Connect storefront. They still finish the series, without the "
+   "offer. Language comes from the profile's native <code>locale</code>, with "
+   "en-GB as the fallback.</span>"),
  "Cadence &amp; re-entry": (
-   "Has not ordered: day 0 (immediate), 1, 3, 5<br>Has ordered: day 0, 5, 10, 15"
+   "Has not ordered: day 0 (+3h), 1, 3, 5<br>Has ordered: day 0 (+3h), 5, 10, 15"
    "<br><span class=\"muted\">The slower ordered cadence keeps this clear of "
    "Post-Purchase, which starts at day 18. Re-entry: once only.</span>"),
  # Concatenated, not %-formatted: these strings contain "10%" and "%s" would
