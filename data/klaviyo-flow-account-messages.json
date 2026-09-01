@@ -1,0 +1,25 @@
+{
+  "flow": "BEH-1b Account created · service message",
+  "flow_id": "RRLyfx",
+  "status": "draft",
+  "trigger": "Completed Signup (WRvuHD)",
+  "created": "2026-09-01",
+  "url": "https://www.klaviyo.com/flow/RRLyfx/edit",
+  "ui_todo": [
+    "mark the message transactional - the API cannot",
+    "change the 1-day delay to 'wait until 9am' - the API cannot"
+  ],
+  "messages": [
+    {
+      "action": "116194734",
+      "message": "VsCjgv",
+      "name": "ACC-1 Account created · next morning",
+      "next": null,
+      "template_saved": "UhdunD",
+      "template_live": "RGw3yK",
+      "template_name": "BEH-1b ACC-1 Account created",
+      "subject": "Your Helloprint account is ready",
+      "preview": ""
+    }
+  ]
+}

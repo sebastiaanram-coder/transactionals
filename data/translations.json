@@ -4334,5 +4334,127 @@
    "es": "Tu cesta sigue ahí, y el código caduca mañana.",
    "it": "Il tuo carrello è ancora qui, e il codice scade domani."
   }
+ },
+ "account-01": {
+  "pre": {
+   "en": "Your account is ready. Here is where everything lives.",
+   "nl": "Je account is klaar. Hier vind je alles terug.",
+   "fr": "Votre compte est prêt. Voici où tout se trouve.",
+   "de": "Ihr Konto ist bereit. Hier finden Sie alles wieder.",
+   "es": "Tu cuenta está lista. Aquí encuentras todo.",
+   "it": "Il tuo account è pronto. Qui trovi tutto."
+  },
+  "h1": {
+   "en": "Your Helloprint account is ready",
+   "nl": "Je Helloprint-account is klaar",
+   "fr": "Votre compte Helloprint est prêt",
+   "de": "Ihr Helloprint-Konto ist bereit",
+   "es": "Tu cuenta de Helloprint está lista",
+   "it": "Il tuo account Helloprint è pronto"
+  },
+  "sub": {
+   "en": "You can order, track a job and pick up a quote from one place. Here is what is in there.",
+   "nl": "Je kunt bestellen, een opdracht volgen en een offerte oppakken vanaf één plek. Dit zit erin.",
+   "fr": "Vous pouvez commander, suivre un travail et retrouver un devis au même endroit. Voici ce qui s'y trouve.",
+   "de": "Sie können bestellen, einen Auftrag verfolgen und ein Angebot abrufen - alles an einem Ort. Das erwartet Sie.",
+   "es": "Puedes pedir, seguir un trabajo y recuperar un presupuesto desde un solo sitio. Esto es lo que hay.",
+   "it": "Puoi ordinare, seguire un lavoro e recuperare un preventivo da un unico posto. Ecco cosa c'è."
+  },
+  "s1t": {
+   "en": "Send your artwork whenever it is ready",
+   "nl": "Stuur je bestand wanneer het klaar is",
+   "fr": "Envoyez votre fichier quand il est prêt",
+   "de": "Senden Sie Ihre Datei, sobald sie fertig ist",
+   "es": "Envía tu archivo cuando esté listo",
+   "it": "Invia il tuo file quando è pronto"
+  },
+  "s1b": {
+   "en": "You can order first and upload later. Every file gets an automatic check at no cost before it goes on press.",
+   "nl": "Je kunt eerst bestellen en later uploaden. Elk bestand krijgt gratis een automatische controle voordat het op de pers gaat.",
+   "fr": "Vous pouvez commander d'abord et envoyer le fichier ensuite. Chaque fichier reçoit une vérification automatique gratuite avant l'impression.",
+   "de": "Sie können zuerst bestellen und die Datei später hochladen. Jede Datei wird vor dem Druck kostenlos automatisch geprüft.",
+   "es": "Puedes pedir primero y subir el archivo después. Cada archivo recibe una revisión automática gratuita antes de imprimir.",
+   "it": "Puoi ordinare prima e caricare il file dopo. Ogni file riceve un controllo automatico gratuito prima della stampa."
+  },
+  "s2t": {
+   "en": "Ask for a price on anything unusual",
+   "nl": "Vraag een prijs voor iets afwijkends",
+   "fr": "Demandez un prix pour tout ce qui sort de l'ordinaire",
+   "de": "Fragen Sie nach einem Preis für alles Ungewöhnliche",
+   "es": "Pide un precio para cualquier cosa fuera de lo común",
+   "it": "Chiedi un prezzo per qualsiasi cosa insolita"
+  },
+  "s2b": {
+   "en": "An odd size, a tight deadline or a large run. Our quotation team comes back within 24 hours.",
+   "nl": "Een afwijkend formaat, een krappe deadline of een grote oplage. Ons calculatieteam reageert binnen 24 uur.",
+   "fr": "Un format inhabituel, un délai serré ou un grand tirage. Notre équipe devis répond sous 24 heures.",
+   "de": "Ein ungewöhnliches Format, ein knapper Termin oder eine große Auflage. Unser Angebotsteam antwortet innerhalb von 24 Stunden.",
+   "es": "Un formato poco habitual, un plazo ajustado o una tirada grande. Nuestro equipo de presupuestos responde en 24 horas.",
+   "it": "Un formato insolito, una scadenza stretta o una tiratura grande. Il nostro team preventivi risponde entro 24 ore."
+  },
+  "s3t": {
+   "en": "See what we print",
+   "nl": "Bekijk wat we drukken",
+   "fr": "Découvrez ce que nous imprimons",
+   "de": "Sehen Sie, was wir drucken",
+   "es": "Mira lo que imprimimos",
+   "it": "Guarda cosa stampiamo"
+  },
+  "s3b": {
+   "en": "Over 10,000 products, printed by local partners and delivered with the price you saw.",
+   "nl": "Meer dan 10.000 producten, gedrukt door lokale partners en geleverd voor de prijs die je zag.",
+   "fr": "Plus de 10 000 produits, imprimés par des partenaires locaux et livrés au prix affiché.",
+   "de": "Über 10.000 Produkte, gedruckt von lokalen Partnern und geliefert zum gezeigten Preis.",
+   "es": "Más de 10.000 productos, impresos por socios locales y entregados al precio que viste.",
+   "it": "Oltre 10.000 prodotti, stampati da partner locali e consegnati al prezzo che hai visto."
+  },
+  "offt": {
+   "en": "Want 10% off your first order?",
+   "nl": "Wil je 10% korting op je eerste bestelling?",
+   "fr": "Vous voulez 10% sur votre première commande ?",
+   "de": "Möchten Sie 10% auf Ihre erste Bestellung?",
+   "es": "¿Quieres un 10% en tu primer pedido?",
+   "it": "Vuoi il 10% sul tuo primo ordine?"
+  },
+  "offb": {
+   "en": "You did not opt in to our emails, so we have not sent you a code. Subscribe and we will send it straight over - it is valid for 5 days and there is one per customer.",
+   "nl": "Je hebt je niet aangemeld voor onze e-mails, dus we hebben je geen code gestuurd. Meld je aan en we sturen hem meteen - hij is 5 dagen geldig en er is er één per klant.",
+   "fr": "Vous ne vous êtes pas inscrit à nos e-mails, nous ne vous avons donc pas envoyé de code. Inscrivez-vous et nous vous l'envoyons aussitôt - valable 5 jours, un par client.",
+   "de": "Sie haben unsere E-Mails nicht abonniert, daher haben wir Ihnen keinen Code geschickt. Melden Sie sich an und wir senden ihn sofort - 5 Tage gültig, einer pro Kunde.",
+   "es": "No te suscribiste a nuestros correos, así que no te hemos enviado un código. Suscríbete y te lo enviamos enseguida: válido 5 días y uno por cliente.",
+   "it": "Non ti sei iscritto alle nostre email, quindi non ti abbiamo inviato un codice. Iscriviti e te lo mandiamo subito: valido 5 giorni, uno per cliente."
+  },
+  "offcta": {
+   "en": "Subscribe and get my 10%",
+   "nl": "Aanmelden en mijn 10% ontvangen",
+   "fr": "M'inscrire et obtenir mes 10%",
+   "de": "Anmelden und meine 10% erhalten",
+   "es": "Suscribirme y recibir mi 10%",
+   "it": "Iscrivimi e ricevi il 10%"
+  },
+  "acct": {
+   "en": "Go to your account",
+   "nl": "Naar je account",
+   "fr": "Accéder à votre compte",
+   "de": "Zu Ihrem Konto",
+   "es": "Ir a tu cuenta",
+   "it": "Vai al tuo account"
+  },
+  "whyt": {
+   "en": "Why you received this",
+   "nl": "Waarom je dit ontvangt",
+   "fr": "Pourquoi vous recevez ceci",
+   "de": "Warum Sie das erhalten",
+   "es": "Por qué recibes esto",
+   "it": "Perché ricevi questa email"
+  },
+  "whyb": {
+   "en": "This is a one-off service message confirming the Helloprint account you created. It is not a marketing email and you will not receive another unless you subscribe.",
+   "nl": "Dit is een eenmalig servicebericht over het Helloprint-account dat je hebt aangemaakt. Het is geen marketingmail en je ontvangt er geen volgende, tenzij je je aanmeldt.",
+   "fr": "Ceci est un message de service unique confirmant le compte Helloprint que vous avez créé. Ce n'est pas un e-mail marketing et vous n'en recevrez pas d'autre, sauf si vous vous inscrivez.",
+   "de": "Dies ist eine einmalige Servicenachricht zu dem von Ihnen erstellten Helloprint-Konto. Es ist keine Marketing-E-Mail, und Sie erhalten keine weitere, sofern Sie sich nicht anmelden.",
+   "es": "Este es un mensaje de servicio único que confirma la cuenta de Helloprint que creaste. No es un correo de marketing y no recibirás otro salvo que te suscribas.",
+   "it": "Questo è un messaggio di servizio una tantum che conferma l'account Helloprint che hai creato. Non è un'email di marketing e non ne riceverai altre, a meno che tu non ti iscriva."
+  }
  }
 }
