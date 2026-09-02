@@ -41,6 +41,7 @@ button{font-family:var(--font-sans);font-size:16px;line-height:21px;font-weight:
       background:var(--color-primary);border:0;border-radius:var(--radius-pill);padding:14px 26px;cursor:pointer}
 button:hover{background:var(--color-primary-dark)}
 button[disabled]{opacity:.55;cursor:default}
+.confirm{display:none;margin:0 0 4px;font-size:16px;line-height:26px;font-weight:700;color:var(--color-ink)}
 .small{margin:14px 0 0;font-size:12px;line-height:18px;color:var(--color-ink-faint)}
 .bullets{margin:28px 0 0;padding:22px 0 0;border-top:1px solid var(--color-border);text-align:left}
 .b{display:flex;gap:10px;align-items:flex-start;margin:0 0 12px;font-size:14px;line-height:20px;color:var(--color-ink-muted)}
@@ -94,7 +95,21 @@ button[disabled]{opacity:.55;cursor:default}
     <div id="form-view">
       <h1 id="t-h1"></h1>
       <p class="sub" id="t-sub"></p>
-      <form id="f" novalidate>
+      <!-- PREFILL, AND WHY IT IS NOT ?email=
+           The address is a personal identifier, and putting one in a query
+           string writes it into web-server logs, analytics and any Referer
+           sent to a third-party script on the page. Two safe routes instead:
+             1. the visitor has just created an account, so the server renders
+                their address into data-prefill below straight from the session
+             2. or the link carries an opaque, short-lived token (?t=...) that
+                the server resolves - no personal data in the URL either way
+           When it IS prefilled the page shows the address and asks for one
+           click, which is still an affirmative opt-in but removes the typing.
+           Klaviyo's own hosted page cannot do this at all: verified, it
+           prefills from neither _kx nor &email=, before or after hydration,
+           and it asks for first and last name on top. -->
+      <form id="f" novalidate data-prefill="">
+        <p class="confirm" id="confirm-line"></p>
         <input type="email" id="email" required autocomplete="email" placeholder="">
         <button type="submit" id="submit"></button>
       </form>
@@ -146,7 +161,8 @@ var COPY = {
   "okt": "Check your inbox",
   "okb": "Your code is on its way. It is valid for 5 days.",
   "err": "That did not work. Check the address and try again.",
-  "name": "English (IE)"
+  "name": "English (IE)",
+  "subpre": "This is the address on your account. One click and the code is on its way: 10% off your first order, up to €25, valid for 5 days."
  },
  "en-GB": {
   "h1": "Your 10% is one click away",
@@ -161,7 +177,8 @@ var COPY = {
   "okt": "Check your inbox",
   "okb": "Your code is on its way. It is valid for 5 days.",
   "err": "That did not work. Check the address and try again.",
-  "name": "English (UK)"
+  "name": "English (UK)",
+  "subpre": "This is the address on your account. One click and the code is on its way: 10% off your first order, up to £25, valid for 5 days."
  },
  "nl-NL": {
   "h1": "Je 10% is één klik weg",
@@ -176,7 +193,8 @@ var COPY = {
   "okt": "Kijk in je inbox",
   "okb": "Je code is op weg. Hij is 5 dagen geldig.",
   "err": "Dat lukte niet. Controleer het adres en probeer het opnieuw.",
-  "name": "Nederlands"
+  "name": "Nederlands",
+  "subpre": "Dit is het adres van je account. Eén klik en de code is op weg: 10% korting op je eerste bestelling, tot € 25, 5 dagen geldig."
  },
  "nl-BE": {
   "h1": "Je 10% is één klik weg",
@@ -191,7 +209,8 @@ var COPY = {
   "okt": "Kijk in je inbox",
   "okb": "Je code is op weg. Hij is 5 dagen geldig.",
   "err": "Dat lukte niet. Controleer het adres en probeer het opnieuw.",
-  "name": "Nederlands (BE)"
+  "name": "Nederlands (BE)",
+  "subpre": "Dit is het adres van je account. Eén klik en de code is op weg: 10% korting op je eerste bestelling, tot € 25, 5 dagen geldig."
  },
  "fr-FR": {
   "h1": "Vos 10% sont à un clic",
@@ -206,7 +225,8 @@ var COPY = {
   "okt": "Consultez votre boîte de réception",
   "okb": "Votre code est en route. Il est valable 5 jours.",
   "err": "Ça n'a pas fonctionné. Vérifiez l'adresse et réessayez.",
-  "name": "Français"
+  "name": "Français",
+  "subpre": "C'est l'adresse de votre compte. Un clic et le code part : 10% sur votre première commande, jusqu'à 25 €, valable 5 jours."
  },
  "fr-BE": {
   "h1": "Vos 10% sont à un clic",
@@ -221,7 +241,8 @@ var COPY = {
   "okt": "Consultez votre boîte de réception",
   "okb": "Votre code est en route. Il est valable 5 jours.",
   "err": "Ça n'a pas fonctionné. Vérifiez l'adresse et réessayez.",
-  "name": "Français (BE)"
+  "name": "Français (BE)",
+  "subpre": "C'est l'adresse de votre compte. Un clic et le code part : 10% sur votre première commande, jusqu'à 25 €, valable 5 jours."
  },
  "de-DE": {
   "h1": "Ihre 10% sind einen Klick entfernt",
@@ -236,7 +257,8 @@ var COPY = {
   "okt": "Sehen Sie in Ihr Postfach",
   "okb": "Ihr Code ist unterwegs. Er ist 5 Tage gültig.",
   "err": "Das hat nicht funktioniert. Prüfen Sie die Adresse und versuchen Sie es erneut.",
-  "name": "Deutsch"
+  "name": "Deutsch",
+  "subpre": "Das ist die Adresse Ihres Kontos. Ein Klick und der Code ist unterwegs: 10% auf Ihre erste Bestellung, bis zu 25 €, 5 Tage gültig."
  },
  "es-ES": {
   "h1": "Tu 10% está a un clic",
@@ -251,7 +273,8 @@ var COPY = {
   "okt": "Mira tu bandeja de entrada",
   "okb": "Tu código está en camino. Es válido 5 días.",
   "err": "No ha funcionado. Comprueba la dirección e inténtalo de nuevo.",
-  "name": "Español"
+  "name": "Español",
+  "subpre": "Esta es la dirección de tu cuenta. Un clic y el código sale: 10% en tu primer pedido, hasta 25 €, válido 5 días."
  },
  "it-IT": {
   "h1": "Il tuo 10% è a un clic",
@@ -266,7 +289,8 @@ var COPY = {
   "okt": "Controlla la tua casella",
   "okb": "Il tuo codice è in arrivo. È valido 5 giorni.",
   "err": "Non ha funzionato. Controlla l'indirizzo e riprova.",
-  "name": "Italiano"
+  "name": "Italiano",
+  "subpre": "Questo è l'indirizzo del tuo account. Un clic e il codice parte: 10% sul tuo primo ordine, fino a € 25, valido 5 giorni."
  }
 };
 var COMPANY_ID = "U9YUZK";      /* public key - safe in a browser */
@@ -302,7 +326,26 @@ Object.keys(COPY).forEach(function(k){
 });
 var current = pickLocale();
 apply(current);
-sel.addEventListener("change", function(){ current = sel.value; apply(current); });
+
+/* If the server rendered an address into data-prefill, hide the input and ask
+   for a single confirming click instead of making them type it again. */
+var PRE = (document.getElementById("f").getAttribute("data-prefill") || "").trim();
+if (PRE) {
+  document.getElementById("email").value = PRE;
+  document.getElementById("email").type = "hidden";
+  var cl = document.getElementById("confirm-line");
+  cl.textContent = PRE;
+  cl.style.display = "block";
+  /* the default subline asks them to leave an address that is already there */
+  var sp = COPY[current].subpre;
+  if (sp) document.getElementById("t-sub").textContent = sp;
+}
+sel.addEventListener("change", function(){
+  current = sel.value; apply(current);
+  if (PRE && COPY[current].subpre) {
+    document.getElementById("t-sub").textContent = COPY[current].subpre;
+  }
+});
 
 document.getElementById("f").addEventListener("submit", function(ev){
   ev.preventDefault();

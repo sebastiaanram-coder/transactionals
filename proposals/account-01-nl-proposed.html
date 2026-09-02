@@ -14,7 +14,16 @@
 .hp-ac1-hero{padding:30px 32px 24px;text-align:center;}
 .hp-ac1-h1{margin:0 0 10px;font-size:27px;line-height:34px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .hp-ac1-sub{margin:0;font-size:15px;line-height:24px;color:#555;}
-a.hp-ac1-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:20px;font-weight:700;padding:14px 26px;border-radius:9999px;margin-top:20px;}
+/* THE ACCOUNT ACTION IS A TEXT LINK, NOT A SECOND BUTTON.
+   Two pills split the attention of an email that exists to win a
+   subscription, so the offer keeps the only button. It is not removed
+   altogether, though: an account confirmation whose ONLY action is claiming
+   the discount is a promotion with service text wrapped round it, and the service
+   action is what makes this message sendable to a profile with no marketing
+   consent at all. One button, one text link.
+   (No percent signs in this block on purpose - it is inside a format
+   string, and a bare one breaks the build.) */
+a.hp-ac1-acclink{display:inline-block;margin-top:16px;font-size:15px;line-height:20px;font-weight:700;color:#008539;text-decoration:none;}
 .hp-ac1-sect{padding:4px 32px 8px;}
 .hp-ac1-row{border-top:1px solid #e5e5e5;padding:18px 0;}
 .hp-ac1-rowttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin:0 0 4px;}
@@ -51,7 +60,7 @@ a.hp-ac1-legallink{color:#8a8a8a;}
     <div class="hp-ac1-hero">
       <h1 class="hp-ac1-h1">Je Helloprint-account is klaar</h1>
       <p class="hp-ac1-sub">Je kunt bestellen, een opdracht volgen en een offerte oppakken vanaf één plek. Dit zit erin.</p>
-      <a class="hp-ac1-cta" href="https://www.helloprint.com/en-ie/my-account">Naar je account</a>
+      <a class="hp-ac1-acclink" href="https://www.helloprint.com/en-ie/my-account">Naar je account &rarr;</a>
     </div>
 
     <div class="hp-ac1-offer">

@@ -92,7 +92,16 @@ CSS = """
 .%(P)s-hero{padding:30px 32px 24px;text-align:center;}
 .%(P)s-h1{margin:0 0 10px;font-size:27px;line-height:34px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .%(P)s-sub{margin:0;font-size:15px;line-height:24px;color:#555;}
-a.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:20px;font-weight:700;padding:14px 26px;border-radius:9999px;margin-top:20px;}
+/* THE ACCOUNT ACTION IS A TEXT LINK, NOT A SECOND BUTTON.
+   Two pills split the attention of an email that exists to win a
+   subscription, so the offer keeps the only button. It is not removed
+   altogether, though: an account confirmation whose ONLY action is claiming
+   the discount is a promotion with service text wrapped round it, and the service
+   action is what makes this message sendable to a profile with no marketing
+   consent at all. One button, one text link.
+   (No percent signs in this block on purpose - it is inside a format
+   string, and a bare one breaks the build.) */
+a.%(P)s-acclink{display:inline-block;margin-top:16px;font-size:15px;line-height:20px;font-weight:700;color:#008539;text-decoration:none;}
 .%(P)s-sect{padding:4px 32px 8px;}
 .%(P)s-row{border-top:1px solid #e5e5e5;padding:18px 0;}
 .%(P)s-rowttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin:0 0 4px;}
@@ -132,7 +141,7 @@ BODY = """<div class="{P}-root">
     <div class="{P}-hero">
       <h1 class="{P}-h1">{T_H1}</h1>
       <p class="{P}-sub">{T_SUB}</p>
-      <a class="{P}-cta" href="{ACCOUNT_URL}">{T_ACCT}</a>
+      <a class="{P}-acclink" href="{ACCOUNT_URL}">{T_ACCT} &rarr;</a>
     </div>
 
     <div class="{P}-offer">
@@ -283,6 +292,12 @@ if "@@" in vis:
     import re as _r
     errs.append("a token survived unfilled: %s"
                 % sorted(set(_r.findall(r"@@[A-Z]+@@", vis))))
+# ONE PILL ONLY. If a second button appears the email stops being an account
+# confirmation that mentions an offer and becomes an offer with an account
+# confirmation attached.
+_pills = len(re.findall(r'class="hp-ac1-(?:cta|offcta)"', vis))
+if _pills != 1:
+    errs.append("%d pill buttons; the offer must be the only one" % _pills)
 if SUBSCRIBE_URL not in vis:
     errs.append("the subscribe link is missing, so the bridge to BEH-1 is broken")
 if "/en-ie/" in re.sub(r"en-IE' %\}https://www\.helloprint\.com/en-ie/", "", vis):
