@@ -392,6 +392,17 @@
    "fr-FR": "https://www.helloprint.com/fr-fr/durabilite",
    "nl-BE": "https://www.helloprint.com/nl-be/duurzaamheid",
    "nl-NL": "https://www.helloprint.com/nl-nl/duurzaamheid"
+  },
+  "my-account": {
+   "en-IE": "https://www.helloprint.com/en-ie/my-account",
+   "en-GB": "https://www.helloprint.com/en-gb/my-account",
+   "nl-NL": "https://www.helloprint.com/nl-nl/mijn-account",
+   "nl-BE": "https://www.helloprint.com/nl-be/mijn-account",
+   "fr-FR": "https://www.helloprint.com/fr-fr/mon-compte",
+   "fr-BE": "https://www.helloprint.com/fr-be/mon-compte",
+   "de-DE": "https://www.helloprint.com/de-de/mein-konto",
+   "es-ES": "https://www.helloprint.com/es-es/mi-cuenta",
+   "it-IT": "https://www.helloprint.com/it-it/account"
   }
  },
  "urls_note": "path -> locale -> the market's real localised URL, taken from the catalog feed and HTTP-verified. Preferred over the same-slug assumption in 'paths'. Belgium keeps the feed's own market segment; see data/catalog-welcome-tiles.json gaps."

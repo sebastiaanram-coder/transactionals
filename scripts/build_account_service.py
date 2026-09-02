@@ -47,8 +47,10 @@ ROOT = os.path.dirname(HERE)
 OUT = os.path.join(ROOT, "proposals")
 ASSETS = os.path.join(ROOT, "assets")
 
+import catalog as cat
 import doc
 import i18n
+import offers
 import klaviyo_assets as ka
 import subcategories as sc
 
@@ -64,6 +66,15 @@ CODE = None
 # can replace it as long as it writes to the same list.
 SUBSCRIBE_URL = "https://manage.kmail-lists.com/subscriptions/subscribe?a=U9YUZK&g=VAh232"
 
+
+
+def _cap(locale):
+    lang = i18n.LOCALE_LANG[locale]
+    cur = cat.item("standardflyers", locale)["currency"]
+    return cat.money(offers.WELCOME_CAP, cur, lang, whole=True)
+
+
+CAP_FILL = {"@@CAP@@": _cap}
 
 def datauri(name):
     mime = "image/png" if name.endswith(".png") else "image/jpeg"
@@ -81,22 +92,24 @@ CSS = """
 .%(P)s-hero{padding:30px 32px 24px;text-align:center;}
 .%(P)s-h1{margin:0 0 10px;font-size:27px;line-height:34px;font-weight:800;color:#191919;letter-spacing:-.01em;}
 .%(P)s-sub{margin:0;font-size:15px;line-height:24px;color:#555;}
-.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:20px;font-weight:700;padding:14px 26px;border-radius:9999px;margin-top:20px;}
+a.%(P)s-cta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:15px;line-height:20px;font-weight:700;padding:14px 26px;border-radius:9999px;margin-top:20px;}
 .%(P)s-sect{padding:4px 32px 8px;}
 .%(P)s-row{border-top:1px solid #e5e5e5;padding:18px 0;}
 .%(P)s-rowttl{display:block;font-size:16px;line-height:22px;font-weight:700;color:#191919;margin:0 0 4px;}
 .%(P)s-rowtx{margin:0;font-size:14px;line-height:22px;color:#555;}
-.%(P)s-rowlink{display:inline-block;margin-top:8px;font-size:14px;line-height:20px;font-weight:700;color:#008539;text-decoration:none;}
-.%(P)s-offer{margin:20px 32px 8px;background:#e8f5e9;border-radius:14px;padding:22px 24px;text-align:center;}
-.%(P)s-offttl{display:block;font-size:19px;line-height:26px;font-weight:800;color:#191919;margin:0 0 8px;}
-.%(P)s-offtx{margin:0;font-size:14px;line-height:22px;color:#333;}
+.%(P)s-offer{margin:4px 32px 20px;background:#e8f5e9;border:2px solid #008539;border-radius:16px;padding:24px 26px 20px;text-align:center;}
+.%(P)s-offeye{display:block;font-size:12px;line-height:16px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#008539;margin:0 0 8px;}
+.%(P)s-offttl{display:block;font-size:23px;line-height:29px;font-weight:800;color:#191919;margin:0 0 10px;letter-spacing:-.01em;}
+.%(P)s-offtx{margin:0;font-size:15px;line-height:23px;color:#333;}
+a.%(P)s-offcta{display:inline-block;background:#008539;color:#ffffff;text-decoration:none;font-size:16px;line-height:21px;font-weight:800;padding:15px 30px;border-radius:9999px;margin-top:18px;}
+.%(P)s-offsmall{margin:12px 0 0;font-size:12px;line-height:18px;color:#557;}
 .%(P)s-why{margin:24px 32px 0;border-top:1px solid #e5e5e5;padding-top:16px;}
 .%(P)s-whyttl{display:block;font-size:13px;line-height:18px;font-weight:700;color:#191919;margin:0 0 4px;}
 .%(P)s-whytx{margin:0;font-size:12px;line-height:19px;color:#8a8a8a;}
 .%(P)s-foot{padding:22px 32px 4px;text-align:center;}
 .%(P)s-footlogo img{width:120px;height:auto;border:0;}
 .%(P)s-legal{margin:12px 0 0;font-size:11px;line-height:18px;color:#8a8a8a;}
-.%(P)s-legal a{color:#8a8a8a;}
+a.%(P)s-legallink{color:#8a8a8a;}
 @media only screen and (max-width:620px){
   .%(P)s-hero{padding:24px 20px 20px;}
   .%(P)s-h1{font-size:23px;line-height:30px;}
@@ -122,29 +135,29 @@ BODY = """<div class="{P}-root">
       <a class="{P}-cta" href="{ACCOUNT_URL}">{T_ACCT}</a>
     </div>
 
+    <div class="{P}-offer">
+      <span class="{P}-offeye">{T_OFFEYEBROW}</span>
+      <span class="{P}-offttl">{T_OFFT}</span>
+      <p class="{P}-offtx">{T_OFFB}</p>
+      <a class="{P}-offcta" href="{SUBSCRIBE_URL}">{T_OFFCTA}</a>
+      <p class="{P}-offsmall">{T_OFFSMALL}</p>
+    </div>
+
     <div class="{P}-sect">
       <div class="{P}-row">
         <span class="{P}-rowttl">{T_S1T}</span>
         <p class="{P}-rowtx">{T_S1B}</p>
-        <a class="{P}-rowlink" href="{DESIGN_URL}">{T_S1T} &rarr;</a>
       </div>
       <div class="{P}-row">
         <span class="{P}-rowttl">{T_S2T}</span>
         <p class="{P}-rowtx">{T_S2B}</p>
-        <a class="{P}-rowlink" href="{QUOTE_URL}">{T_S2T} &rarr;</a>
       </div>
       <div class="{P}-row">
         <span class="{P}-rowttl">{T_S3T}</span>
         <p class="{P}-rowtx">{T_S3B}</p>
-        <a class="{P}-rowlink" href="{PRODUCTS_URL}">{T_S3T} &rarr;</a>
       </div>
     </div>
 
-    <div class="{P}-offer">
-      <span class="{P}-offttl">{T_OFFT}</span>
-      <p class="{P}-offtx">{T_OFFB}</p>
-      <a class="{P}-cta" href="{SUBSCRIBE_URL}">{T_OFFCTA}</a>
-    </div>
 
     <div class="{P}-why">
       <span class="{P}-whyttl">{T_WHYT}</span>
@@ -170,9 +183,11 @@ TRANSLATED = [
     ("s2b", "An odd size, a tight deadline or a large run. Our quotation team comes back within 24 hours."),
     ("s3t", "See what we print"),
     ("s3b", "Over 10,000 products, printed by local partners and delivered with the price you saw."),
-    ("offt", "Want 10% off your first order?"),
-    ("offb", "You did not opt in to our emails, so we have not sent you a code. Subscribe and we will send it straight over - it is valid for 5 days and there is one per customer."),
-    ("offcta", "Subscribe and get my 10%"),
+    ("offeyebrow", "LAST CHANCE"),
+    ("offt", "You are missing 10% off your first order"),
+    ("offb", "This is the only email we are allowed to send you. Subscribe and your code arrives within minutes: 10% off your first order, up to @@CAP@@, valid 5 days."),
+    ("offcta", "Yes, send me my 10%"),
+    ("offsmall", "One per customer. You can unsubscribe again at any time."),
     ("acct", "Go to your account"),
     ("whyt", "Why you received this"),
     ("whyb", "This is a one-off service message confirming the Helloprint account you created. It is not a marketing email and you will not receive another unless you subscribe."),
@@ -184,13 +199,15 @@ def build(live, locale=None):
     vals = {"P": P, "CSS": CSS, "SUBSCRIBE_URL": SUBSCRIBE_URL}
     for k, e in TRANSLATED:
         vals["T_" + re.sub(r"[^A-Z0-9]", "_", k.upper())] = tr(k, e)
+    # offb names the cap, which is a MONEY value and therefore per locale
+    vals["T_OFFB"] = tr("offb", dict(TRANSLATED)["offb"], fills_loc=CAP_FILL)
     vals["T_FOOT_VAT"] = tr("foot.vat", "VAT")
     vals["IMG_WORDMARK"] = (ka.url("helloprint-wordmark-white-on-ink.png") if live
                             else datauri("helloprint-wordmark-white-on-ink.png"))
     vals["IMG_WORDMARK_DARK"] = (ka.url("helloprint-wordmark-dark-padded.png") if live
                                  else datauri("helloprint-wordmark-dark-padded.png"))
     # Market-aware, and only to pages that actually resolve in that market.
-    vals["ACCOUNT_URL"] = sc.market_url_verified("all-products", live)
+    vals["ACCOUNT_URL"] = sc.market_url_verified("my-account", live)
     vals["DESIGN_URL"] = sc.market_url_verified("always-a-perfect-design", live)
     vals["QUOTE_URL"] = sc.market_url_verified("quote", live)
     vals["PRODUCTS_URL"] = sc.market_url_verified("all-products", live)
@@ -262,6 +279,10 @@ for bad in (_off.WELCOME_CODE,) + tuple(_off.NOT_WELCOME):
 if CODE:
     errs.append("CODE is set - a service message must not carry one without a "
                 "privacy sign-off; read the header of this file")
+if "@@" in vis:
+    import re as _r
+    errs.append("a token survived unfilled: %s"
+                % sorted(set(_r.findall(r"@@[A-Z]+@@", vis))))
 if SUBSCRIBE_URL not in vis:
     errs.append("the subscribe link is missing, so the bridge to BEH-1 is broken")
 if "/en-ie/" in re.sub(r"en-IE' %\}https://www\.helloprint\.com/en-ie/", "", vis):

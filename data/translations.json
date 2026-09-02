@@ -4409,28 +4409,28 @@
    "it": "Oltre 10.000 prodotti, stampati da partner locali e consegnati al prezzo che hai visto."
   },
   "offt": {
-   "en": "Want 10% off your first order?",
-   "nl": "Wil je 10% korting op je eerste bestelling?",
-   "fr": "Vous voulez 10% sur votre première commande ?",
-   "de": "Möchten Sie 10% auf Ihre erste Bestellung?",
-   "es": "¿Quieres un 10% en tu primer pedido?",
-   "it": "Vuoi il 10% sul tuo primo ordine?"
+   "en": "You are missing 10% off your first order",
+   "nl": "Je mist 10% korting op je eerste bestelling",
+   "fr": "Vous passez à côté de 10% sur votre première commande",
+   "de": "Ihnen entgehen 10% auf Ihre erste Bestellung",
+   "es": "Te estás perdiendo un 10% en tu primer pedido",
+   "it": "Ti stai perdendo il 10% sul tuo primo ordine"
   },
   "offb": {
-   "en": "You did not opt in to our emails, so we have not sent you a code. Subscribe and we will send it straight over - it is valid for 5 days and there is one per customer.",
-   "nl": "Je hebt je niet aangemeld voor onze e-mails, dus we hebben je geen code gestuurd. Meld je aan en we sturen hem meteen - hij is 5 dagen geldig en er is er één per klant.",
-   "fr": "Vous ne vous êtes pas inscrit à nos e-mails, nous ne vous avons donc pas envoyé de code. Inscrivez-vous et nous vous l'envoyons aussitôt - valable 5 jours, un par client.",
-   "de": "Sie haben unsere E-Mails nicht abonniert, daher haben wir Ihnen keinen Code geschickt. Melden Sie sich an und wir senden ihn sofort - 5 Tage gültig, einer pro Kunde.",
-   "es": "No te suscribiste a nuestros correos, así que no te hemos enviado un código. Suscríbete y te lo enviamos enseguida: válido 5 días y uno por cliente.",
-   "it": "Non ti sei iscritto alle nostre email, quindi non ti abbiamo inviato un codice. Iscriviti e te lo mandiamo subito: valido 5 giorni, uno per cliente."
+   "en": "This is the only email we are allowed to send you. Subscribe and your code arrives within minutes: 10% off your first order, up to @@CAP@@, valid 5 days.",
+   "nl": "Dit is de enige e-mail die we je mogen sturen. Meld je aan en je code komt binnen enkele minuten: 10% korting op je eerste bestelling, tot @@CAP@@, 5 dagen geldig.",
+   "fr": "C'est le seul e-mail que nous sommes autorisés à vous envoyer. Inscrivez-vous et votre code arrive en quelques minutes : 10% sur votre première commande, jusqu'à @@CAP@@, valable 5 jours.",
+   "de": "Das ist die einzige E-Mail, die wir Ihnen senden dürfen. Melden Sie sich an und Ihr Code kommt innerhalb von Minuten: 10% auf Ihre erste Bestellung, bis zu @@CAP@@, 5 Tage gültig.",
+   "es": "Este es el único correo que podemos enviarte. Suscríbete y tu código llega en minutos: 10% en tu primer pedido, hasta @@CAP@@, válido 5 días.",
+   "it": "Questa è la sola email che possiamo inviarti. Iscriviti e il tuo codice arriva in pochi minuti: 10% sul tuo primo ordine, fino a @@CAP@@, valido 5 giorni."
   },
   "offcta": {
-   "en": "Subscribe and get my 10%",
-   "nl": "Aanmelden en mijn 10% ontvangen",
-   "fr": "M'inscrire et obtenir mes 10%",
-   "de": "Anmelden und meine 10% erhalten",
-   "es": "Suscribirme y recibir mi 10%",
-   "it": "Iscrivimi e ricevi il 10%"
+   "en": "Yes, send me my 10%",
+   "nl": "Ja, stuur mij mijn 10%",
+   "fr": "Oui, envoyez-moi mes 10%",
+   "de": "Ja, senden Sie mir meine 10%",
+   "es": "Sí, envíame mi 10%",
+   "it": "Sì, inviami il mio 10%"
   },
   "acct": {
    "en": "Go to your account",
@@ -4455,6 +4455,30 @@
    "de": "Dies ist eine einmalige Servicenachricht zu dem von Ihnen erstellten Helloprint-Konto. Es ist keine Marketing-E-Mail, und Sie erhalten keine weitere, sofern Sie sich nicht anmelden.",
    "es": "Este es un mensaje de servicio único que confirma la cuenta de Helloprint que creaste. No es un correo de marketing y no recibirás otro salvo que te suscribas.",
    "it": "Questo è un messaggio di servizio una tantum che conferma l'account Helloprint che hai creato. Non è un'email di marketing e non ne riceverai altre, a meno che tu non ti iscriva."
+  },
+  "offeyebrow": {
+   "en": "LAST CHANCE",
+   "nl": "LAATSTE KANS",
+   "fr": "DERNIÈRE CHANCE",
+   "de": "LETZTE CHANCE",
+   "es": "ÚLTIMA OPORTUNIDAD",
+   "it": "ULTIMA OCCASIONE"
+  },
+  "offsmall": {
+   "en": "One per customer. You can unsubscribe again at any time.",
+   "nl": "Eén per klant. Je kunt je altijd weer afmelden.",
+   "fr": "Un par client. Vous pouvez vous désinscrire à tout moment.",
+   "de": "Einer pro Kunde. Sie können sich jederzeit wieder abmelden.",
+   "es": "Uno por cliente. Puedes darte de baja en cualquier momento.",
+   "it": "Uno per cliente. Puoi disiscriverti in qualsiasi momento."
+  },
+  "subject": {
+   "en": "Your Helloprint account is ready",
+   "nl": "Je Helloprint-account is klaar",
+   "fr": "Votre compte Helloprint est prêt",
+   "de": "Ihr Helloprint-Konto ist bereit",
+   "es": "Tu cuenta de Helloprint está lista",
+   "it": "Il tuo account Helloprint è pronto"
   }
  }
 }
