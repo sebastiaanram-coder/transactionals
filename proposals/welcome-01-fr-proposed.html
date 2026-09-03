@@ -52,6 +52,16 @@ a.hp-w1-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;
   66%,92%{transform:translateX(-200%)}
   100%{transform:translateX(0)}
 }
+
+/* TWO-ITEM VARIANT. Outside the US the strip drops the price-inclusive claim,
+   which leaves two items - and hpw1usp would still scroll to -200%, i.e. past
+   the last item to blank. Same timing, one step fewer. */
+@keyframes hpw1usp2{
+  0%,40%{transform:translateX(0)}
+  50%,90%{transform:translateX(-100%)}
+  100%{transform:translateX(0)}
+}
+.hp-w1-usp-track2{animation-name:hpw1usp2;}
 .hp-w1-sect{padding:24px 24px 0;}
 .hp-w1-secttl{margin:0 0 6px;font-size:24px;line-height:31px;font-weight:800;color:#191919;text-align:center;letter-spacing:-.01em;}
 .hp-w1-sectsub{margin:0 0 22px;font-size:15px;line-height:22px;color:#555555;text-align:center;}
@@ -136,13 +146,13 @@ a.hp-w1-link{color:#008539;text-decoration:none;font-weight:700;font-size:14px;l
     <!-- hero : real text over a pre-faded team photo -->
     <div class="hp-w1-hero">
       <div class="hp-w1-hero-ov">
-        <span class="hp-w1-eyebrow">10% SUR VOTRE PREMIÈRE COMMANDE</span>
+        <span class="hp-w1-eyebrow">-10% SUR VOTRE PREMIÈRE COMMANDE</span>
         <h1 class="hp-w1-h1">Bienvenue chez Helloprint</h1>
-        <p class="hp-w1-sub">L'impression sans prise de tête, avec des gens qui vous épaulent.</p>
+        <p class="hp-w1-sub">L'impression en toute simplicité, une équipe d'experts à vos côtés</p>
         <div class="hp-w1-code">
           <span class="hp-w1-codelbl">VOTRE CODE</span>
           <span class="hp-w1-codeval">HELLO-8DS2-10</span>
-          <span class="hp-w1-codeexp">10% sur votre première commande, jusqu'à 25 € &middot; valable 5 jours</span>
+          <span class="hp-w1-codeexp">-10% sur votre première commande, jusqu'à 25 € &middot; valable 5 jours</span>
         </div>
         <a class="hp-w1-cta" href="https://www.helloprint.com/en-ie/all-products">Passer ma première commande</a>
         <span class="hp-w1-ctanote">À utiliser au moment du paiement, sur tout le catalogue.</span>
@@ -154,25 +164,21 @@ a.hp-w1-link{color:#008539;text-decoration:none;font-weight:700;font-size:14px;l
          falls back to USP 1. Outlook gets a static bar via the MSO conditional,
          because it ignores both overflow and transform. -->
     <!--[if mso]>
-    <div class="hp-w1-usp-mso">&ldquo;Chaque prix est tout compris : livraison et TVA incluses&rdquo;</div>
+    <div class="hp-w1-usp-mso">&ldquo;Vérification de tous les fichiers avant impression&rdquo;</div>
     <![endif]-->
     <!--[if !mso]><!-->
     <div class="hp-w1-uspwrap">
     <div class="hp-w1-usp-tail"></div>
     <div class="hp-w1-usp">
-      <div class="hp-w1-usp-track">
-        <div class="hp-w1-usp-item">&ldquo;Chaque prix est tout compris : livraison et TVA incluses&rdquo;</div>
-        <div class="hp-w1-usp-item">&ldquo;Aucun fichier ne part à l'impression sans vérification&rdquo;</div>
-        <div class="hp-w1-usp-item">&ldquo;Satisfaction garantie à 100% sur chaque commande&rdquo;</div>
-      </div>
+      <div class="hp-w1-usp-track hp-w1-usp-track2"><div class="hp-w1-usp-item">&ldquo;Vérification de tous les fichiers avant impression&rdquo;</div><div class="hp-w1-usp-item">&ldquo;100% de satisfaction garantie&rdquo;</div></div>
     </div>
     </div>
     <!--<![endif]-->
 
     <!-- product grid : image, title, quantity, price -->
     <div class="hp-w1-sect">
-      <h2 class="hp-w1-secttl">Ce que les entreprises commandent en premier</h2>
-      <p class="hp-w1-sectsub">Choisissez : les 10% partent au moment du paiement.</p>
+      <h2 class="hp-w1-secttl">Découvrez nos meilleures ventes</h2>
+      <p class="hp-w1-sectsub">Trouvez votre bonheur et profitez de -10%</p>
 
       <table class="hp-w1-grid" role="presentation" cellpadding="0" cellspacing="0" width="100%">
         <tr>
@@ -229,8 +235,8 @@ a.hp-w1-link{color:#008539;text-decoration:none;font-weight:700;font-size:14px;l
     <!-- artwork reassurance : links to Centre d'aide, not mailto -->
     <div class="hp-w1-card">
       <h3 class="hp-w1-cardttl">Un doute sur votre fichier ?</h3>
-      <p class="hp-w1-cardtxt">Envoyez ce que vous avez. Chaque fichier passe au contrôle avant impression, et on vous prévient si quelque chose doit bouger.</p>
-      <a class="hp-w1-link" href="https://www.helloprint.com/en-ie/cs">Comment marche la vérification</a>
+      <p class="hp-w1-cardtxt">Envoyez vos fichiers tels quels. Nous vérifions chaque document avant impression et vous contactons si une modification est nécessaire.</p>
+      <a class="hp-w1-link" href="https://www.helloprint.com/en-ie/cs">Comment fonctionne la vérification</a>
     </div>
 
     <!-- trustpilot : real stars graphic, real text -->

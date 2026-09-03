@@ -52,6 +52,16 @@ a.hp-w1-cta{position:relative;z-index:2;display:inline-block;background:#ffffff;
   66%,92%{transform:translateX(-200%)}
   100%{transform:translateX(0)}
 }
+
+/* TWO-ITEM VARIANT. Outside the US the strip drops the price-inclusive claim,
+   which leaves two items - and hpw1usp would still scroll to -200%, i.e. past
+   the last item to blank. Same timing, one step fewer. */
+@keyframes hpw1usp2{
+  0%,40%{transform:translateX(0)}
+  50%,90%{transform:translateX(-100%)}
+  100%{transform:translateX(0)}
+}
+.hp-w1-usp-track2{animation-name:hpw1usp2;}
 .hp-w1-sect{padding:24px 24px 0;}
 .hp-w1-secttl{margin:0 0 6px;font-size:24px;line-height:31px;font-weight:800;color:#191919;text-align:center;letter-spacing:-.01em;}
 .hp-w1-sectsub{margin:0 0 22px;font-size:15px;line-height:22px;color:#555555;text-align:center;}
@@ -154,17 +164,13 @@ a.hp-w1-link{color:#008539;text-decoration:none;font-weight:700;font-size:14px;l
          falls back to USP 1. Outlook gets a static bar via the MSO conditional,
          because it ignores both overflow and transform. -->
     <!--[if mso]>
-    <div class="hp-w1-usp-mso">&ldquo;Cada precio lo incluye todo: envío e IVA&rdquo;</div>
+    <div class="hp-w1-usp-mso">&ldquo;Ningún archivo se imprime sin revisar&rdquo;</div>
     <![endif]-->
     <!--[if !mso]><!-->
     <div class="hp-w1-uspwrap">
     <div class="hp-w1-usp-tail"></div>
     <div class="hp-w1-usp">
-      <div class="hp-w1-usp-track">
-        <div class="hp-w1-usp-item">&ldquo;Cada precio lo incluye todo: envío e IVA&rdquo;</div>
-        <div class="hp-w1-usp-item">&ldquo;Ningún archivo se imprime sin revisar&rdquo;</div>
-        <div class="hp-w1-usp-item">&ldquo;100% de satisfacción garantizada en cada pedido&rdquo;</div>
-      </div>
+      <div class="hp-w1-usp-track hp-w1-usp-track2"><div class="hp-w1-usp-item">&ldquo;Ningún archivo se imprime sin revisar&rdquo;</div><div class="hp-w1-usp-item">&ldquo;100% de satisfacción garantizada en cada pedido&rdquo;</div></div>
     </div>
     </div>
     <!--<![endif]-->

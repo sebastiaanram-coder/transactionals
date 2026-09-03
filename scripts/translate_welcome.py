@@ -402,6 +402,83 @@ def strings_for(slug):
     return keys + [(k, e) for k, e in SHARED_IN_FILE]
 
 
+
+# --------------------------------------------------- the all-inclusive-price USP
+#
+# "Every price includes delivery and VAT" IS TRUE IN THE US ONLY. Sebastiaan
+# confirmed it is a US proposition: elsewhere prices exclude VAT and delivery,
+# which _shared/px.exvat_note has been saying in the other emails all along. So
+# the claim was not just off-brand outside the US, the two lines contradicted
+# each other.
+#
+# WHY THIS IS NOT A TEXT SWAP. The USP strip is a filmstrip of THREE items
+# animated by hpw1usp, whose keyframes step translateX to -100% and then -200%.
+# Drop an item and leave the animation alone and the third step scrolls to blank.
+# Outlook, which ignores transform, gets a separate static bar showing item one -
+# so the claim appears TWICE in the markup and both have to go.
+#
+# The strip is therefore emitted twice, once per shape, behind a locale switch:
+# three items on hpw1usp for en-US, two on hpw1usp2 for everyone else. Duplicated
+# markup costs about 1KB stored and nothing rendered, and it keeps each shape's
+# animation self-contained rather than making one keyframe serve both.
+USP_MSO_RE = re.compile(r'<div class="hp-w1-usp-mso">(.*?)</div>', re.S)
+
+# MATCH THE WHOLE TRACK, NOT THE FIRST ITEM. A non-greedy (.*?)</div> stops at
+# item one's own closing tag, so the rebuilt track was inserted and items two and
+# three were left dangling outside it - two items in the strip and two loose
+# copies below it. The track holds nothing but item divs, so say so.
+USP_TRACK_RE = re.compile(
+    r'<div class="hp-w1-usp-track">\s*'
+    r'((?:<div class="hp-w1-usp-item">.*?</div>\s*)+)'
+    r'</div>', re.S)
+USP_ITEM_RE = re.compile(r'<div class="hp-w1-usp-item">.*?</div>', re.S)
+US_LOCALE = "en-US"
+
+
+def _usp_items(html):
+    """The strip's items, or None if the markup is not the shape we expect."""
+    m = USP_TRACK_RE.search(html)
+    if not m:
+        return None, None
+    items = USP_ITEM_RE.findall(m.group(1))
+    return m, items
+
+
+def _inner(item):
+    return re.sub(r'^<div class="hp-w1-usp-item">|</div>$', "", item)
+
+
+def usp_strip(html, slug, live, locale=None):
+    """Show the price-inclusive USP to en-US only, and fix the animation."""
+    if slug != "welcome-01":
+        return html
+    m, items = _usp_items(html)
+    if not items or len(items) != 3:
+        errs.append("welcome-01: expected a 3-item USP track, found %s"
+                    % (len(items) if items else "no track"))
+        return html
+
+    three = '<div class="hp-w1-usp-track">' + "".join(items) + "</div>"
+    two = ('<div class="hp-w1-usp-track hp-w1-usp-track2">'
+           + "".join(items[1:]) + "</div>")
+    mso_us = '<div class="hp-w1-usp-mso">%s</div>' % _inner(items[0])
+    mso_rest = '<div class="hp-w1-usp-mso">%s</div>' % _inner(items[1])
+
+    if not live:
+        if (locale or i18n.FALLBACK_LOCALE) == US_LOCALE:
+            return html
+        html = USP_MSO_RE.sub(lambda _m: mso_rest, html, count=1)
+        return USP_TRACK_RE.sub(lambda _m: two, html, count=1)
+
+    sw = "{%% if %s == '%s' %%}%s{%% else %%}%s{%% endif %%}"
+    html = USP_MSO_RE.sub(
+        lambda _m: sw % (i18n.LOCALE_EXPR, US_LOCALE, mso_us, mso_rest),
+        html, count=1)
+    html = USP_TRACK_RE.sub(
+        lambda _m: sw % (i18n.LOCALE_EXPR, US_LOCALE, three, two),
+        html, count=1)
+    return html
+
 def render(html, slug, locale=None, live=False):
     """Swap each English string for one locale's text, or for a nine-way switch.
 
@@ -452,6 +529,7 @@ def render(html, slug, locale=None, live=False):
     html = catalog_tiles(html, slug, live, locale)
     html = offer_code(html)
     html = trustpilot_link(html, slug, live, locale)
+    html = usp_strip(html, slug, live, locale)
     html = html_lang(html, live, locale)
     return link_assets(html, live)
 

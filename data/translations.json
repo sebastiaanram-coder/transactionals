@@ -3461,7 +3461,7 @@
   "sub": {
    "en": "Print made simple, by people who have your back.",
    "nl": "Drukwerk zonder gedoe, met mensen die naast je staan.",
-   "fr": "L'impression sans prise de tête, avec des gens qui vous épaulent.",
+   "fr": "L'impression en toute simplicité, une équipe d'experts à vos côtés",
    "de": "Drucken ohne Umstände, mit Menschen, die hinter Ihnen stehen.",
    "es": "Imprimir sin complicaciones, con gente que te respalda.",
    "it": "Stampare senza complicazioni, con persone che ti danno una mano.",
@@ -3470,7 +3470,7 @@
   "code_line": {
    "en": "10% off your first order, up to @@CAP@@ &middot; expires in 5 days",
    "nl": "10% korting op je eerste order, tot @@CAP@@ &middot; nog 5 dagen geldig",
-   "fr": "10% sur votre première commande, jusqu'à @@CAP@@ &middot; valable 5 jours",
+   "fr": "-10% sur votre première commande, jusqu'à @@CAP@@ &middot; valable 5 jours",
    "de": "10% auf Ihre erste Bestellung, bis zu @@CAP@@ &middot; nur 5 Tage gültig",
    "es": "10% en tu primer pedido, hasta @@CAP@@ &middot; válido 5 días",
    "it": "10% sul tuo primo ordine, fino a @@CAP@@ &middot; valido 5 giorni",
@@ -3498,7 +3498,7 @@
   "usp.1": {
    "en": "&ldquo;We check every file before it prints&rdquo;",
    "nl": "&ldquo;Geen bestand gaat op de pers zonder controle&rdquo;",
-   "fr": "&ldquo;Aucun fichier ne part à l'impression sans vérification&rdquo;",
+   "fr": "&ldquo;Vérification de tous les fichiers avant impression&rdquo;",
    "de": "&ldquo;Keine Datei geht ungeprüft in den Druck&rdquo;",
    "es": "&ldquo;Ningún archivo se imprime sin revisar&rdquo;",
    "it": "&ldquo;Nessun file va in stampa senza controllo&rdquo;",
@@ -3507,7 +3507,7 @@
   "usp.2": {
    "en": "&ldquo;Backed by our 100% satisfaction guarantee&rdquo;",
    "nl": "&ldquo;100% tevredenheidsgarantie op elke order&rdquo;",
-   "fr": "&ldquo;Satisfaction garantie à 100% sur chaque commande&rdquo;",
+   "fr": "&ldquo;100% de satisfaction garantie&rdquo;",
    "de": "&ldquo;100% Zufriedenheitsgarantie auf jede Bestellung&rdquo;",
    "es": "&ldquo;100% de satisfacción garantizada en cada pedido&rdquo;",
    "it": "&ldquo;Soddisfazione garantita al 100% su ogni ordine&rdquo;",
@@ -3516,7 +3516,7 @@
   "sect_h": {
    "en": "What businesses order first",
    "nl": "Waar bedrijven mee beginnen",
-   "fr": "Ce que les entreprises commandent en premier",
+   "fr": "Découvrez nos meilleures ventes",
    "de": "Damit fangen Unternehmen an",
    "es": "Con esto empiezan las empresas",
    "it": "Da qui partono le aziende",
@@ -3525,7 +3525,7 @@
   "sect_sub": {
    "en": "Pick one and your 10% comes off at checkout.",
    "nl": "Kies er één. De 10% halen we er bij het afrekenen af.",
-   "fr": "Choisissez : les 10% partent au moment du paiement.",
+   "fr": "Trouvez votre bonheur et profitez de -10%",
    "de": "Eins aussuchen – die 10% gehen beim Bezahlen ab.",
    "es": "Elige uno y el 10% se descuenta al pagar.",
    "it": "Scegline uno, il 10% si scala alla cassa.",
@@ -3552,7 +3552,7 @@
   "file_b": {
    "en": "Send us whatever you have. We check every file before anything goes to print, and we tell you if something needs fixing.",
    "nl": "Stuur gewoon wat je hebt. Elk bestand gaat langs de controle voordat het de pers op gaat, en we trekken aan de bel als er iets aangepast moet worden.",
-   "fr": "Envoyez ce que vous avez. Chaque fichier passe au contrôle avant impression, et on vous prévient si quelque chose doit bouger.",
+   "fr": "Envoyez vos fichiers tels quels. Nous vérifions chaque document avant impression et vous contactons si une modification est nécessaire.",
    "de": "Schicken Sie einfach, was da ist. Jede Datei geht vor dem Druck durch die Prüfung, und wir sagen Bescheid, wenn etwas angepasst werden muss.",
    "es": "Manda lo que tengas. Cada archivo pasa por revisión antes de imprimir, y te avisamos si hay algo que cambiar.",
    "it": "Manda quello che hai. Ogni file passa dal controllo prima della stampa, e se c'è da sistemare qualcosa ti avvisiamo.",
@@ -3561,7 +3561,7 @@
   "file_link": {
    "en": "See how file checking works",
    "nl": "Zo werkt de bestandscontrole",
-   "fr": "Comment marche la vérification",
+   "fr": "Comment fonctionne la vérification",
    "de": "So funktioniert die Dateiprüfung",
    "es": "Así funciona la revisión de archivos",
    "it": "Come funziona il controllo dei file",
@@ -3651,7 +3651,7 @@
   "eyebrow": {
    "en": "10% OFF YOUR FIRST ORDER",
    "nl": "10% KORTING OP JE EERSTE ORDER",
-   "fr": "10% SUR VOTRE PREMIÈRE COMMANDE",
+   "fr": "-10% SUR VOTRE PREMIÈRE COMMANDE",
    "de": "10% AUF IHRE ERSTE BESTELLUNG",
    "es": "10% EN TU PRIMER PEDIDO",
    "it": "10% SUL TUO PRIMO ORDINE",
