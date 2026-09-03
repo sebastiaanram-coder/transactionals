@@ -607,8 +607,14 @@ for f in FLOWS:
 # inlined as srcdoc, but six languages across every built email would add several
 # megabytes to a page that is already 900KB. These are real files in the repo and
 # the repo is published, so the toggle just points the iframe at one.
+# The bar and PREVIEW_LANGS are built from this, so a market absent here cannot
+# be proofread even when its preview file exists - which is what hid Svenska,
+# and en-US had no file at all because previews are written per LANGUAGE and
+# en-US is a locale variant of English. See scripts/refresh_overview_previews.py,
+# which adds any missing entry to an already-generated document.
 LANG_NAMES = {"en": "English", "nl": "Nederlands", "fr": "Français",
-              "de": "Deutsch", "es": "Español", "it": "Italiano"}
+              "de": "Deutsch", "es": "Español", "it": "Italiano",
+              "sv": "Svenska", "en-US": "English (US)"}
 LANGS = list(LANG_NAMES)
 pv_langs = {}
 for f in FLOWS:

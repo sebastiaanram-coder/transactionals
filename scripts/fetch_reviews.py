@@ -48,7 +48,7 @@ DOMAIN = "helloprint.com"
 # Languages we need a review in. Derived from real order volume: French and
 # Dutch are about three quarters of retail demand, English is a minority but
 # not small, Spanish and Italian are present.
-LANGUAGES = ["en", "nl", "fr", "es", "it", "de"]
+LANGUAGES = ["en", "nl", "fr", "es", "it", "de", "sv"]
 
 # our category slug -> the tag values that mean it
 #
@@ -149,6 +149,9 @@ GENERIC_DF = 0.06
 # Spanish likewise. Dropping a modifier that is carrying a product on its own
 # makes the product unfindable.
 MODIFIERS = {
+    "sv": {"tryck", "trycka", "tryckt", "tryckta", "tryckeri", "papper",
+           "företag", "dokument", "beställning", "beställa", "leverans",
+           "kvalitet", "kvalité", "förpackning", "rulle"},
     "en": {"print", "printed", "printing", "paper", "business", "document",
            "commercial", "packaging", "roll"},
     "nl": {"print", "bedrukt", "bedrukte", "bedrukken", "papier", "papieren",
@@ -166,7 +169,10 @@ MODIFIERS = {
 
 LANG_LOCALES = {"en": ["en-IE", "en-GB"], "nl": ["nl", "nl-BE"],
                 "fr": ["fr-FR", "fr-BE"], "es": ["es-ES"], "it": ["it"],
-                "de": ["de-DE"]}
+                "de": ["de-DE"],
+                # Swedish: 129 reviews on the business unit, 82 of them five
+                # star, so the pools have something to choose from
+                "sv": ["sv-SE"]}
 
 # tag slug -> the email whose tiles supply its vocabulary
 TAG_TO_EMAIL = {
@@ -232,8 +238,46 @@ JUNK_AUTHORS = {"false", "true", "null", "none", "n/a", "na", "anonymous",
                 "anoniem", "anonyme", "anonimo", "anónimo", "-", "--", "."}
 
 
+# A FIVE-STAR REVIEW CAN STILL OPEN WITH A COMPLAINT.
+#
+# "Lite strul vid beställningen men när detta var löst så levererades det jag
+# förväntat mig" is five stars, correctly tagged and about the right product -
+# and it opens with "a bit of hassle with the order". In a proof block whose
+# whole job is reassurance, the first clause is what the reader takes away.
+# Neither the star filter nor the relevance filter can see this: one reads a
+# number, the other looks for product nouns.
+#
+# Hand-written per language, on the same terms as MODIFIERS: these are
+# complaint words, not product translations, so a wrong entry costs a missed
+# match rather than a confident lie. Deliberately NOT the conjunctions ("men",
+# "but", "mais") - those are far too common in ordinary praise to ban.
+GRUMBLES = {
+    "en": ("problem", "issue", "mistake", "unfortunately", "wrong", "late",
+           "delay", "complaint", "hassle", "error", "damaged"),
+    "nl": ("probleem", "helaas", "fout", "verkeerd", "te laat", "vertraging",
+           "klacht", "gedoe", "beschadigd"),
+    "fr": ("problème", "souci", "malheureusement", "erreur", "retard",
+           "réclamation", "abîmé", "endommagé"),
+    "de": ("problem", "leider", "fehler", "falsch", "verspätung", "beschwerde",
+           "beschädigt"),
+    "es": ("problema", "desgraciadamente", "lamentablemente", "error",
+           "equivocado", "retraso", "reclamación", "dañado"),
+    "it": ("problema", "purtroppo", "errore", "sbagliato", "ritardo",
+           "reclamo", "danneggiato"),
+    "sv": ("strul", "problem", "tyvärr", "fel", "krångel", "försenad",
+           "försening", "reklamation", "skadad", "miss"),
+}
+
+
+def grumbles(r):
+    """True if the text carries a complaint word in its own language."""
+    t = (r.get("text") or "").lower()
+    return any(w in t for w in GRUMBLES.get(r.get("language") or "", ()))
+
+
 def usable(r):
     if r["stars"] != 5:                      return False
+    if grumbles(r):                          return False
     a = r["author"].strip()
     if not a:                                return False
     if a.lower() in JUNK_AUTHORS:            return False

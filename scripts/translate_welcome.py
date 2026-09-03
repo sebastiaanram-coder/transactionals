@@ -147,6 +147,9 @@ TILE_PRODUCT = [("standardflyers", "standardflyers"),
 
 TILE_EMAILS = ("welcome-01",)
 
+# locales whose preview cannot be derived from a language preview
+PREVIEW_LOCALES = ("en-US",)
+
 TILE_RE = re.compile(r'(<a class="hp-w1-tile" href=")([^"]*)(">)(.*?)(</a>)', re.S)
 
 
@@ -618,6 +621,17 @@ for slug in EMAILS:
         loc = next(l for l, x in i18n.LOCALE_LANG.items() if x == lg)
         io.open(os.path.join(OUT, "%s-%s-proposed.html" % (slug, lg)), "w",
                 encoding="utf-8").write(render(english, slug, loc))
+    # A LOCALE VARIANT NEEDS ITS OWN PREVIEW TOO.
+    #
+    # The loop above is per LANGUAGE, and en-US is not a language - it reads
+    # English prose with per-locale overrides. So no US preview was ever written
+    # and the overview had no US button, even though the US email differs in
+    # three visible ways: dollars, /en-us/ links, and "includes shipping" where
+    # the others claim VAT. Proofreading it needs the locale, not the language.
+    for _loc in PREVIEW_LOCALES:
+        io.open(os.path.join(OUT, "%s-%s-proposed.html" % (slug, _loc)), "w",
+                encoding="utf-8").write(render(english, slug, _loc))
+
     _live = render(english, slug, None, True)
     io.open(os.path.join(OUT, slug + "-klaviyo.html"), "w",
             encoding="utf-8").write(_live)
@@ -635,10 +649,21 @@ LEAKS = ["Do you need help?", "Chat with us", "Help Centre",
          "Start your first order", "Read our story", "Read the reviews"]
 import glob
 for f in sorted(glob.glob(os.path.join(OUT, "welcome-0*-*-proposed.html"))):
-    lg = os.path.basename(f).rsplit("-", 2)[1]
+    # PARSE THE WHOLE TAG, NOT THE LAST TWO DASHES. rsplit("-", 2) reads
+    # "welcome-01-en-US-proposed.html" as language "US", and then every English
+    # string in the US preview looked like a leak. The tag is whatever sits
+    # between the slug and "-proposed".
+    tag = re.match(r"welcome-\d+-(.+)-proposed\.html$",
+                   os.path.basename(f)).group(1)
+    lg = i18n.LOCALE_LANG.get(tag, tag)
+    # An English preview is SUPPOSED to be in English. en-US differs from en in
+    # its money, links and tax wording, not its language, so the leak test does
+    # not apply to it.
+    if lg == i18n.SOURCE:
+        continue
     for p in i18n.leaks(f, lg, LEAKS):
         errs.append("%s: English left in the %s preview (%r)"
-                    % (os.path.basename(f), lg, p))
+                    % (os.path.basename(f), tag, p))
 
 
 # ---- the three go-live defects must not come back --------------------------

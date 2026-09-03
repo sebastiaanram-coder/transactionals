@@ -41,6 +41,32 @@ FLOW_URL = "https://www.klaviyo.com/flow/%s/edit" % FLOW
 TPL = "https://www.klaviyo.com/templates/%s"
 
 # has-not-ordered email -> (timing, subject, preview, purpose, master template)
+# WHY THESE THREE EXTRA FIELDS EXIST.
+#
+# build_overview.py holds the editorial metadata keyed by TEMPLATE ID, and those
+# ids are placeholders inherited from the pre-rebuild document. The refresh below
+# rewrote the subject, preheader and goal around them but not these, so every
+# Welcome email displayed ANOTHER email's rationale: email 1 said "Day 5, last
+# call", email 2 "Day 3, leads with reviews", and email 4 carried an ABANDONED
+# ORDER note about recovering a high-value basket. Owning them here means the
+# section is right after a refresh instead of right only after a full rebuild.
+#
+#   (journey, variant note, [(bullet lead, bullet rest), ...])
+EXTRA = [
+ ("Day 0 of the Welcome flow, immediately on subscribing.",
+  "The only Welcome email everyone gets, and the one that carries the code.",
+  [("The code, up front.", "It is what the tick-box bought.")]),
+ ("Day 1 of the Welcome flow.",
+  "Reasons to trust the platform, with the code and its countdown still in view.",
+  [("Platform over product.", "Who prints it, and how close to you.")]),
+ ("Day 3 of the Welcome flow.",
+  "The only Welcome email that leads with reviews rather than product.",
+  [("Proof, then the code.", "Reviews first, deadline second.")]),
+ ("Day 5, the day the code and the flow both end.",
+  "No product grid at all - a route to a person instead.",
+  [("A person, not a page.", "For anyone who did not order from the first three.")]),
+]
+
 EMAILS = [
  ("Day 0 &middot; immediately on subscribing",
   "Welcome to Helloprint, and your 10% code",
@@ -169,8 +195,27 @@ def main():
         else:
             blk, f = re.subn(r'(<span class="badge badge-green">.*?</span>)',
                              lambda m: m.group(1) + link, blk, count=1, flags=re.S)
-        notes.append("email %d: when=%d subj=%d prev=%d why=%d tpl=%d"
-                     % (idx + 1, a, b, c, e, f))
+        journey, variant, bullets = EXTRA[idx]
+        blk, g = re.subn(
+            r'(<div class="lbl">Why here in the journey</div>)<p>.*?</p>',
+            lambda m: m.group(1) + "<p>" + journey + "</p>",
+            blk, count=1, flags=re.S)
+        # the amber variant callout: <div class="varbox"><div class="lbl">
+        # ...icon...Welcome</div><p>THIS</p>
+        blk, h = re.subn(
+            r'(<div class="varbox"><div class="lbl">.*?</div>)<p>.*?</p>',
+            lambda m: m.group(1) + "<p>" + variant + "</p>",
+            blk, count=1, flags=re.S)
+        lis = "".join("<li><strong>%s</strong> %s</li>" % (a_, b_)
+                      for a_, b_ in bullets)
+        blk, k = re.subn(
+            r'(<div class="changehead">What is in it, and why</div>)'
+            r'<ul class="ellist">.*?</ul>',
+            lambda m: m.group(1) + '<ul class="ellist">' + lis + "</ul>",
+            blk, count=1, flags=re.S)
+        notes.append("email %d: when=%d subj=%d prev=%d why=%d tpl=%d "
+                     "journey=%d variant=%d bullets=%d"
+                     % (idx + 1, a, b, c, e, f, g, h, k))
         sec = sec[:start] + blk + sec[end:]
 
     out = head[:i] + sec + head[j:] + tail

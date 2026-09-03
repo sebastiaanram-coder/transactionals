@@ -1,14 +1,15 @@
 {
  "business_unit": "581b27a10000ff000596fa72",
  "domain": "helloprint.com",
- "fetched": "2026-08-27",
+ "fetched": "2026-09-03",
  "languages": [
   "en",
   "nl",
   "fr",
   "es",
   "it",
-  "de"
+  "de",
+  "sv"
  ],
  "review_total": 34394,
  "reviews": {
@@ -358,6 +359,19 @@
    "text": "Goede kwaliteit en stevige visitekaartjes + snelle levering.",
    "title": "Goede kwaliteit en stevige…"
   },
+  "commercial-print|sv": {
+   "author": "Åsa Ljungdell",
+   "author_location": "",
+   "created_at": "2026-02-24T09:46:47Z",
+   "id": "699d5767a1576f516027e3b5",
+   "language": "sv",
+   "match_tier": "relevant, tagged nothing",
+   "product_words": 1,
+   "stars": 5,
+   "tags": [],
+   "text": "Snabbt och smidigt att beställa. Fina flyers i brevlådan. Jag är mycket nöjd!",
+   "title": "Snabbt och smidigt att beställa"
+  },
   "corporate-gifts|de": {
    "author": "Andreas",
    "author_location": "",
@@ -530,10 +544,10 @@
    "title": "Sehr gute Arbeit"
   },
   "labels|en": {
-   "author": "Bob W Christian",
+   "author": "Stuart",
    "author_location": "",
-   "created_at": "2025-06-08T17:42:05Z",
-   "id": "6845af4d386ea850c88f6008",
+   "created_at": "2026-08-31T23:49:23Z",
+   "id": "6a95f6e32b4d0c4410771b9f",
    "language": "en",
    "match_tier": "tagged only, generic wording",
    "product_words": 0,
@@ -541,7 +555,11 @@
    "tags": [
     {
      "group": "generic",
-     "value": "vinylstickers"
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "squarestickers"
     },
     {
      "group": "generic",
@@ -553,11 +571,11 @@
     },
     {
      "group": "generic",
-     "value": "Vinyl Stickers"
+     "value": "Stickers"
     }
    ],
-   "text": "Fantastic product at a reasonable price with quick delivery, what more could you ask for",
-   "title": "Great service"
+   "text": "Excellent quality, speed and service. Our go to for all printing",
+   "title": "Excellent quality"
   },
   "labels|es": {
    "author": "Eva M.",
@@ -927,10 +945,10 @@
    "title": "El roll up es una pasada"
   },
   "signage-outdoor|fr": {
-   "author": "Alexandre",
+   "author": "Sandy",
    "author_location": "",
-   "created_at": "2026-06-08T18:04:40Z",
-   "id": "6a26e818c50ea612ca5e88e1",
+   "created_at": "2026-09-02T06:55:42Z",
+   "id": "6a97ac4e9bbb716d2de2bbf4",
    "language": "fr",
    "match_tier": "tagged+relevant",
    "product_words": 1,
@@ -942,7 +960,7 @@
     },
     {
      "group": "generic",
-     "value": "panelsaluminium"
+     "value": "banners"
     },
     {
      "group": "generic",
@@ -950,15 +968,15 @@
     },
     {
      "group": "generic",
-     "value": "All Panels"
+     "value": "All Banners"
     },
     {
      "group": "generic",
-     "value": "Panels"
+     "value": "Banners"
     }
    ],
-   "text": "Très satisfait de ma commande, les panneaux dibond sont très qualitatifs pour un super prix, je recommande vivement !!!",
-   "title": "Très satisfait de ma commande"
+   "text": "Toujours satisfait des bâches commandées sur HelloPrint tant pour la qualité que pour la livraison.",
+   "title": "Toujours satisfait des bâches…"
   },
   "signage-outdoor|it": {
    "author": "Paola",
@@ -1183,18 +1201,22 @@
    "title": "Stampa di ottima qualità"
   },
   "stationery|nl": {
-   "author": "Toine van den Broek",
+   "author": "T. Oldenhuis",
    "author_location": "",
-   "created_at": "2026-08-04T21:31:35Z",
-   "id": "6a723e170e3714eaa198a48c",
+   "created_at": "2026-03-18T12:18:01Z",
+   "id": "69ba7bd92977f937fd12900f",
    "language": "nl",
-   "match_tier": "relevant, tagged commercial-print",
-   "product_words": 1,
+   "match_tier": "tagged only, generic wording",
+   "product_words": 0,
    "stars": 5,
    "tags": [
     {
      "group": "generic",
-     "value": "businesscardsstandard"
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "notepads"
     },
     {
      "group": "generic",
@@ -1202,15 +1224,49 @@
     },
     {
      "group": "generic",
-     "value": "All Business Cards"
+     "value": "All Stationery"
     },
     {
      "group": "generic",
-     "value": "Business Cards"
+     "value": "Notepads"
     }
    ],
-   "text": "Snelle levering en reactie op klachten briefpapier, snel opgelost en opnieuw geleverd zonder kosten. Ook over visitekaartjes geen klachten. Gewoon wat je hoopt en eigenlijk ook verwacht",
-   "title": "Goede kwaliteit en service"
+   "text": "Het drukwerk zag er goed uit. Netjes verpakt en snel geleverd.",
+   "title": "Drukwerk netjes gedaan en geleverd."
+  },
+  "stationery|sv": {
+   "author": "Tobias",
+   "author_location": "",
+   "created_at": "2026-08-31T12:18:07Z",
+   "id": "6a9554df3552e5034e323677",
+   "language": "sv",
+   "match_tier": "tagged only, generic wording",
+   "product_words": 0,
+   "stars": 5,
+   "tags": [
+    {
+     "group": "generic",
+     "value": "HelloHP"
+    },
+    {
+     "group": "generic",
+     "value": "bookmarks"
+    },
+    {
+     "group": "generic",
+     "value": "Commercial Print"
+    },
+    {
+     "group": "generic",
+     "value": "All Stationery"
+    },
+    {
+     "group": "generic",
+     "value": "Bookmarks"
+    }
+   ],
+   "text": "Enkelt att använda och alltid snabb leverans de gånger jag har beställt.",
+   "title": "Enkelt och snabbt"
   }
  },
  "score": 4.5,
