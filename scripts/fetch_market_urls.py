@@ -73,6 +73,22 @@ def main():
                          "flaky run must not turn a working URL into a fallback."
                          % errors)
 
+    # THIS SCRIPT PREDATES THE FEED-DERIVED "urls" BLOCK AND WOULD DROP IT.
+    # market-urls.json now also carries path -> locale -> the market's real
+    # localised URL, written by build_market_urls_from_feeds.py. Rewriting the
+    # file from scratch here silently regresses every one of those links back to
+    # same-slug guessing, which is what put French readers on English pages.
+    # Refuse rather than destroy; use the feed builder, which merges.
+    if os.path.exists(OUT):
+        existing = json.loads(open(OUT, encoding="utf-8").read())
+        if existing.get("urls"):
+            raise SystemExit(
+                "REFUSING TO WRITE. %s already holds a feed-derived 'urls' block "
+                "(%d paths) that this script does not know how to produce, so "
+                "writing would drop it. Use scripts/build_market_urls_from_feeds.py, "
+                "which merges into the same file." % (
+                    os.path.relpath(OUT, ROOT), len(existing["urls"])))
+
     io_out = {"fetched": sys.argv[1] if len(sys.argv) > 1 else None,
               "markets": markets, "paths": ok,
               "not_found": [{"path": p, "locale": l, "status": c} for p, l, c in bad]}

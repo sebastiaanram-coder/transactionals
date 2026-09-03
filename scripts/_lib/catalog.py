@@ -41,11 +41,29 @@ FALLBACK_FOR_LOCALE = _D["fallback_market_for_locale"]
 PRODUCTS = _D["products"]
 GAPS = _D["gaps"]
 
+# WHERE A MARKET SELLS SOMETHING ELSE IN THE SAME TILE SLOT.
+#
+# The four tiles are slots, not products: slot four is a roll-up banner in every
+# European market and SADDLE STITCHED BOOKLETS in the US, because the US catalog
+# has no roll-up banner in the welcome set. The alternative was to file booklets
+# under the "rollupbannersv2" key, which renders identically and leaves a key
+# whose name is a lie - the same trap as a fallback that prints plausible
+# garbage. So the slot keeps its European name and the swap is declared here,
+# in one greppable place.
+#
+#   locale -> {slot product: the product that locale actually shows}
+PRODUCT_FOR_LOCALE = {"en-US": {"rollupbannersv2": "booklets5"}}
+
+
+def product_for(product, email_locale):
+    """The product this locale shows in `product`'s tile slot."""
+    return (PRODUCT_FOR_LOCALE.get(email_locale) or {}).get(product, product)
+
 # The Welcome code is 10%. Kept here rather than in the snapshot because it is a
 # campaign decision, not a catalog fact.
 DISCOUNT = 0.10
 
-SYMBOL = {"EUR": "€", "GBP": "£"}
+SYMBOL = {"EUR": "€", "GBP": "£", "USD": "$"}
 
 # HOW EACH LANGUAGE WRITES MONEY. Getting this from the price alone is not
 # possible: the same 31.99 is "31,99 EUR" in French and "EUR 31,99" in Italian.
@@ -70,6 +88,7 @@ def item(product, email_locale):
     Returns a dict with the snapshot's fields plus 'market' (the one actually
     used) and 'fell_back' (True when the reader's own market had no entry).
     """
+    product = product_for(product, email_locale)
     by_market = PRODUCTS[product]
     want = market_for(email_locale)
     if want in by_market:
@@ -91,7 +110,8 @@ def fell_back(locales, products=None):
     out = []
     for p in (products or list(PRODUCTS)):
         for loc in locales:
-            if market_for(loc) not in PRODUCTS[p]:
+            shown = product_for(p, loc)
+            if market_for(loc) not in PRODUCTS[shown]:
                 out.append((p, loc, market_for(loc)))
     return out
 

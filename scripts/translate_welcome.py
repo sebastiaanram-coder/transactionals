@@ -740,8 +740,10 @@ if _gaps:
           "market, verified %s):" % (sc._MU.get("fetched") or "?"))
     for _pth in sorted(_by):
         print("    /%-24s %s" % (_pth or "<home>", " ".join(sorted(_by[_pth]))))
-    print("    Fix by finding the real localised slug and re-running "
-          "scripts/fetch_market_urls.py.")
+    print("    Fix by adding the real localised slug to CONTENT_SLUGS in "
+          "scripts/build_market_urls_from_feeds.py and re-running that "
+          "one - NOT fetch_market_urls.py, which rewrites the whole "
+          "file and drops the feed-derived urls block.")
 
 
 # ---- NO VARIANT MAY MENTION THE DISCOUNT, ANYWHERE

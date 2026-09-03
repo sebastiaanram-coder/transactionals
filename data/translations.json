@@ -550,7 +550,8 @@
    "fr": "Prix hors TVA et livraison.",
    "de": "Preise zzgl. MwSt. und Versand.",
    "es": "Los precios no incluyen IVA ni envío.",
-   "it": "I prezzi non includono IVA e spedizione."
+   "it": "I prezzi non includono IVA e spedizione.",
+   "en-US": "Prices exclude sales tax and shipping."
   },
   "px.for_qty": {
    "en": "for {n} units",
@@ -3456,7 +3457,8 @@
    "fr": "&ldquo;Chaque prix est tout compris : livraison et TVA incluses&rdquo;",
    "de": "&ldquo;Bei jedem Preis ist alles dabei: Versand und MwSt.&rdquo;",
    "es": "&ldquo;Cada precio lo incluye todo: envío e IVA&rdquo;",
-   "it": "&ldquo;Ogni prezzo è tutto compreso: spedizione e IVA&rdquo;"
+   "it": "&ldquo;Ogni prezzo è tutto compreso: spedizione e IVA&rdquo;",
+   "en-US": "&ldquo;Every price includes shipping&rdquo;"
   },
   "usp.1": {
    "en": "&ldquo;We check every file before it prints&rdquo;",

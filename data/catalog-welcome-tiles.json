@@ -1,251 +1,289 @@
 {
-  "fetched": "2026-08-31",
-  "source": "Klaviyo catalog, GET /api/catalog-items (fields: external_id,title,price,url,custom_metadata)",
-  "how_to_refresh": "python3 scripts/fetch_catalog_tiles.py --print, then paste the block it emits. The builder has no Klaviyo credentials by design, so this is a dated snapshot exactly like data/subcategories.json.",
-  "note": "One entry per product per MARKET, not per locale. Belgium is a single BE market carrying both national languages, and Italy has no catalog items at all - see gaps below.",
-  "market_for_locale": {
-    "en-GB": "GB",
-    "en-IE": "IE",
-    "nl-NL": "NL",
-    "nl-BE": "BE",
-    "fr-FR": "FR",
-    "fr-BE": "BE",
-    "de-DE": "DE",
-    "es-ES": "ES",
-    "it-IT": "IT"
+ "fetched": "2026-08-31",
+ "source": "Klaviyo catalog, GET /api/catalog-items (fields: external_id,title,price,url,custom_metadata)",
+ "how_to_refresh": "python3 scripts/fetch_catalog_tiles.py --print, then paste the block it emits. The builder has no Klaviyo credentials by design, so this is a dated snapshot exactly like data/subcategories.json.",
+ "note": "One entry per product per MARKET, not per locale. Belgium is a single BE market carrying both national languages, and Italy has no catalog items at all - see gaps below.",
+ "market_for_locale": {
+  "en-GB": "GB",
+  "en-IE": "IE",
+  "nl-NL": "NL",
+  "nl-BE": "BE",
+  "fr-FR": "FR",
+  "fr-BE": "BE",
+  "de-DE": "DE",
+  "es-ES": "ES",
+  "it-IT": "IT",
+  "en-US": "US"
+ },
+ "gaps": {
+  "IT": "no catalog items exist for any Italian product. Searches for Italian product words (biglietti, striscioni) return nothing. Every Italian tile falls back to IE: English name, but a euro price and a working link.",
+  "ES": "businesscardsstandard and rollupbannersv2 do not exist. Those two Spanish tiles fall back to IE - English name, euro price.",
+  "BE": "the BE catalog mixes languages - standardflyers and rollupbannersv2 are French (fr-be URLs), businesscardsstandard and posters are Dutch (nl-be URLs). Whichever Belgian language a reader has, two of four tiles carry the other one. Kept as-is because the price and the market are right; substituting the NL or FR item would show a price the Belgian checkout does not charge.",
+  "US": "the US welcome set is flyers, business cards, posters and SADDLE STITCHED BOOKLETS - it has no roll-up banner item. The fourth tile slot therefore shows booklets5 in en-US and rollupbannersv2 everywhere else; see catalog.PRODUCT_FOR_LOCALE. US quantities are also its own (1000/250/500/100) rather than Europe's uniform set."
+ },
+ "products": {
+  "standardflyers": {
+   "GB": {
+    "title": "Flyers",
+    "price": 43.49,
+    "currency": "GBP",
+    "unit": "units",
+    "qty": 1000,
+    "url": "https://www.helloprint.com/en-gb/standardflyers"
+   },
+   "IE": {
+    "title": "Flyers",
+    "price": 39.96,
+    "currency": "EUR",
+    "unit": "units",
+    "qty": 1000,
+    "url": "https://www.helloprint.com/en-ie/standardflyers"
+   },
+   "NL": {
+    "title": "Standaard flyers",
+    "price": 46.62,
+    "currency": "EUR",
+    "unit": "stuks",
+    "qty": 1000,
+    "url": "https://www.helloprint.com/nl-nl/standaardflyers"
+   },
+   "BE": {
+    "title": "Flyer classique",
+    "price": 31.49,
+    "currency": "EUR",
+    "unit": "unités",
+    "qty": 500,
+    "url": "https://www.helloprint.com/fr-be/flyersclassiques"
+   },
+   "FR": {
+    "title": "Flyer classique",
+    "price": 31.99,
+    "currency": "EUR",
+    "unit": "unités",
+    "qty": 500,
+    "url": "https://www.helloprint.com/fr-fr/flyersdigital"
+   },
+   "DE": {
+    "title": "Flyer & Flugblätter drucken",
+    "price": 25.49,
+    "currency": "EUR",
+    "unit": "Stück",
+    "qty": 1000,
+    "url": "https://www.helloprint.com/de-de/standardflyers"
+   },
+   "ES": {
+    "title": "Flyers publicitarios",
+    "price": 40.49,
+    "currency": "EUR",
+    "unit": "unidades",
+    "qty": 1000,
+    "url": "https://www.helloprint.com/es-es/flyersdigital"
+   },
+   "US": {
+    "title": "Custom Flyers",
+    "price": 78.29,
+    "currency": "USD",
+    "unit": "units",
+    "qty": 1000,
+    "url": "https://www.helloprint.com/en-us/classicflyers"
+   }
   },
-  "gaps": {
-    "IT": "no catalog items exist for any Italian product. Searches for Italian product words (biglietti, striscioni) return nothing. Every Italian tile falls back to IE: English name, but a euro price and a working link.",
-    "ES": "businesscardsstandard and rollupbannersv2 do not exist. Those two Spanish tiles fall back to IE - English name, euro price.",
-    "BE": "the BE catalog mixes languages - standardflyers and rollupbannersv2 are French (fr-be URLs), businesscardsstandard and posters are Dutch (nl-be URLs). Whichever Belgian language a reader has, two of four tiles carry the other one. Kept as-is because the price and the market are right; substituting the NL or FR item would show a price the Belgian checkout does not charge."
+  "businesscardsstandard": {
+   "GB": {
+    "title": "Classic Business Cards",
+    "price": 21.99,
+    "currency": "GBP",
+    "unit": "units",
+    "qty": 500,
+    "url": "https://www.helloprint.com/en-gb/standardbusinesscards"
+   },
+   "IE": {
+    "title": "Classic Business Cards",
+    "price": 25.82,
+    "currency": "EUR",
+    "unit": "units",
+    "qty": 500,
+    "url": "https://www.helloprint.com/en-ie/standardbusinesscards"
+   },
+   "NL": {
+    "title": "Standaard visitekaartjes",
+    "price": 22.98,
+    "currency": "EUR",
+    "unit": "stuks",
+    "qty": 250,
+    "url": "https://www.helloprint.com/nl-nl/standaardvisitekaartjes"
+   },
+   "BE": {
+    "title": "Standaard visitekaartjes",
+    "price": 25.49,
+    "currency": "EUR",
+    "unit": "stuks",
+    "qty": 250,
+    "url": "https://www.helloprint.com/nl-be/standaardvisitekaartjes"
+   },
+   "FR": {
+    "title": "Cartes de visite standard",
+    "price": 17.27,
+    "currency": "EUR",
+    "unit": "unités",
+    "qty": 250,
+    "url": "https://www.helloprint.com/fr-fr/cartedevisiteclassique"
+   },
+   "DE": {
+    "title": "Günstige Visitenkarten",
+    "price": 22.49,
+    "currency": "EUR",
+    "unit": "Stück",
+    "qty": 500,
+    "url": "https://www.helloprint.com/de-de/standardvisitenkarten"
+   },
+   "US": {
+    "title": "Business Cards",
+    "price": 28.79,
+    "currency": "USD",
+    "unit": "units",
+    "qty": 250,
+    "url": "https://www.helloprint.com/en-us/businesscardsv2us"
+   }
   },
-  "products": {
-    "standardflyers": {
-      "GB": {
-        "title": "Flyers",
-        "price": 43.49,
-        "currency": "GBP",
-        "unit": "units",
-        "qty": 1000,
-        "url": "https://www.helloprint.com/en-gb/standardflyers"
-      },
-      "IE": {
-        "title": "Flyers",
-        "price": 39.96,
-        "currency": "EUR",
-        "unit": "units",
-        "qty": 1000,
-        "url": "https://www.helloprint.com/en-ie/standardflyers"
-      },
-      "NL": {
-        "title": "Standaard flyers",
-        "price": 46.62,
-        "currency": "EUR",
-        "unit": "stuks",
-        "qty": 1000,
-        "url": "https://www.helloprint.com/nl-nl/standaardflyers"
-      },
-      "BE": {
-        "title": "Flyer classique",
-        "price": 31.49,
-        "currency": "EUR",
-        "unit": "unités",
-        "qty": 500,
-        "url": "https://www.helloprint.com/fr-be/flyersclassiques"
-      },
-      "FR": {
-        "title": "Flyer classique",
-        "price": 31.99,
-        "currency": "EUR",
-        "unit": "unités",
-        "qty": 500,
-        "url": "https://www.helloprint.com/fr-fr/flyersdigital"
-      },
-      "DE": {
-        "title": "Flyer & Flugblätter drucken",
-        "price": 25.49,
-        "currency": "EUR",
-        "unit": "Stück",
-        "qty": 1000,
-        "url": "https://www.helloprint.com/de-de/standardflyers"
-      },
-      "ES": {
-        "title": "Flyers publicitarios",
-        "price": 40.49,
-        "currency": "EUR",
-        "unit": "unidades",
-        "qty": 1000,
-        "url": "https://www.helloprint.com/es-es/flyersdigital"
-      }
-    },
-    "businesscardsstandard": {
-      "GB": {
-        "title": "Classic Business Cards",
-        "price": 21.99,
-        "currency": "GBP",
-        "unit": "units",
-        "qty": 500,
-        "url": "https://www.helloprint.com/en-gb/standardbusinesscards"
-      },
-      "IE": {
-        "title": "Classic Business Cards",
-        "price": 25.82,
-        "currency": "EUR",
-        "unit": "units",
-        "qty": 500,
-        "url": "https://www.helloprint.com/en-ie/standardbusinesscards"
-      },
-      "NL": {
-        "title": "Standaard visitekaartjes",
-        "price": 22.98,
-        "currency": "EUR",
-        "unit": "stuks",
-        "qty": 250,
-        "url": "https://www.helloprint.com/nl-nl/standaardvisitekaartjes"
-      },
-      "BE": {
-        "title": "Standaard visitekaartjes",
-        "price": 25.49,
-        "currency": "EUR",
-        "unit": "stuks",
-        "qty": 250,
-        "url": "https://www.helloprint.com/nl-be/standaardvisitekaartjes"
-      },
-      "FR": {
-        "title": "Cartes de visite standard",
-        "price": 17.27,
-        "currency": "EUR",
-        "unit": "unités",
-        "qty": 250,
-        "url": "https://www.helloprint.com/fr-fr/cartedevisiteclassique"
-      },
-      "DE": {
-        "title": "Günstige Visitenkarten",
-        "price": 22.49,
-        "currency": "EUR",
-        "unit": "Stück",
-        "qty": 500,
-        "url": "https://www.helloprint.com/de-de/standardvisitenkarten"
-      }
-    },
-    "posters": {
-      "GB": {
-        "title": "Posters",
-        "price": 29.49,
-        "currency": "GBP",
-        "unit": "units",
-        "qty": 50,
-        "url": "https://www.helloprint.com/en-gb/posters"
-      },
-      "IE": {
-        "title": "Standard Posters",
-        "price": 55.34,
-        "currency": "EUR",
-        "unit": "units",
-        "qty": 50,
-        "url": "https://www.helloprint.com/en-ie/posters"
-      },
-      "NL": {
-        "title": "Posters",
-        "price": 26.08,
-        "currency": "EUR",
-        "unit": "stuks",
-        "qty": 50,
-        "url": "https://www.helloprint.com/nl-nl/posters"
-      },
-      "BE": {
-        "title": "Posters",
-        "price": 22.49,
-        "currency": "EUR",
-        "unit": "stuks",
-        "qty": 50,
-        "url": "https://www.helloprint.com/nl-be/posters"
-      },
-      "FR": {
-        "title": "Affiches",
-        "price": 52.99,
-        "currency": "EUR",
-        "unit": "unités",
-        "qty": 100,
-        "url": "https://www.helloprint.com/fr-fr/affiches"
-      },
-      "DE": {
-        "title": "Poster drucken lassen",
-        "price": 22.99,
-        "currency": "EUR",
-        "unit": "Stück",
-        "qty": 50,
-        "url": "https://www.helloprint.com/de-de/posters"
-      },
-      "ES": {
-        "title": "Pósters",
-        "price": 33.49,
-        "currency": "EUR",
-        "unit": "unidades",
-        "qty": 50,
-        "url": "https://www.helloprint.com/es-es/posterpublicitario"
-      }
-    },
-    "rollupbannersv2": {
-      "GB": {
-        "title": "Roller Banners",
-        "price": 32.49,
-        "currency": "GBP",
-        "unit": "units",
-        "qty": 1,
-        "url": "https://www.helloprint.com/en-gb/budgetrollupbanners"
-      },
-      "IE": {
-        "title": "Roller Banners",
-        "price": 60.87,
-        "currency": "EUR",
-        "unit": "units",
-        "qty": 1,
-        "url": "https://www.helloprint.com/en-ie/budgetrollupbanners"
-      },
-      "NL": {
-        "title": "Roll-up banners",
-        "price": 48.33,
-        "currency": "EUR",
-        "unit": "stuks",
-        "qty": 1,
-        "url": "https://www.helloprint.com/nl-nl/budgetrollupbanners"
-      },
-      "BE": {
-        "title": "Kakémono roll-up",
-        "price": 41.99,
-        "currency": "EUR",
-        "unit": "unités",
-        "qty": 1,
-        "url": "https://www.helloprint.com/fr-be/kakemonorollupbudget"
-      },
-      "FR": {
-        "title": "Kakémono roll-up",
-        "price": 34.49,
-        "currency": "EUR",
-        "unit": "unités",
-        "qty": 1,
-        "url": "https://www.helloprint.com/fr-fr/kakemonorollupbudget"
-      },
-      "DE": {
-        "title": "Roll-Up Banner drucken",
-        "price": 40.49,
-        "currency": "EUR",
-        "unit": "Stück",
-        "qty": 1,
-        "url": "https://www.helloprint.com/de-de/rollbannersbudget"
-      }
-    }
+  "posters": {
+   "GB": {
+    "title": "Posters",
+    "price": 29.49,
+    "currency": "GBP",
+    "unit": "units",
+    "qty": 50,
+    "url": "https://www.helloprint.com/en-gb/posters"
+   },
+   "IE": {
+    "title": "Standard Posters",
+    "price": 55.34,
+    "currency": "EUR",
+    "unit": "units",
+    "qty": 50,
+    "url": "https://www.helloprint.com/en-ie/posters"
+   },
+   "NL": {
+    "title": "Posters",
+    "price": 26.08,
+    "currency": "EUR",
+    "unit": "stuks",
+    "qty": 50,
+    "url": "https://www.helloprint.com/nl-nl/posters"
+   },
+   "BE": {
+    "title": "Posters",
+    "price": 22.49,
+    "currency": "EUR",
+    "unit": "stuks",
+    "qty": 50,
+    "url": "https://www.helloprint.com/nl-be/posters"
+   },
+   "FR": {
+    "title": "Affiches",
+    "price": 52.99,
+    "currency": "EUR",
+    "unit": "unités",
+    "qty": 100,
+    "url": "https://www.helloprint.com/fr-fr/affiches"
+   },
+   "DE": {
+    "title": "Poster drucken lassen",
+    "price": 22.99,
+    "currency": "EUR",
+    "unit": "Stück",
+    "qty": 50,
+    "url": "https://www.helloprint.com/de-de/posters"
+   },
+   "ES": {
+    "title": "Pósters",
+    "price": 33.49,
+    "currency": "EUR",
+    "unit": "unidades",
+    "qty": 50,
+    "url": "https://www.helloprint.com/es-es/posterpublicitario"
+   },
+   "US": {
+    "title": "Posters",
+    "price": 190.79,
+    "currency": "USD",
+    "unit": "units",
+    "qty": 500,
+    "url": "https://www.helloprint.com/en-us/postersv2us"
+   }
   },
-  "fallback_market_for_locale": {
-    "en-GB": "GB",
-    "en-IE": "IE",
-    "nl-NL": "IE",
-    "nl-BE": "IE",
-    "fr-FR": "IE",
-    "fr-BE": "IE",
-    "de-DE": "IE",
-    "es-ES": "IE",
-    "it-IT": "IE"
+  "rollupbannersv2": {
+   "GB": {
+    "title": "Roller Banners",
+    "price": 32.49,
+    "currency": "GBP",
+    "unit": "units",
+    "qty": 1,
+    "url": "https://www.helloprint.com/en-gb/budgetrollupbanners"
+   },
+   "IE": {
+    "title": "Roller Banners",
+    "price": 60.87,
+    "currency": "EUR",
+    "unit": "units",
+    "qty": 1,
+    "url": "https://www.helloprint.com/en-ie/budgetrollupbanners"
+   },
+   "NL": {
+    "title": "Roll-up banners",
+    "price": 48.33,
+    "currency": "EUR",
+    "unit": "stuks",
+    "qty": 1,
+    "url": "https://www.helloprint.com/nl-nl/budgetrollupbanners"
+   },
+   "BE": {
+    "title": "Kakémono roll-up",
+    "price": 41.99,
+    "currency": "EUR",
+    "unit": "unités",
+    "qty": 1,
+    "url": "https://www.helloprint.com/fr-be/kakemonorollupbudget"
+   },
+   "FR": {
+    "title": "Kakémono roll-up",
+    "price": 34.49,
+    "currency": "EUR",
+    "unit": "unités",
+    "qty": 1,
+    "url": "https://www.helloprint.com/fr-fr/kakemonorollupbudget"
+   },
+   "DE": {
+    "title": "Roll-Up Banner drucken",
+    "price": 40.49,
+    "currency": "EUR",
+    "unit": "Stück",
+    "qty": 1,
+    "url": "https://www.helloprint.com/de-de/rollbannersbudget"
+   }
+  },
+  "booklets5": {
+   "US": {
+    "title": "Saddle Stitched Booklets",
+    "price": 113.39,
+    "currency": "USD",
+    "unit": "units",
+    "qty": 100,
+    "url": "https://www.helloprint.com/en-us/saddlestitchedbooklets"
+   }
   }
+ },
+ "fallback_market_for_locale": {
+  "en-GB": "GB",
+  "en-IE": "IE",
+  "nl-NL": "IE",
+  "nl-BE": "IE",
+  "fr-FR": "IE",
+  "fr-BE": "IE",
+  "de-DE": "IE",
+  "es-ES": "IE",
+  "it-IT": "IE",
+  "en-US": "GB"
+ },
+ "fetched_us": "2026-09-03, Klaviyo catalog GET /api/catalog-items by id (US-standardflyersus, US-booklets5us, US-businesscardsv2us, US-postersv2us). qty is each item's min_order_quantity, coerced from the feed's float. All four URLs HTTP 200."
 }

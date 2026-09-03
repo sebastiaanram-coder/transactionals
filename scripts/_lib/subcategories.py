@@ -201,7 +201,9 @@ def market_url_verified(path, live, esc=lambda x: x):
     the market home page: the right page in the wrong language beats the wrong
     page in the right language, and it can never 404.
 
-    Refresh the data with scripts/fetch_market_urls.py.
+    Refresh the data with scripts/build_market_urls_from_feeds.py, which
+    merges. scripts/fetch_market_urls.py rewrites the file wholesale and
+    drops the feed-derived 'urls' block - it predates that block.
     """
     good = (_MU.get("paths") or {}).get(path)
     exact_check = (_MU.get("urls") or {}).get(path) or {}
@@ -213,8 +215,8 @@ def market_url_verified(path, live, esc=lambda x: x):
         raise KeyError(
             "%r is not in data/market-urls.json, so no locale has been verified "
             "for it. Add it to CONTENT_SLUGS in "
-            "scripts/build_market_urls_from_feeds.py (or PATHS in "
-            "scripts/fetch_market_urls.py) and re-run rather than shipping an "
+            "scripts/build_market_urls_from_feeds.py and re-run rather "
+            "than shipping an "
             "unverified link." % path)
     good = good or []
 

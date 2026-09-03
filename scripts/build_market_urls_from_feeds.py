@@ -53,27 +53,34 @@ FROM_CATALOG = {"standardflyers": "standardflyers",
 #                   category, not the company page this link means)
 #   quote           es-ES has only mis-presupuestos, which is the reader's OWN
 #                   saved quotes, not a request form - the wrong page, so it is
-#                   left to fall back rather than linked
+#                   left to fall back rather than linked. en-US does have one,
+#                   but as a CONTACT FORM WITH A QUERY STRING
+#                   (new2contactform?type=inquiry) rather than a /quote slug,
+#                   which is why probing /quote, /request-quote and /get-a-quote
+#                   all 404'd. Supplied and verified 200 on 2026-09-03.
 CONTENT_SLUGS = {
+    # The US roll-up page is "rollerbanners"; budgetrollupbanners 404s
+    # there. Verified 2026-09-03.
+    "budgetrollupbanners": {"en-US": "rollerbanners"},
     "our-promises": {
-        "en-IE": "our-promises", "en-GB": "our-promises",
+        "en-IE": "our-promises", "en-GB": "our-promises", "en-US": "our-promises",
         "nl-NL": "onze-beloftes", "nl-BE": "onze-beloftes",
         "fr-FR": "nos-promesses", "fr-BE": "nos-promesses",
         "de-DE": "unsere-versprechen", "es-ES": "nuestras-promesas",
         "it-IT": "le-nostre-promesse"},
     "all-products": {
-        "en-IE": "all-products", "en-GB": "all-products",
+        "en-IE": "all-products", "en-GB": "all-products", "en-US": "all-products",
         "nl-NL": "alle-producten", "nl-BE": "alle-producten",
         "fr-FR": "tous-nos-produits", "fr-BE": "tous-nos-produits",
         "de-DE": "alle-produkte", "es-ES": "todos-los-productos"},
     "about-us": {
-        "en-IE": "about-us", "en-GB": "about-us",
+        "en-IE": "about-us", "en-GB": "about-us", "en-US": "about-us",
         "nl-NL": "over-ons", "nl-BE": "over-ons",
         "fr-FR": "a-propos-de-nous", "fr-BE": "a-propos-de-nous",
         "de-DE": "uber-uns", "es-ES": "sobre-nosotros",
         "it-IT": "chi-siamo"},
     "sustainability": {
-        "en-IE": "sustainability", "en-GB": "sustainability",
+        "en-IE": "sustainability", "en-GB": "sustainability", "en-US": "sustainability",
         "nl-NL": "duurzaamheid", "nl-BE": "duurzaamheid",
         "fr-FR": "durabilite", "fr-BE": "durabilite",
         "de-DE": "nachhaltigkeit", "es-ES": "sostenibilidad"},
@@ -84,18 +91,21 @@ CONTENT_SLUGS = {
     # resolves but is a design-SERVICES page, not the promise, so it is not used.
     "always-a-perfect-design": {
         "en-IE": "always-a-perfect-design", "en-GB": "always-a-perfect-design",
+        "en-US": "always-a-perfect-design",
         "nl-NL": "altijd-een-perfect-ontwerp", "nl-BE": "altijd-een-perfect-ontwerp",
         "de-DE": "immer-ein-perfektes-design", "it-IT": "un-design-sempre-perfetto",
         "fr-FR": "nos-promesses", "fr-BE": "nos-promesses",
         "es-ES": "nuestras-promesas"},
     "quote": {
         "en-IE": "request-a-quote", "en-GB": "quote",
+        "en-US": "new2contactform?type=inquiry",
         "nl-NL": "offerte-aanvragen", "nl-BE": "offerte-aanvragen",
         "fr-FR": "quote", "fr-BE": "quote",
         "de-DE": "angebot-anfragen", "it-IT": "richiedi-un-preventivo"},
 }
 
-MARKET_SEG = {"en-IE": "en-ie", "en-GB": "en-gb", "nl-NL": "nl-nl",
+MARKET_SEG = {"en-IE": "en-ie", "en-GB": "en-gb", "en-US": "en-us",
+              "nl-NL": "nl-nl",
               "nl-BE": "nl-be", "fr-FR": "fr-fr", "fr-BE": "fr-be",
               "de-DE": "de-de", "es-ES": "es-es", "it-IT": "it-it"}
 
@@ -127,6 +137,15 @@ def main():
     proposed = {}
     for path, product in FROM_CATALOG.items():
         for loc in cat.MARKET_FOR_LOCALE:
+            # THE PATH NAMES A PRODUCT; THE SLOT MAY SHOW ANOTHER ONE. en-US
+            # shows booklets where Europe shows a roll-up banner, so
+            # cat.item("rollupbannersv2", "en-US") is booklets - and filing that
+            # under the "budgetrollupbanners" path would point every US
+            # roll-up-banner link at booklets. The tiles take their URL from the
+            # catalog directly, so nothing needs this entry; the real US
+            # roll-up page is supplied by CONTENT_SLUGS instead.
+            if cat.product_for(product, loc) != product:
+                continue
             it = cat.item(product, loc)
             if it["fell_back"]:
                 continue            # that market genuinely has no such product

@@ -27,14 +27,14 @@ sys.path.insert(0, os.path.join(HERE, "_lib"))
 ROOT = os.path.dirname(HERE)
 import klav, offers
 
-LOCALES = ["en-IE", "en-GB", "nl-NL", "nl-BE", "fr-FR", "fr-BE", "de-DE",
+LOCALES = ["en-IE", "en-GB", "en-US", "nl-NL", "nl-BE", "fr-FR", "fr-BE", "de-DE",
            "es-ES", "it-IT"]
 
 # The words each language counts days in. GERMAN NEEDS BOTH FORMS: the terms say
 # "in 5 Tagen" (dative) and the countdown says "Noch 2 Tage" (nominative), both
 # correct German. A dictionary with only "Tagen" reported the German countdown as
 # missing, which is a bug in the check and not in the email.
-DAYWORDS = {"en-IE": ["days"], "en-GB": ["days"],
+DAYWORDS = {"en-IE": ["days"], "en-GB": ["days"], "en-US": ["days"],
             "nl-NL": ["dagen"], "nl-BE": ["dagen"],
             "fr-FR": ["jours"], "fr-BE": ["jours"],
             "de-DE": ["Tagen", "Tage"],

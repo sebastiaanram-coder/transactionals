@@ -93,7 +93,7 @@ LANGS = ["en", "nl", "fr", "de", "es", "it"]
 # Klaviyo locale -> which language's prose it reads. Two markets share a language
 # and differ only in their links, which is the whole reason prose and links are
 # resolved separately.
-LOCALE_LANG = {"en-IE": "en", "en-GB": "en",
+LOCALE_LANG = {"en-IE": "en", "en-GB": "en", "en-US": "en",
                "nl-NL": "nl", "nl-BE": "nl",
                "fr-FR": "fr", "fr-BE": "fr",
                "de-DE": "de", "es-ES": "es", "it-IT": "it"}

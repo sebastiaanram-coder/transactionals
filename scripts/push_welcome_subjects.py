@@ -26,6 +26,16 @@ sys.path.insert(0, os.path.join(HERE, "_lib"))
 ROOT = os.path.dirname(HERE)
 import klav
 
+# THE TRANSLATION LAYER'S LOCALES ARE NOT THE TEMPLATE'S LOCALES.
+#
+# en-US is deliberately absent. The templates carry an en-US branch (USD prices,
+# /en-us/ links, "includes shipping" instead of VAT), but /translations rejects
+# en-US as a target: PATCHing target_locales with it returns 200 and silently
+# stores "en" instead, so a value can never be written against it. Nothing is
+# lost - the subject for a US reader resolves through fallback_locale en-GB, and
+# the en-GB subject is the same English string en-US would have had, because
+# LOCALE_LANG maps both to "en" and no subject has a per-locale override.
+# Verified 2026-09-03. Adding en-US here just makes every message fail.
 TARGETS = ["de", "en-GB", "en-IE", "es", "fr", "fr-BE", "it", "nl", "nl-BE"]
 
 
@@ -96,7 +106,8 @@ def main():
         "welcome-flow-subjects.json"), encoding="utf-8"))
     store = json.load(io.open(os.path.join(ROOT, "data", "translations.json"),
                               encoding="utf-8"))
-    LANG = {"en-GB": "en", "en-IE": "en", "nl": "nl", "nl-BE": "nl",
+    LANG = {"en-GB": "en", "en-IE": "en", "en-US": "en",
+            "nl": "nl", "nl-BE": "nl",
             "fr": "fr", "fr-BE": "fr", "de": "de", "es": "es", "it": "it"}
 
     def resolve(entry):

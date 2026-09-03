@@ -49,7 +49,7 @@ Usage:
   python3 scripts/push_templates.py --push-only  # masters only, no re-attach
   python3 scripts/push_templates.py --only WEL-4 # substring match on name
 """
-import io, json, os, re, sys, time, urllib.request, urllib.error
+import html, io, json, os, re, sys, time, urllib.request, urllib.error
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES = os.path.join(ROOT, "klaviyo-templates")
@@ -155,8 +155,29 @@ def plan():
 
 
 def subjects():
+    """message id -> the English subject, resolved from the TRANSLATION STORE.
+
+    welcome-flow-subjects.json is a message -> (scope, key) map and nothing more.
+    It used to carry a `source` string too, and this function returned it raw -
+    so when that duplicate was stripped (it had gone stale and was serving
+    pre-rewrite Dutch), every re-attach below silently hit its "NO SUBJECT"
+    branch and skipped. Masters were pushed, no copy was re-cloned, and the run
+    still printed "nothing needs re-attaching". The subject has exactly one
+    source of truth and this reads it.
+    """
     p = os.path.join(ROOT, "proposals", "welcome-flow-subjects.json")
-    return json.loads(io.open(p, encoding="utf-8").read())
+    smap = json.loads(io.open(p, encoding="utf-8").read())
+    store = json.loads(io.open(os.path.join(ROOT, "data", "translations.json"),
+                               encoding="utf-8").read())
+    out = {}
+    for mid, e in smap.items():
+        node = ((store.get(e["scope"]) or {}).get(e["key"])
+                or (store.get("_shared") or {}).get(e["key"]) or {})
+        en = node.get("en")
+        if en:
+            # a subject field is plain text; the store is written for the body
+            out[mid] = html.unescape(en)
+    return out
 
 
 def push_master(key, name, path, master, dry):
@@ -200,10 +221,12 @@ def reattach(key, master, rows, subj, dry):
         if dry:
             print("   attach %-34s action %s -> %s" % (name[:34], action, master))
             continue
-        src = (subj.get(msg_id) or {}).get("source")
+        src = subj.get(msg_id)
         if not src:
-            print("   attach %-34s NO SUBJECT in welcome-flow-subjects.json" % name[:34])
-            continue
+            raise SystemExit(
+                "attach %s: no subject resolved for message %s. Every message "
+                "must resolve one or the flow keeps serving the previous build "
+                "while this script reports success." % (name[:34], msg_id))
         st, res = call(key, "PATCH", "/flow-actions/%s/" % action,
             {"data": {"type": "flow-action", "id": action, "attributes": {
                 "definition": {"type": "send-email", "id": action,
