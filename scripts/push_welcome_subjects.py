@@ -38,8 +38,26 @@ def main():
     key, src = klav.load_key()
     print("key from %s%s\n" % (src, "   DRY RUN" if a.dry_run else ""))
 
+    # THE STRINGS COME FROM data/translations.json, NOT FROM THE SUBJECTS FILE.
+    # welcome-flow-subjects.json used to carry its own copy of the nine
+    # translations, so rewriting a subject in the translation store left Klaviyo
+    # serving the old wording - which is exactly what happened when the welcome
+    # copy was rewritten away from literal English. The subjects file is now
+    # only a MAP: message id -> (scope, key). One source of truth for the text.
     subj = json.load(io.open(os.path.join(ROOT, "proposals",
         "welcome-flow-subjects.json"), encoding="utf-8"))
+    store = json.load(io.open(os.path.join(ROOT, "data", "translations.json"),
+                              encoding="utf-8"))
+    LANG = {"en-GB": "en", "en-IE": "en", "nl": "nl", "nl-BE": "nl",
+            "fr": "fr", "fr-BE": "fr", "de": "de", "es": "es", "it": "it"}
+
+    def resolve(entry):
+        """(source, {locale: text}) straight out of the translation store."""
+        node = ((store.get(entry["scope"]) or {}).get(entry["key"])
+                or (store.get("_shared") or {}).get(entry["key"]))
+        if not node:
+            return None, {}
+        return node.get("en"), {l: node.get(LANG[l]) for l in LANG}
     rec = json.load(io.open(os.path.join(ROOT, "data",
         "klaviyo-flow-welcome-messages.json"), encoding="utf-8"))
     print("%s   %s\n" % (rec["flow"], rec["flow_id"]))
@@ -52,7 +70,13 @@ def main():
             print("  %-36s NO SUBJECT RECORDED" % m["name"][:36])
             problems += 1
             continue
-        tr = entry.get("translations") or {}
+        source, tr = resolve(entry)
+        if not source:
+            print("  %-36s NOT IN THE TRANSLATION STORE (%s/%s)"
+                  % (m["name"][:36], entry["scope"], entry["key"]))
+            problems += 1
+            continue
+        entry = dict(entry, source=source)
         missing = [l for l in TARGETS if not tr.get(l)]
         print("  %-36s %s" % (m["name"][:36], entry["key"]))
         if missing:

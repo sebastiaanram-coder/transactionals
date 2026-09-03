@@ -6,7 +6,7 @@
   "created": "2026-09-01",
   "url": "https://www.klaviyo.com/flow/YzcnqL/edit",
   "supersedes": "TEhf2p, which triggered on Completed Signup and split before email 1. Delete it in the UI - a flow cannot be renamed or re-triggered through the API.",
-  "note": "Klaviyo clones a saved template per flow message on attach. 'template_saved' is the library master, which scripts/push_templates.py patches; 'template_live' is the per-message copy the flow actually sends. A copy is NOT patchable, so the master is pushed and the message re-attached, which mints a fresh copy. Copy ids change on every push.",
+  "note": "Klaviyo clones a saved template per flow message on attach. 'template_saved' is the library master, which scripts/push_templates.py patches; 'template_live' is the per-message copy the flow actually sends. A copy is NOT patchable - /api/templates/{id} returns 404 for it - so the master is pushed and the message re-attached, which mints a fresh copy. Copy ids therefore CHANGE on every push.",
   "messages": [
     {
       "action": "116155437",
@@ -14,7 +14,7 @@
       "name": "WEL-1 Welcome · day 0",
       "next": "116155441",
       "template_saved": "UCriVp",
-      "template_live": "SBvVtz",
+      "template_live": "Xgb3Rn",
       "template_name": "BEH-1 WEL-1 Welcome + 10%",
       "subject": "Welcome to Helloprint, and your 10% code",
       "preview": ""
@@ -25,7 +25,7 @@
       "name": "WEL-2B Behind the print · ord@S2",
       "next": "116155449",
       "template_saved": "Tejd65",
-      "template_live": "RJB7NL",
+      "template_live": "UFtB3u",
       "template_name": "BEH-1 WEL-2B Behind the print, no discount",
       "subject": "Meet the people behind your print",
       "preview": ""
@@ -36,7 +36,7 @@
       "name": "WEL-2 Behind the print · day 1",
       "next": "116155450",
       "template_saved": "WRbYfy",
-      "template_live": "WGJuBf",
+      "template_live": "RHCSD9",
       "template_name": "BEH-1 WEL-2 Behind the print",
       "subject": "Your 10% is waiting, and 4 days left to use it",
       "preview": ""
@@ -47,7 +47,7 @@
       "name": "WEL-3B Rated excellent · ord@S2",
       "next": "116155453",
       "template_saved": "VjQmRX",
-      "template_live": "RGA7Ef",
+      "template_live": "QVmjjJ",
       "template_name": "BEH-1 WEL-3B Rated excellent, no discount",
       "subject": "Rated Excellent on Trustpilot",
       "preview": ""
@@ -58,7 +58,7 @@
       "name": "WEL-3B Rated excellent · ord@S3",
       "next": "116155458",
       "template_saved": "VjQmRX",
-      "template_live": "TauXMa",
+      "template_live": "S6LadA",
       "template_name": "BEH-1 WEL-3B Rated excellent, no discount",
       "subject": "Rated Excellent on Trustpilot",
       "preview": ""
@@ -69,7 +69,7 @@
       "name": "WEL-3 Rated excellent · day 3",
       "next": "116155459",
       "template_saved": "XuNgUx",
-      "template_live": "VX5buH",
+      "template_live": "TrrvNe",
       "template_name": "BEH-1 WEL-3 Rated excellent",
       "subject": "Only 2 days left on your 10%",
       "preview": ""
@@ -80,7 +80,7 @@
       "name": "WEL-4B Send it over · ord@S2",
       "next": null,
       "template_saved": "T6fctZ",
-      "template_live": "R3y4T7",
+      "template_live": "StTrN3",
       "template_name": "BEH-1 WEL-4B Send it over, no discount",
       "subject": "Send it over, we’ll handle it",
       "preview": ""
@@ -91,7 +91,7 @@
       "name": "WEL-4B Send it over · ord@S3",
       "next": null,
       "template_saved": "T6fctZ",
-      "template_live": "UUTR98",
+      "template_live": "RLf8Q2",
       "template_name": "BEH-1 WEL-4B Send it over, no discount",
       "subject": "Send it over, we’ll handle it",
       "preview": ""
@@ -102,7 +102,7 @@
       "name": "WEL-4B Send it over · ord@S4",
       "next": null,
       "template_saved": "T6fctZ",
-      "template_live": "TXmM8V",
+      "template_live": "SVDXHS",
       "template_name": "BEH-1 WEL-4B Send it over, no discount",
       "subject": "Send it over, we’ll handle it",
       "preview": ""
@@ -113,10 +113,11 @@
       "name": "WEL-4 Send it over · day 5",
       "next": null,
       "template_saved": "Ykhktb",
-      "template_live": "Sy5bcT",
+      "template_live": "VAYETa",
       "template_name": "BEH-1 WEL-4 Send it over",
       "subject": "Last day for your 10%",
       "preview": ""
     }
-  ]
+  ],
+  "attached": "2026-08-31"
 }

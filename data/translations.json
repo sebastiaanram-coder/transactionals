@@ -51,10 +51,10 @@
   "help.chat": {
    "en": "Chat with us",
    "nl": "Chat met ons",
-   "fr": "Chattez avec nous",
+   "fr": "Discuter avec nous",
    "de": "Chatten Sie mit uns",
    "es": "Chatea con nosotros",
-   "it": "Chatta con noi"
+   "it": "Scrivici in chat"
   },
   "help.centre": {
    "en": "Help Centre",
@@ -458,11 +458,11 @@
   },
   "wc.help": {
    "en": "Do you need help?",
-   "nl": "Hulp nodig?",
-   "fr": "Besoin d'aide ?",
-   "de": "Brauchen Sie Hilfe?",
-   "es": "¿Necesitas ayuda?",
-   "it": "Ti serve aiuto?"
+   "nl": "Kunnen we je helpen?",
+   "fr": "Besoin d'un coup de main ?",
+   "de": "Können wir helfen?",
+   "es": "¿Te echamos una mano?",
+   "it": "Possiamo darti una mano?"
   },
   "wc.expires5": {
    "en": "&nbsp;&middot;&nbsp;Valid only 5 days",
@@ -474,9 +474,9 @@
   },
   "wc.discount": {
    "en": "Your 10% welcome discount",
-   "nl": "Je 10% welkomstkorting",
+   "nl": "Je welkomstkorting van 10%",
    "fr": "Vos 10% de bienvenue",
-   "de": "Ihre 10% Willkommensrabatt",
+   "de": "Ihre 10% zum Start",
    "es": "Tu 10% de bienvenida",
    "it": "Il tuo 10% di benvenuto"
   },
@@ -739,10 +739,10 @@
   "cta.browse_range": {
    "en": "Browse the full range",
    "nl": "Bekijk het hele assortiment",
-   "fr": "Voir toute la gamme",
+   "fr": "Voir tout le catalogue",
    "de": "Das ganze Sortiment ansehen",
    "es": "Ver todo el catálogo",
-   "it": "Vedi tutta la gamma"
+   "it": "Guarda tutto il catalogo"
   },
   "wc.ordered_line": {
    "en": "Thanks for your order. Here is what we are, in short.",
@@ -754,19 +754,19 @@
   },
   "wc.pre_nocode": {
    "en": "The prints most businesses start with, and the people behind them.",
-   "nl": "Het drukwerk waar de meeste bedrijven mee beginnen, en de mensen erachter.",
-   "fr": "Les imprimés par lesquels commencent la plupart des entreprises, et les gens derrière.",
-   "de": "Die Drucksachen, mit denen die meisten Unternehmen anfangen, und die Menschen dahinter.",
-   "es": "Lo que imprimen primero la mayoría de las empresas, y las personas detrás.",
-   "it": "Le stampe da cui parte la maggior parte delle aziende, e le persone dietro."
+   "nl": "Waar de meeste bedrijven mee beginnen, en de mensen erachter.",
+   "fr": "Ce que commandent la plupart des entreprises, et les gens derrière.",
+   "de": "Womit die meisten Unternehmen anfangen – und wer dahintersteht.",
+   "es": "Con qué empiezan la mayoría de empresas, y quién está detrás.",
+   "it": "Da dove partono quasi tutte le aziende, e chi c'è dietro."
   },
   "wc.sectsub_nocode": {
    "en": "Pick one and see what it comes to.",
-   "nl": "Kies er een en kijk wat het wordt.",
-   "fr": "Choisissez-en un et voyez ce que cela donne.",
-   "de": "Wählen Sie eines und sehen Sie, was es kostet.",
-   "es": "Elige uno y mira en cuánto sale.",
-   "it": "Scegline uno e guarda quanto viene."
+   "nl": "Kies er één en zie wat het wordt.",
+   "fr": "Choisissez et voyez ce que ça donne.",
+   "de": "Aussuchen und sehen, was es kostet.",
+   "es": "Elige uno y mira cuánto sale.",
+   "it": "Scegli e guarda quanto viene."
   },
   "wc.terms": {
    "en": "Offer terms: 10% off your first order, up to @@CAP@@ maximum discount. One use per customer. The code expires 5 days after you sign up. It cannot be combined with other codes, is not valid on bespoke quotes, and applies to products only, excluding services and delivery.",
@@ -3412,11 +3412,11 @@
  "welcome-01": {
   "pre": {
    "en": "Your 10% code is inside, and you have 5 days to use it.",
-   "nl": "Je 10%-code zit erin, en je hebt 5 dagen om hem te gebruiken.",
-   "fr": "Votre code 10% est à l'intérieur, et vous avez 5 jours pour l'utiliser.",
-   "de": "Ihr 10%-Code ist enthalten, und Sie haben 5 Tage Zeit.",
-   "es": "Tu código del 10% está dentro, y tienes 5 días para usarlo.",
-   "it": "Il tuo codice 10% è dentro, e hai 5 giorni per usarlo."
+   "nl": "Je 10%-code staat hieronder — 5 dagen geldig.",
+   "fr": "Votre code de 10% est juste en dessous, valable 5 jours.",
+   "de": "Ihr 10%-Code steht gleich hier – 5 Tage gültig.",
+   "es": "Tu código del 10% está aquí abajo, válido 5 días.",
+   "it": "Il tuo codice 10% è qui sotto, valido 5 giorni."
   },
   "h1": {
    "en": "Welcome to Helloprint",
@@ -3429,10 +3429,10 @@
   "sub": {
    "en": "Print made simple, by people who have your back.",
    "nl": "Drukwerk eenvoudig gemaakt, door échte printliefhebbers.",
-   "fr": "L'impression simplifiée, par des gens qui vous soutiennent.",
-   "de": "Druck einfach gemacht, von Menschen, die hinter Ihnen stehen.",
-   "es": "La impresión hecha fácil, por gente que te respalda.",
-   "it": "La stampa resa semplice, da persone che ti sostengono."
+   "fr": "L'impression sans complications, par de vrais passionnés du print.",
+   "de": "Drucken ohne Umwege – von echten Druckliebhabern.",
+   "es": "Imprimir sin complicaciones, por auténticos apasionados de la impresión.",
+   "it": "Stampare senza complicazioni, da veri appassionati di stampa."
   },
   "code_line": {
    "en": "10% off your first order, up to @@CAP@@ &middot; expires in 5 days",
@@ -3444,51 +3444,51 @@
   },
   "cta": {
    "en": "Start your first order",
-   "nl": "Begin je eerste bestelling",
-   "fr": "Passez votre première commande",
-   "de": "Starten Sie Ihre erste Bestellung",
-   "es": "Haz tu primer pedido",
+   "nl": "Bestel je eerste drukwerk",
+   "fr": "Passer ma première commande",
+   "de": "Erste Bestellung starten",
+   "es": "Hacer mi primer pedido",
    "it": "Fai il tuo primo ordine"
   },
   "usp.0": {
    "en": "&ldquo;Every price includes delivery and VAT&rdquo;",
-   "nl": "&ldquo;Elke prijs is inclusief verzending en btw&rdquo;",
-   "fr": "&ldquo;Chaque prix inclut la livraison et la TVA&rdquo;",
-   "de": "&ldquo;Jeder Preis enthält Versand und Steuer&rdquo;",
-   "es": "&ldquo;Cada precio incluye envío e IVA&rdquo;",
-   "it": "&ldquo;Ogni prezzo include spedizione e IVA&rdquo;"
+   "nl": "&ldquo;Elke prijs is all-in: verzending en btw zitten erin&rdquo;",
+   "fr": "&ldquo;Chaque prix est tout compris : livraison et TVA incluses&rdquo;",
+   "de": "&ldquo;Jeder Preis ist komplett: Versand und MwSt. inklusive&rdquo;",
+   "es": "&ldquo;Cada precio lo incluye todo: envío e IVA&rdquo;",
+   "it": "&ldquo;Ogni prezzo è tutto compreso: spedizione e IVA&rdquo;"
   },
   "usp.1": {
    "en": "&ldquo;We check every file before it prints&rdquo;",
-   "nl": "&ldquo;Wij controleren elk bestand voordat het gedrukt wordt&rdquo;",
-   "fr": "&ldquo;Nous vérifions chaque fichier avant impression&rdquo;",
-   "de": "&ldquo;Wir prüfen jede Datei vor dem Druck&rdquo;",
-   "es": "&ldquo;Revisamos cada archivo antes de imprimirlo&rdquo;",
-   "it": "&ldquo;Controlliamo ogni file prima di stamparlo&rdquo;"
+   "nl": "&ldquo;Geen bestand gaat op de pers zonder controle&rdquo;",
+   "fr": "&ldquo;Aucun fichier ne part à l'impression sans vérification&rdquo;",
+   "de": "&ldquo;Keine Datei geht ungeprüft in den Druck&rdquo;",
+   "es": "&ldquo;Ningún archivo se imprime sin revisar&rdquo;",
+   "it": "&ldquo;Nessun file va in stampa senza controllo&rdquo;"
   },
   "usp.2": {
    "en": "&ldquo;Backed by our 100% satisfaction guarantee&rdquo;",
-   "nl": "&ldquo;Met onze 100% tevredenheidsgarantie&rdquo;",
-   "fr": "&ldquo;Couvert par notre garantie satisfaction 100%&rdquo;",
-   "de": "&ldquo;Abgesichert durch unsere 100% Zufriedenheitsgarantie&rdquo;",
-   "es": "&ldquo;Con nuestra garantía de satisfacción del 100%&rdquo;",
-   "it": "&ldquo;Con la nostra garanzia di soddisfazione 100%&rdquo;"
+   "nl": "&ldquo;100% tevredenheidsgarantie op elke order&rdquo;",
+   "fr": "&ldquo;Satisfaction garantie à 100% sur chaque commande&rdquo;",
+   "de": "&ldquo;100% Zufriedenheitsgarantie auf jede Bestellung&rdquo;",
+   "es": "&ldquo;100% de satisfacción garantizada en cada pedido&rdquo;",
+   "it": "&ldquo;Soddisfazione garantita al 100% su ogni ordine&rdquo;"
   },
   "sect_h": {
    "en": "What businesses order first",
    "nl": "Waar bedrijven mee beginnen",
    "fr": "Ce que les entreprises commandent en premier",
-   "de": "Womit Unternehmen anfangen",
-   "es": "Lo que piden primero las empresas",
-   "it": "Cosa ordinano per prime le aziende"
+   "de": "Damit fangen Unternehmen an",
+   "es": "Con esto empiezan las empresas",
+   "it": "Da qui partono le aziende"
   },
   "sect_sub": {
    "en": "Pick one and your 10% comes off at checkout.",
-   "nl": "Kies er een en je 10% gaat er bij het afrekenen af.",
-   "fr": "Choisissez-en un et vos 10% sont déduits au paiement.",
-   "de": "Wählen Sie eines, und Ihre 10% werden beim Bezahlen abgezogen.",
+   "nl": "Kies er één — je 10% gaat er bij het afrekenen vanaf.",
+   "fr": "Choisissez, vos 10% se déduisent au paiement.",
+   "de": "Aussuchen – Ihre 10% gehen beim Bezahlen ab.",
    "es": "Elige uno y tu 10% se descuenta al pagar.",
-   "it": "Scegline uno e il tuo 10% viene tolto al pagamento."
+   "it": "Scegli e il tuo 10% si scala al pagamento."
   },
   "expires": {
    "en": "Expires in 5 days",
@@ -3501,26 +3501,26 @@
   "file_h": {
    "en": "Not sure your file will work?",
    "nl": "Twijfel je of je bestand goed is?",
-   "fr": "Vous doutez que votre fichier convienne ?",
-   "de": "Unsicher, ob Ihre Datei funktioniert?",
-   "es": "¿No sabes si tu archivo servirá?",
-   "it": "Non sei sicuro che il tuo file vada bene?"
+   "fr": "Un doute sur votre fichier ?",
+   "de": "Unsicher, ob Ihre Datei passt?",
+   "es": "¿Dudas de si tu archivo servirá?",
+   "it": "Non sei sicuro del tuo file?"
   },
   "file_b": {
    "en": "Send us whatever you have. We check every file before anything goes to print, and we tell you if something needs fixing.",
-   "nl": "Stuur ons wat je hebt. Wij controleren elk bestand voordat er iets gedrukt wordt, en we zeggen het als er iets moet worden aangepast.",
-   "fr": "Envoyez-nous ce que vous avez. Nous vérifions chaque fichier avant toute impression et vous disons si quelque chose doit être corrigé.",
-   "de": "Schicken Sie uns, was Sie haben. Wir prüfen jede Datei, bevor etwas gedruckt wird, und sagen Ihnen, wenn etwas angepasst werden muss.",
-   "es": "Envíanos lo que tengas. Revisamos cada archivo antes de imprimir nada, y te decimos si hay que arreglar algo.",
-   "it": "Mandaci quello che hai. Controlliamo ogni file prima di stampare qualsiasi cosa, e ti diciamo se qualcosa va sistemato."
+   "nl": "Stuur maar op wat je hebt. Wij kijken elk bestand na voordat er iets gedrukt wordt, en we laten het weten als er iets moet gebeuren.",
+   "fr": "Envoyez ce que vous avez. Nous vérifions chaque fichier avant l'impression et nous vous prévenons s'il faut y retoucher quelque chose.",
+   "de": "Schicken Sie einfach, was Sie haben. Wir prüfen jede Datei vor dem Druck und melden uns, wenn etwas angepasst werden muss.",
+   "es": "Manda lo que tengas. Revisamos cada archivo antes de imprimir y te avisamos si hay que ajustar algo.",
+   "it": "Mandaci quello che hai. Controlliamo ogni file prima della stampa e ti avvisiamo se c'è qualcosa da correggere."
   },
   "file_link": {
    "en": "See how file checking works",
-   "nl": "Bekijk hoe de bestandscontrole werkt",
-   "fr": "Voir comment fonctionne la vérification",
+   "nl": "Zo werkt de bestandscontrole",
+   "fr": "Comment marche la vérification",
    "de": "So funktioniert die Dateiprüfung",
-   "es": "Mira cómo funciona la revisión de archivos",
-   "it": "Scopri come funziona il controllo file"
+   "es": "Así funciona la revisión de archivos",
+   "it": "Come funziona il controllo dei file"
   },
   "reviews_note": {
    "en": "Based on 34,000+ reviews",
@@ -3588,11 +3588,11 @@
   },
   "pre_ordered": {
    "en": "Your 10% code is inside, and the prints most businesses start with.",
-   "nl": "Je 10%-code zit erin, plus het drukwerk waar de meeste bedrijven mee beginnen.",
-   "fr": "Votre code 10% est à l'intérieur, avec les imprimés par lesquels commencent la plupart des entreprises.",
-   "de": "Ihr 10%-Code steht drin, dazu die Drucksachen, mit denen die meisten Unternehmen anfangen.",
-   "es": "Tu código del 10% está dentro, y lo que imprimen primero la mayoría de las empresas.",
-   "it": "Il tuo codice 10% è qui dentro, insieme alle stampe da cui parte la maggior parte delle aziende."
+   "nl": "Je 10%-code staat klaar, plus waar de meeste bedrijven mee beginnen.",
+   "fr": "Votre code de 10% vous attend, avec ce que commandent la plupart des entreprises.",
+   "de": "Ihr 10%-Code wartet, dazu die Klassiker für den Anfang.",
+   "es": "Tu código del 10% te espera, y con qué empiezan la mayoría de empresas.",
+   "it": "Il tuo codice 10% ti aspetta, e da dove partono quasi tutte le aziende."
   },
   "eyebrow": {
    "en": "10% OFF YOUR FIRST ORDER",
@@ -3612,21 +3612,21 @@
   },
   "ctanote": {
    "en": "Use it at checkout on anything in the range.",
-   "nl": "Gebruik hem bij het afrekenen, op alles in het assortiment.",
-   "fr": "Utilisez-le au paiement, sur tout le catalogue.",
-   "de": "Beim Bezahlen einlösen, für alles im Sortiment.",
+   "nl": "Te gebruiken bij het afrekenen, op alles uit het assortiment.",
+   "fr": "À utiliser au paiement, sur tout le catalogue.",
+   "de": "Beim Bezahlen einlösen, auf alles im Sortiment.",
    "es": "Úsalo al pagar, en todo el catálogo.",
-   "it": "Usalo al pagamento, su tutto il catalogo."
+   "it": "Da usare al pagamento, su tutto il catalogo."
   }
  },
  "welcome-02": {
   "pre": {
    "en": "Printed closer to you by a certified B Corp. Your 10% has 4 days left.",
-   "nl": "Gedrukt dichter bij jou door een gecertificeerde B Corp. Je 10% is nog 4 dagen geldig.",
-   "fr": "Imprimé plus près de vous par une B Corp certifiée. Vos 10% sont valables encore 4 jours.",
-   "de": "Näher bei Ihnen gedruckt von einer zertifizierten B Corp. Ihre 10% gelten noch 4 Tage.",
-   "es": "Impreso más cerca de ti por una B Corp certificada. Tu 10% vale 4 días más.",
-   "it": "Stampato più vicino a te da una B Corp certificata. Il tuo 10% vale altri 4 giorni."
+   "nl": "Dichter bij jou gedrukt, door een gecertificeerde B Corp. Nog 4 dagen voor je 10%.",
+   "fr": "Imprimé près de chez vous, par une B Corp certifiée. Encore 4 jours pour vos 10%.",
+   "de": "Näher bei Ihnen gedruckt, von einer zertifizierten B Corp. Noch 4 Tage für Ihre 10%.",
+   "es": "Impreso cerca de ti, por una B Corp certificada. Te quedan 4 días para tu 10%.",
+   "it": "Stampato vicino a te, da una B Corp certificata. Ancora 4 giorni per il tuo 10%."
   },
   "expires": {
    "en": "&nbsp;&middot;&nbsp;Expires in 4 days",
@@ -3638,27 +3638,27 @@
   },
   "h1": {
    "en": "Meet the people behind your print",
-   "nl": "Maak kennis met de mensen achter je drukwerk",
-   "fr": "Rencontrez les gens derrière vos imprimés",
-   "de": "Lernen Sie die Menschen hinter Ihrem Druck kennen",
-   "es": "Conoce a la gente detrás de tu impresión",
-   "it": "Conosci le persone dietro le tue stampe"
+   "nl": "Wie jouw drukwerk maakt",
+   "fr": "Qui imprime vos commandes",
+   "de": "Wer Ihre Drucksachen produziert",
+   "es": "Quién imprime tus pedidos",
+   "it": "Chi stampa i tuoi ordini"
   },
   "sub": {
    "en": "A B Corp certified platform, local print partners, and a promise to have your back.",
-   "nl": "Een B Corp-gecertificeerd platform, lokale drukpartners, en de belofte achter je te staan.",
-   "fr": "Une plateforme certifiée B Corp, des partenaires imprimeurs locaux, et la promesse d'être là pour vous.",
-   "de": "Eine B Corp-zertifizierte Plattform, lokale Druckpartner und das Versprechen, hinter Ihnen zu stehen.",
-   "es": "Una plataforma certificada B Corp, socios de impresión locales, y la promesa de respaldarte.",
-   "it": "Una piattaforma certificata B Corp, partner di stampa locali, e la promessa di esserci per te."
+   "nl": "Een gecertificeerde B Corp, drukkers uit je eigen regio, en mensen die je niet laten vallen.",
+   "fr": "Une plateforme certifiée B Corp, des imprimeurs près de chez vous, et une équipe qui ne vous laisse pas tomber.",
+   "de": "Zertifizierte B Corp, Druckpartner aus Ihrer Region und ein Team, das Sie nicht hängen lässt.",
+   "es": "Una plataforma certificada B Corp, imprentas cerca de ti y un equipo que no te deja tirado.",
+   "it": "Una piattaforma certificata B Corp, stampatori vicino a te e un team che non ti lascia solo."
   },
   "cta": {
    "en": "Read our story",
    "nl": "Lees ons verhaal",
    "fr": "Découvrir notre histoire",
    "de": "Unsere Geschichte lesen",
-   "es": "Lee nuestra historia",
-   "it": "Leggi la nostra storia"
+   "es": "Conoce nuestra historia",
+   "it": "Scopri la nostra storia"
   },
   "usp.0": {
    "en": "&ldquo;We are a certified B Corp&rdquo;",
@@ -3670,39 +3670,39 @@
   },
   "usp.1": {
    "en": "&ldquo;Local partners, faster delivery&rdquo;",
-   "nl": "&ldquo;Lokale partners, snellere levering&rdquo;",
-   "fr": "&ldquo;Des partenaires locaux, une livraison plus rapide&rdquo;",
-   "de": "&ldquo;Lokale Partner, schnellere Lieferung&rdquo;",
-   "es": "&ldquo;Socios locales, entrega más rápida&rdquo;",
-   "it": "&ldquo;Partner locali, consegna più rapida&rdquo;"
+   "nl": "&ldquo;Drukkers in de buurt, dus sneller bij je&rdquo;",
+   "fr": "&ldquo;Des imprimeurs proches, donc livré plus vite&rdquo;",
+   "de": "&ldquo;Druckpartner in der Nähe, also schneller da&rdquo;",
+   "es": "&ldquo;Imprentas cercanas, así llega antes&rdquo;",
+   "it": "&ldquo;Stampatori vicini, quindi arriva prima&rdquo;"
   },
   "usp.2": {
    "en": "&ldquo;10,000+ products to choose from&rdquo;",
    "nl": "&ldquo;Meer dan 10.000 producten om uit te kiezen&rdquo;",
    "fr": "&ldquo;Plus de 10 000 produits au choix&rdquo;",
    "de": "&ldquo;Über 10.000 Produkte zur Auswahl&rdquo;",
-   "es": "&ldquo;Más de 10.000 productos para elegir&rdquo;",
+   "es": "&ldquo;Más de 10.000 productos a elegir&rdquo;",
    "it": "&ldquo;Oltre 10.000 prodotti tra cui scegliere&rdquo;"
   },
   "sect_h": {
    "en": "Three things worth knowing",
-   "nl": "Drie dingen die het weten waard zijn",
+   "nl": "Drie dingen die je moet weten",
    "fr": "Trois choses à savoir",
-   "de": "Drei Dinge, die man wissen sollte",
+   "de": "Drei Dinge, die Sie wissen sollten",
    "es": "Tres cosas que conviene saber",
-   "it": "Tre cose che vale la pena sapere"
+   "it": "Tre cose da sapere"
   },
   "sect_sub": {
    "en": "Not slogans. Things you can check.",
-   "nl": "Geen slogans. Dingen die je kunt nagaan.",
-   "fr": "Pas des slogans. Des choses vérifiables.",
-   "de": "Keine Slogans. Dinge, die Sie nachprüfen können.",
-   "es": "No son eslóganes. Son cosas que puedes comprobar.",
-   "it": "Non slogan. Cose che puoi verificare."
+   "nl": "Geen praatjes. Dingen die je zelf kunt nagaan.",
+   "fr": "Pas des slogans. Des faits vérifiables.",
+   "de": "Keine Slogans. Nachprüfbare Fakten.",
+   "es": "No son eslóganes. Son datos que puedes comprobar.",
+   "it": "Non slogan. Fatti che puoi verificare."
   },
   "b.0.t": {
    "en": "Printed close to you",
-   "nl": "Dicht bij je gedrukt",
+   "nl": "Dicht bij jou gedrukt",
    "fr": "Imprimé près de chez vous",
    "de": "In Ihrer Nähe gedruckt",
    "es": "Impreso cerca de ti",
@@ -3710,17 +3710,17 @@
   },
   "b.0.l": {
    "en": "How the platform works",
-   "nl": "Hoe het platform werkt",
-   "fr": "Comment fonctionne la plateforme",
+   "nl": "Zo werkt het platform",
+   "fr": "Comment marche la plateforme",
    "de": "So funktioniert die Plattform",
-   "es": "Cómo funciona la plataforma",
+   "es": "Así funciona la plataforma",
    "it": "Come funziona la piattaforma"
   },
   "b.1.t": {
    "en": "Better print, less impact",
-   "nl": "Beter drukwerk, minder impact",
-   "fr": "Mieux imprimer, moins d'impact",
-   "de": "Besser drucken, weniger Auswirkung",
+   "nl": "Mooier drukwerk, minder impact",
+   "fr": "Mieux imprimé, moins d'impact",
+   "de": "Besser gedruckt, weniger Impact",
    "es": "Mejor impresión, menos impacto",
    "it": "Stampa migliore, meno impatto"
   },
@@ -3728,8 +3728,8 @@
    "en": "Read our impact report",
    "nl": "Lees ons impactrapport",
    "fr": "Lire notre rapport d'impact",
-   "de": "Unseren Impact-Bericht lesen",
-   "es": "Lee nuestro informe de impacto",
+   "de": "Unseren Impact-Report lesen",
+   "es": "Leer nuestro informe de impacto",
    "it": "Leggi il nostro report d'impatto"
   },
   "b.2.t": {
@@ -3742,35 +3742,35 @@
   },
   "b.2.l": {
    "en": "Browse everything",
-   "nl": "Bekijk alles",
-   "fr": "Tout parcourir",
-   "de": "Alles ansehen",
-   "es": "Ver todo",
-   "it": "Sfoglia tutto"
+   "nl": "Bekijk het hele assortiment",
+   "fr": "Voir tout le catalogue",
+   "de": "Das ganze Sortiment ansehen",
+   "es": "Ver todo el catálogo",
+   "it": "Guarda tutto il catalogo"
   },
   "ship_body": {
    "en": "Your order goes to a print partner near your delivery address, so it travels less and arrives sooner. In Ireland that means delivery via An Post and DPD, backed by a network of 300+ production partners.",
-   "nl": "Je bestelling gaat naar een drukpartner bij je bezorgadres in de buurt, dus hij reist minder ver en is er sneller. De bezorging loopt via lokale vervoerders, met een netwerk van 300+ productiepartners erachter.",
-   "fr": "Votre commande part chez un partenaire imprimeur proche de votre adresse de livraison : elle voyage moins et arrive plus vite. La livraison passe par des transporteurs locaux, avec un réseau de plus de 300 partenaires de production derrière.",
-   "de": "Ihr Auftrag geht an einen Druckpartner in der Nähe Ihrer Lieferadresse, so reist er kürzer und kommt schneller an. Die Zustellung läuft über lokale Zusteller, gestützt auf ein Netz von über 300 Produktionspartnern.",
-   "es": "Tu pedido va a un socio de impresión cerca de tu dirección de entrega, así viaja menos y llega antes. La entrega se hace con transportistas locales, respaldada por una red de más de 300 socios de producción.",
-   "it": "Il tuo ordine va a un partner di stampa vicino al tuo indirizzo di consegna, così viaggia meno e arriva prima. La consegna passa da corrieri locali, con dietro una rete di oltre 300 partner di produzione."
+   "nl": "Je order gaat naar een drukker in de buurt van je bezorgadres. Minder kilometers, dus sneller bij je. Achter de bezorging zit een netwerk van meer dan 300 productiepartners.",
+   "fr": "Votre commande part chez un imprimeur proche de votre adresse de livraison. Moins de kilomètres, donc plus vite chez vous. Derrière, un réseau de plus de 300 partenaires de production.",
+   "de": "Ihr Auftrag geht an eine Druckerei in der Nähe Ihrer Lieferadresse. Weniger Kilometer, also schneller bei Ihnen. Dahinter steht ein Netz von über 300 Produktionspartnern.",
+   "es": "Tu pedido va a una imprenta cercana a tu dirección de entrega. Menos kilómetros, así que llega antes. Detrás hay una red de más de 300 socios de producción.",
+   "it": "Il tuo ordine va a uno stampatore vicino al tuo indirizzo di consegna. Meno chilometri, quindi arriva prima. Dietro c'è una rete di oltre 300 partner di produzione."
   },
   "eco_body": {
    "en": "Print should not cost the earth. Being a certified B Corp keeps us honest about that, and it is why we work with partners who produce closer to you and materials that ask less of the planet. Our impact report shows where we stand and where we are heading.",
-   "nl": "Drukwerk hoeft de aarde niet te kosten. Als gecertificeerde B Corp houden we onszelf daaraan, en daarom werken we met partners die dichter bij je produceren en met materialen die minder van de planeet vragen. Ons impactrapport laat zien waar we staan en waar we naartoe gaan.",
-   "fr": "L'impression ne devrait pas coûter la planète. Être une B Corp certifiée nous oblige à rester honnêtes là-dessus, et c'est pourquoi nous travaillons avec des partenaires qui produisent plus près de vous et des matériaux qui demandent moins à la planète. Notre rapport d'impact montre où nous en sommes et où nous allons.",
-   "de": "Drucken darf die Erde nicht kosten. Als zertifizierte B Corp bleiben wir dabei ehrlich, und deshalb arbeiten wir mit Partnern, die näher bei Ihnen produzieren, und mit Materialien, die den Planeten weniger belasten. Unser Impact-Report zeigt, wo wir stehen und wohin wir gehen.",
-   "es": "Imprimir no debería costar el planeta. Ser una B Corp certificada nos obliga a ser honestos con eso, y por eso trabajamos con socios que producen más cerca de ti y con materiales que piden menos al planeta. Nuestro informe de impacto muestra dónde estamos y hacia dónde vamos.",
-   "it": "Stampare non deve costare il pianeta. Essere una B Corp certificata ci tiene onesti su questo, ed è il motivo per cui lavoriamo con partner che producono più vicino a te e con materiali che chiedono meno al pianeta. Il nostro report di impatto mostra dove siamo e dove stiamo andando."
+   "nl": "Drukwerk hoeft de aarde niet te kosten. Als gecertificeerde B Corp worden we daarop afgerekend, en daarom kiezen we partners die dichter bij je produceren en materialen die de planeet minder vragen. In ons impactrapport staat waar we staan en waar we naartoe werken.",
+   "fr": "L'impression ne devrait pas coûter la planète. Notre certification B Corp nous oblige à le prouver, et c'est pourquoi nous travaillons avec des partenaires qui produisent plus près de vous et des matériaux moins gourmands. Notre rapport d'impact dit où nous en sommes et où nous allons.",
+   "de": "Drucken muss die Umwelt nicht kosten. Als zertifizierte B Corp müssen wir das belegen – deshalb arbeiten wir mit Partnern, die näher bei Ihnen produzieren, und mit Materialien, die dem Planeten weniger abverlangen. Unser Impact-Report zeigt, wo wir stehen und wohin wir wollen.",
+   "es": "Imprimir no tiene por qué costarle al planeta. Ser una B Corp certificada nos obliga a demostrarlo, y por eso trabajamos con socios que producen más cerca de ti y con materiales que piden menos al planeta. Nuestro informe de impacto cuenta dónde estamos y hacia dónde vamos.",
+   "it": "Stampare non deve costare al pianeta. Essere una B Corp certificata ci obbliga a dimostrarlo, ed è per questo che scegliamo partner che producono più vicino a te e materiali che chiedono meno al pianeta. Il nostro report d'impatto dice dove siamo e dove stiamo andando."
   },
   "range_body": {
    "en": "More than 100 million product combinations. Business cards, flyers, brochures, posters, banners, textiles, packaging and branded gifts. Configure what you need and the platform finds a partner who can make it.",
-   "nl": "Meer dan 100 miljoen productcombinaties. Visitekaartjes, flyers, brochures, posters, banners, textiel, verpakkingen en relatiegeschenken. Stel samen wat je nodig hebt en het platform vindt een partner die het kan maken.",
-   "fr": "Plus de 100 millions de combinaisons de produits. Cartes de visite, flyers, brochures, affiches, banderoles, textiles, emballages et cadeaux personnalisés. Configurez ce dont vous avez besoin et la plateforme trouve un partenaire capable de le produire.",
-   "de": "Mehr als 100 Millionen Produktkombinationen. Visitenkarten, Flyer, Broschüren, Poster, Banner, Textilien, Verpackungen und Werbegeschenke. Konfigurieren Sie, was Sie brauchen, und die Plattform findet einen Partner, der es herstellen kann.",
-   "es": "Más de 100 millones de combinaciones de producto. Tarjetas de visita, flyers, folletos, pósters, lonas, textil, packaging y regalos de empresa. Configura lo que necesitas y la plataforma encuentra un socio que pueda fabricarlo.",
-   "it": "Più di 100 milioni di combinazioni di prodotto. Biglietti da visita, volantini, brochure, poster, striscioni, tessili, packaging e gadget personalizzati. Configura quello che ti serve e la piattaforma trova un partner in grado di produrlo."
+   "nl": "Meer dan 100 miljoen combinaties. Visitekaartjes, flyers, brochures, posters, banners, textiel, verpakking en relatiegeschenken. Jij stelt samen wat je nodig hebt, het platform zoekt de partner die het kan maken.",
+   "fr": "Plus de 100 millions de combinaisons. Cartes de visite, flyers, brochures, affiches, banderoles, textile, emballage et objets publicitaires. Vous configurez ce qu'il vous faut, la plateforme trouve l'imprimeur capable de le produire.",
+   "de": "Über 100 Millionen Kombinationen. Visitenkarten, Flyer, Broschüren, Poster, Banner, Textil, Verpackung und Werbegeschenke. Sie konfigurieren, was Sie brauchen – die Plattform findet den Partner, der es herstellen kann.",
+   "es": "Más de 100 millones de combinaciones. Tarjetas de visita, flyers, folletos, pósters, banners, textil, packaging y regalos de empresa. Tú configuras lo que necesitas y la plataforma encuentra quién puede producirlo.",
+   "it": "Oltre 100 milioni di combinazioni. Biglietti da visita, flyer, brochure, poster, banner, tessile, packaging e gadget aziendali. Tu configuri quello che ti serve, la piattaforma trova il partner che può produrlo."
   },
   "alt_beach": {
    "en": "The Helloprint team at a beach clean-up",
@@ -3806,67 +3806,67 @@
   },
   "pre_ordered": {
    "en": "Printed closer to you, a B Corp certification, and over 10,000 products.",
-   "nl": "Dichter bij je gedrukt, een B Corp-certificering en meer dan 10.000 producten.",
-   "fr": "Imprimé plus près de chez vous, une certification B Corp et plus de 10 000 produits.",
-   "de": "Näher bei Ihnen gedruckt, eine B Corp-Zertifizierung und über 10.000 Produkte.",
-   "es": "Impreso más cerca de ti, una certificación B Corp y más de 10.000 productos.",
-   "it": "Stampato più vicino a te, una certificazione B Corp e oltre 10.000 prodotti."
+   "nl": "Dichter bij jou gedrukt, een B Corp-certificering en meer dan 10.000 producten.",
+   "fr": "Imprimé près de chez vous, une certification B Corp et plus de 10 000 produits.",
+   "de": "Näher bei Ihnen gedruckt, B Corp zertifiziert und über 10.000 Produkte.",
+   "es": "Impreso cerca de ti, certificación B Corp y más de 10.000 productos.",
+   "it": "Stampato vicino a te, certificazione B Corp e oltre 10.000 prodotti."
   }
  },
  "welcome-03": {
   "pre": {
    "en": "Rated 4.5 from 34,000+ reviews. Only 2 days left to use your 10%.",
-   "nl": "Beoordeeld met 4,5 uit 34.000+ reviews. Nog maar 2 dagen om je 10% te gebruiken.",
-   "fr": "Noté 4,5 sur 34 000+ avis. Plus que 2 jours pour utiliser vos 10%.",
-   "de": "Bewertet mit 4,5 aus 34.000+ Bewertungen. Nur noch 2 Tage für Ihre 10%.",
-   "es": "Valorado con 4,5 de 34.000+ opiniones. Solo 2 días para usar tu 10%.",
-   "it": "Valutato 4,5 su 34.000+ recensioni. Solo 2 giorni per usare il tuo 10%."
+   "nl": "4,5 uit 34.000+ reviews. Nog 2 dagen voor je 10%.",
+   "fr": "4,5 sur 34 000+ avis. Encore 2 jours pour vos 10%.",
+   "de": "4,5 aus über 34.000 Bewertungen. Noch 2 Tage für Ihre 10%.",
+   "es": "4,5 de más de 34.000 opiniones. Te quedan 2 días para tu 10%.",
+   "it": "4,5 su oltre 34.000 recensioni. Ancora 2 giorni per il tuo 10%."
   },
   "h1": {
    "en": "Rated Excellent on Trustpilot",
-   "nl": "Beoordeeld als Uitstekend op Trustpilot",
-   "fr": "Noté Excellent sur Trustpilot",
+   "nl": "Uitstekend beoordeeld op Trustpilot",
+   "fr": "Note Excellent sur Trustpilot",
    "de": "Auf Trustpilot mit Hervorragend bewertet",
-   "es": "Valorado como Excelente en Trustpilot",
-   "it": "Valutato Eccellente su Trustpilot"
+   "es": "Valoración Excelente en Trustpilot",
+   "it": "Valutazione Eccellente su Trustpilot"
   },
   "cta": {
    "en": "Read the reviews",
-   "nl": "Lees de reviews",
+   "nl": "Bekijk de reviews",
    "fr": "Lire les avis",
-   "de": "Bewertungen lesen",
-   "es": "Lee las opiniones",
+   "de": "Bewertungen ansehen",
+   "es": "Leer las opiniones",
    "it": "Leggi le recensioni"
   },
   "unedited": {
    "en": "Unedited, straight from Trustpilot.",
    "nl": "Onbewerkt, rechtstreeks van Trustpilot.",
-   "fr": "Non modifiés, directement depuis Trustpilot.",
+   "fr": "Non retouchés, directement depuis Trustpilot.",
    "de": "Unbearbeitet, direkt von Trustpilot.",
    "es": "Sin editar, directamente de Trustpilot.",
    "it": "Non modificate, direttamente da Trustpilot."
   },
   "verified": {
    "en": "verified Trustpilot review",
-   "nl": "geverifieerde Trustpilot-review",
+   "nl": "gecontroleerde Trustpilot-review",
    "fr": "avis Trustpilot vérifié",
    "de": "verifizierte Trustpilot-Bewertung",
-   "es": "opinión verificada de Trustpilot",
+   "es": "opinión verificada en Trustpilot",
    "it": "recensione Trustpilot verificata"
   },
   "g_h": {
    "en": "Every order, guaranteed",
-   "nl": "Elke bestelling, gegarandeerd",
-   "fr": "Chaque commande, garantie",
-   "de": "Jede Bestellung, garantiert",
-   "es": "Cada pedido, garantizado",
-   "it": "Ogni ordine, garantito"
+   "nl": "Bij elke order gegarandeerd",
+   "fr": "Garanti sur chaque commande",
+   "de": "Bei jeder Bestellung garantiert",
+   "es": "Garantizado en cada pedido",
+   "it": "Garantito su ogni ordine"
   },
   "g.0": {
    "en": "Best price guaranteed",
-   "nl": "Laagste prijs gegarandeerd",
+   "nl": "Beste prijs, gegarandeerd",
    "fr": "Meilleur prix garanti",
-   "de": "Bestpreis garantiert",
+   "de": "Bestpreis-Garantie",
    "es": "Mejor precio garantizado",
    "it": "Miglior prezzo garantito"
   },
@@ -3875,13 +3875,13 @@
    "nl": "All-in prijzen",
    "fr": "Prix tout compris",
    "de": "All-inclusive-Preise",
-   "es": "Precios todo incluido",
-   "it": "Prezzi tutto incluso"
+   "es": "Precios con todo incluido",
+   "it": "Prezzi tutto compreso"
   },
   "g.2": {
    "en": "Always a perfect design",
    "nl": "Altijd een perfect ontwerp",
-   "fr": "Toujours un visuel parfait",
+   "fr": "Toujours un design impeccable",
    "de": "Immer ein perfektes Design",
    "es": "Siempre un diseño perfecto",
    "it": "Sempre un design perfetto"
@@ -3889,26 +3889,26 @@
   "g.3": {
    "en": "100% satisfaction guarantee",
    "nl": "100% tevredenheidsgarantie",
-   "fr": "Garantie satisfaction 100%",
+   "fr": "Satisfaction garantie à 100%",
    "de": "100% Zufriedenheitsgarantie",
-   "es": "Garantía de satisfacción del 100%",
-   "it": "Garanzia di soddisfazione 100%"
+   "es": "100% de satisfacción garantizada",
+   "it": "Soddisfazione garantita al 100%"
   },
   "cta2": {
    "en": "Place your first order",
-   "nl": "Plaats je eerste bestelling",
-   "fr": "Passez votre première commande",
-   "de": "Geben Sie Ihre erste Bestellung auf",
-   "es": "Haz tu primer pedido",
+   "nl": "Plaats je eerste order",
+   "fr": "Passer ma première commande",
+   "de": "Erste Bestellung aufgeben",
+   "es": "Hacer mi primer pedido",
    "it": "Fai il tuo primo ordine"
   },
   "promise_link": {
    "en": "See what each promise covers",
-   "nl": "Bekijk wat elke belofte inhoudt",
-   "fr": "Voir ce que couvre chaque promesse",
-   "de": "Sehen, was jedes Versprechen abdeckt",
-   "es": "Mira qué cubre cada promesa",
-   "it": "Guarda cosa copre ogni promessa"
+   "nl": "Wat elke belofte precies inhoudt",
+   "fr": "Ce que couvre chaque garantie",
+   "de": "Was jede Zusage genau abdeckt",
+   "es": "Qué cubre cada garantía",
+   "it": "Cosa copre ogni garanzia"
   },
   "expires": {
    "en": "&nbsp;&middot;&nbsp;2 days left",
@@ -3948,32 +3948,32 @@
    "fr": "Ce que disent <em>de vrais clients</em>",
    "de": "Was <em>echte Kunden</em> sagen",
    "es": "Lo que dicen <em>clientes reales</em>",
-   "it": "Cosa dicono <em>i clienti veri</em>"
+   "it": "Cosa dicono <em>clienti veri</em>"
   },
   "score_line": {
    "en": "4.5 out of 5 from 34,000+ reviews by businesses like yours.",
-   "nl": "4,5 uit 5 op basis van 34.000+ reviews van bedrijven zoals dat van jou.",
-   "fr": "4,5 sur 5 sur 34 000+ avis d'entreprises comme la vôtre.",
-   "de": "4,5 von 5 aus 34.000+ Bewertungen von Unternehmen wie Ihrem.",
-   "es": "4,5 sobre 5 de 34.000+ opiniones de empresas como la tuya.",
-   "it": "4,5 su 5 su 34.000+ recensioni di aziende come la tua."
+   "nl": "4,5 uit 5, op basis van 34.000+ reviews van bedrijven zoals het jouwe.",
+   "fr": "4,5 sur 5, sur la base de 34 000+ avis d'entreprises comme la vôtre.",
+   "de": "4,5 von 5, aus über 34.000 Bewertungen von Unternehmen wie Ihrem.",
+   "es": "4,5 de 5, con más de 34.000 opiniones de empresas como la tuya.",
+   "it": "4,5 su 5, da oltre 34.000 recensioni di aziende come la tua."
   },
   "pre_ordered": {
    "en": "Rated 4.5 on Trustpilot from 34,000+ reviews. Here is what a few of them say.",
-   "nl": "Beoordeeld met 4,5 op Trustpilot uit 34.000+ reviews. Dit zeggen er een paar.",
-   "fr": "Noté 4,5 sur Trustpilot sur 34 000+ avis. Voici ce qu'en disent quelques-uns.",
-   "de": "Bewertet mit 4,5 auf Trustpilot aus 34.000+ Bewertungen. Das sagen einige davon.",
-   "es": "Valorado con 4,5 en Trustpilot a partir de 34.000+ opiniones. Esto dicen algunas.",
-   "it": "Valutato 4,5 su Trustpilot su 34.000+ recensioni. Ecco cosa dicono alcune."
+   "nl": "4,5 op Trustpilot uit 34.000+ reviews. Dit zeggen een paar van hen.",
+   "fr": "4,5 sur Trustpilot, 34 000+ avis. Voici ce qu'en disent quelques-uns.",
+   "de": "4,5 auf Trustpilot aus über 34.000 Bewertungen. Ein paar Stimmen daraus.",
+   "es": "4,5 en Trustpilot con más de 34.000 opiniones. Esto dicen algunos.",
+   "it": "4,5 su Trustpilot da oltre 34.000 recensioni. Ecco cosa dicono alcuni."
   }
  },
  "welcome-04": {
   "pre": {
    "en": "Artwork or just an idea, we take it from there. Last day for your 10%.",
-   "nl": "Een ontwerp of alleen een idee, wij nemen het over. Laatste dag voor je 10%.",
-   "fr": "Un visuel ou juste une idée, on prend le relais. Dernier jour pour vos 10%.",
-   "de": "Eine Druckdatei oder nur eine Idee, wir übernehmen. Letzter Tag für Ihre 10%.",
-   "es": "Un diseño o solo una idea, nos encargamos. Último día para tu 10%.",
+   "nl": "Een ontwerp of alleen een idee, wij pakken het op. Laatste dag voor je 10%.",
+   "fr": "Un fichier ou juste une idée, on prend le relais. Dernier jour pour vos 10%.",
+   "de": "Fertige Datei oder nur eine Idee – wir übernehmen. Letzter Tag für Ihre 10%.",
+   "es": "Un diseño o solo una idea, seguimos nosotros. Último día para tu 10%.",
    "it": "Un file o solo un'idea, ci pensiamo noi. Ultimo giorno per il tuo 10%."
   },
   "lastday": {
@@ -3986,43 +3986,43 @@
   },
   "h1": {
    "en": "Send it over, we&rsquo;ll handle it",
-   "nl": "Stuur het door, wij regelen het",
+   "nl": "Stuur het op, wij regelen het",
    "fr": "Envoyez-le, on s'en occupe",
-   "de": "Schicken Sie es, wir kümmern uns darum",
-   "es": "Envíalo y nos encargamos",
+   "de": "Schicken Sie es, wir kümmern uns",
+   "es": "Mándalo y nos encargamos",
    "it": "Mandacelo, ci pensiamo noi"
   },
   "sub": {
    "en": "Finished artwork or just a rough idea. Send either and a print expert takes it from there, checking your file or pricing the job.",
-   "nl": "Een afgerond ontwerp of alleen een ruw idee. Stuur allebei gerust, dan neemt een printexpert het over: hij controleert je bestand of prijst de klus.",
-   "fr": "Un visuel finalisé ou juste une idée. Envoyez l'un ou l'autre et un expert prend le relais : il vérifie votre fichier ou chiffre le travail.",
-   "de": "Eine fertige Datei oder nur eine grobe Idee. Schicken Sie beides, dann übernimmt ein Druckexperte: Er prüft die Datei oder kalkuliert den Auftrag.",
-   "es": "Un diseño terminado o solo una idea en bruto. Envía cualquiera y un experto se encarga: revisa tu archivo o presupuesta el trabajo.",
-   "it": "Un file finito o solo un'idea grezza. Manda l'uno o l'altro e un esperto prende in mano la cosa: controlla il file o quota il lavoro."
+   "nl": "Een afgerond ontwerp of een ruwe schets. Stuur maar wat je hebt: een printexpert kijkt je bestand na of rekent de klus door.",
+   "fr": "Un fichier finalisé ou un croquis approximatif. Envoyez ce que vous avez : un expert vérifie votre fichier ou chiffre le travail.",
+   "de": "Fertige Datei oder eine grobe Skizze. Schicken Sie, was Sie haben – ein Druckexperte prüft die Datei oder kalkuliert den Auftrag.",
+   "es": "Un diseño acabado o un boceto a mano alzada. Manda lo que tengas: un experto revisa tu archivo o presupuesta el trabajo.",
+   "it": "Un file finito o solo uno schizzo. Manda quello che hai: un esperto controlla il file o preventiva il lavoro."
   },
   "cta": {
    "en": "Contact our experts",
-   "nl": "Neem contact op met onze experts",
-   "fr": "Contacter nos experts",
-   "de": "Unsere Experten kontaktieren",
-   "es": "Contacta con nuestros expertos",
-   "it": "Contatta i nostri esperti"
+   "nl": "Praat met een printexpert",
+   "fr": "Parler à un expert",
+   "de": "Mit einem Druckexperten sprechen",
+   "es": "Habla con un experto",
+   "it": "Parla con un esperto"
   },
   "team_h": {
    "en": "Meet John and the Print Expert Team",
-   "nl": "Maak kennis met John en het printexpert-team",
-   "fr": "Rencontrez John et l'équipe d'experts en impression",
-   "de": "Lernen Sie John und das Druckexperten-Team kennen",
-   "es": "Conoce a John y al equipo de expertos en impresión",
-   "it": "Conosci John e il team di esperti di stampa"
+   "nl": "Dit is John en het printexpert-team",
+   "fr": "Voici John et l'équipe d'experts",
+   "de": "Das sind John und das Druckexperten-Team",
+   "es": "Estos son John y el equipo de expertos",
+   "it": "Ecco John e il team di esperti"
   },
   "team_sub": {
    "en": "Real people who spec print all day. Ask them anything.",
-   "nl": "Echte mensen die de hele dag drukwerk specificeren. Vraag ze alles.",
-   "fr": "De vraies personnes qui définissent des travaux d'impression toute la journée. Posez-leur vos questions.",
-   "de": "Echte Menschen, die den ganzen Tag Druckaufträge kalkulieren. Fragen Sie sie alles.",
-   "es": "Personas de verdad que definen trabajos de impresión todo el día. Pregúntales lo que quieras.",
-   "it": "Persone vere che definiscono lavori di stampa tutto il giorno. Chiedi loro qualsiasi cosa."
+   "nl": "Mensen die dag in dag uit drukwerk specificeren. Vraag ze alles.",
+   "fr": "Des gens qui chiffrent de l'impression toute la journée. Posez-leur vos questions.",
+   "de": "Menschen, die den ganzen Tag Druck kalkulieren. Fragen Sie sie alles.",
+   "es": "Gente que especifica impresión todo el día. Pregúntales lo que quieras.",
+   "it": "Persone che preventivano stampa tutto il giorno. Chiedi quello che vuoi."
   },
   "role": {
    "en": "Print Expert Team",
@@ -4035,70 +4035,70 @@
   "john_role": {
    "en": "Our most experienced print expert",
    "nl": "Onze meest ervaren printexpert",
-   "fr": "Notre expert en impression le plus expérimenté",
+   "fr": "Notre expert le plus expérimenté",
    "de": "Unser erfahrenster Druckexperte",
-   "es": "Nuestro experto en impresión con más experiencia",
-   "it": "Il nostro esperto di stampa più esperto"
+   "es": "Nuestro experto con más experiencia",
+   "it": "Il nostro esperto con più esperienza"
   },
   "john_quote": {
    "en": "Some jobs are genuinely complicated and some are just about getting the best price. Send me the details either way and I will come back with the best option I can find in the market.&rdquo;",
-   "nl": "Sommige klussen zijn echt ingewikkeld en bij andere gaat het gewoon om de beste prijs. Stuur me in beide gevallen de details, dan kom ik terug met de beste optie die ik in de markt kan vinden.&rdquo;",
-   "fr": "Certains travaux sont vraiment compliqués, d'autres se résument au meilleur prix. Dans les deux cas, envoyez-moi les détails et je reviendrai avec la meilleure option que je trouve sur le marché.&rdquo;",
-   "de": "Manche Aufträge sind wirklich kompliziert, bei anderen geht es einfach um den besten Preis. Schicken Sie mir in beiden Fällen die Details, dann melde ich mich mit der besten Option, die ich am Markt finde.&rdquo;",
-   "es": "Algunos trabajos son de verdad complicados y otros van solo de conseguir el mejor precio. En cualquier caso, mándame los detalles y vuelvo con la mejor opción que encuentre en el mercado.&rdquo;",
-   "it": "Alcuni lavori sono davvero complicati e altri riguardano solo il prezzo migliore. In entrambi i casi mandami i dettagli e torno con la migliore opzione che trovo sul mercato.&rdquo;"
+   "nl": "Sommige klussen zijn echt ingewikkeld, bij andere gaat het puur om de scherpste prijs. Stuur me in beide gevallen de details, dan kom ik terug met het beste dat ik in de markt kan vinden.&rdquo;",
+   "fr": "Certains travaux sont vraiment complexes, d'autres se résument au meilleur prix. Dans les deux cas, envoyez-moi les détails et je reviens avec la meilleure option que je trouve sur le marché.&rdquo;",
+   "de": "Manche Aufträge sind wirklich kompliziert, bei anderen geht es nur um den besten Preis. Schicken Sie mir in beiden Fällen die Details, dann melde ich mich mit der besten Option, die ich am Markt finde.&rdquo;",
+   "es": "Algunos trabajos son de verdad complicados y otros van solo del mejor precio. En ambos casos mándame los detalles y te vuelvo con la mejor opción que encuentre en el mercado.&rdquo;",
+   "it": "Certi lavori sono davvero complicati, altri sono solo questione di prezzo. In entrambi i casi mandami i dettagli e torno con la migliore opzione che trovo sul mercato.&rdquo;"
   },
   "email_john": {
    "en": "E-mail John",
    "nl": "Mail John",
    "fr": "Écrire à John",
    "de": "John eine E-Mail schreiben",
-   "es": "Escribe a John",
+   "es": "Escribir a John",
    "it": "Scrivi a John"
   },
   "how_h": {
    "en": "How it works",
-   "nl": "Hoe het werkt",
-   "fr": "Comment ça marche",
-   "de": "So funktioniert es",
+   "nl": "Zo gaat het",
+   "fr": "Comment ça se passe",
+   "de": "So läuft es",
    "es": "Cómo funciona",
    "it": "Come funziona"
   },
   "s.0.t": {
    "en": "Send it over",
-   "nl": "Stuur het door",
+   "nl": "Stuur het op",
    "fr": "Envoyez-le",
    "de": "Schicken Sie es",
-   "es": "Envíalo",
+   "es": "Mándalo",
    "it": "Mandacelo"
   },
   "s.0.b": {
    "en": "Finished artwork or just a rough idea. Whatever you have is enough to start.",
-   "nl": "Een afgerond ontwerp of alleen een ruw idee. Wat je ook hebt, het is genoeg om te beginnen.",
-   "fr": "Un visuel finalisé ou juste une idée. Ce que vous avez suffit pour commencer.",
-   "de": "Eine fertige Datei oder nur eine grobe Idee. Was Sie haben, reicht zum Anfangen.",
-   "es": "Un diseño terminado o solo una idea en bruto. Lo que tengas basta para empezar.",
-   "it": "Un file finito o solo un'idea grezza. Quello che hai basta per iniziare."
+   "nl": "Een afgerond ontwerp of een ruwe schets. Wat je hebt is genoeg om te beginnen.",
+   "fr": "Un fichier finalisé ou un croquis. Ce que vous avez suffit pour démarrer.",
+   "de": "Fertige Datei oder grobe Skizze. Was Sie haben, reicht für den Anfang.",
+   "es": "Un diseño acabado o un boceto. Con lo que tengas ya podemos empezar.",
+   "it": "Un file finito o uno schizzo. Quello che hai basta per iniziare."
   },
   "s.1.t": {
    "en": "John&rsquo;s team specs it",
-   "nl": "John&rsquo;s team specificeert het",
-   "fr": "L'équipe de John le définit",
+   "nl": "Het team van John specificeert het",
+   "fr": "L'équipe de John le chiffre",
    "de": "Johns Team kalkuliert es",
-   "es": "El equipo de John lo define",
-   "it": "Il team di John lo definisce"
+   "es": "El equipo de John lo especifica",
+   "it": "Il team di John lo specifica"
   },
   "s.1.b": {
    "en": "The right product and the right print partner, however unusual the job.",
-   "nl": "Het juiste product en de juiste drukpartner, hoe bijzonder de klus ook is.",
-   "fr": "Le bon produit et le bon partenaire imprimeur, aussi inhabituel que soit le travail.",
-   "de": "Das richtige Produkt und der richtige Druckpartner, wie ungewöhnlich der Auftrag auch ist.",
-   "es": "El producto adecuado y el socio de impresión adecuado, por raro que sea el trabajo.",
-   "it": "Il prodotto giusto e il partner di stampa giusto, per quanto insolito sia il lavoro."
+   "nl": "Het juiste product bij de juiste drukker, hoe bijzonder de klus ook is.",
+   "fr": "Le bon produit chez le bon imprimeur, même pour un travail inhabituel.",
+   "de": "Das richtige Produkt beim richtigen Druckpartner, so ungewöhnlich der Auftrag auch ist.",
+   "es": "El producto adecuado con la imprenta adecuada, por raro que sea el trabajo.",
+   "it": "Il prodotto giusto dallo stampatore giusto, per quanto insolito sia il lavoro."
   },
   "s.2.t": {
    "en": "A price back within 24 hours",
-   "nl": "Binnen 24 uur een prijs terug",
+   "nl": "Binnen 24 uur een prijs",
    "fr": "Un prix sous 24 heures",
    "de": "Ein Preis innerhalb von 24 Stunden",
    "es": "Un precio en 24 horas",
@@ -4106,43 +4106,43 @@
   },
   "s.2.b": {
    "en": "The sharpest price they can find in the market, with the full total in it.",
-   "nl": "De scherpste prijs die ze in de markt kunnen vinden, met het complete totaal erin.",
-   "fr": "Le prix le plus juste qu'ils trouvent sur le marché, total complet inclus.",
-   "de": "Der schärfste Preis, den sie am Markt finden, mit der vollständigen Summe.",
+   "nl": "De scherpste prijs die ze in de markt vinden, met het complete totaal erin.",
+   "fr": "Le prix le plus serré qu'ils trouvent sur le marché, total complet inclus.",
+   "de": "Der beste Preis, den sie am Markt finden – inklusive Gesamtsumme.",
    "es": "El precio más ajustado que encuentren en el mercado, con el total completo.",
-   "it": "Il prezzo più conveniente che trovano sul mercato, con il totale completo."
+   "it": "Il prezzo più aggressivo che trovano sul mercato, con il totale completo."
   },
   "final_h": {
    "en": "Tell John what you need",
-   "nl": "Zeg John wat je nodig hebt",
+   "nl": "Vertel John wat je nodig hebt",
    "fr": "Dites à John ce qu'il vous faut",
    "de": "Sagen Sie John, was Sie brauchen",
-   "es": "Dile a John qué necesitas",
+   "es": "Cuéntale a John qué necesitas",
    "it": "Di' a John cosa ti serve"
   },
   "final_b": {
    "en": "A standard job or something completely unusual. Either way you get a price within 24 hours and a straight answer on what is possible.",
-   "nl": "Een standaardklus of iets compleet ongewoons. In beide gevallen krijg je binnen 24 uur een prijs en een eerlijk antwoord over wat er kan.",
-   "fr": "Un travail standard ou quelque chose de complètement inhabituel. Dans les deux cas, vous avez un prix sous 24 heures et une réponse franche sur ce qui est possible.",
-   "de": "Ein Standardauftrag oder etwas völlig Ungewöhnliches. In beiden Fällen bekommen Sie innerhalb von 24 Stunden einen Preis und eine klare Antwort, was möglich ist.",
-   "es": "Un trabajo estándar o algo completamente inusual. En cualquier caso tienes un precio en 24 horas y una respuesta clara sobre lo que es posible.",
-   "it": "Un lavoro standard o qualcosa di completamente insolito. In entrambi i casi hai un prezzo entro 24 ore e una risposta chiara su cosa è possibile."
+   "nl": "Een standaardklus of iets totaal ongewoons. In beide gevallen heb je binnen 24 uur een prijs en een eerlijk antwoord over wat er kan.",
+   "fr": "Un travail standard ou quelque chose de totalement inhabituel. Dans les deux cas, vous avez un prix sous 24 heures et une réponse franche sur ce qui est possible.",
+   "de": "Ein Standardauftrag oder etwas völlig Ungewöhnliches. In beiden Fällen haben Sie innerhalb von 24 Stunden einen Preis und eine klare Antwort, was möglich ist.",
+   "es": "Un trabajo estándar o algo totalmente fuera de lo común. En ambos casos tienes un precio en 24 horas y una respuesta clara sobre qué es posible.",
+   "it": "Un lavoro standard o qualcosa di totalmente insolito. In entrambi i casi hai un prezzo entro 24 ore e una risposta chiara su cosa si può fare."
   },
   "final_cta": {
    "en": "Get your price",
    "nl": "Vraag je prijs op",
-   "fr": "Obtenir votre prix",
+   "fr": "Obtenir mon prix",
    "de": "Preis anfragen",
-   "es": "Consigue tu precio",
-   "it": "Ottieni il tuo prezzo"
+   "es": "Pedir mi precio",
+   "it": "Chiedi il tuo prezzo"
   },
   "final_note": {
    "en": "Or just reply to this email. It reaches the team.",
-   "nl": "Of antwoord gewoon op deze mail. Hij komt bij het team terecht.",
-   "fr": "Ou répondez simplement à cet e-mail. Il arrive chez l'équipe.",
-   "de": "Oder antworten Sie einfach auf diese E-Mail. Sie erreicht das Team.",
-   "es": "O responde a este correo. Le llega al equipo.",
-   "it": "Oppure rispondi a questa email. Arriva al team."
+   "nl": "Of antwoord gewoon op deze mail. Die komt bij het team terecht.",
+   "fr": "Ou répondez simplement à cet e-mail : il arrive chez l'équipe.",
+   "de": "Oder antworten Sie einfach auf diese E-Mail. Sie landet beim Team.",
+   "es": "O responde a este correo sin más: llega al equipo.",
+   "it": "Oppure rispondi a questa email: arriva al team."
   },
   "alt_desks": {
    "en": "Helloprint advisers at their desks",
@@ -4162,21 +4162,21 @@
   },
   "pre_ordered": {
    "en": "Artwork or just an idea. Send either and John&rsquo;s team takes it from there.",
-   "nl": "Een ontwerp of alleen een idee. Stuur allebei gerust, John&rsquo;s team pakt het vanaf daar op.",
-   "fr": "Un visuel ou juste une idée. Envoyez l'un ou l'autre et l'équipe de John prend le relais.",
-   "de": "Eine Druckdatei oder nur eine Idee. Schicken Sie beides, Johns Team übernimmt ab da.",
-   "es": "Un diseño o solo una idea. Envía cualquiera de los dos y el equipo de John se encarga.",
-   "it": "Un file o solo un'idea. Manda l'uno o l'altro e il team di John prende in mano la cosa."
+   "nl": "Een ontwerp of alleen een idee. Stuur maar op, het team van John pakt het op.",
+   "fr": "Un fichier ou juste une idée. Envoyez, l'équipe de John prend le relais.",
+   "de": "Datei oder nur eine Idee. Schicken Sie es, Johns Team übernimmt.",
+   "es": "Un diseño o solo una idea. Mándalo y el equipo de John sigue.",
+   "it": "Un file o solo un'idea. Mandacelo, il team di John ci pensa."
   }
  },
  "flow-welcome": {
   "subj.wel1": {
    "en": "Welcome to Helloprint, and your 10% code",
-   "nl": "Welkom bij Helloprint, en je 10%-code",
-   "fr": "Bienvenue chez Helloprint, et votre code 10%",
-   "de": "Willkommen bei Helloprint, und Ihr 10%-Code",
-   "es": "Bienvenido a Helloprint, y tu código del 10%",
-   "it": "Benvenuto in Helloprint, e il tuo codice 10%"
+   "nl": "Welkom bij Helloprint — hier is je 10%",
+   "fr": "Bienvenue chez Helloprint, et vos 10%",
+   "de": "Willkommen bei Helloprint – und Ihre 10%",
+   "es": "Bienvenido a Helloprint, y tu 10%",
+   "it": "Benvenuto in Helloprint, e il tuo 10%"
   },
   "subj.wel4": {
    "en": "Last day for your 10%",
@@ -4188,18 +4188,18 @@
   },
   "subj.wel2": {
    "en": "Your 10% is waiting, and 4 days left to use it",
-   "nl": "Je 10% staat klaar, en je hebt nog 4 dagen",
-   "fr": "Vos 10% vous attendent, et il reste 4 jours",
-   "de": "Ihre 10% warten, und Sie haben noch 4 Tage",
-   "es": "Tu 10% te espera, y quedan 4 días",
-   "it": "Il tuo 10% ti aspetta, e restano 4 giorni"
+   "nl": "Je 10% staat klaar, nog 4 dagen",
+   "fr": "Vos 10% vous attendent, encore 4 jours",
+   "de": "Ihre 10% warten – noch 4 Tage",
+   "es": "Tu 10% te espera, quedan 4 días",
+   "it": "Il tuo 10% ti aspetta, ancora 4 giorni"
   },
   "subj.wel3": {
    "en": "Only 2 days left on your 10%",
-   "nl": "Nog maar 2 dagen voor je 10%",
+   "nl": "Nog 2 dagen voor je 10%",
    "fr": "Plus que 2 jours pour vos 10%",
    "de": "Nur noch 2 Tage für Ihre 10%",
-   "es": "Solo quedan 2 días para tu 10%",
+   "es": "Solo 2 días para tu 10%",
    "it": "Solo 2 giorni per il tuo 10%"
   }
  },
