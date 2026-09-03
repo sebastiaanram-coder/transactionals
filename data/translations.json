@@ -38,7 +38,8 @@
    "fr": "Dites à un expert à quoi ça doit servir, il vous dira quelle option convient, ce que ça coûte et sous quel délai vous l'avez. Répondez à cet e-mail, ça arrive directement chez eux.",
    "de": "Sagen Sie einem Druckexperten, wofür es gedacht ist – Sie hören, welche Option passt, was sie kostet und wie schnell sie bei Ihnen ist. Antworten Sie einfach auf diese E-Mail, sie landet direkt beim Team.",
    "es": "Cuéntale a un experto para qué es y te dirá qué opción encaja, cuánto cuesta y en cuánto tiempo lo tienes. Responde a este correo y le llega directamente.",
-   "it": "Racconta a un esperto a cosa ti serve e ti dirà quale opzione va bene, quanto costa e in quanto tempo lo hai. Rispondi a questa mail e arriva direttamente a loro."
+   "it": "Racconta a un esperto a cosa ti serve e ti dirà quale opzione va bene, quanto costa e in quanto tempo lo hai. Rispondi a questa mail e arriva direttamente a loro.",
+   "sv": "Berätta för en tryckexpert vad det ska användas till, så får du veta vilket alternativ som passar, vad det kostar och hur snabbt du har det hemma. Svara på det här mejlet, då når det dem."
   },
   "help.email": {
    "en": "E-mail us",
@@ -54,7 +55,8 @@
    "fr": "Discuter avec nous",
    "de": "Schreiben Sie uns im Chat",
    "es": "Chatea con nosotros",
-   "it": "Scrivici in chat"
+   "it": "Scrivici in chat",
+   "sv": "Chatta med oss"
   },
   "help.centre": {
    "en": "Help Centre",
@@ -62,7 +64,8 @@
    "fr": "Centre d'aide",
    "de": "Hilfe-Center",
    "es": "Centro de ayuda",
-   "it": "Centro assistenza"
+   "it": "Centro assistenza",
+   "sv": "Hjälpcenter"
   },
   "foot.unsub": {
    "en": "Unsubscribe",
@@ -70,7 +73,8 @@
    "fr": "Se désabonner",
    "de": "Abmelden",
    "es": "Darse de baja",
-   "it": "Annulla iscrizione"
+   "it": "Annulla iscrizione",
+   "sv": "Avregistrera"
   },
   "alt.stars": {
    "en": "5 out of 5 on Trustpilot",
@@ -78,7 +82,8 @@
    "fr": "5 sur 5 sur Trustpilot",
    "de": "5 von 5 auf Trustpilot",
    "es": "5 de 5 en Trustpilot",
-   "it": "5 su 5 su Trustpilot"
+   "it": "5 su 5 su Trustpilot",
+   "sv": "5 av 5 på Trustpilot"
   },
   "alt.agents": {
    "en": "Three Helloprint print experts",
@@ -94,7 +99,8 @@
    "fr": "sur 5 sur Trustpilot",
    "de": "von 5 auf Trustpilot",
    "es": "de 5 en Trustpilot",
-   "it": "su 5 su Trustpilot"
+   "it": "su 5 su Trustpilot",
+   "sv": "av 5 på Trustpilot"
   },
   "review.verified": {
    "en": "Verified Trustpilot review",
@@ -134,7 +140,8 @@
    "fr": "VOTRE CODE",
    "de": "IHR CODE",
    "es": "TU CÓDIGO",
-   "it": "IL TUO CODICE"
+   "it": "IL TUO CODICE",
+   "sv": "DIN KOD"
   },
   "offer.terms": {
    "en": "One use per customer.",
@@ -142,7 +149,8 @@
    "fr": "Une utilisation par client.",
    "de": "Einmal pro Kunde einlösbar.",
    "es": "Un uso por cliente.",
-   "it": "Un utilizzo per cliente."
+   "it": "Un utilizzo per cliente.",
+   "sv": "Gäller en gång per kund."
   },
   "offer.cta": {
    "en": "Start your next order",
@@ -166,7 +174,8 @@
    "fr": "Vous ne savez pas quoi choisir ?",
    "de": "Nicht sicher, was Sie brauchen?",
    "es": "¿No sabes qué necesitas?",
-   "it": "Non sai cosa ti serve?"
+   "it": "Non sai cosa ti serve?",
+   "sv": "Vet du inte vad du behöver?"
   },
   "help.body_short": {
    "en": "Tell a print expert what the job is for and they will tell you which option fits and what it costs. Reply to this email and it reaches them.",
@@ -174,7 +183,8 @@
    "fr": "Dites à un expert à quoi ça doit servir, il vous dira quelle option convient et ce que ça coûte. Répondez à cet e-mail, ça arrive directement chez eux.",
    "de": "Sagen Sie einem Druckexperten, wofür es gedacht ist – Sie hören, welche Option passt und was sie kostet. Antworten Sie einfach auf diese E-Mail, sie landet direkt beim Team.",
    "es": "Cuéntale a un experto para qué es y te dirá qué opción encaja y cuánto cuesta. Responde a este correo y le llega directamente.",
-   "it": "Racconta a un esperto a cosa ti serve e ti dirà quale opzione va bene e quanto costa. Rispondi a questa mail e arriva direttamente a loro."
+   "it": "Racconta a un esperto a cosa ti serve e ti dirà quale opzione va bene e quanto costa. Rispondi a questa mail e arriva direttamente a loro.",
+   "sv": "Berätta för en tryckexpert vad det ska användas till, så får du veta vilket alternativ som passar och vad det kostar. Svara på det här mejlet, då når det dem."
   },
   "wb.grid_h3": {
    "en": "A few worth picking up",
@@ -462,7 +472,8 @@
    "fr": "Besoin d'un coup de main ?",
    "de": "Können wir helfen?",
    "es": "¿Te echamos una mano?",
-   "it": "Possiamo darti una mano?"
+   "it": "Possiamo darti una mano?",
+   "sv": "Kan vi hjälpa till?"
   },
   "wc.expires5": {
    "en": "&nbsp;&middot;&nbsp;Valid only 5 days",
@@ -470,7 +481,8 @@
    "fr": "&nbsp;&middot;&nbsp;Valable 5 jours seulement",
    "de": "&nbsp;&middot;&nbsp;Nur 5 Tage gültig",
    "es": "&nbsp;&middot;&nbsp;Solo 5 días",
-   "it": "&nbsp;&middot;&nbsp;Valido solo 5 giorni"
+   "it": "&nbsp;&middot;&nbsp;Valido solo 5 giorni",
+   "sv": "&nbsp;&middot;&nbsp;Giltig i bara 5 dagar"
   },
   "wc.discount": {
    "en": "Your 10% welcome discount",
@@ -478,7 +490,8 @@
    "fr": "Vos 10% de bienvenue",
    "de": "Ihre 10% zum Start",
    "es": "Tu 10% de bienvenida",
-   "it": "Il tuo 10% di benvenuto"
+   "it": "Il tuo 10% di benvenuto",
+   "sv": "Din välkomstrabatt på 10 %"
   },
   "wc.waiting": {
    "en": "Your 10% is still waiting",
@@ -486,7 +499,8 @@
    "fr": "Vos 10% vous attendent toujours",
    "de": "Ihre 10% warten noch",
    "es": "Tu 10% sigue esperando",
-   "it": "Il tuo 10% ti aspetta ancora"
+   "it": "Il tuo 10% ti aspetta ancora",
+   "sv": "Dina 10 % väntar fortfarande"
   },
   "tp.score_line": {
    "en": "<em>4.5</em> out of 5 on Trustpilot",
@@ -494,7 +508,8 @@
    "fr": "<em>4,5</em> sur 5 sur Trustpilot",
    "de": "<em>4,5</em> von 5 auf Trustpilot",
    "es": "<em>4,5</em> de 5 en Trustpilot",
-   "it": "<em>4,5</em> su 5 su Trustpilot"
+   "it": "<em>4,5</em> su 5 su Trustpilot",
+   "sv": "<em>4,5</em> av 5 på Trustpilot"
   },
   "tp.alt": {
    "en": "Rated 4.5 out of 5 on Trustpilot",
@@ -502,7 +517,8 @@
    "fr": "Noté 4,5 sur 5 sur Trustpilot",
    "de": "Bewertet mit 4,5 von 5 auf Trustpilot",
    "es": "Valorado con 4,5 sobre 5 en Trustpilot",
-   "it": "Valutato 4,5 su 5 su Trustpilot"
+   "it": "Valutato 4,5 su 5 su Trustpilot",
+   "sv": "Betygsatt 4,5 av 5 på Trustpilot"
   },
   "tp.verified_line": {
    "en": "Verified Trustpilot review &middot; 4.5 out of 5 from 34,000+",
@@ -518,7 +534,8 @@
    "fr": "Noté 4,5 étoiles sur 5 sur Trustpilot",
    "de": "Bewertet mit 4,5 von 5 Sternen auf Trustpilot",
    "es": "Valorado con 4,5 de 5 estrellas en Trustpilot",
-   "it": "Valutato 4,5 stelle su 5 su Trustpilot"
+   "it": "Valutato 4,5 stelle su 5 su Trustpilot",
+   "sv": "Betygsatt 4,5 av 5 stjärnor på Trustpilot"
   },
   "rev.by": {
    "en": "verified Trustpilot review",
@@ -526,7 +543,8 @@
    "fr": "avis Trustpilot vérifié",
    "de": "verifizierte Trustpilot-Bewertung",
    "es": "opinión verificada de Trustpilot",
-   "it": "recensione Trustpilot verificata"
+   "it": "recensione Trustpilot verificata",
+   "sv": "verifierat Trustpilot-omdöme"
   },
   "px.from": {
    "en": "From",
@@ -534,7 +552,8 @@
    "fr": "À partir de",
    "de": "Ab",
    "es": "Desde",
-   "it": "Da"
+   "it": "Da",
+   "sv": "Från"
   },
   "px.exvat": {
    "en": "excl. VAT and delivery",
@@ -551,7 +570,8 @@
    "de": "Preise zzgl. MwSt. und Versand.",
    "es": "Los precios no incluyen IVA ni envío.",
    "it": "I prezzi non includono IVA e spedizione.",
-   "en-US": "Prices exclude sales tax and shipping."
+   "en-US": "Prices exclude sales tax and shipping.",
+   "sv": "Priser exkl. moms och frakt."
   },
   "px.for_qty": {
    "en": "for {n} units",
@@ -559,7 +579,8 @@
    "fr": "pour {n} unités",
    "de": "für {n} Stück",
    "es": "para {n} unidades",
-   "it": "per {n} pezzi"
+   "it": "per {n} pezzi",
+   "sv": "för {n} st"
   },
   "cta.view_prod": {
    "en": "View product",
@@ -719,7 +740,8 @@
    "fr": "E-mail",
    "de": "E-Mail",
    "es": "Correo",
-   "it": "E-mail"
+   "it": "E-mail",
+   "sv": "Mejl"
   },
   "alt.cs_agents": {
    "en": "Three Helloprint customer service agents",
@@ -727,7 +749,8 @@
    "fr": "Trois conseillers du service client Helloprint",
    "de": "Drei Helloprint-Kundenservicemitarbeiter",
    "es": "Tres agentes de atención al cliente de Helloprint",
-   "it": "Tre operatori del servizio clienti Helloprint"
+   "it": "Tre operatori del servizio clienti Helloprint",
+   "sv": "Tre kundtjänstmedarbetare på Helloprint"
   },
   "help.email_us": {
    "en": "E-mail us",
@@ -743,7 +766,8 @@
    "fr": "Voir tout le catalogue",
    "de": "Das ganze Sortiment ansehen",
    "es": "Ver todo el catálogo",
-   "it": "Guarda tutto il catalogo"
+   "it": "Guarda tutto il catalogo",
+   "sv": "Se hela sortimentet"
   },
   "wc.ordered_line": {
    "en": "Thanks for your order. Here is what we are, in short.",
@@ -759,7 +783,8 @@
    "fr": "Ce que la plupart des entreprises commandent en premier, et qui le fabrique.",
    "de": "Damit fangen die meisten Unternehmen an – und das sind die Menschen dahinter.",
    "es": "Con esto empiezan la mayoría de las empresas, y esta es la gente detrás.",
-   "it": "Da qui partono la maggior parte delle aziende, e queste sono le persone dietro."
+   "it": "Da qui partono la maggior parte delle aziende, e queste sono le persone dietro.",
+   "sv": "Det som de flesta företag börjar med, och folket bakom."
   },
   "wc.sectsub_nocode": {
    "en": "Pick one and see what it comes to.",
@@ -767,7 +792,8 @@
    "fr": "Choisissez et voyez tout de suite le prix.",
    "de": "Eins aussuchen und direkt den Preis sehen.",
    "es": "Elige uno y mira el precio al momento.",
-   "it": "Scegline uno e guarda subito il prezzo."
+   "it": "Scegline uno e guarda subito il prezzo.",
+   "sv": "Välj en och se priset direkt."
   },
   "wc.terms": {
    "en": "Offer terms: 10% off your first order, up to @@CAP@@ maximum discount. One use per customer. The code expires 5 days after you sign up. It cannot be combined with other codes, is not valid on bespoke quotes, and applies to products only, excluding services and delivery.",
@@ -775,7 +801,8 @@
    "fr": "Conditions : 10% sur votre première commande, remise maximale de @@CAP@@. Une utilisation par client. Le code expire 5 jours après votre inscription. Non cumulable avec d'autres codes, non valable sur les devis sur mesure, et applicable aux produits uniquement, hors services et livraison.",
    "de": "Bedingungen: 10% auf Ihre erste Bestellung, maximal @@CAP@@ Rabatt. Eine Verwendung pro Kunde. Der Code läuft 5 Tage nach Ihrer Anmeldung ab. Nicht mit anderen Codes kombinierbar, nicht gültig für individuelle Angebote, und gilt nur für Produkte, ausgenommen Dienstleistungen und Versand.",
    "es": "Condiciones: 10% en tu primer pedido, con un descuento máximo de @@CAP@@. Un uso por cliente. El código caduca 5 días después de tu registro. No se puede combinar con otros códigos, no es válido en presupuestos personalizados y se aplica solo a productos, excluyendo servicios y envío.",
-   "it": "Condizioni: 10% sul tuo primo ordine, sconto massimo di @@CAP@@. Un utilizzo per cliente. Il codice scade 5 giorni dopo la registrazione. Non cumulabile con altri codici, non valido su preventivi personalizzati, e si applica solo ai prodotti, esclusi servizi e spedizione."
+   "it": "Condizioni: 10% sul tuo primo ordine, sconto massimo di @@CAP@@. Un utilizzo per cliente. Il codice scade 5 giorni dopo la registrazione. Non cumulabile con altri codici, non valido su preventivi personalizzati, e si applica solo ai prodotti, esclusi servizi e spedizione.",
+   "sv": "Villkor: 10 % rabatt på din första order, max @@CAP@@ i rabatt. Gäller en gång per kund. Koden går ut 5 dagar efter att du anmält dig. Den kan inte kombineras med andra koder, gäller inte offerter på specialjobb och gäller bara produkter – inte tjänster eller frakt."
   },
   "bk.service": {
    "en": "Additional service",
@@ -791,7 +818,8 @@
    "fr": "lors du paiement",
    "de": "beim Bezahlen",
    "es": "al pagar",
-   "it": "al momento del pagamento"
+   "it": "al momento del pagamento",
+   "sv": "i kassan"
   },
   "foot.vat": {
    "en": "VAT",
@@ -799,7 +827,8 @@
    "fr": "TVA",
    "de": "USt-IdNr.",
    "es": "NIF-IVA",
-   "it": "P. IVA"
+   "it": "P. IVA",
+   "sv": "Momsnr."
   }
  },
  "commercial-print": {
@@ -3417,7 +3446,8 @@
    "fr": "Votre code de 10% est juste en dessous, valable 5 jours.",
    "de": "Ihr 10%-Code steht gleich hier – 5 Tage gültig.",
    "es": "Tu código del 10% está aquí abajo, válido 5 días.",
-   "it": "Il tuo codice 10% è qui sotto, valido 5 giorni."
+   "it": "Il tuo codice 10% è qui sotto, valido 5 giorni.",
+   "sv": "Din 10 %-kod finns här nedan – giltig i 5 dagar."
   },
   "h1": {
    "en": "Welcome to Helloprint",
@@ -3425,7 +3455,8 @@
    "fr": "Bienvenue chez Helloprint",
    "de": "Willkommen bei Helloprint",
    "es": "Bienvenido a Helloprint",
-   "it": "Benvenuto in Helloprint"
+   "it": "Benvenuto in Helloprint",
+   "sv": "Välkommen till Helloprint"
   },
   "sub": {
    "en": "Print made simple, by people who have your back.",
@@ -3433,7 +3464,8 @@
    "fr": "L'impression sans prise de tête, avec des gens qui vous épaulent.",
    "de": "Drucken ohne Umstände, mit Menschen, die hinter Ihnen stehen.",
    "es": "Imprimir sin complicaciones, con gente que te respalda.",
-   "it": "Stampare senza complicazioni, con persone che ti danno una mano."
+   "it": "Stampare senza complicazioni, con persone che ti danno una mano.",
+   "sv": "Trycksaker utan krångel, med folk som ställer upp för dig."
   },
   "code_line": {
    "en": "10% off your first order, up to @@CAP@@ &middot; expires in 5 days",
@@ -3441,7 +3473,8 @@
    "fr": "10% sur votre première commande, jusqu'à @@CAP@@ &middot; valable 5 jours",
    "de": "10% auf Ihre erste Bestellung, bis zu @@CAP@@ &middot; nur 5 Tage gültig",
    "es": "10% en tu primer pedido, hasta @@CAP@@ &middot; válido 5 días",
-   "it": "10% sul tuo primo ordine, fino a @@CAP@@ &middot; valido 5 giorni"
+   "it": "10% sul tuo primo ordine, fino a @@CAP@@ &middot; valido 5 giorni",
+   "sv": "10 % rabatt på din första order, upp till @@CAP@@ &middot; giltig i 5 dagar"
   },
   "cta": {
    "en": "Start your first order",
@@ -3449,7 +3482,8 @@
    "fr": "Passer ma première commande",
    "de": "Erste Bestellung aufgeben",
    "es": "Hacer mi primer pedido",
-   "it": "Fai il tuo primo ordine"
+   "it": "Fai il tuo primo ordine",
+   "sv": "Lägg din första order"
   },
   "usp.0": {
    "en": "&ldquo;Every price includes delivery and VAT&rdquo;",
@@ -3458,7 +3492,8 @@
    "de": "&ldquo;Bei jedem Preis ist alles dabei: Versand und MwSt.&rdquo;",
    "es": "&ldquo;Cada precio lo incluye todo: envío e IVA&rdquo;",
    "it": "&ldquo;Ogni prezzo è tutto compreso: spedizione e IVA&rdquo;",
-   "en-US": "&ldquo;Every price includes shipping&rdquo;"
+   "en-US": "&ldquo;Every price includes shipping&rdquo;",
+   "sv": "&ldquo;Alla priser är färdiga: frakt och moms ingår&rdquo;"
   },
   "usp.1": {
    "en": "&ldquo;We check every file before it prints&rdquo;",
@@ -3466,7 +3501,8 @@
    "fr": "&ldquo;Aucun fichier ne part à l'impression sans vérification&rdquo;",
    "de": "&ldquo;Keine Datei geht ungeprüft in den Druck&rdquo;",
    "es": "&ldquo;Ningún archivo se imprime sin revisar&rdquo;",
-   "it": "&ldquo;Nessun file va in stampa senza controllo&rdquo;"
+   "it": "&ldquo;Nessun file va in stampa senza controllo&rdquo;",
+   "sv": "&ldquo;Ingen fil går till tryck utan kontroll&rdquo;"
   },
   "usp.2": {
    "en": "&ldquo;Backed by our 100% satisfaction guarantee&rdquo;",
@@ -3474,7 +3510,8 @@
    "fr": "&ldquo;Satisfaction garantie à 100% sur chaque commande&rdquo;",
    "de": "&ldquo;100% Zufriedenheitsgarantie auf jede Bestellung&rdquo;",
    "es": "&ldquo;100% de satisfacción garantizada en cada pedido&rdquo;",
-   "it": "&ldquo;Soddisfazione garantita al 100% su ogni ordine&rdquo;"
+   "it": "&ldquo;Soddisfazione garantita al 100% su ogni ordine&rdquo;",
+   "sv": "&ldquo;100 % nöjdhetsgaranti på varje order&rdquo;"
   },
   "sect_h": {
    "en": "What businesses order first",
@@ -3482,7 +3519,8 @@
    "fr": "Ce que les entreprises commandent en premier",
    "de": "Damit fangen Unternehmen an",
    "es": "Con esto empiezan las empresas",
-   "it": "Da qui partono le aziende"
+   "it": "Da qui partono le aziende",
+   "sv": "Det här börjar företag med"
   },
   "sect_sub": {
    "en": "Pick one and your 10% comes off at checkout.",
@@ -3490,7 +3528,8 @@
    "fr": "Choisissez : les 10% partent au moment du paiement.",
    "de": "Eins aussuchen – die 10% gehen beim Bezahlen ab.",
    "es": "Elige uno y el 10% se descuenta al pagar.",
-   "it": "Scegline uno, il 10% si scala alla cassa."
+   "it": "Scegline uno, il 10% si scala alla cassa.",
+   "sv": "Välj en – dina 10 % dras av i kassan."
   },
   "expires": {
    "en": "Expires in 5 days",
@@ -3498,7 +3537,8 @@
    "fr": "Valable encore 5 jours",
    "de": "Noch 5 Tage gültig",
    "es": "Válido 5 días más",
-   "it": "Valido ancora 5 giorni"
+   "it": "Valido ancora 5 giorni",
+   "sv": "Giltig 5 dagar till"
   },
   "file_h": {
    "en": "Not sure your file will work?",
@@ -3506,7 +3546,8 @@
    "fr": "Un doute sur votre fichier ?",
    "de": "Unsicher, ob Ihre Datei passt?",
    "es": "¿Dudas de si tu archivo servirá?",
-   "it": "Non sei sicuro del tuo file?"
+   "it": "Non sei sicuro del tuo file?",
+   "sv": "Osäker på om filen håller?"
   },
   "file_b": {
    "en": "Send us whatever you have. We check every file before anything goes to print, and we tell you if something needs fixing.",
@@ -3514,7 +3555,8 @@
    "fr": "Envoyez ce que vous avez. Chaque fichier passe au contrôle avant impression, et on vous prévient si quelque chose doit bouger.",
    "de": "Schicken Sie einfach, was da ist. Jede Datei geht vor dem Druck durch die Prüfung, und wir sagen Bescheid, wenn etwas angepasst werden muss.",
    "es": "Manda lo que tengas. Cada archivo pasa por revisión antes de imprimir, y te avisamos si hay algo que cambiar.",
-   "it": "Manda quello che hai. Ogni file passa dal controllo prima della stampa, e se c'è da sistemare qualcosa ti avvisiamo."
+   "it": "Manda quello che hai. Ogni file passa dal controllo prima della stampa, e se c'è da sistemare qualcosa ti avvisiamo.",
+   "sv": "Skicka bara det du har. Varje fil går genom kontroll innan den trycks, och behöver något justeras hör du från oss i tid."
   },
   "file_link": {
    "en": "See how file checking works",
@@ -3522,7 +3564,8 @@
    "fr": "Comment marche la vérification",
    "de": "So funktioniert die Dateiprüfung",
    "es": "Así funciona la revisión de archivos",
-   "it": "Come funziona il controllo dei file"
+   "it": "Come funziona il controllo dei file",
+   "sv": "Så fungerar filkontrollen"
   },
   "reviews_note": {
    "en": "Based on 34,000+ reviews",
@@ -3530,7 +3573,8 @@
    "fr": "Sur 34 000+ avis",
    "de": "Aus über 34.000 Bewertungen",
    "es": "De más de 34.000 opiniones",
-   "it": "Su oltre 34.000 recensioni"
+   "it": "Su oltre 34.000 recensioni",
+   "sv": "Av 34 000+ omdömen"
   },
   "tp_outof": {
    "en": "out of 5 on Trustpilot",
@@ -3538,7 +3582,8 @@
    "fr": "sur 5 sur Trustpilot",
    "de": "von 5 auf Trustpilot",
    "es": "de 5 en Trustpilot",
-   "it": "su 5 su Trustpilot"
+   "it": "su 5 su Trustpilot",
+   "sv": "av 5 på Trustpilot"
   },
   "tp_alt_stars": {
    "en": "Rated 4.5 out of 5 stars on Trustpilot",
@@ -3546,7 +3591,8 @@
    "fr": "Noté 4,5 étoiles sur 5 sur Trustpilot",
    "de": "Bewertet mit 4,5 von 5 Sternen auf Trustpilot",
    "es": "Valorado con 4,5 de 5 estrellas en Trustpilot",
-   "it": "Valutato 4,5 stelle su 5 su Trustpilot"
+   "it": "Valutato 4,5 stelle su 5 su Trustpilot",
+   "sv": "Betygsatt 4,5 av 5 stjärnor på Trustpilot"
   },
   "alt_office": {
    "en": "The Helloprint team in the office",
@@ -3554,7 +3600,8 @@
    "fr": "L'équipe Helloprint au bureau",
    "de": "Das Helloprint-Team im Büro",
    "es": "El equipo de Helloprint en la oficina",
-   "it": "Il team Helloprint in ufficio"
+   "it": "Il team Helloprint in ufficio",
+   "sv": "Helloprint-teamet på kontoret"
   },
   "u1000": {
    "en": "1,000 units",
@@ -3562,7 +3609,8 @@
    "fr": "1 000 unités",
    "de": "1.000 Stück",
    "es": "1.000 unidades",
-   "it": "1.000 pezzi"
+   "it": "1.000 pezzi",
+   "sv": "1 000 st"
   },
   "u500": {
    "en": "500 units",
@@ -3570,7 +3618,8 @@
    "fr": "500 unités",
    "de": "500 Stück",
    "es": "500 unidades",
-   "it": "500 pezzi"
+   "it": "500 pezzi",
+   "sv": "500 st"
   },
   "u50": {
    "en": "50 units",
@@ -3578,7 +3627,8 @@
    "fr": "50 unités",
    "de": "50 Stück",
    "es": "50 unidades",
-   "it": "50 pezzi"
+   "it": "50 pezzi",
+   "sv": "50 st"
   },
   "u1": {
    "en": "1 unit",
@@ -3586,7 +3636,8 @@
    "fr": "1 unité",
    "de": "1 Stück",
    "es": "1 unidad",
-   "it": "1 pezzo"
+   "it": "1 pezzo",
+   "sv": "1 st"
   },
   "pre_ordered": {
    "en": "Your 10% code is inside, and the prints most businesses start with.",
@@ -3594,7 +3645,8 @@
    "fr": "Votre code de 10% vous attend, avec ce que commandent la plupart des entreprises.",
    "de": "Ihr 10%-Code wartet, dazu die Klassiker für den Anfang.",
    "es": "Tu código del 10% te espera, y con qué empiezan la mayoría de empresas.",
-   "it": "Il tuo codice 10% ti aspetta, e da dove partono quasi tutte le aziende."
+   "it": "Il tuo codice 10% ti aspetta, e da dove partono quasi tutte le aziende.",
+   "sv": "Din 10 %-kod är klar, plus det som de flesta företag börjar med."
   },
   "eyebrow": {
    "en": "10% OFF YOUR FIRST ORDER",
@@ -3602,7 +3654,8 @@
    "fr": "10% SUR VOTRE PREMIÈRE COMMANDE",
    "de": "10% AUF IHRE ERSTE BESTELLUNG",
    "es": "10% EN TU PRIMER PEDIDO",
-   "it": "10% SUL TUO PRIMO ORDINE"
+   "it": "10% SUL TUO PRIMO ORDINE",
+   "sv": "10 % RABATT PÅ DIN FÖRSTA ORDER"
   },
   "codelbl": {
    "en": "YOUR CODE",
@@ -3610,7 +3663,8 @@
    "fr": "VOTRE CODE",
    "de": "IHR CODE",
    "es": "TU CÓDIGO",
-   "it": "IL TUO CODICE"
+   "it": "IL TUO CODICE",
+   "sv": "DIN KOD"
   },
   "ctanote": {
    "en": "Use it at checkout on anything in the range.",
@@ -3618,7 +3672,8 @@
    "fr": "À utiliser au moment du paiement, sur tout le catalogue.",
    "de": "Beim Bezahlen einlösen – auf alles im Sortiment.",
    "es": "Úsalo al pagar, en todo el catálogo.",
-   "it": "Usalo alla cassa, su tutto il catalogo."
+   "it": "Usalo alla cassa, su tutto il catalogo.",
+   "sv": "Använd den i kassan, på allt i sortimentet."
   }
  },
  "welcome-02": {
@@ -3628,7 +3683,8 @@
    "fr": "Imprimé près de chez vous, par une B Corp certifiée. Encore 4 jours pour vos 10%.",
    "de": "Näher bei Ihnen gedruckt, von einer zertifizierten B Corp. Noch 4 Tage für Ihre 10%.",
    "es": "Impreso cerca de ti, por una B Corp certificada. Te quedan 4 días para tu 10%.",
-   "it": "Stampato vicino a te, da una B Corp certificata. Ancora 4 giorni per il tuo 10%."
+   "it": "Stampato vicino a te, da una B Corp certificata. Ancora 4 giorni per il tuo 10%.",
+   "sv": "Tryckt närmare dig, av en certifierad B Corp. Dina 10 % gäller i 4 dagar."
   },
   "expires": {
    "en": "&nbsp;&middot;&nbsp;Expires in 4 days",
@@ -3636,7 +3692,8 @@
    "fr": "&nbsp;&middot;&nbsp;Expire dans 4 jours",
    "de": "&nbsp;&middot;&nbsp;Läuft in 4 Tagen ab",
    "es": "&nbsp;&middot;&nbsp;Caduca en 4 días",
-   "it": "&nbsp;&middot;&nbsp;Scade tra 4 giorni"
+   "it": "&nbsp;&middot;&nbsp;Scade tra 4 giorni",
+   "sv": "&nbsp;&middot;&nbsp;4 dagar kvar"
   },
   "h1": {
    "en": "Who actually prints your order",
@@ -3644,7 +3701,8 @@
    "fr": "Qui imprime vos commandes",
    "de": "Wer Ihre Drucksachen produziert",
    "es": "Quién imprime tus pedidos",
-   "it": "Chi stampa i tuoi ordini"
+   "it": "Chi stampa i tuoi ordini",
+   "sv": "Vilka trycker dina order"
   },
   "sub": {
    "en": "A B Corp certified platform, local print partners, and a promise to have your back.",
@@ -3652,7 +3710,8 @@
    "fr": "Une plateforme certifiée B Corp, des imprimeurs près de chez vous, et une équipe qui ne vous laisse pas tomber.",
    "de": "Zertifizierte B Corp, Druckpartner aus Ihrer Region und ein Team, das Sie nicht hängen lässt.",
    "es": "Una plataforma certificada B Corp, imprentas cerca de ti y un equipo que no te deja tirado.",
-   "it": "Una piattaforma certificata B Corp, stampatori vicino a te e un team che non ti lascia solo."
+   "it": "Una piattaforma certificata B Corp, stampatori vicino a te e un team che non ti lascia solo.",
+   "sv": "En certifierad B Corp, tryckerier nära dig och folk som inte lämnar dig i sticket."
   },
   "cta": {
    "en": "Read our story",
@@ -3660,7 +3719,8 @@
    "fr": "Découvrir notre histoire",
    "de": "Unsere Geschichte lesen",
    "es": "Conoce nuestra historia",
-   "it": "Scopri la nostra storia"
+   "it": "Scopri la nostra storia",
+   "sv": "Läs vår historia"
   },
   "usp.0": {
    "en": "&ldquo;We are a certified B Corp&rdquo;",
@@ -3668,7 +3728,8 @@
    "fr": "&ldquo;Nous sommes une B Corp certifiée&rdquo;",
    "de": "&ldquo;Wir sind eine zertifizierte B Corp&rdquo;",
    "es": "&ldquo;Somos una B Corp certificada&rdquo;",
-   "it": "&ldquo;Siamo una B Corp certificata&rdquo;"
+   "it": "&ldquo;Siamo una B Corp certificata&rdquo;",
+   "sv": "&ldquo;Vi är en certifierad B Corp&rdquo;"
   },
   "usp.1": {
    "en": "&ldquo;Local partners, faster delivery&rdquo;",
@@ -3676,7 +3737,8 @@
    "fr": "&ldquo;Des imprimeurs proches, donc livré plus vite&rdquo;",
    "de": "&ldquo;Druckpartner in der Nähe, also schneller da&rdquo;",
    "es": "&ldquo;Imprentas cercanas, así llega antes&rdquo;",
-   "it": "&ldquo;Stampatori vicini, quindi arriva prima&rdquo;"
+   "it": "&ldquo;Stampatori vicini, quindi arriva prima&rdquo;",
+   "sv": "&ldquo;Tryckerier nära dig, snabbare leverans&rdquo;"
   },
   "usp.2": {
    "en": "&ldquo;10,000+ products to choose from&rdquo;",
@@ -3684,7 +3746,8 @@
    "fr": "&ldquo;Plus de 10 000 produits au choix&rdquo;",
    "de": "&ldquo;Über 10.000 Produkte zur Auswahl&rdquo;",
    "es": "&ldquo;Más de 10.000 productos a elegir&rdquo;",
-   "it": "&ldquo;Oltre 10.000 prodotti tra cui scegliere&rdquo;"
+   "it": "&ldquo;Oltre 10.000 prodotti tra cui scegliere&rdquo;",
+   "sv": "&ldquo;Över 10 000 produkter att välja bland&rdquo;"
   },
   "sect_h": {
    "en": "Three things worth knowing",
@@ -3692,7 +3755,8 @@
    "fr": "Trois choses à savoir",
    "de": "Drei Dinge, die Sie wissen sollten",
    "es": "Tres cosas que conviene saber",
-   "it": "Tre cose da sapere"
+   "it": "Tre cose da sapere",
+   "sv": "Tre saker värda att veta"
   },
   "sect_sub": {
    "en": "Not slogans. Things you can check.",
@@ -3700,7 +3764,8 @@
    "fr": "Pas des slogans. Des faits vérifiables.",
    "de": "Keine Slogans. Nachprüfbare Fakten.",
    "es": "No son eslóganes. Son datos que puedes comprobar.",
-   "it": "Non slogan. Fatti che puoi verificare."
+   "it": "Non slogan. Fatti che puoi verificare.",
+   "sv": "Inga slogans. Sånt du kan kontrollera själv."
   },
   "b.0.t": {
    "en": "Printed close to you",
@@ -3708,7 +3773,8 @@
    "fr": "Imprimé près de chez vous",
    "de": "In Ihrer Nähe gedruckt",
    "es": "Impreso cerca de ti",
-   "it": "Stampato vicino a te"
+   "it": "Stampato vicino a te",
+   "sv": "Tryckt nära dig"
   },
   "b.0.l": {
    "en": "How the platform works",
@@ -3716,7 +3782,8 @@
    "fr": "Comment marche la plateforme",
    "de": "So funktioniert die Plattform",
    "es": "Así funciona la plataforma",
-   "it": "Come funziona la piattaforma"
+   "it": "Come funziona la piattaforma",
+   "sv": "Så fungerar plattformen"
   },
   "b.1.t": {
    "en": "Better print, less impact",
@@ -3724,7 +3791,8 @@
    "fr": "Mieux imprimé, moins d'impact",
    "de": "Besser gedruckt, weniger Impact",
    "es": "Mejor impresión, menos impacto",
-   "it": "Stampa migliore, meno impatto"
+   "it": "Stampa migliore, meno impatto",
+   "sv": "Bättre tryck, mindre avtryck"
   },
   "b.1.l": {
    "en": "Read our impact report",
@@ -3732,7 +3800,8 @@
    "fr": "Lire notre rapport d'impact",
    "de": "Unseren Impact-Report lesen",
    "es": "Leer nuestro informe de impacto",
-   "it": "Leggi il nostro report d'impatto"
+   "it": "Leggi il nostro report d'impatto",
+   "sv": "Läs vår hållbarhetsrapport"
   },
   "b.2.t": {
    "en": "Over 10,000 products",
@@ -3740,7 +3809,8 @@
    "fr": "Plus de 10 000 produits",
    "de": "Über 10.000 Produkte",
    "es": "Más de 10.000 productos",
-   "it": "Oltre 10.000 prodotti"
+   "it": "Oltre 10.000 prodotti",
+   "sv": "Över 10 000 produkter"
   },
   "b.2.l": {
    "en": "Browse everything",
@@ -3748,7 +3818,8 @@
    "fr": "Voir tout le catalogue",
    "de": "Das ganze Sortiment ansehen",
    "es": "Ver todo el catálogo",
-   "it": "Guarda tutto il catalogo"
+   "it": "Guarda tutto il catalogo",
+   "sv": "Se hela sortimentet"
   },
   "ship_body": {
    "en": "Your order goes to a print partner near your delivery address, so it travels less and arrives sooner. In Ireland that means delivery via An Post and DPD, backed by a network of 300+ production partners.",
@@ -3756,7 +3827,8 @@
    "fr": "Votre commande part chez un imprimeur proche de votre adresse de livraison. Moins de kilomètres, donc plus vite chez vous. Derrière, un réseau de plus de 300 partenaires de production.",
    "de": "Ihr Auftrag geht an eine Druckerei in der Nähe Ihrer Lieferadresse. Weniger Kilometer, also schneller bei Ihnen. Dahinter steht ein Netz von über 300 Produktionspartnern.",
    "es": "Tu pedido va a una imprenta cercana a tu dirección de entrega. Menos kilómetros, así que llega antes. Detrás hay una red de más de 300 socios de producción.",
-   "it": "Il tuo ordine va a uno stampatore vicino al tuo indirizzo di consegna. Meno chilometri, quindi arriva prima. Dietro c'è una rete di oltre 300 partner di produzione."
+   "it": "Il tuo ordine va a uno stampatore vicino al tuo indirizzo di consegna. Meno chilometri, quindi arriva prima. Dietro c'è una rete di oltre 300 partner di produzione.",
+   "sv": "Din order går till ett tryckeri nära din leveransadress. Färre mil på vägen, snabbare hos dig. Bakom leveransen står ett nätverk med över 300 produktionspartner."
   },
   "eco_body": {
    "en": "Print should not cost the earth. Being a certified B Corp keeps us honest about that, and it is why we work with partners who produce closer to you and materials that ask less of the planet. Our impact report shows where we stand and where we are heading.",
@@ -3764,7 +3836,8 @@
    "fr": "L'impression ne devrait pas coûter la planète. Notre certification B Corp nous oblige à le prouver, et c'est pourquoi nous travaillons avec des partenaires qui produisent plus près de vous et des matériaux moins gourmands. Notre rapport d'impact dit où nous en sommes et où nous allons.",
    "de": "Drucken muss die Umwelt nicht kosten. Als zertifizierte B Corp müssen wir das belegen – deshalb arbeiten wir mit Partnern, die näher bei Ihnen produzieren, und mit Materialien, die dem Planeten weniger abverlangen. Unser Impact-Report zeigt, wo wir stehen und wohin wir wollen.",
    "es": "Imprimir no tiene por qué costarle al planeta. Ser una B Corp certificada nos obliga a demostrarlo, y por eso trabajamos con socios que producen más cerca de ti y con materiales que piden menos al planeta. Nuestro informe de impacto cuenta dónde estamos y hacia dónde vamos.",
-   "it": "Stampare non deve costare al pianeta. Essere una B Corp certificata ci obbliga a dimostrarlo, ed è per questo che scegliamo partner che producono più vicino a te e materiali che chiedono meno al pianeta. Il nostro report d'impatto dice dove siamo e dove stiamo andando."
+   "it": "Stampare non deve costare al pianeta. Essere una B Corp certificata ci obbliga a dimostrarlo, ed è per questo che scegliamo partner che producono più vicino a te e materiali che chiedono meno al pianeta. Il nostro report d'impatto dice dove siamo e dove stiamo andando.",
+   "sv": "Tryck ska inte kosta jorden. Som certifierad B Corp blir vi granskade på just det, och därför väljer vi partner som producerar närmare dig och material som tär mindre på planeten. Vår hållbarhetsrapport visar var vi står och vart vi är på väg."
   },
   "range_body": {
    "en": "More than 100 million product combinations. Business cards, flyers, brochures, posters, banners, textiles, packaging and branded gifts. Configure what you need and the platform finds a partner who can make it.",
@@ -3772,7 +3845,8 @@
    "fr": "Plus de 100 millions de combinaisons. Cartes de visite, flyers, brochures, affiches, banderoles, textile, emballage et objets publicitaires. Vous configurez ce qu'il vous faut, la plateforme trouve l'imprimeur capable de le produire.",
    "de": "Über 100 Millionen Kombinationen. Visitenkarten, Flyer, Broschüren, Poster, Banner, Textil, Verpackung und Werbegeschenke. Sie konfigurieren, was Sie brauchen – die Plattform findet den Partner, der es herstellen kann.",
    "es": "Más de 100 millones de combinaciones. Tarjetas de visita, flyers, folletos, pósters, banners, textil, packaging y regalos de empresa. Tú configuras lo que necesitas y la plataforma encuentra quién puede producirlo.",
-   "it": "Oltre 100 milioni di combinazioni. Biglietti da visita, flyer, brochure, poster, banner, tessile, packaging e gadget aziendali. Tu configuri quello che ti serve, la piattaforma trova il partner che può produrlo."
+   "it": "Oltre 100 milioni di combinazioni. Biglietti da visita, flyer, brochure, poster, banner, tessile, packaging e gadget aziendali. Tu configuri quello che ti serve, la piattaforma trova il partner che può produrlo.",
+   "sv": "Över 100 miljoner kombinationer. Visitkort, flygblad, broschyrer, affischer, banderoller, textil, förpackning och profilprodukter. Du sätter ihop det du behöver, plattformen hittar tryckeriet som kan göra det."
   },
   "alt_beach": {
    "en": "The Helloprint team at a beach clean-up",
@@ -3780,7 +3854,8 @@
    "fr": "L'équipe Helloprint lors d'un nettoyage de plage",
    "de": "Das Helloprint-Team bei einer Strandreinigung",
    "es": "El equipo de Helloprint en una limpieza de playa",
-   "it": "Il team Helloprint a una pulizia della spiaggia"
+   "it": "Il team Helloprint a una pulizia della spiaggia",
+   "sv": "Helloprint-teamet på strandstädning"
   },
   "alt_advisers": {
    "en": "Helloprint customer advisers at work",
@@ -3788,7 +3863,8 @@
    "fr": "Des conseillers clients Helloprint au travail",
    "de": "Helloprint-Kundenberater bei der Arbeit",
    "es": "Asesores de clientes de Helloprint trabajando",
-   "it": "Consulenti clienti Helloprint al lavoro"
+   "it": "Consulenti clienti Helloprint al lavoro",
+   "sv": "Helloprints kundrådgivare i arbete"
   },
   "alt_eco": {
    "en": "Eco flyers printed on recycled paper",
@@ -3796,7 +3872,8 @@
    "fr": "Des flyers éco imprimés sur papier recyclé",
    "de": "Öko-Flyer auf Recyclingpapier gedruckt",
    "es": "Flyers ecológicos impresos en papel reciclado",
-   "it": "Volantini eco stampati su carta riciclata"
+   "it": "Volantini eco stampati su carta riciclata",
+   "sv": "Ekoflygblad tryckta på returpapper"
   },
   "alt_range": {
    "en": "Flyers, business cards, posters and roller banners",
@@ -3804,7 +3881,8 @@
    "fr": "Flyers, cartes de visite, affiches et roll-ups",
    "de": "Flyer, Visitenkarten, Poster und Roll-up-Banner",
    "es": "Flyers, tarjetas de visita, pósters y roll-ups",
-   "it": "Volantini, biglietti da visita, poster e roll-up"
+   "it": "Volantini, biglietti da visita, poster e roll-up",
+   "sv": "Flygblad, visitkort, affischer och rollups"
   },
   "pre_ordered": {
    "en": "Printed closer to you, a B Corp certification, and over 10,000 products.",
@@ -3812,7 +3890,8 @@
    "fr": "Imprimé près de chez vous, une certification B Corp et plus de 10 000 produits.",
    "de": "Näher bei Ihnen gedruckt, B Corp zertifiziert und über 10.000 Produkte.",
    "es": "Impreso cerca de ti, certificación B Corp y más de 10.000 productos.",
-   "it": "Stampato vicino a te, certificazione B Corp e oltre 10.000 prodotti."
+   "it": "Stampato vicino a te, certificazione B Corp e oltre 10.000 prodotti.",
+   "sv": "Tryckt närmare dig, B Corp-certifierat och över 10 000 produkter."
   }
  },
  "welcome-03": {
@@ -3822,7 +3901,8 @@
    "fr": "4,5 sur 34 000+ avis. Il reste 2 jours pour vos 10%.",
    "de": "4,5 aus über 34.000 Bewertungen. Noch 2 Tage für Ihre 10%.",
    "es": "4,5 con más de 34.000 opiniones. Te quedan 2 días para tu 10%.",
-   "it": "4,5 su oltre 34.000 recensioni. Restano 2 giorni per il tuo 10%."
+   "it": "4,5 su oltre 34.000 recensioni. Restano 2 giorni per il tuo 10%.",
+   "sv": "4,5 av 34 000+ omdömen. Bara 2 dagar kvar på dina 10 %."
   },
   "h1": {
    "en": "Excellent, say 34,000+ customers",
@@ -3830,7 +3910,8 @@
    "fr": "Excellent, selon 34 000+ clients",
    "de": "Hervorragend – sagen über 34.000 Kunden",
    "es": "Excelente, según más de 34.000 clientes",
-   "it": "Eccellente, secondo oltre 34.000 clienti"
+   "it": "Eccellente, secondo oltre 34.000 clienti",
+   "sv": "Utmärkt, säger 34 000+ kunder"
   },
   "cta": {
    "en": "Read the reviews",
@@ -3838,7 +3919,8 @@
    "fr": "Lire ce qu'ils en disent",
    "de": "Lesen, was sie sagen",
    "es": "Lee lo que dicen",
-   "it": "Leggi cosa dicono"
+   "it": "Leggi cosa dicono",
+   "sv": "Läs vad de säger"
   },
   "unedited": {
    "en": "Unedited, straight from Trustpilot.",
@@ -3846,7 +3928,8 @@
    "fr": "Telles qu'elles apparaissent sur Trustpilot. Rien de retouché.",
    "de": "So, wie sie auf Trustpilot stehen. Nichts geglättet.",
    "es": "Tal como están en Trustpilot. Sin retocar.",
-   "it": "Così come stanno su Trustpilot. Senza ritocchi."
+   "it": "Così come stanno su Trustpilot. Senza ritocchi.",
+   "sv": "Precis som de står på Trustpilot. Inget ändrat."
   },
   "verified": {
    "en": "verified Trustpilot review",
@@ -3854,7 +3937,8 @@
    "fr": "avis Trustpilot vérifié",
    "de": "verifizierte Trustpilot-Bewertung",
    "es": "opinión verificada en Trustpilot",
-   "it": "recensione verificata su Trustpilot"
+   "it": "recensione verificata su Trustpilot",
+   "sv": "verifierat Trustpilot-omdöme"
   },
   "g_h": {
    "en": "Every order, guaranteed",
@@ -3862,7 +3946,8 @@
    "fr": "Sur chaque commande, c'est garanti",
    "de": "Bei jeder Bestellung fest zugesagt",
    "es": "En cada pedido, garantizado",
-   "it": "Su ogni ordine, garantito"
+   "it": "Su ogni ordine, garantito",
+   "sv": "Det här gäller varje order"
   },
   "g.0": {
    "en": "Best price guaranteed",
@@ -3870,7 +3955,8 @@
    "fr": "Meilleur prix garanti",
    "de": "Bestpreis-Garantie",
    "es": "Mejor precio garantizado",
-   "it": "Miglior prezzo garantito"
+   "it": "Miglior prezzo garantito",
+   "sv": "Bästa pris garanterat"
   },
   "g.1": {
    "en": "All-inclusive prices",
@@ -3878,7 +3964,8 @@
    "fr": "Prix tout compris",
    "de": "Preise mit allem drin",
    "es": "Precios con todo incluido",
-   "it": "Prezzi tutto compreso"
+   "it": "Prezzi tutto compreso",
+   "sv": "Priser med allt inräknat"
   },
   "g.2": {
    "en": "Always a perfect design",
@@ -3886,7 +3973,8 @@
    "fr": "Toujours un design impeccable",
    "de": "Immer ein perfektes Design",
    "es": "Siempre un diseño perfecto",
-   "it": "Sempre un design perfetto"
+   "it": "Sempre un design perfetto",
+   "sv": "Alltid perfekt design"
   },
   "g.3": {
    "en": "100% satisfaction guarantee",
@@ -3894,7 +3982,8 @@
    "fr": "Satisfaction garantie à 100%",
    "de": "100% Zufriedenheitsgarantie",
    "es": "100% de satisfacción garantizada",
-   "it": "Soddisfazione garantita al 100%"
+   "it": "Soddisfazione garantita al 100%",
+   "sv": "100 % nöjdhetsgaranti"
   },
   "cta2": {
    "en": "Place your first order",
@@ -3902,7 +3991,8 @@
    "fr": "Passer ma première commande",
    "de": "Zum ersten Mal bestellen",
    "es": "Haz tu primer pedido",
-   "it": "Fai il tuo primo ordine"
+   "it": "Fai il tuo primo ordine",
+   "sv": "Lägg din första order"
   },
   "promise_link": {
    "en": "See what each promise covers",
@@ -3910,7 +4000,8 @@
    "fr": "Voir ce que couvre chaque garantie",
    "de": "Nachlesen, was jede Zusage abdeckt",
    "es": "Mira qué cubre cada garantía",
-   "it": "Guarda cosa copre ogni garanzia"
+   "it": "Guarda cosa copre ogni garanzia",
+   "sv": "Se vad varje löfte omfattar"
   },
   "expires": {
    "en": "&nbsp;&middot;&nbsp;2 days left",
@@ -3918,7 +4009,8 @@
    "fr": "&nbsp;&middot;&nbsp;Plus que 2 jours",
    "de": "&nbsp;&middot;&nbsp;Noch 2 Tage",
    "es": "&nbsp;&middot;&nbsp;Quedan 2 días",
-   "it": "&nbsp;&middot;&nbsp;Ancora 2 giorni"
+   "it": "&nbsp;&middot;&nbsp;Ancora 2 giorni",
+   "sv": "&nbsp;&middot;&nbsp;2 dagar kvar"
   },
   "tp_alt": {
    "en": "Rated 4.5 out of 5 on Trustpilot",
@@ -3926,7 +4018,8 @@
    "fr": "Noté 4,5 sur 5 sur Trustpilot",
    "de": "Bewertet mit 4,5 von 5 auf Trustpilot",
    "es": "Valorado con 4,5 sobre 5 en Trustpilot",
-   "it": "Valutato 4,5 su 5 su Trustpilot"
+   "it": "Valutato 4,5 su 5 su Trustpilot",
+   "sv": "Betygsatt 4,5 av 5 på Trustpilot"
   },
   "alt_5stars": {
    "en": "Rated 5 out of 5 stars",
@@ -3934,7 +4027,8 @@
    "fr": "Noté 5 étoiles sur 5",
    "de": "Bewertet mit 5 von 5 Sternen",
    "es": "Valorado con 5 de 5 estrellas",
-   "it": "Valutato 5 stelle su 5"
+   "it": "Valutato 5 stelle su 5",
+   "sv": "Betygsatt 5 av 5 stjärnor"
   },
   "alt_goldfoil": {
    "en": "Business cards with gold foil finish",
@@ -3942,7 +4036,8 @@
    "fr": "Cartes de visite avec finition dorure à chaud",
    "de": "Visitenkarten mit Goldfolienveredelung",
    "es": "Tarjetas de visita con acabado en foil dorado",
-   "it": "Biglietti da visita con finitura in lamina oro"
+   "it": "Biglietti da visita con finitura in lamina oro",
+   "sv": "Visitkort med guldfoliering"
   },
   "reviews_h": {
    "en": "What <em>real customers</em> tell us",
@@ -3950,7 +4045,8 @@
    "fr": "Ce que disent <em>de vrais clients</em>",
    "de": "Was <em>echte Kunden</em> sagen",
    "es": "Lo que dicen <em>clientes reales</em>",
-   "it": "Cosa dicono <em>clienti veri</em>"
+   "it": "Cosa dicono <em>clienti veri</em>",
+   "sv": "Vad <em>riktiga kunder</em> säger"
   },
   "score_line": {
    "en": "4.5 out of 5 from 34,000+ reviews by businesses like yours.",
@@ -3958,7 +4054,8 @@
    "fr": "4,5 sur 5, sur 34 000+ avis d'entreprises comme la vôtre.",
    "de": "4,5 von 5, aus über 34.000 Bewertungen von Unternehmen wie Ihrem.",
    "es": "4,5 de 5, con más de 34.000 opiniones de empresas como la tuya.",
-   "it": "4,5 su 5, da oltre 34.000 recensioni di aziende come la tua."
+   "it": "4,5 su 5, da oltre 34.000 recensioni di aziende come la tua.",
+   "sv": "4,5 av 5, baserat på 34 000+ omdömen från företag som ditt."
   },
   "pre_ordered": {
    "en": "Rated 4.5 on Trustpilot from 34,000+ reviews. Here is what a few of them say.",
@@ -3966,7 +4063,8 @@
    "fr": "4,5 sur Trustpilot, 34 000+ avis. Voici quelques voix.",
    "de": "4,5 auf Trustpilot, über 34.000 Bewertungen. Ein paar Stimmen daraus.",
    "es": "4,5 en Trustpilot, más de 34.000 opiniones. Estas son algunas voces.",
-   "it": "4,5 su Trustpilot, oltre 34.000 recensioni. Ecco qualche voce."
+   "it": "4,5 su Trustpilot, oltre 34.000 recensioni. Ecco qualche voce.",
+   "sv": "4,5 på Trustpilot, av 34 000+ omdömen. Här är några röster."
   }
  },
  "welcome-04": {
@@ -3976,7 +4074,8 @@
    "fr": "Un fichier ou juste une idée, on prend le relais. Dernier jour pour vos 10%.",
    "de": "Datei oder nur eine Idee – wir übernehmen. Letzter Tag für Ihre 10%.",
    "es": "Un diseño o solo una idea, seguimos nosotros. Último día para tu 10%.",
-   "it": "Un file o solo un'idea, ci pensiamo noi. Ultimo giorno per il tuo 10%."
+   "it": "Un file o solo un'idea, ci pensiamo noi. Ultimo giorno per il tuo 10%.",
+   "sv": "En färdig fil eller bara en idé – vi tar det därifrån. Sista dagen för dina 10 %."
   },
   "lastday": {
    "en": "&nbsp;&middot;&nbsp;Last day!",
@@ -3984,7 +4083,8 @@
    "fr": "&nbsp;&middot;&nbsp;Dernier jour !",
    "de": "&nbsp;&middot;&nbsp;Letzter Tag!",
    "es": "&nbsp;&middot;&nbsp;¡Último día!",
-   "it": "&nbsp;&middot;&nbsp;Ultimo giorno!"
+   "it": "&nbsp;&middot;&nbsp;Ultimo giorno!",
+   "sv": "&nbsp;&middot;&nbsp;Sista dagen!"
   },
   "h1": {
    "en": "You send it, we do the rest",
@@ -3992,7 +4092,8 @@
    "fr": "Vous envoyez, on s'occupe du reste",
    "de": "Sie schicken, wir machen den Rest",
    "es": "Tú lo mandas, nosotros nos encargamos",
-   "it": "Tu mandi, al resto pensiamo noi"
+   "it": "Tu mandi, al resto pensiamo noi",
+   "sv": "Du skickar, vi fixar resten"
   },
   "sub": {
    "en": "Finished artwork or just a rough idea. Send either and a print expert takes it from there, checking your file or pricing the job.",
@@ -4000,7 +4101,8 @@
    "fr": "Un fichier prêt à imprimer ou un croquis au crayon : envoyez ce que vous avez. Un expert le vérifie, ou vous chiffre le travail.",
    "de": "Druckfertige Datei oder schnelle Skizze – schicken Sie, was da ist. Ein Druckexperte prüft sie oder rechnet den Auftrag durch.",
    "es": "Un diseño listo o un boceto a lápiz: manda lo que tengas. Un experto lo revisa, o te lo presupuesta.",
-   "it": "Un file pronto o uno schizzo a matita: manda quello che hai. Un esperto lo controlla, o ti fa il prezzo."
+   "it": "Un file pronto o uno schizzo a matita: manda quello che hai. Un esperto lo controlla, o ti fa il prezzo.",
+   "sv": "En tryckfärdig fil eller en skiss på ett papper – skicka det du har. En tryckexpert kollar filen eller räknar fram ett pris."
   },
   "cta": {
    "en": "Contact our experts",
@@ -4008,7 +4110,8 @@
    "fr": "Parler à un expert",
    "de": "Mit einem Druckexperten sprechen",
    "es": "Habla con un experto",
-   "it": "Parla con un esperto"
+   "it": "Parla con un esperto",
+   "sv": "Prata med en tryckexpert"
   },
   "team_h": {
    "en": "Meet John and the Print Expert Team",
@@ -4016,7 +4119,8 @@
    "fr": "Voici John et l'équipe d'experts",
    "de": "Das sind John und das Druckexperten-Team",
    "es": "Estos son John y el equipo de expertos",
-   "it": "Ecco John e il team di esperti"
+   "it": "Ecco John e il team di esperti",
+   "sv": "Det här är John och tryckexperterna"
   },
   "team_sub": {
    "en": "Real people who spec print all day. Ask them anything.",
@@ -4024,7 +4128,8 @@
    "fr": "Des gens qui font ça toute la journée. Posez-leur n'importe quelle question.",
    "de": "Menschen, die den ganzen Tag nichts anderes tun. Fragen Sie alles.",
    "es": "Gente que hace esto todo el día. Pregúntales lo que sea.",
-   "it": "Gente che fa questo tutto il giorno. Chiedi qualsiasi cosa."
+   "it": "Gente che fa questo tutto il giorno. Chiedi qualsiasi cosa.",
+   "sv": "Folk som håller på med tryck hela dagarna. Fråga dem vad som helst."
   },
   "role": {
    "en": "Print Expert Team",
@@ -4032,7 +4137,8 @@
    "fr": "Équipe d'experts en impression",
    "de": "Druckexperten-Team",
    "es": "Equipo de expertos en impresión",
-   "it": "Team di esperti di stampa"
+   "it": "Team di esperti di stampa",
+   "sv": "Tryckexpertteamet"
   },
   "john_role": {
    "en": "Our most experienced print expert",
@@ -4040,7 +4146,8 @@
    "fr": "Notre expert le plus expérimenté",
    "de": "Unser erfahrenster Druckexperte",
    "es": "Nuestro experto más veterano",
-   "it": "Il nostro esperto più veterano"
+   "it": "Il nostro esperto più veterano",
+   "sv": "Vår mest rutinerade tryckexpert"
   },
   "john_quote": {
    "en": "Some jobs are genuinely complicated and some are just about getting the best price. Send me the details either way and I will come back with the best option I can find in the market.&rdquo;",
@@ -4048,7 +4155,8 @@
    "fr": "Certains travaux sont vraiment complexes, d'autres se résument au meilleur prix. Dans les deux cas, envoyez-moi les détails et je reviens avec la meilleure option que je trouve sur le marché.&rdquo;",
    "de": "Manche Aufträge sind wirklich kompliziert, bei anderen geht es nur um den besten Preis. Schicken Sie mir in beiden Fällen die Details, dann melde ich mich mit der besten Option, die ich am Markt finde.&rdquo;",
    "es": "Algunos trabajos son de verdad complicados y otros van solo del mejor precio. En ambos casos mándame los detalles y te vuelvo con la mejor opción que encuentre en el mercado.&rdquo;",
-   "it": "Certi lavori sono davvero complicati, altri sono solo questione di prezzo. In entrambi i casi mandami i dettagli e torno con la migliore opzione che trovo sul mercato.&rdquo;"
+   "it": "Certi lavori sono davvero complicati, altri sono solo questione di prezzo. In entrambi i casi mandami i dettagli e torno con la migliore opzione che trovo sul mercato.&rdquo;",
+   "sv": "Vissa jobb är verkligen komplicerade, andra handlar bara om att få bästa pris. Skicka detaljerna i båda fallen, så återkommer jag med det bästa jag hittar på marknaden.&rdquo;"
   },
   "email_john": {
    "en": "E-mail John",
@@ -4056,7 +4164,8 @@
    "fr": "Écrire à John",
    "de": "John schreiben",
    "es": "Escribir a John",
-   "it": "Scrivi a John"
+   "it": "Scrivi a John",
+   "sv": "Mejla John"
   },
   "how_h": {
    "en": "How it works",
@@ -4064,7 +4173,8 @@
    "fr": "Comment ça marche",
    "de": "So läuft es ab",
    "es": "Cómo funciona",
-   "it": "Come funziona"
+   "it": "Come funziona",
+   "sv": "Så funkar det"
   },
   "s.0.t": {
    "en": "You send it",
@@ -4072,7 +4182,8 @@
    "fr": "Vous envoyez",
    "de": "Sie schicken",
    "es": "Tú lo mandas",
-   "it": "Tu mandi"
+   "it": "Tu mandi",
+   "sv": "Du skickar"
   },
   "s.0.b": {
    "en": "Finished artwork or just a rough idea. Whatever you have is enough to start.",
@@ -4080,7 +4191,8 @@
    "fr": "Un fichier finalisé ou un croquis. Ce que vous avez suffit.",
    "de": "Fertige Datei oder grobe Skizze. Was da ist, reicht.",
    "es": "Un diseño acabado o un boceto. Con lo que tengas basta.",
-   "it": "Un file finito o uno schizzo. Quello che hai basta."
+   "it": "Un file finito o uno schizzo. Quello che hai basta.",
+   "sv": "En färdig fil eller en snabb skiss. Det du har räcker."
   },
   "s.1.t": {
    "en": "John&rsquo;s team specs it",
@@ -4088,7 +4200,8 @@
    "fr": "L'équipe de John s'en charge",
    "de": "Johns Team kümmert sich",
    "es": "El equipo de John lo resuelve",
-   "it": "Il team di John ci pensa"
+   "it": "Il team di John ci pensa",
+   "sv": "Johns team löser det"
   },
   "s.1.b": {
    "en": "The right product and the right print partner, however unusual the job.",
@@ -4096,7 +4209,8 @@
    "fr": "Le bon produit chez le bon imprimeur, même pour un travail hors norme.",
    "de": "Das richtige Produkt beim richtigen Partner, so ungewöhnlich der Auftrag auch ist.",
    "es": "El producto adecuado en la imprenta adecuada, por raro que sea el trabajo.",
-   "it": "Il prodotto giusto dallo stampatore giusto, per quanto insolito sia il lavoro."
+   "it": "Il prodotto giusto dallo stampatore giusto, per quanto insolito sia il lavoro.",
+   "sv": "Rätt produkt hos rätt tryckeri, hur ovanligt jobbet än är."
   },
   "s.2.t": {
    "en": "A price back within 24 hours",
@@ -4104,7 +4218,8 @@
    "fr": "Votre prix sous 24 heures",
    "de": "Ihr Preis in 24 Stunden",
    "es": "Tu precio en 24 horas",
-   "it": "Il tuo prezzo entro 24 ore"
+   "it": "Il tuo prezzo entro 24 ore",
+   "sv": "Pris inom 24 timmar"
   },
   "s.2.b": {
    "en": "The sharpest price they can find in the market, with the full total in it.",
@@ -4112,7 +4227,8 @@
    "fr": "Le meilleur prix qu'ils trouvent, et c'est le total, tout compris.",
    "de": "Der beste Preis, den sie finden – und das ist gleich die Endsumme.",
    "es": "El mejor precio que encuentren, y ese es el total final.",
-   "it": "Il miglior prezzo che trovano, e quello è già il totale finale."
+   "it": "Il miglior prezzo che trovano, e quello è già il totale finale.",
+   "sv": "Det bästa priset de hittar – och det är hela summan."
   },
   "final_h": {
    "en": "Tell John what you need",
@@ -4120,7 +4236,8 @@
    "fr": "Dites à John ce qu'il vous faut",
    "de": "Sagen Sie John, was Sie brauchen",
    "es": "Cuéntale a John qué necesitas",
-   "it": "Di' a John cosa ti serve"
+   "it": "Di' a John cosa ti serve",
+   "sv": "Berätta för John vad du behöver"
   },
   "final_b": {
    "en": "A standard job or something completely unusual. Either way you get a price within 24 hours and a straight answer on what is possible.",
@@ -4128,7 +4245,8 @@
    "fr": "Un travail standard ou quelque chose de totalement inhabituel. Dans les deux cas, vous avez un prix sous 24 heures et une réponse franche sur ce qui est possible.",
    "de": "Ein Standardauftrag oder etwas völlig Ungewöhnliches. In beiden Fällen haben Sie innerhalb von 24 Stunden einen Preis und eine klare Antwort, was möglich ist.",
    "es": "Un trabajo estándar o algo totalmente fuera de lo común. En ambos casos tienes un precio en 24 horas y una respuesta clara sobre qué es posible.",
-   "it": "Un lavoro standard o qualcosa di totalmente insolito. In entrambi i casi hai un prezzo entro 24 ore e una risposta chiara su cosa si può fare."
+   "it": "Un lavoro standard o qualcosa di totalmente insolito. In entrambi i casi hai un prezzo entro 24 ore e una risposta chiara su cosa si può fare.",
+   "sv": "Ett standardjobb eller något helt ovanligt. I båda fallen får du ett pris inom 24 timmar och ett rakt svar på vad som är möjligt."
   },
   "final_cta": {
    "en": "Get your price",
@@ -4136,7 +4254,8 @@
    "fr": "Obtenir mon prix",
    "de": "Preis anfragen",
    "es": "Pedir mi precio",
-   "it": "Chiedi il tuo prezzo"
+   "it": "Chiedi il tuo prezzo",
+   "sv": "Få ditt pris"
   },
   "final_note": {
    "en": "Or just reply to this email. It reaches the team.",
@@ -4144,7 +4263,8 @@
    "fr": "Ou répondez simplement à cet e-mail : il arrive chez l'équipe.",
    "de": "Oder antworten Sie einfach auf diese E-Mail. Sie landet beim Team.",
    "es": "O responde a este correo sin más: llega al equipo.",
-   "it": "Oppure rispondi a questa email: arriva al team."
+   "it": "Oppure rispondi a questa email: arriva al team.",
+   "sv": "Eller svara bara på det här mejlet. Det når teamet."
   },
   "alt_desks": {
    "en": "Helloprint advisers at their desks",
@@ -4152,7 +4272,8 @@
    "fr": "Des conseillers Helloprint à leur poste",
    "de": "Helloprint-Berater an ihren Schreibtischen",
    "es": "Asesores de Helloprint en sus puestos",
-   "it": "Consulenti Helloprint alle loro scrivanie"
+   "it": "Consulenti Helloprint alle loro scrivanie",
+   "sv": "Helloprints rådgivare vid sina skrivbord"
   },
   "alt_john": {
    "en": "John, print expert at Helloprint",
@@ -4160,7 +4281,8 @@
    "fr": "John, expert en impression chez Helloprint",
    "de": "John, Druckexperte bei Helloprint",
    "es": "John, experto en impresión en Helloprint",
-   "it": "John, esperto di stampa in Helloprint"
+   "it": "John, esperto di stampa in Helloprint",
+   "sv": "John, tryckexpert på Helloprint"
   },
   "pre_ordered": {
    "en": "Artwork or just an idea. Send either and John&rsquo;s team takes it from there.",
@@ -4168,7 +4290,8 @@
    "fr": "Un fichier ou juste une idée. Envoyez, John et son équipe prennent le relais.",
    "de": "Datei oder nur eine Idee. Schicken Sie es, John und sein Team übernehmen.",
    "es": "Un diseño o solo una idea. Mándalo, John y su equipo siguen.",
-   "it": "Un file o solo un'idea. Mandacelo, John e il suo team ci pensano."
+   "it": "Un file o solo un'idea. Mandacelo, John e il suo team ci pensano.",
+   "sv": "En fil eller bara en idé. Skicka in, Johns team tar det därifrån."
   }
  },
  "flow-welcome": {
@@ -4178,7 +4301,8 @@
    "fr": "Bienvenue chez Helloprint, et voici vos 10%",
    "de": "Willkommen bei Helloprint – hier sind Ihre 10%",
    "es": "Bienvenido a Helloprint, y aquí tienes tu 10%",
-   "it": "Benvenuto in Helloprint, ecco il tuo 10%"
+   "it": "Benvenuto in Helloprint, ecco il tuo 10%",
+   "sv": "Välkommen till Helloprint – här är dina 10 %"
   },
   "subj.wel4": {
    "en": "Last day for your 10%",
@@ -4186,7 +4310,8 @@
    "fr": "Dernier jour pour vos 10%",
    "de": "Letzter Tag für Ihre 10%",
    "es": "Último día para tu 10%",
-   "it": "Ultimo giorno per il tuo 10%"
+   "it": "Ultimo giorno per il tuo 10%",
+   "sv": "Sista dagen för dina 10 %"
   },
   "subj.wel2": {
    "en": "Your 10% is waiting &mdash; 4 days left",
@@ -4194,7 +4319,8 @@
    "fr": "Vos 10% vous attendent, encore 4 jours",
    "de": "Ihre 10% warten – noch 4 Tage",
    "es": "Tu 10% te espera, quedan 4 días",
-   "it": "Il tuo 10% ti aspetta, ancora 4 giorni"
+   "it": "Il tuo 10% ti aspetta, ancora 4 giorni",
+   "sv": "Dina 10 % väntar – 4 dagar kvar"
   },
   "subj.wel3": {
    "en": "Only 2 days left on your 10%",
@@ -4202,7 +4328,8 @@
    "fr": "Plus que 2 jours pour vos 10%",
    "de": "Nur noch 2 Tage für Ihre 10%",
    "es": "Solo 2 días para tu 10%",
-   "it": "Solo 2 giorni per il tuo 10%"
+   "it": "Solo 2 giorni per il tuo 10%",
+   "sv": "Bara 2 dagar kvar på dina 10 %"
   }
  },
  "flow-browse": {

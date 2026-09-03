@@ -88,7 +88,7 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 PATH = os.path.join(ROOT, "data", "translations.json")
 
 SOURCE = "en"
-LANGS = ["en", "nl", "fr", "de", "es", "it"]
+LANGS = ["en", "nl", "fr", "de", "es", "it", "sv"]
 
 # Klaviyo locale -> which language's prose it reads. Two markets share a language
 # and differ only in their links, which is the whole reason prose and links are
@@ -96,7 +96,8 @@ LANGS = ["en", "nl", "fr", "de", "es", "it"]
 LOCALE_LANG = {"en-IE": "en", "en-GB": "en", "en-US": "en",
                "nl-NL": "nl", "nl-BE": "nl",
                "fr-FR": "fr", "fr-BE": "fr",
-               "de-DE": "de", "es-ES": "es", "it-IT": "it"}
+               "de-DE": "de", "es-ES": "es", "it-IT": "it",
+               "sv-SE": "sv"}
 LOCALES = list(LOCALE_LANG)
 FALLBACK_LOCALE = "en-GB"
 

@@ -627,7 +627,8 @@ for slug in EMAILS:
         io.open(os.path.join(OUT, slug + "-nocode-klaviyo.html"), "w",
                 encoding="utf-8").write(_var)
         _extra = " + 1 no-discount variant"
-    print("  %-12s -> 5 language previews + 1 Klaviyo block%s" % (slug, _extra))
+    print("  %-12s -> %d language previews + 1 Klaviyo block%s"
+          % (slug, len(i18n.LANGS) - 1, _extra))
 
 # ---- nothing English may survive in a translated preview
 LEAKS = ["Do you need help?", "Chat with us", "Help Centre",

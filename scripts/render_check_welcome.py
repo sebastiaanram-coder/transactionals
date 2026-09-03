@@ -28,7 +28,7 @@ ROOT = os.path.dirname(HERE)
 import klav, offers
 
 LOCALES = ["en-IE", "en-GB", "en-US", "nl-NL", "nl-BE", "fr-FR", "fr-BE", "de-DE",
-           "es-ES", "it-IT"]
+           "es-ES", "it-IT", "sv-SE"]
 
 # The words each language counts days in. GERMAN NEEDS BOTH FORMS: the terms say
 # "in 5 Tagen" (dative) and the countdown says "Noch 2 Tage" (nominative), both
@@ -38,7 +38,8 @@ DAYWORDS = {"en-IE": ["days"], "en-GB": ["days"], "en-US": ["days"],
             "nl-NL": ["dagen"], "nl-BE": ["dagen"],
             "fr-FR": ["jours"], "fr-BE": ["jours"],
             "de-DE": ["Tagen", "Tage"],
-            "es-ES": ["días"], "it-IT": ["giorni"]}
+            "es-ES": ["días"], "it-IT": ["giorni"],
+            "sv-SE": ["dagar", "dag"]}
 
 # THE CODE'S TOTAL VALIDITY IS ALSO A DAY NUMBER. Every discount email states it
 # in the offer terms ("the code expires 5 days after sign-up"), so 5 is allowed

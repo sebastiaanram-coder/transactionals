@@ -63,7 +63,7 @@ def product_for(product, email_locale):
 # campaign decision, not a catalog fact.
 DISCOUNT = 0.10
 
-SYMBOL = {"EUR": "€", "GBP": "£", "USD": "$"}
+SYMBOL = {"EUR": "€", "GBP": "£", "USD": "$", "SEK": "kr"}
 
 # HOW EACH LANGUAGE WRITES MONEY. Getting this from the price alone is not
 # possible: the same 31.99 is "31,99 EUR" in French and "EUR 31,99" in Italian.
@@ -71,8 +71,10 @@ SYMBOL = {"EUR": "€", "GBP": "£", "USD": "$"}
 #   before_sp - symbol, non-break space, amount      -> EUR 46,62
 #   after   - amount, non-break space, then symbol   -> 31,99 EUR
 _MONEY_STYLE = {"en": "before", "nl": "before_sp", "it": "before_sp",
-                "fr": "after", "de": "after", "es": "after"}
-_COMMA_DECIMAL = ("nl", "de", "es", "it", "fr")
+                "fr": "after", "de": "after", "es": "after",
+                # Swedish writes "478,99 kr" - amount first, then the unit
+                "sv": "after"}
+_COMMA_DECIMAL = ("nl", "de", "es", "it", "fr", "sv")
 NB = " "
 
 
@@ -108,7 +110,14 @@ def fell_back(locales, products=None):
     time instead of at send time.
     """
     out = []
-    for p in (products or list(PRODUCTS)):
+    # A SUBSTITUTION TARGET IS NOT A SLOT. booklets5 exists only because en-US
+    # shows it in the roll-up banner slot, so it has a US entry and nothing
+    # else - and iterating it for every locale reported Sweden as missing a
+    # product Sweden never shows. Default to the slots and let the targets be
+    # reached through product_for().
+    targets = {t for m in PRODUCT_FOR_LOCALE.values() for t in m.values()}
+    slots = products or [p for p in PRODUCTS if p not in targets]
+    for p in slots:
         for loc in locales:
             shown = product_for(p, loc)
             if market_for(loc) not in PRODUCTS[shown]:
@@ -121,7 +130,7 @@ def _amount(value, lang):
     s = "%.2f" % float(value)
     whole, frac = s.split(".")
     whole = format(int(whole), ",")
-    if lang == "fr":
+    if lang in ("fr", "sv"):
         whole = whole.replace(",", NB)
     elif lang in _COMMA_DECIMAL:
         whole = whole.replace(",", ".")
@@ -164,14 +173,16 @@ def discounted(value):
 # comes from the reader's language.
 _UNIT = {"en": ("unit", "units"), "nl": ("stuk", "stuks"),
          "fr": ("unité", "unités"), "de": ("Stück", "Stück"),
-         "es": ("unidad", "unidades"), "it": ("pezzo", "pezzi")}
+         "es": ("unidad", "unidades"), "it": ("pezzo", "pezzi"),
+         # "st" is the Swedish commercial abbreviation and does not inflect
+         "sv": ("st", "st")}
 
 
 def qty_label(email_locale, product, lang):
     """"1.000 stuks", or "1 stuk" when the minimum order really is one."""
     n = int(item(product, email_locale)["qty"])
     grouped = format(n, ",")
-    if lang == "fr":
+    if lang in ("fr", "sv"):
         grouped = grouped.replace(",", NB)
     elif lang in _COMMA_DECIMAL:
         grouped = grouped.replace(",", ".")

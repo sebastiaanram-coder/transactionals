@@ -50,7 +50,13 @@ NBSP = " "
 # i18n.get() resolves an exact locale key ahead of the language, so a blank cell
 # here means "no override, use en" - which is why, unlike a language column, an
 # empty variant cell is NOT an error on import.
-VARIANTS = ["en-US"]
+# sv IS HERE AND NOT IN LANGS ON PURPOSE, FOR NOW. Swedish exists only for the
+# Welcome flow (127 strings); browse, order, post-purchase and winback have
+# none. A language column must never be empty - the import treats a blank as an
+# error, because a blank language is a market with an English email. A blank
+# variant is legitimate. Move "sv" into LANGS once the rest of the programme is
+# translated, and the emptiness check starts protecting it too.
+VARIANTS = ["en-US", "sv"]
 HEADER = ["scope", "key", "where", "keep_exactly"] + LANGS + VARIANTS
 
 WELCOME_SCOPES = ["welcome-01", "welcome-02", "welcome-03", "welcome-04",

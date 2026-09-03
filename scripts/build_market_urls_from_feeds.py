@@ -51,6 +51,9 @@ FROM_CATALOG = {"standardflyers": "standardflyers",
 #   all-products    it-IT has no "tutti i prodotti" page
 #   sustainability  it-IT has no sustainability page (prodotti-eco is a product
 #                   category, not the company page this link means)
+#   quote /         sv-SE has neither: /sv-se/offert, /begar-offert and
+#   perfect-design  /alltid-perfekt-design all 404 (probed 2026-09-03), so both
+#                   fall back to en-GB - the right page in the wrong language.
 #   quote           es-ES has only mis-presupuestos, which is the reader's OWN
 #                   saved quotes, not a request form - the wrong page, so it is
 #                   left to fall back rather than linked. en-US does have one,
@@ -59,27 +62,42 @@ FROM_CATALOG = {"standardflyers": "standardflyers",
 #                   which is why probing /quote, /request-quote and /get-a-quote
 #                   all 404'd. Supplied and verified 200 on 2026-09-03.
 CONTENT_SLUGS = {
+    # The help centre and contact page keep the English slug in every market
+    # that has them. /sv-se/cs is a page, /sv-se/contact is not (probed
+    # 2026-09-03), so Sweden falls back to en-GB for contact only.
+    "cs": {"en-IE": "cs", "en-GB": "cs", "en-US": "cs", "sv-SE": "cs",
+           "nl-NL": "cs", "nl-BE": "cs", "fr-FR": "cs", "fr-BE": "cs",
+           "de-DE": "cs", "es-ES": "cs", "it-IT": "cs"},
+    "contact": {"en-IE": "contact", "en-GB": "contact", "en-US": "contact",
+                "nl-NL": "contact", "nl-BE": "contact", "fr-FR": "contact",
+                "fr-BE": "contact", "de-DE": "contact", "es-ES": "contact",
+                "it-IT": "contact"},
+
     # The US roll-up page is "rollerbanners"; budgetrollupbanners 404s
     # there. Verified 2026-09-03.
     "budgetrollupbanners": {"en-US": "rollerbanners"},
     "our-promises": {
+        "sv-SE": "vara-loften",
         "en-IE": "our-promises", "en-GB": "our-promises", "en-US": "our-promises",
         "nl-NL": "onze-beloftes", "nl-BE": "onze-beloftes",
         "fr-FR": "nos-promesses", "fr-BE": "nos-promesses",
         "de-DE": "unsere-versprechen", "es-ES": "nuestras-promesas",
         "it-IT": "le-nostre-promesse"},
     "all-products": {
+        "sv-SE": "alla-produkter",
         "en-IE": "all-products", "en-GB": "all-products", "en-US": "all-products",
         "nl-NL": "alle-producten", "nl-BE": "alle-producten",
         "fr-FR": "tous-nos-produits", "fr-BE": "tous-nos-produits",
         "de-DE": "alle-produkte", "es-ES": "todos-los-productos"},
     "about-us": {
+        "sv-SE": "om-oss",
         "en-IE": "about-us", "en-GB": "about-us", "en-US": "about-us",
         "nl-NL": "over-ons", "nl-BE": "over-ons",
         "fr-FR": "a-propos-de-nous", "fr-BE": "a-propos-de-nous",
         "de-DE": "uber-uns", "es-ES": "sobre-nosotros",
         "it-IT": "chi-siamo"},
     "sustainability": {
+        "sv-SE": "hallbarhet",
         "en-IE": "sustainability", "en-GB": "sustainability", "en-US": "sustainability",
         "nl-NL": "duurzaamheid", "nl-BE": "duurzaamheid",
         "fr-FR": "durabilite", "fr-BE": "durabilite",
@@ -105,6 +123,7 @@ CONTENT_SLUGS = {
 }
 
 MARKET_SEG = {"en-IE": "en-ie", "en-GB": "en-gb", "en-US": "en-us",
+              "sv-SE": "sv-se",
               "nl-NL": "nl-nl",
               "nl-BE": "nl-be", "fr-FR": "fr-fr", "fr-BE": "fr-be",
               "de-DE": "de-de", "es-ES": "es-es", "it-IT": "it-it"}

@@ -13,7 +13,8 @@
   "de-DE": "DE",
   "es-ES": "ES",
   "it-IT": "IT",
-  "en-US": "US"
+  "en-US": "US",
+  "sv-SE": "SE"
  },
  "gaps": {
   "IT": "no catalog items exist for any Italian product. Searches for Italian product words (biglietti, striscioni) return nothing. Every Italian tile falls back to IE: English name, but a euro price and a working link.",
@@ -86,6 +87,14 @@
     "unit": "units",
     "qty": 1000,
     "url": "https://www.helloprint.com/en-us/classicflyers"
+   },
+   "SE": {
+    "title": "Klassiska flygblad",
+    "price": 478.99,
+    "currency": "SEK",
+    "unit": "units",
+    "qty": 1000,
+    "url": "https://www.helloprint.com/sv-se/standardflyers"
    }
   },
   "businesscardsstandard": {
@@ -144,6 +153,14 @@
     "unit": "units",
     "qty": 250,
     "url": "https://www.helloprint.com/en-us/businesscardsv2us"
+   },
+   "SE": {
+    "title": "Klassiska visitkort",
+    "price": 370.99,
+    "currency": "SEK",
+    "unit": "units",
+    "qty": 500,
+    "url": "https://www.helloprint.com/sv-se/klassiskavisitkort"
    }
   },
   "posters": {
@@ -210,6 +227,14 @@
     "unit": "units",
     "qty": 500,
     "url": "https://www.helloprint.com/en-us/postersv2us"
+   },
+   "SE": {
+    "title": "Standard-affischer",
+    "price": 132.99,
+    "currency": "SEK",
+    "unit": "units",
+    "qty": 1,
+    "url": "https://www.helloprint.com/sv-se/affischer"
    }
   },
   "rollupbannersv2": {
@@ -260,6 +285,14 @@
     "unit": "Stück",
     "qty": 1,
     "url": "https://www.helloprint.com/de-de/rollbannersbudget"
+   },
+   "SE": {
+    "title": "Rollups",
+    "price": 1059.99,
+    "currency": "SEK",
+    "unit": "units",
+    "qty": 1,
+    "url": "https://www.helloprint.com/sv-se/rollups"
    }
   },
   "booklets5": {
@@ -283,7 +316,9 @@
   "de-DE": "IE",
   "es-ES": "IE",
   "it-IT": "IE",
-  "en-US": "GB"
+  "en-US": "GB",
+  "sv-SE": "GB"
  },
- "fetched_us": "2026-09-03, Klaviyo catalog GET /api/catalog-items by id (US-standardflyersus, US-booklets5us, US-businesscardsv2us, US-postersv2us). qty is each item's min_order_quantity, coerced from the feed's float. All four URLs HTTP 200."
+ "fetched_us": "2026-09-03, Klaviyo catalog GET /api/catalog-items by id (US-standardflyersus, US-booklets5us, US-businesscardsv2us, US-postersv2us). qty is each item's min_order_quantity, coerced from the feed's float. All four URLs HTTP 200.",
+ "fetched_se": "2026-09-03, Klaviyo catalog by id (SE-standardflyers, SE-businesscardsstandard, SE-posters, SE-rollupbannersv2). Swedish titles and localised /sv-se/ slugs come from the feed - affischer, klassiskavisitkort and rollups are NOT the English slugs. qty is min_order_quantity; posters and rollups are 1, so qty_label renders the singular."
 }

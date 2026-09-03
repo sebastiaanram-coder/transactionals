@@ -40,7 +40,8 @@ BEGIN, END = "<!--TRX:BEGIN-->", "<!--TRX:END-->"
 from translations_csv import EMAIL_NAME, WHERE, LANGS, VARIANTS   # noqa: E402
 
 LANG_NAME = {"nl": "Nederlands", "fr": "Français", "de": "Deutsch",
-             "es": "Español", "it": "Italiano", "en-US": "English (US)"}
+             "es": "Español", "it": "Italiano", "en-US": "English (US)",
+             "sv": "Svenska (draft)"}
 REVIEW = [l for l in LANGS if l != "en"] + list(VARIANTS)
 
 # the order flows are presented in, and which scopes belong to each
@@ -127,14 +128,28 @@ def build(d):
                 cells = []
                 for l in REVIEW:
                     bad = issues(en, e.get(l, ""), l)
-                    flagged += bool(bad) and l != "en-US"
+                    # AN ABSENT VARIANT IS NOT A DEFECT. A blank en-US means
+                    # "use the English" and a blank sv means "not written yet";
+                    # counting either as a problem made the headline read 425
+                    # and told the reader nothing. Only integrity failures on a
+                    # string that HAS a value are flagged.
+                    blank_variant = l in VARIANTS and not e.get(l)
+                    flagged += bool(bad) and not blank_variant
                     warn = ('<div class="trx-warn">%s</div>' % "; ".join(bad)
-                            if bad and not (l in VARIANTS and not e.get(l))
-                            else "")
-                    body = (esc(e[l]) if e.get(l)
-                            else '<span class="muted">&mdash; uses the English'
-                                 '</span>' if l in VARIANTS
-                            else '<span class="trx-none">not translated</span>')
+                            if bad and not blank_variant else "")
+                    if e.get(l):
+                        body = esc(e[l])
+                    elif l == "sv":
+                        # Swedish covers the Welcome flow only so far, and a gap
+                        # is a gap - not a deliberate fall-through to English.
+                        body = ('<span class="trx-none">not translated yet'
+                                '</span>')
+                    elif l in VARIANTS:
+                        body = ('<span class="muted">&mdash; uses the English'
+                                '</span>')
+                    else:
+                        body = '<span class="trx-none">not translated</span>'
+
                     cells.append('<td class="trx-v" data-l="%s">%s%s</td>'
                                  % (l, body, warn))
                 rows_total += 1

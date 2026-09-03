@@ -35,8 +35,11 @@ import klav
 # lost - the subject for a US reader resolves through fallback_locale en-GB, and
 # the en-GB subject is the same English string en-US would have had, because
 # LOCALE_LANG maps both to "en" and no subject has a per-locale override.
-# Verified 2026-09-03. Adding en-US here just makes every message fail.
-TARGETS = ["de", "en-GB", "en-IE", "es", "fr", "fr-BE", "it", "nl", "nl-BE"]
+# Verified 2026-09-03. Adding en-US here just makes every message fail. sv, by
+# contrast, IS accepted - the API stores it as asked - which is why Sweden gets a
+# translated subject and the US does not.
+TARGETS = ["de", "en-GB", "en-IE", "es", "fr", "fr-BE", "it", "nl",
+           "nl-BE", "sv"]
 
 
 def plain(text):
@@ -107,7 +110,7 @@ def main():
     store = json.load(io.open(os.path.join(ROOT, "data", "translations.json"),
                               encoding="utf-8"))
     LANG = {"en-GB": "en", "en-IE": "en", "en-US": "en",
-            "nl": "nl", "nl-BE": "nl",
+            "nl": "nl", "nl-BE": "nl", "sv": "sv",
             "fr": "fr", "fr-BE": "fr", "de": "de", "es": "es", "it": "it"}
 
     def resolve(entry):
@@ -164,6 +167,30 @@ def main():
                       % (st, "; ".join(klav.errors(res))[:110]))
                 problems += 1
                 continue
+        # ENABLE THE TARGET LOCALES FIRST, AND BELIEVE THE READ-BACK.
+        # A collection minted when the flow had nine locales does not gain a
+        # tenth on its own; writing a value for an unlisted locale is rejected.
+        # The PATCH returns 200 even when the API silently substitutes something
+        # else - it answers en-US with "en" - so the stored list is compared
+        # against what was asked for and any dropped locale is named.
+        st, res = klav.call(key, "PATCH", "/translations/%s/" % q, {"data": {
+            "type": "translation", "id": tid,
+            "attributes": {"target_locales": TARGETS}}},
+            revision=klav.REVISION_BETA)
+        stored = (((res.get("data") or {}).get("attributes") or {})
+                  .get("target_locales")) or []
+        if st not in (200, 201, 202):
+            print("      locales HTTP %s %s"
+                  % (st, "; ".join(klav.errors(res))[:120]))
+            problems += 1
+            continue
+        dropped = [l for l in TARGETS if l not in stored]
+        if dropped:
+            print("      locales REFUSED BY THE API: %s (stored %s)"
+                  % (dropped, stored))
+            problems += 1
+            continue
+
         values = [{"id": "flow_message::%s::subject" % mid,
                    "translations": {l: plain(tr[l]) for l in TARGETS}}]
         st, res = klav.call(key, "PATCH", "/translations/%s/" % q, {"data": {

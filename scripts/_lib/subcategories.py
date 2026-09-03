@@ -146,7 +146,7 @@ def market_url(path, live, esc=lambda x: x):
     if not live:
         return "https://www.helloprint.com/%s/%s" % (market_path("en-IE"), path)
     out = ""
-    for email_loc, cf_loc in LOCALE_MAP.items():
+    for email_loc, cf_loc in MARKET_LOCALES.items():
         seg = market_path(cf_loc)
         if not seg:
             continue
@@ -184,6 +184,26 @@ try:
         _MU = json.load(_f)
 except FileNotFoundError:
     _MU = {"paths": {}, "not_found": []}
+
+# THE LOCALES THE EMAILS ARE BUILT FOR, WHICH IS NOT LOCALE_MAP.
+#
+# LOCALE_MAP maps an email locale to a CONTENTFUL locale and drives subcategory
+# names, and Contentful has no en-US or sv-SE - adding them there makes
+# missing() report every subcategory as absent for two locales that never read
+# one. A market SEGMENT is a different question, so it gets its own list.
+#
+# Getting this wrong is silent and expensive: the link switch is built by
+# iterating a locale map, so a locale absent from it gets no branch at all and
+# falls through to the en-GB fallback. That is exactly what happened when en-US
+# was added - every US company and product link pointed at a .com/en-gb page,
+# while the tile links looked right because those come from the catalog feed
+# instead. Any new market must be added HERE as well as to i18n.LOCALE_LANG.
+#
+#   email locale -> the key market_path() knows it by
+MARKET_LOCALES = {"en-IE": "en-IE", "en-GB": "en-GB", "en-US": "en-US",
+                  "nl-NL": "nl", "nl-BE": "nl-BE",
+                  "fr-FR": "fr-FR", "fr-BE": "fr-BE", "de-DE": "de-DE",
+                  "es-ES": "es-ES", "it-IT": "it", "sv-SE": "sv-SE"}
 
 MU_FALLBACK = "en-GB"
 
@@ -231,20 +251,20 @@ def market_url_verified(path, live, esc=lambda x: x):
     def for_locale(email_loc):
         if email_loc in exact:
             return exact[email_loc]
-        seg = market_path(LOCALE_MAP[email_loc])
+        seg = market_path(MARKET_LOCALES[email_loc])
         if seg and email_loc in good:
             return "https://www.helloprint.com/%s/%s" % (seg, path)
         return None
 
     fb = (exact.get(MU_FALLBACK)
           or "https://www.helloprint.com/%s/%s"
-          % (market_path(LOCALE_MAP[MU_FALLBACK]), path))
+          % (market_path(MARKET_LOCALES[MU_FALLBACK]), path))
     if not live:
         return exact.get("en-IE") or (
             "https://www.helloprint.com/%s/%s" % (market_path("en-IE"), path))
     out = ""
-    for email_loc in LOCALE_MAP:
-        if not market_path(LOCALE_MAP[email_loc]):
+    for email_loc in MARKET_LOCALES:
+        if not market_path(MARKET_LOCALES[email_loc]):
             continue
         out += "{%% %s %s == '%s' %%}%s" % (
             "if" if not out else "elif", LOCALE_EXPR, email_loc,
