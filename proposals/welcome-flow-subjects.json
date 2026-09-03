@@ -1,172 +1,52 @@
 {
-  "W9KshE": {
-    "name": "WEL-1 Welcome · day 0",
-    "scope": "flow-welcome",
-    "key": "subj.wel1",
-    "source": "Welcome to Helloprint, and your 10% code",
-    "translations": {
-      "en-GB": "Welcome to Helloprint, and your 10% code",
-      "en-IE": "Welcome to Helloprint, and your 10% code",
-      "nl": "Welkom bij Helloprint, en je 10%-code",
-      "nl-BE": "Welkom bij Helloprint, en je 10%-code",
-      "fr": "Bienvenue chez Helloprint, et votre code 10%",
-      "fr-BE": "Bienvenue chez Helloprint, et votre code 10%",
-      "de": "Willkommen bei Helloprint, und Ihr 10%-Code",
-      "es": "Bienvenido a Helloprint, y tu código del 10%",
-      "it": "Benvenuto in Helloprint, e il tuo codice 10%"
-    }
-  },
-  "SugqVi": {
-    "name": "WEL-2B Behind the print · ord@S2",
-    "scope": "welcome-02",
-    "key": "h1",
-    "source": "Meet the people behind your print",
-    "translations": {
-      "en-GB": "Meet the people behind your print",
-      "en-IE": "Meet the people behind your print",
-      "nl": "Maak kennis met de mensen achter je drukwerk",
-      "nl-BE": "Maak kennis met de mensen achter je drukwerk",
-      "fr": "Rencontrez les gens derrière vos imprimés",
-      "fr-BE": "Rencontrez les gens derrière vos imprimés",
-      "de": "Lernen Sie die Menschen hinter Ihrem Druck kennen",
-      "es": "Conoce a la gente detrás de tu impresión",
-      "it": "Conosci le persone dietro le tue stampe"
-    }
-  },
-  "XRy5sK": {
-    "name": "WEL-2 Behind the print · day 1",
-    "scope": "flow-welcome",
-    "key": "subj.wel2",
-    "source": "Your 10% is waiting, and 4 days left to use it",
-    "translations": {
-      "en-GB": "Your 10% is waiting, and 4 days left to use it",
-      "en-IE": "Your 10% is waiting, and 4 days left to use it",
-      "nl": "Je 10% staat klaar, en je hebt nog 4 dagen",
-      "nl-BE": "Je 10% staat klaar, en je hebt nog 4 dagen",
-      "fr": "Vos 10% vous attendent, et il reste 4 jours",
-      "fr-BE": "Vos 10% vous attendent, et il reste 4 jours",
-      "de": "Ihre 10% warten, und Sie haben noch 4 Tage",
-      "es": "Tu 10% te espera, y quedan 4 días",
-      "it": "Il tuo 10% ti aspetta, e restano 4 giorni"
-    }
-  },
-  "ReejG4": {
-    "name": "WEL-3B Rated excellent · ord@S2",
-    "scope": "welcome-03",
-    "key": "h1",
-    "source": "Rated Excellent on Trustpilot",
-    "translations": {
-      "en-GB": "Rated Excellent on Trustpilot",
-      "en-IE": "Rated Excellent on Trustpilot",
-      "nl": "Beoordeeld als Uitstekend op Trustpilot",
-      "nl-BE": "Beoordeeld als Uitstekend op Trustpilot",
-      "fr": "Noté Excellent sur Trustpilot",
-      "fr-BE": "Noté Excellent sur Trustpilot",
-      "de": "Auf Trustpilot mit Hervorragend bewertet",
-      "es": "Valorado como Excelente en Trustpilot",
-      "it": "Valutato Eccellente su Trustpilot"
-    }
-  },
-  "XLUP7m": {
-    "name": "WEL-3B Rated excellent · ord@S3",
-    "scope": "welcome-03",
-    "key": "h1",
-    "source": "Rated Excellent on Trustpilot",
-    "translations": {
-      "en-GB": "Rated Excellent on Trustpilot",
-      "en-IE": "Rated Excellent on Trustpilot",
-      "nl": "Beoordeeld als Uitstekend op Trustpilot",
-      "nl-BE": "Beoordeeld als Uitstekend op Trustpilot",
-      "fr": "Noté Excellent sur Trustpilot",
-      "fr-BE": "Noté Excellent sur Trustpilot",
-      "de": "Auf Trustpilot mit Hervorragend bewertet",
-      "es": "Valorado como Excelente en Trustpilot",
-      "it": "Valutato Eccellente su Trustpilot"
-    }
-  },
-  "VmtSYf": {
-    "name": "WEL-3 Rated excellent · day 3",
-    "scope": "flow-welcome",
-    "key": "subj.wel3",
-    "source": "Only 2 days left on your 10%",
-    "translations": {
-      "en-GB": "Only 2 days left on your 10%",
-      "en-IE": "Only 2 days left on your 10%",
-      "nl": "Nog maar 2 dagen voor je 10%",
-      "nl-BE": "Nog maar 2 dagen voor je 10%",
-      "fr": "Plus que 2 jours pour vos 10%",
-      "fr-BE": "Plus que 2 jours pour vos 10%",
-      "de": "Nur noch 2 Tage für Ihre 10%",
-      "es": "Solo quedan 2 días para tu 10%",
-      "it": "Solo 2 giorni per il tuo 10%"
-    }
-  },
-  "SW2WR9": {
-    "name": "WEL-4B Send it over · ord@S2",
-    "scope": "welcome-04",
-    "key": "h1",
-    "source": "Send it over, we’ll handle it",
-    "translations": {
-      "en-GB": "Send it over, we’ll handle it",
-      "en-IE": "Send it over, we’ll handle it",
-      "nl": "Stuur het door, wij regelen het",
-      "nl-BE": "Stuur het door, wij regelen het",
-      "fr": "Envoyez-le, on s'en occupe",
-      "fr-BE": "Envoyez-le, on s'en occupe",
-      "de": "Schicken Sie es, wir kümmern uns darum",
-      "es": "Envíalo y nos encargamos",
-      "it": "Mandacelo, ci pensiamo noi"
-    }
-  },
-  "VgQCCR": {
-    "name": "WEL-4B Send it over · ord@S3",
-    "scope": "welcome-04",
-    "key": "h1",
-    "source": "Send it over, we’ll handle it",
-    "translations": {
-      "en-GB": "Send it over, we’ll handle it",
-      "en-IE": "Send it over, we’ll handle it",
-      "nl": "Stuur het door, wij regelen het",
-      "nl-BE": "Stuur het door, wij regelen het",
-      "fr": "Envoyez-le, on s'en occupe",
-      "fr-BE": "Envoyez-le, on s'en occupe",
-      "de": "Schicken Sie es, wir kümmern uns darum",
-      "es": "Envíalo y nos encargamos",
-      "it": "Mandacelo, ci pensiamo noi"
-    }
-  },
-  "SenDT8": {
-    "name": "WEL-4B Send it over · ord@S4",
-    "scope": "welcome-04",
-    "key": "h1",
-    "source": "Send it over, we’ll handle it",
-    "translations": {
-      "en-GB": "Send it over, we’ll handle it",
-      "en-IE": "Send it over, we’ll handle it",
-      "nl": "Stuur het door, wij regelen het",
-      "nl-BE": "Stuur het door, wij regelen het",
-      "fr": "Envoyez-le, on s'en occupe",
-      "fr-BE": "Envoyez-le, on s'en occupe",
-      "de": "Schicken Sie es, wir kümmern uns darum",
-      "es": "Envíalo y nos encargamos",
-      "it": "Mandacelo, ci pensiamo noi"
-    }
-  },
-  "RBmBgv": {
-    "name": "WEL-4 Send it over · day 5",
-    "scope": "flow-welcome",
-    "key": "subj.wel4",
-    "source": "Last day for your 10%",
-    "translations": {
-      "en-GB": "Last day for your 10%",
-      "en-IE": "Last day for your 10%",
-      "nl": "Laatste dag voor je 10%",
-      "nl-BE": "Laatste dag voor je 10%",
-      "fr": "Dernier jour pour vos 10%",
-      "fr-BE": "Dernier jour pour vos 10%",
-      "de": "Letzter Tag für Ihre 10%",
-      "es": "Último día para tu 10%",
-      "it": "Ultimo giorno per il tuo 10%"
-    }
-  }
+ "W9KshE": {
+  "name": "WEL-1 Welcome · day 0",
+  "scope": "flow-welcome",
+  "key": "subj.wel1"
+ },
+ "SugqVi": {
+  "name": "WEL-2B Behind the print · ord@S2",
+  "scope": "welcome-02",
+  "key": "h1"
+ },
+ "XRy5sK": {
+  "name": "WEL-2 Behind the print · day 1",
+  "scope": "flow-welcome",
+  "key": "subj.wel2"
+ },
+ "ReejG4": {
+  "name": "WEL-3B Rated excellent · ord@S2",
+  "scope": "welcome-03",
+  "key": "h1"
+ },
+ "XLUP7m": {
+  "name": "WEL-3B Rated excellent · ord@S3",
+  "scope": "welcome-03",
+  "key": "h1"
+ },
+ "VmtSYf": {
+  "name": "WEL-3 Rated excellent · day 3",
+  "scope": "flow-welcome",
+  "key": "subj.wel3"
+ },
+ "SW2WR9": {
+  "name": "WEL-4B Send it over · ord@S2",
+  "scope": "welcome-04",
+  "key": "h1"
+ },
+ "VgQCCR": {
+  "name": "WEL-4B Send it over · ord@S3",
+  "scope": "welcome-04",
+  "key": "h1"
+ },
+ "SenDT8": {
+  "name": "WEL-4B Send it over · ord@S4",
+  "scope": "welcome-04",
+  "key": "h1"
+ },
+ "RBmBgv": {
+  "name": "WEL-4 Send it over · day 5",
+  "scope": "flow-welcome",
+  "key": "subj.wel4"
+ }
 }

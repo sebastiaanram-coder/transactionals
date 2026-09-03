@@ -19,7 +19,7 @@ Setting a second one here would give two mechanisms authority over the same line
   python3 scripts/push_welcome_subjects.py --dry-run
   python3 scripts/push_welcome_subjects.py
 """
-import argparse, html, io, json, os, sys, time, urllib.parse
+import argparse, copy, html, io, json, os, sys, time, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "_lib"))
@@ -43,6 +43,40 @@ def plain(text):
     return out
 SOURCE_LOCALE = "en"
 FALLBACK_LOCALE = "en-GB"
+
+
+def base_subjects(key, flow_id):
+    """message id -> (action id, definition) for every send-email in the flow.
+
+    The base subject_line lives on the ACTION, not on the flow-message, and the
+    list endpoint returns bare ids, so each action has to be fetched."""
+    st, acts = klav.call(key, "GET", "/flows/%s/flow-actions/" % flow_id)
+    out = {}
+    for a in (acts.get("data") or []):
+        st, one = klav.call(key, "GET", "/flow-actions/%s/" % a["id"])
+        d = ((one.get("data") or {}).get("attributes") or {}).get("definition") or {}
+        if d.get("type") != "send-email":
+            continue
+        msg = (d.get("data") or {}).get("message") or {}
+        if msg.get("id"):
+            out[msg["id"]] = (a["id"], d)
+    return out
+
+
+def set_base(key, aid, definition, subject):
+    """Point the base subject_line at the English source.
+
+    WHY THIS IS NOT COSMETIC. The base is what sends if the translation layer
+    does not resolve, so a stale base is a live fallback to withdrawn copy. It
+    is also the only cross-check on the translation values: base disagreeing
+    with en-GB is what exposed the &rsquo; reaching the IE and GB inbox. Keeping
+    them equal by construction means the next disagreement means something."""
+    nd = copy.deepcopy(definition)
+    nd["data"]["message"]["subject_line"] = subject
+    st, res = klav.call(key, "PATCH", "/flow-actions/%s/" % aid,
+                        {"data": {"type": "flow-action", "id": aid,
+                                  "attributes": {"definition": nd}}})
+    return st, res
 
 
 def main():
@@ -75,6 +109,7 @@ def main():
     rec = json.load(io.open(os.path.join(ROOT, "data",
         "klaviyo-flow-welcome-messages.json"), encoding="utf-8"))
     print("%s   %s\n" % (rec["flow"], rec["flow_id"]))
+    actions = {} if a.dry_run else base_subjects(key, rec["flow_id"])
 
     problems = 0
     for m in rec["messages"]:
@@ -137,6 +172,25 @@ def main():
               % (n, len(TARGETS), "ok" if n == len(TARGETS) else "INCOMPLETE"))
         if n != len(TARGETS):
             problems += 1
+
+        want = plain(entry["source"])
+        aid, definition = actions.get(mid, (None, None))
+        if not aid:
+            print("      base    NO ACTION FOUND for this message")
+            problems += 1
+        else:
+            have = ((definition.get("data") or {}).get("message") or {}
+                    ).get("subject_line")
+            if have == want:
+                print("      base    already %r" % want)
+            else:
+                bst, bres = set_base(key, aid, definition, want)
+                if bst not in (200, 201, 202):
+                    print("      base    HTTP %s %s"
+                          % (bst, "; ".join(klav.errors(bres))[:110]))
+                    problems += 1
+                else:
+                    print("      base    %r -> %r" % (have, want))
         time.sleep(0.5)
 
     print("\nproblems: %d" % problems)

@@ -53,7 +53,7 @@ EMAILS = [
   "enter, about 7% of sign-ups today.",
   "UCriVp", "BEH-1 WEL-1 Welcome + 10%"),
  ("Day 1",
-  "Your 10% is waiting, and 4 days left to use it",
+  "Your 10% is waiting &mdash; 4 days left",
   "Printed closer to you by a certified B Corp. Your 10% has 4 days left.",
   "Give a reason to trust the platform - local partners, B Corp, the range - "
   "while keeping the code and its countdown in view.",
