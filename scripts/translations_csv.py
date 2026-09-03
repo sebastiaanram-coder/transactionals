@@ -44,7 +44,14 @@ sys.path.insert(0, os.path.join(ROOT, "scripts", "_lib"))
 STORE = os.path.join(ROOT, "data", "translations.json")
 LANGS = ["en", "nl", "fr", "de", "es", "it"]
 NBSP = " "
-HEADER = ["scope", "key", "where", "keep_exactly"] + LANGS
+# LOCALE VARIANTS, WHICH ARE NOT LANGUAGES. en-US reads English prose and
+# overrides only the handful of strings where American English makes a different
+# CLAIM, not a different word: "includes VAT" is false where there is no VAT.
+# i18n.get() resolves an exact locale key ahead of the language, so a blank cell
+# here means "no override, use en" - which is why, unlike a language column, an
+# empty variant cell is NOT an error on import.
+VARIANTS = ["en-US"]
+HEADER = ["scope", "key", "where", "keep_exactly"] + LANGS + VARIANTS
 
 WELCOME_SCOPES = ["welcome-01", "welcome-02", "welcome-03", "welcome-04",
                   "flow-welcome"]
@@ -144,7 +151,8 @@ def rows(d, mode):
                     "where": "%s | %s" % (EMAIL_NAME.get(sc, sc),
                                           WHERE.get(k, k)),
                     "keep_exactly": " ".join(keep),
-                    **{lg: node.get(lg, "") for lg in LANGS}})
+                    **{lg: node.get(lg, "") for lg in LANGS},
+                    **{v: node.get(v, "") for v in VARIANTS}})
     return out
 
 
@@ -171,12 +179,15 @@ def do_export(mode):
         w = csv.DictWriter(f, fieldnames=HEADER)
         w.writeheader()
         for r in rs:
-            w.writerow({k: guard(r[k]) if k in LANGS else r[k] for k in HEADER})
+            w.writerow({k: guard(r[k]) if k in LANGS + VARIANTS else r[k]
+                        for k in HEADER})
     tok = sum(1 for r in rs if r["keep_exactly"])
     print("%d strings -> %s" % (len(rs), name))
     print("   columns: %s" % ", ".join(HEADER))
     print("   %d rows carry something that must survive editing (keep_exactly)" % tok)
     print("   encoded utf-8 with BOM, so Sheets and Excel both read the accents")
+    var = sum(1 for r in rs if any(r.get(v) for v in VARIANTS))
+    print("   %d rows carry an en-US override (blank = use the en wording)" % var)
     print("\nTell the team: edit only the language columns. scope, key, where and")
     print("keep_exactly are how the import finds the string again.")
     return 0
@@ -223,6 +234,25 @@ def do_import(path, dry):
                     new = cand
             if new != node.get(lg):
                 changes.append((sc, k, lg, node.get(lg), new))
+        for v in VARIANTS:
+            if v not in r:
+                continue                # column absent: nothing to say
+            new = unguard((r.get(v) or "").replace("\r\n", "\n").strip())
+            if not new:
+                # BLANK IS MEANINGFUL AND NOT AN ERROR: it means this string has
+                # no American variant and should fall through to en.
+                if node.get(v):
+                    changes.append((sc, k, v, node.get(v), ""))
+                continue
+            for t in tokens:
+                if t not in new:
+                    errs.append("row %d: %s/%s %s lost the token %s"
+                                % (i, sc, k, v, t))
+            if re.search(r"&(?![a-z]+;|#\d+;)", new):
+                errs.append("row %d: %s/%s %s has a bare & - breaks the HTML"
+                            % (i, sc, k, v))
+            if new != node.get(v):
+                changes.append((sc, k, v, node.get(v), new))
                 if not dry:
                     node[lg] = new
 
