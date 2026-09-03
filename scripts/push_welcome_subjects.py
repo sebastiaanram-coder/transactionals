@@ -19,7 +19,7 @@ Setting a second one here would give two mechanisms authority over the same line
   python3 scripts/push_welcome_subjects.py --dry-run
   python3 scripts/push_welcome_subjects.py
 """
-import argparse, io, json, os, sys, time, urllib.parse
+import argparse, html, io, json, os, sys, time, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "_lib"))
@@ -27,6 +27,20 @@ ROOT = os.path.dirname(HERE)
 import klav
 
 TARGETS = ["de", "en-GB", "en-IE", "es", "fr", "fr-BE", "it", "nl", "nl-BE"]
+
+
+def plain(text):
+    """A subject line is PLAIN TEXT. The translation store is written for the
+    template body, so its strings carry HTML entities - welcome-04/h1 is
+    "Send it over, we&rsquo;ll handle it". A body renders that as a curly
+    apostrophe; a subject field does not, and en-GB and en-IE went out reading
+    "we&rsquo;ll" literally in the inbox. Unescape on the way to the field, and
+    refuse anything that still looks like markup afterwards."""
+    out = html.unescape(text or "")
+    if "&" in out or "<" in out:
+        raise ValueError("subject still looks like markup after unescaping: %r"
+                         % out)
+    return out
 SOURCE_LOCALE = "en"
 FALLBACK_LOCALE = "en-GB"
 
@@ -105,7 +119,7 @@ def main():
                 problems += 1
                 continue
         values = [{"id": "flow_message::%s::subject" % mid,
-                   "translations": {l: tr[l] for l in TARGETS}}]
+                   "translations": {l: plain(tr[l]) for l in TARGETS}}]
         st, res = klav.call(key, "PATCH", "/translations/%s/" % q, {"data": {
             "type": "translation", "id": tid,
             "attributes": {"values": values}}}, revision=klav.REVISION_BETA)
