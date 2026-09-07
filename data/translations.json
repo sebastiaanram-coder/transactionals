@@ -4471,7 +4471,8 @@
    "fr": "Votre compte est prêt. Voici où tout se trouve.",
    "de": "Ihr Konto ist bereit. Hier finden Sie alles wieder.",
    "es": "Tu cuenta está lista. Aquí encuentras todo.",
-   "it": "Il tuo account è pronto. Qui trovi tutto."
+   "it": "Il tuo account è pronto. Qui trovi tutto.",
+   "sv": "Ditt konto är klart. Här hittar du allt."
   },
   "h1": {
    "en": "Your Helloprint account is ready",
@@ -4479,7 +4480,8 @@
    "fr": "Votre compte Helloprint est prêt",
    "de": "Ihr Helloprint-Konto ist bereit",
    "es": "Tu cuenta de Helloprint está lista",
-   "it": "Il tuo account Helloprint è pronto"
+   "it": "Il tuo account Helloprint è pronto",
+   "sv": "Ditt Helloprint-konto är klart"
   },
   "sub": {
    "en": "You can order, track a job and pick up a quote from one place. Here is what is in there.",
@@ -4487,7 +4489,8 @@
    "fr": "Vous pouvez commander, suivre un travail et retrouver un devis au même endroit. Voici ce qui s'y trouve.",
    "de": "Sie können bestellen, einen Auftrag verfolgen und ein Angebot abrufen - alles an einem Ort. Das erwartet Sie.",
    "es": "Puedes pedir, seguir un trabajo y recuperar un presupuesto desde un solo sitio. Esto es lo que hay.",
-   "it": "Puoi ordinare, seguire un lavoro e recuperare un preventivo da un unico posto. Ecco cosa c'è."
+   "it": "Puoi ordinare, seguire un lavoro e recuperare un preventivo da un unico posto. Ecco cosa c'è.",
+   "sv": "Beställ, följ en order och hämta en offert – allt på ett ställe. Så här ser det ut."
   },
   "s1t": {
    "en": "Send your artwork whenever it is ready",
@@ -4495,7 +4498,8 @@
    "fr": "Envoyez votre fichier quand il est prêt",
    "de": "Senden Sie Ihre Datei, sobald sie fertig ist",
    "es": "Envía tu archivo cuando esté listo",
-   "it": "Invia il tuo file quando è pronto"
+   "it": "Invia il tuo file quando è pronto",
+   "sv": "Skicka filen när den är klar"
   },
   "s1b": {
    "en": "You can order first and upload later. Every file gets an automatic check at no cost before it goes on press.",
@@ -4503,7 +4507,8 @@
    "fr": "Vous pouvez commander d'abord et envoyer le fichier ensuite. Chaque fichier reçoit une vérification automatique gratuite avant l'impression.",
    "de": "Sie können zuerst bestellen und die Datei später hochladen. Jede Datei wird vor dem Druck kostenlos automatisch geprüft.",
    "es": "Puedes pedir primero y subir el archivo después. Cada archivo recibe una revisión automática gratuita antes de imprimir.",
-   "it": "Puoi ordinare prima e caricare il file dopo. Ogni file riceve un controllo automatico gratuito prima della stampa."
+   "it": "Puoi ordinare prima e caricare il file dopo. Ogni file riceve un controllo automatico gratuito prima della stampa.",
+   "sv": "Du kan beställa först och ladda upp sedan. Varje fil får en automatisk kontroll utan kostnad innan den går i tryck."
   },
   "s2t": {
    "en": "Ask for a price on anything unusual",
@@ -4511,7 +4516,8 @@
    "fr": "Demandez un prix pour tout ce qui sort de l'ordinaire",
    "de": "Fragen Sie nach einem Preis für alles Ungewöhnliche",
    "es": "Pide un precio para cualquier cosa fuera de lo común",
-   "it": "Chiedi un prezzo per qualsiasi cosa insolita"
+   "it": "Chiedi un prezzo per qualsiasi cosa insolita",
+   "sv": "Fråga om pris på det ovanliga"
   },
   "s2b": {
    "en": "An odd size, a tight deadline or a large run. Our quotation team comes back within 24 hours.",
@@ -4519,7 +4525,8 @@
    "fr": "Un format inhabituel, un délai serré ou un grand tirage. Notre équipe devis répond sous 24 heures.",
    "de": "Ein ungewöhnliches Format, ein knapper Termin oder eine große Auflage. Unser Angebotsteam antwortet innerhalb von 24 Stunden.",
    "es": "Un formato poco habitual, un plazo ajustado o una tirada grande. Nuestro equipo de presupuestos responde en 24 horas.",
-   "it": "Un formato insolito, una scadenza stretta o una tiratura grande. Il nostro team preventivi risponde entro 24 ore."
+   "it": "Un formato insolito, una scadenza stretta o una tiratura grande. Il nostro team preventivi risponde entro 24 ore.",
+   "sv": "Ett udda format, en tight deadline eller en stor upplaga. Vårt offertteam återkommer inom 24 timmar."
   },
   "s3t": {
    "en": "See what we print",
@@ -4527,7 +4534,8 @@
    "fr": "Découvrez ce que nous imprimons",
    "de": "Sehen Sie, was wir drucken",
    "es": "Mira lo que imprimimos",
-   "it": "Guarda cosa stampiamo"
+   "it": "Guarda cosa stampiamo",
+   "sv": "Se vad vi trycker"
   },
   "s3b": {
    "en": "Over 10,000 products, printed by a local partner close to your delivery address.",
@@ -4535,7 +4543,8 @@
    "fr": "Plus de 10 000 produits, imprimés par un partenaire proche de votre adresse de livraison.",
    "de": "Über 10.000 Produkte, gedruckt von einem Partner in der Nähe Ihrer Lieferadresse.",
    "es": "Más de 10.000 productos, impresos por un socio cerca de tu dirección de entrega.",
-   "it": "Oltre 10.000 prodotti, stampati da un partner vicino al tuo indirizzo di consegna."
+   "it": "Oltre 10.000 prodotti, stampati da un partner vicino al tuo indirizzo di consegna.",
+   "sv": "Över 10 000 produkter, tryckta av en partner nära din leveransadress."
   },
   "offt": {
    "en": "You are missing 10% off your first order",
@@ -4543,7 +4552,8 @@
    "fr": "Vous passez à côté de 10% sur votre première commande",
    "de": "Ihnen entgehen 10% auf Ihre erste Bestellung",
    "es": "Te estás perdiendo un 10% en tu primer pedido",
-   "it": "Ti stai perdendo il 10% sul tuo primo ordine"
+   "it": "Ti stai perdendo il 10% sul tuo primo ordine",
+   "sv": "Du går miste om 10 % på din första order"
   },
   "offb": {
    "en": "This is the only email we are allowed to send you. Subscribe and your code arrives within minutes: 10% off your first order, up to @@CAP@@, valid 5 days.",
@@ -4551,7 +4561,8 @@
    "fr": "C'est le seul e-mail que nous sommes autorisés à vous envoyer. Inscrivez-vous et votre code arrive en quelques minutes : 10% sur votre première commande, jusqu'à @@CAP@@, valable 5 jours.",
    "de": "Das ist die einzige E-Mail, die wir Ihnen senden dürfen. Melden Sie sich an und Ihr Code kommt innerhalb von Minuten: 10% auf Ihre erste Bestellung, bis zu @@CAP@@, 5 Tage gültig.",
    "es": "Este es el único correo que podemos enviarte. Suscríbete y tu código llega en minutos: 10% en tu primer pedido, hasta @@CAP@@, válido 5 días.",
-   "it": "Questa è la sola email che possiamo inviarti. Iscriviti e il tuo codice arriva in pochi minuti: 10% sul tuo primo ordine, fino a @@CAP@@, valido 5 giorni."
+   "it": "Questa è la sola email che possiamo inviarti. Iscriviti e il tuo codice arriva in pochi minuti: 10% sul tuo primo ordine, fino a @@CAP@@, valido 5 giorni.",
+   "sv": "Det här är det enda mejlet vi får skicka dig. Anmäl dig och koden är hos dig inom några minuter: 10 % på din första order, upp till @@CAP@@, giltig i 5 dagar."
   },
   "offcta": {
    "en": "Yes, send me my 10%",
@@ -4559,7 +4570,8 @@
    "fr": "Oui, envoyez-moi mes 10%",
    "de": "Ja, senden Sie mir meine 10%",
    "es": "Sí, envíame mi 10%",
-   "it": "Sì, inviami il mio 10%"
+   "it": "Sì, inviami il mio 10%",
+   "sv": "Ja, skicka mina 10 %"
   },
   "acct": {
    "en": "Go to your account",
@@ -4567,7 +4579,8 @@
    "fr": "Accéder à votre compte",
    "de": "Zu Ihrem Konto",
    "es": "Ir a tu cuenta",
-   "it": "Vai al tuo account"
+   "it": "Vai al tuo account",
+   "sv": "Gå till ditt konto"
   },
   "whyt": {
    "en": "Why you received this",
@@ -4575,7 +4588,8 @@
    "fr": "Pourquoi vous recevez ceci",
    "de": "Warum Sie das erhalten",
    "es": "Por qué recibes esto",
-   "it": "Perché ricevi questa email"
+   "it": "Perché ricevi questa email",
+   "sv": "Därför fick du det här mejlet"
   },
   "whyb": {
    "en": "This is a one-off service message confirming the Helloprint account you created. It is not a marketing email and you will not receive another unless you subscribe.",
@@ -4583,7 +4597,8 @@
    "fr": "Ceci est un message de service unique confirmant le compte Helloprint que vous avez créé. Ce n'est pas un e-mail marketing et vous n'en recevrez pas d'autre, sauf si vous vous inscrivez.",
    "de": "Dies ist eine einmalige Servicenachricht zu dem von Ihnen erstellten Helloprint-Konto. Es ist keine Marketing-E-Mail, und Sie erhalten keine weitere, sofern Sie sich nicht anmelden.",
    "es": "Este es un mensaje de servicio único que confirma la cuenta de Helloprint que creaste. No es un correo de marketing y no recibirás otro salvo que te suscribas.",
-   "it": "Questo è un messaggio di servizio una tantum che conferma l'account Helloprint che hai creato. Non è un'email di marketing e non ne riceverai altre, a meno che tu non ti iscriva."
+   "it": "Questo è un messaggio di servizio una tantum che conferma l'account Helloprint che hai creato. Non è un'email di marketing e non ne riceverai altre, a meno che tu non ti iscriva.",
+   "sv": "Det här är ett enstaka servicemeddelande som bekräftar det Helloprint-konto du skapade. Det är inte ett marknadsföringsmejl och du får inget mer om du inte anmäler dig."
   },
   "offeyebrow": {
    "en": "LAST CHANCE",
@@ -4591,7 +4606,8 @@
    "fr": "DERNIÈRE CHANCE",
    "de": "LETZTE CHANCE",
    "es": "ÚLTIMA OPORTUNIDAD",
-   "it": "ULTIMA OCCASIONE"
+   "it": "ULTIMA OCCASIONE",
+   "sv": "SISTA CHANSEN"
   },
   "offsmall": {
    "en": "One per customer. You can unsubscribe again at any time.",
@@ -4599,7 +4615,8 @@
    "fr": "Un par client. Vous pouvez vous désinscrire à tout moment.",
    "de": "Einer pro Kunde. Sie können sich jederzeit wieder abmelden.",
    "es": "Uno por cliente. Puedes darte de baja en cualquier momento.",
-   "it": "Uno per cliente. Puoi disiscriverti in qualsiasi momento."
+   "it": "Uno per cliente. Puoi disiscriverti in qualsiasi momento.",
+   "sv": "En per kund. Du kan avregistrera dig igen när du vill."
   },
   "subject": {
    "en": "Your Helloprint account is ready",
@@ -4607,7 +4624,8 @@
    "fr": "Votre compte Helloprint est prêt",
    "de": "Ihr Helloprint-Konto ist bereit",
    "es": "Tu cuenta de Helloprint está lista",
-   "it": "Il tuo account Helloprint è pronto"
+   "it": "Il tuo account Helloprint è pronto",
+   "sv": "Ditt Helloprint-konto är klart"
   }
  }
 }
