@@ -850,19 +850,19 @@
   },
   "sub": {
    "en": "Whatever it is, this is the print that puts it in front of people, and what tends to go with what.",
-   "nl": "Wat het ook is, dit is het drukwerk dat het onder de ogen van mensen brengt, en wat er meestal bij besteld wordt.",
-   "fr": "Quoi que ce soit, voici les imprimés qui le mettent sous les yeux des gens, et ce qui va généralement avec.",
-   "de": "Was es auch ist: Das sind die Drucksachen, die es vor Augen bringen, und was meistens dazu bestellt wird.",
-   "es": "Sea lo que sea, este es el material impreso que lo pone delante de la gente, y lo que suele pedirse con ello.",
-   "it": "Qualunque cosa sia, questa è la stampa che la mette davanti alle persone, e quello che di solito si ordina insieme."
+   "nl": "Wat het ook is: dit is het drukwerk waarmee mensen het zien, en wat er meestal bij hoort.",
+   "fr": "Quoi que ce soit, voici les imprimés qui le font remarquer, et ce qui va souvent ensemble.",
+   "de": "Was auch immer es ist: Das sind die Drucksachen, mit denen es gesehen wird - und was meist dazugehört.",
+   "es": "Sea lo que sea, estos son los impresos que hacen que se vea, y qué suele ir con qué.",
+   "it": "Qualunque cosa sia, sono queste le stampe che lo fanno notare, e cosa va con cosa."
   },
   "pre": {
    "en": "The print that puts your next campaign in front of people.",
-   "nl": "Het drukwerk dat je volgende campagne onder de ogen van mensen brengt.",
-   "fr": "Les imprimés qui mettent votre prochaine campagne sous les yeux des gens.",
-   "de": "Die Drucksachen, die Ihre nächste Kampagne vor Augen bringen.",
-   "es": "El material impreso que pone tu próxima campaña delante de la gente.",
-   "it": "La stampa che mette la tua prossima campagna davanti alle persone."
+   "nl": "Het drukwerk waarmee mensen je volgende campagne zien.",
+   "fr": "Les imprimés qui font remarquer votre prochaine campagne.",
+   "de": "Die Drucksachen, mit denen Ihre nächste Kampagne gesehen wird.",
+   "es": "Los impresos que hacen que se vea tu próxima campaña.",
+   "it": "Le stampe che fanno notare la tua prossima campagna."
   },
   "sect_h": {
    "en": "Where most campaigns start",
@@ -1078,11 +1078,11 @@
   },
   "sect_h": {
    "en": "Where most signage starts",
-   "nl": "Waar de meeste signing begint",
-   "fr": "Par où commence la plupart de la signalétique",
-   "de": "Womit die meiste Beschilderung anfängt",
-   "es": "Por dónde empieza la mayoría de la rotulación",
-   "it": "Da dove parte la maggior parte delle insegne"
+   "nl": "Waar signing meestal begint",
+   "fr": "Par où commence la signalétique",
+   "de": "Womit Beschilderung meistens anfängt",
+   "es": "Por dónde empieza la señalética",
+   "it": "Da dove parte la segnaletica"
   },
   "sect_sub": {
    "en": "The two formats businesses order most when something has to be read from a distance.",
@@ -1379,10 +1379,10 @@
   "brands.sub": {
    "en": "Not everything has to be a blank. We print on premium garment brands too, from the same file.",
    "nl": "Niet alles hoeft blanco te zijn. Wij bedrukken ook premium kledingmerken, vanaf hetzelfde bestand.",
-   "fr": "Tout n'est pas obligé d'être neutre. Nous imprimons aussi sur des marques de vêtements premium, à partir du même fichier.",
-   "de": "Nicht alles muss neutral sein. Wir bedrucken auch Premium-Textilmarken, aus derselben Datei.",
-   "es": "No todo tiene que ser sin marca. También imprimimos sobre marcas de ropa premium, desde el mismo archivo.",
-   "it": "Non deve essere per forza neutro. Stampiamo anche su marchi di abbigliamento premium, dallo stesso file."
+   "fr": "Tout n'a pas besoin d'être neutre. Nous imprimons aussi sur des marques de vêtements premium, depuis le même fichier.",
+   "de": "Es muss nicht alles ein Blanko-Teil sein. Wir bedrucken auch Premium-Textilmarken, aus derselben Datei.",
+   "es": "No todo tiene que ser una prenda neutra. También imprimimos en marcas premium, desde el mismo archivo.",
+   "it": "Non deve essere tutto un capo neutro. Stampiamo anche su marchi premium, dallo stesso file."
   },
   "brands.link": {
    "en": "See all brands",
@@ -1540,11 +1540,11 @@
   },
   "brands.sub": {
    "en": "We personalise premium brands as well as our own ranges. Same file, same process.",
-   "nl": "Wij personaliseren premium merken naast onze eigen assortimenten. Zelfde bestand, zelfde proces.",
-   "fr": "Nous personnalisons des marques premium comme nos propres gammes. Même fichier, même processus.",
+   "nl": "Wij bedrukken zowel premium merken als onze eigen collecties. Zelfde bestand, zelfde proces.",
+   "fr": "Nous personnalisons les grandes marques comme nos propres gammes. Même fichier, même procédé.",
    "de": "Wir veredeln Premium-Marken genauso wie unsere eigenen Sortimente. Gleiche Datei, gleicher Ablauf.",
-   "es": "Personalizamos marcas premium además de nuestras propias gamas. Mismo archivo, mismo proceso.",
-   "it": "Personalizziamo marchi premium oltre alle nostre linee. Stesso file, stesso processo."
+   "es": "Personalizamos tanto marcas premium como nuestras propias gamas. Mismo archivo, mismo proceso.",
+   "it": "Personalizziamo sia i marchi premium sia le nostre linee. Stesso file, stesso processo."
   },
   "brands.link": {
    "en": "See all brands",
@@ -1582,51 +1582,51 @@
  "post-01-review": {
   "eyebrow": {
    "en": "ABOUT A MINUTE",
-   "nl": "ONGEVEER EEN MINUUT",
-   "fr": "UNE MINUTE ENVIRON",
-   "de": "ETWA EINE MINUTE",
-   "es": "UN MINUTO APROXIMADAMENTE",
-   "it": "CIRCA UN MINUTO"
+   "nl": "ÉÉN MINUUT",
+   "fr": "UNE MINUTE",
+   "de": "EINE MINUTE",
+   "es": "UN MINUTO",
+   "it": "UN MINUTO"
   },
   "h1": {
    "en": "Would you tell other businesses how it went?",
-   "nl": "Wil je andere bedrijven vertellen hoe het ging?",
-   "fr": "Diriez-vous à d'autres entreprises comment ça s'est passé ?",
-   "de": "Erzählen Sie anderen Unternehmen, wie es gelaufen ist?",
-   "es": "¿Le cuentas a otras empresas cómo fue?",
-   "it": "Racconti ad altre aziende com'è andata?"
+   "nl": "Help je andere ondernemers kiezen?",
+   "fr": "Un avis, pour aider les autres à choisir ?",
+   "de": "Helfen Sie anderen Unternehmen bei der Wahl?",
+   "es": "¿Ayudas a otras empresas a elegir?",
+   "it": "Aiuti altre aziende a scegliere?"
   },
   "sub": {
    "en": "A service review: how ordering went, how it turned up, and what we were like to deal with. It helps the next business work out who to print with, and it takes about a minute.",
-   "nl": "Een servicebeoordeling: hoe het bestellen ging, hoe het aankwam en hoe wij waren om mee te werken. Het helpt het volgende bedrijf kiezen waar ze laten drukken, en het kost ongeveer een minuut.",
-   "fr": "Un avis sur le service : comment s'est passée la commande, comment elle est arrivée, et comment nous avons été. Cela aide l'entreprise suivante à choisir son imprimeur, et ça prend environ une minute.",
-   "de": "Eine Bewertung des Service: wie die Bestellung lief, wie sie ankam und wie die Zusammenarbeit war. Das hilft dem nächsten Unternehmen bei der Wahl der Druckerei und dauert etwa eine Minute.",
-   "es": "Una opinión sobre el servicio: cómo fue el pedido, cómo llegó y cómo fue tratar con nosotros. Ayuda a la siguiente empresa a decidir con quién imprimir, y lleva más o menos un minuto.",
-   "it": "Una recensione sul servizio: com'è andato l'ordine, com'è arrivato e come siamo stati da trattare. Aiuta l'azienda successiva a scegliere con chi stampare, e richiede circa un minuto."
+   "nl": "Een beoordeling van de service: het bestellen, de levering en hoe wij ons gedroegen. Daar kiest de volgende ondernemer zijn drukker mee. Kost je een minuut.",
+   "fr": "Un avis sur le service : la commande, la livraison, et notre façon de faire. C'est là-dessus que la prochaine entreprise choisit son imprimeur. Une minute suffit.",
+   "de": "Eine Bewertung zum Service: die Bestellung, die Lieferung und wie wir dabei waren. Danach wählt das nächste Unternehmen seine Druckerei. Dauert eine Minute.",
+   "es": "Una opinión sobre el servicio: el pedido, la entrega y cómo nos portamos. Es lo que mira la siguiente empresa para elegir imprenta. Un minuto.",
+   "it": "Un giudizio sul servizio: l'ordine, la consegna e come ci siamo comportati. È così che la prossima azienda sceglie la tipografia. Ci vuole un minuto."
   },
   "pre": {
    "en": "A minute on Trustpilot, if you can spare it.",
-   "nl": "Een minuutje op Trustpilot, als je die hebt.",
-   "fr": "Une minute sur Trustpilot, si vous en avez une.",
-   "de": "Eine Minute auf Trustpilot, wenn Sie eine übrig haben.",
-   "es": "Un minuto en Trustpilot, si lo tienes.",
-   "it": "Un minuto su Trustpilot, se ce l'hai."
+   "nl": "Eén minuutje op Trustpilot, als het je uitkomt.",
+   "fr": "Une minute sur Trustpilot, si vous avez le temps.",
+   "de": "Eine Minute auf Trustpilot, wenn Sie sie erübrigen können.",
+   "es": "Un minuto en Trustpilot, si te va bien.",
+   "it": "Un minuto su Trustpilot, se ti va."
   },
   "band_h": {
    "en": "Still waiting, or something not right?",
-   "nl": "Nog aan het wachten, of klopt er iets niet?",
-   "fr": "Toujours en attente, ou quelque chose ne va pas ?",
-   "de": "Warten Sie noch, oder stimmt etwas nicht?",
-   "es": "¿Sigues esperando, o algo no está bien?",
-   "it": "Stai ancora aspettando, o qualcosa non va?"
+   "nl": "Nog niets ontvangen, of gaat er iets mis?",
+   "fr": "Toujours rien reçu, ou un souci ?",
+   "de": "Noch nichts angekommen, oder passt etwas nicht?",
+   "es": "¿Aún no ha llegado, o hay algo que no cuadra?",
+   "it": "Non è ancora arrivato, o c'è qualcosa che non va?"
   },
   "band_b": {
    "en": "Tell us before you rate us. Reply to this email and it reaches a print expert who can chase the order or put it right.",
-   "nl": "Zeg het ons voordat je ons beoordeelt. Antwoord op deze mail en je bericht komt bij een printexpert die de bestelling kan nazoeken of het recht kan zetten.",
-   "fr": "Dites-le-nous avant de nous noter. Répondez à cet e-mail : votre message arrive chez un expert qui peut relancer la commande ou corriger le tir.",
-   "de": "Sagen Sie es uns, bevor Sie uns bewerten. Antworten Sie auf diese E-Mail, dann landet sie bei einem Druckexperten, der die Bestellung nachverfolgen oder das Problem lösen kann.",
-   "es": "Dínoslo antes de valorarnos. Responde a este correo y llegará a un experto en impresión que puede seguir el pedido o arreglarlo.",
-   "it": "Diccelo prima di valutarci. Rispondi a questa email e arriverà a un esperto di stampa che può sollecitare l'ordine o sistemare le cose."
+   "nl": "Geef ons eerst de kans het op te lossen. Antwoord op deze mail: je bericht komt bij een printexpert die de order kan nazoeken of rechtzetten.",
+   "fr": "Laissez-nous d'abord une chance d'y remédier. Répondez à cet e-mail : un expert peut relancer la commande ou corriger le tir.",
+   "de": "Geben Sie uns zuerst die Chance, das zu klären. Antworten Sie einfach - Ihre Nachricht landet bei einem Druckexperten, der der Bestellung nachgeht oder sie richtigstellt.",
+   "es": "Danos antes la oportunidad de arreglarlo. Responde a este correo: le llega a un experto que puede rastrear el pedido o corregirlo.",
+   "it": "Prima dacci la possibilità di sistemarlo. Rispondi a questa mail: arriva a un esperto che può rintracciare l'ordine o correggerlo."
   },
   "hero_alt": {
    "en": "A printed flyer tucked under the wiper of a dark green car",
@@ -1640,7 +1640,7 @@
  "post-02-reminder": {
   "eyebrow": {
    "en": "STILL A MINUTE",
-   "nl": "NOG STEEDS EEN MINUUT",
+   "nl": "NOG ÉÉN MINUUT",
    "fr": "TOUJOURS UNE MINUTE",
    "de": "IMMER NOCH EINE MINUTE",
    "es": "SIGUE SIENDO UN MINUTO",
@@ -1650,41 +1650,41 @@
    "en": "Nobody takes a printer&rsquo;s word for&nbsp;it",
    "nl": "Niemand gelooft een drukker op zijn&nbsp;woord",
    "fr": "Personne ne croit un imprimeur sur&nbsp;parole",
-   "de": "Keiner glaubt einer Druckerei aufs&nbsp;Wort",
-   "es": "Nadie se fía de la palabra de una&nbsp;imprenta",
+   "de": "Einer Druckerei glaubt man nicht aufs&nbsp;Wort",
+   "es": "Nadie se cree a una imprenta sin&nbsp;más",
    "it": "Nessuno crede a una tipografia sulla&nbsp;parola"
   },
   "sub": {
    "en": "They read the reviews. If ordering with us went well, a line from you carries further than anything we could say about ourselves.",
-   "nl": "Ze lezen de reviews. Als het bestellen bij ons goed ging, telt één zin van jou zwaarder dan alles wat wij over onszelf kunnen zeggen.",
-   "fr": "Ils lisent les avis. Si votre commande s'est bien passée, une ligne de votre part pèse plus lourd que tout ce que nous pourrions dire de nous-mêmes.",
-   "de": "Man liest die Bewertungen. Wenn Ihre Bestellung gut lief, wiegt eine Zeile von Ihnen mehr als alles, was wir über uns selbst sagen könnten.",
-   "es": "La gente lee las opiniones. Si tu pedido salió bien, una línea tuya pesa más que cualquier cosa que podamos decir de nosotros mismos.",
-   "it": "Le recensioni le leggono. Se il tuo ordine è andato bene, una riga tua conta più di qualsiasi cosa possiamo dire di noi stessi."
+   "nl": "Ze lezen de reviews. Ging het bestellen goed, dan weegt één zin van jou zwaarder dan al onze eigen praatjes.",
+   "fr": "Ils lisent les avis. Si la commande s'est bien passée, une ligne de vous pèse plus lourd que tout notre discours.",
+   "de": "Sie lesen die Bewertungen. Wenn die Bestellung gut lief, wiegt ein Satz von Ihnen mehr als alles, was wir über uns sagen.",
+   "es": "Se leen las opiniones. Si el pedido fue bien, una línea tuya pesa más que todo lo que digamos de nosotros.",
+   "it": "Leggono le recensioni. Se l'ordine è andato bene, una riga tua pesa più di tutto quello che diciamo di noi."
   },
   "pre": {
    "en": "A line about how it went carries further than our own marketing.",
-   "nl": "Eén zin over hoe het ging telt zwaarder dan onze eigen marketing.",
-   "fr": "Une ligne sur la façon dont ça s'est passé pèse plus que notre propre marketing.",
-   "de": "Eine Zeile darüber, wie es lief, wiegt mehr als unser eigenes Marketing.",
-   "es": "Una línea sobre cómo fue pesa más que nuestro propio marketing.",
-   "it": "Una riga su com'è andata conta più del nostro marketing."
+   "nl": "Eén zin van jou weegt zwaarder dan onze eigen marketing.",
+   "fr": "Une ligne de votre part pèse plus que notre marketing.",
+   "de": "Ein Satz von Ihnen wiegt mehr als unser eigenes Marketing.",
+   "es": "Una línea tuya pesa más que nuestro propio marketing.",
+   "it": "Una riga tua pesa più del nostro marketing."
   },
   "band_h": {
    "en": "Something not right?",
-   "nl": "Klopt er iets niet?",
-   "fr": "Quelque chose ne va pas ?",
-   "de": "Stimmt etwas nicht?",
-   "es": "¿Algo no está bien?",
+   "nl": "Gaat er iets mis?",
+   "fr": "Un souci ?",
+   "de": "Passt etwas nicht?",
+   "es": "¿Algo no cuadra?",
    "it": "Qualcosa non va?"
   },
   "band_b": {
    "en": "Tell us before you rate us. Reply to this email and it reaches a print expert who can put it right.",
-   "nl": "Zeg het ons voordat je ons beoordeelt. Antwoord op deze mail en je bericht komt bij een printexpert die het recht kan zetten.",
-   "fr": "Dites-le-nous avant de nous noter. Répondez à cet e-mail : votre message arrive chez un expert qui peut corriger le tir.",
-   "de": "Sagen Sie es uns, bevor Sie uns bewerten. Antworten Sie auf diese E-Mail, dann landet sie bei einem Druckexperten, der das Problem lösen kann.",
-   "es": "Dínoslo antes de valorarnos. Responde a este correo y llegará a un experto en impresión que puede arreglarlo.",
-   "it": "Diccelo prima di valutarci. Rispondi a questa email e arriverà a un esperto di stampa che può sistemare le cose."
+   "nl": "Geef ons eerst de kans het op te lossen. Antwoord op deze mail: je bericht komt bij een printexpert die het rechtzet.",
+   "fr": "Laissez-nous d'abord une chance d'y remédier. Répondez à cet e-mail : un expert corrige le tir.",
+   "de": "Geben Sie uns zuerst die Chance, das zu klären. Antworten Sie einfach - Ihre Nachricht landet bei einem Druckexperten, der es richtigstellt.",
+   "es": "Danos antes la oportunidad de arreglarlo. Responde a este correo: le llega a un experto que lo corrige.",
+   "it": "Prima dacci la possibilità di sistemarlo. Rispondi a questa mail: arriva a un esperto che lo sistema."
   },
   "hero_alt": {
    "en": "Printed business cards resting on a leather chair",
@@ -1698,10 +1698,10 @@
  "post-04-expert": {
   "pre": {
    "en": "How did the last job turn out?",
-   "nl": "Hoe is de vorige opdracht geworden?",
-   "fr": "Comment s'est passé le dernier travail ?",
+   "nl": "Hoe is je laatste bestelling geworden?",
+   "fr": "Comment s'est passée votre dernière commande ?",
    "de": "Wie ist der letzte Auftrag geworden?",
-   "es": "¿Cómo salió el último trabajo?",
+   "es": "¿Cómo salió el último pedido?",
    "it": "Com'è venuto l'ultimo lavoro?"
   },
   "greet_named": {
@@ -1730,19 +1730,19 @@
   },
   "opening.1": {
    "en": "How did the last job turn out? If something was not right, tell me and I will sort it out.",
-   "nl": "Hoe is de vorige opdracht geworden? Als er iets niet klopte, zeg het me en ik regel het.",
-   "fr": "Comment s'est passé le dernier travail ? Si quelque chose n'allait pas, dites-le-moi et je m'en occupe.",
-   "de": "Wie ist der letzte Auftrag geworden? Wenn etwas nicht gestimmt hat, sagen Sie es mir, dann kläre ich das.",
-   "es": "¿Cómo salió el último trabajo? Si algo no estuvo bien, dímelo y lo soluciono.",
-   "it": "Com'è venuto l'ultimo lavoro? Se qualcosa non andava, dimmelo e me ne occupo."
+   "nl": "Hoe is je laatste bestelling geworden? Klopte er iets niet, laat het me weten en ik regel het.",
+   "fr": "Comment s'est passée votre dernière commande ? Si quelque chose n'allait pas, dites-le-moi, je m'en occupe.",
+   "de": "Wie ist der letzte Auftrag geworden? Wenn etwas nicht gepasst hat, sagen Sie es mir - ich kümmere mich darum.",
+   "es": "¿Cómo salió el último pedido? Si algo no estuvo bien, dímelo y lo resuelvo.",
+   "it": "Com'è venuto l'ultimo lavoro? Se qualcosa non andava, dimmelo e ci penso io."
   },
   "opening.2": {
    "en": "And if you have anything coming up, I would rather hear about it early. Some of what I can take off your hands:",
-   "nl": "En als je iets op de planning hebt staan, hoor ik het liever vroeg. Een paar dingen die ik uit handen kan nemen:",
-   "fr": "Et si vous avez quelque chose de prévu, je préfère l'apprendre tôt. Voici ce dont je peux vous décharger :",
-   "de": "Und wenn bei Ihnen etwas ansteht, höre ich lieber früh davon. Ein paar Dinge, die ich Ihnen abnehmen kann:",
-   "es": "Y si tienes algo en marcha, prefiero saberlo pronto. Algunas cosas de las que puedo encargarme:",
-   "it": "E se hai qualcosa in programma, preferisco saperlo per tempo. Alcune cose di cui posso occuparmi io:"
+   "nl": "En staat er iets op de planning, dan hoor ik het graag vroeg. Een paar dingen die ik uit handen kan nemen:",
+   "fr": "Et si quelque chose se prépare, autant me le dire tôt. Voici ce que je peux prendre en charge :",
+   "de": "Und wenn etwas ansteht, höre ich es lieber früh. Ein paar Dinge, die ich übernehmen kann:",
+   "es": "Y si tienes algo a la vista, mejor me lo cuentas pronto. Algunas cosas que puedo quitarte de encima:",
+   "it": "E se hai qualcosa in programma, meglio dirmelo presto. Un paio di cose di cui posso occuparmi io:"
   },
   "offer.0.t": {
    "en": "Not sure about a file?",
@@ -1786,11 +1786,11 @@
   },
   "offer.2.b": {
    "en": "I will price it at a few quantities. The step up is usually smaller than people expect.",
-   "nl": "Ik reken het door voor een paar aantallen. De stap omhoog valt meestal kleiner uit dan mensen denken.",
-   "fr": "Je vous chiffre plusieurs quantités. L'écart est en général plus petit qu'on ne l'imagine.",
-   "de": "Ich rechne es Ihnen für mehrere Mengen durch. Der Sprung ist meistens kleiner, als man denkt.",
-   "es": "Te lo calculo para varias cantidades. El salto suele ser menor de lo que la gente espera.",
-   "it": "Te lo quoto su più quantità. Il salto di solito è più piccolo di quanto si pensi."
+   "nl": "Ik reken het voor een paar aantallen door. Het verschil is meestal kleiner dan mensen denken.",
+   "fr": "Je vous chiffre plusieurs quantités. L'écart est souvent plus faible qu'on ne le croit.",
+   "de": "Ich rechne es für ein paar Stückzahlen durch. Der Unterschied ist meist kleiner als gedacht.",
+   "es": "Te lo presupuesto en varias cantidades. La diferencia suele ser menor de lo que se piensa.",
+   "it": "Te lo quoto su più quantità. La differenza è di solito minore di quanto si pensi."
   },
   "offer.3.t": {
    "en": "Not sure it will last?",
@@ -1810,11 +1810,11 @@
   },
   "closing": {
    "en": "Just reply to this email. It comes to me.",
-   "nl": "Antwoord gewoon op deze mail. Hij komt bij mij binnen.",
-   "fr": "Répondez simplement à cet e-mail. Il arrive chez moi.",
-   "de": "Antworten Sie einfach auf diese E-Mail. Sie landet bei mir.",
-   "es": "Responde a este correo sin más. Me llega a mí.",
-   "it": "Rispondi semplicemente a questa email. Arriva a me."
+   "nl": "Antwoord gewoon op deze mail. Die komt bij mij.",
+   "fr": "Répondez simplement à cet e-mail. Il arrive directement chez moi.",
+   "de": "Antworten Sie einfach auf diese E-Mail. Sie kommt bei mir an.",
+   "es": "Responde sin más a este correo. Me llega a mí.",
+   "it": "Rispondi semplicemente a questa mail. Arriva a me."
   },
   "unsub_before": {
    "en": "And if you would rather not hear from me again, ",
@@ -1852,35 +1852,35 @@
  "post-05-offer": {
   "eyebrow": {
    "en": "10% OFF YOUR NEXT ORDER",
-   "nl": "10% KORTING OP JE VOLGENDE BESTELLING",
-   "fr": "10% DE REMISE SUR VOTRE PROCHAINE COMMANDE",
-   "de": "10% RABATT AUF IHRE NÄCHSTE BESTELLUNG",
-   "es": "10% DE DESCUENTO EN TU PRÓXIMO PEDIDO",
-   "it": "10% DI SCONTO SUL PROSSIMO ORDINE"
+   "nl": "10% KORTING OP JE VOLGENDE ORDER",
+   "fr": "-10% SUR VOTRE PROCHAINE COMMANDE",
+   "de": "10% AUF IHRE NÄCHSTE BESTELLUNG",
+   "es": "10% EN TU PRÓXIMO PEDIDO",
+   "it": "10% SUL TUO PROSSIMO ORDINE"
   },
   "h1": {
    "en": "Something coming up? This takes 10% off it",
-   "nl": "Staat er iets op de planning? Hier gaat 10% af",
-   "fr": "Un projet en vue ? Voici 10% de moins dessus",
-   "de": "Steht etwas an? Damit sind es 10% weniger",
-   "es": "¿Tienes algo en marcha? Esto le quita un 10%",
-   "it": "Hai qualcosa in programma? Questo te lo sconta del 10%"
+   "nl": "Iets op de planning? Deze code haalt er 10% af",
+   "fr": "Un projet en vue ? Ce code en enlève 10%",
+   "de": "Steht etwas an? Mit diesem Code 10% weniger",
+   "es": "¿Algo a la vista? Este código le quita un 10%",
+   "it": "Qualcosa in arrivo? Questo codice ne toglie il 10%"
   },
   "sub": {
    "en": "You have not printed with us for a couple of months, so here is a reason to. The code below is yours.",
-   "nl": "Je hebt een paar maanden niets bij ons laten drukken, dus hier is een reden. De code hieronder is van jou.",
-   "fr": "Vous n'avez rien imprimé chez nous depuis quelques mois, alors voici une raison de le faire. Le code ci-dessous est le vôtre.",
-   "de": "Sie haben seit ein paar Monaten nichts bei uns drucken lassen, hier ist also ein Grund dafür. Der Code unten gehört Ihnen.",
-   "es": "Hace un par de meses que no imprimes con nosotros, así que aquí tienes un motivo. El código de abajo es tuyo.",
-   "it": "Non stampi con noi da un paio di mesi, quindi ecco un motivo per farlo. Il codice qui sotto è tuo."
+   "nl": "Het is een paar maanden stil geweest. Dit is een goede reden om weer iets te laten drukken. De code hieronder is voor jou.",
+   "fr": "Cela fait quelques mois que vous n'avez rien imprimé chez nous. Voilà une raison d'y revenir. Le code ci-dessous est pour vous.",
+   "de": "Seit ein paar Monaten haben Sie nichts bei uns drucken lassen. Hier ist ein Grund dafür. Der Code unten gehört Ihnen.",
+   "es": "Llevas un par de meses sin imprimir con nosotros. Aquí tienes un motivo. El código de abajo es tuyo.",
+   "it": "Da un paio di mesi non stampi con noi. Ecco un motivo per farlo. Il codice qui sotto è tuo."
   },
   "pre": {
    "en": "Your code is inside, and it is good for 14 days.",
-   "nl": "Je code zit erin, en hij is 14 dagen geldig.",
-   "fr": "Votre code est à l'intérieur, valable 14 jours.",
-   "de": "Ihr Code steht drin und gilt 14 Tage.",
-   "es": "Tu código está dentro, y vale 14 días.",
-   "it": "Il tuo codice è qui dentro, valido 14 giorni."
+   "nl": "Je code staat hieronder, 14 dagen geldig.",
+   "fr": "Votre code est ci-dessous, valable 14 jours.",
+   "de": "Ihr Code steht unten, 14 Tage gültig.",
+   "es": "Tu código está abajo, válido 14 días.",
+   "it": "Il tuo codice è qui sotto, valido 14 giorni."
   },
   "hero_alt": {
    "en": "A roller banner in an office lobby as somebody walks past",
@@ -1902,19 +1902,19 @@
   },
   "h1": {
    "en": "Today is the last day for your 10%",
-   "nl": "Vandaag is de laatste dag voor je 10%",
-   "fr": "Aujourd'hui est le dernier jour pour vos 10%",
-   "de": "Heute ist der letzte Tag für Ihre 10%",
-   "es": "Hoy es el último día para tu 10%",
-   "it": "Oggi è l'ultimo giorno per il tuo 10%"
+   "nl": "Vandaag verloopt je 10%",
+   "fr": "Dernier jour pour vos -10%",
+   "de": "Heute endet Ihr 10%-Code",
+   "es": "Hoy vence tu 10%",
+   "it": "Oggi scade il tuo 10%"
   },
   "sub": {
    "en": "After today the code stops working. Whatever you were thinking of printing, this is the moment it is cheapest.",
-   "nl": "Na vandaag werkt de code niet meer. Wat je ook van plan was te laten drukken, dit is het moment dat het het goedkoopst is.",
-   "fr": "Après aujourd'hui, le code ne fonctionne plus. Quoi que vous envisagiez d'imprimer, c'est le moment où c'est le moins cher.",
-   "de": "Nach heute funktioniert der Code nicht mehr. Was Sie auch drucken wollten: Jetzt ist es am günstigsten.",
-   "es": "Después de hoy el código deja de funcionar. Sea lo que sea que pensabas imprimir, este es el momento más barato.",
-   "it": "Dopo oggi il codice smette di funzionare. Qualunque cosa pensassi di stampare, questo è il momento in cui costa meno."
+   "nl": "Morgen werkt de code niet meer. Had je nog iets te laten drukken? Dan is dit het goedkoopste moment.",
+   "fr": "Demain, le code ne marchera plus. Si vous avez un projet d'impression, c'est maintenant qu'il coûte le moins cher.",
+   "de": "Morgen funktioniert der Code nicht mehr. Wenn etwas zu drucken ist, ist jetzt der günstigste Moment.",
+   "es": "Mañana el código ya no funciona. Si tenías algo que imprimir, este es el momento más barato.",
+   "it": "Domani il codice non funziona più. Se avevi qualcosa da stampare, questo è il momento più conveniente."
   },
   "pre": {
    "en": "Last day on your code.",
