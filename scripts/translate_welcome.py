@@ -542,20 +542,22 @@ def promise_band(html, slug, live, locale=None):
 #   locale -> (what the reader sees, what tel: dials)
 PHONE_IE = "+353 818 882 249"
 PHONE = {
-    "en-IE": ("+353 818 882 249", "+353818882249"),
+    "en-IE": ("0818 882 249",     "+353818882249"),
     "en-GB": ("0121 285 7464",    "+441212857464"),
     "en-US": ("(646) 582-8295",   "+16465828295"),
     "nl-NL": ("088 088 8688",     "+31880888688"),
     "nl-BE": ("03 808 15 06",     "+3238081506"),
-    "fr-BE": ("03 808 15 06",     "+3238081506"),
+    # the one cross-border entry: French-speaking Belgium is served by the
+    # French line, so the country code stays VISIBLE - "01 84 88 50 55" is the
+    # French national form and a Belgian cannot dial it as written
+    "fr-BE": ("+33 1 84 88 50 55", "+33184885055"),
     "fr-FR": ("01 84 88 50 55",   "+33184885055"),
     "es-ES": ("960 65 08 96",     "+34960650896"),
     "it-IT": ("06 9480 9947",     "+390694809947"),
     "sv-SE": ("08 420 023 90",    "+46842002390"),
+    "de-DE": ("0800 0010779",     "+498000010779"),
 }
-# de-DE HAS NO NUMBER YET, so German readers keep the Irish one rather than a
-# number that does not answer. Add it here and nothing else needs touching.
-PHONE_MISSING = ("de-DE",)
+PHONE_MISSING = ()
 
 
 def phone(html, live, locale=None):
