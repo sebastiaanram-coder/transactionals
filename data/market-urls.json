@@ -365,6 +365,19 @@
    "nl-NL": "https://www.helloprint.com/nl-nl/cs",
    "sv-SE": "https://www.helloprint.com/sv-se/cs"
   },
+  "my-account": {
+   "de-DE": "https://www.helloprint.com/de-de/mein-konto",
+   "en-GB": "https://www.helloprint.com/en-gb/my-account",
+   "en-IE": "https://www.helloprint.com/en-ie/my-account",
+   "en-US": "https://www.helloprint.com/en-us/my-account",
+   "es-ES": "https://www.helloprint.com/es-es/mi-cuenta",
+   "fr-BE": "https://www.helloprint.com/fr-be/mon-compte",
+   "fr-FR": "https://www.helloprint.com/fr-fr/mon-compte",
+   "it-IT": "https://www.helloprint.com/it-it/mio-account",
+   "nl-BE": "https://www.helloprint.com/nl-be/mijn-account",
+   "nl-NL": "https://www.helloprint.com/nl-nl/mijn-account",
+   "sv-SE": "https://www.helloprint.com/sv-se/mitt-konto"
+  },
   "our-promises": {
    "de-DE": "https://www.helloprint.com/de-de/unsere-versprechen",
    "en-GB": "https://www.helloprint.com/en-gb/our-promises",

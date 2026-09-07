@@ -1,25 +1,26 @@
 {
-  "flow": "BEH-1b Account created · service message",
-  "flow_id": "RRLyfx",
-  "status": "draft",
-  "trigger": "Completed Signup (WRvuHD)",
-  "created": "2026-09-01",
-  "url": "https://www.klaviyo.com/flow/RRLyfx/edit",
-  "ui_todo": [
-    "mark the message transactional - the API cannot",
-    "change the 1-day delay to 'wait until 9am' - the API cannot"
-  ],
-  "messages": [
-    {
-      "action": "116194734",
-      "message": "VsCjgv",
-      "name": "ACC-1 Account created · next morning",
-      "next": null,
-      "template_saved": "UhdunD",
-      "template_live": "Tey7Qn",
-      "template_name": "BEH-1b ACC-1 Account created",
-      "subject": "Your Helloprint account is ready",
-      "preview": ""
-    }
-  ]
+ "flow": "BEH-1b Account created · service message",
+ "flow_id": "RRLyfx",
+ "status": "draft",
+ "trigger": "Completed Signup (WRvuHD)",
+ "created": "2026-09-01",
+ "url": "https://www.klaviyo.com/flow/RRLyfx/edit",
+ "ui_todo": [
+  "RE-SET 'transactional' ON THE MESSAGE - it is False after any re-attach and only the UI can set it. It is the legal basis for mailing a non-subscriber.",
+  "change the 1-day delay to 'wait until 9am' - the API cannot express a time of day",
+  "set the message from Draft to Live"
+ ],
+ "messages": [
+  {
+   "action": "116194734",
+   "message": "VsCjgv",
+   "name": "ACC-1 Account created · next morning",
+   "next": null,
+   "template_saved": "UhdunD",
+   "template_live": "RhzHSC",
+   "template_name": "BEH-1b ACC-1 Account created",
+   "subject": "Your Helloprint account is ready",
+   "preview": ""
+  }
+ ]
 }

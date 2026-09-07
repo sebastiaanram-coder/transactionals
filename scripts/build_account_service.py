@@ -191,7 +191,7 @@ TRANSLATED = [
     ("s2t", "Ask for a price on anything unusual"),
     ("s2b", "An odd size, a tight deadline or a large run. Our quotation team comes back within 24 hours."),
     ("s3t", "See what we print"),
-    ("s3b", "Over 10,000 products, printed by local partners and delivered with the price you saw."),
+    ("s3b", "Over 10,000 products, printed by a local partner close to your delivery address."),
     ("offeyebrow", "LAST CHANCE"),
     ("offt", "You are missing 10% off your first order"),
     ("offb", "This is the only email we are allowed to send you. Subscribe and your code arrives within minutes: 10% off your first order, up to @@CAP@@, valid 5 days."),
@@ -305,6 +305,20 @@ if "/en-ie/" in re.sub(r"en-IE' %\}https://www\.helloprint\.com/en-ie/", "", vis
 
 print("preview: %6d bytes  ->  proposals/account-01-proposed.html" % len(prev))
 print("klaviyo: %6d bytes  ->  proposals/account-01-klaviyo.html" % len(body))
-if i18n.report(errs):
+# MISSING TRANSLATIONS ARE A COUNT, NOT AN ERROR - i18n.report says so in its
+# own docstring, and it RETURNS that count rather than printing it. This used to
+# read `if i18n.report(errs): raise SystemExit(1)`, so the moment Swedish was
+# added to i18n.LANGS every one of the 18 account-01 strings counted as missing
+# and this build exited 1 - after writing both output files, and without
+# printing a single word about why. It only fails on real errors now, and it
+# says out loud what is still untranslated.
+need = i18n.report(errs)
+if need:
+    print("\ntranslations still to write:")
+    for scope in sorted(need):
+        print("  %-14s %s" % (scope, ", ".join(need[scope])[:80]))
+if errs:
+    for e in errs:
+        print("  FAIL  " + e)
     raise SystemExit(1)
 print("all self-checks passed")

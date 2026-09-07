@@ -62,6 +62,18 @@ FROM_CATALOG = {"standardflyers": "standardflyers",
 #                   which is why probing /quote, /request-quote and /get-a-quote
 #                   all 404'd. Supplied and verified 200 on 2026-09-03.
 CONTENT_SLUGS = {
+    # THE ACCOUNT PAGE. It was only ever added to market-urls.json by hand, so
+    # regenerating the map dropped it and build_account_service.py started
+    # raising - ACC-1 could not be built at all. Every slug below was probed and
+    # answered 200 on 2026-09-03. Note it-IT: /mio-account and /my-account BOTH
+    # resolve there, and the localised one is the right link to send.
+    "my-account": {
+        "en-IE": "my-account", "en-GB": "my-account", "en-US": "my-account",
+        "nl-NL": "mijn-account", "nl-BE": "mijn-account",
+        "fr-FR": "mon-compte", "fr-BE": "mon-compte",
+        "de-DE": "mein-konto", "es-ES": "mi-cuenta",
+        "it-IT": "mio-account", "sv-SE": "mitt-konto"},
+
     # The help centre and contact page keep the English slug in every market
     # that has them. /sv-se/cs is a page, /sv-se/contact is not (probed
     # 2026-09-03), so Sweden falls back to en-GB for contact only.
