@@ -526,39 +526,63 @@ def promise_band(html, slug, live, locale=None):
 # in Ireland. Only the French number has been supplied, so the rest keep what
 # they had - unchanged rather than wrong in a new way - and the gap is visible
 # here rather than buried in the HTML.
+# THE SUPPORT NUMBER PER MARKET.
+#
+# +353 818 882 249 is an IRISH number and it was hardcoded for every locale, so a
+# Dutch, French, German, Spanish, Italian, Swedish or American reader was given a
+# number in Ireland. Ireland keeps it; the rest were supplied by Sebastiaan.
+#
+# DISPLAY AND LINK ARE NOT THE SAME STRING. The text shows the number the way
+# that market writes it, which is how it was supplied. The tel: href has to be
+# dialable from anywhere, so it is E.164: country code, no spaces, and the
+# national trunk "0" dropped - EXCEPT Italy, which keeps its leading zero. Get
+# that wrong and the link is dead while the text still looks right, which is why
+# both columns are written out here rather than derived in one line.
+#
+#   locale -> (what the reader sees, what tel: dials)
 PHONE_IE = "+353 818 882 249"
-PHONE_BY_LOCALE = {
-    "fr-FR": "01 84 88 50 55",
-    "fr-BE": "01 84 88 50 55",
+PHONE = {
+    "en-IE": ("+353 818 882 249", "+353818882249"),
+    "en-GB": ("0121 285 7464",    "+441212857464"),
+    "en-US": ("(646) 582-8295",   "+16465828295"),
+    "nl-NL": ("088 088 8688",     "+31880888688"),
+    "nl-BE": ("03 808 15 06",     "+3238081506"),
+    "fr-BE": ("03 808 15 06",     "+3238081506"),
+    "fr-FR": ("01 84 88 50 55",   "+33184885055"),
+    "es-ES": ("960 65 08 96",     "+34960650896"),
+    "it-IT": ("06 9480 9947",     "+390694809947"),
+    "sv-SE": ("08 420 023 90",    "+46842002390"),
 }
-PHONE_MISSING = "nl-NL nl-BE de-DE es-ES it-IT sv-SE en-US"
+# de-DE HAS NO NUMBER YET, so German readers keep the Irish one rather than a
+# number that does not answer. Add it here and nothing else needs touching.
+PHONE_MISSING = ("de-DE",)
 
 
 def phone(html, live, locale=None):
-    """The support number per market, where we have one."""
-    if PHONE_IE not in html:
+    """The support number per market, display and tel: link resolved separately."""
+    tel_ie = PHONE_IE.replace(" ", "")
+    if PHONE_IE not in html and tel_ie not in html:
         return html
-    tel = PHONE_IE.replace(" ", "")
 
-    def for_loc(loc):
-        return PHONE_BY_LOCALE.get(loc, PHONE_IE)
+    def pair(loc):
+        return PHONE.get(loc, (PHONE_IE, tel_ie))
 
     if not live:
-        want = for_loc(locale or i18n.FALLBACK_LOCALE)
-        return (html.replace(PHONE_IE, want)
-                    .replace(tel, want.replace(" ", "")))
-    out = ""
-    for i, loc in enumerate(i18n.LOCALES):
-        out += "{%% %s %s == '%s' %%}%s" % (
-            "if" if i == 0 else "elif", i18n.LOCALE_EXPR, loc, for_loc(loc))
-    disp = out + "{%% else %%}%s{%% endif %%}" % PHONE_IE
-    link = ""
-    for i, loc in enumerate(i18n.LOCALES):
-        link += "{%% %s %s == '%s' %%}%s" % (
-            "if" if i == 0 else "elif", i18n.LOCALE_EXPR, loc,
-            for_loc(loc).replace(" ", ""))
-    link += "{%% else %%}%s{%% endif %%}" % tel
-    return html.replace(tel, link).replace(PHONE_IE, disp)
+        disp, link = pair(locale or i18n.FALLBACK_LOCALE)
+        return html.replace(tel_ie, link).replace(PHONE_IE, disp)
+
+    def switch(index):
+        out = ""
+        for i, loc in enumerate(i18n.LOCALES):
+            out += "{%% %s %s == '%s' %%}%s" % (
+                "if" if i == 0 else "elif", i18n.LOCALE_EXPR, loc,
+                pair(loc)[index])
+        return out + "{%% else %%}%s{%% endif %%}" % pair("en-IE")[index]
+
+    # the tel: value first: replacing the display text first would destroy the
+    # digits the href is matched on
+    return html.replace(tel_ie, switch(1)).replace(PHONE_IE, switch(0))
+
 
 def render(html, slug, locale=None, live=False):
     """Swap each English string for one locale's text, or for a nine-way switch.

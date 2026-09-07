@@ -86,3 +86,36 @@ ORDER_SPLIT = 150
 # rename above cannot leave a guard silently checking a code that no longer
 # exists.
 NOT_WELCOME = (ORDER_CODE_10, ORDER_CODE_25)
+
+# ---------------------------------------------------------------- Post-Purchase
+#
+# Day 60, closed on day 73. Confirmed by Sebastiaan on 2026-09-07 against the
+# order-value distribution measured on 762 retail Placed Order events:
+#
+#   median EUR 63.70, mean EUR 145, p90 EUR 327, p95 EUR 480, p99 EUR 1,130,
+#   and a EUR 3,948 order inside a single sample.
+#
+# CAPPED AT 50, unlike Welcome and the 10% abandoned-order offers. Uncapped, one
+# order took EUR 395 off and nothing bounded the tail. A cap of 25 - the
+# BASKET25 number - would have bitten 13.9% of orders and read as an insult on a
+# four-figure basket (2.5% off a EUR 1,000 order). 50 bites the top ~7%, saves
+# 16.5% of programme cost on that sample, and stays honest up to p95.
+#
+# NO MINIMUM ORDER VALUE. Only 5.8% of orders fall under EUR 25 and 1.6% under
+# EUR 20, so a minimum protects almost nothing and costs a condition the email
+# would have to state.
+#
+# THE BASIS IS THE PRODUCT SUBTOTAL, EXCLUDING VAT AND DELIVERY, because that is
+# the number European customers are shown. en-US is the exception: its prices
+# include shipping, so the US copy says "off your order total" instead - see the
+# en-US override on post.basis in the translation store.
+POST_CODE = "BACK-3K7P-10"
+POST_PERCENT = 10
+POST_CAP = 50
+POST_DAYS = 14
+
+# Every code in the programme must be distinct: reporting cannot separate two
+# offers that share one. This is the guard the builders check against.
+ALL_CODES = (WELCOME_CODE, ORDER_CODE_10, ORDER_CODE_25, POST_CODE)
+assert len(set(ALL_CODES)) == len(ALL_CODES), "two flows share a discount code"
+

@@ -1,0 +1,5 @@
+{
+ "flow": "BEH-4 Post-Purchase · Placed Order",
+ "flow_id": "XCvsxh",
+ "note": "Created by scripts/create_post_flow.py. Rotation gates still need scripts/patch_post_rotation.py to scope Received Email to each message id."
+}
