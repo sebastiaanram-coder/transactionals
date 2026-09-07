@@ -479,6 +479,87 @@ def usp_strip(html, slug, live, locale=None):
         html, count=1)
     return html
 
+
+# --------------------------------------------- the all-inclusive-price GUARANTEE
+#
+# welcome-03's closing band promises four things, and one of them - "All-inclusive
+# prices" - is the same claim the FR team asked us to drop from welcome-01's USP
+# strip, and the same one that only holds in the US. Leaving it here while
+# removing it there would have the flow contradict itself two emails apart.
+#
+# Easier than the USP strip: the promises are inline spans in a flowing list, so
+# dropping one reflows on its own. No animation and no Outlook duplicate.
+PROMISE_RE = re.compile(
+    r'(<div class="hp-w3-promises">)(.*?)(</div>)', re.S)
+PROMISE_ITEM_RE = re.compile(r'<span class="hp-w3-promise">.*?</span>', re.S)
+
+
+def promise_band(html, slug, live, locale=None):
+    """The all-inclusive promise is shown to en-US only."""
+    if slug != "welcome-03":
+        return html
+    m = PROMISE_RE.search(html)
+    if not m:
+        errs.append("welcome-03: no promises band found")
+        return html
+    items = PROMISE_ITEM_RE.findall(m.group(2))
+    if len(items) != 4:
+        errs.append("welcome-03: expected 4 promises, found %d" % len(items))
+        return html
+    keep = items[:1] + items[2:]            # drop "All-inclusive prices"
+    four = m.group(1) + "".join(items) + m.group(3)
+    three = m.group(1) + "".join(keep) + m.group(3)
+    if not live:
+        if (locale or i18n.FALLBACK_LOCALE) == US_LOCALE:
+            return html
+        return PROMISE_RE.sub(lambda _m: three, html, count=1)
+    return PROMISE_RE.sub(
+        lambda _m: ("{%% if %s == '%s' %%}%s{%% else %%}%s{%% endif %%}"
+                    % (i18n.LOCALE_EXPR, US_LOCALE, four, three)),
+        html, count=1)
+
+
+# ------------------------------------------------------- the expert's phone line
+#
+# +353 818 882 249 is an IRISH number and it was hardcoded for every locale, so a
+# French, German, Spanish, Italian, Swedish or American reader was given a number
+# in Ireland. Only the French number has been supplied, so the rest keep what
+# they had - unchanged rather than wrong in a new way - and the gap is visible
+# here rather than buried in the HTML.
+PHONE_IE = "+353 818 882 249"
+PHONE_BY_LOCALE = {
+    "fr-FR": "01 84 88 50 55",
+    "fr-BE": "01 84 88 50 55",
+}
+PHONE_MISSING = "nl-NL nl-BE de-DE es-ES it-IT sv-SE en-US"
+
+
+def phone(html, live, locale=None):
+    """The support number per market, where we have one."""
+    if PHONE_IE not in html:
+        return html
+    tel = PHONE_IE.replace(" ", "")
+
+    def for_loc(loc):
+        return PHONE_BY_LOCALE.get(loc, PHONE_IE)
+
+    if not live:
+        want = for_loc(locale or i18n.FALLBACK_LOCALE)
+        return (html.replace(PHONE_IE, want)
+                    .replace(tel, want.replace(" ", "")))
+    out = ""
+    for i, loc in enumerate(i18n.LOCALES):
+        out += "{%% %s %s == '%s' %%}%s" % (
+            "if" if i == 0 else "elif", i18n.LOCALE_EXPR, loc, for_loc(loc))
+    disp = out + "{%% else %%}%s{%% endif %%}" % PHONE_IE
+    link = ""
+    for i, loc in enumerate(i18n.LOCALES):
+        link += "{%% %s %s == '%s' %%}%s" % (
+            "if" if i == 0 else "elif", i18n.LOCALE_EXPR, loc,
+            for_loc(loc).replace(" ", ""))
+    link += "{%% else %%}%s{%% endif %%}" % tel
+    return html.replace(tel, link).replace(PHONE_IE, disp)
+
 def render(html, slug, locale=None, live=False):
     """Swap each English string for one locale's text, or for a nine-way switch.
 
@@ -530,6 +611,8 @@ def render(html, slug, locale=None, live=False):
     html = offer_code(html)
     html = trustpilot_link(html, slug, live, locale)
     html = usp_strip(html, slug, live, locale)
+    html = promise_band(html, slug, live, locale)
+    html = phone(html, live, locale)
     html = html_lang(html, live, locale)
     return link_assets(html, live)
 

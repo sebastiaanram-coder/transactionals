@@ -3454,7 +3454,7 @@
    "nl": "Welkom bij Helloprint",
    "fr": "Bienvenue chez Helloprint",
    "de": "Willkommen bei Helloprint",
-   "es": "Bienvenido a Helloprint",
+   "es": "Te damos la bienvenida a Helloprint",
    "it": "Benvenuto in Helloprint",
    "sv": "Välkommen till Helloprint"
   },
@@ -3463,7 +3463,7 @@
    "nl": "Drukwerk zonder gedoe, met mensen die naast je staan.",
    "fr": "L'impression en toute simplicité, une équipe d'experts à vos côtés",
    "de": "Drucken ohne Umstände, mit Menschen, die hinter Ihnen stehen.",
-   "es": "Imprimir sin complicaciones, con gente que te respalda.",
+   "es": "Imprimir sin complicaciones, con un equipo de expertos a tu lado",
    "it": "Stampare senza complicazioni, con persone che ti danno una mano.",
    "sv": "Trycksaker utan krångel, med folk som ställer upp för dig."
   },
@@ -3518,7 +3518,7 @@
    "nl": "Waar bedrijven mee beginnen",
    "fr": "Découvrez nos meilleures ventes",
    "de": "Damit fangen Unternehmen an",
-   "es": "Con esto empiezan las empresas",
+   "es": "Descubre nuestros productos más vendidos",
    "it": "Da qui partono le aziende",
    "sv": "Det här börjar företag med"
   },
@@ -3527,7 +3527,7 @@
    "nl": "Kies er één en vul je code in bij het afrekenen.",
    "fr": "Trouvez votre bonheur et profitez de -10%",
    "de": "Eins aussuchen und den Code beim Bezahlen eingeben.",
-   "es": "Elige uno e introduce tu código al pagar.",
+   "es": "Elige tu producto y disfruta de un 10% de descuento",
    "it": "Scegline uno e inserisci il codice alla cassa.",
    "sv": "Välj en och ange din kod i kassan."
   },
@@ -3545,7 +3545,7 @@
    "nl": "Twijfel je of je bestand goed is?",
    "fr": "Un doute sur votre fichier ?",
    "de": "Unsicher, ob Ihre Datei passt?",
-   "es": "¿Dudas de si tu archivo servirá?",
+   "es": "¿No tienes claro si tu archivo servirá?",
    "it": "Non sei sicuro del tuo file?",
    "sv": "Osäker på om filen håller?"
   },
@@ -3554,7 +3554,7 @@
    "nl": "Stuur gewoon wat je hebt. Elk bestand gaat langs de controle voordat het de pers op gaat, en we trekken aan de bel als er iets aangepast moet worden.",
    "fr": "Envoyez vos fichiers tels quels. Nous vérifions chaque document avant impression et vous contactons si une modification est nécessaire.",
    "de": "Schicken Sie einfach, was da ist. Jede Datei geht vor dem Druck durch die Prüfung, und wir sagen Bescheid, wenn etwas angepasst werden muss.",
-   "es": "Manda lo que tengas. Cada archivo pasa por revisión antes de imprimir, y te avisamos si hay algo que cambiar.",
+   "es": "Manda lo que tengas. Todos los archivos se revisan antes de imprimirse, y te avisamos si hay algo que cambiar.",
    "it": "Manda quello che hai. Ogni file passa dal controllo prima della stampa, e se c'è da sistemare qualcosa ti avvisiamo.",
    "sv": "Skicka bara det du har. Varje fil går genom kontroll innan den trycks, och behöver något justeras hör du från oss i tid."
   },
@@ -3698,7 +3698,7 @@
   "h1": {
    "en": "Who actually prints your order",
    "nl": "Wie jouw drukwerk maakt",
-   "fr": "Qui imprime vos commandes",
+   "fr": "L'équipe derrière vos commandes",
    "de": "Wer Ihre Drucksachen produziert",
    "es": "Quién imprime tus pedidos",
    "it": "Chi stampa i tuoi ordini",
@@ -3707,7 +3707,7 @@
   "sub": {
    "en": "A B Corp certified platform, local print partners, and a promise to have your back.",
    "nl": "Een gecertificeerde B Corp, drukkers uit je eigen regio, en mensen die je niet laten vallen.",
-   "fr": "Une plateforme certifiée B Corp, des imprimeurs près de chez vous, et une équipe qui ne vous laisse pas tomber.",
+   "fr": "Une entreprise certifiée B Corp, des imprimeurs près de vous, et une équipe toujours à vos côtés.",
    "de": "Zertifizierte B Corp, Druckpartner aus Ihrer Region und ein Team, das Sie nicht hängen lässt.",
    "es": "Una plataforma certificada B Corp, imprentas cerca de ti y un equipo que no te deja tirado.",
    "it": "Una piattaforma certificata B Corp, stampatori vicino a te e un team che non ti lascia solo.",
@@ -3725,7 +3725,7 @@
   "usp.0": {
    "en": "&ldquo;We are a certified B Corp&rdquo;",
    "nl": "&ldquo;Wij zijn een gecertificeerde B Corp&rdquo;",
-   "fr": "&ldquo;Nous sommes une B Corp certifiée&rdquo;",
+   "fr": "&ldquo;Entreprise certifiée B Corp&rdquo;",
    "de": "&ldquo;Wir sind eine zertifizierte B Corp&rdquo;",
    "es": "&ldquo;Somos una B Corp certificada&rdquo;",
    "it": "&ldquo;Siamo una B Corp certificata&rdquo;",
@@ -3734,7 +3734,7 @@
   "usp.1": {
    "en": "&ldquo;Local partners, faster delivery&rdquo;",
    "nl": "&ldquo;Drukkers in de buurt, dus sneller bij je&rdquo;",
-   "fr": "&ldquo;Des imprimeurs proches, donc livré plus vite&rdquo;",
+   "fr": "&ldquo;Vaste réseau d'imprimeurs = livraison rapide&rdquo;",
    "de": "&ldquo;Druckpartner in der Nähe, also schneller da&rdquo;",
    "es": "&ldquo;Imprentas cercanas, así llega antes&rdquo;",
    "it": "&ldquo;Stampatori vicini, quindi arriva prima&rdquo;",
@@ -3743,7 +3743,7 @@
   "usp.2": {
    "en": "&ldquo;10,000+ products to choose from&rdquo;",
    "nl": "&ldquo;Meer dan 10.000 producten om uit te kiezen&rdquo;",
-   "fr": "&ldquo;Plus de 10 000 produits au choix&rdquo;",
+   "fr": "&ldquo;Une sélection de plus de 10&nbsp;000 produits&rdquo;",
    "de": "&ldquo;Über 10.000 Produkte zur Auswahl&rdquo;",
    "es": "&ldquo;Más de 10.000 productos a elegir&rdquo;",
    "it": "&ldquo;Oltre 10.000 prodotti tra cui scegliere&rdquo;",
@@ -3752,7 +3752,7 @@
   "sect_h": {
    "en": "Three things worth knowing",
    "nl": "Drie dingen die je moet weten",
-   "fr": "Trois choses à savoir",
+   "fr": "Nos avantages",
    "de": "Drei Dinge, die Sie wissen sollten",
    "es": "Tres cosas que conviene saber",
    "it": "Tre cose da sapere",
@@ -3761,7 +3761,7 @@
   "sect_sub": {
    "en": "Not slogans. Things you can check.",
    "nl": "Geen praatjes. Dingen die je zelf kunt nagaan.",
-   "fr": "Pas des slogans. Des faits vérifiables.",
+   "fr": "Pour vous servir au mieux",
    "de": "Keine Slogans. Nachprüfbare Fakten.",
    "es": "No son eslóganes. Son datos que puedes comprobar.",
    "it": "Non slogan. Fatti che puoi verificare.",
@@ -3788,7 +3788,7 @@
   "b.1.t": {
    "en": "Better print, less impact",
    "nl": "Mooier drukwerk, minder impact",
-   "fr": "Mieux imprimé, moins d'impact",
+   "fr": "Imprimer mieux. Moins d'impact.",
    "de": "Besser gedruckt, weniger Impact",
    "es": "Mejor impresión, menos impacto",
    "it": "Stampa migliore, meno impatto",
@@ -3824,7 +3824,7 @@
   "ship_body": {
    "en": "Your order goes to a print partner near your delivery address, so it travels less and arrives sooner. In Ireland that means delivery via An Post and DPD, backed by a network of 300+ production partners.",
    "nl": "Je order gaat naar een drukker in de buurt van je bezorgadres. Minder kilometers, dus sneller bij je. Achter de bezorging zit een netwerk van meer dan 300 productiepartners.",
-   "fr": "Votre commande part chez un imprimeur proche de votre adresse de livraison. Moins de kilomètres, donc plus vite chez vous. Derrière, un réseau de plus de 300 partenaires de production.",
+   "fr": "Votre commande est imprimée par un partenaire situé au plus près de votre adresse de livraison. Résultat : moins de transport et une livraison plus rapide, grâce à notre réseau de plus de 300 imprimeurs.",
    "de": "Ihr Auftrag geht an eine Druckerei in der Nähe Ihrer Lieferadresse. Weniger Kilometer, also schneller bei Ihnen. Dahinter steht ein Netz von über 300 Produktionspartnern.",
    "es": "Tu pedido va a una imprenta cercana a tu dirección de entrega. Menos kilómetros, así que llega antes. Detrás hay una red de más de 300 socios de producción.",
    "it": "Il tuo ordine va a uno stampatore vicino al tuo indirizzo di consegna. Meno chilometri, quindi arriva prima. Dietro c'è una rete di oltre 300 partner di produzione.",
@@ -3833,7 +3833,7 @@
   "eco_body": {
    "en": "Print should not cost the earth. Being a certified B Corp keeps us honest about that, and it is why we work with partners who produce closer to you and materials that ask less of the planet. Our impact report shows where we stand and where we are heading.",
    "nl": "Drukwerk hoeft de aarde niet te kosten. Als gecertificeerde B Corp worden we daarop afgerekend, en daarom kiezen we partners die dichter bij je produceren en materialen die de planeet minder vragen. In ons impactrapport staat waar we staan en waar we naartoe werken.",
-   "fr": "L'impression ne devrait pas coûter la planète. Notre certification B Corp nous oblige à le prouver, et c'est pourquoi nous travaillons avec des partenaires qui produisent plus près de vous et des matériaux moins gourmands. Notre rapport d'impact dit où nous en sommes et où nous allons.",
+   "fr": "L'impression ne devrait jamais se faire aux dépens de la planète. C'est le sens de notre certification B Corp : elle nous pousse à choisir des partenaires qui produisent plus près de vous, et des matériaux qui ménagent nos ressources. Notre rapport d'impact dit où nous en sommes, et où nous allons.",
    "de": "Drucken muss die Umwelt nicht kosten. Als zertifizierte B Corp müssen wir das belegen – deshalb arbeiten wir mit Partnern, die näher bei Ihnen produzieren, und mit Materialien, die dem Planeten weniger abverlangen. Unser Impact-Report zeigt, wo wir stehen und wohin wir wollen.",
    "es": "Imprimir no tiene por qué costarle al planeta. Ser una B Corp certificada nos obliga a demostrarlo, y por eso trabajamos con socios que producen más cerca de ti y con materiales que piden menos al planeta. Nuestro informe de impacto cuenta dónde estamos y hacia dónde vamos.",
    "it": "Stampare non deve costare al pianeta. Essere una B Corp certificata ci obbliga a dimostrarlo, ed è per questo che scegliamo partner che producono più vicino a te e materiali che chiedono meno al pianeta. Il nostro report d'impatto dice dove siamo e dove stiamo andando.",
@@ -3842,7 +3842,7 @@
   "range_body": {
    "en": "More than 100 million product combinations. Business cards, flyers, brochures, posters, banners, textiles, packaging and branded gifts. Configure what you need and the platform finds a partner who can make it.",
    "nl": "Meer dan 100 miljoen combinaties. Visitekaartjes, flyers, brochures, posters, banners, textiel, verpakking en relatiegeschenken. Jij stelt samen wat je nodig hebt, het platform zoekt de partner die het kan maken.",
-   "fr": "Plus de 100 millions de combinaisons. Cartes de visite, flyers, brochures, affiches, banderoles, textile, emballage et objets publicitaires. Vous configurez ce qu'il vous faut, la plateforme trouve l'imprimeur capable de le produire.",
+   "fr": "Plus de 100 millions de combinaisons de produits : cartes de visite, flyers, brochures, affiches, banderoles, objets publicitaires... Créez ce dont vous avez besoin, nous trouvons l'imprimeur capable de le produire.",
    "de": "Über 100 Millionen Kombinationen. Visitenkarten, Flyer, Broschüren, Poster, Banner, Textil, Verpackung und Werbegeschenke. Sie konfigurieren, was Sie brauchen – die Plattform findet den Partner, der es herstellen kann.",
    "es": "Más de 100 millones de combinaciones. Tarjetas de visita, flyers, folletos, pósters, banners, textil, packaging y regalos de empresa. Tú configuras lo que necesitas y la plataforma encuentra quién puede producirlo.",
    "it": "Oltre 100 milioni di combinazioni. Biglietti da visita, flyer, brochure, poster, banner, tessile, packaging e gadget aziendali. Tu configuri quello che ti serve, la piattaforma trova il partner che può produrlo.",
@@ -3916,7 +3916,7 @@
   "cta": {
    "en": "Read the reviews",
    "nl": "Lees wat ze zeggen",
-   "fr": "Lire ce qu'ils en disent",
+   "fr": "Lire leurs témoignages",
    "de": "Lesen, was sie sagen",
    "es": "Lee lo que dicen",
    "it": "Leggi cosa dicono",
@@ -3943,7 +3943,7 @@
   "g_h": {
    "en": "Every order, guaranteed",
    "nl": "Dit staat vast bij elke order",
-   "fr": "Sur chaque commande, c'est garanti",
+   "fr": "Nos garanties",
    "de": "Bei jeder Bestellung fest zugesagt",
    "es": "En cada pedido, garantizado",
    "it": "Su ogni ordine, garantito",
@@ -4089,7 +4089,7 @@
   "h1": {
    "en": "You send it, we do the rest",
    "nl": "Jij stuurt, wij regelen de rest",
-   "fr": "Vous envoyez, on s'occupe du reste",
+   "fr": "Vous envoyez, on gère.",
    "de": "Sie schicken, wir machen den Rest",
    "es": "Tú lo mandas, nosotros nos encargamos",
    "it": "Tu mandi, al resto pensiamo noi",
@@ -4098,7 +4098,7 @@
   "sub": {
    "en": "Finished artwork or just a rough idea. Send either and a print expert takes it from there, checking your file or pricing the job.",
    "nl": "Een kant-en-klaar ontwerp of een ruwe schets — stuur wat je hebt. Een printexpert kijkt het na of maakt er een prijs bij.",
-   "fr": "Un fichier prêt à imprimer ou un croquis au crayon : envoyez ce que vous avez. Un expert le vérifie, ou vous chiffre le travail.",
+   "fr": "Envoyez votre fichier ; un expert le vérifie et le rend prêt à imprimer, ou vous chiffre le travail.",
    "de": "Druckfertige Datei oder schnelle Skizze – schicken Sie, was da ist. Ein Druckexperte prüft sie oder rechnet den Auftrag durch.",
    "es": "Un diseño listo o un boceto a lápiz: manda lo que tengas. Un experto lo revisa, o te lo presupuesta.",
    "it": "Un file pronto o uno schizzo a matita: manda quello che hai. Un esperto lo controlla, o ti fa il prezzo.",
@@ -4125,7 +4125,7 @@
   "team_sub": {
    "en": "Real people who spec print all day. Ask them anything.",
    "nl": "Mensen die de hele dag drukwerk uitzoeken. Vraag ze alles.",
-   "fr": "Des gens qui font ça toute la journée. Posez-leur n'importe quelle question.",
+   "fr": "À votre disposition pour vous guider.",
    "de": "Menschen, die den ganzen Tag nichts anderes tun. Fragen Sie alles.",
    "es": "Gente que hace esto todo el día. Pregúntales lo que sea.",
    "it": "Gente che fa questo tutto il giorno. Chiedi qualsiasi cosa.",
@@ -4152,7 +4152,7 @@
   "john_quote": {
    "en": "Some jobs are genuinely complicated and some are just about getting the best price. Send me the details either way and I will come back with the best option I can find in the market.&rdquo;",
    "nl": "Sommige klussen zijn echt ingewikkeld, bij andere gaat het puur om de scherpste prijs. Stuur me in beide gevallen de details, dan kom ik terug met het beste dat ik in de markt kan vinden.&rdquo;",
-   "fr": "Certains travaux sont vraiment complexes, d'autres se résument au meilleur prix. Dans les deux cas, envoyez-moi les détails et je reviens avec la meilleure option que je trouve sur le marché.&rdquo;",
+   "fr": "Certains projets sont vraiment complexes, d'autres sont une question de prix. Dans les deux cas, faites-moi part de vos besoins et je reviens vers vous avec la meilleure option que je trouve sur le marché.&rdquo;",
    "de": "Manche Aufträge sind wirklich kompliziert, bei anderen geht es nur um den besten Preis. Schicken Sie mir in beiden Fällen die Details, dann melde ich mich mit der besten Option, die ich am Markt finde.&rdquo;",
    "es": "Algunos trabajos son de verdad complicados y otros van solo del mejor precio. En ambos casos mándame los detalles y te vuelvo con la mejor opción que encuentre en el mercado.&rdquo;",
    "it": "Certi lavori sono davvero complicati, altri sono solo questione di prezzo. In entrambi i casi mandami i dettagli e torno con la migliore opzione che trovo sul mercato.&rdquo;",
@@ -4179,7 +4179,7 @@
   "s.0.t": {
    "en": "You send it",
    "nl": "Jij stuurt",
-   "fr": "Vous envoyez",
+   "fr": "Vous nous envoyez votre fichier",
    "de": "Sie schicken",
    "es": "Tú lo mandas",
    "it": "Tu mandi",
@@ -4188,7 +4188,7 @@
   "s.0.b": {
    "en": "Finished artwork or just a rough idea. Whatever you have is enough to start.",
    "nl": "Een kant-en-klaar ontwerp of een ruwe schets. Wat je hebt is genoeg.",
-   "fr": "Un fichier finalisé ou un croquis. Ce que vous avez suffit.",
+   "fr": "Nous acceptons les formats PDF, JPG, PNG, EPS, AI ou INDD.",
    "de": "Fertige Datei oder grobe Skizze. Was da ist, reicht.",
    "es": "Un diseño acabado o un boceto. Con lo que tengas basta.",
    "it": "Un file finito o uno schizzo. Quello che hai basta.",
@@ -4197,7 +4197,7 @@
   "s.1.t": {
    "en": "John&rsquo;s team specs it",
    "nl": "John zoekt het uit",
-   "fr": "L'équipe de John s'en charge",
+   "fr": "Notre équipe s'en occupe",
    "de": "Johns Team kümmert sich",
    "es": "El equipo de John lo resuelve",
    "it": "Il team di John ci pensa",
@@ -4206,7 +4206,7 @@
   "s.1.b": {
    "en": "The right product and the right print partner, however unusual the job.",
    "nl": "Het juiste product bij de juiste drukker, hoe bijzonder de klus ook is.",
-   "fr": "Le bon produit chez le bon imprimeur, même pour un travail hors norme.",
+   "fr": "Le fichier est vérifié et rendu prêt à imprimer, chez le bon imprimeur, même pour un travail hors norme.",
    "de": "Das richtige Produkt beim richtigen Partner, so ungewöhnlich der Auftrag auch ist.",
    "es": "El producto adecuado en la imprenta adecuada, por raro que sea el trabajo.",
    "it": "Il prodotto giusto dallo stampatore giusto, per quanto insolito sia il lavoro.",
@@ -4215,7 +4215,7 @@
   "s.2.t": {
    "en": "A price back within 24 hours",
    "nl": "Binnen 24 uur je prijs",
-   "fr": "Votre prix sous 24 heures",
+   "fr": "Votre devis sous 24 heures",
    "de": "Ihr Preis in 24 Stunden",
    "es": "Tu precio en 24 horas",
    "it": "Il tuo prezzo entro 24 ore",
@@ -4224,7 +4224,7 @@
   "s.2.b": {
    "en": "The sharpest price they can find in the market, with the full total in it.",
    "nl": "De scherpste prijs die ze kunnen vinden — en dat is meteen het totaalbedrag.",
-   "fr": "Le meilleur prix qu'ils trouvent, et c'est le total, tout compris.",
+   "fr": "Meilleur prix garanti",
    "de": "Der beste Preis, den sie finden – und das ist gleich die Endsumme.",
    "es": "El mejor precio que encuentren, y ese es el total final.",
    "it": "Il miglior prezzo che trovano, e quello è già il totale finale.",
@@ -4233,7 +4233,7 @@
   "final_h": {
    "en": "Tell John what you need",
    "nl": "Vertel John wat je nodig hebt",
-   "fr": "Dites à John ce qu'il vous faut",
+   "fr": "Dites-nous ce dont vous avez besoin",
    "de": "Sagen Sie John, was Sie brauchen",
    "es": "Cuéntale a John qué necesitas",
    "it": "Di' a John cosa ti serve",
@@ -4242,7 +4242,7 @@
   "final_b": {
    "en": "A standard job or something completely unusual. Either way you get a price within 24 hours and a straight answer on what is possible.",
    "nl": "Een standaardklus of iets totaal ongewoons. In beide gevallen heb je binnen 24 uur een prijs en een eerlijk antwoord over wat er kan.",
-   "fr": "Un travail standard ou quelque chose de totalement inhabituel. Dans les deux cas, vous avez un prix sous 24 heures et une réponse franche sur ce qui est possible.",
+   "fr": "Un projet standard ou une impression exceptionnelle. Dans tous les cas, nous vous envoyons un devis sous 24 heures.",
    "de": "Ein Standardauftrag oder etwas völlig Ungewöhnliches. In beiden Fällen haben Sie innerhalb von 24 Stunden einen Preis und eine klare Antwort, was möglich ist.",
    "es": "Un trabajo estándar o algo totalmente fuera de lo común. En ambos casos tienes un precio en 24 horas y una respuesta clara sobre qué es posible.",
    "it": "Un lavoro standard o qualcosa di totalmente insolito. In entrambi i casi hai un prezzo entro 24 ore e una risposta chiara su cosa si può fare.",
@@ -4251,7 +4251,7 @@
   "final_cta": {
    "en": "Get your price",
    "nl": "Vraag je prijs op",
-   "fr": "Obtenir mon prix",
+   "fr": "Obtenir un devis",
    "de": "Preis anfragen",
    "es": "Pedir mi precio",
    "it": "Chiedi il tuo prezzo",
@@ -4260,7 +4260,7 @@
   "final_note": {
    "en": "Or just reply to this email. It reaches the team.",
    "nl": "Of antwoord gewoon op deze mail. Die komt bij het team terecht.",
-   "fr": "Ou répondez simplement à cet e-mail : il arrive chez l'équipe.",
+   "fr": "Vous pouvez également directement répondre à cet e-mail.",
    "de": "Oder antworten Sie einfach auf diese E-Mail. Sie landet beim Team.",
    "es": "O responde a este correo sin más: llega al equipo.",
    "it": "Oppure rispondi a questa email: arriva al team.",
