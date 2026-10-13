@@ -294,6 +294,7 @@
   .emails-wrap[data-active-flow="pl-warning-d12"]       .event-vars[data-for-flow="pl-warning-d12"],
   .emails-wrap[data-active-flow="pl-cancelled-d14"]     .event-vars[data-for-flow="pl-cancelled-d14"],
   .emails-wrap[data-active-flow="email-verification"]   .event-vars[data-for-flow="email-verification"],
+  .emails-wrap[data-active-flow="quote-sent"]            .event-vars[data-for-flow="quote-sent"],
   .emails-wrap[data-active-flow="artwork-proof-reminder"] .event-vars[data-for-flow="artwork-proof-reminder"] {
     display: block;
   }
@@ -327,6 +328,7 @@
   .emails-wrap[data-active-flow="pl-warning-d12"]       .email-meta[data-for-flow="pl-warning-d12"],
   .emails-wrap[data-active-flow="pl-cancelled-d14"]     .email-meta[data-for-flow="pl-cancelled-d14"],
   .emails-wrap[data-active-flow="email-verification"]   .email-meta[data-for-flow="email-verification"],
+  .emails-wrap[data-active-flow="quote-sent"]            .email-meta[data-for-flow="quote-sent"],
   .emails-wrap[data-active-flow="artwork-proof-reminder"] .email-meta[data-for-flow="artwork-proof-reminder"] {
     display: block;
   }
@@ -521,6 +523,10 @@
   [data-theme="dark"] .artwork-badge.is-shipped,
   [data-theme="dark"] .payment-pill.is-paid { color: #4ade80; }
 
+  /* Same fix for the signature's direct email link: brand green on a dark
+     card is a 2.4:1 fail, #4ade80 clears AAA. */
+  [data-theme="dark"] .signature-contact a { color: #4ade80; }
+
   /* Awaiting + cancelled badges had hardcoded light-grey bgs from light mode
      (#f3f4f6), invisible in dark. Override to a dark grey + lifted faint text. */
   [data-theme="dark"] .artwork-badge.is-awaiting,
@@ -570,7 +576,8 @@
   .emails-wrap[data-active-flow="reminder-first"]     .toggle-group[data-for-flow~="reminder-first"],
   .emails-wrap[data-active-flow="reminder-second"]    .toggle-group[data-for-flow~="reminder-second"],
   .emails-wrap[data-active-flow="notice-of-default"]  .toggle-group[data-for-flow~="notice-of-default"],
-  .emails-wrap[data-active-flow="pl-payment-link"]    .toggle-group[data-for-flow~="pl-payment-link"] {
+  .emails-wrap[data-active-flow="pl-payment-link"]    .toggle-group[data-for-flow~="pl-payment-link"],
+  .emails-wrap[data-active-flow="quote-sent"]         .toggle-group[data-for-flow~="quote-sent"] {
     display: flex;
   }
   .email[data-flow] { display: none; }
@@ -605,6 +612,7 @@
   .emails-wrap[data-active-flow="review-product"]     .email[data-flow="review-product"],
   .emails-wrap[data-active-flow="guest-order-link"]   .email[data-flow="guest-order-link"],
   .emails-wrap[data-active-flow="email-verification"] .email[data-flow="email-verification"],
+  .emails-wrap[data-active-flow="quote-sent"]         .email[data-flow="quote-sent"],
   .emails-wrap[data-active-flow="artwork-proof-reminder"] .email[data-flow="artwork-proof-reminder"] {
     display: block;
   }
@@ -635,6 +643,132 @@
   .email[data-flow="pl-payment-link"][data-recipient="self"]  [data-recipient-block="self"],
   .email[data-flow="pl-payment-link"][data-recipient="other"] [data-recipient-block="other"] { display: block; }
   .emails-wrap[data-active-flow="pl-payment-link"] .toggle-panel { grid-template-columns: 1fr; }
+
+  /* ── Quote sent (Adminpanel) ───────────────────────────────────────
+     A quote has no payment state and no artwork state: nothing exists
+     until the customer approves, so this email only switches on two
+     things, both handled by the generic toggle handler.
+       data-note     = "with" | "without"   optional message from the sender
+       data-revision = "new"  | "revised"   first send vs a corrected re-send  */
+  .email[data-flow="quote-sent"] [data-revision-block] { display: none; }
+  .email[data-flow="quote-sent"][data-revision="new"]     [data-revision-block="new"],
+  .email[data-flow="quote-sent"][data-revision="revised"] [data-revision-block="revised"] { display: block; }
+  .email[data-flow="quote-sent"] .quote-note { display: none; }
+  .email[data-flow="quote-sent"][data-note="with"] .quote-note { display: block; }
+
+  /* Quote facts, the three things a buyer checks before reading the lines:
+     which quote this is, how long it holds, and who wrote it. */
+  .quote-facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin: 0 0 28px;
+  }
+  .quote-fact { background: var(--color-surface); padding: 14px 16px; }
+  .quote-fact-label {
+    margin: 0 0 4px;
+    font-size: 11px; line-height: 16px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--color-ink-faint);
+  }
+  .quote-fact-value {
+    margin: 0;
+    font-size: 14px; line-height: 20px; font-weight: 600;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Re-sent quote, amber banner above the hero copy. */
+  .revision-banner {
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    background: var(--color-amber-bg);
+    color: var(--color-amber-ink);
+    border: 1px solid var(--color-amber-border);
+    border-radius: var(--radius-card);
+    font-size: 14px; line-height: 20px; font-weight: 600;
+  }
+
+  /* Free-text note the Helloprinter typed in Adminpanel. Rendered as a
+     quote, not as a warning: it is a person talking, not a system state. */
+  .quote-note {
+    background: var(--color-surface-muted);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-card);
+    padding: 18px 20px;
+    margin: 0 0 28px;
+  }
+  .quote-note h3 {
+    margin: 0 0 6px;
+    font-size: 13px; line-height: 20px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--color-ink-faint);
+  }
+  .quote-note p {
+    margin: 0;
+    font-size: 15px; line-height: 24px;
+    color: var(--color-ink-muted);
+  }
+
+  /* "Quote, not an order" pill, sits where the payment pill sits on the
+     order emails so the two never get confused. */
+  .quote-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 11px;
+    border-radius: 9999px;
+    font-size: 12px; line-height: 16px; font-weight: 700;
+    white-space: nowrap;
+    background: var(--color-amber-bg);
+    color: var(--color-amber-ink);
+  }
+  .quote-pill svg { width: 12px; height: 12px; }
+
+  /* Signature of the Helloprinter who sent the quote. The photo is optional,
+     the initials circle is the fallback, so a colleague with no photo in
+     Adminpanel still signs the email as a person. */
+  .signature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-card-lg);
+    padding: 22px 24px;
+    margin: 0 0 28px;
+  }
+  .signature-avatar {
+    flex: 0 0 56px;
+    width: 56px; height: 56px;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 18px; font-weight: 700; line-height: 56px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .signature-avatar img { width: 56px; height: 56px; border-radius: 9999px; display: block; }
+  .signature-body { flex: 1 1 auto; }
+  .signature-sign-off {
+    margin: 0 0 10px;
+    font-size: 15px; line-height: 24px;
+    color: var(--color-ink-muted);
+  }
+  .signature-name { margin: 0; font-size: 16px; line-height: 24px; font-weight: 700; }
+  .signature-role {
+    margin: 2px 0 8px;
+    font-size: 13px; line-height: 20px;
+    color: var(--color-ink-faint);
+  }
+  .signature-contact {
+    margin: 0;
+    font-size: 13px; line-height: 20px;
+    color: var(--color-ink-faint);
+  }
+  .signature-contact a { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+  .signature-contact .meta-dot { padding: 0 6px; opacity: 0.5; }
 
   /* ── Welcome / marketing email components ──────────────────────────
      Discount code block, USP grid, category grid + unsubscribe footer.
@@ -1904,6 +2038,8 @@
     .hero { padding: 24px; }
     .addresses { grid-template-columns: 1fr; }
     .timeline-label { font-size: 11px; }
+    .quote-facts { grid-template-columns: 1fr; }
+    .signature { flex-direction: column; }
   }
 </style>
 </head>
@@ -2141,6 +2277,13 @@
         <button type="button" data-flow="email-verification">
           <span class="flow-num">32.</span>
           <span class="flow-name">Email verification</span>
+          <span class="flow-version is-new">NEW</span>
+        </button>
+
+        <div class="flow-group-label">Quotes (Adminpanel)</div>
+        <button type="button" data-flow="quote-sent">
+          <span class="flow-num">33.</span>
+          <span class="flow-name">Quote sent</span>
           <span class="flow-version is-new">NEW</span>
         </button>
 
@@ -6179,6 +6322,334 @@
     </div>
     <!-- ── End 28 · Order cancelled · day 14 ───────────────── -->
 
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         33 · QUOTE SENT, Klaviyo data contract
+         ─────────────────────────────────────────────────────────────────
+         Event:    Quote Sent
+         Source:   Adminpanel. A Helloprinter builds a quote and presses
+                   "Send to customer"; that press is the only trigger. A
+                   saved or draft quote must never emit this event.
+         Channel:  Klaviyo, transactional template, sent immediately.
+         $value:   QuoteTotalExclTax (analytics only, never read in the
+                   template, same rule as Order Placed).
+
+         WHAT THIS EMAIL IS. A quote is not an order. Nothing is reserved,
+         nothing is produced and nothing is charged until the customer
+         approves it in My account. So this email carries the same order
+         overview the confirmation carries, with three differences:
+           • no artwork and no payment state anywhere (neither exists yet),
+           • a validity date, because the price only holds so long,
+           • a named human, because a person made this and a person is
+             waiting on the answer.
+
+         MAIN CTA. Always "View and approve quote", always to QuoteUrl,
+         which is the quote page in My account. Approving happens there
+         and nowhere else, so the email never carries an approve link that
+         acts on its own.
+
+         STATE. Two switches, both from the event:
+           data-note     = "with" | "without"   SentBy.Message present or not
+           data-revision = "new"  | "revised"   QuoteVersion == 1 or higher
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="email" data-flow="quote-sent" data-lines="multi" data-note="with" data-revision="new">
+
+      <!-- Logo -->
+      <div class="logo-bar">
+        <img class="logo-light" src="https://d3k81ch9hvuctc.cloudfront.net/company/U9YUZK/images/845e3a4a-244f-444f-a4f2-5b0081e5a40f.png" alt="Helloprint">
+        <img class="logo-dark" src="https://partners.helloprint.com/lovable-uploads/b96f67c7-a4d2-497f-a764-4a0ac5dcbc2c.png" alt="Helloprint">
+      </div>
+
+      <div class="email-inner">
+
+        <!-- Hero
+             First name:    Klaviyo profile {{ first_name }}, fallback to
+                            event.Customer.FirstName, then "there".
+             Sender name:   event.SentBy.FirstName (the Helloprinter who pressed send)
+             Quote URL:     event.QuoteUrl
+             Valid until:   event.ValidUntil, formatted in the recipient's locale
+             Revised copy:  shown when event.QuoteVersion > 1, dated with
+                            event.PreviousQuoteSentAt. -->
+        <div class="hero">
+
+          <!-- Re-sent quote, the customer has an older version in their inbox
+               and needs to know which one counts. -->
+          <div class="revision-banner" data-revision-block="revised">
+            This replaces the quote Lotte sent you on 11 September 2026. Quantities and prices have changed.
+          </div>
+
+          <div data-revision-block="new">
+            <h1>Sebastiaan, here is your quote from Lotte</h1>
+            <p class="lead">Lotte at Helloprint put this together for you. Have a look, and when it is right you can approve it in your account. Nothing is ordered and nothing is charged until you do.</p>
+          </div>
+          <div data-revision-block="revised">
+            <h1>Sebastiaan, here is your updated quote from Lotte</h1>
+            <p class="lead">Lotte reworked your quote. Everything below is the new version, and it is the one you can approve in your account. Nothing is ordered and nothing is charged until you do.</p>
+          </div>
+
+          <a class="btn-primary" href="#my-account-quote">View and approve quote →</a>
+          <p class="hero-deadline">These prices hold until <strong>29 September 2026</strong>. After that we need to price it again, because paper and production costs move.</p>
+        </div>
+
+        <!-- Where the customer is in the journey. "You approve" is the current
+             step, which is why it carries the amber ring: the quote sits still
+             until they act. -->
+        <div class="timeline">
+          <div class="timeline-row">
+            <div class="timeline-connector timeline-connector-done" style="left:12.5%; right:62.5%;"></div>
+            <div class="timeline-connector" style="left:37.5%; right:37.5%;"></div>
+            <div class="timeline-connector" style="left:62.5%; right:12.5%;"></div>
+
+            <div class="timeline-step timeline-step-1">
+              <span class="timeline-dot is-done">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div class="timeline-label">Quote sent</div>
+            </div>
+            <div class="timeline-step timeline-step-2">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">You approve</div>
+            </div>
+            <div class="timeline-step is-pending">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">We print it</div>
+            </div>
+            <div class="timeline-step is-pending">
+              <span class="timeline-dot"></span>
+              <div class="timeline-label">On its way</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- The three facts a buyer checks before reading a single line.
+             Bind: QuoteNumber · ValidUntil · SentBy.FullName.
+             A fourth cell (Your reference → CustomerReference, typically a
+             PO number) is worth adding when the field is filled; drop back
+             to three columns when it is empty. -->
+        <div class="quote-facts">
+          <div class="quote-fact">
+            <p class="quote-fact-label">Quote</p>
+            <p class="quote-fact-value">QT-2026-04871</p>
+          </div>
+          <div class="quote-fact">
+            <p class="quote-fact-label">Valid until</p>
+            <p class="quote-fact-value">29 Sep 2026</p>
+          </div>
+          <div class="quote-fact">
+            <p class="quote-fact-label">Prepared by</p>
+            <p class="quote-fact-value">Lotte de Wit</p>
+          </div>
+        </div>
+
+        <!-- Optional note the Helloprinter typed in Adminpanel before sending.
+             Bind: event.SentBy.Message. Hidden when empty (data-note). -->
+        <div class="quote-note">
+          <h3>Note from Lotte</h3>
+          <p>Hi Sebastiaan, I put the 2,500 flyers on the silk stock we talked about and kept the banners at three. The price for the banners came down a little because we can run them alongside another job next week. Shout if you want a different quantity and I will redo it.</p>
+        </div>
+
+        <!-- What is in this quote. Same line-item component as the order
+             confirmation, minus the artwork badges: no file has been asked
+             for yet, so a status badge here would be a lie.
+             Bind: event.Items[] → ProductName, ConfigSummary, Quantity,
+             RowTotalExclTax, ImageURL, Kind. -->
+        <h2 class="section-h2">What is in this quote</h2>
+        <div class="line-items">
+
+          <div class="line-item line-item-1">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/7E877HKC8kPBs0ZigHYBLz/27daf840f61ca765f3bc013d23c19ab8/flyers-catalog.png?fm=jpg&fl=progressive&bg=rgb:ffffff&w=380&q=80" alt="A5 Flyers" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">A5 Flyers</p>
+              </div>
+              <p class="line-config">170 gsm Silk · Double-sided · Matte finish</p>
+              <p class="line-qty">Qty 2,500</p>
+            </div>
+            <div class="line-price">€189.00</div>
+          </div>
+
+          <div class="line-item line-item-2">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/4LUYcWQGwic1s16ADpeCnZ/78189a11a18face60c43cc2a5263c44e/classic_business_cards__2_.webp?fm=jpg&fl=progressive&bg=rgb:ffffff&w=380&q=80" alt="Business Cards Premium" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Business Cards Premium</p>
+              </div>
+              <p class="line-config">350 gsm · Round corners · Spot UV front</p>
+              <p class="line-qty">Qty 500</p>
+            </div>
+            <div class="line-price">€64.50</div>
+          </div>
+
+          <div class="line-item line-item-3">
+            <div class="line-thumb">
+              <img src="https://images.ctfassets.net/wm1n7oady8a5/41Y1y3jMop3QZACNSW5h7g/57b1c68acebbea0a04a384908da64759/banners_retractable_banners__1_.png?fm=jpg&fl=progressive&bg=rgb:ffffff&w=380&q=80" alt="Roll-up Banner Premium" width="64" height="64">
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Roll-up Banner Premium</p>
+              </div>
+              <p class="line-config">85 × 200 cm · Aluminium base · Carry bag included</p>
+              <p class="line-qty">Qty 3</p>
+            </div>
+            <div class="line-price">€237.00</div>
+          </div>
+
+          <!-- Service line (Kind == "service"), rendered whenever the quote
+               contains one. No badge, a service has no file of its own. -->
+          <div class="line-item line-item-service" data-kind="service">
+            <div class="line-thumb">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="color: var(--color-ink-muted);"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="line-body">
+              <div class="line-head">
+                <p class="line-name">Premium Artwork Check</p>
+              </div>
+              <p class="line-config">Pre-press review of your files by our team before printing</p>
+            </div>
+            <div class="line-price">€12.00</div>
+          </div>
+        </div>
+
+        <!-- Totals, identical arithmetic to the order confirmation so the
+             numbers a customer approves are the numbers they later pay.
+               Articles  → Σ Items[].RowTotalExclTax where Kind == "product"
+               Services  → Σ Items[].RowTotalExclTax where Kind == "service", hide when 0
+               Delivery  → ShippingExclTax
+               Discount  → DiscountTotal, labelled with DiscountLabel, hide when 0
+               Subtotal  → QuoteTotalExclTax
+               VAT       → TaxTotal
+               Total     → QuoteTotalExclTax + TaxTotal
+             The pill says what this document is. It replaces the payment pill
+             on purpose: a quote has no payment state to report. -->
+        <div class="totals">
+          <table>
+            <tr><td>Articles</td><td>€490.50</td></tr>
+            <tr><td>Services</td><td>€12.00</td></tr>
+            <tr><td>Delivery</td><td>€14.95</td></tr>
+            <tr class="discount-row"><td>Agreed discount</td><td>−€45.00</td></tr>
+            <tr><td>Subtotal</td><td>€472.45</td></tr>
+            <tr><td>VAT</td><td>€99.21</td></tr>
+            <tr class="total-row">
+              <td>Total</td>
+              <td class="total-amount">
+                <span class="quote-pill">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Quote, not an order yet
+                </span>
+                <span class="total-value">€571.66</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Delivery and billing as quoted. The delivery address is what the
+             shipping price above was calculated on, so it belongs here: a
+             different address can change the price.
+             Bind: ShippingAddress / BillingAddress, same shape as Order Placed.
+             When the quote has no shipping address yet, drop this block and
+             the Delivery row above, and say so in the lead instead. -->
+        <div class="addresses">
+          <div class="address">
+            <h3>Delivery address</h3>
+            <p>
+              Sebastiaan Ram<br>
+              Beursplein 37<br>
+              3011 AA Rotterdam<br>
+              Netherlands
+            </p>
+          </div>
+          <div class="address">
+            <h3>Quote for</h3>
+            <p>
+              Helloprint B.V.<br>
+              Schiedamsevest 89<br>
+              3012 BG Rotterdam<br>
+              Netherlands<br>
+              VAT NL000000000B00
+            </p>
+          </div>
+        </div>
+
+        <!-- Signature. Required on every send: a quote is a person's work and
+             the reply goes back to that person, not to a shared inbox.
+             Bind: SentBy.FullName, SentBy.JobTitle, SentBy.Email, SentBy.Phone,
+             SentBy.PhotoUrl (optional; falls back to SentBy.Initials in the
+             green circle, which is what this preview shows).
+             Reply-To on the send must be SentBy.Email. -->
+        <div class="signature">
+          <div class="signature-avatar">LW</div>
+          <div class="signature-body">
+            <p class="signature-sign-off">Any question at all, just hit reply. It lands in my inbox, not a shared one, and I will pick it up the same working day.</p>
+            <p class="signature-name">Lotte de Wit</p>
+            <p class="signature-role">Your Helloprinter · Customer Care, Rotterdam</p>
+            <p class="signature-contact">
+              <a href="mailto:lotte.dewit@helloprint.com">lotte.dewit@helloprint.com</a><span class="meta-dot">·</span>+31 10 340 0100
+            </p>
+          </div>
+        </div>
+
+        <!-- Fallback URL for clients that strip buttons. Same target as the
+             hero CTA: the quote page in My account. -->
+        <div class="link-fallback">
+          <p class="link-fallback-label">Button not working? Copy and paste this link into your browser:</p>
+          <a class="link-fallback-url" href="#my-account-quote" data-no-track="true">https://www.helloprint.com/en-ie/account/quotes/QT-2026-04871</a>
+        </div>
+
+        <hr class="email-divider">
+
+        <!-- FAQ, written to answer the three things that stop people approving:
+             what approving does to them, whether they can still change it,
+             and what happens if they sit on it. -->
+        <div class="faq">
+          <h3>What happens when I approve?</h3>
+          <p>Approving turns this quote into an order. You pick how you pay at that moment, we ask you for your files, and production starts once both are in. Until you approve, nothing is reserved and nothing is charged.</p>
+          <h3>Can I still change something?</h3>
+          <p>Yes. Reply to this email with what you want different, a quantity, a paper, an extra item, and Lotte sends you a new version. Approving the old one is not something you can undo yourself.</p>
+          <h3>What if the date passes?</h3>
+          <p>The quote expires and the approve button stops working. Reply and we will price it again, usually the same day. Prices can move, because paper and production costs do.</p>
+          <h3>Do I need an account to approve?</h3>
+          <p>The link above opens your quote without a login. If you do have an account, the quote is also waiting in <strong>My account → Quotes</strong>, together with everything else you have ordered from us.</p>
+        </div>
+
+        <div class="trustpilot">
+          <span class="trustpilot-inner">
+            <span class="trustpilot-stars" aria-label="Rated 4.5 out of 5">
+              <span class="star-bg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+              <span class="star-fg">
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+                <span class="star"><svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg></span>
+              </span>
+            </span>
+            <span class="trustpilot-label">
+              <strong>Excellent</strong> · 4.5 out of 5 · <strong>32,894</strong> reviews on Trustpilot
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Footer. Transactional: a person sent this on request, so there is no
+           marketing unsubscribe on it. -->
+      <div class="email-footer">
+        <p>You received this email because Lotte de Wit at Helloprint prepared a quote for you. This is a transactional message.</p>
+        <p>Helloprint B.V. · VAT NL855793302B01 · KvK 64710815 · © 2026, all rights reserved.</p>
+      </div>
+    </div>
+    <!-- ── End 33 · Quote sent ─────────────────────────────── -->
+
     </div>
     <!-- /.preview-grid -->
 
@@ -6202,6 +6673,45 @@
         <div class="email-meta-field">
           <div class="email-meta-label">Main CTA</div>
           <div class="email-meta-value"><code>View order →</code></div>
+        </div>
+      </div>
+
+      <div class="email-meta" data-for-flow="quote-sent">
+        <div class="email-meta-field">
+          <div class="email-meta-label">When</div>
+          <div class="email-meta-value">A Helloprinter built a quote in Adminpanel and pressed <strong>Send to customer</strong>. Sent within seconds of that press, and only of that press: saving or editing a quote sends nothing.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Trigger</div>
+          <div class="email-meta-value"><code>Quote Sent</code> · Klaviyo · immediate · one event per send, including every re-send</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Goal</div>
+          <div class="email-meta-value">Give the customer the full quote in the email, and get them to approve it in My account. Everything that is not the approve decision is kept small.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Main CTA</div>
+          <div class="email-meta-value"><code>View and approve quote →</code></div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">CTA target</div>
+          <div class="email-meta-value"><code>QuoteUrl</code> is the quote page in My account, reached with a one-time token so it opens without a login (same pattern as the guest order link). Approving happens on that page. The email never carries a link that approves on click, because a mail scanner that pre-fetches links would then place orders.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Signature</div>
+          <div class="email-meta-value">Every send is signed by the Helloprinter who pressed the button: name, job title, direct email and phone from <code>SentBy</code>. <strong>Reply-To must be <code>SentBy.Email</code></strong>, otherwise the email promises a person and delivers a shared inbox. Photo optional, initials are the fallback.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Two states</div>
+          <div class="email-meta-value"><strong>Note</strong> → shown when the sender typed one in Adminpanel (<code>SentBy.Message</code>).<br><strong>Revised</strong> → shown when <code>QuoteVersion &gt; 1</code>, so a customer with two quotes in their inbox knows which one counts.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Not in this email</div>
+          <div class="email-meta-value">No artwork status and no payment status: neither exists before approval. Adding them here is the most likely way to make this email lie.</div>
+        </div>
+        <div class="email-meta-field">
+          <div class="email-meta-label">Status</div>
+          <div class="email-meta-value">Design proposal. The <code>Quote Sent</code> metric does not exist in Klaviyo yet and the payload below is the contract we are asking for, not something the event already carries.</div>
         </div>
       </div>
 
@@ -7387,6 +7897,56 @@
 <span class="p">}</span></pre></div>
       </details>
 
+      <details class="event-vars" data-for-flow="quote-sent">
+        <summary>Event payload</summary>
+        <div class="event-vars-body"><pre class="event-vars-json"><span class="p">{</span>
+  <span class="k">"event"</span><span class="p">:</span> <span class="s">"Quote Sent"</span><span class="p">,</span>          <span class="c">// new metric, does not exist in Klaviyo yet</span>
+  <span class="k">"$value"</span><span class="p">:</span> <span class="n">472.45</span><span class="p">,</span>                    <span class="c">// ex VAT, analytics only, never read in the template</span>
+  <span class="k">"Currency"</span><span class="p">:</span> <span class="s">"EUR"</span><span class="p">,</span>
+  <span class="k">"Locale"</span><span class="p">:</span> <span class="s">"en-IE"</span><span class="p">,</span>                 <span class="c">// drives language, date and money format</span>
+
+  <span class="c">// The quote itself</span>
+  <span class="k">"QuoteNumber"</span><span class="p">:</span> <span class="s">"QT-2026-04871"</span><span class="p">,</span>
+  <span class="k">"QuoteUrl"</span><span class="p">:</span> <span class="s">"https://www.helloprint.com/en-ie/account/quotes/QT-2026-04871?t=..."</span><span class="p">,</span>
+  <span class="k">"QuoteVersion"</span><span class="p">:</span> <span class="n">1</span><span class="p">,</span>                     <span class="c">// &gt; 1 renders the "this replaces" banner</span>
+  <span class="k">"PreviousQuoteSentAt"</span><span class="p">:</span> <span class="s">"2026-09-11T14:05:00Z"</span><span class="p">,</span>   <span class="c">// only when QuoteVersion &gt; 1</span>
+  <span class="k">"QuoteSentAt"</span><span class="p">:</span> <span class="s">"2026-09-15T09:12:00Z"</span><span class="p">,</span>
+  <span class="k">"ValidUntil"</span><span class="p">:</span> <span class="s">"2026-09-29T21:59:59Z"</span><span class="p">,</span>      <span class="c">// hard stop, the approve page refuses after this</span>
+  <span class="k">"CustomerReference"</span><span class="p">:</span> <span class="s">"PO 4471"</span><span class="p">,</span>                <span class="c">// optional, shown as a fourth fact when present</span>
+
+  <span class="c">// Who sent it. Required on every send, this email is signed.</span>
+  <span class="k">"SentBy"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="k">"FirstName"</span><span class="p">:</span> <span class="s">"Lotte"</span><span class="p">,</span>
+    <span class="k">"FullName"</span><span class="p">:</span> <span class="s">"Lotte de Wit"</span><span class="p">,</span>
+    <span class="k">"Initials"</span><span class="p">:</span> <span class="s">"LW"</span><span class="p">,</span>                  <span class="c">// avatar fallback when PhotoUrl is empty</span>
+    <span class="k">"JobTitle"</span><span class="p">:</span> <span class="s">"Customer Care, Rotterdam"</span><span class="p">,</span>
+    <span class="k">"Email"</span><span class="p">:</span> <span class="s">"lotte.dewit@helloprint.com"</span><span class="p">,</span>   <span class="c">// also the Reply-To of the send</span>
+    <span class="k">"Phone"</span><span class="p">:</span> <span class="s">"+31 10 340 0100"</span><span class="p">,</span>
+    <span class="k">"PhotoUrl"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>                     <span class="c">// optional</span>
+    <span class="k">"Message"</span><span class="p">:</span> <span class="s">"Hi Sebastiaan, I put the 2,500 flyers on the silk stock we talked about..."</span>
+  <span class="p">}</span><span class="p">,</span>
+
+  <span class="c">// The quote contents. Same shape as Order Placed on purpose, so the</span>
+  <span class="k">"Customer"</span><span class="p">:</span> <span class="p">{</span> <span class="k">"FirstName"</span><span class="p">:</span> <span class="s">"Sebastiaan"</span><span class="p">,</span> <span class="k">"Email"</span><span class="p">:</span> <span class="s">"sebastiaan@acme.com"</span><span class="p">,</span> <span class="k">"CompanyName"</span><span class="p">:</span> <span class="s">"Acme B.V."</span> <span class="p">}</span><span class="p">,</span>
+  <span class="k">"QuoteTotalExclTax"</span><span class="p">:</span> <span class="n">472.45</span><span class="p">,</span>
+  <span class="k">"TaxTotal"</span><span class="p">:</span> <span class="n">99.21</span><span class="p">,</span>
+  <span class="k">"ShippingExclTax"</span><span class="p">:</span> <span class="n">14.95</span><span class="p">,</span>
+  <span class="k">"DiscountTotal"</span><span class="p">:</span> <span class="n">45.00</span><span class="p">,</span>
+  <span class="k">"DiscountLabel"</span><span class="p">:</span> <span class="s">"Agreed discount"</span><span class="p">,</span>     <span class="c">// label only, no coupon code on a quote</span>
+  <span class="k">"LeadTimeWorkingDays"</span><span class="p">:</span> <span class="n">5</span><span class="p">,</span>             <span class="c">// after approval and files, drives the delivery line</span>
+  <span class="k">"BillingAddress"</span><span class="p">:</span> <span class="p">{</span> <span class="k">"FirstName"</span><span class="p">:</span> <span class="s">"Sebastiaan"</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span><span class="p">,</span>
+  <span class="k">"ShippingAddress"</span><span class="p">:</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span><span class="p">,</span>         <span class="c">// may be absent on an early quote</span>
+  <span class="k">"Items"</span><span class="p">:</span> <span class="p">[</span><span class="p">{</span>
+    <span class="k">"ProductName"</span><span class="p">:</span> <span class="s">"A5 Flyers"</span><span class="p">,</span>
+    <span class="k">"ConfigSummary"</span><span class="p">:</span> <span class="s">"170 gsm Silk · Double-sided · Matte finish"</span><span class="p">,</span>
+    <span class="k">"Quantity"</span><span class="p">:</span> <span class="n">2500</span><span class="p">,</span>
+    <span class="k">"RowTotalExclTax"</span><span class="p">:</span> <span class="n">189.00</span><span class="p">,</span>
+    <span class="k">"ImageURL"</span><span class="p">:</span> <span class="s">"https://contentful..."</span><span class="p">,</span>
+    <span class="k">"Kind"</span><span class="p">:</span> <span class="s">"product"</span>                    <span class="c">// "product" | "service"</span>
+  <span class="p">}</span><span class="p">,</span> <span class="p">...]</span>
+<span class="p">}</span></pre></div>
+      </details>
+
       <!-- State toggles for the active flow. Groups with data-for-flow only
            render when the active flow matches (CSS); otherwise hidden. -->
       <div class="toggle-panel">
@@ -7397,6 +7957,28 @@
           <div class="toggle-options" data-toggle="recipient">
             <button type="button" data-value="self">Pay myself</button>
             <button type="button" data-value="other" class="is-active">Send to someone else</button>
+          </div>
+        </div>
+        <!-- Quote sent: the only two things that vary in this email. -->
+        <div class="toggle-group full" data-for-flow="quote-sent">
+          <span class="toggle-group-label">Note from the sender</span>
+          <div class="toggle-options" data-toggle="note">
+            <button type="button" data-value="with" class="is-active">With a note</button>
+            <button type="button" data-value="without">No note</button>
+          </div>
+        </div>
+        <div class="toggle-group full" data-for-flow="quote-sent">
+          <span class="toggle-group-label">Quote version</span>
+          <div class="toggle-options" data-toggle="revision">
+            <button type="button" data-value="new" class="is-active">First send</button>
+            <button type="button" data-value="revised">Re-sent (updated)</button>
+          </div>
+        </div>
+        <div class="toggle-group" data-for-flow="quote-sent">
+          <span class="toggle-group-label">Quote lines</span>
+          <div class="toggle-options" data-toggle="lines">
+            <button type="button" data-value="one">1 item</button>
+            <button type="button" data-value="multi" class="is-active">3 items</button>
           </div>
         </div>
         <!-- Line items: scoped to order-side flows. -->
